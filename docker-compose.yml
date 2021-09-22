@@ -10,5 +10,11 @@ services:
       - mongo-data:/data/db
     ports:
       - "27017:27017"
+  bot:
+    image: ghcr.io/drschlaubi/mikmusic/bot:latest
+    env_file:
+      - .env
+    depends_on:
+      - mongo
 volumes:
   mongo-data: { }

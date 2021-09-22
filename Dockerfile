@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk16-openj9
+FROM adoptopenjdk/openjdk16:alpine-jre
 
 WORKDIR /usr/app
 COPY build/libs/install ./

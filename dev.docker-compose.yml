@@ -10,7 +10,5 @@ services:
       - mongo-data:/data/db
     ports:
       - "27017:27017"
-  bot:
-    image: ghcr.io/drschlaubi/mikmusic/bot:latest
 volumes:
   mongo-data: { }

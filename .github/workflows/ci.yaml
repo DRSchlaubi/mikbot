@@ -32,6 +32,9 @@ jobs:
           name: build_folder
           path: build
       - uses: actions/checkout@v2
+      - uses: gradle/gradle-build-action@v1
+        with:
+          arguments: installDist
       - name: Login
         env:
           GITHUB_TOKEN: ${{ secrets.DOCKER_TOKEN }}

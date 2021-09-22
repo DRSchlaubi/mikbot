@@ -9,6 +9,8 @@ import dev.schlaubi.musicbot.core.io.Database
 import dev.schlaubi.musicbot.core.io.findUser
 import dev.schlaubi.musicbot.module.music.MusicModule
 import dev.schlaubi.musicbot.module.settings.SettingsModule
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.dsl.module
 
@@ -60,8 +62,14 @@ class MusicBot : KoinComponent {
             }
         }
 
-        bot.start()
-        bot.findExtension<LavalinkManager>()!!.load()
+        coroutineScope {
+            launch {
+                bot.start()
+            }
+            launch {
+                bot.findExtension<LavalinkManager>()!!.load()
+            }
+        }
     }
 
     private fun registerKoinModules() {

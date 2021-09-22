@@ -1,7 +1,7 @@
 FROM adoptopenjdk/openjdk16:alpine-jre
 
 WORKDIR /usr/app
-COPY build/libs/install ./
+COPY build/install/mikmusic ./
 
 LABEL org.opencontainers.image.source = "https://github.com/DRSchlaubi/mikmusic"
 

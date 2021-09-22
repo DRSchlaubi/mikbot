@@ -61,6 +61,7 @@ class MusicBot : KoinComponent {
         }
 
         bot.start()
+        bot.findExtension<LavalinkManager>()!!.load()
     }
 
     private fun registerKoinModules() {

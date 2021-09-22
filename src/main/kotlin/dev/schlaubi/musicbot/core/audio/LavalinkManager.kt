@@ -14,6 +14,9 @@ class LavalinkManager : Extension() {
     private val database: Database by inject()
 
     override suspend fun setup() {
+    }
+
+    public suspend fun load() {
         lavalink = kord.lavakord()
 
         database.lavalinkServers.find().toList().forEach { (url, password) ->

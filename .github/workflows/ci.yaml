@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  build:
+    if: "!contains(github.event.commits[0].message, '[skip ci]')"
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: gradle/gradle-build-action@v1
+        with:
+          arguments: classes ktlintCheck
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2.2.3
+        with:
+          name: build_folder
+          path: ./build
+  push:
+    runs-on: ubuntu-20.04
+    needs: [build]
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build_folder
+          path: build
+      - uses: actions/checkout@v2
+      - name: Login
+        env:
+          GITHUB_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+        run:  docker login ghcr.io --username phanatic --password "$GITHUB_TOKEN"
+      - name: Build & Tag
+        run:  docker build -t ghcr.io/drschlaubi/mikmusic/bot:latest -t ghcr.io/drschlaubi/mikmusic/bot:"$GITHUB_SHA" . --file Dockerfile
+      - name: Push
+        run:  docker push ghcr.io/drschlaubi/mikmusic/bot:latest
+      - name: Push specific tag
+        run: docker push ghcr.io/drschlaubi/mikmusic/bot:"$GITHUB_SHA"

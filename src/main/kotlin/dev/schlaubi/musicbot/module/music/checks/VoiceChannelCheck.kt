@@ -6,7 +6,6 @@ import com.kotlindiscord.kord.extensions.checks.types.CheckContext
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.GuildBehavior
 import dev.kord.core.entity.interaction.ChatInputCommandInteraction
-import dev.kord.core.entity.interaction.ComponentInteraction
 import dev.kord.core.entity.interaction.MessageCommandInteraction
 import dev.kord.core.event.Event
 import dev.kord.core.event.interaction.InteractionCreateEvent

@@ -86,7 +86,7 @@ internal suspend fun CommandContext.findTracks(
         searchPrefix + rawQuery
     } else rawQuery
 
-    if(isUrl) {
+    if (isUrl) {
         val spotifySearch = findSpotifySongs(musicPlayer, query)
         if (spotifySearch != null) {
             return queueSpotifySearch(spotifySearch, respond)

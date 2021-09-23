@@ -31,7 +31,7 @@ class MusicPlayer(internal val link: Link) : Link by link {
     }
 
     private suspend fun onTrackEnd(event: TrackEndEvent) {
-        if (queue.isEmpty() && event.reason != TrackEndEvent.EndReason.REPLACED) link.disconnectAudio()
+        if (queue.isEmpty() && event.reason != TrackEndEvent.EndReason.REPLACED) return link.disconnectAudio()
         if (event.reason.mayStartNext) {
             startNextSong(event.track)
         }

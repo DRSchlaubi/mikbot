@@ -7,7 +7,6 @@ import dev.schlaubi.musicbot.module.music.MusicModule
 import dev.schlaubi.musicbot.module.music.player.MusicPlayer
 import kotlin.reflect.KMutableProperty1
 
-
 suspend fun MusicModule.schedulerCommands() {
     suspend fun EphemeralSlashCommandContext<*>.schedulerOption(
         myProperty: KMutableProperty1<MusicPlayer, Boolean>,
@@ -66,5 +65,3 @@ suspend fun MusicModule.schedulerCommands() {
         }
     }
 }
-
-

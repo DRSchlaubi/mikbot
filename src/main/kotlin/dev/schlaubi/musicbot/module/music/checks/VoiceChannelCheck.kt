@@ -45,7 +45,6 @@ suspend fun <T : InteractionCreateEvent> CheckContext<T>.musicControlCheck() {
     }
 }
 
-
 private suspend inline fun <T : Event> CheckContext<T>.abstractMusicCheck(
     block: MusicCheckContext.() -> Unit
 ) {

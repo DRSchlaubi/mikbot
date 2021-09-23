@@ -1,9 +1,7 @@
 package dev.schlaubi.musicbot.module.music.commands
 
-import com.kotlindiscord.kord.extensions.checks.anyGuild
 import com.kotlindiscord.kord.extensions.commands.converters.impl.defaultingBoolean
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
-import com.kotlindiscord.kord.extensions.extensions.slashCommandCheck
 import dev.kord.core.behavior.edit
 import dev.schlaubi.lavakord.kord.connectAudio
 import dev.schlaubi.musicbot.module.music.MusicModule

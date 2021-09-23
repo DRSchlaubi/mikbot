@@ -56,7 +56,7 @@ suspend fun CommandContext.searchSong(
     val channel = response?.channel?.asChannel() ?: return null
     val kord = channel.kord
     if ((channel as GuildChannel).permissionsForMember(kord.getUser(kord.selfId)!!)
-            .contains(Permission.ManageMessages)
+        .contains(Permission.ManageMessages)
     ) {
         response.delete()
     }

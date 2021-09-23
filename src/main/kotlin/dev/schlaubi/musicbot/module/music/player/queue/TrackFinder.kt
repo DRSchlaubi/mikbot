@@ -49,7 +49,8 @@ suspend fun <T : QueueArguments> EphemeralSlashCommandContext<T>.findTracks(
 }
 
 internal suspend fun CommandContext.findTracks(
-    musicPlayer: MusicPlayer, search: Boolean,
+    musicPlayer: MusicPlayer,
+    search: Boolean,
     arguments: QueueOptions,
     respond: MessageSender,
     editingPaginator: EditingPaginatorSender

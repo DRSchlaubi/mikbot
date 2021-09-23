@@ -10,10 +10,8 @@ import dev.kord.common.entity.ButtonStyle
 import dev.kord.core.behavior.interaction.FollowupMessageBehavior
 import dev.kord.core.entity.interaction.ComponentInteraction
 import dev.kord.core.event.interaction.InteractionCreateEvent
-import dev.kord.rest.builder.message.create.MessageCreateBuilder
 import dev.kord.rest.builder.message.create.actionRow
 import kotlin.time.Duration
-
 
 private const val yes = "yes"
 private const val no = "no"

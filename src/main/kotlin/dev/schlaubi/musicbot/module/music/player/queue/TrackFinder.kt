@@ -8,6 +8,7 @@ import com.kotlindiscord.kord.extensions.commands.converters.impl.string
 import com.kotlindiscord.kord.extensions.interactions.editingPaginator
 import com.kotlindiscord.kord.extensions.interactions.respond
 import dev.kord.rest.builder.message.create.embed
+import dev.schlaubi.lavakord.audio.player.Track
 import dev.schlaubi.lavakord.rest.TrackResponse
 import dev.schlaubi.lavakord.rest.loadItem
 import dev.schlaubi.lavakord.rest.mapToTrack
@@ -85,6 +86,11 @@ internal suspend fun CommandContext.findTracks(
         searchPrefix + rawQuery
     } else rawQuery
 
+    val spotifySearch = findSpotifySongs(musicPlayer, query)
+    if (spotifySearch != null) {
+        return queueSpotifySearch(spotifySearch, respond)
+    }
+
     val result = musicPlayer.loadItem(query)
 
     val searchResult: QueueSearchResult = when (result.loadType) {
@@ -110,6 +116,27 @@ internal suspend fun CommandContext.findTracks(
     }
 
     return searchResult
+}
+
+private suspend fun CommandContext.queueSpotifySearch(
+    spotifySearch: List<Track>,
+    respond: MessageSender,
+): QueueSearchResult? {
+    if (spotifySearch.isEmpty()) {
+        respond {
+            content = translate("music.queue.spotify.no_songs_found")
+        }
+        return null
+    }
+
+    return if (spotifySearch.size == 1) {
+        SingleTrack(spotifySearch.first())
+    } else {
+        Playlist(
+            TrackResponse.PlaylistInfo("Spotify Playlist", 0),
+            spotifySearch
+        )
+    }
 }
 
 suspend fun CommandContext.queueTracks(

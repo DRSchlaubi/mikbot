@@ -16,12 +16,23 @@ repositories {
 }
 
 dependencies {
+    // Bot
     implementation("com.kotlindiscord.kord.extensions", "kord-extensions", "1.5.0-SNAPSHOT")
-    implementation("dev.schlaubi", "envconf", "1.1")
+    implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-jdk8", "1.5.2")
     implementation("dev.schlaubi.lavakord", "kord", "2.0.2")
-    implementation("ch.qos.logback", "logback-classic", "1.2.6")
     implementation("org.litote.kmongo", "kmongo-coroutine-serialization", "4.3.0")
+
+    // Logging
+    implementation("ch.qos.logback", "logback-classic", "1.2.6")
+
+    // Plattform support
     implementation("com.google.apis", "google-api-services-youtube", "v3-rev205-1.25.0")
+    implementation("se.michaelthelin.spotify", "spotify-web-api-java", "6.5.4")
+
+
+    // Util
+    implementation("dev.schlaubi", "envconf", "1.1")
+
 }
 
 application {

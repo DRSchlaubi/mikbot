@@ -8,8 +8,8 @@ import dev.schlaubi.musicbot.utils.forList
 import dev.schlaubi.musicbot.utils.format
 
 suspend fun MusicModule.queueCommand() = ephemeralSlashCommand {
-    name = "queueTracks"
-    description = "Shows the current queueTracks"
+    name = "queue"
+    description = "Shows the current queue"
 
     action {
         if (musicPlayer.queuedTracks.isEmpty()) {

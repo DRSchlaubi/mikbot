@@ -17,6 +17,9 @@ object Config : EnvironmentConfig("") {
     val MONGO_DATABASE by environment
 
     val TEST_GUILD by getEnv { it.toLong() }.optional()
+
+    val SPOTIFY_CLIENT_ID by getEnv("")
+    val SPOTIFY_CLIENT_SECRET by getEnv("")
 }
 
 enum class Environment(val useSentry: Boolean) {

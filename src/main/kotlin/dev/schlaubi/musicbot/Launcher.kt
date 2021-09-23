@@ -3,6 +3,7 @@ package dev.schlaubi.musicbot
 import ch.qos.logback.classic.Logger
 import dev.schlaubi.musicbot.config.Config
 import dev.schlaubi.musicbot.core.MusicBot
+import dev.schlaubi.musicbot.module.music.player.queue.initializeSpotifyApi
 import io.sentry.Sentry
 import io.sentry.SentryOptions
 import org.slf4j.LoggerFactory
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory
 suspend fun main() {
     initializeLogging()
     initializeSentry()
+    initializeSpotifyApi()
     MusicBot().start()
 }
 

@@ -12,7 +12,6 @@ fun PlaylistModule.renameCommand() = playlistSubCommand(::PlaylistRenameArgument
     name = "rename"
     description = "Renames a playlist"
 
-
     action {
         checkPermissions { playlist ->
             checkName(arguments.newName, playlist.public) {

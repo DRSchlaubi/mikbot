@@ -29,10 +29,8 @@ dependencies {
     implementation("com.google.apis", "google-api-services-youtube", "v3-rev205-1.25.0")
     implementation("se.michaelthelin.spotify", "spotify-web-api-java", "6.5.4")
 
-
     // Util
     implementation("dev.schlaubi", "envconf", "1.1")
-
 }
 
 application {

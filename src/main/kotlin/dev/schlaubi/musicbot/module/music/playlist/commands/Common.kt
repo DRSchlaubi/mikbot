@@ -49,7 +49,6 @@ suspend fun EphemeralSlashCommandContext<out PlaylistArguments>.getPlaylist() =
 @JvmRecord
 data class PlaylistCommandContext(val musicModule: MusicModule, val context: EphemeralSlashCommandContext<Arguments>)
 
-
 class CommandPair<T : Arguments>(
     private val argumentBody: (() -> T)?,
     private val commandBody: suspend EphemeralSlashCommand<T>.() -> Unit

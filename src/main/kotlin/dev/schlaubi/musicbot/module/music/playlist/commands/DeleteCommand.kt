@@ -9,7 +9,6 @@ fun PlaylistModule.deleteCommand() = playlistSubCommand(::PlaylistDeleteArgument
     name = "delete"
     description = "Deletes a playlist"
 
-
     action {
         checkPermissions { playlist ->
             database.playlists.deleteOneById(playlist.id)

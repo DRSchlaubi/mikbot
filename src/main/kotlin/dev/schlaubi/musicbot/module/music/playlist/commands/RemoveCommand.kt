@@ -25,9 +25,13 @@ fun PlaylistModule.removeCommand() = playlistSubCommand(::PlaylistRemoveArgument
                 return@action
             }
 
-            database.playlists.save(playlist.copy(songs = playlist.songs.toMutableList().apply {
-                removeAt(index) // this might be a dupe, so we remove by index
-            }))
+            database.playlists.save(
+                playlist.copy(
+                    songs = playlist.songs.toMutableList().apply {
+                        removeAt(index) // this might be a dupe, so we remove by index
+                    }
+                )
+            )
 
             respond {
                 content = translate("commands.playlist.remove.removed", arrayOf(item.format(musicPlayer), playlist.name))

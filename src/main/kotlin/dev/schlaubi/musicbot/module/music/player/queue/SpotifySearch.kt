@@ -20,7 +20,6 @@ private val PLAYLIST_PATTERN =
 private val TRACK_PATTERN = "https?://.*\\.spotify\\.com/tracks?/([^?/\\s]*)".toRegex()
 private val ALBUM_PATTERN = "https?://.*\\.spotify\\.com/albums?/([^?/\\s]*)".toRegex()
 
-
 private val api = SpotifyApi.Builder()
     .setClientId(Config.SPOTIFY_CLIENT_ID)
     .setClientSecret(Config.SPOTIFY_CLIENT_SECRET)

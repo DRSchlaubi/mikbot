@@ -14,7 +14,7 @@ fun PlaylistModule.toggleVisibilityCommand() = playlistSubCommand(::PlaylistTogg
             database.playlists.save(playlist.copy(public = !playlist.public))
 
             respond {
-                content = if(!playlist.public) {
+                content = if (!playlist.public) {
                     translate("commands.playlist.toggle_visibility.on")
                 } else {
                     translate("commands.playlist.toggle_visibility.off")

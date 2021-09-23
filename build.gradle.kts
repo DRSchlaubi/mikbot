@@ -21,6 +21,7 @@ dependencies {
     implementation("dev.schlaubi.lavakord", "kord", "2.0.2")
     implementation("ch.qos.logback", "logback-classic", "1.2.6")
     implementation("org.litote.kmongo", "kmongo-coroutine-serialization", "4.3.0")
+    implementation("com.google.apis", "google-api-services-youtube", "v3-rev205-1.25.0")
 }
 
 application {

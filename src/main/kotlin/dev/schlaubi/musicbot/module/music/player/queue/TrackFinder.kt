@@ -92,7 +92,7 @@ internal suspend fun CommandContext.findTracks(
     respond {
         embed {
             this.title = title
-            with(searchResult) { addInfo(this@findTracks) }
+            with(searchResult) { addInfo(musicPlayer.link, this@findTracks) }
 
             footer {
                 text = translate("music.plays_in.estimated", "0")

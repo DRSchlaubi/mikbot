@@ -2,8 +2,10 @@ package dev.schlaubi.musicbot.module.music.player.queue
 
 import com.kotlindiscord.kord.extensions.commands.CommandContext
 import dev.kord.rest.builder.message.EmbedBuilder
+import dev.schlaubi.lavakord.audio.Link
 import dev.schlaubi.lavakord.audio.player.Track
 import dev.schlaubi.lavakord.rest.TrackResponse
+import dev.schlaubi.musicbot.utils.addSong
 import kotlin.time.ExperimentalTime
 
 sealed interface QueueSearchResult {
@@ -12,7 +14,7 @@ sealed interface QueueSearchResult {
 
     suspend fun CommandContext.type(): String
 
-    suspend fun EmbedBuilder.addInfo(context: CommandContext)
+    suspend fun EmbedBuilder.addInfo(link: Link, context: CommandContext)
 }
 
 class SingleTrack(private val track: Track) : QueueSearchResult {
@@ -21,23 +23,8 @@ class SingleTrack(private val track: Track) : QueueSearchResult {
     override suspend fun CommandContext.type(): String = translate("music.info.track")
 
     @OptIn(ExperimentalTime::class)
-    override suspend fun EmbedBuilder.addInfo(context: CommandContext) {
-        with(track) {
-            url = uri // embed.url = track.uri
-            description = title
-
-            if (!isStream) {
-                field {
-                    name = context.translate("music.info.length")
-                    value = length.toString()
-                }
-            }
-
-            field {
-                name = context.translate("music.info.author")
-                value = author
-            }
-        }
+    override suspend fun EmbedBuilder.addInfo(link: Link, context: CommandContext) {
+        addSong(context, track)
     }
 }
 
@@ -50,7 +37,7 @@ class Playlist(private val info: TrackResponse.PlaylistInfo, tracks: List<Track>
 
     override suspend fun CommandContext.type(): String = translate("music.info.playlist")
 
-    override suspend fun EmbedBuilder.addInfo(context: CommandContext) {
+    override suspend fun EmbedBuilder.addInfo(link: Link, context: CommandContext) {
         description = info.name
     }
 }

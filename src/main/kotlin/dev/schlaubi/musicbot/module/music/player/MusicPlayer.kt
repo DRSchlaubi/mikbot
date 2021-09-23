@@ -7,7 +7,7 @@ import dev.schlaubi.lavakord.audio.player.Track
 import java.util.LinkedList
 import kotlin.random.Random
 
-class MusicPlayer(private val link: Link) : Link by link {
+class MusicPlayer(internal val link: Link) : Link by link {
     private val queue = LinkedList<Track>()
     val queuedTracks get() = queue.toList()
     var shuffle = false

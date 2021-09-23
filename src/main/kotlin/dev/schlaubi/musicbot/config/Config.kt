@@ -6,6 +6,7 @@ import dev.schlaubi.envconf.getEnv
 import dev.schlaubi.envconf.Config as EnvironmentConfig
 
 object Config : EnvironmentConfig("") {
+    val YOUTUBE_API_KEY by environment
     val ENVIRONMENT: Environment by getEnvEnum(default = Environment.PRODUCTION)
     val LOG_LEVEL by getEnv(Level.INFO, Level::valueOf)
     val SENTRY_TOKEN by environment.optional()

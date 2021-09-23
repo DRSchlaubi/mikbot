@@ -10,4 +10,5 @@ suspend fun MusicModule.commands() {
     queueCommand()
     skipCommand()
     schedulerCommands()
+    nowPlayingCommand()
 }

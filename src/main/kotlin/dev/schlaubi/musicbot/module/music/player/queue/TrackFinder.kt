@@ -1,29 +1,59 @@
 package dev.schlaubi.musicbot.module.music.player.queue
 
 import com.kotlindiscord.kord.extensions.commands.Arguments
+import com.kotlindiscord.kord.extensions.commands.CommandContext
 import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommandContext
 import com.kotlindiscord.kord.extensions.commands.converters.impl.defaultingBoolean
 import com.kotlindiscord.kord.extensions.commands.converters.impl.string
+import com.kotlindiscord.kord.extensions.interactions.editingPaginator
 import com.kotlindiscord.kord.extensions.interactions.respond
 import dev.kord.rest.builder.message.create.embed
 import dev.schlaubi.lavakord.rest.TrackResponse
 import dev.schlaubi.lavakord.rest.loadItem
 import dev.schlaubi.lavakord.rest.mapToTrack
 import dev.schlaubi.musicbot.module.music.player.MusicPlayer
+import dev.schlaubi.musicbot.utils.MessageSender
 import mu.KotlinLogging
 
 private val LOG = KotlinLogging.logger { }
 
 private val urlProtocol = "^https?://".toRegex()
 
-abstract class QueueArguments : Arguments() {
-    val query by string("query", "The query to play")
-    val force by defaultingBoolean("force", "Makes this item skip the queue", false)
-    val top by defaultingBoolean("top", "Adds this item to the top of the queue", false)
-    val soundcloud by defaultingBoolean("soundcloud", "Searches for this item on SoundCloud instead of YouTube", false)
+interface QueueOptions {
+    val query: String
+    val force: Boolean
+    val top: Boolean
+    val soundcloud: Boolean
 }
 
-suspend fun <T : QueueArguments> EphemeralSlashCommandContext<T>.findTracks(musicPlayer: MusicPlayer, search: Boolean) {
+abstract class QueueArguments : Arguments(), QueueOptions {
+    override val query by string("query", "The query to play")
+    override val force by defaultingBoolean("force", "Makes this item skip the queue", false)
+    override val top by defaultingBoolean("top", "Adds this item to the top of the queue", false)
+    override val soundcloud by defaultingBoolean("soundcloud", "Searches for this item on SoundCloud instead of YouTube", false)
+}
+
+suspend fun <T : QueueArguments> EphemeralSlashCommandContext<T>.findTracks(
+    musicPlayer: MusicPlayer,
+    search: Boolean
+) {
+    return findTracks(musicPlayer, search, arguments, {
+        respond {
+            it()
+        }
+    }) {
+        editingPaginator {
+            it()
+        }
+    }
+}
+
+internal suspend fun CommandContext.findTracks(
+    musicPlayer: MusicPlayer, search: Boolean,
+    arguments: QueueOptions,
+    respond: MessageSender,
+    editingPaginator: EditingPaginatorSender
+) {
     val rawQuery = arguments.query
     val isUrl = urlProtocol.find(rawQuery) != null
 
@@ -41,14 +71,14 @@ suspend fun <T : QueueArguments> EphemeralSlashCommandContext<T>.findTracks(musi
             Playlist(result.getPlaylistInfo(), result.tracks.mapToTrack())
         TrackResponse.LoadType.SEARCH_RESULT -> {
             if (search) {
-                searchSong(result) ?: return
+                searchSong(respond, editingPaginator, getUser()!!, musicPlayer, result) ?: return
             } else {
                 val foundTrack = result.tracks.first()
                 SingleTrack(foundTrack.toTrack())
             }
         }
-        TrackResponse.LoadType.NO_MATCHES -> return noMatches()
-        TrackResponse.LoadType.LOAD_FAILED -> return handleError(result)
+        TrackResponse.LoadType.NO_MATCHES -> return noMatches(respond)
+        TrackResponse.LoadType.LOAD_FAILED -> return handleError(respond, result)
     }
 
     val title = if (musicPlayer.nextSongIsFirst) translate("music.queue.now_playing") else translate(
@@ -70,13 +100,14 @@ suspend fun <T : QueueArguments> EphemeralSlashCommandContext<T>.findTracks(musi
     }
 }
 
-private suspend fun <T : QueueArguments> EphemeralSlashCommandContext<T>.noMatches() {
+private suspend fun CommandContext.noMatches(respond: MessageSender) {
     respond {
         content = translate("music.queue.no_matches")
     }
 }
 
-private suspend fun <T : QueueArguments> EphemeralSlashCommandContext<T>.handleError(
+private suspend fun CommandContext.handleError(
+    respond: MessageSender,
     result: TrackResponse
 ) {
     val error = result.getException()

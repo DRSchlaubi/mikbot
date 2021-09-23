@@ -1,7 +1,8 @@
 package dev.schlaubi.musicbot.utils
 
-import com.kotlindiscord.kord.extensions.commands.application.slash.SlashCommandContext
+import com.kotlindiscord.kord.extensions.commands.CommandContext
 import dev.kord.core.behavior.GuildBehavior
+import kotlinx.coroutines.runBlocking
 
-val SlashCommandContext<*, *>.safeGuild: GuildBehavior
-    get() = guild ?: error("This command required a guild check")
+val CommandContext.safeGuild: GuildBehavior
+    get() = runBlocking { getGuild() } ?: error("This command required a guild check")

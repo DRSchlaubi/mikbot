@@ -14,7 +14,6 @@ import dev.kord.rest.builder.message.create.MessageCreateBuilder
 import dev.kord.rest.builder.message.create.actionRow
 import kotlin.time.Duration
 
-private typealias MessageBuilder = suspend MessageCreateBuilder.() -> Unit
 
 private const val yes = "yes"
 private const val no = "no"

@@ -1,6 +1,7 @@
 package dev.schlaubi.musicbot.module.music.commands
 
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
+import com.kotlindiscord.kord.extensions.extensions.slashCommandCheck
 import com.kotlindiscord.kord.extensions.interactions.editingPaginator
 import com.kotlindiscord.kord.extensions.interactions.respond
 import dev.schlaubi.musicbot.module.music.MusicModule

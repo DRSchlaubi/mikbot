@@ -1,6 +1,7 @@
 package dev.schlaubi.musicbot.module.music
 
 import com.kotlindiscord.kord.extensions.checks.anyGuild
+import com.kotlindiscord.kord.extensions.commands.CommandContext
 import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommandContext
 import com.kotlindiscord.kord.extensions.commands.application.slash.SlashCommandContext
 import com.kotlindiscord.kord.extensions.extensions.Extension
@@ -11,6 +12,7 @@ import dev.schlaubi.lavakord.audio.Link
 import dev.schlaubi.lavakord.audio.player.Player
 import dev.schlaubi.musicbot.core.audio.LavalinkManager
 import dev.schlaubi.musicbot.module.music.commands.commands
+import dev.schlaubi.musicbot.module.music.context.playMessageAction
 import dev.schlaubi.musicbot.module.music.player.MusicPlayer
 import dev.schlaubi.musicbot.utils.confirmation
 import dev.schlaubi.musicbot.utils.extension
@@ -23,13 +25,13 @@ class MusicModule : Extension() {
     override val name: String = "music"
     override val bundle: String = "music"
 
-    val SlashCommandContext<*, *>.link: Link
+    val CommandContext.link: Link
         get() = lavalink.getLink(safeGuild)
 
-    val SlashCommandContext<*, *>.player: Player
+    val CommandContext.player: Player
         get() = link.player
 
-    val SlashCommandContext<*, *>.musicPlayer
+    val CommandContext.musicPlayer
         get() = musicPlayers.computeIfAbsent(safeGuild.id) { MusicPlayer(link) }
 
     override suspend fun setup() {
@@ -38,6 +40,7 @@ class MusicModule : Extension() {
         }
 
         commands()
+        playMessageAction()
     }
 
     suspend inline fun EphemeralSlashCommandContext<*>.checkOtherSchedulerOptions(

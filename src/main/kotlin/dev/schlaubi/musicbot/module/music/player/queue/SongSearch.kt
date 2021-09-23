@@ -3,7 +3,10 @@ package dev.schlaubi.musicbot.module.music.player.queue
 import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommandContext
 import com.kotlindiscord.kord.extensions.interactions.editingPaginator
 import com.kotlindiscord.kord.extensions.interactions.respond
+import com.kotlindiscord.kord.extensions.utils.permissionsForMember
 import com.kotlindiscord.kord.extensions.utils.waitForResponse
+import dev.kord.common.entity.Permission
+import dev.kord.core.entity.channel.GuildChannel
 import dev.schlaubi.lavakord.rest.TrackResponse
 import dev.schlaubi.lavakord.rest.mapToTrack
 import dev.schlaubi.musicbot.utils.forList
@@ -38,6 +41,11 @@ suspend fun EphemeralSlashCommandContext<*>.searchSong(result: TrackResponse): S
         pass
     }
     paginator.destroy()
+    if ((channel as GuildChannel).permissionsForMember(channel.kord.getUser(channel.kord.selfId)!!)
+            .contains(Permission.ManageMessages)
+    ) {
+        response?.delete()
+    }
     val index = response?.let { it.content.toInt() - 1 } ?: return null
 
     val track = tracks[index]

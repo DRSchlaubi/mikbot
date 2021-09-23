@@ -36,5 +36,6 @@ suspend fun <T> PaginatorBuilder.forList(
             additionalPageConfig()
         }
     }
+
     additionalConfig()
 }

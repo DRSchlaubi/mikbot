@@ -11,6 +11,7 @@ suspend fun MusicModule.stopCommand() {
 
         action {
             link.disconnectAudio()
+            musicPlayer.clearQueue()
 
             respond { content = "Stopped playback" }
         }

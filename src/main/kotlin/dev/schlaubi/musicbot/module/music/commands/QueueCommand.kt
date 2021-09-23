@@ -1,7 +1,6 @@
 package dev.schlaubi.musicbot.module.music.commands
 
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
-import com.kotlindiscord.kord.extensions.extensions.slashCommandCheck
 import com.kotlindiscord.kord.extensions.interactions.editingPaginator
 import com.kotlindiscord.kord.extensions.interactions.respond
 import dev.schlaubi.musicbot.module.music.MusicModule
@@ -41,7 +40,7 @@ suspend fun MusicModule.queueCommand() = ephemeralSlashCommand {
                 if (musicPlayer.shuffle || musicPlayer.loopQueue) {
                     field {
                         name = translate("music.queue.order")
-                        value = if(musicPlayer.shuffle) "\uD83D\uDD00" else "\uD83D\uDD01"
+                        value = if (musicPlayer.shuffle) "\uD83D\uDD00" else "\uD83D\uDD01"
                     }
                 }
             }

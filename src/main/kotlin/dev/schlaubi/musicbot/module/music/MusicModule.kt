@@ -3,7 +3,6 @@ package dev.schlaubi.musicbot.module.music
 import com.kotlindiscord.kord.extensions.checks.anyGuild
 import com.kotlindiscord.kord.extensions.commands.CommandContext
 import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommandContext
-import com.kotlindiscord.kord.extensions.commands.application.slash.SlashCommandContext
 import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.extensions.slashCommandCheck
 import com.kotlindiscord.kord.extensions.interactions.edit
@@ -11,6 +10,7 @@ import dev.kord.common.entity.Snowflake
 import dev.schlaubi.lavakord.audio.Link
 import dev.schlaubi.lavakord.audio.player.Player
 import dev.schlaubi.musicbot.core.audio.LavalinkManager
+import dev.schlaubi.musicbot.module.music.checks.musicControlCheck
 import dev.schlaubi.musicbot.module.music.commands.commands
 import dev.schlaubi.musicbot.module.music.context.playMessageAction
 import dev.schlaubi.musicbot.module.music.player.MusicPlayer
@@ -37,6 +37,7 @@ class MusicModule : Extension() {
     override suspend fun setup() {
         slashCommandCheck {
             anyGuild() // Disable this commands in DMs
+            musicControlCheck() // checks voice connection etc.
         }
 
         commands()

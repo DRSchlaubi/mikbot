@@ -37,7 +37,7 @@ class MusicPlayer(private val link: Link) : Link by link {
         }
 
         // In order to loop the queue we just add every track back to the queue
-        if(event.reason == TrackEndEvent.EndReason.FINISHED && loopQueue) {
+        if (event.reason == TrackEndEvent.EndReason.FINISHED && loopQueue) {
             queue.add(event.track)
         }
     }
@@ -46,7 +46,7 @@ class MusicPlayer(private val link: Link) : Link by link {
 
     private suspend fun startNextSong(lastSong: Track? = null) {
         val nextTrack = when {
-        lastSong != null && repeat -> lastSong
+            lastSong != null && repeat -> lastSong
             shuffle -> {
                 val index = Random.nextInt(queue.size)
 
@@ -56,4 +56,6 @@ class MusicPlayer(private val link: Link) : Link by link {
         }
         link.player.playTrack(nextTrack)
     }
+
+    fun clearQueue() = queue.clear()
 }

@@ -16,7 +16,7 @@ suspend fun MusicModule.queueCommand() = ephemeralSlashCommand {
             val track = player.playingTrack
             if (track != null) {
                 respond {
-                    content = translate("commands.queue.now_playing", arrayOf(track.format()))
+                    content = translate("commands.queue.now_playing", arrayOf(track.format(musicPlayer)))
                 }
             } else {
                 respond {
@@ -26,14 +26,21 @@ suspend fun MusicModule.queueCommand() = ephemeralSlashCommand {
         }
 
         editingPaginator {
-            forList(user, musicPlayer.queuedTracks, { it.format() }, { current, total ->
+            forList(user, musicPlayer.queuedTracks, { it.format(musicPlayer) }, { current, total ->
                 translate("music.queue.info.title", arrayOf(current.toString(), total.toString()))
             }) {
                 val playingTrack = player.playingTrack
                 if (playingTrack != null) {
                     field {
                         name = translate("music.queue.now_playing")
-                        value = playingTrack.format()
+                        value = playingTrack.format(musicPlayer)
+                    }
+                }
+
+                if (musicPlayer.shuffle || musicPlayer.loopQueue) {
+                    field {
+                        name = translate("music.queue.order")
+                        value = if(musicPlayer.shuffle) "\uD83D\uDD00" else "\uD83D\uDD01"
                     }
                 }
             }

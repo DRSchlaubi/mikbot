@@ -9,4 +9,5 @@ suspend fun MusicModule.commands() {
     volumeCommand()
     queueCommand()
     skipCommand()
+    schedulerCommands()
 }

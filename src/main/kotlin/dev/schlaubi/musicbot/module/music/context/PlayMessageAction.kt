@@ -5,12 +5,19 @@ import com.kotlindiscord.kord.extensions.extensions.ephemeralMessageCommand
 import com.kotlindiscord.kord.extensions.interactions.editingPaginator
 import com.kotlindiscord.kord.extensions.interactions.respond
 import dev.schlaubi.musicbot.module.music.MusicModule
+import dev.schlaubi.musicbot.module.music.checks.joinSameChannelCheck
 import dev.schlaubi.musicbot.module.music.player.MusicPlayer
 import dev.schlaubi.musicbot.module.music.player.queue.QueueOptions
 import dev.schlaubi.musicbot.module.music.player.queue.queueTracks
 
+const val playActionName = "play as track"
+
 suspend fun MusicModule.playMessageAction() = ephemeralMessageCommand {
-    name = "Play as track"
+    name = playActionName
+
+    check {
+        joinSameChannelCheck(bot)
+    }
 
     action {
         val arguments = PlayMessageActionArguments(event.interaction.messages!!.values.first().content)

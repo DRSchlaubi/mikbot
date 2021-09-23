@@ -6,6 +6,8 @@ import com.kotlindiscord.kord.extensions.checks.types.CheckContext
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.GuildBehavior
 import dev.kord.core.entity.interaction.ChatInputCommandInteraction
+import dev.kord.core.entity.interaction.ComponentInteraction
+import dev.kord.core.entity.interaction.MessageCommandInteraction
 import dev.kord.core.event.Event
 import dev.kord.core.event.interaction.InteractionCreateEvent
 import dev.schlaubi.lavakord.kord.connectAudio
@@ -34,6 +36,7 @@ suspend fun <T : Event> CheckContext<T>.joinSameChannelCheck(extensibleBot: Exte
 suspend fun <T : InteractionCreateEvent> CheckContext<T>.musicControlCheck() {
     // This is hacky but there is no other way
     if ((event.interaction as? ChatInputCommandInteraction)?.command?.rootName == "play") return pass()
+    if ((event.interaction as? MessageCommandInteraction)?.name == "play") return pass()
 
     abstractMusicCheck {
         if (botChannel == null) {

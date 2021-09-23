@@ -13,7 +13,6 @@ import dev.schlaubi.musicbot.config.Config
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-
 private val client: YouTube = YouTube.Builder(
     GoogleNetHttpTransport.newTrustedTransport(),
     JacksonFactory.getDefaultInstance()

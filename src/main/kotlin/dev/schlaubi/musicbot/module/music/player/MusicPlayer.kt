@@ -6,6 +6,7 @@ import dev.schlaubi.lavakord.audio.on
 import dev.schlaubi.lavakord.audio.player.Track
 import java.util.LinkedList
 import kotlin.random.Random
+import kotlin.time.Duration
 
 class MusicPlayer(internal val link: Link) : Link by link {
     private val queue = LinkedList<Track>()
@@ -17,6 +18,18 @@ class MusicPlayer(internal val link: Link) : Link by link {
     init {
         link.player.on(consumer = ::onTrackEnd)
     }
+
+    val remainingQueueDuration: Duration
+        get() {
+            val remainingOfCurrentTrack =
+                player.playingTrack?.length?.minus(Duration.milliseconds(player.position))
+                    ?: Duration.milliseconds(0)
+
+            val remainingQueue = queuedTracks
+                .fold(Duration.seconds(0)) { acc, track -> acc + track.length }
+
+            return remainingOfCurrentTrack + remainingQueue
+        }
 
     val nextSongIsFirst: Boolean get() = queue.isEmpty() && link.player.playingTrack == null
 
@@ -36,7 +49,7 @@ class MusicPlayer(internal val link: Link) : Link by link {
             startNextSong(event.track)
         }
 
-        // In order to loop the queue we just add every track back to the queue
+        // In order to loop the queueTracks we just add every track back to the queueTracks
         if (event.reason == TrackEndEvent.EndReason.FINISHED && loopQueue) {
             queue.add(event.track)
         }
@@ -54,6 +67,7 @@ class MusicPlayer(internal val link: Link) : Link by link {
             }
             else -> queue.poll()
         }
+
         link.player.playTrack(nextTrack)
     }
 

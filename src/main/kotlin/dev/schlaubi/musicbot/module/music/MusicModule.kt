@@ -7,6 +7,7 @@ import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.extensions.slashCommandCheck
 import com.kotlindiscord.kord.extensions.interactions.edit
 import dev.kord.common.entity.Snowflake
+import dev.kord.core.behavior.GuildBehavior
 import dev.schlaubi.lavakord.audio.Link
 import dev.schlaubi.lavakord.audio.player.Player
 import dev.schlaubi.musicbot.core.audio.LavalinkManager
@@ -32,7 +33,14 @@ class MusicModule : Extension() {
         get() = link.player
 
     val CommandContext.musicPlayer
-        get() = musicPlayers.computeIfAbsent(safeGuild.id) { MusicPlayer(link) }
+        get() = getMusicPlayer(safeGuild)
+
+    fun getMusicPlayer(guild: GuildBehavior) =
+        musicPlayers.computeIfAbsent(guild.id) {
+            val link = lavalink.getLink(guild)
+
+            MusicPlayer(link)
+        }
 
     override suspend fun setup() {
         slashCommandCheck {

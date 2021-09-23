@@ -25,7 +25,7 @@ suspend fun <T : Event> CheckContext<T>.joinSameChannelCheck(extensibleBot: Exte
                 delay(Duration.milliseconds(400)) // wait for Discord API to propagate
             }
             lavalink.connectAudio(voiceChannel)
-        } else {
+        } else if (voiceChannel != botChannel) {
             fail(translateM("music.checks.already_in_use"))
         }
     }

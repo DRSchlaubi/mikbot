@@ -8,8 +8,8 @@ import dev.schlaubi.musicbot.utils.forList
 import dev.schlaubi.musicbot.utils.format
 
 suspend fun MusicModule.queueCommand() = ephemeralSlashCommand {
-    name = "queue"
-    description = "Shows the current queue"
+    name = "queueTracks"
+    description = "Shows the current queueTracks"
 
     action {
         if (musicPlayer.queuedTracks.isEmpty()) {
@@ -39,7 +39,7 @@ suspend fun MusicModule.queueCommand() = ephemeralSlashCommand {
 
                 if (musicPlayer.shuffle || musicPlayer.loopQueue) {
                     field {
-                        name = translate("music.queue.order")
+                        name = translate("music.queueTracks.order")
                         value = if (musicPlayer.shuffle) "\uD83D\uDD00" else "\uD83D\uDD01"
                     }
                 }

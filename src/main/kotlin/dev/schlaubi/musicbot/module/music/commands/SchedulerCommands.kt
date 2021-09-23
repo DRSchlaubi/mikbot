@@ -38,8 +38,8 @@ suspend fun MusicModule.schedulerCommands() {
     }
 
     ephemeralSlashCommand {
-        name = "loop-queue"
-        description = "Toggles loop queue mode (Looping the queue over and over)"
+        name = "loop-queueTracks"
+        description = "Toggles loop queueTracks mode (Looping the queueTracks over and over)"
 
         action {
             schedulerOption(

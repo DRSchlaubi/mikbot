@@ -7,7 +7,7 @@ import dev.schlaubi.lavakord.kord.connectAudio
 import dev.schlaubi.musicbot.module.music.MusicModule
 import dev.schlaubi.musicbot.module.music.checks.joinSameChannelCheck
 import dev.schlaubi.musicbot.module.music.player.queue.QueueArguments
-import dev.schlaubi.musicbot.module.music.player.queue.findTracks
+import dev.schlaubi.musicbot.module.music.player.queue.queueTracks
 import dev.schlaubi.musicbot.utils.safeGuild
 
 class PlayArguments : QueueArguments() {
@@ -33,7 +33,7 @@ suspend fun MusicModule.playCommand() {
                 deafened = true
             }
 
-            findTracks(musicPlayer, arguments.search)
+            queueTracks(musicPlayer, arguments.search)
         }
     }
 }

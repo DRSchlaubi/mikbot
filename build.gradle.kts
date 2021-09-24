@@ -18,6 +18,7 @@ repositories {
 dependencies {
     // Bot
     implementation("com.kotlindiscord.kord.extensions", "kord-extensions", "1.5.0-SNAPSHOT")
+    implementation("dev.kord.x", "emoji", "0.5.0")
     implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-jdk8", "1.5.2")
     implementation("dev.schlaubi.lavakord", "kord", "2.0.2")
     implementation("org.litote.kmongo", "kmongo-coroutine-serialization", "4.3.0")

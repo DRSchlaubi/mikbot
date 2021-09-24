@@ -11,6 +11,7 @@ import dev.kord.core.behavior.GuildBehavior
 import dev.schlaubi.lavakord.audio.Link
 import dev.schlaubi.lavakord.audio.player.Player
 import dev.schlaubi.musicbot.core.audio.LavalinkManager
+import dev.schlaubi.musicbot.core.io.Database
 import dev.schlaubi.musicbot.module.music.checks.musicControlCheck
 import dev.schlaubi.musicbot.module.music.commands.commands
 import dev.schlaubi.musicbot.module.music.context.playMessageAction
@@ -18,6 +19,7 @@ import dev.schlaubi.musicbot.module.music.player.MusicPlayer
 import dev.schlaubi.musicbot.utils.confirmation
 import dev.schlaubi.musicbot.utils.extension
 import dev.schlaubi.musicbot.utils.safeGuild
+import org.koin.core.component.inject
 import kotlin.reflect.KMutableProperty1
 
 class MusicModule : Extension() {
@@ -25,6 +27,8 @@ class MusicModule : Extension() {
     private val musicPlayers: MutableMap<Snowflake, MusicPlayer> = mutableMapOf()
     override val name: String = "music"
     override val bundle: String = "music"
+
+    val database: Database by inject()
 
     val CommandContext.link: Link
         get() = lavalink.getLink(safeGuild)
@@ -39,7 +43,7 @@ class MusicModule : Extension() {
         musicPlayers.computeIfAbsent(guild.id) {
             val link = lavalink.getLink(guild)
 
-            MusicPlayer(link)
+            MusicPlayer(link, guild, database)
         }
 
     override suspend fun setup() {
@@ -58,7 +62,7 @@ class MusicModule : Extension() {
         callback: (newValue: Boolean) -> Unit
     ) {
         if (properties.any { it.get(musicPlayer) }) {
-            val confirmation = confirmation(this) {
+            val confirmation = confirmation {
                 content = translate("music.multiple_scheduler_options")
             }
             if (!confirmation.value) {

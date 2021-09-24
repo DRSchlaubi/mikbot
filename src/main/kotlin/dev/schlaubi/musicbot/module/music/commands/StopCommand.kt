@@ -10,8 +10,7 @@ suspend fun MusicModule.stopCommand() {
         description = "Stops the current song"
 
         action {
-            link.disconnectAudio()
-            musicPlayer.clearQueue()
+            musicPlayer.stop()
 
             respond { content = "Stopped playback" }
         }

@@ -1,19 +1,35 @@
 package dev.schlaubi.musicbot.module.music.player
 
+import dev.kord.core.behavior.GuildBehavior
 import dev.schlaubi.lavakord.audio.Link
 import dev.schlaubi.lavakord.audio.TrackEndEvent
 import dev.schlaubi.lavakord.audio.on
 import dev.schlaubi.lavakord.audio.player.Track
+import dev.schlaubi.musicbot.core.io.Database
+import dev.schlaubi.musicbot.module.settings.updateMessage
+import kotlinx.coroutines.launch
 import java.util.LinkedList
 import kotlin.random.Random
 import kotlin.time.Duration
 
-class MusicPlayer(internal val link: Link) : Link by link {
+class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, private val database: Database) : Link by link {
     private val queue = LinkedList<Track>()
     val queuedTracks get() = queue.toList()
     var shuffle = false
+        set(value) {
+            field = value
+            updateMusicChannelMessage()
+        }
     var repeat = false
+        set(value) {
+            field = value
+            updateMusicChannelMessage()
+        }
     var loopQueue = false
+        set(value) {
+            field = value
+            updateMusicChannelMessage()
+        }
 
     init {
         link.player.on(consumer = ::onTrackEnd)
@@ -41,6 +57,8 @@ class MusicPlayer(internal val link: Link) : Link by link {
         if (force || isFirst) {
             startNextSong(force = force)
         }
+
+        updateMusicChannelMessage()
     }
 
     private suspend fun onTrackEnd(event: TrackEndEvent) {
@@ -53,9 +71,14 @@ class MusicPlayer(internal val link: Link) : Link by link {
         if (event.reason == TrackEndEvent.EndReason.FINISHED && loopQueue) {
             queue.add(event.track)
         }
+
+        updateMusicChannelMessage()
     }
 
-    suspend fun skip() = startNextSong()
+    suspend fun skip() {
+        startNextSong()
+        updateMusicChannelMessage()
+    }
 
     private suspend fun startNextSong(lastSong: Track? = null, force: Boolean = false) {
         val nextTrack = when {
@@ -71,5 +94,21 @@ class MusicPlayer(internal val link: Link) : Link by link {
         link.player.playTrack(nextTrack)
     }
 
-    fun clearQueue() = queue.clear()
+    fun clearQueue() {
+        queue.clear()
+
+        updateMusicChannelMessage()
+    }
+
+    suspend fun stop() {
+        player.stopTrack()
+        link.disconnectAudio()
+        clearQueue()
+    }
+
+    fun updateMusicChannelMessage() {
+        guild.kord.launch {
+            updateMessage(guild.id, database, guild.kord, this@MusicPlayer)
+        }
+    }
 }

@@ -16,6 +16,9 @@ import kotlin.time.Duration
 private const val yes = "yes"
 private const val no = "no"
 
+class Confirmation(val value: Boolean, private val response: FollowupMessageBehavior) :
+    FollowupMessageBehavior by response
+
 /**
  * Initiates a button based confirmation form for [context].
  *
@@ -48,7 +51,7 @@ private suspend fun CommandContext.confirmation(
     sendMessage: suspend (MessageBuilder) -> FollowupMessageBehavior,
     timeout: Duration = Duration.seconds(30),
     messageBuilder: MessageBuilder
-): Boolean {
+): Confirmation {
     val message = sendMessage {
         messageBuilder()
 
@@ -69,12 +72,12 @@ private suspend fun CommandContext.confirmation(
         (interaction as? ComponentInteraction)?.let {
             it.message?.id == message.id
         } == true
-    } ?: return false
+    } ?: return Confirmation(false, message)
 
     val interaction = response.interaction as ComponentInteraction
     interaction.acknowledgeEphemeralDeferredMessageUpdate()
 
     val button = interaction.componentId
 
-    return button == yes
+    return Confirmation(button == yes, message)
 }

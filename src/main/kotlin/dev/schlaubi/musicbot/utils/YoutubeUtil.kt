@@ -16,7 +16,7 @@ import kotlinx.coroutines.withContext
 private val client: YouTube = YouTube.Builder(
     GoogleNetHttpTransport.newTrustedTransport(),
     JacksonFactory.getDefaultInstance()
-) { httpRequest -> }
+) { }
     .setApplicationName("groovybot-discord")
     .setYouTubeRequestInitializer(RequestInitializer())
     .build()

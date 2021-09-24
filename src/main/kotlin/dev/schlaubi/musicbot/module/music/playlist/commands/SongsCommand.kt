@@ -22,7 +22,7 @@ fun PlaylistModule.songsCommand() = playlistSubCommand(::PlaylistSongsArguments)
 
         editingPaginator {
             forList(
-                user, playlist.songs, { it.format(musicPlayer) },
+                user, playlist.songs, { it.format() },
                 { current, total ->
                     translate(
                         "commands.playlist.songs.paginator.title",

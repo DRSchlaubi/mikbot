@@ -101,7 +101,7 @@ internal suspend fun CommandContext.findTracks(
             Playlist(result.getPlaylistInfo(), result.tracks.mapToTrack())
         TrackResponse.LoadType.SEARCH_RESULT -> {
             if (search) {
-                searchSong(respond, editingPaginator, getUser()!!, musicPlayer, result) ?: return null
+                searchSong(respond, editingPaginator, getUser()!!, result) ?: return null
             } else {
                 val foundTrack = result.tracks.first()
                 SingleTrack(foundTrack.toTrack())

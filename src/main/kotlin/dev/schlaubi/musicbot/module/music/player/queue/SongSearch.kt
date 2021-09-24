@@ -10,7 +10,6 @@ import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.entity.channel.GuildChannel
 import dev.schlaubi.lavakord.rest.TrackResponse
 import dev.schlaubi.lavakord.rest.mapToTrack
-import dev.schlaubi.musicbot.module.music.player.MusicPlayer
 import dev.schlaubi.musicbot.utils.MessageSender
 import dev.schlaubi.musicbot.utils.forList
 import dev.schlaubi.musicbot.utils.format
@@ -25,7 +24,6 @@ suspend fun CommandContext.searchSong(
     respond: MessageSender,
     editingPaginator: EditingPaginatorSender,
     user: UserBehavior,
-    musicPlayer: MusicPlayer,
     result: TrackResponse
 ): SingleTrack? {
     val tracks = result.tracks.mapToTrack()
@@ -33,7 +31,7 @@ suspend fun CommandContext.searchSong(
         forList(
             user,
             tracks,
-            { it.format(musicPlayer) },
+            { it.format() },
             { current, total ->
                 translate("music.queue.search.title", arrayOf(current.toString(), total.toString()))
             }

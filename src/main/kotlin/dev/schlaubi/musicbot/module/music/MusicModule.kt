@@ -58,12 +58,14 @@ class MusicModule : Extension() {
         callback: (newValue: Boolean) -> Unit
     ) {
         if (properties.any { it.get(musicPlayer) }) {
-            val confirmed = confirmation(this) {
+            val confirmation = confirmation(this) {
                 content = translate("music.multiple_scheduler_options")
             }
-            if (!confirmed) {
+            if (!confirmation.value) {
                 edit { content = translate("music.general.aborted") }
                 return
+            } else {
+                confirmation.value
             }
 
             properties.forEach {

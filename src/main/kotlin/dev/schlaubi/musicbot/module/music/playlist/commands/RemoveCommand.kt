@@ -34,7 +34,7 @@ fun PlaylistModule.removeCommand() = playlistSubCommand(::PlaylistRemoveArgument
             )
 
             respond {
-                content = translate("commands.playlist.remove.removed", arrayOf(item.format(musicPlayer), playlist.name))
+                content = translate("commands.playlist.remove.removed", arrayOf(item.format(), playlist.name))
             }
         }
     }

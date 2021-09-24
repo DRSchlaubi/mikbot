@@ -35,11 +35,11 @@ class MusicPlayer(internal val link: Link) : Link by link {
 
     suspend fun queueTrack(force: Boolean, onTop: Boolean, tracks: Collection<Track>) {
         val isFirst = nextSongIsFirst
-        val startIndex = if ((onTop || force) && queue.isNotEmpty()) 1 else 0
+        val startIndex = if ((onTop || force) && queue.isNotEmpty()) 0 else queue.size
         queue.addAll(startIndex, tracks)
 
         if (force || isFirst) {
-            startNextSong()
+            startNextSong(force = force)
         }
     }
 
@@ -57,10 +57,10 @@ class MusicPlayer(internal val link: Link) : Link by link {
 
     suspend fun skip() = startNextSong()
 
-    private suspend fun startNextSong(lastSong: Track? = null) {
+    private suspend fun startNextSong(lastSong: Track? = null, force: Boolean = false) {
         val nextTrack = when {
             lastSong != null && repeat -> lastSong
-            shuffle -> {
+            !force && shuffle -> {
                 val index = Random.nextInt(queue.size)
 
                 /* return */queue.removeAt(index)

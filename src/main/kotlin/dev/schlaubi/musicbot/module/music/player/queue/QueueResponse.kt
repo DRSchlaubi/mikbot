@@ -31,8 +31,8 @@ class SingleTrack(private val track: Track) : QueueSearchResult {
 class Playlist(private val info: TrackResponse.PlaylistInfo, tracks: List<Track>) : QueueSearchResult {
     override val tracks: List<Track> = run {
         if (info.selectedTrack == -1) return@run tracks
-        val track = tracks[info.selectedTrack]
-        listOf(track) + (tracks - track)
+
+        tracks.drop(info.selectedTrack)
     }
 
     override suspend fun CommandContext.type(): String = translate("music.info.playlist")

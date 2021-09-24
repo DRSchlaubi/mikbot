@@ -7,7 +7,8 @@ import dev.schlaubi.envconf.getEnv
 import dev.schlaubi.envconf.Config as EnvironmentConfig
 
 object Config : EnvironmentConfig("") {
-    val BOT_OWNERS by getEnv(emptyList()) { it.split(",").map { Snowflake(it) } }
+    val OWNER_GUILD by getEnv { Snowflake(it) }.optional()
+    val BOT_OWNERS by getEnv(emptyList()) { it.split(",").map { id -> Snowflake(id) } }
     val REDEPLOY_HOST by environment.optional()
     val REDEPLOY_TOKEN by environment.optional()
     val YOUTUBE_API_KEY by environment

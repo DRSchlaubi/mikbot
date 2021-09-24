@@ -8,8 +8,6 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: bot
     volumes:
       - mongo-data:/data/db
-    ports:
-      - "27017:27017"
   bot:
     image: ghcr.io/drschlaubi/mikmusic/bot:latest
     env_file:

@@ -1,11 +1,15 @@
 package dev.schlaubi.musicbot.config
 
 import ch.qos.logback.classic.Level
+import dev.kord.common.entity.Snowflake
 import dev.schlaubi.envconf.EnvironmentVariable
 import dev.schlaubi.envconf.getEnv
 import dev.schlaubi.envconf.Config as EnvironmentConfig
 
 object Config : EnvironmentConfig("") {
+    val BOT_OWNERS by getEnv(emptyList()) { it.split(",").map { Snowflake(it) } }
+    val REDEPLOY_HOST by environment.optional()
+    val REDEPLOY_TOKEN by environment.optional()
     val YOUTUBE_API_KEY by environment
     val ENVIRONMENT: Environment by getEnvEnum(default = Environment.PRODUCTION)
     val LOG_LEVEL by getEnv(Level.INFO, Level::valueOf)

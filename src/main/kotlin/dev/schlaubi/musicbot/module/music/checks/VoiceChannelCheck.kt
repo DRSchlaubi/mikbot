@@ -1,6 +1,7 @@
 package dev.schlaubi.musicbot.module.music.checks
 
 import com.kotlindiscord.kord.extensions.ExtensibleBot
+import com.kotlindiscord.kord.extensions.checks.hasRole
 import com.kotlindiscord.kord.extensions.checks.memberFor
 import com.kotlindiscord.kord.extensions.checks.types.CheckContext
 import dev.kord.common.entity.Snowflake
@@ -13,6 +14,9 @@ import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.core.event.interaction.InteractionCreateEvent
 import dev.schlaubi.lavakord.kord.connectAudio
 import dev.schlaubi.musicbot.core.audio.LavalinkManager
+import dev.schlaubi.musicbot.core.io.findGuild
+import dev.schlaubi.musicbot.utils.database
+import dev.schlaubi.musicbot.utils.ifPassing
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.count
 import kotlin.time.Duration
@@ -69,12 +73,19 @@ private suspend inline fun <T : Event> CheckContext<T>.abstractMusicCheck(
     }
     val voiceChannel = member?.getVoiceStateOrNull()?.channelId
         ?: return fail(translateM("music.checks.not_in_vc"))
-
     val guild = member.guild
-    val bot = guild.getMember(member.kord.selfId)
-    val botChannel = bot.getVoiceStateOrNull()?.channelId
 
-    block(MusicCheckContext(voiceChannel, botChannel, guild))
+    val guildSettings = database.guildSettings.findGuild(guild)
+    if (guildSettings.djMode) {
+        hasRole(guildSettings.djRole!!)
+    }
+
+    ifPassing {
+        val bot = guild.getMember(member.kord.selfId)
+        val botChannel = bot.getVoiceStateOrNull()?.channelId
+
+        block(MusicCheckContext(voiceChannel, botChannel, guild))
+    }
 }
 
 private fun CheckContext<*>.translateM(key: String) = translate(key, "music")

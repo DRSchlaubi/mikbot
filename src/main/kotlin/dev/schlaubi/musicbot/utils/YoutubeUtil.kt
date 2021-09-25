@@ -21,24 +21,28 @@ private val client: YouTube = YouTube.Builder(
     .setYouTubeRequestInitializer(RequestInitializer())
     .build()
 
-suspend fun getVideoById(videoId: String): VideoListResponse {
+private suspend fun getVideosById(videoId: String): VideoListResponse {
     return withContext(Dispatchers.IO) {
         client.videos().list("snippet,localizations,contentDetails").setId(videoId).execute()
     }
 }
 
-suspend fun getChannelById(channelId: String): ChannelListResponse {
+private suspend fun getChannelsById(channelId: String): ChannelListResponse {
     return withContext(Dispatchers.IO) {
         client.channels().list("snippet").setId(channelId).execute()
     }
 }
 
-suspend fun getFirstVideoById(videoId: String): Video {
-    return getVideoById(videoId).items[0]
-}
+/**
+ * Retrieves a [YouTube Video][Video] by its [videoId].
+ */
+suspend fun getVideoById(videoId: String): Video = getVideosById(videoId).items[0]
 
+/**
+ * Retrieves a [YouTube Channel][Channel] by its [channelId].
+ */
 suspend fun getFirstChannelById(channelId: String): Channel {
-    return getChannelById(channelId).items[0]
+    return getChannelsById(channelId).items[0]
 }
 
 private class RequestInitializer : YouTubeRequestInitializer() {

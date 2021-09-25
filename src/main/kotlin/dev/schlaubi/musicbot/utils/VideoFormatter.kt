@@ -4,6 +4,11 @@ import com.kotlindiscord.kord.extensions.commands.CommandContext
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.schlaubi.lavakord.audio.player.Track
 
+/**
+ * This function fetches all required information for [track] and adds it to `this` [EmbedBuilder].
+ *
+ * @param commandContext [CommandContext] which supplies the translate function
+ */
 suspend fun EmbedBuilder.addSong(commandContext: CommandContext, track: Track) {
     field {
         name = commandContext.translate("music.track.title")
@@ -16,7 +21,7 @@ suspend fun EmbedBuilder.addSong(commandContext: CommandContext, track: Track) {
     }
 
     if (track.uri?.contains("youtu(?:be)?".toRegex()) == true) {
-        val video = getFirstVideoById(track.identifier)
+        val video = getVideoById(track.identifier)
         val info = video.snippet
         val channel = getFirstChannelById(info.channelId).snippet
         thumbnail {

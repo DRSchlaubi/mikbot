@@ -17,7 +17,10 @@ import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
 import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.behavior.edit
+import dev.kord.core.behavior.getChannelOfOrNull
+import dev.kord.core.entity.Message
 import dev.kord.core.entity.channel.TextChannel
+import dev.kord.core.supplier.EntitySupplyStrategy
 import dev.kord.rest.builder.component.ActionRowBuilder
 import dev.kord.rest.builder.message.modify.actionRow
 import dev.kord.rest.builder.message.modify.embed
@@ -29,11 +32,18 @@ import dev.schlaubi.musicbot.module.music.player.MusicPlayer
 import dev.schlaubi.musicbot.utils.confirmation
 import dev.schlaubi.musicbot.utils.format
 import dev.schlaubi.musicbot.utils.safeGuild
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toList
 
 private class MusicChannelArguments : Arguments() {
-    val musicChannel by channel("channel", "Text Channel to use for Music Channel", validator = { _, value ->
+    val channel by channel("channel", "Text Channel to use for Music Channel", validator = { _, value ->
         if (value.type != ChannelType.GuildText) {
             throw DiscordRelayedException(translate("commands.musicchannel.notextchannel", arrayOf(value.data.name)))
+        }
+
+        val botPermissions = (value as TextChannel).getEffectivePermissions(value.kord.selfId)
+        if (Permission.ManageMessages !in botPermissions) {
+            throw DiscordRelayedException(translate("command.music_channel.chnnal_missing_perms"))
         }
     })
 }
@@ -69,17 +79,44 @@ suspend fun SettingsModule.musicChannel() {
                 }
             }
 
-            val message = (arguments.musicChannel as TextChannel).createMessage {
-                content = "loading..."
+            val textChannel = (arguments.channel as TextChannel)
+                // disable the cache for this one, because message caching has issues
+                .withStrategy(EntitySupplyStrategy.rest)
+
+            if (textChannel.getLastMessage() != null) {
+                val (confirmed) = confirmation {
+                    content = translate("settings.musicchannel.try_delete_messages")
+                }
+
+                if (confirmed) {
+                    val messages = textChannel
+                        .messages
+                        .map { it.id }
+                        .toList()
+                    textChannel.bulkDelete(messages)
+                }
             }
+
+            val message = (arguments.channel as TextChannel).createMessage {
+                content = translate("settings.loading")
+            }
+
+            message.pin("Main music channel message")
 
             database.guildSettings.save(
                 guildSettings.copy(
-                    musicChannelData = MusicChannelData(arguments.musicChannel.id, message.id)
+                    musicChannelData = MusicChannelData(arguments.channel.id, message.id)
                 )
             )
 
-            musicModule.getMusicPlayer(safeGuild).updateMusicChannelMessage()
+            // Remove loading text
+            updateMessage(
+                safeGuild.id,
+                database,
+                this@ephemeralSlashCommand.kord,
+                musicModule.getMusicPlayer(safeGuild),
+                true
+            )
 
             respond {
                 content = translate("settings.musicchannel.createdchannel")
@@ -89,16 +126,31 @@ suspend fun SettingsModule.musicChannel() {
 }
 
 @OptIn(KordUnsafe::class, dev.kord.common.annotation.KordExperimental::class)
-suspend fun updateMessage(guildId: Snowflake, database: Database, kord: Kord, musicPlayer: MusicPlayer) {
-    val (channelId, messageId) = database.guildSettings.findOneById(guildId)?.musicChannelData ?: return
-
-    kord.unsafe.message(channelId, messageId).edit {
+suspend fun updateMessage(
+    guildId: Snowflake,
+    database: Database,
+    kord: Kord,
+    musicPlayer: MusicPlayer,
+    initialUpdate: Boolean = false
+) {
+    findMessageSafe(database, guildId, kord)?.edit {
+        if (initialUpdate) {
+            // Clear initial loading text
+            // This requires the content to be explicitly an empty string
+            // afterwards we will just send null (or effectively no value) to shrink down the request size
+            content = ""
+        }
         embed {
             title = "Queue"
             description = musicPlayer.queuedTracks.take(5).mapIndexed { index, track -> track to index }
                 .joinToString("\n") { (track, index) ->
                     (index + 1).toString() + ". " + track.format()
                 }.ifBlank { "No further songs in queue" }
+
+            field {
+                name = "now"
+                value = musicPlayer.player.playingTrack?.title ?: "nothing"
+            }
         }
 
         actionRow {
@@ -108,7 +160,8 @@ suspend fun updateMessage(guildId: Snowflake, database: Database, kord: Kord, mu
                 musicPlayer,
                 skip,
                 Emojis.fastForward,
-                customDisabledCondition = musicPlayer.queuedTracks.isEmpty() || musicPlayer.player.playingTrack == null
+                // You cannot skip, if there is no next item in the queue
+                additionalCondition = musicPlayer.queuedTracks.isNotEmpty()
             )
         }
         actionRow {
@@ -116,22 +169,36 @@ suspend fun updateMessage(guildId: Snowflake, database: Database, kord: Kord, mu
                 musicPlayer,
                 loop,
                 Emojis.repeat,
-                if (musicPlayer.loopQueue) ButtonStyle.Success else ButtonStyle.Primary
+                enabled = musicPlayer.loopQueue
             )
             musicButton(
                 musicPlayer,
                 repeatOne,
                 Emojis.repeatOne,
-                if (musicPlayer.repeat) ButtonStyle.Success else ButtonStyle.Primary
+                enabled = musicPlayer.repeat
             )
             musicButton(
                 musicPlayer,
                 shuffle,
                 Emojis.twistedRightwardsArrows,
-                if (musicPlayer.shuffle) ButtonStyle.Success else ButtonStyle.Primary
+                enabled = musicPlayer.shuffle
             )
         }
     }
+}
+
+suspend fun findMessageSafe(database: Database, guildId: Snowflake, kord: Kord): Message? {
+    val guildSettings = database.guildSettings.findOneById(guildId)
+    val (channelId, messageId) = guildSettings?.musicChannelData ?: return null
+
+    val message = kord.getGuild(guildId)?.getChannelOfOrNull<TextChannel>(channelId)?.getMessageOrNull(messageId)
+
+    // if the message is not found, disable the feature
+    if (message == null) {
+        database.guildSettings.save(guildSettings.copy(musicChannelData = null))
+    }
+
+    return message
 }
 
 private fun ActionRowBuilder.musicButton(
@@ -139,12 +206,21 @@ private fun ActionRowBuilder.musicButton(
     name: String,
     emoji: DiscordEmoji,
     buttonStyle: ButtonStyle = ButtonStyle.Primary,
-    customDisabledCondition: Boolean? = null
+    additionalCondition: Boolean = true,
+    enabled: Boolean = false,
+    enabledStyle: ButtonStyle = ButtonStyle.Success
 ) {
-    interactionButton(buttonStyle, name) {
+    val playingCondition = musicPlayer.player.playingTrack != null
+
+    val style = if (enabled && playingCondition) {
+        enabledStyle
+    } else {
+        buttonStyle
+    }
+
+    interactionButton(style, name) {
         this.emoji = DiscordPartialEmoji(name = emoji.unicode)
 
-        disabled =
-            customDisabledCondition ?: (musicPlayer.player.playingTrack == null)
+        disabled = !(playingCondition && additionalCondition)
     }
 }

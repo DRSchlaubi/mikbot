@@ -16,6 +16,9 @@ import dev.schlaubi.musicbot.module.music.checks.musicControlCheck
 import dev.schlaubi.musicbot.module.music.commands.commands
 import dev.schlaubi.musicbot.module.music.context.playMessageAction
 import dev.schlaubi.musicbot.module.music.player.MusicPlayer
+import dev.schlaubi.musicbot.utils.ConfirmationSender
+import dev.schlaubi.musicbot.utils.MessageEditor
+import dev.schlaubi.musicbot.utils.Translator
 import dev.schlaubi.musicbot.utils.confirmation
 import dev.schlaubi.musicbot.utils.extension
 import dev.schlaubi.musicbot.utils.safeGuild
@@ -56,30 +59,55 @@ class MusicModule : Extension() {
         playMessageAction()
     }
 
-    suspend inline fun EphemeralSlashCommandContext<*>.checkOtherSchedulerOptions(
+    suspend fun EphemeralSlashCommandContext<*>.checkOtherSchedulerOptions(
         myProperty: KMutableProperty1<MusicPlayer, Boolean>,
         vararg properties: KMutableProperty1<MusicPlayer, Boolean>,
-        callback: (newValue: Boolean) -> Unit
-    ) {
-        if (properties.any { it.get(musicPlayer) }) {
-            val confirmation = confirmation {
-                content = translate("music.multiple_scheduler_options")
-            }
-            if (!confirmation.value) {
-                edit { content = translate("music.general.aborted") }
-                return
-            } else {
-                confirmation.value
-            }
+        callback: suspend (newValue: Boolean) -> Unit
+    ) = checkOtherSchedulerOptions(
+        musicPlayer, ::translate,
+        { confirmation { it() } },
+        { edit { it() } },
+        myProperty,
+        *properties,
+        translatorGroup = "music",
+        callback = callback
+    )
+}
 
+/**
+ * Checks all [properties] to be false, and otherwise uses [confirmation] to confirm an overwrite to toggle [myProperty].
+ *
+ * @param musicPlayer the [MusicPlayer] the properties are on
+ * @param translate a [Translator] to translate the messages
+ * @param edit a [MessageEditor] editing the status message
+ * @param callback a callback called after it got updated
+ */
+suspend fun checkOtherSchedulerOptions(
+    musicPlayer: MusicPlayer,
+    translate: Translator,
+    confirmation: ConfirmationSender,
+    edit: MessageEditor,
+    myProperty: KMutableProperty1<MusicPlayer, Boolean>,
+    vararg properties: KMutableProperty1<MusicPlayer, Boolean>,
+    translatorGroup: String,
+    callback: suspend (newValue: Boolean) -> Unit
+) {
+    if (properties.any { it.get(musicPlayer) }) {
+        val (confirmed) = confirmation {
+            content = translate("music.multiple_scheduler_options", translatorGroup)
+        }
+        if (!confirmed) {
+            edit { content = translate("music.general.aborted", translatorGroup) }
+            return
+        } else {
             properties.forEach {
                 it.set(musicPlayer, false)
             }
         }
-
-        val currentValue = myProperty.get(musicPlayer)
-        myProperty.set(musicPlayer, !currentValue)
-
-        callback(!currentValue)
     }
+
+    val currentValue = myProperty.get(musicPlayer)
+    myProperty.set(musicPlayer, !currentValue)
+
+    callback(!currentValue)
 }

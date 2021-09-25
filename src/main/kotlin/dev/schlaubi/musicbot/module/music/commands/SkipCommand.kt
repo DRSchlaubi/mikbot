@@ -9,6 +9,11 @@ suspend fun MusicModule.skipCommand() = ephemeralSlashCommand {
     description = "Skips the current track"
 
     action {
+        if (musicPlayer.queuedTracks.isEmpty()) {
+            respond { content = translate("commands.skip.empty") }
+            return@action
+        }
+
         musicPlayer.skip()
         respond { content = translate("commands.skip.skipped") }
     }

@@ -4,19 +4,32 @@ import com.kotlindiscord.kord.extensions.commands.CommandContext
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.schlaubi.lavakord.audio.player.Track
 
-suspend fun EmbedBuilder.addSong(commandContext: CommandContext, track: Track) {
+/**
+ * This function fetches all required information for [track] and adds it to `this` [EmbedBuilder].
+ *
+ * @param commandContext [CommandContext] which supplies the translate function
+ */
+suspend fun EmbedBuilder.addSong(commandContext: CommandContext, track: Track) =
+    addSong(commandContext::translate, track)
+
+/**
+ * This function fetches all required information for [track] and adds it to `this` [EmbedBuilder].
+ *
+ * @param translate A [Translator] to translate messages.
+ */
+suspend fun EmbedBuilder.addSong(translate: Translator, track: Track) {
     field {
-        name = commandContext.translate("music.track.title")
+        name = translate("music.track.title", "music")
         value = track.title
     }
 
     field {
-        name = commandContext.translate("music.track.duration")
+        name = translate("music.track.duration", "music")
         value = track.length.toString()
     }
 
     if (track.uri?.contains("youtu(?:be)?".toRegex()) == true) {
-        val video = getFirstVideoById(track.identifier)
+        val video = getVideoById(track.identifier)
         val info = video.snippet
         val channel = getFirstChannelById(info.channelId).snippet
         thumbnail {
@@ -30,7 +43,7 @@ suspend fun EmbedBuilder.addSong(commandContext: CommandContext, track: Track) {
         }
     } else {
         field {
-            name = commandContext.translate("music.track.author")
+            name = translate("music.track.author", "music")
             value = track.author
         }
     }

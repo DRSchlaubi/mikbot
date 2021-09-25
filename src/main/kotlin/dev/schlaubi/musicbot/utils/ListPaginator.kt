@@ -4,6 +4,16 @@ import com.kotlindiscord.kord.extensions.pagination.builders.PaginatorBuilder
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.rest.builder.message.EmbedBuilder
 
+/**
+ * Configures this [PaginatorBuilder] to create one page for each [x][chunkSize] elements in [items].
+ *
+ * @param user the [PaginatorBuilder.owner] of this paginator
+ * @param mapper a mapper converting [T] to [String]
+ * @param title a function providing the title for the current page
+ * @param enumerate whether to include element numbers in entries or not
+ * @param additionalConfig additional [PaginatorBuilder] config
+ * @param additionalPageConfig additional [EmbedBuilder] config, applied to each page
+ */
 suspend fun <T> PaginatorBuilder.forList(
     user: UserBehavior,
     items: List<T>,

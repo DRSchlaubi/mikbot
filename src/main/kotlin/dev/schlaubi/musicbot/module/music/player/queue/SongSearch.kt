@@ -10,7 +10,7 @@ import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.entity.channel.GuildChannel
 import dev.schlaubi.lavakord.rest.TrackResponse
 import dev.schlaubi.lavakord.rest.mapToTrack
-import dev.schlaubi.musicbot.utils.MessageSender
+import dev.schlaubi.musicbot.utils.EditableMessageSender
 import dev.schlaubi.musicbot.utils.forList
 import dev.schlaubi.musicbot.utils.format
 import kotlin.time.Duration
@@ -21,7 +21,7 @@ typealias EditingPaginatorSender = suspend (EditingPaginatorBuilder) -> BaseButt
 
 @OptIn(ExperimentalTime::class)
 suspend fun CommandContext.searchSong(
-    respond: MessageSender,
+    respond: EditableMessageSender,
     editingPaginator: EditingPaginatorSender,
     user: UserBehavior,
     result: TrackResponse

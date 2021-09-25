@@ -16,41 +16,53 @@ import kotlin.time.Duration
 private const val yes = "yes"
 private const val no = "no"
 
-class Confirmation(val value: Boolean, private val response: FollowupMessageBehavior) :
+@Suppress("DataClassCanBeRecord")
+data class Confirmation(val value: Boolean, private val response: FollowupMessageBehavior) :
     FollowupMessageBehavior by response
 
 /**
- * Initiates a button based confirmation form for [context].
+ * Initiates a button based confirmation form for a [EphemeralSlashCommandContext].
  *
  * @param timeout the [Duration] after which the confirmation process should be aborted (default to false)
  * @param messageBuilder the confirmation message builder
  *
  * @return whether the user confirmed the form or not
  */
-suspend fun CommandContext.confirmation(
-    context: EphemeralSlashCommandContext<*>,
+suspend fun EphemeralSlashCommandContext<*>.confirmation(
     timeout: Duration = Duration.seconds(30),
     messageBuilder: MessageBuilder
-) = confirmation({ context.respond { it() } }, timeout, messageBuilder)
+) = confirmation({ respond { it() } }, timeout, messageBuilder)
 
 /**
- * Initiates a button based confirmation form for [context].
+ * Initiates a button based confirmation form for a [PublicSlashCommandContext].
  *
  * @param timeout the [Duration] after which the confirmation process should be aborted (default to false)
  * @param messageBuilder the confirmation message builder
  *
  * @return whether the user confirmed the form or not
  */
-suspend fun CommandContext.confirmation(
-    context: PublicSlashCommandContext<*>,
+suspend fun PublicSlashCommandContext<*>.confirmation(
     timeout: Duration = Duration.seconds(30),
     messageBuilder: MessageBuilder
-) = confirmation({ context.respond { it() } }, timeout, messageBuilder)
+) = confirmation({ respond { it() } }, timeout, messageBuilder)
 
 private suspend fun CommandContext.confirmation(
-    sendMessage: suspend (MessageBuilder) -> FollowupMessageBehavior,
+    sendMessage: EditableMessageSender,
     timeout: Duration = Duration.seconds(30),
     messageBuilder: MessageBuilder
+): Confirmation = confirmation(sendMessage, timeout, messageBuilder) { key, group ->
+    translate(key, group)
+}
+
+/**
+ * Bare bone confirmation implementation.
+ */
+suspend fun confirmation(
+    sendMessage: EditableMessageSender,
+    timeout: Duration = Duration.seconds(30),
+    messageBuilder: MessageBuilder,
+    hasNoOption: Boolean = true,
+    translate: Translator
 ): Confirmation {
     val message = sendMessage {
         messageBuilder()
@@ -61,8 +73,10 @@ private suspend fun CommandContext.confirmation(
                     label = translate("general.yes", "general")
                 }
 
-                interactionButton(ButtonStyle.Danger, no) {
-                    label = translate("general.no", "general")
+                if (hasNoOption) {
+                    interactionButton(ButtonStyle.Danger, no) {
+                        label = translate("general.no", "general")
+                    }
                 }
             }
         }

@@ -5,9 +5,11 @@ import com.kotlindiscord.kord.extensions.checks.memberFor
 import com.kotlindiscord.kord.extensions.checks.types.CheckContext
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.GuildBehavior
+import dev.kord.core.behavior.edit
 import dev.kord.core.entity.interaction.ChatInputCommandInteraction
 import dev.kord.core.entity.interaction.MessageCommandInteraction
 import dev.kord.core.event.Event
+import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.core.event.interaction.InteractionCreateEvent
 import dev.schlaubi.lavakord.kord.connectAudio
 import dev.schlaubi.musicbot.core.audio.LavalinkManager
@@ -26,6 +28,10 @@ suspend fun <T : Event> CheckContext<T>.joinSameChannelCheck(extensibleBot: Exte
                 delay(Duration.milliseconds(400)) // wait for Discord API to propagate
             }
             lavalink.connectAudio(voiceChannel)
+
+            guild.getMember(guild.kord.selfId).edit {
+                deafened = true
+            }
         } else if (voiceChannel != botChannel) {
             fail(translateM("music.checks.already_in_use"))
         }
@@ -54,7 +60,13 @@ private suspend inline fun <T : Event> CheckContext<T>.abstractMusicCheck(
         return
     }
 
-    val member = memberFor(event)
+    val member = memberFor(event) ?: (event as? ComponentInteractionCreateEvent)?.let {
+        it.interaction.message?.getGuild()?.id?.let { snow ->
+            it.interaction.user.asMember(
+                snow
+            )
+        }
+    }
     val voiceChannel = member?.getVoiceStateOrNull()?.channelId
         ?: return fail(translateM("music.checks.not_in_vc"))
 

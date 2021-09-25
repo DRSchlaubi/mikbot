@@ -8,6 +8,7 @@ import dev.schlaubi.musicbot.core.audio.LavalinkManager
 import dev.schlaubi.musicbot.core.io.Database
 import dev.schlaubi.musicbot.core.io.findUser
 import dev.schlaubi.musicbot.module.music.MusicModule
+import dev.schlaubi.musicbot.module.music.musicchannel.MusicInteractionModule
 import dev.schlaubi.musicbot.module.music.playlist.commands.PlaylistModule
 import dev.schlaubi.musicbot.module.owner.OwnerModule
 import dev.schlaubi.musicbot.module.settings.SettingsModule
@@ -30,6 +31,7 @@ class MusicBot : KoinComponent {
                 add(::MusicModule)
                 add(::PlaylistModule)
                 add(::OwnerModule)
+                add(::MusicInteractionModule)
             }
 
             presence {

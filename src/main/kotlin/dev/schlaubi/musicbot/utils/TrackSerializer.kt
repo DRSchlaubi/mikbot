@@ -9,6 +9,9 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
+/**
+ * Implementation of [KSerializer] for [Track] using [Track.track] and [Track.fromLavalink].
+ */
 object TrackSerializer : KSerializer<Track> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Track", PrimitiveKind.STRING)
 

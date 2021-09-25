@@ -12,10 +12,13 @@ suspend fun MusicModule.schedulerCommands() {
         myProperty: KMutableProperty1<MusicPlayer, Boolean>,
         vararg properties: KMutableProperty1<MusicPlayer, Boolean>,
         enabled: String,
-        disabled: String
+        disabled: String,
+        additional: suspend (Boolean) -> Unit = {}
     ) {
-        checkOtherSchedulerOptions(myProperty, *properties) {
-            val translateKey = if (it) enabled else disabled
+        checkOtherSchedulerOptions(myProperty, *properties) { gotEnabled ->
+            val translateKey = if (gotEnabled) enabled else disabled
+
+            additional(gotEnabled)
 
             respond {
                 content = translate(translateKey)

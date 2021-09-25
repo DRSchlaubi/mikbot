@@ -1,19 +1,50 @@
 package dev.schlaubi.musicbot.module.music.player
 
+import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
+import dev.kord.core.behavior.GuildBehavior
 import dev.schlaubi.lavakord.audio.Link
 import dev.schlaubi.lavakord.audio.TrackEndEvent
 import dev.schlaubi.lavakord.audio.on
 import dev.schlaubi.lavakord.audio.player.Track
+import dev.schlaubi.musicbot.core.io.Database
+import dev.schlaubi.musicbot.module.settings.updateMessage
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import java.util.LinkedList
 import kotlin.random.Random
 import kotlin.time.Duration
 
-class MusicPlayer(internal val link: Link) : Link by link {
+class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, private val database: Database) :
+    Link by link, KoinComponent {
     private val queue = LinkedList<Track>()
     val queuedTracks get() = queue.toList()
+    private val translationsProvider: TranslationsProvider by inject()
+
     var shuffle = false
+        set(value) {
+            field = value
+            updateMusicChannelMessage()
+        }
     var repeat = false
+        set(value) {
+            field = value
+            updateMusicChannelMessage()
+        }
     var loopQueue = false
+        set(value) {
+            field = value
+            if (value) { // if feature gets enabled
+                // Queue the current track again, so it also gets looped
+                player.playingTrack?.let {
+                    // we directly add it because we don't need to perform any other tasks
+                    // so essentially queueTrack would unnecessarily suspend
+                    queue.add(it)
+                }
+            }
+            updateMusicChannelMessage()
+        }
 
     init {
         link.player.on(consumer = ::onTrackEnd)
@@ -40,11 +71,17 @@ class MusicPlayer(internal val link: Link) : Link by link {
 
         if (force || isFirst) {
             startNextSong(force = force)
+            waitForPlayerUpdate()
         }
+
+        updateMusicChannelMessage()
     }
 
     private suspend fun onTrackEnd(event: TrackEndEvent) {
-        if (queue.isEmpty() && event.reason != TrackEndEvent.EndReason.REPLACED) return link.disconnectAudio()
+        if ((!repeat && queue.isEmpty()) && event.reason != TrackEndEvent.EndReason.REPLACED) {
+            link.disconnectAudio()
+            return updateMusicChannelMessage()
+        }
         if (event.reason.mayStartNext) {
             startNextSong(event.track)
         }
@@ -53,9 +90,24 @@ class MusicPlayer(internal val link: Link) : Link by link {
         if (event.reason == TrackEndEvent.EndReason.FINISHED && loopQueue) {
             queue.add(event.track)
         }
+
+        if (repeat) {
+            waitForPlayerUpdate()
+        }
+
+        updateMusicChannelMessage()
     }
 
-    suspend fun skip() = startNextSong()
+    private suspend fun waitForPlayerUpdate() {
+        // Delay .5 seconds to wait for player update event
+        // Otherwise updateMusicChannelMessage() won't get the update
+        delay(Duration.milliseconds(500))
+    }
+
+    suspend fun skip() {
+        startNextSong()
+        updateMusicChannelMessage()
+    }
 
     private suspend fun startNextSong(lastSong: Track? = null, force: Boolean = false) {
         val nextTrack = when {
@@ -71,5 +123,21 @@ class MusicPlayer(internal val link: Link) : Link by link {
         link.player.playTrack(nextTrack)
     }
 
-    fun clearQueue() = queue.clear()
+    fun clearQueue() {
+        queue.clear()
+
+        updateMusicChannelMessage()
+    }
+
+    suspend fun stop() {
+        player.stopTrack()
+        link.disconnectAudio()
+        clearQueue()
+    }
+
+    private fun updateMusicChannelMessage() {
+        guild.kord.launch {
+            updateMessage(guild.id, database, guild.kord, this@MusicPlayer, translationsProvider = translationsProvider)
+        }
+    }
 }

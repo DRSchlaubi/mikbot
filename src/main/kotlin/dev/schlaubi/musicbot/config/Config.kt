@@ -27,6 +27,7 @@ object Config : EnvironmentConfig("") {
     val SPOTIFY_CLIENT_SECRET by getEnv("")
 }
 
+@Suppress("unused")
 enum class Environment(val useSentry: Boolean) {
     PRODUCTION(true),
     DEVELOPMENT(false)

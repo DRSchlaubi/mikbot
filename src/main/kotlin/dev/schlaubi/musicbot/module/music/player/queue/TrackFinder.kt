@@ -13,7 +13,7 @@ import dev.schlaubi.lavakord.rest.TrackResponse
 import dev.schlaubi.lavakord.rest.loadItem
 import dev.schlaubi.lavakord.rest.mapToTrack
 import dev.schlaubi.musicbot.module.music.player.MusicPlayer
-import dev.schlaubi.musicbot.utils.MessageSender
+import dev.schlaubi.musicbot.utils.EditableMessageSender
 import mu.KotlinLogging
 import kotlin.time.Duration
 
@@ -74,7 +74,7 @@ internal suspend fun CommandContext.findTracks(
     musicPlayer: MusicPlayer,
     search: Boolean,
     arguments: QueueOptions,
-    respond: MessageSender,
+    respond: EditableMessageSender,
     editingPaginator: EditingPaginatorSender
 ): QueueSearchResult? {
     val rawQuery = arguments.query
@@ -122,7 +122,7 @@ internal suspend fun CommandContext.findTracks(
 
 private suspend fun CommandContext.queueSpotifySearch(
     spotifySearch: List<Track>,
-    respond: MessageSender,
+    respond: EditableMessageSender,
 ): QueueSearchResult? {
     if (spotifySearch.isEmpty()) {
         respond {
@@ -145,7 +145,7 @@ suspend fun CommandContext.queueTracks(
     musicPlayer: MusicPlayer,
     search: Boolean,
     arguments: QueueOptions,
-    respond: MessageSender,
+    respond: EditableMessageSender,
     editingPaginator: EditingPaginatorSender
 ) {
     val searchResult = findTracks(musicPlayer, search, arguments, respond, editingPaginator) ?: return
@@ -180,14 +180,14 @@ suspend fun CommandContext.queueTracks(
     }
 }
 
-private suspend fun CommandContext.noMatches(respond: MessageSender) {
+private suspend fun CommandContext.noMatches(respond: EditableMessageSender) {
     respond {
         content = translate("music.queue.no_matches")
     }
 }
 
 private suspend fun CommandContext.handleError(
-    respond: MessageSender,
+    respond: EditableMessageSender,
     result: TrackResponse
 ) {
     val error = result.getException()

@@ -5,6 +5,7 @@ import dev.schlaubi.musicbot.core.audio.LavalinkServer
 import dev.schlaubi.musicbot.module.music.playlist.Playlist
 import dev.schlaubi.musicbot.module.settings.BotGuild
 import dev.schlaubi.musicbot.module.settings.BotUser
+import dev.schlaubi.musicbot.module.owner.verification.Invitation
 import dev.schlaubi.musicbot.utils.TrackSerializer
 import org.litote.kmongo.coroutine.coroutine
 import org.litote.kmongo.reactivestreams.KMongo
@@ -22,4 +23,5 @@ class Database {
     val guildSettings = database.getCollection<BotGuild>("guild_settings")
     val playlists = database.getCollection<Playlist>("playlists")
     val lavalinkServers = database.getCollection<LavalinkServer>("lavalink_servers")
+    val invitations = database.getCollection<Invitation>("invitations")
 }

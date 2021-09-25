@@ -30,6 +30,11 @@ dependencies {
     implementation("com.google.apis", "google-api-services-youtube", "v3-rev205-1.25.0")
     implementation("se.michaelthelin.spotify", "spotify-web-api-java", "6.5.4")
 
+    // Verification Server
+    implementation(platform("io.ktor:ktor-bom:1.6.2"))
+    implementation("io.ktor", "ktor-server-netty")
+    implementation("io.ktor", "ktor-locations")
+
     // Util
     implementation("dev.schlaubi", "envconf", "1.1")
 }
@@ -48,7 +53,7 @@ tasks {
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions {
             jvmTarget = "16"
-            freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn", "-Xopt-in=kotlin.time.ExperimentalTime")
+            freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn", "-Xopt-in=kotlin.time.ExperimentalTime", "-Xopt-in=io.ktor.locations.KtorExperimentalLocationsAPI")
         }
     }
 }

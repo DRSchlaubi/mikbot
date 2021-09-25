@@ -33,8 +33,11 @@ For legal reasons: There is **no** official public instance of this bot, so don'
 
 ## Example Environment file
 
-<section hidden>
+<details>
+<summary>.env</summary>
+  
 ```properties
+  
 SENTRY_TOKEN=<sentry>
 DISCORD_TOKEN=<discord>
 GAMES=p: some funny games,w: unfunny funny compilations on YouTube,l: to silence
@@ -48,12 +51,15 @@ SPOTIFY_CLIENT_ID=<key>
 
 // See redeployment REDEPLOY_HOST=<host>
 REDEPLOY_TOKEN=<token>
-// comma seperated id list BOT_OWNERS=416902379598774273
+// comma seperated id list 
+BOT_OWNERS=416902379598774273
 
-// command /redeploy is on OWNER_GUILD=694185276922134619
+// command /redeploy is on 
+OWNER_GUILD=694185276922134619
 
 ```
-</section>
+  
+</details>
 
 ### Starting the bot
 Docker image from: https://github.com/DRSchlaubi/mikmusic/pkgs/container/mikmusic%2Fbot

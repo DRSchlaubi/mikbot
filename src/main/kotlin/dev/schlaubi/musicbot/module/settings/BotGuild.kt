@@ -11,7 +11,8 @@ data class BotGuild(
     val guildId: Snowflake,
     val djMode: Boolean = false,
     val announceSongs: Boolean = true,
-    val musicChannelData: MusicChannelData? = null
+    val musicChannelData: MusicChannelData? = null,
+    val verified: Boolean = false
 )
 
 @JvmRecord

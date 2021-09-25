@@ -6,6 +6,8 @@ import dev.schlaubi.musicbot.module.music.MusicModule
 import dev.schlaubi.musicbot.utils.extension
 import org.koin.core.component.inject
 
+typealias SuspendFunction = suspend () -> Unit
+
 class SettingsModule : Extension() {
     override val name: String = "settings"
     override val bundle: String = "settings"

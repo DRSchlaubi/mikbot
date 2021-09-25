@@ -14,5 +14,8 @@ services:
       - .env
     depends_on:
       - mongo
+    ports:
+      # only needed for verification_mode
+      - "127.0.0.1:7725:8080"
 volumes:
   mongo-data: { }

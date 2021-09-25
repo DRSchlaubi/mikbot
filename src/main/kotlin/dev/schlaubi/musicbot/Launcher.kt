@@ -22,7 +22,7 @@ private fun initializeLogging() {
 
 private fun initializeSentry() {
     val configure: (SentryOptions) -> Unit =
-        if (Config.ENVIRONMENT.useSentry && Config.SENTRY_TOKEN != null) {
+        if (Config.ENVIRONMENT.useSentry) {
             { it.dsn = Config.SENTRY_TOKEN }
         } else {
             { it.dsn = "" }

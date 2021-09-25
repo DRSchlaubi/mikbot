@@ -1,5 +1,6 @@
 package dev.schlaubi.musicbot.module.music.player
 
+import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
 import dev.kord.core.behavior.GuildBehavior
 import dev.schlaubi.lavakord.audio.Link
 import dev.schlaubi.lavakord.audio.TrackEndEvent
@@ -9,14 +10,18 @@ import dev.schlaubi.musicbot.core.io.Database
 import dev.schlaubi.musicbot.module.settings.updateMessage
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import java.util.LinkedList
 import kotlin.random.Random
 import kotlin.time.Duration
 
 class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, private val database: Database) :
-    Link by link {
+    Link by link, KoinComponent {
     private val queue = LinkedList<Track>()
     val queuedTracks get() = queue.toList()
+    private val translationsProvider: TranslationsProvider by inject()
+
     var shuffle = false
         set(value) {
             field = value
@@ -132,7 +137,7 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
 
     private fun updateMusicChannelMessage() {
         guild.kord.launch {
-            updateMessage(guild.id, database, guild.kord, this@MusicPlayer)
+            updateMessage(guild.id, database, guild.kord, this@MusicPlayer, translationsProvider = translationsProvider)
         }
     }
 }

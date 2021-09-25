@@ -6,6 +6,7 @@ import com.kotlindiscord.kord.extensions.checks.hasPermission
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.converters.impl.channel
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
+import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
 import com.kotlindiscord.kord.extensions.interactions.edit
 import com.kotlindiscord.kord.extensions.interactions.respond
 import dev.kord.common.annotation.KordUnsafe
@@ -29,6 +30,7 @@ import dev.kord.x.emoji.Emojis
 import dev.schlaubi.musicbot.core.io.Database
 import dev.schlaubi.musicbot.core.io.findGuild
 import dev.schlaubi.musicbot.module.music.player.MusicPlayer
+import dev.schlaubi.musicbot.utils.addSong
 import dev.schlaubi.musicbot.utils.confirmation
 import dev.schlaubi.musicbot.utils.format
 import dev.schlaubi.musicbot.utils.safeGuild
@@ -115,7 +117,8 @@ suspend fun SettingsModule.musicChannel() {
                 database,
                 this@ephemeralSlashCommand.kord,
                 musicModule.getMusicPlayer(safeGuild),
-                true
+                true,
+                translationsProvider
             )
 
             respond {
@@ -131,7 +134,8 @@ suspend fun updateMessage(
     database: Database,
     kord: Kord,
     musicPlayer: MusicPlayer,
-    initialUpdate: Boolean = false
+    initialUpdate: Boolean = false,
+    translationsProvider: TranslationsProvider
 ) {
     findMessageSafe(database, guildId, kord)?.edit {
         if (initialUpdate) {
@@ -141,15 +145,19 @@ suspend fun updateMessage(
             content = ""
         }
         embed {
+            val playingTrack = musicPlayer.player.playingTrack
+            if (playingTrack != null) {
+                addSong({ key, group -> translationsProvider.translate(key, bundleName = group) }, playingTrack)
+            }
+
             title = "Queue"
             description = musicPlayer.queuedTracks.take(5).mapIndexed { index, track -> track to index }
                 .joinToString("\n") { (track, index) ->
                     (index + 1).toString() + ". " + track.format()
                 }.ifBlank { "No further songs in queue" }
 
-            field {
-                name = "now"
-                value = musicPlayer.player.playingTrack?.title ?: "nothing"
+            footer {
+                text = "Send a message in this channel to queue a song"
             }
         }
 

@@ -7,7 +7,7 @@ import dev.schlaubi.lavakord.audio.player.Track
  *
  * @param repeat whether to add the repeat emoji or not
  */
-fun Track.format(repeat: Boolean = false) = "$title - $author".run {
+fun Track.format(repeat: Boolean = false) = "$title - $author ($length)".run {
     if (repeat) {
         "🔂 $this"
     } else {

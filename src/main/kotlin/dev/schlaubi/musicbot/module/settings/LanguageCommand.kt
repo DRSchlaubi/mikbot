@@ -30,7 +30,7 @@ suspend fun SettingsModule.languageCommand() {
             val newUser = botUser.copy(language = locale)
             database.users.save(newUser)
 
-            respond { content = translate("commands.langauge.changed", arrayOf(arguments.language)) }
+            respond { content = translate("commands.language.changed", arrayOf(arguments.language)) }
         }
     }
 }

@@ -17,6 +17,5 @@ class SettingsModule : Extension() {
     override suspend fun setup() {
         languageCommand()
         musicChannel()
-
     }
 }

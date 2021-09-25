@@ -118,5 +118,6 @@ docker-compose pull && docker-compose up -d
 ```
 
 # For developers
+  JDK is required it can be obtained [here](https://adoptium.net) (Recommended for Windows but works everywhere) and [here](https://sdkman.io/) (Recommended for Linux/Mac)
 
 Please set the `ENVIRONMENT` env var to `DEVELOPMENT` whilst developing the bot

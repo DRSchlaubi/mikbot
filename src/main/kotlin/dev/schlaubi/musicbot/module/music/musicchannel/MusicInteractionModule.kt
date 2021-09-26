@@ -29,6 +29,7 @@ import dev.schlaubi.musicbot.module.settings.stop
 import dev.schlaubi.musicbot.utils.Confirmation
 import dev.schlaubi.musicbot.utils.MessageBuilder
 import dev.schlaubi.musicbot.utils.Translator
+import dev.schlaubi.musicbot.utils.deleteAfterwards
 import dev.schlaubi.musicbot.utils.extension
 import dev.schlaubi.musicbot.utils.ifPassing
 import dev.schlaubi.musicbot.utils.respondIfFailed
@@ -132,8 +133,13 @@ class MusicInteractionModule : Extension() {
                 val tracks = player.takeFirstMatch(event.message.content)
 
                 player.queueTrack(force = false, onTop = false, tracks = tracks)
-
                 event.message.delete("Music channel interaction")
+
+                if (tracks.isEmpty()) {
+                    event.message.channel
+                        .createMessage(translate("music.queue.no_matches"))
+                        .deleteAfterwards()
+                }
             }
         }
     }

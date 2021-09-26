@@ -30,6 +30,11 @@ suspend fun MusicModule.nowPlayingCommand() = publicSlashCommand {
                     name = translate("commands.now_playing.serving_node.music")
                     value = "`${link.node.host}`"
                 }
+
+                field {
+                    name = translate("commands.now_playing.progress")
+                    value = "${player.position}/${playingTrack.length}"
+                }
             }
         }
     }

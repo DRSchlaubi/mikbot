@@ -20,6 +20,7 @@ import dev.schlaubi.musicbot.module.music.checkOtherSchedulerOptions
 import dev.schlaubi.musicbot.module.music.checks.joinSameChannelCheck
 import dev.schlaubi.musicbot.module.music.checks.musicControlCheck
 import dev.schlaubi.musicbot.module.music.player.MusicPlayer
+import dev.schlaubi.musicbot.module.music.player.queue.findSpotifySongs
 import dev.schlaubi.musicbot.module.settings.loop
 import dev.schlaubi.musicbot.module.settings.playPause
 import dev.schlaubi.musicbot.module.settings.repeatOne
@@ -130,7 +131,7 @@ class MusicInteractionModule : Extension() {
                 val guild = guildFor(event) ?: return@action
 
                 val player = musicModule.getMusicPlayer(guild)
-                val tracks = player.takeFirstMatch(event.message.content)
+                val tracks = player.takeFirstMatch(player, event.message.content)
 
                 player.queueTrack(force = false, onTop = false, tracks = tracks)
                 event.message.delete("Music channel interaction")
@@ -145,17 +146,25 @@ class MusicInteractionModule : Extension() {
     }
 }
 
-suspend fun Link.takeFirstMatch(query: String): List<Track> {
-    val queryString = if (query.startsWith("http")) {
+suspend fun Link.takeFirstMatch(musicPlayer: MusicPlayer, query: String): List<Track> {
+    val isUrl = query.startsWith("http")
+    val queryString = if (isUrl) {
         query
     } else {
         "ytsearch: $query"
     }
 
+    if (isUrl) {
+        val spotifySearch = findSpotifySongs(musicPlayer, query)
+        if (!spotifySearch.isNullOrEmpty()) {
+            return spotifySearch
+        }
+    }
+
     val result = loadItem(queryString)
     return when (result.loadType) {
         TrackResponse.LoadType.TRACK_LOADED,
-        TrackResponse.LoadType.PLAYLIST_LOADED -> result.tracks.take(1).mapToTrack()
+        TrackResponse.LoadType.PLAYLIST_LOADED -> result.tracks.mapToTrack()
         TrackResponse.LoadType.SEARCH_RESULT -> result.tracks.take(1).mapToTrack()
         else -> emptyList()
     }

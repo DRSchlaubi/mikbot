@@ -11,7 +11,7 @@ import dev.schlaubi.musicbot.utils.unSetableBoolean
 
 class SchedulerSettingsArguments : Arguments() {
     val repeat by unSetableBoolean("repeat", "Whether to repeat the queue by default or not")
-    val loopQueue by unSetableBoolean("loopQueue", "Whether to repeat the entire queue by default or not")
+    val loopQueue by unSetableBoolean("loop_queue", "Whether to repeat the entire queue by default or not")
     val shuffle by unSetableBoolean("shuffle", "Whether to shuffle the queue by default or not")
     val volume by optionalInt("volume", "The default volume for channels")
 }

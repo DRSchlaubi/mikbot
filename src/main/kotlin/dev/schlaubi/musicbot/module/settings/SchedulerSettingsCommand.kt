@@ -41,7 +41,7 @@ suspend fun SettingsModule.optionsCommand() {
     }
 
     ephemeralSlashCommand(::SchedulerSettingsArguments) {
-        name = "update-guild-scheduler"
+        name = "guild-options"
         description = "Updates the settings of Scheduling for this guild"
 
         guildAdminOnly()

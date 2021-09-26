@@ -13,5 +13,6 @@ data class BotUser(
     @SerialName("_id")
     val id: Snowflake,
     @Contextual
-    val language: Locale = SupportedLocales.ENGLISH
+    val language: Locale = SupportedLocales.ENGLISH,
+    val defaultSchedulerSettings: SchedulerSettings? = null
 )

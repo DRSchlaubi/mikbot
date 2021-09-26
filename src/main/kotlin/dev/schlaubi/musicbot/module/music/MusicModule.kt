@@ -19,6 +19,7 @@ import dev.schlaubi.musicbot.module.music.checks.musicControlCheck
 import dev.schlaubi.musicbot.module.music.commands.commands
 import dev.schlaubi.musicbot.module.music.context.playMessageAction
 import dev.schlaubi.musicbot.module.music.player.MusicPlayer
+import dev.schlaubi.musicbot.module.music.player.applyToPlayer
 import dev.schlaubi.musicbot.utils.ConfirmationSender
 import dev.schlaubi.musicbot.utils.MessageEditor
 import dev.schlaubi.musicbot.utils.Translator

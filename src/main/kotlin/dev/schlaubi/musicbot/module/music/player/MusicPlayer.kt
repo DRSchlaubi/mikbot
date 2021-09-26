@@ -10,6 +10,7 @@ import dev.schlaubi.lavakord.audio.player.FiltersApi
 import dev.schlaubi.lavakord.audio.player.Track
 import dev.schlaubi.lavakord.audio.player.applyFilters
 import dev.schlaubi.musicbot.core.io.Database
+import dev.schlaubi.musicbot.core.io.findGuild
 import dev.schlaubi.musicbot.module.settings.updateMessage
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -25,6 +26,16 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
     val queuedTracks get() = queue.toList()
     var filters: SerializableFilters? = null
     private val translationsProvider: TranslationsProvider by inject()
+
+    init {
+        guild.kord.launch {
+            val settings = database.guildSettings.findGuild(guild)
+
+            settings.defaultSchedulerSettings?.applyToPlayer(this@MusicPlayer)
+            if(filters?.volume != settings.defaultSchedulerSettings?.volume) {
+            }
+        }
+    }
 
     var shuffle = false
         set(value) {

@@ -13,7 +13,8 @@ data class BotGuild(
     val djRole: Snowflake? = null,
     val announceSongs: Boolean = true,
     val musicChannelData: MusicChannelData? = null,
-    val verified: Boolean = false
+    val verified: Boolean = false,
+    val defaultSchedulerSettings: SchedulerSettings? = null
 )
 
 @JvmRecord

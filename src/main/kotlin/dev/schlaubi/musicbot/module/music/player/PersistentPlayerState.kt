@@ -12,6 +12,7 @@ import dev.schlaubi.lavakord.audio.player.karaoke
 import dev.schlaubi.lavakord.audio.player.timescale
 import dev.schlaubi.lavakord.audio.player.tremolo
 import dev.schlaubi.lavakord.audio.player.vibrato
+import dev.schlaubi.musicbot.module.settings.SchedulerSettings
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 
@@ -24,7 +25,7 @@ data class PersistentPlayerState(
     @Contextual //this is a playingTrack which contains the current position
     val currenTrack: Track?,
     val filters: SerializableFilters?,
-    val schedulerOptions: SchedulerOptions,
+    val schedulerOptions: SchedulerSettings,
     val paused: Boolean,
     val position: Long
 ) {
@@ -34,7 +35,7 @@ data class PersistentPlayerState(
         musicPlayer.queuedTracks,
         musicPlayer.player.playingTrack,
         musicPlayer.filters,
-        SchedulerOptions(musicPlayer.shuffle, musicPlayer.loopQueue, musicPlayer.repeat),
+        SchedulerSettings(musicPlayer.shuffle, musicPlayer.loopQueue, musicPlayer.repeat),
         musicPlayer.player.paused,
         musicPlayer.player.position
     )
@@ -113,6 +114,24 @@ data class SerializableFilters(
                     depth = vibrato.depth
                 }
             }
+        }
+    }
+}
+
+suspend fun SchedulerSettings.applyToPlayer(player: MusicPlayer) {
+    if (shuffle != null) {
+        player.shuffle = shuffle
+    }
+    if (loopQueue != null) {
+        player.loopQueue = loopQueue
+    }
+    if (repeat != null) {
+        player.repeat = repeat
+    }
+
+    if(player.filters?.volume != volume) {
+        player.applyFilters {
+            this.volume = volume
         }
     }
 }

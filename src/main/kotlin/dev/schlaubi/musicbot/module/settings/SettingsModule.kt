@@ -1,6 +1,10 @@
 package dev.schlaubi.musicbot.module.settings
 
+import com.kotlindiscord.kord.extensions.checks.anyGuild
+import com.kotlindiscord.kord.extensions.checks.hasPermission
+import com.kotlindiscord.kord.extensions.commands.application.slash.SlashCommand
 import com.kotlindiscord.kord.extensions.extensions.Extension
+import dev.kord.common.entity.Permission
 import dev.schlaubi.musicbot.core.io.Database
 import dev.schlaubi.musicbot.module.music.MusicModule
 import dev.schlaubi.musicbot.utils.extension
@@ -17,5 +21,12 @@ class SettingsModule : Extension() {
     override suspend fun setup() {
         languageCommand()
         musicChannel()
+    }
+}
+
+fun SlashCommand<*, *>.guildAdminOnly() {
+    check {
+        anyGuild()
+        hasPermission(Permission.ManageGuild)
     }
 }

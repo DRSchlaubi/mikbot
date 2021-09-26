@@ -1,8 +1,6 @@
 package dev.schlaubi.musicbot.module.settings
 
 import com.kotlindiscord.kord.extensions.DiscordRelayedException
-import com.kotlindiscord.kord.extensions.checks.anyGuild
-import com.kotlindiscord.kord.extensions.checks.hasPermission
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.converters.impl.channel
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
@@ -62,10 +60,7 @@ suspend fun SettingsModule.musicChannel() {
         name = "music-channel"
         description = "Set your music channel in this guild"
 
-        check {
-            anyGuild()
-            hasPermission(Permission.ManageGuild)
-        }
+        guildAdminOnly()
 
         action {
             val guildSettings = database.guildSettings.findGuild(safeGuild)

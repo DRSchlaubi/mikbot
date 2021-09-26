@@ -128,9 +128,10 @@ class MusicInteractionModule : Extension() {
             action {
                 val guild = guildFor(event) ?: return@action
 
-                val tracks = musicModule.getMusicPlayer(guild).takeFirstMatch(event.message.content)
+                val player = musicModule.getMusicPlayer(guild)
+                val tracks = player.takeFirstMatch(event.message.content)
 
-                musicModule.getMusicPlayer(guild).queueTrack(force = false, onTop = false, tracks = tracks)
+                player.queueTrack(force = false, onTop = false, tracks = tracks)
 
                 event.message.delete("Music channel interaction")
             }

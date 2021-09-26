@@ -4,12 +4,15 @@ import com.kotlindiscord.kord.extensions.checks.anyGuild
 import com.kotlindiscord.kord.extensions.commands.CommandContext
 import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommandContext
 import com.kotlindiscord.kord.extensions.extensions.Extension
+import com.kotlindiscord.kord.extensions.extensions.event
 import com.kotlindiscord.kord.extensions.extensions.slashCommandCheck
 import com.kotlindiscord.kord.extensions.interactions.edit
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.GuildBehavior
+import dev.kord.core.event.gateway.ReadyEvent
 import dev.schlaubi.lavakord.audio.Link
 import dev.schlaubi.lavakord.audio.player.Player
+import dev.schlaubi.lavakord.kord.connectAudio
 import dev.schlaubi.musicbot.core.audio.LavalinkManager
 import dev.schlaubi.musicbot.core.io.Database
 import dev.schlaubi.musicbot.module.music.checks.musicControlCheck
@@ -22,6 +25,8 @@ import dev.schlaubi.musicbot.utils.Translator
 import dev.schlaubi.musicbot.utils.confirmation
 import dev.schlaubi.musicbot.utils.extension
 import dev.schlaubi.musicbot.utils.safeGuild
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 import kotlin.reflect.KMutableProperty1
 
@@ -42,12 +47,13 @@ class MusicModule : Extension() {
     val CommandContext.musicPlayer
         get() = getMusicPlayer(safeGuild)
 
-    fun getMusicPlayer(guild: GuildBehavior) =
-        musicPlayers.computeIfAbsent(guild.id) {
+    fun getMusicPlayer(guild: GuildBehavior): MusicPlayer {
+        return musicPlayers.computeIfAbsent(guild.id) {
             val link = lavalink.getLink(guild)
 
             MusicPlayer(link, guild, database)
         }
+    }
 
     override suspend fun setup() {
         slashCommandCheck {
@@ -57,6 +63,12 @@ class MusicModule : Extension() {
 
         commands()
         playMessageAction()
+
+        event<ReadyEvent> {
+            action {
+                reconnectPlayers()
+            }
+        }
     }
 
     suspend fun EphemeralSlashCommandContext<*>.checkOtherSchedulerOptions(
@@ -72,6 +84,33 @@ class MusicModule : Extension() {
         translatorGroup = "music",
         callback = callback
     )
+
+    suspend fun savePlayerStates() {
+        val collection = database.playerStates
+        collection.drop()
+        collection.insertMany(
+            musicPlayers.map { (_, player) -> player.toState() }
+        )
+    }
+
+    suspend fun disconnect() {
+        musicPlayers.forEach { (_, player) -> player.disconnectAudio() }
+    }
+
+    private suspend fun reconnectPlayers() = coroutineScope {
+        val players = database.playerStates.find().toList()
+        players.forEach {
+            launch {
+                val guild = kord.getGuild(it.guildId) ?: return@launch
+                val channelId = it.channelId
+                val player = getMusicPlayer(guild)
+                it.schedulerOptions.applyToPlayer(player)
+                player.connectAudio(channelId)
+                it.applyToPlayer(player)
+            }
+        }
+        database.playerStates.drop()
+    }
 }
 
 /**

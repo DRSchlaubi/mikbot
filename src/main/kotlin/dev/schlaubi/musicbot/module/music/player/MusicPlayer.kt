@@ -5,7 +5,10 @@ import dev.kord.core.behavior.GuildBehavior
 import dev.schlaubi.lavakord.audio.Link
 import dev.schlaubi.lavakord.audio.TrackEndEvent
 import dev.schlaubi.lavakord.audio.on
+import dev.schlaubi.lavakord.audio.player.Filters
+import dev.schlaubi.lavakord.audio.player.FiltersApi
 import dev.schlaubi.lavakord.audio.player.Track
+import dev.schlaubi.lavakord.audio.player.applyFilters
 import dev.schlaubi.musicbot.core.io.Database
 import dev.schlaubi.musicbot.module.settings.updateMessage
 import kotlinx.coroutines.delay
@@ -20,6 +23,7 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
     Link by link, KoinComponent {
     private val queue = LinkedList<Track>()
     val queuedTracks get() = queue.toList()
+    var filters: SerializableFilters? = null
     private val translationsProvider: TranslationsProvider by inject()
 
     var shuffle = false
@@ -35,14 +39,6 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
     var loopQueue = false
         set(value) {
             field = value
-            if (value) { // if feature gets enabled
-                // Queue the current track again, so it also gets looped
-                player.playingTrack?.let {
-                    // we directly add it because we don't need to perform any other tasks
-                    // so essentially queueTrack would unnecessarily suspend
-                    queue.add(it)
-                }
-            }
             updateMusicChannelMessage()
         }
 
@@ -77,8 +73,15 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
         updateMusicChannelMessage()
     }
 
+    @OptIn(FiltersApi::class)
+    suspend fun applyFilters(builder: Filters.() -> Unit) {
+        val filters = MutableFilters().apply(builder)
+        player.applyFilters(builder)
+        this.filters = SerializableFilters(filters)
+    }
+
     private suspend fun onTrackEnd(event: TrackEndEvent) {
-        if ((!repeat && queue.isEmpty()) && event.reason != TrackEndEvent.EndReason.REPLACED) {
+        if ((!repeat && !loopQueue && queue.isEmpty()) && event.reason != TrackEndEvent.EndReason.REPLACED) {
             link.disconnectAudio()
             return updateMusicChannelMessage()
         }
@@ -112,7 +115,7 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
     private suspend fun startNextSong(lastSong: Track? = null, force: Boolean = false) {
         val nextTrack = when {
             lastSong != null && repeat -> lastSong
-            !force && shuffle -> {
+            !force && (shuffle || (loopQueue && queue.isEmpty())) -> {
                 val index = Random.nextInt(queue.size)
 
                 /* return */queue.removeAt(index)
@@ -123,7 +126,9 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
         link.player.playTrack(nextTrack)
     }
 
-    fun clearQueue() {
+    fun toState(): PersistentPlayerState = PersistentPlayerState(this)
+
+    private fun clearQueue() {
         queue.clear()
 
         updateMusicChannelMessage()

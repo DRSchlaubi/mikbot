@@ -18,6 +18,9 @@ suspend fun OwnerModule.redeployCommand() = ephemeralSlashCommand {
     ownerOnly()
 
     action {
+        musicModule.savePlayerStates()
+        musicModule.disconnect()
+
         val host = Config.REDEPLOY_HOST ?: return@action notAvailable()
         val response = client.get<String>(host) {
             header("Redeploy-Token", Config.REDEPLOY_TOKEN)

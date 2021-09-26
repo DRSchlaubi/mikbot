@@ -27,7 +27,7 @@ suspend fun MusicModule.volumeCommand() = ephemeralSlashCommand(::VolumeArgument
         val volume = arguments.volume
         if (volume != null) {
             val filterVolume = volume.toFloat() / 100
-            player.applyFilters {
+            musicPlayer.applyFilters {
                 this.volume = filterVolume
             }
 

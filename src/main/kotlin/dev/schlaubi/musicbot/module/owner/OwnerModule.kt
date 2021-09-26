@@ -4,7 +4,9 @@ import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.extensions.slashCommandCheck
 import dev.schlaubi.musicbot.config.Config
 import dev.schlaubi.musicbot.core.io.Database
+import dev.schlaubi.musicbot.module.music.MusicModule
 import dev.schlaubi.musicbot.module.owner.verification.verification
+import dev.schlaubi.musicbot.utils.extension
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -16,6 +18,7 @@ class OwnerModule : Extension(), CoroutineScope {
     override val name: String = "owner"
     override val bundle: String = "owner"
     val database: Database by inject()
+    val musicModule: MusicModule by extension()
     override val coroutineContext: CoroutineContext = Dispatchers.IO + SupervisorJob()
 
     override suspend fun setup() {

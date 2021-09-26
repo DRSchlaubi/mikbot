@@ -32,7 +32,7 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
             val settings = database.guildSettings.findGuild(guild)
 
             settings.defaultSchedulerSettings?.applyToPlayer(this@MusicPlayer)
-            if(filters?.volume != settings.defaultSchedulerSettings?.volume) {
+            if (filters?.volume != settings.defaultSchedulerSettings?.volume) {
             }
         }
     }

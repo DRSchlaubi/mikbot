@@ -50,8 +50,8 @@ suspend fun SettingsModule.optionsCommand() {
             doUpdate({
                 database.guildSettings.findGuild(safeGuild)
             }, BotGuild::defaultSchedulerSettings) {
-                database.guildSettings.save(copy(defaultSchedulerSettings = it))
-            }
+            database.guildSettings.save(copy(defaultSchedulerSettings = it))
+        }
         }
     }
 

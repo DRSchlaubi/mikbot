@@ -22,7 +22,7 @@ data class PersistentPlayerState(
     val guildId: Snowflake,
     val channelId: Snowflake,
     val queue: List<@Contextual Track>,
-    @Contextual //this is a playingTrack which contains the current position
+    @Contextual // this is a playingTrack which contains the current position
     val currenTrack: Track?,
     val filters: SerializableFilters?,
     val schedulerOptions: SchedulerSettings,
@@ -129,7 +129,7 @@ suspend fun SchedulerSettings.applyToPlayer(player: MusicPlayer) {
         player.repeat = repeat
     }
 
-    if(player.filters?.volume != volume) {
+    if (player.filters?.volume != volume) {
         player.applyFilters {
             this.volume = volume
         }

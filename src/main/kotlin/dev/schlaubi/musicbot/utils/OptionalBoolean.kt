@@ -40,11 +40,13 @@ private fun Arguments.unSettableBooleanString(
     description: String,
     validator: Validator<String?> = null
 ) = stringChoice(
-    displayName, description, mapOf(
+    displayName, description,
+    mapOf(
         "True" to UnSetableBoolean.TRUE.name,
         "False" to UnSetableBoolean.FALSE.name,
         "Unset" to UnSetableBoolean.UNSET.name
-    ), validator
+    ),
+    validator
 )
 
 private fun <InputType : Any?, OutputType : Any?, NamedInputType : Any, ResultType : Any, B : Any?> Converter<InputType, OutputType, NamedInputType, ResultType>.map(

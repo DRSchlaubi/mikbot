@@ -43,10 +43,6 @@ suspend fun <T : Event> CheckContext<T>.joinSameChannelCheck(extensibleBot: Exte
 }
 
 suspend fun <T : InteractionCreateEvent> CheckContext<T>.musicControlCheck() {
-    // This is hacky but there is no other way
-    if ((event.interaction as? ChatInputCommandInteraction)?.command?.rootName == "play") return pass()
-    if ((event.interaction as? MessageCommandInteraction)?.name == "play") return pass()
-
     abstractMusicCheck {
         if (botChannel == null) {
             return@abstractMusicCheck fail(translateM("music.checks.no_running"))

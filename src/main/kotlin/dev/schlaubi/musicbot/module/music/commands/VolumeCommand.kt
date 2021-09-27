@@ -3,10 +3,8 @@ package dev.schlaubi.musicbot.module.music.commands
 import com.kotlindiscord.kord.extensions.DiscordRelayedException
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalInt
-import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
 import com.kotlindiscord.kord.extensions.interactions.respond
 import dev.schlaubi.lavakord.audio.player.FiltersApi
-import dev.schlaubi.lavakord.audio.player.applyFilters
 import dev.schlaubi.musicbot.module.music.MusicModule
 
 class VolumeArguments : Arguments() {
@@ -19,7 +17,7 @@ class VolumeArguments : Arguments() {
 }
 
 @OptIn(FiltersApi::class)
-suspend fun MusicModule.volumeCommand() = ephemeralSlashCommand(::VolumeArguments) {
+suspend fun MusicModule.volumeCommand() = ephemeralControlSlashCommand(::VolumeArguments) {
     name = "volume"
     description = "Changes the volume of the bot"
 

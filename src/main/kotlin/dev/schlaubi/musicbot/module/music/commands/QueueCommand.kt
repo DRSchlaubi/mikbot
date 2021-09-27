@@ -4,12 +4,17 @@ import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
 import com.kotlindiscord.kord.extensions.interactions.editingPaginator
 import com.kotlindiscord.kord.extensions.interactions.respond
 import dev.schlaubi.musicbot.module.music.MusicModule
+import dev.schlaubi.musicbot.module.music.checks.anyMusicPlaying
 import dev.schlaubi.musicbot.utils.forList
 import dev.schlaubi.musicbot.utils.format
 
 suspend fun MusicModule.queueCommand() = ephemeralSlashCommand {
     name = "queue"
     description = "Shows the current queue"
+
+    check {
+        anyMusicPlaying(this@queueCommand)
+    }
 
     action {
         if (musicPlayer.queuedTracks.isEmpty()) {

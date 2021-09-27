@@ -26,7 +26,7 @@ suspend fun MusicModule.schedulerCommands() {
         }
     }
 
-    ephemeralSlashCommand {
+    ephemeralControlSlashCommand {
         name = "repeat"
         description = "Toggles repeat mode"
 
@@ -40,7 +40,7 @@ suspend fun MusicModule.schedulerCommands() {
         }
     }
 
-    ephemeralSlashCommand {
+    ephemeralControlSlashCommand {
         name = "loop-queueTracks"
         description = "Toggles loop queueTracks mode (Looping the queueTracks over and over)"
 
@@ -54,7 +54,7 @@ suspend fun MusicModule.schedulerCommands() {
         }
     }
 
-    ephemeralSlashCommand {
+    ephemeralControlSlashCommand {
         name = "shuffle"
         description = "Toggles shuffle mode"
 

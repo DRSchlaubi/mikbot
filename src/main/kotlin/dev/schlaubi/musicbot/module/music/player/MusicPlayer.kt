@@ -4,6 +4,7 @@ import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
 import dev.kord.core.behavior.GuildBehavior
 import dev.schlaubi.lavakord.audio.Link
 import dev.schlaubi.lavakord.audio.TrackEndEvent
+import dev.schlaubi.lavakord.audio.TrackStartEvent
 import dev.schlaubi.lavakord.audio.on
 import dev.schlaubi.lavakord.audio.player.Filters
 import dev.schlaubi.lavakord.audio.player.FiltersApi
@@ -33,6 +34,10 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
 
             settings.defaultSchedulerSettings?.applyToPlayer(this@MusicPlayer)
         }
+
+
+        link.player.on(consumer = ::onTrackEnd)
+        link.player.on(consumer = ::onTrackStart)
     }
 
     var shuffle = false
@@ -50,10 +55,6 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
             field = value
             updateMusicChannelMessage()
         }
-
-    init {
-        link.player.on(consumer = ::onTrackEnd)
-    }
 
     val remainingQueueDuration: Duration
         get() {
@@ -87,6 +88,11 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
         val filters = MutableFilters().apply(builder)
         player.applyFilters(builder)
         this.filters = SerializableFilters(filters)
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    private fun onTrackStart(event: TrackStartEvent) {
+        updateMusicChannelMessage()
     }
 
     private suspend fun onTrackEnd(event: TrackEndEvent) {

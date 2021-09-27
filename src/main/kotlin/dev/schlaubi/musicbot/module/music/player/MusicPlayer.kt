@@ -16,6 +16,8 @@ import dev.schlaubi.musicbot.core.io.findGuild
 import dev.schlaubi.musicbot.module.settings.updateMessage
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.util.LinkedList
@@ -238,5 +240,6 @@ private fun <T : MutableList<*>> T.countRemoves(mutator: T.() -> Unit): Int {
     return currentSize - size
 }
 
+@Serializable
 @JvmRecord
-data class QueuedTrack(val track: Track, val queuedBy: Snowflake)
+data class QueuedTrack(@Contextual val track: Track, val queuedBy: Snowflake)

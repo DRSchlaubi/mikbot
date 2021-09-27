@@ -150,7 +150,6 @@ suspend fun updateMessage(
                 val nextSongAt = Clock.System.now() + remainingTime
 
                 if (musicPlayer.queuedTracks.isNotEmpty()) {
-
                     field {
                         name = "Next song at"
                         if (musicPlayer.player.paused) {

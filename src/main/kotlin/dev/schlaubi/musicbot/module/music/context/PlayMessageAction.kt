@@ -2,8 +2,8 @@ package dev.schlaubi.musicbot.module.music.context
 
 import com.kotlindiscord.kord.extensions.commands.application.message.EphemeralMessageCommandContext
 import com.kotlindiscord.kord.extensions.extensions.ephemeralMessageCommand
-import com.kotlindiscord.kord.extensions.interactions.editingPaginator
-import com.kotlindiscord.kord.extensions.interactions.respond
+import com.kotlindiscord.kord.extensions.types.editingPaginator
+import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.musicbot.module.music.MusicModule
 import dev.schlaubi.musicbot.module.music.checks.joinSameChannelCheck
 import dev.schlaubi.musicbot.module.music.player.MusicPlayer

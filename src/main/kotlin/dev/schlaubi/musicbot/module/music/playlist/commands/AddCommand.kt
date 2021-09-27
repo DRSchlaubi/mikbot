@@ -2,7 +2,7 @@ package dev.schlaubi.musicbot.module.music.playlist.commands
 
 import com.kotlindiscord.kord.extensions.commands.converters.impl.defaultingBoolean
 import com.kotlindiscord.kord.extensions.commands.converters.impl.string
-import com.kotlindiscord.kord.extensions.interactions.respond
+import com.kotlindiscord.kord.extensions.types.respond
 import dev.kord.rest.builder.message.create.embed
 import dev.schlaubi.musicbot.module.music.player.queue.QueueOptions
 import dev.schlaubi.musicbot.module.music.player.queue.findTracks

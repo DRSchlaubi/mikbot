@@ -2,7 +2,7 @@ package dev.schlaubi.musicbot.module.owner
 
 import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommandContext
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
-import com.kotlindiscord.kord.extensions.interactions.respond
+import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.musicbot.config.Config
 import dev.schlaubi.musicbot.utils.ownerOnly
 import io.ktor.client.HttpClient

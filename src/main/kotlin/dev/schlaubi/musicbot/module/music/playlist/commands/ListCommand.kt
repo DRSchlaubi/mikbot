@@ -2,8 +2,8 @@ package dev.schlaubi.musicbot.module.music.playlist.commands
 
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.converters.impl.defaultingBoolean
-import com.kotlindiscord.kord.extensions.interactions.editingPaginator
-import com.kotlindiscord.kord.extensions.interactions.respond
+import com.kotlindiscord.kord.extensions.types.editingPaginator
+import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.musicbot.module.music.playlist.Playlist
 import dev.schlaubi.musicbot.utils.database
 import dev.schlaubi.musicbot.utils.forList

@@ -1,7 +1,7 @@
 package dev.schlaubi.musicbot.module.music.playlist.commands
 
-import com.kotlindiscord.kord.extensions.interactions.editingPaginator
-import com.kotlindiscord.kord.extensions.interactions.respond
+import com.kotlindiscord.kord.extensions.types.editingPaginator
+import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.musicbot.utils.forList
 import dev.schlaubi.musicbot.utils.format
 

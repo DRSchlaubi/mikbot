@@ -6,7 +6,7 @@ import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSla
 import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.extensions.event
 import com.kotlindiscord.kord.extensions.extensions.slashCommandCheck
-import com.kotlindiscord.kord.extensions.interactions.edit
+import com.kotlindiscord.kord.extensions.types.edit
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.GuildBehavior
 import dev.kord.core.event.gateway.ReadyEvent

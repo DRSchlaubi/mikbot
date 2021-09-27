@@ -81,7 +81,7 @@ class MusicInteractionModule : Extension() {
 
                 when (interaction.componentId) {
                     playPause -> {
-                        player.player.pause(!player.player.paused)
+                        player.pause()
                     }
                     stop -> {
                         player.stop()

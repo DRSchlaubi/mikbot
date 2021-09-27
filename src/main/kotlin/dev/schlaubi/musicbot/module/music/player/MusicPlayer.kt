@@ -221,6 +221,12 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
         updateMusicChannelMessage()
     }
 
+    suspend fun pause(pause: Boolean = !player.paused) {
+        player.pause(pause)
+
+        updateMusicChannelMessage()
+    }
+
     suspend fun stop() {
         player.stopTrack()
         link.disconnectAudio()

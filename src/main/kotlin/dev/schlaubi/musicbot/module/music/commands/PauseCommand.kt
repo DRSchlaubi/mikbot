@@ -8,7 +8,7 @@ suspend fun MusicModule.pauseCommand() = ephemeralControlSlashCommand {
     description = "Toggles the playback"
 
     action {
-        player.pause(!link.player.paused)
+        musicPlayer.pause(!link.player.paused)
 
         respond { content = "Pause toggle" }
     }

@@ -63,21 +63,26 @@ private suspend fun buildPlaylist(link: Link, matchResult: MatchResult): List<Tr
     return tracks.mapToTracks(link) { it.toNamedTrack() }
 }
 
+@JvmRecord
+private data class IndexedTrack(val index: Int, val track: Track)
+
 private suspend fun <T> Array<T>.mapToTracks(link: Link, mapper: suspend (T) -> NamedTrack): List<Track> {
-    val list = ArrayList<Track>(size)
+    val list = ArrayList<IndexedTrack>(size)
 
     coroutineScope {
-        forEach {
+        forEachIndexed { index, it ->
             launch {
                 val found = mapper(it).findTrack(link)
                 if (found != null) {
-                    list.add(found)
+                    list.add(IndexedTrack(index, found))
                 }
             }
         }
     }
 
     return list
+        .sortedBy { it.index }
+        .map { it.track }
 }
 
 private suspend fun buildTrack(link: Link, trackMatch: MatchResult): List<Track> {

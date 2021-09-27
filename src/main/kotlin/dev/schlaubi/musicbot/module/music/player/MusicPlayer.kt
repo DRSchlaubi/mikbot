@@ -32,8 +32,6 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
             val settings = database.guildSettings.findGuild(guild)
 
             settings.defaultSchedulerSettings?.applyToPlayer(this@MusicPlayer)
-            if (filters?.volume != settings.defaultSchedulerSettings?.volume) {
-            }
         }
     }
 
@@ -151,7 +149,7 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
         clearQueue()
     }
 
-    private fun updateMusicChannelMessage() {
+    fun updateMusicChannelMessage() {
         guild.kord.launch {
             updateMessage(guild.id, database, guild.kord, this@MusicPlayer, translationsProvider = translationsProvider)
         }

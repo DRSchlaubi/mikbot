@@ -20,6 +20,7 @@ class SettingsModule : Extension() {
         languageCommand()
         musicChannel()
         optionsCommand()
+        fixMusicChannel()
     }
 }
 

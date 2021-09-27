@@ -45,6 +45,19 @@ suspend fun getFirstChannelById(channelId: String): Channel {
     return getChannelsById(channelId).items[0]
 }
 
+suspend fun searchForYouTubeMusicVideos(query: String) {
+    val response = withContext(Dispatchers.IO) {
+        client.search().list("snippet").apply {
+            q = query
+            videoCategoryId = "10" // Music category
+        }.execute()
+    }
+
+    response.items.forEach {
+        it.snippet
+    }
+}
+
 private class RequestInitializer : YouTubeRequestInitializer() {
     override fun initializeYouTubeRequest(youTubeRequest: YouTubeRequest<*>) {
         youTubeRequest.key = Config.YOUTUBE_API_KEY

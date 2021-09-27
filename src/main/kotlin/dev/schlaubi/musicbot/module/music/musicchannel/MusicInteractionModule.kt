@@ -4,6 +4,7 @@ import com.kotlindiscord.kord.extensions.checks.guildFor
 import com.kotlindiscord.kord.extensions.checks.inChannel
 import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.extensions.event
+import dev.kord.core.behavior.channel.MessageChannelBehavior
 import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.followUpEphemeral
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
@@ -34,6 +35,7 @@ import dev.schlaubi.musicbot.utils.deleteAfterwards
 import dev.schlaubi.musicbot.utils.extension
 import dev.schlaubi.musicbot.utils.ifPassing
 import dev.schlaubi.musicbot.utils.respondIfFailed
+import dev.schlaubi.musicbot.utils.typeUntilDone
 import org.koin.core.component.inject
 import kotlin.reflect.KMutableProperty1
 
@@ -131,7 +133,10 @@ class MusicInteractionModule : Extension() {
                 val guild = guildFor(event) ?: return@action
 
                 val player = musicModule.getMusicPlayer(guild)
-                val tracks = player.takeFirstMatch(player, event.message.content)
+                val tracks = player.takeFirstMatch(
+                    event.message.channel,
+                    player, event.message.content
+                )
 
                 player.queueTrack(force = false, onTop = false, tracks = tracks)
                 event.message.delete("Music channel interaction")
@@ -146,7 +151,7 @@ class MusicInteractionModule : Extension() {
     }
 }
 
-suspend fun Link.takeFirstMatch(musicPlayer: MusicPlayer, query: String): List<Track> {
+suspend fun Link.takeFirstMatch(channel: MessageChannelBehavior, musicPlayer: MusicPlayer, query: String): List<Track> {
     val isUrl = query.startsWith("http")
     val queryString = if (isUrl) {
         query
@@ -155,7 +160,10 @@ suspend fun Link.takeFirstMatch(musicPlayer: MusicPlayer, query: String): List<T
     }
 
     if (isUrl) {
-        val spotifySearch = findSpotifySongs(musicPlayer, query)
+        val spotifySearch = channel.typeUntilDone {
+            findSpotifySongs(musicPlayer, query)
+        }
+
         if (!spotifySearch.isNullOrEmpty()) {
             return spotifySearch
         }

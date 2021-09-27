@@ -60,7 +60,11 @@ private suspend fun buildPlaylist(link: Link, matchResult: MatchResult): List<Tr
 
     val tracks = playlist.tracks.items
 
-    return tracks.mapToTracks(link) { it.toNamedTrack() }
+    return tracks.mapToTracks(link) {
+        val track = api.getTrack(it.track.id).build().await()
+
+        track.toNamedTrack()
+    }
 }
 
 @JvmRecord

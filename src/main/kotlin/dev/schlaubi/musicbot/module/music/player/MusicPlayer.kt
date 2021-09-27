@@ -35,7 +35,6 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
             settings.defaultSchedulerSettings?.applyToPlayer(this@MusicPlayer)
         }
 
-
         link.player.on(consumer = ::onTrackEnd)
         link.player.on(consumer = ::onTrackStart)
     }

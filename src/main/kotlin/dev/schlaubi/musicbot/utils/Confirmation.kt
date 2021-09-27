@@ -7,7 +7,6 @@ import com.kotlindiscord.kord.extensions.components.components
 import com.kotlindiscord.kord.extensions.interactions.respond
 import com.kotlindiscord.kord.extensions.utils.waitFor
 import dev.kord.common.entity.ButtonStyle
-import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.FollowupMessageBehavior
 import dev.kord.core.behavior.interaction.PublicFollowupMessageBehavior
 import dev.kord.core.behavior.interaction.edit

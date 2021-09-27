@@ -33,6 +33,7 @@ object Config : EnvironmentConfig("") {
     val VERIFY_SERVER_URL by getEnv("http://127.0.0.1")
     val VERIFY_CLIENT_ID by environment.optional()
     val VERIFY_CLIENT_SECRET by environment.optional()
+    val KSOFT_TOKEN by environment.optional()
 }
 
 @Suppress("unused")

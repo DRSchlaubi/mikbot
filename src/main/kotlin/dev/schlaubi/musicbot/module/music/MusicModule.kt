@@ -1,15 +1,21 @@
 package dev.schlaubi.musicbot.module.music
 
+import com.kotlindiscord.kord.extensions.annotations.ExtensionDSL
 import com.kotlindiscord.kord.extensions.checks.anyGuild
+import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.CommandContext
+import com.kotlindiscord.kord.extensions.commands.application.ApplicationCommand
+import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommand
 import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommandContext
 import com.kotlindiscord.kord.extensions.extensions.Extension
+import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
 import com.kotlindiscord.kord.extensions.extensions.event
 import com.kotlindiscord.kord.extensions.extensions.slashCommandCheck
 import com.kotlindiscord.kord.extensions.types.edit
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.GuildBehavior
 import dev.kord.core.event.gateway.ReadyEvent
+import dev.kord.core.event.interaction.InteractionCreateEvent
 import dev.schlaubi.lavakord.audio.Link
 import dev.schlaubi.lavakord.audio.player.Player
 import dev.schlaubi.lavakord.kord.connectAudio
@@ -85,6 +91,28 @@ class MusicModule : Extension() {
         translatorGroup = "music",
         callback = callback
     )
+
+    @ExtensionDSL
+    suspend fun <T : Arguments> Extension.ephemeralControlSlashCommand(
+        arguments: () -> T,
+        body: suspend EphemeralSlashCommand<T>.() -> Unit,
+    ): EphemeralSlashCommand<T> = musicApplicationCommand({ ephemeralSlashCommand(arguments, it) }, body)
+
+    @ExtensionDSL
+    suspend fun Extension.ephemeralControlSlashCommand(
+        body: suspend EphemeralSlashCommand<Arguments>.() -> Unit,
+    ): EphemeralSlashCommand<Arguments> = musicApplicationCommand({ ephemeralSlashCommand(it) }, body)
+
+    private suspend fun <E : InteractionCreateEvent, T : ApplicationCommand<E>> Extension.musicApplicationCommand(
+        create: suspend Extension.(suspend T.() -> Unit) -> T,
+        body: suspend T.() -> Unit
+    ) = create {
+        check {
+            musicControlCheck()
+        }
+
+        body()
+    }
 
     suspend fun savePlayerStates() {
         val collection = database.playerStates

@@ -1,11 +1,10 @@
 package dev.schlaubi.musicbot.module.music.commands
 
-import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.musicbot.module.music.MusicModule
 
-suspend fun MusicModule.stopCommand() {
-    ephemeralSlashCommand {
+suspend fun MusicModule.stopCommand() =
+    ephemeralControlSlashCommand {
         name = "die"
         description = "Stops the current song"
 
@@ -15,4 +14,3 @@ suspend fun MusicModule.stopCommand() {
             respond { content = "Stopped playback" }
         }
     }
-}

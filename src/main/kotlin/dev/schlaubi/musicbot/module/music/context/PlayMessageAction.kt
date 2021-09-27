@@ -9,6 +9,7 @@ import dev.schlaubi.musicbot.module.music.checks.joinSameChannelCheck
 import dev.schlaubi.musicbot.module.music.player.MusicPlayer
 import dev.schlaubi.musicbot.module.music.player.queue.QueueOptions
 import dev.schlaubi.musicbot.module.music.player.queue.queueTracks
+import dev.schlaubi.musicbot.utils.attachmentOrContentQuery
 
 const val playActionName = "play as track"
 
@@ -20,7 +21,9 @@ suspend fun MusicModule.playMessageAction() = ephemeralMessageCommand {
     }
 
     action {
-        val arguments = PlayMessageActionArguments(event.interaction.messages!!.values.first().content)
+        val query = event.interaction.messages!!.values.first().attachmentOrContentQuery
+
+        val arguments = PlayMessageActionArguments(query)
 
         queue(arguments, musicPlayer)
     }

@@ -148,7 +148,7 @@ suspend fun updateMessage(
             title = "Queue"
             description = musicPlayer.queuedTracks.take(5).mapIndexed { index, track -> track to index }
                 .joinToString("\n") { (track, index) ->
-                    (index + 1).toString() + ". " + track.format()
+                    (index + 1).toString() + ". " + track.track.format()
                 }.ifBlank { "No further songs in queue" }
 
             footer {

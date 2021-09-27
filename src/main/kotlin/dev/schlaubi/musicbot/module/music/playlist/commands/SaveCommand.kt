@@ -5,6 +5,7 @@ import com.kotlindiscord.kord.extensions.commands.converters.impl.defaultingBool
 import com.kotlindiscord.kord.extensions.commands.converters.impl.string
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.musicbot.module.music.checks.anyMusicPlaying
+import dev.schlaubi.musicbot.module.music.player.QueuedTrack
 import dev.schlaubi.musicbot.module.music.playlist.Playlist
 import dev.schlaubi.musicbot.utils.database
 import org.litote.kmongo.newId
@@ -24,13 +25,13 @@ fun PlaylistModule.saveCommand() = playlistSubCommand(::PlaylistSaveArguments) {
 
     action {
         checkName(arguments.name, arguments.public) {
-            val tracks = listOfNotNull(musicPlayer.player.playingTrack) + musicPlayer.queuedTracks
+            val tracks = listOfNotNull(musicPlayer.playingTrack) + musicPlayer.queuedTracks
 
             val playlist = Playlist(
                 newId(),
                 user.id,
                 arguments.name,
-                tracks,
+                tracks.map(QueuedTrack::track),
                 arguments.public
             )
 

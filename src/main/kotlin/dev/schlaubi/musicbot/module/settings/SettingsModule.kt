@@ -21,6 +21,7 @@ class SettingsModule : Extension() {
         musicChannel()
         optionsCommand()
         fixMusicChannel()
+        djModeCommand()
     }
 }
 

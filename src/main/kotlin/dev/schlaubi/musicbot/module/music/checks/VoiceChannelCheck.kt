@@ -7,8 +7,6 @@ import com.kotlindiscord.kord.extensions.checks.types.CheckContext
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.GuildBehavior
 import dev.kord.core.behavior.edit
-import dev.kord.core.entity.interaction.ChatInputCommandInteraction
-import dev.kord.core.entity.interaction.MessageCommandInteraction
 import dev.kord.core.event.Event
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.core.event.interaction.InteractionCreateEvent
@@ -42,12 +40,8 @@ suspend fun <T : Event> CheckContext<T>.joinSameChannelCheck(extensibleBot: Exte
     }
 }
 
-suspend fun <T : InteractionCreateEvent> CheckContext<T>.musicControlCheck() {
-    // This is hacky but there is no other way
-    if ((event.interaction as? ChatInputCommandInteraction)?.command?.rootName == "play") return pass()
-    if ((event.interaction as? MessageCommandInteraction)?.name == "play") return pass()
-
-    abstractMusicCheck {
+suspend fun <T : InteractionCreateEvent> CheckContext<T>.musicControlCheck(ignoreDjMode: Boolean = false) {
+    abstractMusicCheck(ignoreDjMode) {
         if (botChannel == null) {
             return@abstractMusicCheck fail(translateM("music.checks.no_running"))
         }
@@ -58,6 +52,7 @@ suspend fun <T : InteractionCreateEvent> CheckContext<T>.musicControlCheck() {
 }
 
 private suspend inline fun <T : Event> CheckContext<T>.abstractMusicCheck(
+    ignoreDjMode: Boolean = false,
     block: MusicCheckContext.() -> Unit
 ) {
     if (!passed) {
@@ -76,7 +71,7 @@ private suspend inline fun <T : Event> CheckContext<T>.abstractMusicCheck(
     val guild = member.guild
 
     val guildSettings = database.guildSettings.findGuild(guild)
-    if (guildSettings.djMode) {
+    if (guildSettings.djMode && !ignoreDjMode) {
         hasRole(guildSettings.djRole!!)
     }
 

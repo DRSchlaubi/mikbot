@@ -1,5 +1,7 @@
 package dev.schlaubi.musicbot.module.music.commands
 
+import com.kotlindiscord.kord.extensions.commands.Arguments
+import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalInt
 import com.kotlindiscord.kord.extensions.extensions.publicSlashCommand
 import com.kotlindiscord.kord.extensions.interactions.respond
 import dev.kord.rest.builder.message.create.embed
@@ -7,7 +9,11 @@ import dev.schlaubi.musicbot.module.music.MusicModule
 import dev.schlaubi.musicbot.module.music.checks.anyMusicPlaying
 import dev.schlaubi.musicbot.utils.addSong
 
-suspend fun MusicModule.nowPlayingCommand() = publicSlashCommand {
+class NowPlayingArguments : Arguments() {
+    val index by optionalInt("position", "The number of the song in the queue to display the info for")
+}
+
+suspend fun MusicModule.nowPlayingCommand() = publicSlashCommand(::NowPlayingArguments) {
     name = "now-playing"
     description = "Displays information about the currently playing track"
 
@@ -16,7 +22,13 @@ suspend fun MusicModule.nowPlayingCommand() = publicSlashCommand {
     }
 
     action {
-        val playingTrack = player.playingTrack ?: return@action
+        val index = arguments.index
+        val playingTrack = if (index != null) {
+            musicPlayer.queuedTracks.getOrNull(index) ?: run {
+                respond { translate("commands.now_playing.invalid_index") }
+                return@action
+            }
+        } else player.playingTrack ?: return@action
 
         respond {
             embed {

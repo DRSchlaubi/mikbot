@@ -6,7 +6,6 @@ import dev.kord.common.entity.Snowflake
 import dev.schlaubi.lavakord.audio.player.Filters
 import dev.schlaubi.lavakord.audio.player.FiltersApi
 import dev.schlaubi.lavakord.audio.player.Player
-import dev.schlaubi.lavakord.audio.player.Track
 import dev.schlaubi.lavakord.audio.player.applyFilters
 import dev.schlaubi.lavakord.audio.player.karaoke
 import dev.schlaubi.lavakord.audio.player.timescale
@@ -21,9 +20,9 @@ import kotlinx.serialization.Serializable
 data class PersistentPlayerState(
     val guildId: Snowflake,
     val channelId: Snowflake,
-    val queue: List<@Contextual Track>,
+    val queue: List<@Contextual QueuedTrack>,
     @Contextual // this is a playingTrack which contains the current position
-    val currenTrack: Track?,
+    val currenTrack: QueuedTrack?,
     val filters: SerializableFilters?,
     val schedulerOptions: SchedulerSettings,
     val paused: Boolean,
@@ -33,7 +32,7 @@ data class PersistentPlayerState(
         Snowflake(musicPlayer.guildId),
         Snowflake(musicPlayer.lastChannelId!!),
         musicPlayer.queuedTracks,
-        musicPlayer.player.playingTrack,
+        musicPlayer.playingTrack,
         musicPlayer.filters,
         SchedulerSettings(musicPlayer.shuffle, musicPlayer.loopQueue, musicPlayer.repeat),
         musicPlayer.player.paused,

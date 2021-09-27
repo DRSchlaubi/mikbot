@@ -12,6 +12,10 @@ suspend fun MusicModule.commands() {
     skipCommand()
     schedulerCommands()
     nowPlayingCommand()
+    moveCommand()
+    removeCommand()
+    seekCommand()
+    replayCommand()
 
     if (Config.KSOFT_TOKEN != null) {
         lyricsCommand()

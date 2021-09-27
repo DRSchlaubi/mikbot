@@ -23,12 +23,12 @@ suspend fun MusicModule.nowPlayingCommand() = publicSlashCommand(::NowPlayingArg
 
     action {
         val index = arguments.index
-        val playingTrack = if (index != null) {
+        val (playingTrack) = if (index != null) {
             musicPlayer.queuedTracks.getOrNull(index) ?: run {
                 respond { translate("commands.now_playing.invalid_index") }
                 return@action
             }
-        } else player.playingTrack ?: return@action
+        } else musicPlayer.playingTrack ?: return@action
 
         respond {
             embed {

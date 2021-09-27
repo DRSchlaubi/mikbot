@@ -31,7 +31,7 @@ suspend fun MusicModule.queueCommand() = ephemeralSlashCommand {
         }
 
         editingPaginator {
-            forList(user, musicPlayer.queuedTracks, { it.format() }, { current, total ->
+            forList(user, musicPlayer.queuedTracks, { (track) -> track.format() }, { current, total ->
                 translate("music.queue.info.title", arrayOf(current.toString(), total.toString()))
             }) {
                 val playingTrack = player.playingTrack

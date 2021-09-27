@@ -34,6 +34,7 @@ import dev.schlaubi.musicbot.utils.Translator
 import dev.schlaubi.musicbot.utils.deleteAfterwards
 import dev.schlaubi.musicbot.utils.extension
 import dev.schlaubi.musicbot.utils.ifPassing
+import dev.schlaubi.musicbot.utils.mapToQueuedTrack
 import dev.schlaubi.musicbot.utils.respondIfFailed
 import dev.schlaubi.musicbot.utils.typeUntilDone
 import org.koin.core.component.inject
@@ -138,7 +139,11 @@ class MusicInteractionModule : Extension() {
                     player, event.message.content
                 )
 
-                player.queueTrack(force = false, onTop = false, tracks = tracks)
+                player.queueTrack(
+                    force = false,
+                    onTop = false,
+                    tracks = tracks.mapToQueuedTrack(event.message.author!!)
+                )
                 event.message.delete("Music channel interaction")
 
                 if (tracks.isEmpty()) {

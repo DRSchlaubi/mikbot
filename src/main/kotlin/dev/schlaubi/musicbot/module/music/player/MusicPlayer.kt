@@ -224,6 +224,7 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
     suspend fun pause(pause: Boolean = !player.paused) {
         player.pause(pause)
 
+        delay(500) // Wait for change to propagate
         updateMusicChannelMessage()
     }
 

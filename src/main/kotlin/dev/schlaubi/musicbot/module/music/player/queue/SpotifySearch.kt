@@ -12,7 +12,10 @@ import dev.schlaubi.musicbot.config.Config
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import org.apache.http.client.utils.URIBuilder
+import kotlin.time.Duration
 import com.wrapper.spotify.model_objects.specification.Track as SpotifyTrack
 
 private val PLAYLIST_PATTERN =
@@ -20,15 +23,24 @@ private val PLAYLIST_PATTERN =
 private val TRACK_PATTERN = "https?://.*\\.spotify\\.com/tracks?/([^?/\\s]*)".toRegex()
 private val ALBUM_PATTERN = "https?://.*\\.spotify\\.com/albums?/([^?/\\s]*)".toRegex()
 
+private var tokenExpiry: Instant? = null
+
 private val api = SpotifyApi.Builder()
     .setClientId(Config.SPOTIFY_CLIENT_ID)
     .setClientSecret(Config.SPOTIFY_CLIENT_SECRET)
     .build()
 
-suspend fun initializeSpotifyApi() {
-    val token = api.clientCredentials().build().await()
+private suspend fun api(): SpotifyApi {
+    val expiry = tokenExpiry
+    if (expiry != null && Clock.System.now() < expiry) {
+        return api
+    }
 
-    api.accessToken = token.accessToken
+    val credentials = api.clientCredentials().build().await()
+    tokenExpiry = Clock.System.now() + Duration.seconds(credentials.expiresIn)
+    return api.apply {
+        accessToken = credentials.accessToken
+    }
 }
 
 suspend fun findSpotifySongs(link: Link, query: String): List<Track>? {
@@ -47,7 +59,7 @@ suspend fun findSpotifySongs(link: Link, query: String): List<Track>? {
 
 private suspend fun buildAlbum(link: Link, matchResult: MatchResult): List<Track> {
     val (albumId) = matchResult.destructured
-    val album = api.getAlbum(albumId).build().await()
+    val album = api().getAlbum(albumId).build().await()
 
     val tracks = album.tracks.items
 
@@ -56,12 +68,12 @@ private suspend fun buildAlbum(link: Link, matchResult: MatchResult): List<Track
 
 private suspend fun buildPlaylist(link: Link, matchResult: MatchResult): List<Track> {
     val (playlistId) = matchResult.destructured
-    val playlist = api.getPlaylist(playlistId).build().await()
+    val playlist = api().getPlaylist(playlistId).build().await()
 
     val tracks = playlist.tracks.items
 
     return tracks.mapToTracks(link) {
-        val track = api.getTrack(it.track.id).build().await()
+        val track = api().getTrack(it.track.id).build().await()
 
         track.toNamedTrack()
     }
@@ -96,7 +108,7 @@ private suspend fun buildTrack(link: Link, trackMatch: MatchResult): List<Track>
 }
 
 private suspend fun getTrack(link: Link, trackId: String): Track? {
-    val track = api.getTrack(trackId).build().await()
+    val track = api().getTrack(trackId).build().await()
 
     return track.toNamedTrack().findTrack(link)
 }

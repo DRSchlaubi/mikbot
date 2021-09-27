@@ -9,13 +9,13 @@ import dev.schlaubi.musicbot.utils.safeGuild
 
 private class DjModeArguments : Arguments() {
     val djRole by optionalRole(
-        "DJ Role", "Set a DJ Mode Role",
+        "role", "Set a DJ Mode Role",
     )
 }
 
 suspend fun SettingsModule.djModeCommand() {
     ephemeralSlashCommand(::DjModeArguments) {
-        name = "DJ Role"
+        name = "dj-role"
         description = "Toggles DJ Mode"
 
         guildAdminOnly()

@@ -11,7 +11,7 @@ import dev.schlaubi.musicbot.module.music.player.queue.QueueOptions
 import dev.schlaubi.musicbot.module.music.player.queue.queueTracks
 import dev.schlaubi.musicbot.utils.attachmentOrContentQuery
 
-const val playActionName = "play as track"
+const val playActionName = "Play as track"
 
 suspend fun MusicModule.playMessageAction() = ephemeralMessageCommand {
     name = playActionName

@@ -34,6 +34,8 @@ import dev.schlaubi.musicbot.utils.format
 import dev.schlaubi.musicbot.utils.safeGuild
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
+import kotlinx.datetime.Clock
+import kotlin.time.Duration
 
 private class MusicChannelArguments : Arguments() {
     val channel by channel("channel", "Text Channel to use for Music Channel", validator = { _, value ->
@@ -143,6 +145,22 @@ suspend fun updateMessage(
             val playingTrack = musicPlayer.player.playingTrack
             if (playingTrack != null) {
                 addSong({ key, group -> translationsProvider.translate(key, bundleName = group) }, playingTrack)
+
+                val remainingTime = playingTrack.length - Duration.Companion.milliseconds(musicPlayer.player.position)
+                val nextSongAt = Clock.System.now() + remainingTime
+
+                if (musicPlayer.queuedTracks.isNotEmpty()) {
+
+                    field {
+                        name = "Next song at"
+                        if (musicPlayer.player.paused) {
+                            value = "You will never reach the next song at this speed. (Bot is paused)"
+                        } else {
+                            value = "<t:${nextSongAt.epochSeconds}:R>"
+                        }
+                    }
+                }
+
             }
 
             title = "Queue"
@@ -157,7 +175,13 @@ suspend fun updateMessage(
         }
 
         actionRow {
-            musicButton(musicPlayer, playPause, Emojis.playPause)
+            musicButton(
+                musicPlayer,
+                playPause,
+                Emojis.playPause,
+                enabled = musicPlayer.player.paused,
+                enabledStyle = ButtonStyle.Danger
+            )
             musicButton(musicPlayer, stop, Emojis.stopButton, ButtonStyle.Danger)
             musicButton(
                 musicPlayer,

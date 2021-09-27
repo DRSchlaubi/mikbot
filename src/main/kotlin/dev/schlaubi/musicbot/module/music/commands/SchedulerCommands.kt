@@ -40,7 +40,7 @@ suspend fun MusicModule.schedulerCommands() {
     }
 
     ephemeralControlSlashCommand {
-        name = "loop-queueTracks"
+        name = "loop-queue"
         description = "Toggles loop queueTracks mode (Looping the queueTracks over and over)"
 
         action {

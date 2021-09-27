@@ -7,8 +7,12 @@ import com.kotlindiscord.kord.extensions.components.components
 import com.kotlindiscord.kord.extensions.interactions.respond
 import com.kotlindiscord.kord.extensions.utils.waitFor
 import dev.kord.common.entity.ButtonStyle
+import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.FollowupMessageBehavior
+import dev.kord.core.behavior.interaction.PublicFollowupMessageBehavior
+import dev.kord.core.behavior.interaction.edit
 import dev.kord.core.entity.interaction.ComponentInteraction
+import dev.kord.core.entity.interaction.EphemeralFollowupMessage
 import dev.kord.core.event.interaction.InteractionCreateEvent
 import dev.kord.rest.builder.message.create.actionRow
 import kotlin.time.Duration
@@ -87,6 +91,11 @@ suspend fun confirmation(
             it.message?.id == message.id
         } == true
     } ?: return Confirmation(false, message)
+
+    when (message) {
+        is EphemeralFollowupMessage -> message.edit { components = mutableListOf() }
+        is PublicFollowupMessageBehavior -> message.edit { components = mutableListOf() }
+    }
 
     val interaction = response.interaction as ComponentInteraction
     interaction.acknowledgeEphemeralDeferredMessageUpdate()

@@ -3,8 +3,8 @@ package dev.schlaubi.musicbot.module.music.commands
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalString
 import com.kotlindiscord.kord.extensions.extensions.publicSlashCommand
-import com.kotlindiscord.kord.extensions.interactions.editingPaginator
-import com.kotlindiscord.kord.extensions.interactions.respond
+import com.kotlindiscord.kord.extensions.types.editingPaginator
+import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.musicbot.module.music.MusicModule
 import dev.schlaubi.musicbot.utils.KSoftUtil
 import dev.schlaubi.musicbot.utils.forList

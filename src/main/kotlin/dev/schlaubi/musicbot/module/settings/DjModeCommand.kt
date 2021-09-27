@@ -3,7 +3,7 @@ package dev.schlaubi.musicbot.module.settings
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalRole
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
-import com.kotlindiscord.kord.extensions.interactions.respond
+import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.musicbot.core.io.findGuild
 import dev.schlaubi.musicbot.utils.safeGuild
 

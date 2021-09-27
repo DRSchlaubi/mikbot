@@ -1,7 +1,7 @@
 package dev.schlaubi.musicbot.module.owner.verification
 
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
-import com.kotlindiscord.kord.extensions.interactions.respond
+import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.musicbot.config.Config
 import dev.schlaubi.musicbot.module.owner.OwnerModule
 import dev.schlaubi.musicbot.utils.database

@@ -1,6 +1,8 @@
 package dev.schlaubi.musicbot.module.music.player
 
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
+import dev.inmo.krontab.buildSchedule
+import dev.inmo.krontab.doInfinity
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.GuildBehavior
 import dev.schlaubi.lavakord.audio.Link
@@ -13,7 +15,10 @@ import dev.schlaubi.lavakord.audio.player.Track
 import dev.schlaubi.lavakord.audio.player.applyFilters
 import dev.schlaubi.musicbot.core.io.Database
 import dev.schlaubi.musicbot.core.io.findGuild
+import dev.schlaubi.musicbot.module.music.sponsorblock.checkAndSkipSponsorBlockSegments
+import dev.schlaubi.musicbot.module.music.sponsorblock.deleteSponsorBlockCache
 import dev.schlaubi.musicbot.module.settings.updateMessage
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Contextual
@@ -32,15 +37,36 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
     var playingTrack: QueuedTrack? = null
     private val translationsProvider: TranslationsProvider by inject()
 
+    private var sponsorBlockJob: Job? = null
+
     init {
         guild.kord.launch {
             val settings = database.guildSettings.findGuild(guild)
 
             settings.defaultSchedulerSettings?.applyToPlayer(this@MusicPlayer)
+
+            if (settings.useSponsorBlock) {
+                launchSponsorBlockJob()
+            }
         }
 
         link.player.on(consumer = ::onTrackEnd)
         link.player.on(consumer = ::onTrackStart)
+    }
+
+    fun launchSponsorBlockJob() {
+        if (sponsorBlockJob != null) {
+            return
+        }
+        sponsorBlockJob = guild.kord.launch {
+            buildSchedule("/1 * * * *").doInfinity {
+                player.playingTrack?.checkAndSkipSponsorBlockSegments(player)
+            }
+        }
+    }
+
+    fun cancelSponsorBlockJob() {
+        sponsorBlockJob?.cancel()
     }
 
     var shuffle = false
@@ -159,9 +185,20 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
     @Suppress("UNUSED_PARAMETER")
     private fun onTrackStart(event: TrackStartEvent) {
         updateMusicChannelMessage()
+        applySponsorBlock(event)
+    }
+
+    private fun applySponsorBlock(event: TrackStartEvent) {
+        if (sponsorBlockJob == null) {
+            return
+        }
+        guild.kord.launch {
+            event.track.checkAndSkipSponsorBlockSegments(player)
+        }
     }
 
     private suspend fun onTrackEnd(event: TrackEndEvent) {
+        event.track.deleteSponsorBlockCache()
         if ((!repeat && !loopQueue && queue.isEmpty()) && event.reason != TrackEndEvent.EndReason.REPLACED) {
             link.disconnectAudio()
             return updateMusicChannelMessage()

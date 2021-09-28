@@ -14,7 +14,8 @@ data class BotGuild(
     val announceSongs: Boolean = true,
     val musicChannelData: MusicChannelData? = null,
     val verified: Boolean = false,
-    val defaultSchedulerSettings: SchedulerSettings? = null
+    val defaultSchedulerSettings: SchedulerSettings? = null,
+    val useSponsorBlock: Boolean = true
 )
 
 @JvmRecord

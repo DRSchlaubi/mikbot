@@ -13,6 +13,7 @@ repositories {
     maven("https://maven.kotlindiscord.com/repository/maven-public/")
     maven("https://schlaubi.jfrog.io/artifactory/envconf/")
     maven("https://schlaubi.jfrog.io/artifactory/lavakord/")
+    maven("https://nycode.jfrog.io/artifactory/snapshots/")
 }
 
 dependencies {
@@ -20,7 +21,7 @@ dependencies {
     implementation("com.kotlindiscord.kord.extensions", "kord-extensions", "1.5.0-SNAPSHOT")
     implementation("dev.kord.x", "emoji", "0.5.0")
     implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-jdk8", "1.5.2")
-    implementation("dev.schlaubi.lavakord", "kord", "2.0.2")
+    implementation("dev.schlaubi.lavakord", "kord", "2.1.0")
     implementation("org.litote.kmongo", "kmongo-coroutine-serialization", "4.3.0")
 
     // Logging
@@ -37,6 +38,12 @@ dependencies {
 
     // Util
     implementation("dev.schlaubi", "envconf", "1.1")
+
+    // SponsorBlock Client
+    implementation("dev.nycode", "sponsorblock-kt", "1.0-SNAPSHOT")
+
+    // Scheduling
+    implementation("dev.inmo", "krontab", "0.6.5")
 }
 
 application {

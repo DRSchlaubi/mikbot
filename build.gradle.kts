@@ -13,6 +13,7 @@ repositories {
     maven("https://maven.kotlindiscord.com/repository/maven-public/")
     maven("https://schlaubi.jfrog.io/artifactory/envconf/")
     maven("https://schlaubi.jfrog.io/artifactory/lavakord/")
+    maven("https://nycode.jfrog.io/artifactory/snapshots/")
 }
 
 dependencies {
@@ -37,6 +38,12 @@ dependencies {
 
     // Util
     implementation("dev.schlaubi", "envconf", "1.1")
+
+    // SponsorBlock Client
+    implementation("dev.nycode", "sponsorblock-kt", "1.0-SNAPSHOT")
+
+    // Scheduling
+    implementation("dev.inmo", "krontab", "0.6.5")
 }
 
 application {

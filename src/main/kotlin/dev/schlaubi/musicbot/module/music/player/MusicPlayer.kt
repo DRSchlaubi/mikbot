@@ -1,6 +1,8 @@
 package dev.schlaubi.musicbot.module.music.player
 
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
+import dev.inmo.krontab.buildSchedule
+import dev.inmo.krontab.doInfinity
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.GuildBehavior
 import dev.schlaubi.lavakord.audio.Link
@@ -13,14 +15,17 @@ import dev.schlaubi.lavakord.audio.player.Track
 import dev.schlaubi.lavakord.audio.player.applyFilters
 import dev.schlaubi.musicbot.core.io.Database
 import dev.schlaubi.musicbot.core.io.findGuild
+import dev.schlaubi.musicbot.module.music.sponsorblock.checkAndSkipSponsorBlockSegments
+import dev.schlaubi.musicbot.module.music.sponsorblock.deleteSponsorBlockCache
 import dev.schlaubi.musicbot.module.settings.updateMessage
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
+import mu.KotlinLogging
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import java.util.LinkedList
+import java.util.*
 import kotlin.random.Random
 import kotlin.time.Duration
 
@@ -41,6 +46,12 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
 
         link.player.on(consumer = ::onTrackEnd)
         link.player.on(consumer = ::onTrackStart)
+
+        guild.kord.launch {
+            buildSchedule("/1 * * * *").doInfinity {
+                player.playingTrack?.checkAndSkipSponsorBlockSegments(player)
+            }
+        }
     }
 
     var shuffle = false
@@ -159,9 +170,17 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
     @Suppress("UNUSED_PARAMETER")
     private fun onTrackStart(event: TrackStartEvent) {
         updateMusicChannelMessage()
+        applySponsorBlock(event)
+    }
+
+    private fun applySponsorBlock(event: TrackStartEvent) {
+        guild.kord.launch {
+            event.track.checkAndSkipSponsorBlockSegments(player)
+        }
     }
 
     private suspend fun onTrackEnd(event: TrackEndEvent) {
+        event.track.deleteSponsorBlockCache()
         if ((!repeat && !loopQueue && queue.isEmpty()) && event.reason != TrackEndEvent.EndReason.REPLACED) {
             link.disconnectAudio()
             return updateMusicChannelMessage()

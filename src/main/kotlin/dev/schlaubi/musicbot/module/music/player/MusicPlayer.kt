@@ -18,14 +18,14 @@ import dev.schlaubi.musicbot.core.io.findGuild
 import dev.schlaubi.musicbot.module.music.sponsorblock.checkAndSkipSponsorBlockSegments
 import dev.schlaubi.musicbot.module.music.sponsorblock.deleteSponsorBlockCache
 import dev.schlaubi.musicbot.module.settings.updateMessage
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import mu.KotlinLogging
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import java.util.*
+import java.util.LinkedList
 import kotlin.random.Random
 import kotlin.time.Duration
 
@@ -37,21 +37,36 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
     var playingTrack: QueuedTrack? = null
     private val translationsProvider: TranslationsProvider by inject()
 
+    private var sponsorBlockJob: Job? = null
+
     init {
         guild.kord.launch {
             val settings = database.guildSettings.findGuild(guild)
 
             settings.defaultSchedulerSettings?.applyToPlayer(this@MusicPlayer)
+
+            if (settings.useSponsorBlock) {
+                launchSponsorBlockJob()
+            }
         }
 
         link.player.on(consumer = ::onTrackEnd)
         link.player.on(consumer = ::onTrackStart)
+    }
 
-        guild.kord.launch {
+    fun launchSponsorBlockJob() {
+        if (sponsorBlockJob != null) {
+            return
+        }
+        sponsorBlockJob = guild.kord.launch {
             buildSchedule("/1 * * * *").doInfinity {
                 player.playingTrack?.checkAndSkipSponsorBlockSegments(player)
             }
         }
+    }
+
+    fun cancelSponsorBlockJob() {
+        sponsorBlockJob?.cancel()
     }
 
     var shuffle = false
@@ -174,6 +189,9 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
     }
 
     private fun applySponsorBlock(event: TrackStartEvent) {
+        if (sponsorBlockJob == null) {
+            return
+        }
         guild.kord.launch {
             event.track.checkAndSkipSponsorBlockSegments(player)
         }

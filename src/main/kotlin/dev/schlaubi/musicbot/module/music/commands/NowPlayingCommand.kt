@@ -13,6 +13,8 @@ class NowPlayingArguments : Arguments() {
     val index by optionalInt("position", "The number of the song in the queue to display the info for")
 }
 
+private val regex = """\.[0-9]*""".toRegex()
+
 suspend fun MusicModule.nowPlayingCommand() = publicSlashCommand(::NowPlayingArguments) {
     name = "now-playing"
     description = "Displays information about the currently playing track"
@@ -46,7 +48,8 @@ suspend fun MusicModule.nowPlayingCommand() = publicSlashCommand(::NowPlayingArg
 
                 field {
                     name = translate("commands.now_playing.progress")
-                    value = "${player.position}/${playingTrack.length}"
+                    value =
+                        "${player.positionDuration.toString().replace(regex, "")}/${playingTrack.length}"
                 }
             }
         }

@@ -22,6 +22,7 @@ class SettingsModule : Extension() {
         optionsCommand()
         fixMusicChannel()
         djModeCommand()
+        sponsorBlockCommand()
     }
 }
 

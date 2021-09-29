@@ -5,6 +5,7 @@ import com.kotlindiscord.kord.extensions.checks.inChannel
 import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.extensions.event
 import dev.kord.core.behavior.channel.MessageChannelBehavior
+import dev.kord.core.behavior.channel.withTyping
 import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.followUpEphemeral
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
@@ -36,7 +37,6 @@ import dev.schlaubi.musicbot.utils.extension
 import dev.schlaubi.musicbot.utils.ifPassing
 import dev.schlaubi.musicbot.utils.mapToQueuedTrack
 import dev.schlaubi.musicbot.utils.respondIfFailed
-import dev.schlaubi.musicbot.utils.typeUntilDone
 import org.koin.core.component.inject
 import kotlin.reflect.KMutableProperty1
 
@@ -165,8 +165,9 @@ suspend fun Link.takeFirstMatch(channel: MessageChannelBehavior, musicPlayer: Mu
     }
 
     if (isUrl) {
-        val spotifySearch = channel.typeUntilDone {
-            findSpotifySongs(musicPlayer, query)
+        val spotifySearch: List<Track>?
+        channel.withTyping {
+            spotifySearch = findSpotifySongs(musicPlayer, query)
         }
 
         if (!spotifySearch.isNullOrEmpty()) {

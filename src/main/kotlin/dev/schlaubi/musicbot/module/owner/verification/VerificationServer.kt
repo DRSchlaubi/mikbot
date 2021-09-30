@@ -135,7 +135,7 @@ private fun Kord.generateInviteForGuild(guildId: Snowflake, state: String) =
     URLBuilder("https://discord.com/oauth2/authorize").apply {
         parameters.apply {
             append("client_id", selfId.asString)
-            append("permissions", "414476142912")
+            append("permissions", "328576854080")
             append("guild_id", guildId.asString)
             append("scope", "bot applications.commands identify")
             append("redirect_uri", redirectUri)

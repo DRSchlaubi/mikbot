@@ -17,10 +17,10 @@ suspend fun DiscordUnoPlayer.updateControls(active: Boolean) {
         content = translate(key)
 
         val cards = deck
-            .sortedBy {
-                (it as? PlayedCard)?.color ?: UnoColor.GREEN
-            }
             .mapIndexed { index, card -> card to index } // save origin index
+            .sortedBy { (card) ->
+                (card as? PlayedCard)?.color ?: UnoColor.GREEN
+            }
             .chunked(5) // Only 5 buttons per action row
 
         cards.forEach {

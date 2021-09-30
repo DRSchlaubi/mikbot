@@ -98,6 +98,8 @@ class DiscordUnoGame(
             components = mutableListOf()
             embed {
                 title = "UNO - Game ended"
+                description = "Winners: "
+
                 if (running && game.wonPlayers.isNotEmpty()) {
                     repeat(3) {
                         winner(it)
@@ -146,8 +148,6 @@ class DiscordUnoGame(
 
     private fun EmbedBuilder.winner(placeIndex: Int) {
         val player = game.wonPlayers.getOrNull(placeIndex) ?: return
-
-        description = "Winners: "
 
         val medal = when (placeIndex) {
             0 -> Emojis.firstPlace

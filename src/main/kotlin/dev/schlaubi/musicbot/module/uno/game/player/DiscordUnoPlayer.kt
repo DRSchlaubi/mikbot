@@ -30,6 +30,12 @@ class DiscordUnoPlayer(
     private var myTurn = false
     internal var drawn = false
 
+    override fun onWin(place: Int) {
+        game.kord.launch {
+            game.thread.createMessage("${owner.mention} finished the game!")
+        }
+    }
+
     suspend fun turn() {
         myTurn = true
         updateControls(true)

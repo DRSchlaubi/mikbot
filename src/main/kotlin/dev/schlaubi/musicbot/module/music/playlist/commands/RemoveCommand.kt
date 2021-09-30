@@ -9,7 +9,7 @@ class PlaylistRemoveArguments : PlaylistArguments() {
     val index by int("index", "The index of the track to remove")
 }
 
-fun PlaylistModule.removeCommand() = playlistSubCommand(::PlaylistRemoveArguments) {
+fun PlaylistModule.removeCommand() = ephemeralSubCommand(::PlaylistRemoveArguments) {
     name = "remove"
     description = "Removes a Track from the playlist"
 

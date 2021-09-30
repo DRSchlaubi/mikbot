@@ -5,7 +5,7 @@ import dev.schlaubi.musicbot.utils.database
 
 class PlaylistDeleteArguments : PlaylistArguments()
 
-fun PlaylistModule.deleteCommand() = playlistSubCommand(::PlaylistDeleteArguments) {
+fun PlaylistModule.deleteCommand() = ephemeralSubCommand(::PlaylistDeleteArguments) {
     name = "delete"
     description = "Deletes a playlist"
 

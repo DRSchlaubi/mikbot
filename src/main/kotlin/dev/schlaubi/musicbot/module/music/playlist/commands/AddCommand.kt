@@ -20,7 +20,7 @@ class PlaylistAddArguments : PlaylistArguments(), QueueOptions {
     override val force: Boolean = false
 }
 
-fun PlaylistModule.addCommand() = playlistSubCommand(::PlaylistAddArguments) {
+fun PlaylistModule.addCommand() = ephemeralSubCommand(::PlaylistAddArguments) {
     name = "add"
     description = "Adds a new track to the Playlist"
 

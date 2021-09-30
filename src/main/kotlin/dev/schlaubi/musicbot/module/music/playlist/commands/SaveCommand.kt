@@ -15,7 +15,7 @@ class PlaylistSaveArguments : Arguments() {
     val public by defaultingBoolean("public", "Whether this playlist is supposed to be public or not", false)
 }
 
-fun PlaylistModule.saveCommand() = playlistSubCommand(::PlaylistSaveArguments) {
+fun PlaylistModule.saveCommand() = ephemeralSubCommand(::PlaylistSaveArguments) {
     name = "save"
     description = "Saves the current queueTracks as a playliste"
 

@@ -8,7 +8,7 @@ class PlaylistRenameArguments : PlaylistArguments() {
     val newName by string("new_name", "The new name of the playlist")
 }
 
-fun PlaylistModule.renameCommand() = playlistSubCommand(::PlaylistRenameArguments) {
+fun PlaylistModule.renameCommand() = ephemeralSubCommand(::PlaylistRenameArguments) {
     name = "rename"
     description = "Renames a playlist"
 

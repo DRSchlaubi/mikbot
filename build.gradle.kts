@@ -17,6 +17,9 @@ repositories {
 }
 
 dependencies {
+    // Uno module
+    implementation(project(":uno"))
+
     // Bot
     implementation("com.kotlindiscord.kord.extensions", "kord-extensions", "1.5.0-SNAPSHOT")
     implementation("dev.kord.x", "emoji", "0.5.0")

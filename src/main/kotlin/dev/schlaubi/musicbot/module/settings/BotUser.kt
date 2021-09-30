@@ -14,5 +14,14 @@ data class BotUser(
     val id: Snowflake,
     @Contextual
     val language: Locale = SupportedLocales.ENGLISH,
-    val defaultSchedulerSettings: SchedulerSettings? = null
+    val defaultSchedulerSettings: SchedulerSettings? = null,
+    val unoStats: UnoStats? = null
+)
+
+@Serializable
+@JvmRecord
+data class UnoStats(
+    val wins: Int,
+    val losses: Int,
+    val ratio: Double
 )

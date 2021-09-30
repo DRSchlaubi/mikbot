@@ -12,6 +12,7 @@ import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.kord.core.behavior.UserBehavior
 import dev.schlaubi.musicbot.core.io.Database
+import dev.schlaubi.musicbot.module.SubCommandModule
 import dev.schlaubi.musicbot.module.music.MusicModule
 import dev.schlaubi.musicbot.module.music.player.MusicPlayer
 import dev.schlaubi.musicbot.module.music.playlist.Playlist
@@ -46,34 +47,19 @@ suspend fun Database.updatePlaylistUsages(playlist: Playlist) {
 suspend fun EphemeralSlashCommandContext<out PlaylistArguments>.getPlaylist() =
     arguments.getPlaylistOrNull(database, user, arguments.name) ?: error("Could not load playlist")
 
-@JvmRecord
-data class PlaylistCommandContext(val musicModule: MusicModule, val context: EphemeralSlashCommandContext<Arguments>)
 
-class CommandPair<T : Arguments>(
-    private val argumentBody: (() -> T)?,
-    private val commandBody: suspend EphemeralSlashCommand<T>.() -> Unit
-) {
-    suspend fun EphemeralSlashCommand<*>.add() {
-        if (argumentBody == null) {
-            ephemeralSubCommand {
-                @Suppress("UNCHECKED_CAST")
-                commandBody(this as EphemeralSlashCommand<T>)
-            }
-        } else {
-            ephemeralSubCommand(argumentBody) {
-                commandBody()
-            }
-        }
-    }
-}
+class PlaylistModule : SubCommandModule() {
 
-class PlaylistModule : Extension() {
-
-    private val subCommandBodies = mutableListOf<CommandPair<*>>()
-    val musicModule: MusicModule by extension()
     override val bundle: String = "music"
+    override val name: String = "playlist"
+    override val commandName: String = "playlist"
+    override val commandDescription: String = "Manages bot playlists"
 
-    init {
+    val musicModule: MusicModule by extension()
+    val CommandContext.musicPlayer: MusicPlayer
+        get() = with(musicModule) { musicPlayer }
+
+    override suspend fun overrideSetup() {
         loadCommand()
         saveCommand()
         renameCommand()
@@ -83,31 +69,6 @@ class PlaylistModule : Extension() {
         listCommand()
         songsCommand()
         addCommand()
-    }
-
-    val CommandContext.musicPlayer: MusicPlayer
-        get() = with(musicModule) { musicPlayer }
-
-    fun <T : Arguments> playlistSubCommand(
-        argumentBody: (() -> T),
-        body: suspend EphemeralSlashCommand<T>.() -> Unit
-    ) {
-        subCommandBodies.add(CommandPair(argumentBody, body))
-    }
-
-    fun playlistSubCommand(body: suspend EphemeralSlashCommand<Arguments>.() -> Unit) {
-        subCommandBodies.add(CommandPair(null, body))
-    }
-
-    override val name: String = "playlist"
-
-    override suspend fun setup() {
-        ephemeralSlashCommand {
-            name = "playlist"
-            description = "Manages bot playlists"
-
-            subCommandBodies.forEach { with(it) { add() } }
-        }
     }
 }
 

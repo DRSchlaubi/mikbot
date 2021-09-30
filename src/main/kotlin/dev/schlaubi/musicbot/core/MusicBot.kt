@@ -12,6 +12,7 @@ import dev.schlaubi.musicbot.module.music.musicchannel.MusicInteractionModule
 import dev.schlaubi.musicbot.module.music.playlist.commands.PlaylistModule
 import dev.schlaubi.musicbot.module.owner.OwnerModule
 import dev.schlaubi.musicbot.module.settings.SettingsModule
+import dev.schlaubi.musicbot.module.uno.UnoModule
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -32,7 +33,9 @@ class MusicBot : KoinComponent {
                 add(::PlaylistModule)
                 add(::OwnerModule)
                 add(::MusicInteractionModule)
+                add(::UnoModule)
             }
+
 
             presence {
                 status = PresenceStatus.DoNotDisturb

@@ -7,7 +7,7 @@ import dev.schlaubi.musicbot.utils.mapToQueuedTrack
 
 class LoadArguments : PlaylistArguments()
 
-fun PlaylistModule.loadCommand() = playlistSubCommand(::LoadArguments) {
+fun PlaylistModule.loadCommand() = ephemeralSubCommand(::LoadArguments) {
     name = "load"
     description = "Queues a playlist"
 

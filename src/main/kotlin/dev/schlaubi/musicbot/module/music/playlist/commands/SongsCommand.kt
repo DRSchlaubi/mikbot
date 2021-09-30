@@ -7,7 +7,7 @@ import dev.schlaubi.musicbot.utils.format
 
 class PlaylistSongsArguments : PlaylistArguments()
 
-fun PlaylistModule.songsCommand() = playlistSubCommand(::PlaylistSongsArguments) {
+fun PlaylistModule.songsCommand() = ephemeralSubCommand(::PlaylistSongsArguments) {
     name = "songs"
     description = "Shows all the songs which are in a playlist"
 

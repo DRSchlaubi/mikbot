@@ -19,6 +19,7 @@ For legal reasons: There is **no** official public instance of this bot, so don'
   Like [Hydra](https://hydra.bot)) ([DEMO](https://cdn.discordapp.com/attachments/890344418320719973/891144736151318568/music_channel_demo.gif))
 - Bot internal playlist system (Supports import from other sources, just do `/playlist add name: <name> query: <existing yt/spotify playlist>`)
 - i18n (although most strings are only English as of rn)
+- UNO as a minigame - Just don't even ask why
 
 ## Deployment
 

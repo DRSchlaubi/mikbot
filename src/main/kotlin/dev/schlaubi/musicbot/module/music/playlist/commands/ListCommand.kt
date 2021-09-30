@@ -14,7 +14,7 @@ class PlayListListArguments : Arguments() {
     val onlyMine by defaultingBoolean("only_mine", "Just show my playlist", false)
 }
 
-fun PlaylistModule.listCommand() = playlistSubCommand(::PlayListListArguments) {
+fun PlaylistModule.listCommand() = ephemeralSubCommand(::PlayListListArguments) {
     name = "list"
     description = "Shows all playlists, which are available to you"
 

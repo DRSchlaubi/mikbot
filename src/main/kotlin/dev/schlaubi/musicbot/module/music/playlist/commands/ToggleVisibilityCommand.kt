@@ -5,7 +5,7 @@ import dev.schlaubi.musicbot.utils.database
 
 class PlaylistToggleVisibilityCommand : PlaylistArguments()
 
-fun PlaylistModule.toggleVisibilityCommand() = playlistSubCommand(::PlaylistToggleVisibilityCommand) {
+fun PlaylistModule.toggleVisibilityCommand() = ephemeralSubCommand(::PlaylistToggleVisibilityCommand) {
     name = "toggle-visibility"
     description = "Toggles whether other users can find this playlist or not"
 

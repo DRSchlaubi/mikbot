@@ -2,6 +2,7 @@ package dev.schlaubi.musicbot.module.uno.commands
 
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.kord.common.entity.ButtonStyle
+import dev.kord.common.entity.Permission
 import dev.kord.core.behavior.channel.createMessage
 import dev.kord.rest.builder.message.create.actionRow
 import dev.kord.rest.builder.message.create.embed
@@ -14,6 +15,11 @@ import dev.schlaubi.musicbot.module.uno.game.startGameButton
 fun UnoModule.startGameCommand() = publicSubCommand {
     name = "start"
     description = "Starts a new game"
+
+    check {
+        // Required for pin()
+        requireBotPermissions(Permission.ManageMessages)
+    }
 
     action {
         val gameThread = textChannel.startPublicThread("uno-game")

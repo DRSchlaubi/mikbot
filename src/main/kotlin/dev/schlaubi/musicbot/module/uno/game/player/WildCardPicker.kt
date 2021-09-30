@@ -35,4 +35,3 @@ suspend fun DiscordUnoPlayer.pickWildCardColor(): UnoColor {
 
     return UnoColor.valueOf(event.interaction.componentId)
 }
-

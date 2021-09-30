@@ -36,7 +36,6 @@ class MusicBot : KoinComponent {
                 add(::UnoModule)
             }
 
-
             presence {
                 status = PresenceStatus.DoNotDisturb
                 playing("Starting ...")

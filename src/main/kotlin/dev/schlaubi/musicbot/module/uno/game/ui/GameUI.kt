@@ -30,7 +30,6 @@ suspend fun DiscordUnoGame.updateWelcomeMessage() = welcomeMessage.edit {
             url = game.topCard.imageUrl
         }
 
-
         field {
             name = "Last Player"
             value = currentPlayer?.owner?.mention ?: "No one"
@@ -42,7 +41,6 @@ suspend fun DiscordUnoGame.updateWelcomeMessage() = welcomeMessage.edit {
             value = game.getNextPlayer().owner.mention
             inline = true
         }
-
 
         if (game.drawCardSum >= 1) {
             field {

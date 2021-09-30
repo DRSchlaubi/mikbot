@@ -3,12 +3,8 @@ package dev.schlaubi.musicbot.module.music.playlist.commands
 import com.kotlindiscord.kord.extensions.DiscordRelayedException
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.CommandContext
-import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommand
 import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommandContext
-import com.kotlindiscord.kord.extensions.commands.application.slash.ephemeralSubCommand
 import com.kotlindiscord.kord.extensions.commands.converters.impl.string
-import com.kotlindiscord.kord.extensions.extensions.Extension
-import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.kord.core.behavior.UserBehavior
 import dev.schlaubi.musicbot.core.io.Database
@@ -46,7 +42,6 @@ suspend fun Database.updatePlaylistUsages(playlist: Playlist) {
 
 suspend fun EphemeralSlashCommandContext<out PlaylistArguments>.getPlaylist() =
     arguments.getPlaylistOrNull(database, user, arguments.name) ?: error("Could not load playlist")
-
 
 class PlaylistModule : SubCommandModule() {
 

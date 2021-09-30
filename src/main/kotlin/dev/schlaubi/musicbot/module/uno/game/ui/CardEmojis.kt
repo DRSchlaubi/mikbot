@@ -7,11 +7,9 @@ import dev.schlaubi.uno.cards.ColoredCard
 import dev.schlaubi.uno.cards.DrawTwoCard
 import dev.schlaubi.uno.cards.DrawingCard
 import dev.schlaubi.uno.cards.PlayedCard
-import dev.schlaubi.uno.cards.PlayedWildCard
 import dev.schlaubi.uno.cards.ReverseCard
 import dev.schlaubi.uno.cards.SimpleCard
 import dev.schlaubi.uno.cards.SkipCard
-import dev.schlaubi.uno.cards.WildCard
 
 val Card.emoji: Long
     get() = when (this) {

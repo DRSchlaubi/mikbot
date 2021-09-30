@@ -36,7 +36,4 @@ private suspend fun DiscordUnoGame.kickUser(removedId: Snowflake) {
     if (currentPlayer == player || players.size <= 1) {
         currentTurn?.cancel()
     }
-
 }
-
-

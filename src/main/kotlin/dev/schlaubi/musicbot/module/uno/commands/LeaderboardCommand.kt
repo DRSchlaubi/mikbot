@@ -31,7 +31,8 @@ fun UnoModule.leaderboardCommand() = publicSubCommand {
                         "commands.uno.leaderboard.page.title",
                         arrayOf(current.toString(), total.toString())
                     )
-                })
+                }
+            )
         }.send()
     }
 }

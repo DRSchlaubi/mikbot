@@ -170,7 +170,7 @@ public class Game<T : Player>(initialPlayers: List<T>) {
 
         // Check uno rule
         if (player.deck.size == 1 && !player.saidUno) {
-            drawCards(player, 3)
+            drawCards(player, 2)
             player.forgotUno(this)
         }
 

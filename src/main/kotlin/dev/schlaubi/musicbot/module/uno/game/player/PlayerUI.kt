@@ -8,6 +8,8 @@ import dev.kord.rest.builder.message.modify.actionRow
 import dev.schlaubi.musicbot.module.uno.game.ui.buttonStyle
 import dev.schlaubi.musicbot.module.uno.game.ui.emoji
 import dev.schlaubi.musicbot.module.uno.game.ui.translationKey
+import dev.schlaubi.uno.UnoColor
+import dev.schlaubi.uno.cards.PlayedCard
 
 suspend fun DiscordUnoPlayer.updateControls(active: Boolean) {
     controls.edit {
@@ -15,6 +17,9 @@ suspend fun DiscordUnoPlayer.updateControls(active: Boolean) {
         content = translate(key)
 
         val cards = deck
+            .sortedBy {
+                (it as? PlayedCard)?.color ?: UnoColor.GREEN
+            }
             .mapIndexed { index, card -> card to index } // save origin index
             .chunked(5) // Only 5 buttons per action row
 

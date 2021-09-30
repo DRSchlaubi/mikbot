@@ -68,6 +68,7 @@ suspend fun UnoModule.profileCommand() = publicSubCommand(::UnoProfileArguments)
                     name = translate("commands.uno.profile.rank")
                     value = database.users.find().toList()
                         .count { (it.unoStats?.ratio ?: 0.0) > user.unoStats.ratio }
+                        .plus(1)
                         .toString()
                     inline = true
                 }

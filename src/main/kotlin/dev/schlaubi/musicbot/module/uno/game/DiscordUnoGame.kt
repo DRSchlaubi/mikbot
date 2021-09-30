@@ -42,6 +42,7 @@ class DiscordUnoGame(
 ) : KoinComponent {
     val database: Database by inject()
     val players = mutableListOf<DiscordUnoPlayer>()
+    private val leftPlayers = mutableListOf<DiscordUnoPlayer>()
     val kord: Kord get() = host.kord
     var running = false
     lateinit var game: Game<DiscordUnoPlayer>
@@ -54,6 +55,7 @@ class DiscordUnoGame(
 
     fun removePlayer(player: DiscordUnoPlayer) {
         players.remove(player)
+        leftPlayers.add(player)
         if (running) {
             game.removePlayer(player)
         }
@@ -127,7 +129,7 @@ class DiscordUnoGame(
                 )
             }
 
-            ((game.wonPlayers - winner) + players).forEach {
+            (game.wonPlayers.drop(1) + players + leftPlayers).forEach {
                 it.update {
                     copy(
                         losses = losses + 1,

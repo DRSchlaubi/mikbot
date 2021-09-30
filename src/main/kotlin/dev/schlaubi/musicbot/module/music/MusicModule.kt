@@ -118,7 +118,7 @@ class MusicModule : Extension() {
         val collection = database.playerStates
         collection.drop()
         collection.insertMany(
-            musicPlayers.map { (_, player) -> player.toState() }
+            musicPlayers.filter { it.value.lastChannelId != null }.map { (_, player) -> player.toState() }
         )
     }
 

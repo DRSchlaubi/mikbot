@@ -33,11 +33,14 @@ class DiscordUnoPlayer(
     suspend fun turn() {
         myTurn = true
         updateControls(true)
+        val cantPlay by lazy { deck.none { it.canBePlayedOn(game.game.topCard) } }
         if (drawn) {
-            val cantPlay = deck.none { it.canBePlayedOn(game.game.topCard) }
             if (cantPlay) {
                 return endTurn() // auto-skip if drawn and can't play
             }
+        } else if (game.game.drawCardSum >= 1) {
+            doDraw()
+            return turn()
         }
 
         val response = game.kord.waitFor<ComponentInteractionCreateEvent>(unoInteractionTimeout) {
@@ -67,8 +70,7 @@ class DiscordUnoPlayer(
         @Suppress("DUPLICATE_LABEL_IN_WHEN") // not duplicated, we want to purposely not skip
         when (name) {
             drawCardButton -> {
-                drawn = true
-                draw(game.game)
+                doDraw()
                 return true
             }
             sayUnoButton -> {
@@ -89,6 +91,11 @@ class DiscordUnoPlayer(
                 return false
             }
         }
+    }
+
+    private fun doDraw() {
+        drawn = true
+        draw(game.game)
     }
 
     private suspend fun playUno() {

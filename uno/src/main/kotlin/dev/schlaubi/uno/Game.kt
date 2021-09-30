@@ -117,6 +117,8 @@ public class Game<T : Player>(initialPlayers: List<T>) {
         players.forEach {
             it.deck = mutableListOf()
             drawCards(it, 7)
+            it.deck.add(DrawTwoCard(UnoColor.YELLOW))
+            it.deck.add(WildCardDraw4())
         }
 
         // Poll first card
@@ -173,12 +175,11 @@ public class Game<T : Player>(initialPlayers: List<T>) {
         }
 
         // Play card
-        playedDeck.add(card)
+
         if (card is ActionCard) {
             card.applyToGame(this)
         }
         if (card is DrawingCard) {
-            card.canStackWith(topCard)
             if (card.canStackWith(topCard)) {
                 drawCardSum += card.cards
             } else {
@@ -188,6 +189,7 @@ public class Game<T : Player>(initialPlayers: List<T>) {
         } else if (drawCardSum >= 1) {
             drawSummedCards(player)
         }
+        playedDeck.add(card)
 
         // Reset uno state
         player.saidUno = false

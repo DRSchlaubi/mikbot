@@ -10,5 +10,6 @@ import dev.schlaubi.uno.UnoColor
 @Suppress("DataClassCanBeRecord")
 public data class DrawTwoCard(override val color: UnoColor) : ColoredCard(), DrawingCard {
     override fun canBePlayedOn(card: PlayedCard): Boolean = super.canBePlayedOn(card) || card is DrawTwoCard
+    override fun canStackWith(card: PlayedCard): Boolean = card is DrawTwoCard
     override val cards: Int = 2
 }

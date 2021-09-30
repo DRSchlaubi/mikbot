@@ -34,12 +34,13 @@ public class WildCard : AbstractWildCard() {
  * @see WildCard
  * @see PlayedWildCard
  */
-public class WildCardDraw4 : AbstractWildCard(), DrawingCard {
+public open class WildCardDraw4: AbstractWildCard(), DrawingCard {
     override val cards: Int = 4
+    override fun canStackWith(card: PlayedCard): Boolean = card is WildCardDraw4
 
     override fun play(color: UnoColor): PlayedCard = PlayedWildCardDraw4(super.play(color))
 
-    private inner class PlayedWildCardDraw4(val delegate: PlayedCard) : AbstractWildCard(), PlayedCard by delegate,
+    private inner class PlayedWildCardDraw4(val delegate: PlayedCard) : WildCardDraw4(), PlayedCard by delegate,
         DrawingCard {
         override val cards: Int = this@WildCardDraw4.cards
         override fun play(color: UnoColor): PlayedCard = delegate.play(color)

@@ -5,7 +5,6 @@ import dev.schlaubi.uno.cards.Card
 import dev.schlaubi.uno.cards.DrawTwoCard
 import dev.schlaubi.uno.cards.DrawingCard
 import dev.schlaubi.uno.cards.PlayedCard
-import dev.schlaubi.uno.cards.PlayedWildCard
 import dev.schlaubi.uno.cards.ReverseCard
 import dev.schlaubi.uno.cards.SimpleCard
 import dev.schlaubi.uno.cards.SkipCard
@@ -179,10 +178,12 @@ public class Game<T : Player>(initialPlayers: List<T>) {
             card.applyToGame(this)
         }
         if (card is DrawingCard) {
-            if (card is PlayedWildCard) {
-                drawCards(player, card.cards)
-            } else {
+            card.canStackWith(topCard)
+            if (card.canStackWith(topCard)) {
                 drawCardSum += card.cards
+            } else {
+                drawSummedCards(player)
+                drawCardSum = card.cards
             }
         } else if (drawCardSum >= 1) {
             drawSummedCards(player)
@@ -229,7 +230,7 @@ public class Game<T : Player>(initialPlayers: List<T>) {
         override fun hasNext(): Boolean = _players.size > 1
 
         override fun next(): T {
-            val player = players[currentIndex]
+            val player = players.getOrNull(currentIndex)
             if (direction == Direction.CLOCKWISE) {
                 if (++currentIndex >= players.size) {
                     currentIndex = 0
@@ -239,7 +240,7 @@ public class Game<T : Player>(initialPlayers: List<T>) {
                     currentIndex = players.lastIndex
                 }
             }
-            return player
+            return player ?: players[currentIndex] // if index is broken re-coerce it
         }
 
         fun nextWithoutProgress(): T {

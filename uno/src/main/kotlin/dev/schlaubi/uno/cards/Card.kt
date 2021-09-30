@@ -60,4 +60,9 @@ public sealed interface PlayedCard : Card {
  */
 public sealed interface DrawingCard : Card {
     public val cards: Int
+
+    /**
+     * Checks whether this card can stack with [card] or not.
+     */
+    public fun canStackWith(card: PlayedCard): Boolean
 }

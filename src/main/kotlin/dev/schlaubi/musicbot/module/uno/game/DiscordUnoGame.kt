@@ -16,6 +16,8 @@ import dev.kord.rest.builder.message.EmbedBuilder
 import dev.kord.rest.builder.message.modify.embed
 import dev.kord.x.emoji.Emojis
 import dev.schlaubi.musicbot.core.io.Database
+import dev.schlaubi.musicbot.module.settings.BotUser
+import dev.schlaubi.musicbot.module.settings.UnoStats
 import dev.schlaubi.musicbot.module.uno.game.player.DiscordUnoPlayer
 import dev.schlaubi.musicbot.module.uno.game.player.translate
 import dev.schlaubi.musicbot.module.uno.game.player.updateControls
@@ -90,6 +92,8 @@ class DiscordUnoGame(
             game.forceWin(players.first())
         }
 
+        updateStats()
+
         welcomeMessage.edit {
             components = mutableListOf()
             embed {
@@ -109,6 +113,35 @@ class DiscordUnoGame(
         }
         interactionListener.cancel()
         threadWatcher.cancel()
+    }
+
+    private suspend fun updateStats() {
+        val winner = game.wonPlayers.firstOrNull()
+        if (winner != null) {
+            winner.update {
+                copy(
+                    wins = wins + 1,
+                    ratio = (wins + 1).toDouble().div(losses.coerceAtLeast(1))
+                )
+            }
+
+            ((game.wonPlayers - winner) + players).forEach {
+                it.update {
+                    copy(
+                        losses = losses + 1,
+                        ratio = wins.toDouble().div((losses + 1))
+                    )
+                }
+            }
+        }
+    }
+
+    private suspend fun DiscordUnoPlayer.update(updaterFunction: UnoStats.() -> UnoStats) {
+        val user = database.users.findOneById(owner.id) ?: BotUser(owner.id)
+        val stats = user.unoStats ?: UnoStats(0, 0, 0.0)
+        val newStats = stats.updaterFunction()
+
+        database.users.save(user.copy(unoStats = newStats))
     }
 
     private fun EmbedBuilder.winner(placeIndex: Int) {

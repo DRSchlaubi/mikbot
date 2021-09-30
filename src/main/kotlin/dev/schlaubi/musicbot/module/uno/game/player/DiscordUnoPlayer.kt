@@ -38,8 +38,8 @@ class DiscordUnoPlayer(
             if (cantPlay) {
                 return endTurn() // auto-skip if drawn and can't play
             }
-        } else if (game.game.drawCardSum >= 1) {
-            doDraw()
+        } else if (game.game.drawCardSum >= 1 && cantPlay) {
+            doDraw() // auto draw if there is no other option
             return turn()
         }
 

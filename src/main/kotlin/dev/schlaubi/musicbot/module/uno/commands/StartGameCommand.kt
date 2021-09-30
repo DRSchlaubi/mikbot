@@ -16,7 +16,7 @@ fun UnoModule.startGameCommand() = publicSubCommand {
     description = "Starts a new game"
 
     action {
-        val gameThread = textChannel.startPublicThread("test")
+        val gameThread = textChannel.startPublicThread("uno-game")
         gameThread.addUser(user.id) // Add creator
         val gameMessage = gameThread.createMessage {
             embed {

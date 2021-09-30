@@ -19,9 +19,11 @@ private suspend fun DiscordUnoGame.kickUser(removedId: Snowflake) {
     val player = players.firstOrNull { it.owner.id == removedId } ?: return
     removePlayer(player)
 
-    player.controls.edit {
-        components = mutableListOf()
-        content = player.translate("uno.controls.left")
+    runCatching {
+        player.controls.edit {
+            components = mutableListOf()
+            content = player.translate("uno.controls.left")
+        }
     }
 
     if (!running) {

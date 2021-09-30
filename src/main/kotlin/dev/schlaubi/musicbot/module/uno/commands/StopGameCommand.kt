@@ -13,7 +13,7 @@ fun UnoModule.stopGameCommand() = ephemeralSubCommand {
         isInThread()
 
         failIf(translate("commands.uno.stop_game.not_running")) {
-            findUno(event.interaction.channelId) != null
+            findUno(event.interaction.channelId) == null
         }
     }
 

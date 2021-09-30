@@ -43,6 +43,7 @@ suspend fun UnoModule.profileCommand() = publicSubCommand(::UnoProfileArguments)
                 field {
                     name = translate("commands.uno.profile.wins")
                     value = user.unoStats.wins.toString()
+                    inline = true
                 }
 
                 field {
@@ -60,6 +61,7 @@ suspend fun UnoModule.profileCommand() = publicSubCommand(::UnoProfileArguments)
                 field {
                     name = translate("commands.uno.profile.played")
                     value = (user.unoStats.wins + user.unoStats.losses).toString()
+                    inline = true
                 }
 
                 field {

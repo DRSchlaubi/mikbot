@@ -140,11 +140,11 @@ class DiscordUnoPlayer(
     }
 
     suspend fun resendControls(
-        event: ComponentInteractionCreateEvent,
+        event: ComponentInteractionCreateEvent?,
         justLoading: Boolean = false,
         overrideConfirm: Boolean = false
     ) {
-        val ack = event.interaction.acknowledgeEphemeral()
+        val ack = event?.interaction?.acknowledgeEphemeral() ?: response
         val confirmed = overrideConfirm || game.confirmation(ack) {
             content = translate("uno.resend_controls.confirm")
         }.value
@@ -159,7 +159,9 @@ class DiscordUnoPlayer(
                 }.pin()
             }
 
-            controls = ack.followUpEphemeral { content = translate("uno.controls.loading") }
+            controls = ack.followUpEphemeral {
+                content = translate("uno.controls.loading")
+            }
             if (!justLoading) {
                 updateControls(myTurn)
             }

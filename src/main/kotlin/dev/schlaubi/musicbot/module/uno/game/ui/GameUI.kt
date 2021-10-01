@@ -9,13 +9,15 @@ import dev.schlaubi.musicbot.module.uno.game.joinGameButton
 import dev.schlaubi.musicbot.module.uno.game.leaveButton
 import dev.schlaubi.musicbot.module.uno.game.resendControlsButton
 import dev.schlaubi.musicbot.module.uno.game.startGameButton
+import dev.schlaubi.uno.Direction
 import java.util.Locale
 
 suspend fun DiscordUnoGame.updateWelcomeMessage() = welcomeMessage.edit {
     embed {
         field {
+            val actualPlayers = if (game.direction == Direction.COUNTER_CLOCKWISE) players.reversed() else players
             name = "Players"
-            value = players.joinToString(", ") {
+            value = actualPlayers.joinToString(", ") {
                 val mention = it.owner.mention
                 if (running) {
                     "$mention (${it.deck.size})"

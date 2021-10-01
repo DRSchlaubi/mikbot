@@ -28,12 +28,15 @@ import dev.schlaubi.uno.Game
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import mu.KotlinLogging
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 const val joinGameButton = "join_game"
 const val resendControlsButton = "resend_controls"
 const val startGameButton = "start_game"
+
+private val LOG = KotlinLogging.logger { }
 
 class DiscordUnoGame(
     val host: UserBehavior,
@@ -73,8 +76,16 @@ class DiscordUnoGame(
         while (game.gameRunning) {
             coroutineScope {
                 currentTurn = launch {
-                    currentPlayer = game.nextPlayer()
-                    currentPlayer!!.turn()
+                    try {
+                        currentPlayer = game.nextPlayer()
+                        currentPlayer!!.turn()
+                    } catch (e: Exception) {
+                        currentPlayer!!.response.followUpEphemeral {
+                            content = translate("uno.controls.failed")
+                        }
+                        currentPlayer!!.resendControls(null, justLoading = true, overrideConfirm = true)
+                        LOG.error(e) { "Error occurred whilst updating game" }
+                    }
                     updateWelcomeMessage()
                 }
             }

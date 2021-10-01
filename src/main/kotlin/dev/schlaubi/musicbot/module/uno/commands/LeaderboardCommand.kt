@@ -16,7 +16,10 @@ fun UnoModule.leaderboardCommand() = publicSubCommand {
     description = "Displays the best UNO players"
 
     action {
-        val all = database.users.find(not(BotUser::unoStats eq null)).toList()
+        val all = database.users
+            .find(not(BotUser::unoStats eq null))
+            .toList()
+            .sortedByDescending { it.unoStats?.ratio ?: 0.0 }
 
         editingPaginator {
             forList(

@@ -25,12 +25,17 @@ fun DiscordUnoGame.interactionHandler() = kord.on<ComponentInteractionCreateEven
         }
 
         joinGameButton -> {
-            val ack = interaction.acknowledgeEphemeral()
             thread.addUser(interaction.user.id)
-            val loading = ack.followUpEphemeral { content = "Waiting for game to start" }
-            val player = DiscordUnoPlayer(interaction.user, ack, loading, this@interactionHandler)
-            players.add(player)
-            updateWelcomeMessage()
+            val existingPlayer = interaction.unoPlayer
+            if (existingPlayer != null) {
+                existingPlayer.resendControls(this, justLoading = true, overrideConfirm = true)
+            } else {
+                val ack = interaction.acknowledgeEphemeral()
+                val loading = ack.followUpEphemeral { content = "Waiting for game to start" }
+                val player = DiscordUnoPlayer(interaction.user, ack, loading, this@interactionHandler)
+                players.add(player)
+                updateWelcomeMessage()
+            }
         }
         resendControlsButton -> {
             val player = interaction.unoPlayer ?: return@on

@@ -12,7 +12,5 @@ import dev.schlaubi.uno.UnoColor
 @Suppress("DataClassCanBeRecord")
 public data class SkipCard(override val color: UnoColor) : ColoredCard(), ActionCard {
     override fun canBePlayedOn(card: PlayedCard): Boolean = super.canBePlayedOn(card) || card is SkipCard
-    override fun applyToGame(game: Game<*>) {
-        game.skipPlayer()
-    }
+    override fun applyToGame(game: Game<*>): Unit = game.skipPlayer()
 }

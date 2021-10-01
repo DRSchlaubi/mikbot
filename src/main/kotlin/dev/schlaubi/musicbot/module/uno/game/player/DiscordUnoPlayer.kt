@@ -10,6 +10,7 @@ import dev.kord.core.entity.interaction.EphemeralFollowupMessage
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.schlaubi.musicbot.module.uno.game.DiscordUnoGame
 import dev.schlaubi.musicbot.utils.deleteAfterwards
+import dev.schlaubi.uno.Game
 import dev.schlaubi.uno.Player
 import dev.schlaubi.uno.cards.AbstractWildCard
 import kotlinx.coroutines.launch
@@ -33,6 +34,14 @@ class DiscordUnoPlayer(
     override fun onWin(place: Int) {
         game.kord.launch {
             game.thread.createMessage("${owner.mention} finished the game!")
+        }
+    }
+
+    override fun forgotUno(game: Game<*>) {
+        this.game.kord.launch {
+            response.followUpEphemeral {
+                content = translate("uno.general.forgot_uno")
+            }
         }
     }
 
@@ -130,22 +139,30 @@ class DiscordUnoPlayer(
         }
     }
 
-    suspend fun resendControls(event: ComponentInteractionCreateEvent) {
+    suspend fun resendControls(
+        event: ComponentInteractionCreateEvent,
+        justLoading: Boolean = false,
+        overrideConfirm: Boolean = false
+    ) {
         val ack = event.interaction.acknowledgeEphemeral()
-        val (confirmed) = game.confirmation(ack) {
+        val confirmed = overrideConfirm || game.confirmation(ack) {
             content = translate("uno.resend_controls.confirm")
-        }
+        }.value
         if (confirmed) {
             controls.edit {
                 content = translate("uno.controls.reset")
                 components = mutableListOf()
             }
-            game.thread.createMessage {
-                content = translate("uno.resend_controls.blame", owner.mention)
-            }.pin()
+            if (!overrideConfirm) {
+                game.thread.createMessage {
+                    content = translate("uno.resend_controls.blame", owner.mention)
+                }.pin()
+            }
 
-            controls = ack.followUpEphemeral { content = "Loading ..." }
-            updateControls(myTurn)
+            controls = ack.followUpEphemeral { content = translate("uno.controls.loading") }
+            if (!justLoading) {
+                updateControls(myTurn)
+            }
         }
     }
 

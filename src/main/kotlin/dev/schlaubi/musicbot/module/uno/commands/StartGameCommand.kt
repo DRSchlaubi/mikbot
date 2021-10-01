@@ -1,5 +1,6 @@
 package dev.schlaubi.musicbot.module.uno.commands
 
+import com.kotlindiscord.kord.extensions.checks.isNotInThread
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.kord.common.entity.ButtonStyle
 import dev.kord.common.entity.Permission
@@ -20,6 +21,7 @@ fun UnoModule.startGameCommand() = publicSubCommand {
     check {
         // Required for pin()
         requireBotPermissions(Permission.ManageMessages)
+        isNotInThread()
     }
 
     action {

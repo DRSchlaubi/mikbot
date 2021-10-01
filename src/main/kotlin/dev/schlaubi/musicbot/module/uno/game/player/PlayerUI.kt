@@ -51,7 +51,7 @@ suspend fun DiscordUnoPlayer.updateControls(active: Boolean) {
             if (deck.size <= 2) {
                 interactionButton(if (saidUno) ButtonStyle.Success else ButtonStyle.Primary, sayUnoButton) {
                     label = translate("uno.actions.say_uno")
-                    disabled = !active || deck.size <= 1
+                    disabled = !active || deck.size <= 1 || saidUno
                 }
             }
         }

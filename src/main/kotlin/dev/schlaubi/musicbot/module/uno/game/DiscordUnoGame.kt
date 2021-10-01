@@ -122,7 +122,7 @@ class DiscordUnoGame(
     }
 
     private suspend fun updateStats() {
-        if(!running) return
+        if (!running) return
         val winner = game.wonPlayers.firstOrNull()
         if (winner != null) {
             winner.update {
@@ -165,9 +165,13 @@ class DiscordUnoGame(
     }
 
     suspend fun confirmation(ack: EphemeralInteractionResponseBehavior, messageBuilder: MessageBuilder) =
-        dev.schlaubi.musicbot.utils.confirmation({
-            ack.followUpEphemeral { it() }
-        }, messageBuilder = messageBuilder, translate = translationsProvider::translate)
+        dev.schlaubi.musicbot.utils.confirmation(
+            {
+                ack.followUpEphemeral { it() }
+            },
+            messageBuilder = messageBuilder,
+            translate = translationsProvider::translate
+        )
 
     val ComponentInteraction.unoPlayer: DiscordUnoPlayer?
         get() = players.firstOrNull { it.owner == user }

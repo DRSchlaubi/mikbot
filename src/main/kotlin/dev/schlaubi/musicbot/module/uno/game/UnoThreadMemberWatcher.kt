@@ -36,6 +36,7 @@ private suspend fun DiscordUnoGame.kickUser(removedId: Snowflake) {
     // Cancel turn for current player if it is the leaving player or,
     // there are no players left (end game)
     if (currentPlayer == player || players.size <= 1) {
+        game.skipPlayer() // leaving confuses the player sequence and lets the left player play again
         currentTurn?.cancel()
     }
 }

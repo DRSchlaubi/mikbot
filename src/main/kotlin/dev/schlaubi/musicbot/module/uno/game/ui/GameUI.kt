@@ -15,7 +15,7 @@ import java.util.Locale
 suspend fun DiscordUnoGame.updateWelcomeMessage() = welcomeMessage.edit {
     embed {
         field {
-            val actualPlayers = if (game.direction == Direction.COUNTER_CLOCKWISE) players.reversed() else players
+            val actualPlayers = if (running && game.direction == Direction.COUNTER_CLOCKWISE) players.reversed() else players
             name = "Players"
             value = actualPlayers.joinToString(", ") {
                 val mention = it.owner.mention

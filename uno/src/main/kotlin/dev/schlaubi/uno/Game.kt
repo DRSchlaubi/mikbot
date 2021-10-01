@@ -143,6 +143,16 @@ public class Game<T : Player>(initialPlayers: List<T>) {
     public fun skipPlayer(): Unit = nextPlayer().onSkip()
 
     /**
+     * Reverses [direction].
+     */
+    public fun reverse() {
+        direction = !direction
+        if (players.size == 2) {
+            skipPlayer() // If there are only 2 players, reverse essentially means skip
+        }
+    }
+
+    /**
      * Obtains the next [Player].
      */
     public fun nextPlayer(): T = playerSequence.next()
@@ -224,29 +234,28 @@ public class Game<T : Player>(initialPlayers: List<T>) {
     }
 
     private inner class PlayerSequence : Iterator<T> {
-        var currentIndex = 0
+        var lastIndex = -1
 
         // Winning players get removed => only one player left means game ended
         override fun hasNext(): Boolean = _players.size > 1
 
         override fun next(): T {
-            val player = players.getOrNull(currentIndex)
             if (direction == Direction.CLOCKWISE) {
-                if (++currentIndex >= players.size) {
-                    currentIndex = 0
+                if (++lastIndex >= players.size) {
+                    lastIndex = 0
                 }
             } else {
-                if (--currentIndex < 0) {
-                    currentIndex = players.lastIndex
+                if (--lastIndex < 0) {
+                    lastIndex = players.lastIndex
                 }
             }
-            return player ?: players[currentIndex] // if index is broken re-coerce it
+            return players[lastIndex] // if index is broken re-coerce it
         }
 
         fun nextWithoutProgress(): T {
-            val indexNow = currentIndex
+            val indexNow = lastIndex
             val player = nextPlayer()
-            currentIndex = indexNow
+            lastIndex = indexNow
 
             return player
         }

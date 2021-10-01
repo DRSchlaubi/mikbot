@@ -22,6 +22,7 @@ import dev.schlaubi.musicbot.module.uno.game.player.DiscordUnoPlayer
 import dev.schlaubi.musicbot.module.uno.game.player.translate
 import dev.schlaubi.musicbot.module.uno.game.player.updateControls
 import dev.schlaubi.musicbot.module.uno.game.ui.updateWelcomeMessage
+import dev.schlaubi.musicbot.module.uno.unregisterUno
 import dev.schlaubi.musicbot.utils.MessageBuilder
 import dev.schlaubi.uno.Game
 import kotlinx.coroutines.Job
@@ -117,9 +118,11 @@ class DiscordUnoGame(
         }
         interactionListener.cancel()
         threadWatcher.cancel()
+        unregisterUno(thread.id)
     }
 
     private suspend fun updateStats() {
+        if(!running) return
         val winner = game.wonPlayers.firstOrNull()
         if (winner != null) {
             winner.update {

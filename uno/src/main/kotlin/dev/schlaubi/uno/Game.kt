@@ -117,8 +117,6 @@ public class Game<T : Player>(initialPlayers: List<T>) {
         players.forEach {
             it.deck = mutableListOf()
             drawCards(it, 7)
-            it.deck.add(DrawTwoCard(UnoColor.YELLOW))
-            it.deck.add(WildCardDraw4())
         }
 
         // Poll first card
@@ -197,6 +195,7 @@ public class Game<T : Player>(initialPlayers: List<T>) {
         // Check win condition
         if (player.deck.isEmpty()) {
             win(player)
+            player.onWin(wonPlayers.size)
         }
     }
 
@@ -204,7 +203,6 @@ public class Game<T : Player>(initialPlayers: List<T>) {
         _players.remove(player)
         @Suppress("UNCHECKED_CAST")
         _wonPlayers.add(player as T)
-        player.onWin(wonPlayers.size)
     }
 
     private fun drawSummedCards(player: Player) {

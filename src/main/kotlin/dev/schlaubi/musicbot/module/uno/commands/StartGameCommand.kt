@@ -11,6 +11,7 @@ import dev.schlaubi.musicbot.module.uno.game.DiscordUnoGame
 import dev.schlaubi.musicbot.module.uno.game.joinGameButton
 import dev.schlaubi.musicbot.module.uno.game.leaveButton
 import dev.schlaubi.musicbot.module.uno.game.startGameButton
+import dev.schlaubi.musicbot.module.uno.registerUno
 
 fun UnoModule.startGameCommand() = publicSubCommand {
     name = "start"
@@ -46,7 +47,8 @@ fun UnoModule.startGameCommand() = publicSubCommand {
             }
         }
         gameMessage.pin()
-        DiscordUnoGame(user, gameMessage, gameThread, translationsProvider)
+        val game = DiscordUnoGame(user, gameMessage, gameThread, translationsProvider)
+        registerUno(gameThread.id, game)
 
         respond {
             content = translate("commands.uno.start_game.success")

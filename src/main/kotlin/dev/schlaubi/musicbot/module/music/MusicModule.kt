@@ -117,9 +117,10 @@ class MusicModule : Extension() {
     suspend fun savePlayerStates() {
         val collection = database.playerStates
         collection.drop()
-        collection.insertMany(
-            musicPlayers.filter { it.value.lastChannelId != null }.map { (_, player) -> player.toState() }
-        )
+        val players = musicPlayers.filter { it.value.lastChannelId != null }.map { (_, player) -> player.toState() }
+        if (players.isNotEmpty()) {
+            collection.insertMany(players)
+        }
     }
 
     suspend fun disconnect() {

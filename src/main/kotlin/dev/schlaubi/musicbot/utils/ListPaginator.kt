@@ -17,7 +17,7 @@ import dev.kord.rest.builder.message.EmbedBuilder
 suspend fun <T> PaginatorBuilder.forList(
     user: UserBehavior,
     items: List<T>,
-    mapper: (T) -> String,
+    mapper: suspend (T) -> String,
     title: suspend (current: Int, total: Int) -> String,
     chunkSize: Int = 8,
     enumerate: Boolean = true,

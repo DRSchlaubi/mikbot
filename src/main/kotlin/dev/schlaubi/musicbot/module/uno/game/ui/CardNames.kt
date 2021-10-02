@@ -25,7 +25,7 @@ val AbstractWildCard.translationKey: String
     get() = when (this) {
         is PlayedCard -> {
             val name = if (this is DrawingCard) {
-                "wilddraw4"
+                "wild.draw4"
             } else {
                 "wild"
             }

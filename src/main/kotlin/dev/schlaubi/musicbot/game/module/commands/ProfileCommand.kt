@@ -72,8 +72,10 @@ suspend fun GameModule<*, *>.profileCommand() = publicSubCommand(::UnoProfileArg
 
                 field {
                     name = translateGlobal("commands.profile.rank")
-                    value = (database.users
-                        .countDocuments((gameStats / GameStats::ratio) gt 0.0) + 1)
+                    value = (
+                        database.users
+                            .countDocuments((gameStats / GameStats::ratio) gt 0.0) + 1
+                        )
                         .toString()
                     inline = true
                 }

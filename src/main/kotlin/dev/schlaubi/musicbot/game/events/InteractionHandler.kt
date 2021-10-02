@@ -52,5 +52,3 @@ internal fun <T : Player> AbstractGame<T>.interactionHandler() = kord.on<Compone
         else -> onInteraction()
     }
 }
-
-

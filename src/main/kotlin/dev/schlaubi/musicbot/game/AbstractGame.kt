@@ -120,7 +120,7 @@ abstract class AbstractGame<T : Player>(val host: UserBehavior) : KoinComponent 
      */
     suspend fun doUpdateWelcomeMessage() {
         welcomeMessage.edit {
-            if(running) {
+            if (running) {
                 updateWelcomeMessage()
             }
             gameUI(this@AbstractGame)
@@ -227,4 +227,3 @@ abstract class AbstractGame<T : Player>(val host: UserBehavior) : KoinComponent 
         description += "${medal?.toString() ?: (placeIndex + 1).toString()}${player.user.mention}"
     }
 }
-

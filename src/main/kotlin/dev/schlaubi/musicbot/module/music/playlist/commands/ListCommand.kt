@@ -7,7 +7,6 @@ import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.musicbot.module.music.playlist.Playlist
 import dev.schlaubi.musicbot.utils.database
 import dev.schlaubi.musicbot.utils.forFlow
-import dev.schlaubi.musicbot.utils.forList
 import org.litote.kmongo.eq
 import org.litote.kmongo.or
 

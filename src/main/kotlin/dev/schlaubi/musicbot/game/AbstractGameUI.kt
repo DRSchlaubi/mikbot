@@ -25,7 +25,6 @@ fun MessageModifyBuilder.gameUI(game: AbstractGame<*>) {
             }
         }
 
-
         leaveButton("Leave Game")
     }
 }

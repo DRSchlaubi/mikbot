@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
 import kotlin.math.roundToInt
 
-
 /**
  * Configures this [PaginatorBuilder] to create one page for each [x][chunkSize] elements in [items]
  * .

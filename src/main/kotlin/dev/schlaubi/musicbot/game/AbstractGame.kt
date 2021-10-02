@@ -126,6 +126,13 @@ abstract class AbstractGame<T : Player>(
         welcomeMessage.edit {
             if (running) {
                 updateWelcomeMessage()
+            } else {
+                embed {
+                    field {
+                        name = "Players"
+                        value = players.joinToString(", ") { it.user.mention }
+                    }
+                }
             }
             gameUI(this@AbstractGame)
         }

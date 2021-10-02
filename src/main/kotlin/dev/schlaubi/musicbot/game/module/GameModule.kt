@@ -84,6 +84,11 @@ abstract class GameModule<P : Player, G : AbstractGame<P>> : SubCommandModule() 
     ): G
 
     /**
+     * Removes the game by its [threadId].
+     */
+    fun unregisterGame(threadId: Snowflake) = games.remove(threadId)
+
+    /**
      * Additional setup calls.
      */
     protected open suspend fun gameSetup() = Unit

@@ -13,8 +13,6 @@ abstract class SubCommandModule : Extension() {
     protected val ephemeralSubCommandBodies = mutableListOf<EphemeralCommandPair<*>>()
     protected val publicSubCommandBodies = mutableListOf<PublicCommandPair<*>>()
     abstract val commandName: String
-    abstract val commandDescription: String
-
     fun <T : Arguments> ephemeralSubCommand(
         argumentBody: (() -> T),
         body: suspend EphemeralSlashCommand<T>.() -> Unit
@@ -42,7 +40,7 @@ abstract class SubCommandModule : Extension() {
 
         ephemeralSlashCommand {
             name = commandName
-            description = commandDescription
+            description = "<never used>"
 
             ephemeralSubCommandBodies.forEach { with(it) { add() } }
             publicSubCommandBodies.forEach { with(it) { add() } }

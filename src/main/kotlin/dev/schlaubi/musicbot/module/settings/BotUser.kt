@@ -16,7 +16,8 @@ data class BotUser(
     @Contextual
     val language: Locale = SupportedLocales.ENGLISH,
     val defaultSchedulerSettings: SchedulerSettings? = null,
-    val unoStats: GameStats? = null
+    val unoStats: GameStats? = null,
+    val quizStats: GameStats? = null
 )
 
 @Serializable

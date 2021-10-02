@@ -48,7 +48,6 @@ class PlaylistModule : SubCommandModule() {
     override val bundle: String = "music"
     override val name: String = "playlist"
     override val commandName: String = "playlist"
-    override val commandDescription: String = "Manages bot playlists"
 
     val musicModule: MusicModule by extension()
     val CommandContext.musicPlayer: MusicPlayer

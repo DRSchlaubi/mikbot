@@ -19,6 +19,7 @@ import dev.kord.x.emoji.Emojis
 import dev.schlaubi.musicbot.core.io.Database
 import dev.schlaubi.musicbot.game.events.interactionHandler
 import dev.schlaubi.musicbot.game.events.watchThread
+import dev.schlaubi.musicbot.game.module.GameModule
 import dev.schlaubi.musicbot.module.settings.BotUser
 import dev.schlaubi.musicbot.module.uno.unregisterUno
 import kotlinx.coroutines.Job
@@ -40,7 +41,10 @@ import kotlin.reflect.KProperty1
  * @property translationsProvider the [TranslationsProvider] used for translations
  * @property statsProperty the property of [BotUser] representing the games stats
  */
-abstract class AbstractGame<T : Player>(val host: UserBehavior) : KoinComponent {
+abstract class AbstractGame<T : Player>(
+    val host: UserBehavior,
+    val module: GameModule<T, out AbstractGame<T>>
+) : KoinComponent {
     val players: MutableList<T> = mutableListOf()
     private val leftPlayers = mutableListOf<T>()
 
@@ -51,7 +55,7 @@ abstract class AbstractGame<T : Player>(val host: UserBehavior) : KoinComponent 
     abstract val welcomeMessage: Message
     abstract val wonPlayers: List<T>
     abstract val bundle: String
-    abstract val statsProperty: KProperty1<BotUser, GameStats?>
+    val statsProperty: KProperty1<BotUser, GameStats?> get() = module.gameStats
     val kord: Kord get() = host.kord
 
     abstract val translationsProvider: TranslationsProvider
@@ -153,6 +157,7 @@ abstract class AbstractGame<T : Player>(val host: UserBehavior) : KoinComponent 
      */
     suspend fun doEnd() {
         end()
+        module.unregisterGame(thread.id)
 
         if (running) {
             updateStats()

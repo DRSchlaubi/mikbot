@@ -19,6 +19,7 @@ import dev.schlaubi.musicbot.game.AbstractGame
 import dev.schlaubi.musicbot.game.GameStats
 import dev.schlaubi.musicbot.game.translate
 import dev.schlaubi.musicbot.module.settings.BotUser
+import dev.schlaubi.musicbot.module.uno.UnoModule
 import dev.schlaubi.musicbot.module.uno.game.player.DiscordUnoPlayer
 import dev.schlaubi.musicbot.module.uno.game.player.translate
 import dev.schlaubi.musicbot.module.uno.game.player.updateControls
@@ -38,10 +39,11 @@ private val LOG = KotlinLogging.logger { }
 
 class DiscordUnoGame(
     host: UserBehavior,
+    module: UnoModule,
     override val welcomeMessage: Message,
     override val thread: ThreadChannelBehavior,
     override val translationsProvider: TranslationsProvider
-) : AbstractGame<DiscordUnoPlayer>(host) {
+) : AbstractGame<DiscordUnoPlayer>(host, module) {
     override val bundle: String = "uno"
     lateinit var game: Game<DiscordUnoPlayer>
         internal set
@@ -50,7 +52,6 @@ class DiscordUnoGame(
 
     override val playerRange: IntRange = 2..10
     internal var currentTurn: Job? = null
-    override val statsProperty: KProperty1<BotUser, GameStats?> = BotUser::unoStats
     internal var currentPlayer: DiscordUnoPlayer? = null
     override fun BotUser.applyStats(stats: GameStats): BotUser = copy(unoStats = stats)
 

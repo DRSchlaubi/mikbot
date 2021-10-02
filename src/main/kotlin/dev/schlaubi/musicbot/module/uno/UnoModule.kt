@@ -23,8 +23,6 @@ class UnoModule : GameModule<DiscordUnoPlayer, DiscordUnoGame>() {
     override val name: String = "uno"
     override val bundle: String = "uno"
     override val commandName: String = "uno"
-    override val commandDescription: String =
-        "Command for the Bots built-in UNO game feature, and yes all music bots should have an uno feature"
     override val gameStats: KProperty1<BotUser, GameStats?> = BotUser::unoStats
 
     @OptIn(PrivilegedIntent::class, KordUnsafe::class, KordExperimental::class)
@@ -45,5 +43,5 @@ class UnoModule : GameModule<DiscordUnoPlayer, DiscordUnoGame>() {
         welcomeMessage: Message,
         thread: ThreadChannelBehavior,
         translationsProvider: TranslationsProvider
-    ): DiscordUnoGame = DiscordUnoGame(host, welcomeMessage, thread, translationsProvider)
+    ): DiscordUnoGame = DiscordUnoGame(host, this, welcomeMessage, thread, translationsProvider)
 }

@@ -1,6 +1,5 @@
 package dev.schlaubi.musicbot.module.uno.commands
 
-import java.text.DecimalFormat
 import com.kotlindiscord.kord.extensions.types.editingPaginator
 import dev.kord.common.annotation.KordExperimental
 import dev.kord.common.annotation.KordUnsafe
@@ -8,8 +7,10 @@ import dev.schlaubi.musicbot.module.settings.BotUser
 import dev.schlaubi.musicbot.module.uno.UnoModule
 import dev.schlaubi.musicbot.utils.database
 import dev.schlaubi.musicbot.utils.forList
+import dev.schlaubi.musicbot.utils.safeGuild
 import org.litote.kmongo.eq
 import org.litote.kmongo.not
+import java.text.DecimalFormat
 
 private val ratioFormat = DecimalFormat("00%") // percentage
 
@@ -32,7 +33,7 @@ fun UnoModule.leaderboardCommand() = publicSubCommand {
                     val user = this@leaderboardCommand.kord.unsafe.user(it.id)
                     val unoStats = it.unoStats!!
                     val ratio = ratioFormat.format(unoStats.ratio)
-                    "${user.asMemberOrNull(safeGuild?.id)?.mention ?: user.username} - ${unoStats.wins}/${unoStats.losses} ($ratio)"
+                    "${user.asMemberOrNull(safeGuild?.id)?.mention ?: user.asUserOrNull()?.username ?: user.mention} - ${unoStats.wins}/${unoStats.losses} ($ratio)"
                 },
                 { current: Int, total: Int ->
                     translate(

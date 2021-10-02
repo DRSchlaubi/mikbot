@@ -5,7 +5,8 @@ import dev.kord.core.behavior.UserBehavior
 import dev.kord.rest.builder.message.EmbedBuilder
 
 /**
- * Configures this [PaginatorBuilder] to create one page for each [x][chunkSize] elements in [items].
+ * Configures this [PaginatorBuilder] to create one page for each [x][chunkSize] elements in [items]
+ * .
  *
  * @param user the [PaginatorBuilder.owner] of this paginator
  * @param mapper a mapper converting [T] to [String]
@@ -31,17 +32,15 @@ suspend fun <T> PaginatorBuilder.forList(
         page {
             this.title = title((index + 1), pages.size)
 
-            val enumeratingMapper: (Pair<T, Int>) -> String by lazy {
-                { (it, index) -> "${index + 1}: ${mapper(it)}" }
-            }
-            val nonEnumeratingMapper: (Pair<T, Int>) -> String by lazy {
-                { (it) -> mapper(it) }
-            }
-
-            description = tracks.joinToString(
-                "\n",
-                transform = if (enumerate) enumeratingMapper else nonEnumeratingMapper
-            )
+            description =
+                tracks.map { (it, index) ->
+                    if (enumerate) {
+                        "${index + 1}: ${mapper(it)}"
+                    } else {
+                        mapper(it)
+                    }
+                }
+                    .joinToString("\n")
 
             additionalPageConfig()
         }

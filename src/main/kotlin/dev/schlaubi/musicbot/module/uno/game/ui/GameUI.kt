@@ -1,24 +1,19 @@
 package dev.schlaubi.musicbot.module.uno.game.ui
 
-import dev.kord.common.entity.ButtonStyle
-import dev.kord.core.behavior.edit
-import dev.kord.rest.builder.message.modify.actionRow
-import dev.kord.rest.builder.message.modify.embed
+import dev.kord.rest.builder.message.EmbedBuilder
+import dev.schlaubi.musicbot.game.translate
 import dev.schlaubi.musicbot.module.uno.game.DiscordUnoGame
-import dev.schlaubi.musicbot.module.uno.game.joinGameButton
-import dev.schlaubi.musicbot.module.uno.game.leaveButton
-import dev.schlaubi.musicbot.module.uno.game.resendControlsButton
-import dev.schlaubi.musicbot.module.uno.game.startGameButton
 import dev.schlaubi.uno.Direction
 import java.util.Locale
 
-suspend fun DiscordUnoGame.updateWelcomeMessage() = welcomeMessage.edit {
-    embed {
+fun EmbedBuilder.welcomeMessage(uno: DiscordUnoGame) {
+    with(uno) {
         field {
-            val actualPlayers = if (running && game.direction == Direction.COUNTER_CLOCKWISE) players.reversed() else players
+            val actualPlayers =
+                if (running && game.direction == Direction.COUNTER_CLOCKWISE) players.reversed() else players
             name = "Players"
             value = actualPlayers.joinToString(", ") {
-                val mention = it.owner.mention
+                val mention = it.user.mention
                 if (running) {
                     "$mention (${it.deck.size})"
                 } else {
@@ -27,20 +22,20 @@ suspend fun DiscordUnoGame.updateWelcomeMessage() = welcomeMessage.edit {
             }
         }
 
-        if (!running) return@embed
+        if (!running) return
         thumbnail {
             url = game.topCard.imageUrl
         }
 
         field {
             name = "Last Player"
-            value = currentPlayer?.owner?.mention ?: "No one"
+            value = currentPlayer?.user?.mention ?: "No one"
             inline = true
         }
 
         field {
             name = "Current Player"
-            value = game.getNextPlayer().owner.mention
+            value = game.getNextPlayer().user.mention
             inline = true
         }
 
@@ -68,23 +63,5 @@ suspend fun DiscordUnoGame.updateWelcomeMessage() = welcomeMessage.edit {
             value = translate("uno.direction." + game.direction.name.lowercase(Locale.ENGLISH))
             inline = true
         }
-    }
-
-    actionRow {
-        if (running) {
-            interactionButton(ButtonStyle.Secondary, resendControlsButton) {
-                label = "Resend Controls"
-            }
-        } else {
-            interactionButton(ButtonStyle.Success, joinGameButton) {
-                label = "Join"
-            }
-
-            interactionButton(ButtonStyle.Primary, startGameButton) {
-                label = "Start"
-            }
-        }
-
-        leaveButton()
     }
 }

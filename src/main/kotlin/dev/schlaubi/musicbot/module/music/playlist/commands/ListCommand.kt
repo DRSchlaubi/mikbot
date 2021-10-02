@@ -6,6 +6,7 @@ import com.kotlindiscord.kord.extensions.types.editingPaginator
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.musicbot.module.music.playlist.Playlist
 import dev.schlaubi.musicbot.utils.database
+import dev.schlaubi.musicbot.utils.forFlow
 import dev.schlaubi.musicbot.utils.forList
 import org.litote.kmongo.eq
 import org.litote.kmongo.or
@@ -26,19 +27,20 @@ fun PlaylistModule.listCommand() = ephemeralSubCommand(::PlayListListArguments) 
             or(myPlaylists, Playlist::public eq true)
         }
 
-        val playlists = database.playlists.find(filter).toList()
+        val playlistCount = database.playlists.countDocuments(filter)
 
-        if (playlists.isEmpty()) {
+        if (playlistCount == 0L) {
             respond {
                 content = translate("commands.playlist.list.empty")
             }
             return@action
         }
+        val playlists = database.playlists.find(filter).toFlow()
 
         val tracks = translate("music.general.tracks")
         editingPaginator {
-            forList(
-                user, playlists, { "${it.name} - ${it.songs.size} $tracks by <@${it.authorId.asString}>" },
+            forFlow(
+                user, playlistCount, playlists, { "${it.name} - ${it.songs.size} $tracks by <@${it.authorId.asString}>" },
                 { current, total ->
                     translate(
                         "commands.playlist.list.paginator.title",

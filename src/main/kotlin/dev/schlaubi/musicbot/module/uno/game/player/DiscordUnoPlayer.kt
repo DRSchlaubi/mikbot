@@ -1,6 +1,5 @@
 package dev.schlaubi.musicbot.module.uno.game.player
 
-import com.kotlindiscord.kord.extensions.utils.waitFor
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
@@ -8,6 +7,7 @@ import dev.kord.core.behavior.interaction.edit
 import dev.kord.core.behavior.interaction.followUpEphemeral
 import dev.kord.core.entity.interaction.EphemeralFollowupMessage
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
+import dev.schlaubi.musicbot.game.confirmation
 import dev.schlaubi.musicbot.module.uno.game.DiscordUnoGame
 import dev.schlaubi.musicbot.utils.deleteAfterwards
 import dev.schlaubi.uno.Game
@@ -15,6 +15,7 @@ import dev.schlaubi.uno.Player
 import dev.schlaubi.uno.cards.AbstractWildCard
 import kotlinx.coroutines.launch
 import kotlin.time.Duration
+import dev.schlaubi.musicbot.game.Player as GamePlayer
 
 internal val unoInteractionTimeout = Duration.seconds(30).inWholeMilliseconds
 
@@ -23,17 +24,17 @@ const val sayUnoButton = "say_uno"
 const val skipButton = "skip"
 
 class DiscordUnoPlayer(
-    val owner: UserBehavior,
+    override val user: UserBehavior,
     val response: EphemeralInteractionResponseBehavior,
     var controls: EphemeralFollowupMessage,
     val game: DiscordUnoGame
-) : Player() {
+) : Player(), GamePlayer {
     private var myTurn = false
     internal var drawn = false
 
     override fun onWin(place: Int) {
         game.kord.launch {
-            game.thread.createMessage("${owner.mention} finished the game!")
+            game.thread.createMessage("${user.mention} finished the game!")
         }
     }
 
@@ -58,14 +59,11 @@ class DiscordUnoPlayer(
             return turn()
         }
 
-        val response = game.kord.waitFor<ComponentInteractionCreateEvent>(unoInteractionTimeout) {
-            interaction.message?.id == controls.id && interaction.user == owner
-        }
+        val cardName = awaitResponse { controls }
 
         myTurn = false // Prevent clicking again
-        if (response != null) {
-            response.interaction.acknowledgePublicDeferredMessageUpdate()
-            if (normalPlay(response)) { // if the action calls for a new turn repeat
+        if (cardName != null) {
+            if (normalPlay(cardName)) { // if the action calls for a new turn repeat
                 return turn()
             }
         } else {
@@ -80,10 +78,9 @@ class DiscordUnoPlayer(
         drawn = false
     }
 
-    private suspend fun normalPlay(response: ComponentInteractionCreateEvent): Boolean {
-        val name = response.interaction.componentId
+    private suspend fun normalPlay(cardName: String): Boolean {
         @Suppress("DUPLICATE_LABEL_IN_WHEN") // not duplicated, we want to purposely not skip
-        when (name) {
+        when (cardName) {
             drawCardButton -> {
                 doDraw()
                 return true
@@ -94,7 +91,7 @@ class DiscordUnoPlayer(
             }
             skipButton -> return false
             else -> {
-                val cardId = name.substringAfter("play_card_").toInt()
+                val cardId = cardName.substringAfter("play_card_").toInt()
                 val card = deck[cardId]
                 if (card is AbstractWildCard && deck.size != 1) { // ignore pick on last card
                     val color = pickWildCardColor()
@@ -115,7 +112,7 @@ class DiscordUnoPlayer(
 
     private suspend fun playUno() {
         uno()
-        val message = game.thread.createMessage("${owner.mention} just said UNO!")
+        val message = game.thread.createMessage("${user.mention} just said UNO!")
 
         game.kord.launch {
             runCatching {
@@ -155,7 +152,7 @@ class DiscordUnoPlayer(
             }
             if (!overrideConfirm) {
                 game.thread.createMessage {
-                    content = translate("uno.resend_controls.blame", owner.mention)
+                    content = translate("uno.resend_controls.blame", user.mention)
                 }.pin()
             }
 
@@ -172,12 +169,12 @@ class DiscordUnoPlayer(
         if (this === other) return true
         if (other !is DiscordUnoPlayer) return false
 
-        if (owner != other.owner) return false
+        if (user != other.user) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        return owner.hashCode()
+        return user.hashCode()
     }
 }

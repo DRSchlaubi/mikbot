@@ -1,24 +1,10 @@
 package dev.schlaubi.musicbot.module.uno.game
 
-import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.interaction.edit
-import dev.kord.core.event.channel.thread.ThreadMembersUpdateEvent
-import dev.kord.core.on
+import dev.schlaubi.musicbot.module.uno.game.player.DiscordUnoPlayer
 import dev.schlaubi.musicbot.module.uno.game.player.translate
-import kotlinx.coroutines.Job
 
-fun DiscordUnoGame.watchThread(): Job = kord.on<ThreadMembersUpdateEvent> {
-    if (thread.id == id) {
-        removedMemberIds.forEach { removedId ->
-            kickUser(removedId)
-        }
-    }
-}
-
-private suspend fun DiscordUnoGame.kickUser(removedId: Snowflake) {
-    val player = players.firstOrNull { it.owner.id == removedId } ?: return
-    removePlayer(player)
-
+suspend fun DiscordUnoGame.kickPlayer(player: DiscordUnoPlayer) {
     runCatching {
         player.controls.edit {
             components = mutableListOf()
@@ -26,12 +12,7 @@ private suspend fun DiscordUnoGame.kickUser(removedId: Snowflake) {
         }
     }
 
-    if (!running) {
-        if (players.isEmpty()) {
-            end()
-        }
-        return
-    }
+    game.removePlayer(player)
 
     // Cancel turn for current player if it is the leaving player or,
     // there are no players left (end game)

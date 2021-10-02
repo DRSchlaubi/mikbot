@@ -1,4 +1,4 @@
-package dev.schlaubi.musicbot.module.uno.commands
+package dev.schlaubi.musicbot.game.module.commands
 
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalUser
@@ -8,26 +8,32 @@ import dev.kord.common.annotation.KordUnsafe
 import dev.kord.rest.Image
 import dev.kord.rest.builder.message.create.embed
 import dev.schlaubi.musicbot.core.io.findUser
-import dev.schlaubi.musicbot.module.uno.UnoModule
+import dev.schlaubi.musicbot.game.GameStats
+import dev.schlaubi.musicbot.game.module.GameModule
 import dev.schlaubi.musicbot.utils.database
+import org.litote.kmongo.div
+import org.litote.kmongo.gt
 
 class UnoProfileArguments : Arguments() {
     val target by optionalUser("user", "The user you want to see the profile of")
 }
 
+/**
+ * Adds a /profile command to this [profileCommand].
+ */
 @OptIn(KordUnsafe::class, KordExperimental::class)
-suspend fun UnoModule.profileCommand() = publicSubCommand(::UnoProfileArguments) {
+suspend fun GameModule<*, *>.profileCommand() = publicSubCommand(::UnoProfileArguments) {
     name = "profile"
     description = "Shows a users profile"
 
     action {
         val target = arguments.target ?: user
 
-        val user = database.users.findUser(target)
+        val botUser = database.users.findUser(target)
 
-        if (user.unoStats == null) {
+        if (botUser.unoStats == null) {
             respond {
-                content = translate("commands.uno.profile.empty")
+                content = translateGlobal("commands.profile.profile.empty")
             }
             return@action
         }
@@ -41,34 +47,33 @@ suspend fun UnoModule.profileCommand() = publicSubCommand(::UnoProfileArguments)
                 }
 
                 field {
-                    name = translate("commands.uno.profile.wins")
-                    value = user.unoStats.wins.toString()
+                    name = translateGlobal("commands.profile.wins")
+                    value = botUser.unoStats.wins.toString()
                     inline = true
                 }
 
                 field {
-                    name = translate("commands.uno.profile.losses")
-                    value = user.unoStats.losses.toString()
+                    name = translateGlobal("commands.profile.losses")
+                    value = botUser.unoStats.losses.toString()
                     inline = true
                 }
 
                 field {
-                    name = translate("commands.uno.profile.ratio")
-                    value = user.unoStats.ratio.toString()
+                    name = translateGlobal("commands.profile.ratio")
+                    value = botUser.unoStats.ratio.formatPercentage()
                     inline = true
                 }
 
                 field {
-                    name = translate("commands.uno.profile.played")
-                    value = (user.unoStats.wins + user.unoStats.losses).toString()
+                    name = translateGlobal("commands.profile.played")
+                    value = (botUser.unoStats.wins + botUser.unoStats.losses).toString()
                     inline = true
                 }
 
                 field {
-                    name = translate("commands.uno.profile.rank")
-                    value = database.users.find().toList()
-                        .count { (it.unoStats?.ratio ?: 0.0) > user.unoStats.ratio }
-                        .plus(1)
+                    name = translateGlobal("commands.profile.rank")
+                    value = (database.users
+                        .countDocuments((gameStats / GameStats::ratio) gt 0.0) + 1)
                         .toString()
                     inline = true
                 }

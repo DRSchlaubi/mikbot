@@ -19,6 +19,12 @@ fun UnoModule.stopGameCommand() = ephemeralSubCommand {
 
     action {
         val game = findUno(channel.id)!!
+        if(user != game.owner) {
+            respond {
+                content = translate("commands.uni.stop_game.permission_denied")
+            }
+            return@action
+        }
 
         respond {
             content = translate("commands.uno.stop_game.success")

@@ -33,7 +33,7 @@ fun UnoModule.leaderboardCommand() = publicSubCommand {
                     val user = this@leaderboardCommand.kord.unsafe.user(it.id)
                     val unoStats = it.unoStats!!
                     val ratio = ratioFormat.format(unoStats.ratio)
-                    "${user.asMemberOrNull(safeGuild?.id)?.mention ?: user.asUserOrNull()?.username ?: user.mention} - ${unoStats.wins}/${unoStats.losses} ($ratio)"
+                    "${user.asMemberOrNull(safeGuild.id)?.mention ?: user.asUserOrNull()?.username ?: user.mention} - ${unoStats.wins}/${unoStats.losses} ($ratio)"
                 },
                 { current: Int, total: Int ->
                     translate(

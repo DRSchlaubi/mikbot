@@ -143,7 +143,7 @@ class DiscordUnoGame(
                 )
             }
 
-            (game.wonPlayers.drop(1) + players + leftPlayers).forEach {
+            (game.wonPlayers.drop(1) + game.players + leftPlayers).forEach {
                 it.update {
                     copy(
                         losses = losses + 1,

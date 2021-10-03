@@ -61,7 +61,7 @@ class SongQuizGame(
     }
 
     override suspend fun runGame() {
-        musicPlayer.updateMusicChannelState(false)
+        musicPlayer.updateMusicChannelState(true)
         doUpdateWelcomeMessage()
         trackContainer = TrackContainer(spotifyPlaylist, quizSize)
         musicPlayer.clearQueue()
@@ -72,7 +72,7 @@ class SongQuizGame(
     }
 
     override suspend fun end() {
-        musicPlayer.updateMusicChannelState(true)
+        musicPlayer.updateMusicChannelState(false)
         musicPlayer.disconnectAudio()
         doUpdateWelcomeMessage()
         if (players.isNotEmpty() && running) {

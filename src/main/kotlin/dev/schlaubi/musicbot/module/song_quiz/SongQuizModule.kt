@@ -40,16 +40,7 @@ class SongQuizModule : GameModule<SongQuizPlayer, SongQuizGame>() {
     private val musicModule: MusicModule by extension()
 
     override suspend fun gameSetup() {
-        startGameCommand(
-            "shit",
-            "Quiz about music I was listening to back in 2017",
-            "https://open.spotify.com/playlist/6s2CcoPOwavAGSqnypq4Pt"
-        )
-        startGameCommand(
-            "charts",
-            "Quiz about the 2021 charts",
-            "https://open.spotify.com/playlist/3xMQTDLOIGvj3lWH5e5x6F"
-        )
+        spotifyPlaylistSongs()
         startGameCommand(
             "playlist",
             "Quiz about a specific playlist",
@@ -61,7 +52,7 @@ class SongQuizModule : GameModule<SongQuizPlayer, SongQuizGame>() {
         profileCommand()
     }
 
-    private suspend fun startGameCommand(
+    suspend fun startGameCommand(
         name: String,
         description: String,
         playlistUrl: String

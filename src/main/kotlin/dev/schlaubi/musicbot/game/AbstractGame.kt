@@ -134,9 +134,13 @@ abstract class AbstractGame<T : Player>(
                 updateWelcomeMessage()
             } else {
                 embed {
-                    field {
-                        name = "Players"
-                        value = players.joinToString(", ") { it.user.mention }
+                    title = welcomeMessage.embeds.firstOrNull()?.title
+                    addWelcomeMessage()
+                    if (players.isNotEmpty()) {
+                        field {
+                            name = "Players"
+                            value = players.joinToString(", ") { it.user.mention }
+                        }
                     }
                 }
             }

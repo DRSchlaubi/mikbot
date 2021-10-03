@@ -142,7 +142,7 @@ suspend fun updateMessage(
             content = ""
         }
         embed {
-            val playingTrack = musicPlayer.player.playingTrack
+            val playingTrack = musicPlayer.playingTrack?.track
             if (playingTrack != null) {
                 addSong({ key, group -> translationsProvider.translate(key, bundleName = group) }, playingTrack)
 
@@ -235,7 +235,7 @@ private fun ActionRowBuilder.musicButton(
     enabled: Boolean = false,
     enabledStyle: ButtonStyle = ButtonStyle.Success
 ) {
-    val playingCondition = musicPlayer.player.playingTrack != null
+    val playingCondition = musicPlayer.playingTrack != null
 
     val style = if (enabled && playingCondition) {
         enabledStyle

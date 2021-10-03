@@ -68,6 +68,7 @@ fun <A : Arguments, G : AbstractGame<*>> GameModule<*, G>.startGameCommand(
         }
         gameMessage.pin(reason = "Game Welcome message")
         val game = makeNewGame(gameMessage, gameThread) ?: return@action
+        game.doUpdateWelcomeMessage()
         registerGame(gameThread.id, game)
 
         respond {

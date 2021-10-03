@@ -1,10 +1,13 @@
 package dev.schlaubi.musicbot.game
 
 import com.kotlindiscord.kord.extensions.i18n.SupportedLocales
+import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.followUpEphemeral
+import dev.schlaubi.musicbot.core.io.findUser
 import dev.schlaubi.musicbot.module.settings.BotUser
 import dev.schlaubi.musicbot.utils.MessageBuilder
+import java.util.Locale
 import kotlin.reflect.KProperty1
 
 suspend fun AbstractGame<*>.confirmation(ack: EphemeralInteractionResponseBehavior, messageBuilder: MessageBuilder) =
@@ -33,8 +36,13 @@ suspend fun <T : Player> AbstractGame<T>.update(
  * Translates [key] for a game.
  */
 @Suppress("UNCHECKED_CAST")
-fun AbstractGame<*>.translate(key: String, vararg replacements: Any?) =
+fun AbstractGame<*>.translate(key: String, vararg replacements: Any?, locale: Locale = SupportedLocales.ENGLISH) =
     translationsProvider.translate(
-        key, SupportedLocales.ENGLISH,
-        bundle, replacements as Array<Any?>
+        key, locale,
+        bundle, replacements = replacements as Array<Any?>
     )
+
+suspend fun AbstractGame<*>.translate(user: UserBehavior, key: String, vararg replacements: Any?): String {
+    val locale = database.users.findUser(user).language
+    return translate(key, locale = locale, replacements = replacements)
+}

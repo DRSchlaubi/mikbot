@@ -23,12 +23,43 @@ import dev.schlaubi.musicbot.module.uno.game.startGameButton
  *
  * @param gameTitleKey the translation key for the embed title
  * @param threadName the thread name of the game thread
+ * @param arguments the argument body for this command
+ * @param makeNewGame a lambda creating a new game
  */
 fun <A : Arguments, G : AbstractGame<*>> GameModule<*, G>.startGameCommand(
     gameTitleKey: String,
     threadName: String,
     arguments: () -> A,
     makeNewGame: suspend PublicSlashCommandContext<A>.(gameMessage: Message, gameThread: ThreadChannelBehavior) -> G?,
+    additionalChecks: suspend CheckContext<InteractionCreateEvent>.() -> Unit = {},
+    name: String = "start",
+    description: String = "Starts a new match"
+) = startGameCommand(
+    gameTitleKey,
+    threadName,
+    arguments,
+    { },
+    { _, gameMessage, gameThread -> makeNewGame(gameMessage, gameThread) },
+    additionalChecks,
+    name,
+    description
+)
+
+/**
+ * Adds a /profile command to this [profileCommand].
+ *
+ * @param gameTitleKey the translation key for the embed title
+ * @param threadName the thread name of the game thread
+ * @param arguments the argument body for this command
+ * @param prepareData a callback preparing [Data] before creating the thread
+ * @param makeNewGame a lambda creating a new game
+ */
+fun <A : Arguments, G : AbstractGame<*>, Data> GameModule<*, G>.startGameCommand(
+    gameTitleKey: String,
+    threadName: String,
+    arguments: () -> A,
+    prepareData: suspend PublicSlashCommandContext<A>.() -> Data?,
+    makeNewGame: suspend PublicSlashCommandContext<A>.(data: Data, gameMessage: Message, gameThread: ThreadChannelBehavior) -> G?,
     additionalChecks: suspend CheckContext<InteractionCreateEvent>.() -> Unit = {},
     name: String = "start",
     description: String = "Starts a new match"
@@ -43,6 +74,7 @@ fun <A : Arguments, G : AbstractGame<*>> GameModule<*, G>.startGameCommand(
     }
 
     action {
+        val data = prepareData() ?: return@action
         val gameThread = textChannel.startPublicThread(threadName)
         gameThread.addUser(user.id) // Add creator
         val gameMessage = gameThread.createMessage {
@@ -67,10 +99,9 @@ fun <A : Arguments, G : AbstractGame<*>> GameModule<*, G>.startGameCommand(
             }
         }
         gameMessage.pin(reason = "Game Welcome message")
-        val game = makeNewGame(gameMessage, gameThread) ?: return@action
+        val game = makeNewGame(data, gameMessage, gameThread) ?: return@action
         game.doUpdateWelcomeMessage()
         registerGame(gameThread.id, game)
-
         respond {
             content = translateGlobal("game.start.success")
         }

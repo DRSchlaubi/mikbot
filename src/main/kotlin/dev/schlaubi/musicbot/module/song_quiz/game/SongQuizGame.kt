@@ -1,13 +1,13 @@
 package dev.schlaubi.musicbot.module.song_quiz.game
 
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
-import com.wrapper.spotify.model_objects.specification.Playlist
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
 import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.edit
+import dev.kord.core.behavior.interaction.followUpEphemeral
 import dev.kord.core.behavior.interaction.respondEphemeral
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.User
@@ -28,21 +28,20 @@ class SongQuizGame(
     module: GameModule<SongQuizPlayer, out AbstractGame<SongQuizPlayer>>,
     val quizSize: Int,
     val musicPlayer: MusicPlayer,
-    private val spotifyPlaylist: Playlist,
+    val trackContainer: TrackContainer,
     override val thread: ThreadChannelBehavior,
     override val welcomeMessage: Message,
     override val translationsProvider: TranslationsProvider
 ) : AbstractGame<SongQuizPlayer>(host, module) {
     override val playerRange: IntRange = 1..10
     val gameStats = mutableMapOf<Snowflake, Statistics>()
-    lateinit var trackContainer: TrackContainer
     override val wonPlayers: List<SongQuizPlayer>
         get() = players.sortedByDescending { gameStats[it.user.id] ?: Statistics(0, emptyList(), quizSize) }
 
     override fun EmbedBuilder.addWelcomeMessage() {
         field {
             name = "Playlist"
-            value = spotifyPlaylist.uri.spotifyUriToUrl()
+            value = trackContainer.spotifyPlaylist.uri.spotifyUriToUrl()
         }
     }
 
@@ -51,19 +50,29 @@ class SongQuizGame(
         ack: EphemeralInteractionResponseBehavior,
         loading: EphemeralFollowupMessage
     ): SongQuizPlayer = SongQuizPlayer(user).also {
-        loading.edit { content = translate("song_quiz.controls.joined") }
+        loading.edit { content = translate(user, "song_quiz.controls.joined") }
     }
 
     override suspend fun onRejoin(event: ComponentInteractionCreateEvent, player: SongQuizPlayer) {
         event.interaction.respondEphemeral {
-            content = translate("song_quiz.controls.rejoined")
+            content = translate(event.interaction.user, "song_quiz.controls.rejoined")
+        }
+    }
+
+    override suspend fun onJoin(ack: EphemeralInteractionResponseBehavior, player: SongQuizPlayer) {
+        val member = player.user.asMember(thread.guild.id)
+        val voiceState = member.getVoiceStateOrNull()
+        if (voiceState?.channelId?.value != musicPlayer.lastChannelId) {
+            ack.followUpEphemeral {
+                content =
+                    translate(player.user, "song_quiz.controls.not_in_vc", "<#${musicPlayer.lastChannelId}>")
+            }
         }
     }
 
     override suspend fun runGame() {
         musicPlayer.updateMusicChannelState(true)
         doUpdateWelcomeMessage()
-        trackContainer = TrackContainer(spotifyPlaylist, quizSize)
         musicPlayer.clearQueue()
         val iterator = trackContainer.iterator()
         while (iterator.hasNext()) {

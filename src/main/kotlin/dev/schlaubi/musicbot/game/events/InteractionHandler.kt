@@ -46,6 +46,7 @@ internal fun <T : Player> AbstractGame<T>.interactionHandler() = kord.on<Compone
                 val loading = ack.followUpEphemeral { content = "Waiting for game to start" }
                 val player = obtainNewPlayer(interaction.user, ack, loading)
                 players.add(player)
+                onJoin(ack, player)
                 doUpdateWelcomeMessage()
             }
         }

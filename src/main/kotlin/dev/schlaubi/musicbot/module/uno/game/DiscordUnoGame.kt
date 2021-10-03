@@ -117,7 +117,7 @@ class DiscordUnoGame(
                         currentPlayer!!.turn()
                     } catch (e: Exception) {
                         currentPlayer!!.response.followUpEphemeral {
-                            content = translate("uno.controls.failed")
+                            content = translate(currentPlayer!!.user, "uno.controls.failed")
                         }
                         currentPlayer!!.resendControls(null, overrideConfirm = true)
                         LOG.error(e) { "Error occurred whilst updating game" }

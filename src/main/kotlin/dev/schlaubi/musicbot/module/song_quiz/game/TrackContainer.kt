@@ -8,6 +8,7 @@ import dev.schlaubi.uno.poll
 import java.util.LinkedList
 
 class TrackContainer private constructor(
+    val spotifyPlaylist: Playlist,
     private val tracks: List<Track>,
     private val artistPool: LinkedList<String>,
     private val songNamePool: LinkedList<String>
@@ -44,7 +45,7 @@ class TrackContainer private constructor(
 
             val tracks = playlistTracks.take(size.coerceAtMost(playlistTracks.size))
 
-            return TrackContainer(tracks, artistPool, songNamePool)
+            return TrackContainer(playlist, tracks, artistPool, songNamePool)
         }
     }
 }

@@ -17,6 +17,7 @@ import dev.schlaubi.musicbot.module.music.player.queue.getPlaylist
 import dev.schlaubi.musicbot.module.settings.BotUser
 import dev.schlaubi.musicbot.module.song_quiz.game.SongQuizGame
 import dev.schlaubi.musicbot.module.song_quiz.game.SongQuizPlayer
+import dev.schlaubi.musicbot.module.song_quiz.game.TrackContainer
 import dev.schlaubi.musicbot.utils.extension
 import dev.schlaubi.musicbot.utils.safeGuild
 import kotlin.reflect.KProperty1
@@ -66,15 +67,14 @@ class SongQuizModule : GameModule<SongQuizPlayer, SongQuizGame>() {
     ) = this@SongQuizModule.startGameCommand(
         "song_quiz.game.title", "song-quiz",
         arguments,
-        findGame@{ message, thread ->
-            val player = musicModule.getMusicPlayer(safeGuild)
+        prepareData@{
             val playlistUrl = this.arguments.playlistArgument()
             val matchedPlaylist = PLAYLIST_PATTERN.find(playlistUrl)
             if (matchedPlaylist == null) {
                 respond {
                     content = translate("commands.song_quiz.start_game.not_a_spotify_url")
                 }
-                return@findGame null
+                return@prepareData null
             }
             val (playlistId) = matchedPlaylist.destructured
             val playlist = getPlaylist(playlistId)
@@ -82,19 +82,27 @@ class SongQuizModule : GameModule<SongQuizPlayer, SongQuizGame>() {
                 respond {
                     content = translate("commands.song_quiz.start_game.not_found")
                 }
-                return@findGame null
+                return@prepareData null
             }
 
-            SongQuizGame(
+            TrackContainer(playlist, this.arguments.size)
+        },
+        findGame@{ trackContainer, message, thread ->
+            val game = SongQuizGame(
                 user,
                 this@SongQuizModule,
-                this.arguments.size.coerceAtMost(playlist.tracks.items.size),
-                player,
-                playlist,
+                this.arguments.size.coerceAtMost(trackContainer.spotifyPlaylist.tracks.items.size),
+                musicModule.getMusicPlayer(safeGuild),
+                trackContainer,
                 thread,
                 message,
                 translationsProvider
             )
+
+            val hostPlayer = SongQuizPlayer(user)
+            game.players.add(hostPlayer)
+
+            game
         },
         { joinSameChannelCheck(bot) },
         name,

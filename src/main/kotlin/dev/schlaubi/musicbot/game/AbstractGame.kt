@@ -97,6 +97,11 @@ abstract class AbstractGame<T : Player>(
     open suspend fun onRejoin(event: ComponentInteractionCreateEvent, player: T) = Unit
 
     /**
+     * Event handler called when [player] joined the game.
+     */
+    open suspend fun onJoin(ack: EphemeralInteractionResponseBehavior, player: T) = Unit
+
+    /**
      * Removes [player] from the game.
      */
     suspend fun doRemovePlayer(player: T) {

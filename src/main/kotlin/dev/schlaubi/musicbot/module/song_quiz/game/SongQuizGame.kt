@@ -58,7 +58,10 @@ class SongQuizGame(
         doUpdateWelcomeMessage()
         trackContainer = TrackContainer(spotifyPlaylist, quizSize)
         musicPlayer.clearQueue()
-        trackContainer.forEach { turn(it) }
+        val iterator = trackContainer.iterator()
+        while (iterator.hasNext()) {
+            turn(iterator.next(), iterator.hasNext())
+        }
     }
 
     override suspend fun end() {

@@ -11,11 +11,15 @@ import dev.schlaubi.musicbot.module.music.player.queue.spotifyUriToUrl
 fun EmbedBuilder.addPlayers(players: Map<UserBehavior, Boolean>) {
     field {
         name = "Answers"
-        value = players.map { (player, wasCorrect) ->
-            val emoji = if (wasCorrect) Emojis.whiteCheckMark else Emojis.noEntrySign
+        value = if (players.isNotEmpty()) {
+            players.map { (player, wasCorrect) ->
+                val emoji = if (wasCorrect) Emojis.whiteCheckMark else Emojis.noEntrySign
 
-            "${player.mention} - $emoji"
-        }.joinToString("\n")
+                "${player.mention} - $emoji"
+            }.joinToString("\n")
+        } else {
+            "No one answered :("
+        }
     }
 }
 

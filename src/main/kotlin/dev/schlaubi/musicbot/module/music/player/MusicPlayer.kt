@@ -35,6 +35,7 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
     val queuedTracks get() = queue.toList()
     var filters: SerializableFilters? = null
     var playingTrack: QueuedTrack? = null
+    private var disableMusicChannel: Boolean = false
     private val translationsProvider: TranslationsProvider by inject()
 
     private var sponsorBlockJob: Job? = null
@@ -52,6 +53,13 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
 
         link.player.on(consumer = ::onTrackEnd)
         link.player.on(consumer = ::onTrackStart)
+    }
+
+    fun updateMusicChannelState(to: Boolean) {
+        queue.clear()
+        playingTrack = null
+        updateMusicChannelMessage()
+        disableMusicChannel = to
     }
 
     fun launchSponsorBlockJob() {
@@ -272,8 +280,16 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
     }
 
     fun updateMusicChannelMessage() {
-        guild.kord.launch {
-            updateMessage(guild.id, database, guild.kord, this@MusicPlayer, translationsProvider = translationsProvider)
+        if (!disableMusicChannel) {
+            guild.kord.launch {
+                updateMessage(
+                    guild.id,
+                    database,
+                    guild.kord,
+                    this@MusicPlayer,
+                    translationsProvider = translationsProvider
+                )
+            }
         }
     }
 }

@@ -8,16 +8,18 @@ import java.util.Locale
 
 fun EmbedBuilder.welcomeMessage(uno: DiscordUnoGame) {
     with(uno) {
-        field {
-            val actualPlayers =
-                if (running && game.direction == Direction.COUNTER_CLOCKWISE) players.reversed() else players
-            name = "Players"
-            value = actualPlayers.joinToString(", ") {
-                val mention = it.user.mention
-                if (running) {
-                    "$mention (${it.deck.size})"
-                } else {
-                    mention
+        if (players.isNotEmpty()) {
+            field {
+                val actualPlayers =
+                    if (running && game.direction == Direction.COUNTER_CLOCKWISE) players.reversed() else players
+                name = "Players"
+                value = actualPlayers.joinToString(", ") {
+                    val mention = it.user.mention
+                    if (running) {
+                        "$mention (${it.deck.size})"
+                    } else {
+                        mention
+                    }
                 }
             }
         }

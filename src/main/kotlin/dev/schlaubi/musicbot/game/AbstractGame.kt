@@ -141,7 +141,7 @@ abstract class AbstractGame<T : Player>(
                 embed {
                     title = welcomeMessage.embeds.firstOrNull()?.title
                     addWelcomeMessage()
-                    if (players.isNotEmpty()) {
+                    if (players.isNotEmpty() && fields.none { it.name == "Players" }) {
                         field {
                             name = "Players"
                             value = players.joinToString(", ") { it.user.mention }

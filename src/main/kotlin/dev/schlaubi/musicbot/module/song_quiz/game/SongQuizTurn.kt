@@ -36,7 +36,7 @@ suspend fun SongQuizGame.turn(track: Track) {
         actionRow {
             allAnswers.forEachIndexed { index, name ->
                 interactionButton(ButtonStyle.Secondary, "choose_$index") {
-                    label = name.take(20)
+                    label = name.take(80)
                 }
             }
         }

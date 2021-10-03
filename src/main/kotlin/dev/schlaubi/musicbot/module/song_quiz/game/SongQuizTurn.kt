@@ -85,7 +85,8 @@ suspend fun SongQuizGame.turn(track: Track, isLast: Boolean) {
                     response.followUpEphemeral {
                         embed {
                             addUserStats(
-                                user, gameStats[user.id] ?: Statistics(
+                                user,
+                                gameStats[user.id] ?: Statistics(
                                     0,
                                     emptyList(), quizSize
                                 )

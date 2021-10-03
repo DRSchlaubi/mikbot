@@ -133,7 +133,7 @@ private fun SongQuizGame.failRemainingPlayers(answers: MutableMap<UserBehavior, 
     players.forEach {
         if (!answers.containsKey(it.user)) {
             val turnStart = Clock.System.now() - Duration.seconds(30) // 30 sec is max
-            addStats(it.user.id, turnStart, true)
+            addStats(it.user.id, turnStart, false)
         }
     }
 }

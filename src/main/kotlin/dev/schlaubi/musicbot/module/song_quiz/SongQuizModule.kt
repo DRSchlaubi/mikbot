@@ -34,7 +34,7 @@ open class SongQuizPlaylistArguments : SongQuizSizeArguments() {
 }
 
 class SongQuizModule : GameModule<SongQuizPlayer, SongQuizGame>() {
-    override val name: String = "song_quiz"
+    override val name: String = "song-quiz"
     override val gameStats: KProperty1<BotUser, GameStats?> = BotUser::quizStats
     override val bundle: String = "song_quiz"
     private val musicModule: MusicModule by extension()

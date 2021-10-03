@@ -40,11 +40,9 @@ suspend fun EmbedBuilder.addTrack(track: Track) {
         value = track.album.name
     }
 
-    if (track.artists.size > 1) {
-        field {
-            name = "Artists"
-            value = track.artists.joinToString(", ") { it.name }
-        }
+    field {
+        name = "Artists"
+        value = track.artists.joinToString(", ") { it.name }
     }
 
     footer {

@@ -19,6 +19,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import kotlin.time.Duration
 
 suspend fun SongQuizGame.turn(track: Track, isLast: Boolean) {
@@ -116,7 +117,7 @@ suspend fun SongQuizGame.turn(track: Track, isLast: Boolean) {
     }
 
     // Players that were too dumb to answer
-    failRemainingPlayers(answers)
+    failRemainingPlayers(turnStart, answers)
 
     message.edit {
         components = mutableListOf()
@@ -129,10 +130,9 @@ suspend fun SongQuizGame.turn(track: Track, isLast: Boolean) {
     delay(Duration.seconds(3))
 }
 
-private fun SongQuizGame.failRemainingPlayers(answers: MutableMap<UserBehavior, Boolean>) {
+private fun SongQuizGame.failRemainingPlayers(turnStart: Instant, answers: MutableMap<UserBehavior, Boolean>) {
     players.forEach {
         if (!answers.containsKey(it.user)) {
-            val turnStart = Clock.System.now() - Duration.seconds(30) // 30 sec is max
             addStats(it.user.id, turnStart, false)
         }
     }

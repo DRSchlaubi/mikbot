@@ -20,6 +20,7 @@ import dev.schlaubi.musicbot.game.GameStats
 import dev.schlaubi.musicbot.game.module.GameModule
 import dev.schlaubi.musicbot.game.translate
 import dev.schlaubi.musicbot.module.music.player.MusicPlayer
+import dev.schlaubi.musicbot.module.music.player.queue.spotifyUriToUrl
 import dev.schlaubi.musicbot.module.settings.BotUser
 
 class SongQuizGame(
@@ -38,7 +39,12 @@ class SongQuizGame(
     override val wonPlayers: List<SongQuizPlayer>
         get() = players.sortedByDescending { gameStats[it.user.id] ?: Statistics(0, emptyList(), quizSize) }
 
-    override fun EmbedBuilder.addWelcomeMessage() = Unit
+    override fun EmbedBuilder.addWelcomeMessage() {
+        field {
+            name = "Playlist"
+            value = spotifyPlaylist.uri.spotifyUriToUrl()
+        }
+    }
 
     override suspend fun obtainNewPlayer(
         user: User,

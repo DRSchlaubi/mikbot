@@ -1,11 +1,8 @@
 package dev.schlaubi.musicbot.module.uno
 
-import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
+import com.kotlindiscord.kord.extensions.commands.Arguments
 import dev.kord.common.annotation.KordExperimental
 import dev.kord.common.annotation.KordUnsafe
-import dev.kord.core.behavior.UserBehavior
-import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
-import dev.kord.core.entity.Message
 import dev.kord.gateway.Intent
 import dev.kord.gateway.PrivilegedIntent
 import dev.schlaubi.musicbot.game.GameStats
@@ -31,17 +28,14 @@ class UnoModule : GameModule<DiscordUnoPlayer, DiscordUnoGame>() {
 
         startGameCommand(
             "uno.game.title",
-            "uno-game"
+            "uno-game",
+            ::Arguments,
+            { welcomeMessage, thread ->
+                DiscordUnoGame(user, this@UnoModule, welcomeMessage, thread, translationsProvider)
+            }
         )
         stopGameCommand()
         profileCommand()
         leaderboardCommand("commands.uno.leaderboard.page.title")
     }
-
-    override fun obtainGame(
-        host: UserBehavior,
-        welcomeMessage: Message,
-        thread: ThreadChannelBehavior,
-        translationsProvider: TranslationsProvider
-    ): DiscordUnoGame = DiscordUnoGame(host, this, welcomeMessage, thread, translationsProvider)
 }

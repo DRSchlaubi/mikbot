@@ -5,12 +5,11 @@ import com.kotlindiscord.kord.extensions.checks.types.CheckContext
 import com.kotlindiscord.kord.extensions.commands.CommandContext
 import com.kotlindiscord.kord.extensions.commands.application.ApplicationCommandContext
 import com.kotlindiscord.kord.extensions.extensions.slashCommandCheck
-import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
 import dev.kord.common.entity.Snowflake
-import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
-import dev.kord.core.entity.Message
 import dev.kord.core.entity.channel.TextChannel
+import dev.kord.gateway.Intent
+import dev.kord.gateway.PrivilegedIntent
 import dev.schlaubi.musicbot.game.AbstractGame
 import dev.schlaubi.musicbot.game.GameStats
 import dev.schlaubi.musicbot.game.Player
@@ -30,6 +29,7 @@ import kotlin.reflect.KProperty1
 abstract class GameModule<P : Player, G : AbstractGame<P>> : SubCommandModule() {
 
     private val games = mutableMapOf<Snowflake, G>()
+    abstract override val bundle: String
 
     override val commandName: String
         get() = name
@@ -45,7 +45,9 @@ abstract class GameModule<P : Player, G : AbstractGame<P>> : SubCommandModule() 
     val ApplicationCommandContext.textChannel: TextChannel
         get() = runBlocking { channel.asChannel() as TextChannel }
 
+    @OptIn(PrivilegedIntent::class)
     final override suspend fun overrideSetup() {
+        intents.add(Intent.GuildMembers)
         slashCommandCheck { anyGuild() }
         gameSetup()
     }
@@ -56,32 +58,14 @@ abstract class GameModule<P : Player, G : AbstractGame<P>> : SubCommandModule() 
     fun findGame(threadId: Snowflake): G? = games[threadId]
 
     /**
-     * Creates a new game for [host].
-     * @param welcomeMessage the head message in [thread]
-     * @param thread the [ThreadChannelBehavior] the game is in
-     * @param translationsProvider the [TranslationsProvider] to use
+     * Registers [game] as the game for [threadId].
      */
-    fun newGame(
-        host: UserBehavior,
-        welcomeMessage: Message,
-        thread: ThreadChannelBehavior,
-        translationsProvider: TranslationsProvider
+    fun registerGame(
+        threadId: Snowflake,
+        game: G
     ) {
-        games[thread.id] = obtainGame(host, welcomeMessage, thread, translationsProvider)
+        games[threadId] = game
     }
-
-    /**
-     * Creates a new [Game][G] hosted by [host].
-     * @param welcomeMessage the head message in [thread]
-     * @param thread the [ThreadChannelBehavior] the game is in
-     * @param translationsProvider the [TranslationsProvider] to use
-     */
-    abstract fun obtainGame(
-        host: UserBehavior,
-        welcomeMessage: Message,
-        thread: ThreadChannelBehavior,
-        translationsProvider: TranslationsProvider
-    ): G
 
     /**
      * Removes the game by its [threadId].

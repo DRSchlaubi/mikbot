@@ -4,14 +4,18 @@ import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommand
 import com.kotlindiscord.kord.extensions.commands.application.slash.PublicSlashCommand
 import com.kotlindiscord.kord.extensions.commands.application.slash.SlashCommand
+import com.kotlindiscord.kord.extensions.commands.application.slash.SlashGroup
 import com.kotlindiscord.kord.extensions.commands.application.slash.ephemeralSubCommand
 import com.kotlindiscord.kord.extensions.commands.application.slash.publicSubCommand
 import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
 
+typealias GroupBuilder = suspend SlashGroup.() -> Unit
+
 abstract class SubCommandModule : Extension() {
-    protected val ephemeralSubCommandBodies = mutableListOf<EphemeralCommandPair<*>>()
-    protected val publicSubCommandBodies = mutableListOf<PublicCommandPair<*>>()
+    private val ephemeralSubCommandBodies = mutableListOf<EphemeralCommandPair<*>>()
+    private val publicSubCommandBodies = mutableListOf<PublicCommandPair<*>>()
+    private val groupBodies = mutableListOf<GroupPair>()
     abstract val commandName: String
     fun <T : Arguments> ephemeralSubCommand(
         argumentBody: (() -> T),
@@ -33,6 +37,10 @@ abstract class SubCommandModule : Extension() {
 
     fun publicSubCommand(body: suspend PublicSlashCommand<Arguments>.() -> Unit) {
         publicSubCommandBodies.add(PublicCommandPair(null, body))
+    }
+
+    fun group(name: String, body: GroupBuilder) {
+        groupBodies.add(GroupPair(name, body))
     }
 
     final override suspend fun setup() {
@@ -99,3 +107,6 @@ class PublicCommandPair<T : Arguments>(
         }
     }
 }
+
+@JvmRecord
+private data class GroupPair(val name: String, val body: GroupBuilder)

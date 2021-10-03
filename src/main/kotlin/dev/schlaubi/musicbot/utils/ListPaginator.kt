@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
-import kotlin.math.roundToInt
+import kotlin.math.ceil
 
 /**
  * Configures this [PaginatorBuilder] to create one page for each [x][chunkSize] elements in [items]
@@ -76,7 +76,7 @@ private suspend fun <T> PaginatorBuilder.forList(
 
     var currentIndexOffset = 0
 
-    repeat((size / chunkSize.toDouble()).roundToInt()) {
+    repeat(ceil(size / chunkSize.toDouble()).toInt()) {
         val items = subList(currentIndexOffset, currentIndexOffset + chunkSize)
         addPage(currentIndexOffset, title, items, enumerate, mapper, additionalPageConfig)
 

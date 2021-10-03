@@ -23,6 +23,8 @@ import dev.schlaubi.musicbot.game.module.GameModule
 import dev.schlaubi.musicbot.module.settings.BotUser
 import dev.schlaubi.musicbot.module.uno.unregisterUno
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import kotlin.reflect.KProperty1
@@ -54,9 +56,11 @@ abstract class AbstractGame<T : Player>(
     abstract val thread: ThreadChannelBehavior
     abstract val welcomeMessage: Message
     abstract val wonPlayers: List<T>
-    abstract val bundle: String
-    val statsProperty: KProperty1<BotUser, GameStats?> get() = module.gameStats
+    val bundle: String
+        get() = module.bundle
+    private val statsProperty: KProperty1<BotUser, GameStats?> get() = module.gameStats
     val kord: Kord get() = host.kord
+    private var gameJob: Job? = null
 
     abstract val translationsProvider: TranslationsProvider
 
@@ -74,6 +78,8 @@ abstract class AbstractGame<T : Player>(
 
     private val interactionListener: Job = interactionHandler()
     private val threadWatcher: Job = watchThread()
+
+    private var silentEnd = false
 
     /**
      * Event handler for custom events on [welcomeMessage].
@@ -148,8 +154,14 @@ abstract class AbstractGame<T : Player>(
      */
     suspend fun doStart() {
         running = true
-        runGame()
-        doEnd()
+        coroutineScope {
+            gameJob = launch {
+                runGame()
+            }
+        }
+        if (!silentEnd) {
+            doEnd()
+        }
     }
 
     /**
@@ -163,6 +175,10 @@ abstract class AbstractGame<T : Player>(
      * Ends the game.
      */
     suspend fun doEnd() {
+        if (gameJob?.isActive == true) {
+            gameJob!!.cancel()
+        }
+        silentEnd = true
         end()
         module.unregisterGame(thread.id)
 
@@ -180,6 +196,8 @@ abstract class AbstractGame<T : Player>(
                     repeat(3) {
                         winner(it)
                     }
+
+                    addWinnerGamecard()
                 } else {
                     description = "The game ended abruptly"
                 }
@@ -194,6 +212,11 @@ abstract class AbstractGame<T : Player>(
         threadWatcher.cancel()
         unregisterUno(thread.id)
     }
+
+    /**
+     * Allows editing of the final embed.
+     */
+    protected open suspend fun EmbedBuilder.addWinnerGamecard() = Unit
 
     /**
      * Adds additional UI to the end embed.

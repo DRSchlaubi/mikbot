@@ -3,7 +3,6 @@ package dev.schlaubi.musicbot.game.module.commands
 import com.kotlindiscord.kord.extensions.checks.isInThread
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.musicbot.game.module.GameModule
-import dev.schlaubi.musicbot.module.uno.findUno
 import dev.schlaubi.musicbot.utils.ifPassing
 
 /**
@@ -18,7 +17,7 @@ fun GameModule<*, *>.stopGameCommand() = ephemeralSubCommand {
 
         ifPassing {
             failIf(translateGlobal("commands.stop_game.not_running")) {
-                findUno(event.interaction.channelId) == null
+                findGame(event.interaction.channelId) == null
             }
         }
     }

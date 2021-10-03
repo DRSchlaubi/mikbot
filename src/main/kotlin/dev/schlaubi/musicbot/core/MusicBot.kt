@@ -12,6 +12,7 @@ import dev.schlaubi.musicbot.module.music.musicchannel.MusicInteractionModule
 import dev.schlaubi.musicbot.module.music.playlist.commands.PlaylistModule
 import dev.schlaubi.musicbot.module.owner.OwnerModule
 import dev.schlaubi.musicbot.module.settings.SettingsModule
+import dev.schlaubi.musicbot.module.song_quiz.SongQuizModule
 import dev.schlaubi.musicbot.module.uno.UnoModule
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -34,6 +35,7 @@ class MusicBot : KoinComponent {
                 add(::OwnerModule)
                 add(::MusicInteractionModule)
                 add(::UnoModule)
+                add(::SongQuizModule)
             }
 
             presence {

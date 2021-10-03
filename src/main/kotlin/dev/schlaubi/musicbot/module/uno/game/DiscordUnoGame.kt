@@ -29,7 +29,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import mu.KotlinLogging
-import kotlin.reflect.KProperty1
 
 const val joinGameButton = "join_game"
 const val resendControlsButton = "resend_controls"
@@ -44,7 +43,6 @@ class DiscordUnoGame(
     override val thread: ThreadChannelBehavior,
     override val translationsProvider: TranslationsProvider
 ) : AbstractGame<DiscordUnoPlayer>(host, module) {
-    override val bundle: String = "uno"
     lateinit var game: Game<DiscordUnoPlayer>
         internal set
     override val wonPlayers: List<DiscordUnoPlayer>

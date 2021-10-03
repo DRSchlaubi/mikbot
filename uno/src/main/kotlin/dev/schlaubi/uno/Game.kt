@@ -294,10 +294,3 @@ public val defaultUnoDeck: List<Card> = buildList(108) {
         add(WildCardDraw4())
     }
 }
-
-@OptIn(ExperimentalStdlibApi::class)
-private fun <T> LinkedList<T>.poll(amount: Int) = buildList(amount) {
-    repeat(amount) {
-        add(poll())
-    }
-}

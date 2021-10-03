@@ -22,11 +22,13 @@ private val logger = KotlinLogging.logger {}
  */
 suspend fun Track.loadSponsorBlockInfo(): List<SkipSegment>? {
     val videoId = this.getYouTubeVideoId() ?: return null
-    return cache.getOrPut(videoId) {
-        client.segments.getSkipSegments(videoId) {
-            categories = listOf(Category.MUSIC_OFF_TOPIC)
+    return runCatching {
+        cache.getOrPut(videoId) {
+            client.segments.getSkipSegments(videoId) {
+                categories = listOf(Category.MUSIC_OFF_TOPIC)
+            }
         }
-    }
+    }.getOrNull()
 }
 
 /**

@@ -1,11 +1,18 @@
 package dev.schlaubi.musicbot.game.module.commands
 
+import com.kotlindiscord.kord.extensions.checks.types.CheckContext
+import com.kotlindiscord.kord.extensions.commands.Arguments
+import com.kotlindiscord.kord.extensions.commands.application.slash.PublicSlashCommandContext
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.kord.common.entity.ButtonStyle
 import dev.kord.common.entity.Permission
 import dev.kord.core.behavior.channel.createMessage
+import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
+import dev.kord.core.entity.Message
+import dev.kord.core.event.interaction.InteractionCreateEvent
 import dev.kord.rest.builder.message.create.actionRow
 import dev.kord.rest.builder.message.create.embed
+import dev.schlaubi.musicbot.game.AbstractGame
 import dev.schlaubi.musicbot.game.leaveButton
 import dev.schlaubi.musicbot.game.module.GameModule
 import dev.schlaubi.musicbot.module.uno.game.joinGameButton
@@ -17,16 +24,22 @@ import dev.schlaubi.musicbot.module.uno.game.startGameButton
  * @param gameTitleKey the translation key for the embed title
  * @param threadName the thread name of the game thread
  */
-fun GameModule<*, *>.startGameCommand(
+fun <A : Arguments, G : AbstractGame<*>> GameModule<*, G>.startGameCommand(
     gameTitleKey: String,
-    threadName: String
-) = publicSubCommand {
-    name = "start"
-    description = "Starts a new match"
+    threadName: String,
+    arguments: () -> A,
+    makeNewGame: suspend PublicSlashCommandContext<A>.(gameMessage: Message, gameThread: ThreadChannelBehavior) -> G?,
+    additionalChecks: suspend CheckContext<InteractionCreateEvent>.() -> Unit = {},
+    name: String = "start",
+    description: String = "Starts a new match"
+) = publicSubCommand(arguments) {
+    this.name = name
+    this.description = description
 
     check {
         // Required for pin()
         requireBotPermissions(Permission.ManageMessages, Permission.ManageThreads)
+        additionalChecks()
     }
 
     action {
@@ -54,7 +67,8 @@ fun GameModule<*, *>.startGameCommand(
             }
         }
         gameMessage.pin(reason = "Game Welcome message")
-        newGame(user, gameMessage, gameThread, translationsProvider)
+        val game = makeNewGame(gameMessage, gameThread) ?: return@action
+        registerGame(gameThread.id, game)
 
         respond {
             content = translateGlobal("game.start.success")

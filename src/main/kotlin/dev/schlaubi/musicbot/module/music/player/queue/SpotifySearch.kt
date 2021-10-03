@@ -1,7 +1,7 @@
 package dev.schlaubi.musicbot.module.music.player.queue
 
 import com.wrapper.spotify.SpotifyApi
-import com.wrapper.spotify.model_objects.specification.PlaylistTrack
+import com.wrapper.spotify.model_objects.specification.Artist
 import com.wrapper.spotify.model_objects.specification.TrackSimplified
 import com.wrapper.spotify.requests.AbstractRequest
 import dev.schlaubi.lavakord.audio.Link
@@ -18,7 +18,7 @@ import org.apache.http.client.utils.URIBuilder
 import kotlin.time.Duration
 import com.wrapper.spotify.model_objects.specification.Track as SpotifyTrack
 
-private val PLAYLIST_PATTERN =
+val PLAYLIST_PATTERN =
     "https?://.*\\.spotify\\.com/playlists?/([^?/\\s]*)".toRegex()
 private val TRACK_PATTERN = "https?://.*\\.spotify\\.com/tracks?/([^?/\\s]*)".toRegex()
 private val ALBUM_PATTERN = "https?://.*\\.spotify\\.com/albums?/([^?/\\s]*)".toRegex()
@@ -68,16 +68,20 @@ private suspend fun buildAlbum(link: Link, matchResult: MatchResult): List<Track
 
 private suspend fun buildPlaylist(link: Link, matchResult: MatchResult): List<Track> {
     val (playlistId) = matchResult.destructured
-    val playlist = api().getPlaylist(playlistId).build().await()
+    val playlist = getPlaylist(playlistId)
 
     val tracks = playlist.tracks.items
 
     return tracks.mapToTracks(link) {
-        val track = api().getTrack(it.track.id).build().await()
+        it.track.id?.let { id ->
+            val track = api().getTrack(id).build().await()
 
-        track.toNamedTrack()
+            track.toNamedTrack()
+        } ?: NamedTrack(it.track.name, null)
     }
 }
+
+suspend fun getPlaylist(playlistId: String) = api().getPlaylist(playlistId).build().await()
 
 @JvmRecord
 private data class IndexedTrack(val index: Int, val track: Track)
@@ -107,13 +111,17 @@ private suspend fun buildTrack(link: Link, trackMatch: MatchResult): List<Track>
     return listOfNotNull(getTrack(link, trackId))
 }
 
+suspend fun getTrack(trackId: String): SpotifyTrack = api().getTrack(trackId).build().await()
+
+suspend fun getArtist(artistId: String): Artist = api().getArtist(artistId).build().await()
+
 private suspend fun getTrack(link: Link, trackId: String): Track? {
-    val track = api().getTrack(trackId).build().await()
+    val track = getTrack(trackId)
 
     return track.toNamedTrack().findTrack(link)
 }
 
-private suspend fun NamedTrack.findTrack(link: Link): Track? =
+suspend fun NamedTrack.findTrack(link: Link): Track? =
     link.takeFirstMatch("$name${artist?.let { "- $it" } ?: ""}")
 
 private suspend fun Link.takeFirstMatch(query: String): Track? {
@@ -124,11 +132,16 @@ private suspend fun Link.takeFirstMatch(query: String): Track? {
     }
 }
 
-private fun SpotifyTrack.toNamedTrack(): NamedTrack = NamedTrack(name, artists.first().name)
+fun SpotifyTrack.toNamedTrack(): NamedTrack = NamedTrack(name, artists.first().name)
 private fun TrackSimplified.toNamedTrack(): NamedTrack = NamedTrack(name, artists.first().name)
-private fun PlaylistTrack.toNamedTrack(): NamedTrack = NamedTrack(track.name, null)
 
 @JvmRecord
-private data class NamedTrack(val name: String, val artist: String?)
+data class NamedTrack(val name: String, val artist: String?)
 
 private suspend fun <T> AbstractRequest<T>.await(): T = executeAsync().await()
+
+fun String.spotifyUriToUrl(): String {
+    val (_, type, id) = split(":")
+
+    return "https://open.spotify.com/$type/$id"
+}

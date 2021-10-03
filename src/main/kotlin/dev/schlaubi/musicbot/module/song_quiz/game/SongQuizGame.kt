@@ -60,7 +60,7 @@ class SongQuizGame(
         musicPlayer.clearQueue()
         val iterator = trackContainer.iterator()
         while (iterator.hasNext()) {
-            turn(iterator.next(), iterator.hasNext())
+            turn(iterator.next(), !iterator.hasNext())
         }
     }
 

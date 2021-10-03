@@ -5,8 +5,10 @@ import dev.kord.common.entity.ButtonStyle
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.behavior.edit
+import dev.kord.core.behavior.interaction.followUpEphemeral
 import dev.kord.core.behavior.interaction.respondEphemeral
 import dev.kord.rest.builder.message.create.actionRow
+import dev.kord.rest.builder.message.create.embed
 import dev.kord.rest.builder.message.modify.embed
 import dev.schlaubi.musicbot.game.translate
 import dev.schlaubi.musicbot.module.music.player.queue.findTrack
@@ -19,7 +21,7 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlin.time.Duration
 
-suspend fun SongQuizGame.turn(track: Track) {
+suspend fun SongQuizGame.turn(track: Track, isLast: Boolean) {
     val (wrongOptions, correctOption, title) = decideTurnParameters(track)
 
     val lavalinkTrack = track.toNamedTrack().findTrack(musicPlayer)
@@ -67,13 +69,29 @@ suspend fun SongQuizGame.turn(track: Track) {
                     }
                     return@onInteraction
                 }
-                interaction.acknowledgeEphemeralDeferredMessageUpdate()
+                val response = interaction.acknowledgeEphemeralDeferredMessageUpdate()
                 val index = interaction.componentId.substringAfter("choose_").toInt()
                 val name = allAnswers[index]
                 val wasCorrect = name == correctOption
                 answers[user] = wasCorrect
                 if (wasCorrect) {
                     addStats(user.id, turnStart, true)
+                }
+
+                // Send user their own stats, except if they won (because those stats are sent publicly)
+                // We do this here, because this is the only place where we have an interaction,
+                // we can reply to ephemerally
+                if (isLast && user != wonPlayers.firstOrNull()?.user) {
+                    response.followUpEphemeral {
+                        embed {
+                            addUserStats(
+                                user, gameStats[user.id] ?: Statistics(
+                                    0,
+                                    emptyList(), quizSize
+                                )
+                            )
+                        }
+                    }
                 }
 
                 if (answers.size == players.size) {

@@ -33,8 +33,8 @@ class TrackContainer private constructor(
                 it.track.id?.let { id -> getTrack(id) }
             }
 
-            val artists = ArrayList<String>(playlistTracks.size)
-            val names = ArrayList<String>(playlistTracks.size)
+            val artists = HashSet<String>(playlistTracks.size)
+            val names = HashSet<String>(playlistTracks.size)
             playlistTracks.forEach {
                 artists.add(it.artists.first().name)
                 names.add(it.name)

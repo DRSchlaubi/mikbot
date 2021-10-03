@@ -39,7 +39,7 @@ fun GameModule<*, *>.leaderboardCommand(
                 all,
                 {
                     val user = this@leaderboardCommand.kord.unsafe.user(it.id)
-                    val stats = it.unoStats!!
+                    val stats = gameStats.get(it)!!
                     val ratio = stats.ratio.formatPercentage()
                     "${
                     user.asMemberOrNull(safeGuild.id)?.mention ?: user.asUserOrNull()?.username

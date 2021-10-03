@@ -3,6 +3,7 @@ package dev.schlaubi.musicbot.module.song_quiz.game
 import dev.kord.common.entity.Snowflake
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
+import kotlin.math.round
 import kotlin.time.Duration
 
 @Suppress("DataClassCanBeRecord")
@@ -12,7 +13,7 @@ data class Statistics(
     val gameSize: Int
 ) : Comparable<Statistics> {
     val average: Duration by lazy {
-        val average = responseTimes.sumOf { it.inWholeMilliseconds } / gameSize
+        val average = round(responseTimes.map { it.inWholeMilliseconds }.average())
         Duration.milliseconds(average)
     }
 
@@ -21,6 +22,7 @@ data class Statistics(
         if (pointsComparison != 0) {
             return pointsComparison
         }
+
         return average.compareTo(other.average)
     }
 }

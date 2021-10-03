@@ -36,7 +36,7 @@ suspend fun SongQuizGame.turn(track: Track) {
         actionRow {
             allAnswers.forEachIndexed { index, name ->
                 interactionButton(ButtonStyle.Secondary, "choose_$index") {
-                    label = name.take(80)
+                    label = (name as String?)?.take(80) ?: "<Spotify broke the name of this>"
                 }
             }
         }

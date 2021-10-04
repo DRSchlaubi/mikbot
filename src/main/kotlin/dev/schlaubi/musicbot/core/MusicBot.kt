@@ -7,6 +7,7 @@ import dev.schlaubi.musicbot.config.Config
 import dev.schlaubi.musicbot.core.audio.LavalinkManager
 import dev.schlaubi.musicbot.core.io.Database
 import dev.schlaubi.musicbot.core.io.findUser
+import dev.schlaubi.musicbot.module.gdpr.GDPRModule
 import dev.schlaubi.musicbot.module.music.MusicModule
 import dev.schlaubi.musicbot.module.music.musicchannel.MusicInteractionModule
 import dev.schlaubi.musicbot.module.music.playlist.commands.PlaylistModule
@@ -33,9 +34,27 @@ class MusicBot : KoinComponent {
                 add(::MusicModule)
                 add(::PlaylistModule)
                 add(::OwnerModule)
+                add(::GDPRModule)
                 add(::MusicInteractionModule)
                 add(::UnoModule)
                 add(::SongQuizModule)
+
+                sentry {
+                    enable = Config.ENVIRONMENT.useSentry
+                    pingInReply = false
+
+                    setupCallback = {
+                        setup(
+                            dsn = Config.SENTRY_TOKEN,
+                            beforeSend = { event, _ ->
+                                event?.apply {
+                                    // Remove user from event
+                                    user = null
+                                }
+                            }
+                        )
+                    }
+                }
             }
 
             presence {

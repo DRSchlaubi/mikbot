@@ -9,6 +9,7 @@ import dev.kord.core.entity.interaction.EphemeralFollowupMessage
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.schlaubi.musicbot.game.confirmation
 import dev.schlaubi.musicbot.module.uno.game.DiscordUnoGame
+import dev.schlaubi.musicbot.module.uno.game.ui.translationKey
 import dev.schlaubi.musicbot.utils.deleteAfterwards
 import dev.schlaubi.uno.Game
 import dev.schlaubi.uno.Player
@@ -22,6 +23,7 @@ internal val unoInteractionTimeout = Duration.seconds(30).inWholeMilliseconds
 const val drawCardButton = "draw_card"
 const val sayUnoButton = "say_uno"
 const val skipButton = "skip"
+const val allCardsButton = "request_all_cards"
 
 class DiscordUnoPlayer(
     override val user: UserBehavior,
@@ -87,6 +89,13 @@ class DiscordUnoPlayer(
             }
             sayUnoButton -> {
                 playUno()
+                return true
+            }
+            allCardsButton -> {
+                val cards = deck.map { translate(it.translationKey) }.joinToString(", ")
+                response.followUpEphemeral {
+                    content = cards.substring(0, 2000.coerceAtMost(cards.length))
+                }
                 return true
             }
             skipButton -> return false

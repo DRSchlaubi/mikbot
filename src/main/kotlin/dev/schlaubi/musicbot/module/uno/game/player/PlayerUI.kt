@@ -41,7 +41,6 @@ suspend fun DiscordUnoPlayer.updateControls(active: Boolean) {
 
         content = cardsTitle(active, cards.size)
 
-
         addCards(cards, this@updateControls, active)
         addControlButtons(
             this@updateControls, active,

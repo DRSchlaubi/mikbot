@@ -2,7 +2,7 @@ package dev.schlaubi.musicbot.utils
 
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.CommandContext
-import com.kotlindiscord.kord.extensions.commands.application.slash.converters.impl.stringChoice
+import com.kotlindiscord.kord.extensions.commands.application.slash.converters.impl.optionalStringChoice
 import com.kotlindiscord.kord.extensions.commands.converters.Converter
 import com.kotlindiscord.kord.extensions.commands.converters.ConverterToOptional
 import com.kotlindiscord.kord.extensions.commands.converters.Validator
@@ -19,7 +19,7 @@ fun Arguments.unSetableBoolean(
     description: String,
     validator: Validator<String?> = null
 ) = unSettableBooleanString(displayName, description, validator).map {
-    UnSetableBoolean.valueOf(it.uppercase())
+    it?.uppercase()?.let { UnSetableBoolean.valueOf(it) }
 }
 
 @OptIn(ConverterToOptional::class)
@@ -28,10 +28,7 @@ fun Arguments.optionalUnSetableBoolean(
     description: String,
     outputError: Boolean = false,
     validator: Validator<String?> = null
-) = unSettableBooleanString(displayName, description, validator).toOptional(
-    outputError = outputError,
-    nestedValidator = validator
-).map {
+) = unSettableBooleanString(displayName, description, validator).map {
     it?.let { UnSetableBoolean.valueOf(it.uppercase()) }
 }
 
@@ -39,14 +36,14 @@ private fun Arguments.unSettableBooleanString(
     displayName: String,
     description: String,
     validator: Validator<String?> = null
-) = stringChoice(
+) = optionalStringChoice(
     displayName, description,
     mapOf(
         "True" to UnSetableBoolean.TRUE.name,
         "False" to UnSetableBoolean.FALSE.name,
         "Unset" to UnSetableBoolean.UNSET.name
     ),
-    validator
+    validator = validator
 )
 
 private fun <InputType : Any?, OutputType : Any?, NamedInputType : Any, ResultType : Any, B : Any?> Converter<InputType, OutputType, NamedInputType, ResultType>.map(

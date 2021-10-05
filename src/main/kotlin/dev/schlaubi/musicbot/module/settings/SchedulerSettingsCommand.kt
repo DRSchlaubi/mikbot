@@ -27,9 +27,9 @@ suspend fun SettingsModule.optionsCommand() {
 
         val newSettings = settings.copy(
             // fallback to predefined option, to not reset each time, therefore ?:
-            repeat = arguments.repeat.value ?: settings.repeat,
-            loopQueue = arguments.loopQueue.value ?: settings.loopQueue,
-            shuffle = arguments.shuffle.value ?: settings.shuffle,
+            repeat = arguments.repeat?.value ?: settings.repeat,
+            loopQueue = arguments.loopQueue?.value ?: settings.loopQueue,
+            shuffle = arguments.shuffle?.value ?: settings.shuffle,
             volume = arguments.volume?.toFloat()?.div(100) ?: settings.volume
         )
 

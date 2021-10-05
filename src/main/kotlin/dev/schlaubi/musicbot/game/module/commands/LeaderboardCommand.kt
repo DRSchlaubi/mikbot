@@ -42,7 +42,7 @@ fun GameModule<*, *>.leaderboardCommand(
                     val stats = gameStats.get(it)!!
                     val ratio = stats.ratio.formatPercentage()
                     "${
-                        user.asMemberOrNull(safeGuild.id)?.mention ?: user.asUserOrNull()?.username
+                    user.asMemberOrNull(safeGuild.id)?.mention ?: user.asUserOrNull()?.username
                         ?: user.mention
                     } - ${stats.wins}/${stats.losses} ($ratio)"
                 },

@@ -124,6 +124,10 @@ class MusicInteractionModule : Extension() {
                 inChannel(channelId)
 
                 ifPassing { // only respond if this check fails
+
+                    val player = musicModule.getMusicPlayer(guild)
+                    if (player.disableMusicChannel) return@ifPassing fail(translate("music.music_channel.disabled"))
+
                     joinSameChannelCheck(bot)
 
                     respondIfFailed()

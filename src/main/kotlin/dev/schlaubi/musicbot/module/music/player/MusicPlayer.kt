@@ -35,7 +35,8 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
     val queuedTracks get() = queue.toList()
     var filters: SerializableFilters? = null
     var playingTrack: QueuedTrack? = null
-    private var disableMusicChannel: Boolean = false
+    var disableMusicChannel: Boolean = false
+        private set
     private val translationsProvider: TranslationsProvider by inject()
 
     private var sponsorBlockJob: Job? = null

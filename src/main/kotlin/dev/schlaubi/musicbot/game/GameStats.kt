@@ -14,5 +14,6 @@ import kotlinx.serialization.Serializable
 data class GameStats(
     val wins: Int,
     val losses: Int,
-    val ratio: Double
+    val ratio: Double,
+    val totalGamesPlayed: Int
 )

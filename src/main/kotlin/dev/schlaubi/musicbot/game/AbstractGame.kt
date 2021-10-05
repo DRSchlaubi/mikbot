@@ -243,15 +243,17 @@ abstract class AbstractGame<T : Player>(
             update(winner, statsProperty, { applyStats(it) }) {
                 copy(
                     wins = wins + 1,
-                    ratio = (wins + 1).toDouble().div(losses.coerceAtLeast(1))
+                    ratio = (wins + 1).toDouble().div(losses.coerceAtLeast(1)),
+                    totalGamesPlayed = totalGamesPlayed + 1
                 )
             }
 
-            (wonPlayers.drop(1) + players + leftPlayers).forEach {
+            ((players + leftPlayers) - winner).forEach {
                 update(it, statsProperty, { stats -> applyStats(stats) }) {
                     copy(
                         losses = losses + 1,
-                        ratio = wins.toDouble().div((losses + 1))
+                        ratio = wins.toDouble().div((losses + 1)),
+                        totalGamesPlayed = totalGamesPlayed + 1
                     )
                 }
             }

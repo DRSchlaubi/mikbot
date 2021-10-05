@@ -26,7 +26,7 @@ suspend fun <T : Player> AbstractGame<T>.update(
     updaterFunction: GameStats.() -> GameStats
 ) {
     val user = database.users.findOneById(player.user.id) ?: BotUser(player.user.id)
-    val existingStats = stats.get(user) ?: GameStats(0, 0, 0.0)
+    val existingStats = stats.get(user) ?: GameStats(0, 0, 0.0, 0)
     val newStats = existingStats.updaterFunction()
 
     database.users.save(user.copy(newStats))

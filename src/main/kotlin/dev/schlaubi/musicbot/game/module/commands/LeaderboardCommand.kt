@@ -29,7 +29,7 @@ fun GameModule<*, *>.leaderboardCommand(
         val count = database.users.countDocuments(filter)
         val all = database.users
             .find(filter)
-            .sort(descending(gameStats / GameStats::ratio))
+            .sort(descending(gameStats / GameStats::totalGamesPlayed, gameStats / GameStats::ratio))
             .toFlow()
 
         editingPaginator {
@@ -42,7 +42,7 @@ fun GameModule<*, *>.leaderboardCommand(
                     val stats = gameStats.get(it)!!
                     val ratio = stats.ratio.formatPercentage()
                     "${
-                    user.asMemberOrNull(safeGuild.id)?.mention ?: user.asUserOrNull()?.username
+                        user.asMemberOrNull(safeGuild.id)?.mention ?: user.asUserOrNull()?.username
                         ?: user.mention
                     } - ${stats.wins}/${stats.losses} ($ratio)"
                 },

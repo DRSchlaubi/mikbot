@@ -4,7 +4,6 @@ import dev.kord.core.behavior.interaction.followUpEphemeral
 import dev.schlaubi.uno.cards.Card
 import dev.schlaubi.uno.cards.PlayedCard
 
-
 private const val cardLimit = 20
 
 private fun List<Card>.filterOutCards(topCard: PlayedCard): Pair<List<Card>, List<Card>> {

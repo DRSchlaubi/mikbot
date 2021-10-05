@@ -12,7 +12,7 @@ suspend fun DiscordUnoGame.kickPlayer(player: DiscordUnoPlayer) {
         }
     }
 
-    if(!running) return
+    if (!running) return
     game.removePlayer(player)
 
     // Cancel turn for current player if it is the leaving player or,

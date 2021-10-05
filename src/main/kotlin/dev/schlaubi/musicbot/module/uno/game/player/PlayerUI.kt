@@ -4,15 +4,12 @@ import dev.kord.common.entity.ButtonStyle
 import dev.kord.common.entity.DiscordPartialEmoji
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.interaction.edit
-import dev.kord.core.behavior.interaction.followUpEphemeral
 import dev.kord.rest.builder.message.modify.EphemeralFollowupMessageModifyBuilder
 import dev.kord.rest.builder.message.modify.actionRow
 import dev.schlaubi.musicbot.module.uno.game.ui.buttonStyle
 import dev.schlaubi.musicbot.module.uno.game.ui.emoji
 import dev.schlaubi.musicbot.module.uno.game.ui.translationKey
-import dev.schlaubi.uno.UnoColor
 import dev.schlaubi.uno.cards.Card
-import dev.schlaubi.uno.cards.PlayedCard
 
 private suspend fun DiscordUnoPlayer.cardsTitle(active: Boolean, cardSize: Int): String {
     val (key, replacements) = if (active) {

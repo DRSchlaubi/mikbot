@@ -24,8 +24,8 @@ private fun List<Card>.filterOutCards(topCard: PlayedCard): Pair<List<Card>, Lis
 
 suspend fun DiscordUnoPlayer.playableCards(): List<Card> {
     val (remainingCards, safeCards) = deck.filterOutCards(game.game.topCard)
-    val diff = safeCards.size - cardLimit
     return if (safeCards.size > cardLimit) {
+        val diff = safeCards.size - cardLimit
         val brokenCards = safeCards.takeLast(diff)
         deck.removeAll(brokenCards)
         response.followUpEphemeral {
@@ -33,7 +33,7 @@ suspend fun DiscordUnoPlayer.playableCards(): List<Card> {
         }
         safeCards.dropLast(diff)
     } else if (safeCards.size != cardLimit) { // display as many cards as possible
-        safeCards + remainingCards.take(diff)
+        safeCards + remainingCards.take(cardLimit - safeCards.size)
     } else {
         safeCards
     }

@@ -36,7 +36,7 @@ suspend fun DiscordUnoPlayer.updateControls(active: Boolean) {
             .sortedBy { (card) -> card } // sort by card
             .chunked(5) // Only 5 buttons per action row
 
-        content = cardsTitle(active, cards.size)
+        content = cardsTitle(active, availableCards.size)
 
         addCards(cards, this@updateControls, active)
         addControlButtons(

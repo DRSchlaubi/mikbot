@@ -14,13 +14,19 @@ class TrackContainer private constructor(
     private val songNamePool: LinkedList<String>
 ) : List<Track> by tracks {
 
+    private val allArtists = ArrayList(artistPool)
+    private val allSongs = ArrayList(songNamePool)
+
     fun pollArtistNames(blacklist: String, amount: Int = 3): List<String> =
-        artistPool.poll(blacklist, amount)
+        artistPool.poll(allArtists, blacklist, amount)
 
     fun pollSongNames(blacklist: String, amount: Int = 3): List<String> =
-        songNamePool.poll(blacklist, amount)
+        songNamePool.poll(allSongs, blacklist, amount)
 
-    private fun LinkedList<String>.poll(blacklist: String, amount: Int): List<String> {
+    private fun LinkedList<String>.poll(backupPool: List<String>, blacklist: String, amount: Int): List<String> {
+        if (size <= amount) {
+            addAll(backupPool)
+        }
         val allowed = LinkedList(this - blacklist)
         val options = allowed.poll(amount)
         removeAll(options + blacklist)

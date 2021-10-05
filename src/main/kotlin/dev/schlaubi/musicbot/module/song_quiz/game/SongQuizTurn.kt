@@ -33,11 +33,11 @@ suspend fun SongQuizGame.turn(track: Track, isLast: Boolean) {
 
     val turnStart = Clock.System.now()
     musicPlayer.player.playTrack(lavalinkTrack)
-    val allAnswers = wrongOptions + correctOption
+    val allAnswers = (wrongOptions + correctOption).shuffled()
     val message = thread.createMessage {
         content = title
         actionRow {
-            allAnswers.shuffled().forEachIndexed { index, name ->
+            allAnswers.forEachIndexed { index, name ->
                 interactionButton(ButtonStyle.Secondary, "choose_$index") {
                     label = (name as String?)?.take(80) ?: "<Spotify broke the name of this>"
                 }

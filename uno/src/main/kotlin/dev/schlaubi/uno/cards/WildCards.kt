@@ -10,6 +10,14 @@ import dev.schlaubi.uno.UnoColor
 public sealed class AbstractWildCard : Card {
     override fun canBePlayedOn(card: PlayedCard): Boolean = true // wild cards work on every other card
     override fun play(color: UnoColor): PlayedCard = PlayedWildCard(color)
+
+    override fun compareTo(other: Card): Int {
+        return when (other) {
+            this -> 0 // is same
+            is WildCardDraw4 -> 1 // wild draw 4 is higher then wild
+            else -> -1 // all other cards are lower
+        }
+    }
 }
 
 /**
@@ -34,7 +42,7 @@ public class WildCard : AbstractWildCard() {
  * @see WildCard
  * @see PlayedWildCard
  */
-public open class WildCardDraw4: AbstractWildCard(), DrawingCard {
+public open class WildCardDraw4 : AbstractWildCard(), DrawingCard {
     override val cards: Int = 4
     override fun canStackWith(card: PlayedCard): Boolean = card is WildCardDraw4
 
@@ -46,6 +54,9 @@ public open class WildCardDraw4: AbstractWildCard(), DrawingCard {
         override fun play(color: UnoColor): PlayedCard = delegate.play(color)
 
         override fun canBePlayedOn(card: PlayedCard): Boolean = delegate.canBePlayedOn(card)
+        override fun compareTo(other: Card): Int {
+            return delegate.compareTo(other)
+        }
     }
 }
 

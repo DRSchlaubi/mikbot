@@ -6,7 +6,7 @@ import dev.schlaubi.uno.UnoColor
 /**
  * Representation of a normal Uno card.
  */
-public sealed interface Card {
+public sealed interface Card : Comparable<Card> {
     /**
      * Checks whether this card can be played on [the other card][card].
      */
@@ -40,6 +40,14 @@ public sealed class ColoredCard : PlayedCard {
     override fun canBePlayedOn(card: PlayedCard): Boolean = card.color == color
 
     final override fun play(color: UnoColor): PlayedCard = this
+
+    override fun compareTo(other: Card): Int {
+        return if (other is PlayedCard) {
+            color.compareTo(other.color)
+        } else {
+            0
+        }
+    }
 }
 
 /**

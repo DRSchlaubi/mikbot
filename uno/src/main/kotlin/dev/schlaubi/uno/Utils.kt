@@ -2,6 +2,9 @@ package dev.schlaubi.uno
 
 import dev.schlaubi.uno.cards.Card
 import java.util.LinkedList
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 /**
  * Polls [amount] items from this [LinkedList].
@@ -13,6 +16,9 @@ public fun <T> LinkedList<T>.poll(amount: Int): List<T> = buildList(amount) {
     }
 }
 
+/**
+ * Drops identical [Card]s from a [List].
+ */
 @OptIn(ExperimentalStdlibApi::class)
 public fun <T : Pair<Card, Int>> List<T>.dropIdentical(): List<Pair<Card, Int>> = buildList<Pair<Card, Int>> {
     val cards = mutableListOf<Card>()
@@ -23,4 +29,12 @@ public fun <T : Pair<Card, Int>> List<T>.dropIdentical(): List<Pair<Card, Int>> 
             add(pair)
         }
     }
+}
+
+@OptIn(ExperimentalContracts::class)
+public inline fun <T> T.transform(block: T.() -> T): T {
+    contract {
+        callsInPlace(block, InvocationKind.EXACTLY_ONCE)
+    }
+    return block()
 }

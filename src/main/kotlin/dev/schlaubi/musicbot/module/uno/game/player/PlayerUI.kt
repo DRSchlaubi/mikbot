@@ -11,6 +11,7 @@ import dev.schlaubi.musicbot.module.uno.game.ui.translationKey
 import dev.schlaubi.uno.UnoColor
 import dev.schlaubi.uno.cards.PlayedCard
 import dev.schlaubi.uno.dropIdentical
+import dev.schlaubi.uno.transform
 
 suspend fun DiscordUnoPlayer.updateControls(active: Boolean) {
     controls.edit {
@@ -21,12 +22,12 @@ suspend fun DiscordUnoPlayer.updateControls(active: Boolean) {
             .mapIndexed { index, card -> card to index } // save origin index
             .sortedBy { (card) ->
                 (card as? PlayedCard)?.color ?: UnoColor.GREEN
-            }.chunked(1).map {
-                if (it.size > 20) {
-                    return@map it.dropIdentical().subList(0, 20)
+            }.transform {
+                if (this.size > 20) {
+                    return@transform this.dropIdentical().subList(0, 20)
                 }
-                return@map it
-            }.first().chunked(5) // Only 5 buttons per action row
+                return@transform this
+            }.chunked(5) // Only 5 buttons per action row
 
         cards.forEach {
             actionRow {

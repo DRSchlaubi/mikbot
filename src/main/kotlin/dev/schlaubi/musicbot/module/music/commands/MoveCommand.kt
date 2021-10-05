@@ -83,7 +83,7 @@ suspend fun MusicModule.moveCommand() {
             name = "swap"
             description = "Swaps the two songs at the specified positions"
 
-            doMove(MoveArguments::from, MoveArguments::to, swap = true) { track ->
+            doMove(MoveArguments::from, MoveArguments::to, swap = true) {
                 translate(
                     "commands.move.swap.success",
                     arrayOf(

@@ -27,9 +27,8 @@ private suspend fun DiscordUnoPlayer.cardsTitle(active: Boolean, cardSize: Int):
 
 suspend fun DiscordUnoPlayer.updateControls(active: Boolean) {
     controls.edit {
-        val availableCards = playableCards()
+        val availableCards = displayableCards()
         val cards = availableCards
-            .mapIndexed { index, card -> card to index } // save origin index
             .sortedBy { (card) -> card } // sort by card
             .chunked(5) // Only 5 buttons per action row
 

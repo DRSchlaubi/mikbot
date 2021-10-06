@@ -29,7 +29,6 @@ val AbstractWildCard.imageUrl: String
             } else {
                 "wild.png"
             }
-            println("C: " + coloredCdn)
             "$coloredCdn/$name"
         }
         is WildCard -> "$BASE_CDN/wild/wild.png"

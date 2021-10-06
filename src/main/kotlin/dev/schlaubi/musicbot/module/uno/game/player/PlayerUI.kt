@@ -19,7 +19,7 @@ private suspend fun DiscordUnoPlayer.cardsTitle(active: Boolean, cardSize: Int):
             "uno.controls.active.head" to emptyArray()
         }
     } else {
-        "uno.controls.inacvtive.head" to emptyArray()
+        "uno.controls.inactive.head" to emptyArray()
     }
 
     return translate(key, *replacements)

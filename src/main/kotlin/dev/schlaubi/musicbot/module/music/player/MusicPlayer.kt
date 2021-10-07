@@ -209,8 +209,7 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
     private suspend fun onTrackEnd(event: TrackEndEvent) {
         event.track.deleteSponsorBlockCache()
         if ((!repeat && !loopQueue && queue.isEmpty()) && event.reason != TrackEndEvent.EndReason.REPLACED) {
-            link.disconnectAudio()
-            return updateMusicChannelMessage()
+            return stop()
         }
 
         // In order to loop the queueTracks we just add every track back to the queueTracks
@@ -278,6 +277,7 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
         player.stopTrack()
         link.disconnectAudio()
         clearQueue()
+        updateMusicChannelMessage()
     }
 
     fun updateMusicChannelMessage() {

@@ -24,19 +24,22 @@ import dev.schlaubi.musicbot.module.music.player.queue.spotifyUriToUrl
 import dev.schlaubi.musicbot.module.settings.BotUser
 
 class SongQuizGame(
-    host: UserBehavior,
-    module: GameModule<SongQuizPlayer, out AbstractGame<SongQuizPlayer>>,
-    val quizSize: Int,
-    val musicPlayer: MusicPlayer,
-    val trackContainer: TrackContainer,
-    override val thread: ThreadChannelBehavior,
-    override val welcomeMessage: Message,
-    override val translationsProvider: TranslationsProvider
+        host: UserBehavior,
+        module: GameModule<SongQuizPlayer, out AbstractGame<SongQuizPlayer>>,
+        val quizSize: Int,
+        val musicPlayer: MusicPlayer,
+        val trackContainer: TrackContainer,
+        override val thread: ThreadChannelBehavior,
+        override val welcomeMessage: Message,
+        override val translationsProvider: TranslationsProvider
 ) : AbstractGame<SongQuizPlayer>(host, module) {
     override val playerRange: IntRange = 1..10
     val gameStats = mutableMapOf<Snowflake, Statistics>()
     override val wonPlayers: List<SongQuizPlayer>
-        get() = players.sortedByDescending { gameStats[it.user.id] ?: Statistics(0, emptyList(), quizSize) }
+        get() =
+                players.sortedByDescending {
+                    gameStats[it.user.id] ?: Statistics(0, emptyList(), quizSize)
+                }
 
     override fun EmbedBuilder.addWelcomeMessage() {
         field {
@@ -46,12 +49,13 @@ class SongQuizGame(
     }
 
     override suspend fun obtainNewPlayer(
-        user: User,
-        ack: EphemeralInteractionResponseBehavior,
-        loading: EphemeralFollowupMessage
-    ): SongQuizPlayer = SongQuizPlayer(user).also {
-        loading.edit { content = translate(user, "song_quiz.controls.joined") }
-    }
+            user: User,
+            ack: EphemeralInteractionResponseBehavior,
+            loading: EphemeralFollowupMessage
+    ): SongQuizPlayer =
+            SongQuizPlayer(user).also {
+                loading.edit { content = translate(user, "song_quiz.controls.joined") }
+            }
 
     override suspend fun onRejoin(event: ComponentInteractionCreateEvent, player: SongQuizPlayer) {
         event.interaction.respondEphemeral {
@@ -65,7 +69,11 @@ class SongQuizGame(
         if (voiceState?.channelId?.value != musicPlayer.lastChannelId) {
             ack.followUpEphemeral {
                 content =
-                    translate(player.user, "song_quiz.controls.not_in_vc", "<#${musicPlayer.lastChannelId}>")
+                        translate(
+                                player.user,
+                                "song_quiz.controls.not_in_vc",
+                                "<#${musicPlayer.lastChannelId}>"
+                        )
             }
         }
     }
@@ -81,6 +89,7 @@ class SongQuizGame(
     }
 
     override suspend fun end() {
+        if (!running) return
         musicPlayer.updateMusicChannelState(false)
         musicPlayer.disconnectAudio()
         doUpdateWelcomeMessage()

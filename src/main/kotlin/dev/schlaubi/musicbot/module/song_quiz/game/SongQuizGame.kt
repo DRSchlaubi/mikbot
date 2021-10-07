@@ -1,10 +1,12 @@
 package dev.schlaubi.musicbot.module.song_quiz.game
 
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
+import dev.kord.common.entity.ButtonStyle
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
+import dev.kord.core.behavior.edit
 import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.edit
 import dev.kord.core.behavior.interaction.followUpEphemeral
@@ -14,6 +16,7 @@ import dev.kord.core.entity.User
 import dev.kord.core.entity.interaction.EphemeralFollowupMessage
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.rest.builder.message.EmbedBuilder
+import dev.kord.rest.builder.message.create.actionRow
 import dev.kord.rest.builder.message.create.embed
 import dev.schlaubi.musicbot.game.AbstractGame
 import dev.schlaubi.musicbot.game.GameStats
@@ -24,6 +27,11 @@ import dev.schlaubi.musicbot.module.music.player.PersistentPlayerState
 import dev.schlaubi.musicbot.module.music.player.applyToPlayer
 import dev.schlaubi.musicbot.module.music.player.queue.spotifyUriToUrl
 import dev.schlaubi.musicbot.module.settings.BotUser
+import dev.schlaubi.musicbot.utils.componentLive
+import kotlinx.coroutines.delay
+import kotlin.time.Duration
+
+private const val requestStats = "request_stats"
 
 class SongQuizGame(
     host: UserBehavior,
@@ -108,13 +116,45 @@ class SongQuizGame(
         }
         doUpdateWelcomeMessage()
         if (players.isNotEmpty() && running) {
-            thread.createMessage {
+            val message = thread.createMessage {
                 embed {
                     title = "Game final results"
 
                     addGameEndEmbed(this@SongQuizGame)
                 }
+
+                actionRow {
+                    interactionButton(ButtonStyle.Primary, requestStats) {
+                        label = "See how bad you were"
+                    }
+                }
             }
+            val live = message.componentLive(message.kord)
+            live.onInteraction {
+                val user = interaction.user
+                val statistics = gameStats[interaction.user.id]
+                interaction.respondEphemeral {
+                    if (statistics == null) {
+                        content = translate(user, "song_quiz.game.not_in_game")
+                    } else if (interaction.gamePlayer in wonPlayers) {
+                        content = translate(user, "song_quiz.game.won")
+                    } else {
+                        embed {
+                            addUserStats(
+                                user,
+                                gameStats[user.id] ?: Statistics(
+                                    0,
+                                    emptyList(), quizSize
+                                )
+                            )
+                        }
+                    }
+                }
+            }
+
+            delay(Duration.minutes(1))
+            live.shutDown()
+            message.edit { components = mutableListOf() }
         }
     }
 

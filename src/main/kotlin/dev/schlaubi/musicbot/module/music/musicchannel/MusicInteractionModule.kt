@@ -8,6 +8,7 @@ import dev.kord.core.behavior.channel.MessageChannelBehavior
 import dev.kord.core.behavior.channel.withTyping
 import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.followUpEphemeral
+import dev.kord.core.behavior.reply
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.schlaubi.lavakord.audio.Link
@@ -148,11 +149,11 @@ class MusicInteractionModule : Extension() {
                     onTop = false,
                     tracks = tracks.mapToQueuedTrack(event.message.author!!)
                 )
-                event.message.delete("Music channel interaction")
+                event.message.deleteAfterwards()
 
                 if (tracks.isEmpty()) {
-                    event.message.channel
-                        .createMessage(translate("music.queue.no_matches"))
+                    event.message
+                        .reply { content = translate("music.queue.no_matches") }
                         .deleteAfterwards()
                 }
             }

@@ -20,26 +20,29 @@ import dev.schlaubi.musicbot.game.GameStats
 import dev.schlaubi.musicbot.game.module.GameModule
 import dev.schlaubi.musicbot.game.translate
 import dev.schlaubi.musicbot.module.music.player.MusicPlayer
+import dev.schlaubi.musicbot.module.music.player.PersistentPlayerState
+import dev.schlaubi.musicbot.module.music.player.applyToPlayer
 import dev.schlaubi.musicbot.module.music.player.queue.spotifyUriToUrl
 import dev.schlaubi.musicbot.module.settings.BotUser
 
 class SongQuizGame(
-        host: UserBehavior,
-        module: GameModule<SongQuizPlayer, out AbstractGame<SongQuizPlayer>>,
-        val quizSize: Int,
-        val musicPlayer: MusicPlayer,
-        val trackContainer: TrackContainer,
-        override val thread: ThreadChannelBehavior,
-        override val welcomeMessage: Message,
-        override val translationsProvider: TranslationsProvider
+    host: UserBehavior,
+    module: GameModule<SongQuizPlayer, out AbstractGame<SongQuizPlayer>>,
+    val quizSize: Int,
+    val musicPlayer: MusicPlayer,
+    val trackContainer: TrackContainer,
+    override val thread: ThreadChannelBehavior,
+    override val welcomeMessage: Message,
+    override val translationsProvider: TranslationsProvider
 ) : AbstractGame<SongQuizPlayer>(host, module) {
     override val playerRange: IntRange = 1..10
     val gameStats = mutableMapOf<Snowflake, Statistics>()
+    private var beforePlayerState: PersistentPlayerState? = null
     override val wonPlayers: List<SongQuizPlayer>
         get() =
-                players.sortedByDescending {
-                    gameStats[it.user.id] ?: Statistics(0, emptyList(), quizSize)
-                }
+            players.sortedByDescending {
+                gameStats[it.user.id] ?: Statistics(0, emptyList(), quizSize)
+            }
 
     override fun EmbedBuilder.addWelcomeMessage() {
         field {
@@ -49,13 +52,13 @@ class SongQuizGame(
     }
 
     override suspend fun obtainNewPlayer(
-            user: User,
-            ack: EphemeralInteractionResponseBehavior,
-            loading: EphemeralFollowupMessage
+        user: User,
+        ack: EphemeralInteractionResponseBehavior,
+        loading: EphemeralFollowupMessage
     ): SongQuizPlayer =
-            SongQuizPlayer(user).also {
-                loading.edit { content = translate(user, "song_quiz.controls.joined") }
-            }
+        SongQuizPlayer(user).also {
+            loading.edit { content = translate(user, "song_quiz.controls.joined") }
+        }
 
     override suspend fun onRejoin(event: ComponentInteractionCreateEvent, player: SongQuizPlayer) {
         event.interaction.respondEphemeral {
@@ -69,16 +72,20 @@ class SongQuizGame(
         if (voiceState?.channelId?.value != musicPlayer.lastChannelId) {
             ack.followUpEphemeral {
                 content =
-                        translate(
-                                player.user,
-                                "song_quiz.controls.not_in_vc",
-                                "<#${musicPlayer.lastChannelId}>"
-                        )
+                    translate(
+                        player.user,
+                        "song_quiz.controls.not_in_vc",
+                        "<#${musicPlayer.lastChannelId}>"
+                    )
             }
         }
     }
 
     override suspend fun runGame() {
+        if (musicPlayer.playingTrack != null) {
+            beforePlayerState = musicPlayer.toState()
+        }
+
         musicPlayer.updateMusicChannelState(true)
         doUpdateWelcomeMessage()
         musicPlayer.clearQueue()
@@ -91,7 +98,14 @@ class SongQuizGame(
     override suspend fun end() {
         if (!running) return
         musicPlayer.updateMusicChannelState(false)
-        musicPlayer.disconnectAudio()
+        val state = beforePlayerState
+        if (state == null) {
+            musicPlayer.disconnectAudio()
+        } else {
+            // restore player state from before the quiz
+            state.schedulerOptions.applyToPlayer(musicPlayer)
+            state.applyToPlayer(musicPlayer)
+        }
         doUpdateWelcomeMessage()
         if (players.isNotEmpty() && running) {
             thread.createMessage {

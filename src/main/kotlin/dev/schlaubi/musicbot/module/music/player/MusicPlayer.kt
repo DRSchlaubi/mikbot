@@ -277,6 +277,7 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
         player.stopTrack()
         link.disconnectAudio()
         clearQueue()
+        playingTrack = null
         updateMusicChannelMessage()
     }
 

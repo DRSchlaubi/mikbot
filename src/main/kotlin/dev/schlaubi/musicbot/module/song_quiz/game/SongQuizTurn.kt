@@ -72,7 +72,7 @@ suspend fun SongQuizGame.turn(track: Track, isLast: Boolean) {
                 }
                 if (answers.containsKey(user)) {
                     interaction.respondEphemeral {
-                        content = translate(user, "song_quiz.game.not_in_game")
+                        content = translate(user, "song_quiz.game.already_submitted")
                     }
                     return@onInteraction
                 }

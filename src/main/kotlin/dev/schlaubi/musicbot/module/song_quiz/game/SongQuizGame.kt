@@ -132,11 +132,12 @@ class SongQuizGame(
             val live = message.componentLive(message.kord)
             live.onInteraction {
                 val user = interaction.user
+                val winner = wonPlayers.firstOrNull()?.user
                 val statistics = gameStats[interaction.user.id]
                 interaction.respondEphemeral {
                     if (statistics == null) {
                         content = translate(user, "song_quiz.game.not_in_game")
-                    } else if (interaction.gamePlayer in wonPlayers) {
+                    } else if (user.id == winner?.id) {
                         content = translate(user, "song_quiz.game.won")
                     } else {
                         embed {
@@ -153,8 +154,8 @@ class SongQuizGame(
             }
 
             delay(Duration.minutes(1))
-            live.shutDown()
             message.edit { components = mutableListOf() }
+            live.shutDown()
         }
     }
 

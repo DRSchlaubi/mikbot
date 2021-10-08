@@ -5,6 +5,7 @@ import dev.inmo.krontab.buildSchedule
 import dev.inmo.krontab.doInfinity
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.GuildBehavior
+import dev.kord.core.entity.channel.VoiceChannel
 import dev.schlaubi.lavakord.audio.Link
 import dev.schlaubi.lavakord.audio.TrackEndEvent
 import dev.schlaubi.lavakord.audio.TrackStartEvent
@@ -55,6 +56,9 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
         link.player.on(consumer = ::onTrackEnd)
         link.player.on(consumer = ::onTrackStart)
     }
+
+    suspend fun getChannel() = link.lastChannelId
+        ?.let { guild.kord.getChannelOf<VoiceChannel>(Snowflake(it)) }
 
     fun updateMusicChannelState(to: Boolean) {
         queue.clear()

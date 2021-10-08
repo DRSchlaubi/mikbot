@@ -1,8 +1,10 @@
 package dev.schlaubi.musicbot.module.gdpr
 
 import com.kotlindiscord.kord.extensions.types.respond
+import dev.schlaubi.musicbot.module.music.playlist.Playlist
 import dev.schlaubi.musicbot.utils.confirmation
 import dev.schlaubi.musicbot.utils.database
+import org.litote.kmongo.eq
 
 fun GDPRModule.deleteCommand() = ephemeralSubCommand {
     name = "delete"
@@ -18,6 +20,7 @@ fun GDPRModule.deleteCommand() = ephemeralSubCommand {
         }
 
         database.users.deleteOneById(user.id)
+        database.playlists.deleteMany(Playlist::authorId eq user.id)
 
         respond {
             content = translate("commands.gdpr.delete.success")

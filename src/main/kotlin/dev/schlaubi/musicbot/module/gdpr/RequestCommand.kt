@@ -30,6 +30,11 @@ fun GDPRModule.requestCommand() = ephemeralSubCommand {
                     value = botUser.language.getDisplayName(botUser.language)
                 }
 
+                field {
+                    name = translate("commands.gdpr.request.playlists")
+                    value = translate("commands.gdpr.request.playlists.description")
+                }
+
                 if (botUser.defaultSchedulerSettings != null) {
                     field {
                         name = translate("commands.gdpr.request.scheduler_settings")

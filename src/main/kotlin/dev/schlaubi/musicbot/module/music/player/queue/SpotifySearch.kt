@@ -73,7 +73,7 @@ private suspend fun buildPlaylist(link: Link, matchResult: MatchResult): List<Tr
     val (playlistId) = matchResult.destructured
     val playlist = getPlaylist(playlistId)
 
-    val tracks = playlist.tracks.items
+    val tracks = playlist?.tracks?.items ?: return emptyList()
 
     return tracks.mapToTracks(link, maxConcurrentRequests = 5) {
         it.track.id?.let { id ->
@@ -84,7 +84,7 @@ private suspend fun buildPlaylist(link: Link, matchResult: MatchResult): List<Tr
     }
 }
 
-suspend fun getPlaylist(playlistId: String): Playlist = api().getPlaylist(playlistId).build().await()
+suspend fun getPlaylist(playlistId: String): Playlist? = api().getPlaylist(playlistId).build().await()
 
 @JvmRecord
 private data class IndexedTrack(val index: Int, val track: Track)

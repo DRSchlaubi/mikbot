@@ -9,6 +9,7 @@ on:
 
 jobs:
   build:
+    name: Build
     if: "!contains(github.event.commits[0].message, '[skip ci]')"
     runs-on: ubuntu-20.04
     steps:

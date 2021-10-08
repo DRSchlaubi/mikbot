@@ -238,6 +238,8 @@ abstract class AbstractGame<T : Player>(
     abstract fun BotUser.applyStats(stats: GameStats): BotUser
 
     private suspend fun updateStats() {
+        // Winning against yourself, doesn't count
+        if ((players.size + leftPlayers.size) == 1) return
         val winner = wonPlayers.firstOrNull()
         if (winner != null) {
             update(winner, statsProperty, { applyStats(it) }) {

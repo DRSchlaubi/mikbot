@@ -21,6 +21,11 @@ dependencies {
     implementation(project(":uno"))
 
     // Bot
+    implementation("dev.kord", "kord-core", "0.8.x-SNAPSHOT") {
+        version {
+            strictly("0.8.x-SNAPSHOT")
+        }
+    }
     implementation("com.kotlindiscord.kord.extensions", "kord-extensions", "1.5.1-SNAPSHOT")
     implementation("dev.kord.x", "emoji", "0.5.0")
     implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-jdk8", "1.5.2")

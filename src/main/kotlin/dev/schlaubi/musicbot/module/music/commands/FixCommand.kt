@@ -2,10 +2,16 @@ package dev.schlaubi.musicbot.module.music.commands
 
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.kord.common.entity.Permission
+import dev.kord.common.entity.optional.Optional
+import dev.kord.core.behavior.channel.edit
+import dev.kord.rest.json.request.ChannelModifyPatchRequest
 import dev.schlaubi.musicbot.module.music.MusicModule
+import dev.schlaubi.musicbot.module.uno.registerUno
 import dev.schlaubi.musicbot.utils.safeGuild
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
+import kotlin.time.Duration
 
 suspend fun MusicModule.fixCommand() = ephemeralControlSlashCommand {
     name = "fix"
@@ -25,16 +31,13 @@ suspend fun MusicModule.fixCommand() = ephemeralControlSlashCommand {
                 )
             val fallbackRegion = availableRegions.random()
 
-            // https://github.com/kordlib/kord/pull/413
-//            channel.edit {
-//                this.rtcRegion = fallbackRegion
-//            }
-//            delay(Duration.seconds(1))
-//            kord.rest.channel.patchChannel(
-//                channel.id,
-            // we do this manually, so we always encode the null
-//                ChannelModifyPatchRequest(rtcRegion = Optional.Value(currentRegion))
-//            )
+            channel.edit {
+                rtcRegion = fallbackRegion
+            }
+            delay(Duration.seconds(1))
+            channel.edit {
+                rtcRegion = currentRegion
+            }
 
             content = translate("commands.fix.success")
         }

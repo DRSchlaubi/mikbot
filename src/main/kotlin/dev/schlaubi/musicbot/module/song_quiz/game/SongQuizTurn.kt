@@ -21,7 +21,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlin.time.Duration
 
-suspend fun SongQuizGame.turn(track: Track, isLast: Boolean) {
+suspend fun SongQuizGame.turn(track: Track) {
     val (wrongOptions, correctOption, title) = decideTurnParameters(track)
 
     val lavalinkTrack = track.toNamedTrack().findTrack(musicPlayer)
@@ -76,7 +76,7 @@ suspend fun SongQuizGame.turn(track: Track, isLast: Boolean) {
                     }
                     return@onInteraction
                 }
-                val response = interaction.acknowledgeEphemeralDeferredMessageUpdate()
+                interaction.acknowledgeEphemeralDeferredMessageUpdate()
                 val index = interaction.componentId.substringAfter("choose_").toInt()
                 val name = allAnswers[index]
                 val wasCorrect = name == correctOption

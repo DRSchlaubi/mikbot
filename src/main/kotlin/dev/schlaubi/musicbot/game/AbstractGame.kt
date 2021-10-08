@@ -11,6 +11,7 @@ import dev.kord.core.entity.Message
 import dev.kord.core.entity.User
 import dev.kord.core.entity.interaction.ComponentInteraction
 import dev.kord.core.entity.interaction.EphemeralFollowupMessage
+import dev.kord.core.entity.interaction.PublicFollowupMessage
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.kord.rest.builder.message.modify.MessageModifyBuilder
@@ -127,7 +128,7 @@ abstract class AbstractGame<T : Player>(
     abstract suspend fun obtainNewPlayer(
         user: User,
         ack: EphemeralInteractionResponseBehavior,
-        loading: EphemeralFollowupMessage
+        loading: PublicFollowupMessage
     ): T
 
     /**

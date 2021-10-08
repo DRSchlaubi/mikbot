@@ -4,7 +4,7 @@ import dev.kord.common.entity.ButtonStyle
 import dev.kord.common.entity.DiscordPartialEmoji
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.interaction.edit
-import dev.kord.rest.builder.message.modify.EphemeralFollowupMessageModifyBuilder
+import dev.kord.rest.builder.message.modify.FollowupMessageModifyBuilder
 import dev.kord.rest.builder.message.modify.actionRow
 import dev.schlaubi.musicbot.module.uno.game.ui.buttonStyle
 import dev.schlaubi.musicbot.module.uno.game.ui.emoji
@@ -42,7 +42,7 @@ suspend fun DiscordUnoPlayer.updateControls(active: Boolean) {
     }
 }
 
-private suspend fun EphemeralFollowupMessageModifyBuilder.addControlButtons(
+private suspend fun FollowupMessageModifyBuilder.addControlButtons(
     discordUnoPlayer: DiscordUnoPlayer,
     active: Boolean,
     cardsHidden: Boolean
@@ -79,7 +79,7 @@ private suspend fun EphemeralFollowupMessageModifyBuilder.addControlButtons(
     }
 }
 
-private suspend fun EphemeralFollowupMessageModifyBuilder.addCards(
+private suspend fun FollowupMessageModifyBuilder.addCards(
     cards: List<List<Pair<Card, Int>>>,
     discordUnoPlayer: DiscordUnoPlayer,
     active: Boolean

@@ -7,6 +7,7 @@ import dev.kord.x.emoji.Emojis
 import dev.schlaubi.musicbot.game.module.commands.formatPercentage
 import dev.schlaubi.musicbot.module.music.player.queue.getArtist
 import dev.schlaubi.musicbot.module.music.player.queue.spotifyUriToUrl
+import dev.schlaubi.musicbot.utils.effectiveAvatar
 
 fun EmbedBuilder.addPlayers(players: Map<UserBehavior, Boolean>) {
     field {
@@ -58,7 +59,7 @@ suspend fun EmbedBuilder.addUserStats(userBehavior: UserBehavior, stats: Statist
     author {
         val user = userBehavior.asUser()
         name = user.username
-        icon = user.avatar.url
+        icon = user.effectiveAvatar
     }
 
     field {

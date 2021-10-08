@@ -4,6 +4,7 @@ import com.kotlindiscord.kord.extensions.types.respond
 import dev.kord.rest.builder.message.create.embed
 import dev.schlaubi.musicbot.core.io.findUser
 import dev.schlaubi.musicbot.utils.database
+import dev.schlaubi.musicbot.utils.effectiveAvatar
 
 fun GDPRModule.requestCommand() = ephemeralSubCommand {
     name = "request"
@@ -15,7 +16,7 @@ fun GDPRModule.requestCommand() = ephemeralSubCommand {
                 val discordUser = user.asUser()
                 val botUser = database.users.findUser(discordUser)
                 author {
-                    icon = discordUser.avatar.url
+                    icon = discordUser.effectiveAvatar
                     name = translate("commands.gdpr.request.title", arrayOf(discordUser.username))
                 }
 

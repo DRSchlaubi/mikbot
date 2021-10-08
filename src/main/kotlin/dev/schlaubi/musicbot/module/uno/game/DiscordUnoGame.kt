@@ -6,10 +6,11 @@ import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
 import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.edit
-import dev.kord.core.behavior.interaction.followUpEphemeral
+import dev.kord.core.behavior.interaction.followUp
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.User
 import dev.kord.core.entity.interaction.EphemeralFollowupMessage
+import dev.kord.core.entity.interaction.PublicFollowupMessage
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.kord.rest.builder.message.modify.MessageModifyBuilder
@@ -77,7 +78,7 @@ class DiscordUnoGame(
     override suspend fun obtainNewPlayer(
         user: User,
         ack: EphemeralInteractionResponseBehavior,
-        loading: EphemeralFollowupMessage
+        loading: PublicFollowupMessage
     ): DiscordUnoPlayer = DiscordUnoPlayer(
         user,
         ack,
@@ -116,7 +117,7 @@ class DiscordUnoGame(
                         currentPlayer = game.nextPlayer()
                         currentPlayer!!.turn()
                     } catch (e: Exception) {
-                        currentPlayer!!.response.followUpEphemeral {
+                        currentPlayer!!.response.followUp(true) {
                             content = translate(currentPlayer!!.user, "uno.controls.failed")
                         }
                         currentPlayer!!.resendControls(null, overrideConfirm = true)

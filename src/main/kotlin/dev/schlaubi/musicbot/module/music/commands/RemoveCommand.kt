@@ -7,6 +7,7 @@ import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSla
 import com.kotlindiscord.kord.extensions.commands.application.slash.ephemeralSubCommand
 import com.kotlindiscord.kord.extensions.commands.converters.impl.int
 import com.kotlindiscord.kord.extensions.types.respond
+import dev.kord.common.entity.Snowflake
 import dev.schlaubi.musicbot.module.music.MusicModule
 import dev.schlaubi.musicbot.utils.safeGuild
 import kotlinx.coroutines.flow.filter
@@ -88,7 +89,7 @@ suspend fun MusicModule.removeCommand() = ephemeralControlSlashCommand {
         doRemove {
             val channel = musicPlayer.lastChannelId!!
             val users = safeGuild.voiceStates.filter {
-                it.channelId?.value == channel
+                it.channelId == Snowflake(channel)
             }
                 .map { it.userId }
                 .toList()

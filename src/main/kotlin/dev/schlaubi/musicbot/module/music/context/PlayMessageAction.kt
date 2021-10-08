@@ -21,7 +21,7 @@ suspend fun MusicModule.playMessageAction() = ephemeralMessageCommand {
     }
 
     action {
-        val query = event.interaction.messages!!.values.first().attachmentOrContentQuery
+        val query = event.interaction.messages.values.first().attachmentOrContentQuery
 
         val arguments = PlayMessageActionArguments(query)
 

@@ -11,6 +11,7 @@ import dev.schlaubi.musicbot.core.io.findUser
 import dev.schlaubi.musicbot.game.GameStats
 import dev.schlaubi.musicbot.game.module.GameModule
 import dev.schlaubi.musicbot.utils.database
+import dev.schlaubi.musicbot.utils.effectiveAvatar
 import org.litote.kmongo.div
 import org.litote.kmongo.gt
 
@@ -43,7 +44,7 @@ suspend fun GameModule<*, *>.profileCommand() = publicSubCommand(::UnoProfileArg
             embed {
                 author {
                     name = author?.username ?: "<crazy person>"
-                    icon = author?.avatar?.getUrl(Image.Size.Size256)
+                    icon = author?.effectiveAvatar
                 }
 
                 field {

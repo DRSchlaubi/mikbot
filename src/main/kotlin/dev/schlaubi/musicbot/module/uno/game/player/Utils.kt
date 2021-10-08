@@ -3,7 +3,7 @@ package dev.schlaubi.musicbot.module.uno.game.player
 import com.kotlindiscord.kord.extensions.utils.waitFor
 import dev.kord.core.behavior.interaction.FollowupMessageBehavior
 import dev.kord.core.behavior.interaction.edit
-import dev.kord.core.behavior.interaction.followUpEphemeral
+import dev.kord.core.behavior.interaction.followUp
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.schlaubi.musicbot.core.io.findUser
 import dev.schlaubi.musicbot.utils.MessageBuilder
@@ -21,7 +21,7 @@ suspend fun DiscordUnoPlayer.awaitResponse(
     doneTranslationKey: String,
     messageBuilder: MessageBuilder
 ): String? {
-    val message = response.followUpEphemeral { messageBuilder() }
+    val message = response.followUp(true) { messageBuilder() }
 
     val response = awaitResponse { message } ?: return null
 

@@ -4,8 +4,8 @@ import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.edit
-import dev.kord.core.behavior.interaction.followUpEphemeral
-import dev.kord.core.entity.interaction.EphemeralFollowupMessage
+import dev.kord.core.behavior.interaction.followUp
+import dev.kord.core.entity.interaction.PublicFollowupMessage
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.schlaubi.musicbot.game.confirmation
 import dev.schlaubi.musicbot.module.uno.game.DiscordUnoGame
@@ -28,7 +28,7 @@ const val allCardsButton = "request_all_cards"
 class DiscordUnoPlayer(
     override val user: UserBehavior,
     val response: EphemeralInteractionResponseBehavior,
-    var controls: EphemeralFollowupMessage,
+    var controls: PublicFollowupMessage,
     val game: DiscordUnoGame
 ) : Player(), GamePlayer {
     private var myTurn = false
@@ -42,7 +42,7 @@ class DiscordUnoPlayer(
 
     override fun forgotUno(game: Game<*>) {
         this.game.kord.launch {
-            response.followUpEphemeral {
+            response.followUp(true) {
                 content = translate("uno.general.forgot_uno")
             }
         }
@@ -93,7 +93,7 @@ class DiscordUnoPlayer(
             }
             allCardsButton -> {
                 val cards = deck.map { translate(it.translationKey) }.joinToString(", ")
-                response.followUpEphemeral {
+                response.followUp(true) {
                     content = cards.substring(0, 2000.coerceAtMost(cards.length))
                 }
                 return true
@@ -165,7 +165,7 @@ class DiscordUnoPlayer(
                 }.pin()
             }
 
-            controls = ack.followUpEphemeral {
+            controls = ack.followUp(true) {
                 content = translate("uno.controls.loading")
             }
             if (!justLoading) {

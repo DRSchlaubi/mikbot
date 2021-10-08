@@ -1,6 +1,6 @@
 package dev.schlaubi.musicbot.module.uno.game.player
 
-import dev.kord.core.behavior.interaction.followUpEphemeral
+import dev.kord.core.behavior.interaction.followUp
 import dev.schlaubi.uno.cards.Card
 import dev.schlaubi.uno.cards.PlayedCard
 
@@ -31,7 +31,7 @@ suspend fun DiscordUnoPlayer.displayableCards(): List<Pair<Card, Int>> {
         val diff = safeCards.size - cardLimit
         val brokenCards = safeCards.takeLast(diff)
         deck.removeAll(brokenCards.map { (card) -> card })
-        response.followUpEphemeral {
+        response.followUp(true) {
             content = translate("uno.controls.removed_cards", arrayOf(diff))
         }
         safeCards.dropLast(diff)

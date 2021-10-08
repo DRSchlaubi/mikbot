@@ -30,6 +30,7 @@ open class SongQuizPlaylistArguments : SongQuizSizeArguments() {
     val playlist by string("playlist", "The URL to the spotify playlist you want to quiz about")
 
     init {
+        // Fix optional argument size being before required argument playlist
         args.reverse()
     }
 }
@@ -87,7 +88,7 @@ class SongQuizModule : GameModule<SongQuizPlayer, SongQuizGame>() {
 
             TrackContainer(playlist, this.arguments.size)
         },
-        findGame@{ trackContainer, message, thread ->
+        { trackContainer, message, thread ->
             val game = SongQuizGame(
                 user,
                 this@SongQuizModule,

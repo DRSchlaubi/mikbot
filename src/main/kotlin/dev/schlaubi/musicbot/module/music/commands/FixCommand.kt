@@ -2,11 +2,8 @@ package dev.schlaubi.musicbot.module.music.commands
 
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.kord.common.entity.Permission
-import dev.kord.common.entity.optional.Optional
 import dev.kord.core.behavior.channel.edit
-import dev.kord.rest.json.request.ChannelModifyPatchRequest
 import dev.schlaubi.musicbot.module.music.MusicModule
-import dev.schlaubi.musicbot.module.uno.registerUno
 import dev.schlaubi.musicbot.utils.safeGuild
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.map

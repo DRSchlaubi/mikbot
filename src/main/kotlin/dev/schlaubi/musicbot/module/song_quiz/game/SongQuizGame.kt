@@ -30,6 +30,7 @@ import dev.schlaubi.musicbot.module.music.player.queue.spotifyUriToUrl
 import dev.schlaubi.musicbot.module.settings.BotUser
 import dev.schlaubi.musicbot.utils.componentLive
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.time.Duration
 
 private const val requestStats = "request_stats"
@@ -105,8 +106,8 @@ class SongQuizGame(
 
     @OptIn(KordPreview::class)
     override suspend fun end() {
-        if (!running) return
         musicPlayer.updateMusicChannelState(false)
+        if (!running) return
         val state = beforePlayerState
         if (state == null) {
             musicPlayer.disconnectAudio()
@@ -154,9 +155,11 @@ class SongQuizGame(
                 }
             }
 
-            delay(Duration.minutes(1))
-            message.edit { components = mutableListOf() }
-            live.shutDown()
+            kord.launch {
+                delay(Duration.minutes(1))
+                message.edit { components = mutableListOf() }
+                live.shutDown()
+            }
         }
     }
 

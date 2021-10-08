@@ -1,5 +1,6 @@
 package dev.schlaubi.musicbot.game.module.commands
 
+import com.kotlindiscord.kord.extensions.checks.isNotInThread
 import com.kotlindiscord.kord.extensions.checks.types.CheckContext
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.application.slash.PublicSlashCommandContext
@@ -68,6 +69,7 @@ fun <A : Arguments, G : AbstractGame<*>, Data> GameModule<*, G>.startGameCommand
     this.description = description
 
     check {
+        isNotInThread()
         // Required for pin()
         requireBotPermissions(Permission.ManageMessages, Permission.ManageThreads)
         additionalChecks()

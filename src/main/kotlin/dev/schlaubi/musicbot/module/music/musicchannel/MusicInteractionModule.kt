@@ -125,12 +125,12 @@ class MusicInteractionModule : Extension() {
                 inChannel(channelId)
 
                 ifPassing { // only respond if this check fails
-
-                    val player = musicModule.getMusicPlayer(guild)
-                    if (player.disableMusicChannel) return@ifPassing fail(translate("music.music_channel.disabled"))
+                    failIf(translate("music.music_channel.disabled", "music")) {
+                        val player = musicModule.getMusicPlayer(guild)
+                        player.disableMusicChannel
+                    }
 
                     joinSameChannelCheck(bot)
-
                     respondIfFailed()
                 }
             }
@@ -153,7 +153,7 @@ class MusicInteractionModule : Extension() {
 
                 if (tracks.isEmpty()) {
                     event.message
-                        .reply { content = translate("music.queue.no_matches") }
+                        .reply { content = translate("music.queue.no_matches", "music") }
                         .deleteAfterwards()
                 }
             }

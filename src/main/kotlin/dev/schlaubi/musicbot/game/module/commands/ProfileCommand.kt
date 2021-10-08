@@ -5,7 +5,6 @@ import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalUser
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.kord.common.annotation.KordExperimental
 import dev.kord.common.annotation.KordUnsafe
-import dev.kord.rest.Image
 import dev.kord.rest.builder.message.create.embed
 import dev.schlaubi.musicbot.core.io.findUser
 import dev.schlaubi.musicbot.game.GameStats

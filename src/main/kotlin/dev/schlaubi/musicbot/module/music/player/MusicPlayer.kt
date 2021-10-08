@@ -61,9 +61,11 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
         ?.let { guild.kord.getChannelOf<VoiceChannel>(Snowflake(it)) }
 
     fun updateMusicChannelState(to: Boolean) {
-        queue.clear()
-        playingTrack = null
-        updateMusicChannelMessage()
+        if (to) {
+            queue.clear()
+            playingTrack = null
+            updateMusicChannelMessage()
+        }
         disableMusicChannel = to
     }
 

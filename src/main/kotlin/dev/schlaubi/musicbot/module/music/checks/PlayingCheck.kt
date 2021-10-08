@@ -13,6 +13,6 @@ suspend fun <T : InteractionCreateEvent> CheckContext<T>.anyMusicPlaying(musicMo
     val guild = guildFor(event) ?: error("This check needs to also use anyGuild()")
     val player = musicModule.getMusicPlayer(guild)
     if (player.player.playingTrack == null) {
-        fail(translate("music.checks.not_playing"))
+        fail(translate("music.checks.not_playing", "music"))
     }
 }

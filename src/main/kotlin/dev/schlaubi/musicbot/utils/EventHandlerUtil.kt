@@ -6,6 +6,8 @@ import dev.kord.core.behavior.reply
 import dev.kord.core.event.Event
 import dev.kord.core.event.interaction.InteractionCreateEvent
 import dev.kord.core.event.message.MessageCreateEvent
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 /**
  * Responds with [CheckContext.message] if the check failed.
@@ -20,7 +22,10 @@ suspend fun <T : InteractionCreateEvent> CheckContext<T>.respondIfFailed() = res
  */
 @JvmName("respondIfFailedInMessageChannel")
 suspend fun CheckContext<MessageCreateEvent>.respondIfFailed() = respondIfFailed {
-    event.message.reply { content = it }.deleteAfterwards()
+    coroutineScope {
+        launch { event.message.deleteAfterwards() }
+        event.message.reply { content = it }.deleteAfterwards()
+    }
 }
 
 @JvmName("respondIfFailedGeneric")

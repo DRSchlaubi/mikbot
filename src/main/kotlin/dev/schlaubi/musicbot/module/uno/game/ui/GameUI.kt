@@ -1,10 +1,14 @@
 package dev.schlaubi.musicbot.module.uno.game.ui
 
+import dev.kord.common.Color
+import dev.kord.common.kColor
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.schlaubi.musicbot.game.translate
 import dev.schlaubi.musicbot.module.uno.game.DiscordUnoGame
 import dev.schlaubi.uno.Direction
+import dev.schlaubi.uno.UnoColor
 import java.util.Locale
+import java.awt.Color as JColor
 
 fun EmbedBuilder.welcomeMessage(uno: DiscordUnoGame) {
     with(uno) {
@@ -25,6 +29,7 @@ fun EmbedBuilder.welcomeMessage(uno: DiscordUnoGame) {
         }
 
         if (!running) return
+        color = game.topCard.color.kColor
         thumbnail {
             url = game.topCard.imageUrl
         }
@@ -67,3 +72,15 @@ fun EmbedBuilder.welcomeMessage(uno: DiscordUnoGame) {
         }
     }
 }
+
+private val UnoColor.kColor: Color
+    get() {
+        val jColor = when (this) {
+            UnoColor.RED -> JColor.RED
+            UnoColor.YELLOW -> JColor.YELLOW
+            UnoColor.BLUE -> JColor.BLUE
+            UnoColor.GREEN -> JColor.GREEN
+        }
+
+        return jColor.kColor
+    }

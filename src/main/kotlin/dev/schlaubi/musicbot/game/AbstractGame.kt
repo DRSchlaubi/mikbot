@@ -23,11 +23,15 @@ import dev.schlaubi.musicbot.game.events.watchThread
 import dev.schlaubi.musicbot.game.module.GameModule
 import dev.schlaubi.musicbot.module.settings.BotUser
 import dev.schlaubi.musicbot.module.uno.unregisterUno
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import kotlin.coroutines.CoroutineContext
 import kotlin.reflect.KProperty1
 
 /**
@@ -47,8 +51,9 @@ import kotlin.reflect.KProperty1
 abstract class AbstractGame<T : Player>(
     val host: UserBehavior,
     val module: GameModule<T, out AbstractGame<T>>
-) : KoinComponent {
+) : KoinComponent, CoroutineScope {
     val players: MutableList<T> = mutableListOf()
+    override val coroutineContext: CoroutineContext = Dispatchers.IO + SupervisorJob()
     private val leftPlayers = mutableListOf<T>()
 
     val database: Database by inject()
@@ -162,15 +167,17 @@ abstract class AbstractGame<T : Player>(
     /**
      * Starts the game.
      */
-    suspend fun doStart() {
-        running = true
-        coroutineScope {
-            gameJob = launch {
-                runGame()
+    fun doStart() {
+        launch {
+            running = true
+            coroutineScope {
+                gameJob = launch {
+                    runGame()
+                }
             }
-        }
-        if (!silentEnd) {
-            doEnd()
+            if (!silentEnd) {
+                doEnd()
+            }
         }
     }
 

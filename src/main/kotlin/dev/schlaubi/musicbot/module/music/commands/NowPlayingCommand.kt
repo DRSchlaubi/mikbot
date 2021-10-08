@@ -1,5 +1,6 @@
 package dev.schlaubi.musicbot.module.music.commands
 
+import com.kotlindiscord.kord.extensions.checks.guildFor
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalInt
 import com.kotlindiscord.kord.extensions.extensions.publicSlashCommand
@@ -21,6 +22,10 @@ suspend fun MusicModule.nowPlayingCommand() = publicSlashCommand(::NowPlayingArg
 
     check {
         anyMusicPlaying(this@nowPlayingCommand)
+        failIf(translate("commands.now_playing.cheat_attempt", "music")) {
+            val musicPlayer = getMusicPlayer(guildFor(event)!!)
+            musicPlayer.disableMusicChannel
+        }
     }
 
     action {

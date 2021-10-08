@@ -19,8 +19,10 @@ suspend fun MusicModule.fixCommand() = ephemeralControlSlashCommand {
         respond {
             val channel = musicPlayer.getChannel()!!
             val currentRegion = channel.rtcRegion
-            val availableRegions = (safeGuild.regions
-                .map { it.id }.toList() - (currentRegion ?: ""))
+            val availableRegions = (
+                safeGuild.regions
+                    .map { it.id }.toList() - (currentRegion ?: "")
+                )
             val fallbackRegion = availableRegions.random()
 
             // https://github.com/kordlib/kord/pull/413
@@ -30,7 +32,7 @@ suspend fun MusicModule.fixCommand() = ephemeralControlSlashCommand {
 //            delay(Duration.seconds(1))
 //            kord.rest.channel.patchChannel(
 //                channel.id,
-                // we do this manually, so we always encode the null
+            // we do this manually, so we always encode the null
 //                ChannelModifyPatchRequest(rtcRegion = Optional.Value(currentRegion))
 //            )
 

@@ -43,7 +43,12 @@ suspend fun SongQuizModule.spotifyPlaylistSongs() {
     )
     startGameCommand(
         "hits",
-        "Quiz about the globval 2021 hits",
+        "Quiz about the global 2021 hits",
         "https://open.spotify.com/playlist/3D0nhaU09v7mrIENPR35L1"
+    )
+    startGameCommand(
+        "neu",
+        "Eine neue Playlist für Deutschland, also sie war zumindest irgendwann mal neu",
+        "https://open.spotify.com/playlist/37i9dQZF1DX2cNqJ4LgCMf"
     )
 }

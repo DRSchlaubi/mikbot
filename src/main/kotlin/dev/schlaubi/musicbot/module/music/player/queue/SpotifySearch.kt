@@ -2,6 +2,7 @@ package dev.schlaubi.musicbot.module.music.player.queue
 
 import com.wrapper.spotify.SpotifyApi
 import com.wrapper.spotify.model_objects.specification.Artist
+import com.wrapper.spotify.model_objects.specification.Playlist
 import com.wrapper.spotify.model_objects.specification.TrackSimplified
 import com.wrapper.spotify.requests.AbstractRequest
 import dev.schlaubi.lavakord.audio.Link
@@ -12,6 +13,8 @@ import dev.schlaubi.musicbot.config.Config
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import org.apache.http.client.utils.URIBuilder
@@ -72,7 +75,7 @@ private suspend fun buildPlaylist(link: Link, matchResult: MatchResult): List<Tr
 
     val tracks = playlist.tracks.items
 
-    return tracks.mapToTracks(link) {
+    return tracks.mapToTracks(link, maxConcurrentRequests = 5) {
         it.track.id?.let { id ->
             val track = api().getTrack(id).build().await()
 
@@ -81,20 +84,34 @@ private suspend fun buildPlaylist(link: Link, matchResult: MatchResult): List<Tr
     }
 }
 
-suspend fun getPlaylist(playlistId: String) = api().getPlaylist(playlistId).build().await()
+suspend fun getPlaylist(playlistId: String): Playlist = api().getPlaylist(playlistId).build().await()
 
 @JvmRecord
 private data class IndexedTrack(val index: Int, val track: Track)
 
-private suspend fun <T> Array<T>.mapToTracks(link: Link, mapper: suspend (T) -> NamedTrack): List<Track> {
+private suspend fun <T> Array<T>.mapToTracks(
+    link: Link,
+    maxConcurrentRequests: Int? = null,
+    mapper: suspend (T) -> NamedTrack
+): List<Track> {
     val list = ArrayList<IndexedTrack>(size)
+
+    val semaphore = maxConcurrentRequests?.let { Semaphore(it) }
 
     coroutineScope {
         forEachIndexed { index, it ->
             launch {
-                val found = mapper(it).findTrack(link)
-                if (found != null) {
-                    list.add(IndexedTrack(index, found))
+                val block = suspend {
+                    val found = mapper(it).findTrack(link)
+                    if (found != null) {
+                        list.add(IndexedTrack(index, found))
+                    }
+                }
+
+                if (semaphore != null) {
+                    semaphore.withPermit { block() }
+                } else {
+                    block()
                 }
             }
         }

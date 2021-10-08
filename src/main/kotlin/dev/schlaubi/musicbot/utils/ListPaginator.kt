@@ -30,8 +30,8 @@ suspend fun <T> PaginatorBuilder.forList(
     enumerate: Boolean = true,
     additionalConfig: suspend PaginatorBuilder.() -> Unit = {},
     additionalPageConfig: suspend EmbedBuilder.() -> Unit = {},
-) = forList(user, items.size, { offset, end ->
-    items.subList(offset, end)
+) = forList(user, items.size, { offset, limit ->
+    items.subList(offset, (offset + limit).coerceAtMost(items.size))
 }, mapper, title, chunkSize, enumerate, additionalConfig, additionalPageConfig)
 
 /**
@@ -77,10 +77,10 @@ private suspend fun <T> PaginatorBuilder.forList(
     var currentIndexOffset = 0
 
     repeat(ceil(size / chunkSize.toDouble()).toInt()) {
-        val items = subList(currentIndexOffset, currentIndexOffset + chunkSize)
+        val items = subList(currentIndexOffset, chunkSize)
         addPage(currentIndexOffset, title, items, enumerate, mapper, additionalPageConfig)
 
-        currentIndexOffset += size
+        currentIndexOffset += items.size
     }
 
     additionalConfig()

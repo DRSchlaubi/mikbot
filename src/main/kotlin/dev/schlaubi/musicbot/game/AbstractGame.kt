@@ -22,7 +22,6 @@ import dev.schlaubi.musicbot.game.events.interactionHandler
 import dev.schlaubi.musicbot.game.events.watchThread
 import dev.schlaubi.musicbot.game.module.GameModule
 import dev.schlaubi.musicbot.module.settings.BotUser
-import dev.schlaubi.musicbot.module.uno.unregisterUno
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -227,7 +226,6 @@ abstract class AbstractGame<T : Player>(
         }
         interactionListener.cancel()
         threadWatcher.cancel()
-        unregisterUno(thread.id)
     }
 
     /**

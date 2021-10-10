@@ -15,7 +15,7 @@ fun EmbedBuilder.welcomeMessage(uno: DiscordUnoGame) {
         if (players.isNotEmpty()) {
             field {
                 val actualPlayers =
-                    if (running && game.direction == Direction.COUNTER_CLOCKWISE) players.reversed() else players
+                    if (!flashMode && running && game.direction == Direction.COUNTER_CLOCKWISE) players.reversed() else players
                 name = "Players"
                 value = actualPlayers.joinToString(", ") {
                     val mention = it.user.mention
@@ -40,10 +40,12 @@ fun EmbedBuilder.welcomeMessage(uno: DiscordUnoGame) {
             inline = true
         }
 
-        field {
-            name = "Current Player"
-            value = game.getNextPlayer().user.mention
-            inline = true
+        if (!flashMode) {
+            field {
+                name = "Current Player"
+                value = game.getNextPlayer().user.mention
+                inline = true
+            }
         }
 
         if (game.drawCardSum >= 1) {

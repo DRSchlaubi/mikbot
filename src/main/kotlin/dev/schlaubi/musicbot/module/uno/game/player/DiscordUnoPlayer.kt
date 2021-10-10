@@ -34,6 +34,16 @@ class DiscordUnoPlayer(
     private var myTurn = false
     internal var drawn = false
 
+    override fun onSkip() {
+        if (game.flashMode) {
+            game.launch {
+                response.followUp(true) {
+                    content = translate("uno.flash.skipped")
+                }
+            }
+        }
+    }
+
     override fun onWin(place: Int) {
         game.kord.launch {
             game.thread.createMessage("${user.mention} finished the game!")

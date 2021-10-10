@@ -41,7 +41,10 @@ class DiscordUnoGame(
     module: UnoModule,
     override val welcomeMessage: Message,
     override val thread: ThreadChannelBehavior,
-    override val translationsProvider: TranslationsProvider
+    override val translationsProvider: TranslationsProvider,
+    val extremeMode: Boolean,
+    val flashMode: Boolean,
+    val allowDropIns: Boolean
 ) : AbstractGame<DiscordUnoPlayer>(host, module) {
     lateinit var game: Game<DiscordUnoPlayer>
         internal set
@@ -102,7 +105,7 @@ class DiscordUnoGame(
     }
 
     override suspend fun runGame() {
-        game = Game(players)
+        game = Game(players, extremeMode, flashMode)
 
         players.forEach {
             it.updateControls(false)
@@ -123,6 +126,9 @@ class DiscordUnoGame(
                         LOG.error(e) { "Error occurred whilst updating game" }
                     }
                     doUpdateWelcomeMessage()
+                    if (allowDropIns) {
+                        checkForDropIns()
+                    }
                 }
             }
             doUpdateWelcomeMessage()

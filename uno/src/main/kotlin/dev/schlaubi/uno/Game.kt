@@ -13,6 +13,7 @@ import dev.schlaubi.uno.cards.WildCardDraw4
 import dev.schlaubi.uno.exceptions.CardDoesntMatchException
 import dev.schlaubi.uno.exceptions.PlayerDoesNotHaveCardException
 import java.util.LinkedList
+import kotlin.random.Random
 
 /**
  * The direction in which the game is going.
@@ -49,7 +50,7 @@ public open class Player {
     public open fun onSkip(): Unit = Unit
 
     /**
-     * FUnction called when the player forgot to say uno in [game].
+     * Function called when the player forgot to say uno in [game].
      */
     public open fun forgotUno(game: Game<*>): Unit = Unit
 
@@ -93,13 +94,19 @@ public open class Player {
  * @property players the [Players][Player] which are currently still in the game
  * @property wonPlayers [Players][Player] which already finished the game
  * @property direction the [Direction] in which the game is going
+ * @property extreme enable extreme mode (60% of the times you draw no cards, but if you do you can draw up to 5)
+ * @property flash enable flash mode (Player sequence is completely random)
  */
-public class Game<T : Player>(initialPlayers: List<T>) {
-    private val deck = LinkedList(defaultUnoDeck)
-    private val playerSequence = PlayerSequence()
+public class Game<T : Player>(initialPlayers: List<T>, public val extreme: Boolean = false, flash: Boolean = false) {
+    private val playerSequence: PlayerSequence<T> = if (flash) FlashPlayerSequence() else NormalPlayerSequence()
+    private val deck = LinkedList(with(playerSequence) {
+        // e.g no skip/reverse in flash mode
+        defaultUnoDeck.filterIncompatbile()
+    })
     private val playedDeck: MutableList<PlayedCard> = mutableListOf()
     private val _players = ArrayList(initialPlayers)
-    private val _wonPlayers = ArrayList<T>(initialPlayers.size - 1) // last player cannot win
+    // last player cannot win
+    private val _wonPlayers = ArrayList<T>(initialPlayers.size - 1)
 
     public var direction: Direction = Direction.CLOCKWISE
     public val players: List<T> get() = _players.toList()
@@ -116,7 +123,10 @@ public class Game<T : Player>(initialPlayers: List<T>) {
         // Hand out each player's initial cards
         players.forEach {
             it.deck = mutableListOf()
-            drawCards(it, 7)
+            handOutCards(it, 7)
+            UnoColor.values().forEach { color ->
+                it.deck.add(SimpleCard(1, color))
+            }
         }
 
         // Poll first card
@@ -172,6 +182,12 @@ public class Game<T : Player>(initialPlayers: List<T>) {
     public fun removePlayer(player: Player): Boolean =
         _players.remove(player)
 
+    public fun dropIn(player: Player, card: PlayedCard) {
+        if (topCard != card) throw CardDoesntMatchException(topCard, card)
+        playerSequence.lastIndex = _players.indexOf(player)
+        playCard(player, card)
+    }
+
     internal fun playCard(player: Player, card: PlayedCard) {
         // Check card matches
         if (!card.canBePlayedOn(topCard)) throw CardDoesntMatchException(topCard, card)
@@ -221,9 +237,25 @@ public class Game<T : Player>(initialPlayers: List<T>) {
     }
 
     internal fun drawCards(player: Player, cards: Int) {
-        if (drawCardSum >= 1 && cards != drawCardSum) {
+        if (extreme) {
+            repeat(drawCardSum.coerceAtLeast(1)) {
+                extremeDrawCards(player)
+            }
+        } else if (drawCardSum >= 1 && cards != drawCardSum) {
             return drawSummedCards(player)
+        } else {
+            handOutCards(player, cards)
         }
+    }
+
+    private fun extremeDrawCards(player: Player) {
+        val random = Random.nextInt(1, 100)
+        if (random > 65) return // 65% chance, I don't actually know if this is 65% chance because I suck at math, but let's just hope it is
+        handOutCards(player, Random.nextInt(1, 6))
+    }
+
+    private fun handOutCards(player: Player, cards: Int) {
+
         // Grab cards from played deck if this deck is empty
         if (cards > deck.size) {
             deck.addAll(playedDeck.shuffled())
@@ -233,8 +265,8 @@ public class Game<T : Player>(initialPlayers: List<T>) {
         player.deck.addAll(drawedCards)
     }
 
-    private inner class PlayerSequence : Iterator<T> {
-        var lastIndex = -1
+    private inner class NormalPlayerSequence : PlayerSequence<T> {
+        override var lastIndex = -1
 
         // Winning players get removed => only one player left means game ended
         override fun hasNext(): Boolean = _players.size > 1
@@ -252,7 +284,7 @@ public class Game<T : Player>(initialPlayers: List<T>) {
             return players[lastIndex] // if index is broken re-coerce it
         }
 
-        fun nextWithoutProgress(): T {
+        override fun nextWithoutProgress(): T {
             val indexNow = lastIndex
             val player = nextPlayer()
             lastIndex = indexNow
@@ -260,6 +292,33 @@ public class Game<T : Player>(initialPlayers: List<T>) {
             return player
         }
     }
+
+    /**
+     * Sequence selecting players completely random, simmilar to the UNO variant UNO flash
+     */
+    private inner class FlashPlayerSequence : PlayerSequence<T> {
+        // Winning players get removed => only one player left means game ended
+        override fun hasNext(): Boolean = _players.size > 1
+
+        override var lastIndex = -1
+
+        override fun next(): T = _players.random()
+
+        override fun nextWithoutProgress() =
+            throw UnsupportedOperationException("Next player isn't known in flash mode!")
+
+        override fun List<Card>.filterIncompatbile() = filterNot { it is SkipCard }
+
+    }
+}
+
+private interface PlayerSequence<T : Player> : Iterator<T> {
+    var lastIndex: Int
+
+    fun nextWithoutProgress(): T
+
+    fun List<Card>.filterIncompatbile() = this
+
 }
 
 /**

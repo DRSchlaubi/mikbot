@@ -33,6 +33,7 @@ val AbstractWildCard.imageUrl: String
         }
         is WildCard -> "$BASE_CDN/wild/wild.png"
         is DrawingCard -> "$BASE_CDN/wild/draw4.png"
+        else -> error("Could not find image for card: $this")
     }
 
 val ColoredCard.imageUrl: String

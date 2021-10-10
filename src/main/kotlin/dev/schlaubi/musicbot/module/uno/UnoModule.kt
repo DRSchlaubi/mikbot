@@ -1,6 +1,7 @@
 package dev.schlaubi.musicbot.module.uno
 
 import com.kotlindiscord.kord.extensions.commands.Arguments
+import com.kotlindiscord.kord.extensions.commands.converters.impl.defaultingBoolean
 import dev.kord.common.annotation.KordExperimental
 import dev.kord.common.annotation.KordUnsafe
 import dev.kord.gateway.Intent
@@ -16,6 +17,16 @@ import dev.schlaubi.musicbot.module.uno.game.DiscordUnoGame
 import dev.schlaubi.musicbot.module.uno.game.player.DiscordUnoPlayer
 import kotlin.reflect.KProperty1
 
+class UnoArguments : Arguments() {
+    val extreme by defaultingBoolean(
+        "extreme",
+        "Extreme mode (65% of the times, you draw 0 cards, but you can draw up to 6 cards at once)",
+        false
+    )
+    val flash by defaultingBoolean("flash", "Flash mode (Player order is completely random)", false)
+    val dropIns by defaultingBoolean("drop_ins", "Enable or disaable drop-ins (Default: disabled)", false)
+}
+
 class UnoModule : GameModule<DiscordUnoPlayer, DiscordUnoGame>() {
     override val name: String = "uno"
     override val bundle: String = "uno"
@@ -29,9 +40,12 @@ class UnoModule : GameModule<DiscordUnoPlayer, DiscordUnoGame>() {
         startGameCommand(
             "uno.game.title",
             "uno-game",
-            ::Arguments,
+            ::UnoArguments,
             { welcomeMessage, thread ->
-                DiscordUnoGame(user, this@UnoModule, welcomeMessage, thread, translationsProvider)
+                DiscordUnoGame(
+                    user, this@UnoModule, welcomeMessage, thread, translationsProvider,
+                    arguments.extreme, arguments.flash, arguments.dropIns
+                )
             }
         )
         stopGameCommand()

@@ -3,6 +3,7 @@ package dev.schlaubi.musicbot.module.uno.game
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
 import dev.kord.common.entity.ButtonStyle
 import dev.kord.core.behavior.UserBehavior
+import dev.kord.core.behavior.channel.createEmbed
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
 import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.edit
@@ -145,6 +146,15 @@ class DiscordUnoGame(
 
         if (players.size == 1) {
             game.forceWin(players.first())
+        }
+
+        if (flashMode) {
+            thread.createEmbed {
+                title = "Turns"
+                description =
+                    players.sortedBy(DiscordUnoPlayer::turns)
+                        .joinToString("\n") { "${it.user.mention} - ${it.turns}" }
+            }
         }
     }
 }

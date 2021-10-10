@@ -33,6 +33,8 @@ class DiscordUnoPlayer(
 ) : Player(), GamePlayer {
     private var myTurn = false
     internal var drawn = false
+    var turns: Int = 0
+        private set
 
     override fun onSkip() {
         if (game.flashMode) {
@@ -88,6 +90,7 @@ class DiscordUnoPlayer(
     private suspend fun endTurn() {
         updateControls(false)
         drawn = false
+        turns++
     }
 
     private suspend fun normalPlay(cardName: String): Boolean {

@@ -9,6 +9,7 @@ import dev.schlaubi.musicbot.game.Player
 import dev.schlaubi.musicbot.game.leaveGameButton
 import dev.schlaubi.musicbot.module.uno.game.joinGameButton
 import dev.schlaubi.musicbot.module.uno.game.startGameButton
+import kotlinx.coroutines.launch
 
 internal fun <T : Player> AbstractGame<T>.interactionHandler() = kord.on<ComponentInteractionCreateEvent> {
     if (interaction.message?.id != welcomeMessage.id) return@on
@@ -29,7 +30,9 @@ internal fun <T : Player> AbstractGame<T>.interactionHandler() = kord.on<Compone
             }
 
             interaction.acknowledgeEphemeralDeferredMessageUpdate()
-            doStart()
+            launch {
+                doStart()
+            }
         }
         leaveGameButton -> {
             interaction.acknowledgeEphemeralDeferredMessageUpdate()

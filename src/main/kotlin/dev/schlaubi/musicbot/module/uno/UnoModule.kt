@@ -24,7 +24,7 @@ class UnoArguments : Arguments() {
         false
     )
     val flash by defaultingBoolean("flash", "Flash mode (Player order is completely random)", false)
-    val dropIns by defaultingBoolean("drop_ins", "Enable or disaable drop-ins (Default: disabled)", false)
+    val dropIns by defaultingBoolean("drop_ins", "Enable or disable drop-ins (Default: disabled)", false)
 }
 
 class UnoModule : GameModule<DiscordUnoPlayer, DiscordUnoGame>() {

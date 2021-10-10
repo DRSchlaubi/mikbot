@@ -11,6 +11,7 @@ import dev.kord.core.behavior.interaction.followUp
 import dev.kord.x.emoji.Emojis
 import dev.schlaubi.musicbot.module.uno.game.player.DiscordUnoPlayer
 import dev.schlaubi.musicbot.module.uno.game.player.translate
+import dev.schlaubi.musicbot.module.uno.game.player.updateControls
 import dev.schlaubi.musicbot.module.uno.game.ui.translationKey
 import dev.schlaubi.uno.cards.PlayedCard
 import kotlinx.coroutines.CompletableDeferred
@@ -65,7 +66,7 @@ private class DropInContext(val game: DiscordUnoGame, val players: List<Pair<Dis
 
     private fun end() {
         messages.forEach { (player, message) ->
-            if (player != wonPlayer) {
+            if (player.user != wonPlayer?.user) {
                 game.launch {
                     message.edit {
                         components = mutableListOf()
@@ -78,11 +79,12 @@ private class DropInContext(val game: DiscordUnoGame, val players: List<Pair<Dis
         completer.complete(Unit)
     }
 
-    fun dropIn(player: DiscordUnoPlayer, card: PlayedCard) {
+    suspend fun dropIn(player: DiscordUnoPlayer, card: PlayedCard) {
         if (wonPlayer != null) return
         wonPlayer = player
         timeout.cancel()
         game.game.dropIn(player, card)
+        player.updateControls(false)
         end()
     }
 }

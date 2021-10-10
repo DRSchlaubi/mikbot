@@ -40,10 +40,16 @@ fun EmbedBuilder.welcomeMessage(uno: DiscordUnoGame) {
             inline = true
         }
 
-        if (!flashMode) {
+        field {
+            name = "Current Player"
+            value = currentPlayer?.user?.mention.toString()
+            inline = true
+        }
+
+        if (nextPlayer != null) {
             field {
-                name = "Current Player"
-                value = game.getNextPlayer().user.mention
+                name = "Next Player"
+                value = nextPlayer?.user?.mention.toString()
                 inline = true
             }
         }

@@ -97,7 +97,7 @@ public open class Player {
  * @property extreme enable extreme mode (60% of the times you draw no cards, but if you do you can draw up to 5)
  * @property flash enable flash mode (Player sequence is completely random)
  */
-public class Game<T : Player>(initialPlayers: List<T>, public val extreme: Boolean = false, flash: Boolean = false) {
+public class Game<T : Player>(initialPlayers: List<T>, private val extreme: Boolean = false, flash: Boolean = false) {
     private val playerSequence: PlayerSequence<T> = if (flash) FlashPlayerSequence() else NormalPlayerSequence()
     private val deck = LinkedList(with(playerSequence) {
         // e.g no skip/reverse in flash mode
@@ -105,6 +105,7 @@ public class Game<T : Player>(initialPlayers: List<T>, public val extreme: Boole
     })
     private val playedDeck: MutableList<PlayedCard> = mutableListOf()
     private val _players = ArrayList(initialPlayers)
+
     // last player cannot win
     private val _wonPlayers = ArrayList<T>(initialPlayers.size - 1)
 
@@ -124,9 +125,6 @@ public class Game<T : Player>(initialPlayers: List<T>, public val extreme: Boole
         players.forEach {
             it.deck = mutableListOf()
             handOutCards(it, 7)
-            UnoColor.values().forEach { color ->
-                it.deck.add(SimpleCard(1, color))
-            }
         }
 
         // Poll first card
@@ -185,6 +183,7 @@ public class Game<T : Player>(initialPlayers: List<T>, public val extreme: Boole
 
     public fun dropIn(player: Player, card: PlayedCard) {
         if (topCard != card) throw CardDoesntMatchException(topCard, card)
+        if (player.deck.size == 2) player.uno()
         player.playCard(this, card)
         playerSequence.lastIndex = _players.indexOf(player)
     }
@@ -200,7 +199,6 @@ public class Game<T : Player>(initialPlayers: List<T>, public val extreme: Boole
         }
 
         // Play card
-
         if (card is ActionCard) {
             card.applyToGame(this)
         }
@@ -256,7 +254,6 @@ public class Game<T : Player>(initialPlayers: List<T>, public val extreme: Boole
     }
 
     private fun handOutCards(player: Player, cards: Int) {
-
         // Grab cards from played deck if this deck is empty
         if (cards > deck.size) {
             deck.addAll(playedDeck.shuffled())

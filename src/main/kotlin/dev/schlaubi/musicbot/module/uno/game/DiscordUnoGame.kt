@@ -52,6 +52,8 @@ class DiscordUnoGame(
     override val wonPlayers: List<DiscordUnoPlayer>
         get() = game.wonPlayers
 
+    var nextPlayer: DiscordUnoPlayer? = null
+        private set
     override val playerRange: IntRange = 2..10
     internal var currentTurn: Job? = null
     internal var currentPlayer: DiscordUnoPlayer? = null
@@ -117,7 +119,8 @@ class DiscordUnoGame(
             coroutineScope {
                 currentTurn = launch {
                     try {
-                        currentPlayer = game.nextPlayer()
+                        currentPlayer = nextPlayer ?: game.nextPlayer()
+                        nextPlayer = game.nextPlayer()
                         currentPlayer!!.turn()
                     } catch (e: Exception) {
                         currentPlayer!!.response.followUp(true) {

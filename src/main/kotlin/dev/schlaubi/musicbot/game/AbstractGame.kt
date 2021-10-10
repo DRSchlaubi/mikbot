@@ -27,11 +27,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import kotlin.coroutines.CoroutineContext
 import kotlin.reflect.KProperty1
+import kotlin.time.Duration
 
 /**
  * Abstract implementation of a game.
@@ -220,9 +222,12 @@ abstract class AbstractGame<T : Player>(
             }
         }
 
-        thread.edit {
-            reason = "Game ended"
-            archived = true
+        launch {
+            delay(Duration.minutes(2)) // delay so users cann discuss game end and click the stats button
+            thread.edit {
+                reason = "Game ended"
+                archived = true
+            }
         }
         interactionListener.cancel()
         threadWatcher.cancel()

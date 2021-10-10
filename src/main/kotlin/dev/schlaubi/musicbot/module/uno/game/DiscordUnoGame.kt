@@ -119,6 +119,12 @@ class DiscordUnoGame(
             lastPlayer = currentPlayer
             currentPlayer = nextPlayer ?: game.nextPlayer()
             nextPlayer = game.nextPlayer()
+            // if the previously elected next player won the last turn
+            // we need to elect a new player
+            if (nextPlayer in game.wonPlayers) {
+                currentPlayer = nextPlayer!!
+                nextPlayer = game.nextPlayer()
+            }
             doUpdateWelcomeMessage()
             coroutineScope {
                 currentTurn = launch {

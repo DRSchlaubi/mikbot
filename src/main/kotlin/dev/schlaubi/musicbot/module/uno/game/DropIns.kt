@@ -22,6 +22,7 @@ import kotlin.random.Random
 import kotlin.time.Duration
 
 private val LOG = KotlinLogging.logger { }
+private val timeoutDuration = Duration.seconds(5)
 
 suspend fun DiscordUnoGame.checkForDropIns() {
     if (allowDropIns && players.size > 2) { // drop-ins, don't make sense with 2 players
@@ -47,6 +48,7 @@ private class DropInContext(val game: DiscordUnoGame, val players: List<Pair<Dis
     lateinit var messages: List<Pair<DiscordUnoPlayer, FollowupMessageBehavior>>
     private var completer = CompletableDeferred<Unit>()
     private lateinit var timeout: Job
+    private var wonPlayer: DiscordUnoPlayer? = null
 
     suspend fun initialize(): CompletableDeferred<Unit> {
         messages = players.map { (player, card) ->
@@ -54,7 +56,7 @@ private class DropInContext(val game: DiscordUnoGame, val players: List<Pair<Dis
         }
 
         timeout = game.launch {
-            delay(Duration.seconds(5))
+            delay(timeoutDuration)
             end()
         }
 
@@ -63,10 +65,12 @@ private class DropInContext(val game: DiscordUnoGame, val players: List<Pair<Dis
 
     private fun end() {
         messages.forEach { (player, message) ->
-            game.launch {
-                message.edit {
-                    components = mutableListOf()
-                    content = player.translate("uno.controls.drop_in.over")
+            if (player != wonPlayer) {
+                game.launch {
+                    message.edit {
+                        components = mutableListOf()
+                        content = player.translate("uno.controls.drop_in.over")
+                    }
                 }
             }
         }
@@ -75,6 +79,8 @@ private class DropInContext(val game: DiscordUnoGame, val players: List<Pair<Dis
     }
 
     fun dropIn(player: DiscordUnoPlayer, card: PlayedCard) {
+        if (wonPlayer != null) return
+        wonPlayer = player
         timeout.cancel()
         game.game.dropIn(player, card)
         end()
@@ -84,9 +90,9 @@ private class DropInContext(val game: DiscordUnoGame, val players: List<Pair<Dis
 private suspend fun DiscordUnoPlayer.dropIn(context: DropInContext, card: PlayedCard) = response.followUp(true) {
     content = translate("uno.controls.drop_in.title", translate(card.translationKey))
 
-    components {
+    components(timeoutDuration) {
         val correct = Random.nextInt(0, 3)
-        repeat(3) {
+        repeat(4) {
             if (correct == it) {
                 ephemeralButton {
                     style = ButtonStyle.Primary

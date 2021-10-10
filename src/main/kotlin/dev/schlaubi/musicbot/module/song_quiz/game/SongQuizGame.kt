@@ -117,6 +117,12 @@ class SongQuizGame(
             state.applyToPlayer(musicPlayer)
         }
         doUpdateWelcomeMessage()
+        launch {
+            endStats()
+        }
+    }
+
+    private suspend fun endStats() {
         if (players.isNotEmpty() && running) {
             val message = thread.createMessage {
                 embed {
@@ -155,11 +161,9 @@ class SongQuizGame(
                 }
             }
 
-            kord.launch {
-                delay(Duration.minutes(1))
-                message.edit { components = mutableListOf() }
-                live.shutDown()
-            }
+            delay(Duration.minutes(1))
+            message.edit { components = mutableListOf() }
+            live.shutDown()
         }
     }
 

@@ -158,7 +158,8 @@ public class Game<T : Player>(initialPlayers: List<T>, public val extreme: Boole
     public fun reverse() {
         direction = !direction
         if (players.size == 2) {
-            skipPlayer() // If there are only 2 players, reverse essentially means skip
+            // If there are only 2 players, reverse essentially means skip
+            nextPlayer()
         }
     }
 
@@ -307,7 +308,7 @@ public class Game<T : Player>(initialPlayers: List<T>, public val extreme: Boole
         override fun nextWithoutProgress() =
             throw UnsupportedOperationException("Next player isn't known in flash mode!")
 
-        override fun List<Card>.filterIncompatbile() = filterNot { it is SkipCard }
+        override fun List<Card>.filterIncompatbile() = filterNot { it is ReverseCard }
 
     }
 }

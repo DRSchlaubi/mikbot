@@ -52,6 +52,7 @@ class DiscordUnoGame(
     override val wonPlayers: List<DiscordUnoPlayer>
         get() = game.wonPlayers
 
+    var lastPlayer: DiscordUnoPlayer? = null
     var nextPlayer: DiscordUnoPlayer? = null
         private set
     override val playerRange: IntRange = 2..10
@@ -115,12 +116,13 @@ class DiscordUnoGame(
         }
 
         while (game.gameRunning) {
+            lastPlayer = currentPlayer
+            currentPlayer = nextPlayer ?: game.nextPlayer()
+            nextPlayer = game.nextPlayer()
             doUpdateWelcomeMessage()
             coroutineScope {
                 currentTurn = launch {
                     try {
-                        currentPlayer = nextPlayer ?: game.nextPlayer()
-                        nextPlayer = game.nextPlayer()
                         currentPlayer!!.turn()
                     } catch (e: Exception) {
                         currentPlayer!!.response.followUp(true) {

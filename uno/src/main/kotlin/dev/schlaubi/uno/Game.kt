@@ -251,6 +251,7 @@ public class Game<T : Player>(initialPlayers: List<T>, private val extreme: Bool
         val random = Random.nextInt(1, 100)
         if (random < 65) return // 65% chance, I don't actually know if this is 65% chance because I suck at math, but let's just hope it is
         handOutCards(player, Random.nextInt(1, 4))
+        drawCardSum = 0
     }
 
     private fun handOutCards(player: Player, cards: Int) {

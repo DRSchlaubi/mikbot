@@ -3,6 +3,7 @@ package dev.schlaubi.musicbot.module.uno.game
 import com.kotlindiscord.kord.extensions.components.components
 import com.kotlindiscord.kord.extensions.components.disabledButton
 import com.kotlindiscord.kord.extensions.components.ephemeralButton
+import com.kotlindiscord.kord.extensions.types.respond
 import dev.kord.common.entity.ButtonStyle
 import dev.kord.common.entity.DiscordPartialEmoji
 import dev.kord.core.behavior.interaction.FollowupMessageBehavior
@@ -103,6 +104,8 @@ private suspend fun DiscordUnoPlayer.dropIn(context: DropInContext, card: Played
 
                     action {
                         context.dropIn(this@dropIn, card)
+
+                        respond { content = translate("uno.controls.drop_in.success") }
                     }
                 }
             } else {

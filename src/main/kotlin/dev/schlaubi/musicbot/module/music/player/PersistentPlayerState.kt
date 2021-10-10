@@ -34,7 +34,7 @@ data class PersistentPlayerState(
         musicPlayer.queuedTracks,
         musicPlayer.playingTrack,
         musicPlayer.filters,
-        SchedulerSettings(musicPlayer.shuffle, musicPlayer.loopQueue, musicPlayer.repeat),
+        SchedulerSettings(musicPlayer.loopQueue, musicPlayer.repeat, musicPlayer.shuffle),
         musicPlayer.player.paused,
         musicPlayer.player.position
     )

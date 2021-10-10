@@ -36,7 +36,7 @@ fun EmbedBuilder.welcomeMessage(uno: DiscordUnoGame) {
 
         field {
             name = "Last Player"
-            value = currentPlayer?.user?.mention ?: "No one"
+            value = lastPlayer?.user?.mention ?: "No one"
             inline = true
         }
 

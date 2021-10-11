@@ -189,8 +189,8 @@ public class Game<T : Player>(initialPlayers: List<T>, private val extreme: Bool
     public fun dropIn(player: Player, card: PlayedCard) {
         if (topCard != card) throw CardDoesntMatchException(topCard, card)
         if (player.deck.size == 2) player.uno()
-        player.playCard(this, card)
         playerSequence.lastIndex = _players.indexOf(player)
+        player.playCard(this, card)
     }
 
     internal fun playCard(player: Player, card: PlayedCard) {

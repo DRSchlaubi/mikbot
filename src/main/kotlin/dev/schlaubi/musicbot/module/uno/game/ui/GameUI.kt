@@ -28,6 +28,7 @@ fun EmbedBuilder.welcomeMessage(uno: DiscordUnoGame) {
             }
         }
 
+        if (!running) return
         if (wonPlayers.isNotEmpty()) {
             field {
                 name = "Won players"
@@ -35,7 +36,6 @@ fun EmbedBuilder.welcomeMessage(uno: DiscordUnoGame) {
             }
         }
 
-        if (!running) return
         color = game.topCard.color.kColor
         thumbnail {
             url = game.topCard.imageUrl

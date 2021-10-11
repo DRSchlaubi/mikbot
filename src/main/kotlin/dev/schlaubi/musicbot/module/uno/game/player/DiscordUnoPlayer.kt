@@ -49,6 +49,10 @@ class DiscordUnoPlayer(
     override fun onWin(place: Int) {
         game.kord.launch {
             game.thread.createMessage("${user.mention} finished the game!")
+            controls.edit {
+                components = mutableListOf()
+                content = translate("uno.controls.won")
+            }
         }
     }
 

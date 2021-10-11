@@ -29,6 +29,7 @@ import dev.schlaubi.musicbot.module.music.player.applyToPlayer
 import dev.schlaubi.musicbot.module.music.player.queue.spotifyUriToUrl
 import dev.schlaubi.musicbot.module.settings.BotUser
 import dev.schlaubi.musicbot.utils.componentLive
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration
@@ -138,7 +139,7 @@ class SongQuizGame(
                     }
                 }
             }
-            val live = message.componentLive(message.kord)
+            val live = message.componentLive()
             live.onInteraction {
                 val user = interaction.user
                 val winner = wonPlayers.firstOrNull()?.user
@@ -164,7 +165,7 @@ class SongQuizGame(
 
             delay(Duration.minutes(1))
             message.edit { components = mutableListOf() }
-            live.shutDown()
+            live.cancel()
         }
     }
 

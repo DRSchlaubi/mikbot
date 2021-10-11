@@ -7,7 +7,6 @@ import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.behavior.edit
 import dev.kord.core.behavior.interaction.respondEphemeral
 import dev.kord.rest.builder.message.create.actionRow
-import dev.kord.rest.builder.message.create.embed
 import dev.kord.rest.builder.message.modify.embed
 import dev.schlaubi.musicbot.game.translate
 import dev.schlaubi.musicbot.module.music.player.queue.findTrack
@@ -55,7 +54,7 @@ suspend fun SongQuizGame.turn(track: Track) {
         }
 
         job = launch {
-            val liveMessage = message.componentLive(this)
+            val liveMessage = message.componentLive()
             launch { // this blocks this scope until we cancel it
                 delay(Duration.seconds(30))
                 endTurn()

@@ -75,7 +75,7 @@ private suspend fun buildPlaylist(link: Link, matchResult: MatchResult): List<Tr
 
     val tracks = playlist?.tracks?.items ?: return emptyList()
 
-    return tracks.mapToTracks(link, maxConcurrentRequests = 5) {
+    return tracks.mapToTracks(link, maxConcurrentRequests = 3) {
         it.track.id?.let { id ->
             val track = api().getTrack(id).build().await()
 

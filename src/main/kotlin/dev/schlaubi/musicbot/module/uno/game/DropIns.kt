@@ -104,7 +104,10 @@ private suspend fun DiscordUnoPlayer.dropIn(context: DropInContext, card: Played
 
                     action {
                         context.dropIn(this@dropIn, card)
-                        edit { content = translate("uno.controls.drop_in.success") }
+                        edit {
+                            components = mutableListOf()
+                            content = translate("uno.controls.drop_in.success", "uno")
+                        }
                     }
                 }
             } else {

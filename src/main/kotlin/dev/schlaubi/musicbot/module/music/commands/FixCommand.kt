@@ -31,7 +31,7 @@ suspend fun MusicModule.fixCommand() = ephemeralControlSlashCommand {
             channel.edit {
                 rtcRegion = fallbackRegion
             }
-            delay(Duration.seconds(1))
+            delay(Duration.seconds(5))
             channel.edit {
                 rtcRegion = currentRegion
             }

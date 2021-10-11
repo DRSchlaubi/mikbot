@@ -15,7 +15,7 @@ fun EmbedBuilder.welcomeMessage(uno: DiscordUnoGame) {
         if (players.isNotEmpty()) {
             field {
                 val actualPlayers =
-                    if (!flashMode && running && game.direction == Direction.COUNTER_CLOCKWISE) players.reversed() else players
+                    if (!flashMode && running && game.direction == Direction.COUNTER_CLOCKWISE) game.players.reversed() else game.players
                 name = "Players"
                 value = actualPlayers.joinToString(", ") {
                     val mention = it.user.mention
@@ -25,6 +25,13 @@ fun EmbedBuilder.welcomeMessage(uno: DiscordUnoGame) {
                         mention
                     }
                 }
+            }
+        }
+
+        if (wonPlayers.isNotEmpty()) {
+            field {
+                name = "Won players"
+                value = wonPlayers.joinToString(", ") { it.user.mention }
             }
         }
 

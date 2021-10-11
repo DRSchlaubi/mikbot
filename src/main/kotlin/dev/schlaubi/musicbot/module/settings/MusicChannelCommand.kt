@@ -43,7 +43,7 @@ private class MusicChannelArguments : Arguments() {
             throw DiscordRelayedException(translate("commands.musicchannel.notextchannel", arrayOf(value.data.name)))
         }
 
-        val botPermissions = (value as TextChannel).getEffectivePermissions(value.kord.selfId)
+        val botPermissions = (value.fetchChannel() as TextChannel).getEffectivePermissions(value.kord.selfId)
         if (Permission.ManageMessages !in botPermissions) {
             throw DiscordRelayedException(translate("command.music_channel.chnnal_missing_perms"))
         }
@@ -78,7 +78,7 @@ suspend fun SettingsModule.musicChannel() {
                 }
             }
 
-            val textChannel = (arguments.channel as TextChannel)
+            val textChannel = (arguments.channel.fetchChannel() as TextChannel)
                 // disable the cache for this one, because message caching has issues
                 .withStrategy(EntitySupplyStrategy.rest)
 

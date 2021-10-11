@@ -22,7 +22,7 @@ data class PersistentPlayerState(
     val channelId: Snowflake,
     val queue: List<@Contextual QueuedTrack>,
     @Contextual // this is a playingTrack which contains the current position
-    val currenTrack: QueuedTrack?,
+    val currentTrack: QueuedTrack?,
     val filters: SerializableFilters?,
     val schedulerOptions: SchedulerSettings,
     val paused: Boolean,
@@ -41,8 +41,9 @@ data class PersistentPlayerState(
 
     suspend fun applyToPlayer(musicPlayer: MusicPlayer) {
         filters?.applyToPlayer(musicPlayer.player)
-        if (currenTrack != null) {
-            musicPlayer.queueTrack(force = true, onTop = false, tracks = listOf(currenTrack))
+        if (currentTrack != null) {
+            musicPlayer.playingTrack = currentTrack
+            musicPlayer.queueTrack(force = true, onTop = false, tracks = listOf(currentTrack))
         }
         musicPlayer.queueTrack(force = false, onTop = false, tracks = queue)
         musicPlayer.player.seekTo(position)

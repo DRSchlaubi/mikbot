@@ -53,8 +53,8 @@ class DiscordUnoGame(
         get() = game.wonPlayers
 
     var lastPlayer: DiscordUnoPlayer? = null
-    var nextPlayer: DiscordUnoPlayer? = null
-        private set
+    val nextPlayer: DiscordUnoPlayer get() = game.getNextPlayer()
+
     override val playerRange: IntRange = 2..10
     internal var currentTurn: Job? = null
     internal var currentPlayer: DiscordUnoPlayer? = null
@@ -117,14 +117,7 @@ class DiscordUnoGame(
 
         while (game.gameRunning) {
             lastPlayer = currentPlayer
-            currentPlayer = nextPlayer ?: game.nextPlayer()
-            nextPlayer = game.nextPlayer()
-            // if the previously elected next player won the last turn
-            // we need to elect a new player
-            if (nextPlayer in game.wonPlayers) {
-                currentPlayer = nextPlayer!!
-                nextPlayer = game.nextPlayer()
-            }
+            currentPlayer = game.nextPlayer()
             doUpdateWelcomeMessage()
             coroutineScope {
                 currentTurn = launch {

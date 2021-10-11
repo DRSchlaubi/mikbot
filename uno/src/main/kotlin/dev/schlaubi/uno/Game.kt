@@ -134,6 +134,11 @@ public class Game<T : Player>(initialPlayers: List<T>, private val extreme: Bool
     }
 
     /**
+     * The index of the last player, having a turn.
+     */
+    public val lastPlayerIndex: Int get() = playerSequence.lastIndex
+
+    /**
      * Whether this game is still running or not.
      */
     public val gameRunning: Boolean

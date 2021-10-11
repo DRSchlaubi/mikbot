@@ -155,6 +155,8 @@ class DiscordUnoGame(
             }
         }
 
+        if (!running) return
+
         if (players.size == 1) {
             game.forceWin(players.first())
         }

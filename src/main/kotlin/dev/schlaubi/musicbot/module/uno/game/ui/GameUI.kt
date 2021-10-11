@@ -14,7 +14,7 @@ fun EmbedBuilder.welcomeMessage(uno: DiscordUnoGame) {
     with(uno) {
         if (players.isNotEmpty()) {
             field {
-                val playingPlayers = players - wonPlayers
+                val playingPlayers = if (running) game.players else players
                 val actualPlayers =
                     if (!flashMode && running && game.direction == Direction.COUNTER_CLOCKWISE) {
                         playingPlayers.reversed()

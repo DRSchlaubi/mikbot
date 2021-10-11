@@ -10,11 +10,11 @@ import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
 import dev.kord.core.behavior.edit
 import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.edit
-import dev.kord.core.behavior.interaction.followUp
+import dev.kord.core.behavior.interaction.ephemeralFollowup
 import dev.kord.core.behavior.interaction.respondEphemeral
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.User
-import dev.kord.core.entity.interaction.PublicFollowupMessage
+import dev.kord.core.entity.interaction.InteractionFollowup
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.kord.rest.builder.message.create.actionRow
@@ -64,7 +64,7 @@ class SongQuizGame(
     override suspend fun obtainNewPlayer(
         user: User,
         ack: EphemeralInteractionResponseBehavior,
-        loading: PublicFollowupMessage
+        loading: InteractionFollowup
     ): SongQuizPlayer =
         SongQuizPlayer(user).also {
             loading.edit { content = translate(user, "song_quiz.controls.joined") }
@@ -80,7 +80,7 @@ class SongQuizGame(
         val member = player.user.asMember(thread.guild.id)
         val voiceState = member.getVoiceStateOrNull()
         if (voiceState?.channelId != musicPlayer.lastChannelId?.let { Snowflake(it) }) {
-            ack.followUp(true) {
+            ack.ephemeralFollowup {
                 content = translate(
                     player.user,
                     "song_quiz.controls.not_in_vc",
@@ -122,6 +122,7 @@ class SongQuizGame(
         }
     }
 
+    @OptIn(KordPreview::class)
     private suspend fun endStats() {
         if (players.isNotEmpty() && running) {
             val message = thread.createMessage {

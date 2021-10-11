@@ -26,7 +26,6 @@ fun Arguments.unSetableBoolean(
 fun Arguments.optionalUnSetableBoolean(
     displayName: String,
     description: String,
-    outputError: Boolean = false,
     validator: Validator<String?> = null
 ) = unSettableBooleanString(displayName, description, validator).map {
     it?.let { UnSetableBoolean.valueOf(it.uppercase()) }

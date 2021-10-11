@@ -1,6 +1,6 @@
 package dev.schlaubi.musicbot.game.events
 
-import dev.kord.core.behavior.interaction.followUp
+import dev.kord.core.behavior.interaction.ephemeralFollowup
 import dev.kord.core.behavior.interaction.respondEphemeral
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.core.on
@@ -46,7 +46,7 @@ internal fun <T : Player> AbstractGame<T>.interactionHandler() = kord.on<Compone
                 onRejoin(this, existingPlayer)
             } else {
                 val ack = interaction.acknowledgeEphemeral()
-                val loading = ack.followUp(true) { content = "Waiting for game to start" }
+                val loading = ack.ephemeralFollowup { content = "Waiting for game to start" }
                 val player = obtainNewPlayer(interaction.user, ack, loading)
                 players.add(player)
                 onJoin(ack, player)

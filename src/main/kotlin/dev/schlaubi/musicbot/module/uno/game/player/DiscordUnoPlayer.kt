@@ -4,8 +4,8 @@ import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.edit
-import dev.kord.core.behavior.interaction.followUp
-import dev.kord.core.entity.interaction.PublicFollowupMessage
+import dev.kord.core.behavior.interaction.ephemeralFollowup
+import dev.kord.core.entity.interaction.InteractionFollowup
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.schlaubi.musicbot.game.confirmation
 import dev.schlaubi.musicbot.module.uno.game.DiscordUnoGame
@@ -28,7 +28,7 @@ const val allCardsButton = "request_all_cards"
 class DiscordUnoPlayer(
     override val user: UserBehavior,
     val response: EphemeralInteractionResponseBehavior,
-    var controls: PublicFollowupMessage,
+    var controls: InteractionFollowup,
     val game: DiscordUnoGame
 ) : Player(), GamePlayer {
     private var myTurn = false
@@ -39,7 +39,7 @@ class DiscordUnoPlayer(
     override fun onSkip() {
         if (game.flashMode) {
             game.launch {
-                response.followUp(true) {
+                response.ephemeralFollowup {
                     content = translate("uno.flash.skipped")
                 }
             }
@@ -58,7 +58,7 @@ class DiscordUnoPlayer(
 
     override fun forgotUno(game: Game<*>) {
         this.game.kord.launch {
-            response.followUp(true) {
+            response.ephemeralFollowup {
                 content = translate("uno.general.forgot_uno")
             }
         }
@@ -110,7 +110,7 @@ class DiscordUnoPlayer(
             }
             allCardsButton -> {
                 val cards = deck.map { translate(it.translationKey) }.joinToString(", ")
-                response.followUp(true) {
+                response.ephemeralFollowup {
                     content = cards.substring(0, 2000.coerceAtMost(cards.length))
                 }
                 return true
@@ -182,7 +182,7 @@ class DiscordUnoPlayer(
                 }.pin()
             }
 
-            controls = ack.followUp(true) {
+            controls = ack.ephemeralFollowup {
                 content = translate("uno.controls.loading")
             }
             if (!justLoading) {

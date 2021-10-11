@@ -7,10 +7,10 @@ import dev.kord.core.behavior.channel.createEmbed
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
 import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.edit
-import dev.kord.core.behavior.interaction.followUp
+import dev.kord.core.behavior.interaction.ephemeralFollowup
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.User
-import dev.kord.core.entity.interaction.PublicFollowupMessage
+import dev.kord.core.entity.interaction.InteractionFollowup
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.kord.rest.builder.message.modify.MessageModifyBuilder
@@ -43,7 +43,7 @@ class DiscordUnoGame(
     override val welcomeMessage: Message,
     override val thread: ThreadChannelBehavior,
     override val translationsProvider: TranslationsProvider,
-    val extremeMode: Boolean,
+    private val extremeMode: Boolean,
     val flashMode: Boolean,
     val allowDropIns: Boolean
 ) : AbstractGame<DiscordUnoPlayer>(host, module) {
@@ -84,7 +84,7 @@ class DiscordUnoGame(
     override suspend fun obtainNewPlayer(
         user: User,
         ack: EphemeralInteractionResponseBehavior,
-        loading: PublicFollowupMessage
+        loading: InteractionFollowup
     ): DiscordUnoPlayer = DiscordUnoPlayer(
         user,
         ack,
@@ -124,7 +124,7 @@ class DiscordUnoGame(
                     try {
                         currentPlayer!!.turn()
                     } catch (e: Exception) {
-                        currentPlayer!!.response.followUp(true) {
+                        currentPlayer!!.response.ephemeralFollowup {
                             content = translate(currentPlayer!!.user, "uno.controls.failed")
                         }
                         currentPlayer!!.resendControls(null, overrideConfirm = true)

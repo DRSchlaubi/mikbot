@@ -96,7 +96,7 @@ suspend fun SettingsModule.musicChannel() {
                 }
             }
 
-            val message = (arguments.channel as TextChannel).createMessage {
+            val message = textChannel.createMessage {
                 content = translate("settings.loading")
             }
 

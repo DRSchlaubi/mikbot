@@ -27,7 +27,7 @@ private val LOG = KotlinLogging.logger { }
 private val timeoutDuration = Duration.seconds(5)
 
 suspend fun DiscordUnoGame.checkForDropIns() {
-    if (allowDropIns && players.size > 2) { // drop-ins, don't make sense with 2 players
+    if (allowDropIns) {
         doDropInCheck()
     }
 }

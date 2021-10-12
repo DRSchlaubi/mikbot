@@ -3,7 +3,7 @@ package dev.schlaubi.musicbot.game
 import com.kotlindiscord.kord.extensions.i18n.SupportedLocales
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
-import dev.kord.core.behavior.interaction.ephemeralFollowup
+import dev.kord.core.behavior.interaction.followUpEphemeral
 import dev.schlaubi.musicbot.core.io.findUser
 import dev.schlaubi.musicbot.module.settings.BotUser
 import dev.schlaubi.musicbot.utils.MessageBuilder
@@ -13,7 +13,7 @@ import kotlin.reflect.KProperty1
 suspend fun AbstractGame<*>.confirmation(ack: EphemeralInteractionResponseBehavior, messageBuilder: MessageBuilder) =
     dev.schlaubi.musicbot.utils.confirmation(
         {
-            ack.ephemeralFollowup { it() }
+            ack.followUpEphemeral { it() }
         },
         messageBuilder = messageBuilder,
         translate = translationsProvider::translate

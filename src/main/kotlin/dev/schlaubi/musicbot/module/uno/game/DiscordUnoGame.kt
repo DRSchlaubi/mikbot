@@ -7,7 +7,7 @@ import dev.kord.core.behavior.channel.createEmbed
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
 import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.edit
-import dev.kord.core.behavior.interaction.ephemeralFollowup
+import dev.kord.core.behavior.interaction.followUpEphemeral
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.User
 import dev.kord.core.entity.interaction.InteractionFollowup
@@ -124,7 +124,7 @@ class DiscordUnoGame(
                     try {
                         currentPlayer!!.turn()
                     } catch (e: Exception) {
-                        currentPlayer!!.response.ephemeralFollowup {
+                        currentPlayer!!.response.followUpEphemeral {
                             content = translate(currentPlayer!!.user, "uno.controls.failed")
                         }
                         currentPlayer!!.resendControls(null, overrideConfirm = true)

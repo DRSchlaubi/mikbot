@@ -4,7 +4,7 @@ import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.edit
-import dev.kord.core.behavior.interaction.ephemeralFollowup
+import dev.kord.core.behavior.interaction.followUpEphemeral
 import dev.kord.core.entity.interaction.InteractionFollowup
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.schlaubi.musicbot.game.confirmation
@@ -39,7 +39,7 @@ class DiscordUnoPlayer(
     override fun onSkip() {
         if (game.flashMode) {
             game.launch {
-                response.ephemeralFollowup {
+                response.followUpEphemeral {
                     content = translate("uno.flash.skipped")
                 }
             }
@@ -58,7 +58,7 @@ class DiscordUnoPlayer(
 
     override fun forgotUno(game: Game<*>) {
         this.game.kord.launch {
-            response.ephemeralFollowup {
+            response.followUpEphemeral {
                 content = translate("uno.general.forgot_uno")
             }
         }
@@ -110,7 +110,7 @@ class DiscordUnoPlayer(
             }
             allCardsButton -> {
                 val cards = deck.map { translate(it.translationKey) }.joinToString(", ")
-                response.ephemeralFollowup {
+                response.followUpEphemeral {
                     content = cards.substring(0, 2000.coerceAtMost(cards.length))
                 }
                 return true
@@ -182,7 +182,7 @@ class DiscordUnoPlayer(
                 }.pin()
             }
 
-            controls = ack.ephemeralFollowup {
+            controls = ack.followUpEphemeral {
                 content = translate("uno.controls.loading")
             }
             if (!justLoading) {

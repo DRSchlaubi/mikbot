@@ -7,7 +7,7 @@ import com.kotlindiscord.kord.extensions.extensions.event
 import dev.kord.core.behavior.channel.MessageChannelBehavior
 import dev.kord.core.behavior.channel.withTyping
 import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
-import dev.kord.core.behavior.interaction.ephemeralFollowup
+import dev.kord.core.behavior.interaction.followUpEphemeral
 import dev.kord.core.behavior.reply
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.core.event.message.MessageCreateEvent
@@ -212,7 +212,7 @@ private suspend fun EphemeralInteractionResponseBehavior.confirmation(
     translate: Translator
 ): Confirmation = dev.schlaubi.musicbot.utils.confirmation(
     {
-        ephemeralFollowup { it() }
+        followUpEphemeral { it() }
     },
     messageBuilder = messageBuilder,
     translate = translate,

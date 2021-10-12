@@ -8,7 +8,7 @@ import dev.kord.common.entity.ButtonStyle
 import dev.kord.common.entity.DiscordPartialEmoji
 import dev.kord.core.behavior.interaction.FollowupMessageBehavior
 import dev.kord.core.behavior.interaction.edit
-import dev.kord.core.behavior.interaction.ephemeralFollowup
+import dev.kord.core.behavior.interaction.followUpEphemeral
 import dev.kord.x.emoji.Emojis
 import dev.schlaubi.musicbot.module.uno.game.player.DiscordUnoPlayer
 import dev.schlaubi.musicbot.module.uno.game.player.translate
@@ -90,7 +90,7 @@ private class DropInContext(val game: DiscordUnoGame, val players: List<Pair<Dis
     }
 }
 
-private suspend fun DiscordUnoPlayer.dropIn(context: DropInContext, card: PlayedCard) = response.ephemeralFollowup {
+private suspend fun DiscordUnoPlayer.dropIn(context: DropInContext, card: PlayedCard) = response.followUpEphemeral {
     content = translate("uno.controls.drop_in.title", translate(card.translationKey))
 
     components(timeoutDuration) {

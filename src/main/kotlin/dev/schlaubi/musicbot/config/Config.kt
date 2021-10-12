@@ -21,7 +21,7 @@ object Config : EnvironmentConfig("") {
     val MONGO_URL by environment
     val MONGO_DATABASE by environment
 
-    val TEST_GUILD by getEnv { it.toLong() }.optional()
+    val TEST_GUILD by getEnv { Snowflake(it) }.optional()
 
     val SPOTIFY_CLIENT_ID by getEnv("")
     val SPOTIFY_CLIENT_SECRET by getEnv("")

@@ -10,7 +10,7 @@ import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
 import dev.kord.core.behavior.edit
 import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.edit
-import dev.kord.core.behavior.interaction.ephemeralFollowup
+import dev.kord.core.behavior.interaction.followUpEphemeral
 import dev.kord.core.behavior.interaction.respondEphemeral
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.User
@@ -81,7 +81,7 @@ class SongQuizGame(
         val member = player.user.asMember(thread.guild.id)
         val voiceState = member.getVoiceStateOrNull()
         if (voiceState?.channelId != musicPlayer.lastChannelId?.let { Snowflake(it) }) {
-            ack.ephemeralFollowup {
+            ack.followUpEphemeral {
                 content = translate(
                     player.user,
                     "song_quiz.controls.not_in_vc",

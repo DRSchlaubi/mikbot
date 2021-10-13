@@ -19,7 +19,7 @@ suspend fun MusicModule.commands() {
     clearCommand()
     fixCommand()
 
-    if (Config.KSOFT_TOKEN != null) {
+    if (Config.HAPPI_KEY != null) {
         lyricsCommand()
     }
 }

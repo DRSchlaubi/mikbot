@@ -6,8 +6,9 @@ import com.kotlindiscord.kord.extensions.extensions.publicSlashCommand
 import com.kotlindiscord.kord.extensions.types.editingPaginator
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.musicbot.module.music.MusicModule
-import dev.schlaubi.musicbot.utils.KSoftUtil
+import dev.schlaubi.musicbot.utils.fetchLyrics
 import dev.schlaubi.musicbot.utils.forList
+import dev.schlaubi.musicbot.utils.searchHappiSong
 import dev.schlaubi.musicbot.utils.splitIntoPages
 
 class LyricsArguments : Arguments() {
@@ -15,11 +16,12 @@ class LyricsArguments : Arguments() {
 }
 
 suspend fun MusicModule.lyricsCommand() = publicSlashCommand(::LyricsArguments) {
+    name = "lyrics"
+    description = "Displays the lyrics for the current song or the specified query"
 
     action {
-        val query = arguments.name ?: player.playingTrack?.let {
-            it.title + " - " + it.author
-        }
+        val query = arguments.name ?: player.playingTrack?.title
+            ?.replace("\\(.+(?!\\))".toRegex(), "") // replace anything in brackets like (official music video)
 
         if (query == null) {
             respond {
@@ -28,24 +30,25 @@ suspend fun MusicModule.lyricsCommand() = publicSlashCommand(::LyricsArguments) 
 
             return@action
         }
-        val lyrics = KSoftUtil.searchForLyric(query)
-        if (lyrics == null) {
+        val trackResponse = searchHappiSong(query)
+        if (trackResponse.length != 1) {
             respond {
                 content = translate("command.lyrics.no_lyrics")
             }
-
             return@action
         }
+        val track = trackResponse.result!!.first()
+        val lyrics = track.fetchLyrics().result!!
 
         val lines = lyrics.lyrics.lines()
         val paged = lines.splitIntoPages(2000)
 
         editingPaginator {
-            forList(user, paged, { it }, { _, _ -> lyrics.name }) {
+            forList(user, paged, { it }, { _, _ -> track.track }) {
                 footer {
-                    text = "Source: KSoft"
+                    text = "© ${lyrics.copyrightLabel} | ${lyrics.copyrightNotice}"
                 }
             }
-        }
+        }.send()
     }
 }

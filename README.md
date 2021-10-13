@@ -59,6 +59,7 @@ REDEPLOY_HOST=<>
 REDEPLOY_TOKEN=<>
 BOT_OWNERS=416902379598774273
 OWNER_GUILD=<>
+HAPPI_KEY=<token from happi.dev for lyrics>
 ```
 
 </details>

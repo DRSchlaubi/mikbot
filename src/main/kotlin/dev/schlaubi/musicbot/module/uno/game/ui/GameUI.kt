@@ -58,11 +58,11 @@ fun EmbedBuilder.welcomeMessage(uno: DiscordUnoGame) {
             inline = true
         }
 
-            field {
-                name = "Next Player"
-                value = nextPlayer.user.mention
-                inline = true
-            }
+        field {
+            name = "Next Player"
+            value = nextPlayer.user.mention
+            inline = true
+        }
 
         if (game.drawCardSum >= 1) {
             field {

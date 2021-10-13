@@ -65,7 +65,6 @@ class MusicModule : Extension() {
     override suspend fun setup() {
         slashCommandCheck {
             anyGuild() // Disable this commands in DMs
-            musicControlCheck() // checks voice connection etc.
         }
 
         commands()

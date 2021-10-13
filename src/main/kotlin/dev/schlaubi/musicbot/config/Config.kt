@@ -7,6 +7,8 @@ import dev.schlaubi.envconf.getEnv
 import dev.schlaubi.envconf.Config as EnvironmentConfig
 
 object Config : EnvironmentConfig("") {
+
+    val HAPPI_KEY by environment.optional()
     val OWNER_GUILD by getEnv { Snowflake(it) }.optional()
     val BOT_OWNERS by getEnv(emptyList()) { it.split(",").map { id -> Snowflake(id) } }
     val REDEPLOY_HOST by environment.optional()
@@ -33,7 +35,6 @@ object Config : EnvironmentConfig("") {
     val VERIFY_SERVER_URL by getEnv("http://127.0.0.1")
     val VERIFY_CLIENT_ID by environment.optional()
     val VERIFY_CLIENT_SECRET by environment.optional()
-    val KSOFT_TOKEN by environment.optional()
 }
 
 @Suppress("unused")

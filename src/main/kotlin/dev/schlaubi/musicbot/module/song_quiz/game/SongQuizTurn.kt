@@ -128,11 +128,27 @@ private fun SongQuizGame.decideTurnParameters(track: Track): GuessContext {
         )
         GuessingMode.ARTIST -> {
             val artistName = track.artists.first().name
-            GuessContext(
-                trackContainer.pollArtistNames(artistName),
-                artistName,
-                "Guess the Artist of this song"
-            )
+            val fillerArtists = trackContainer.pollArtistNames(artistName)
+
+            if (trackContainer.artistCount < 4) {
+                val nonNullNames = fillerArtists.filterNotNull()
+                val correctArtistPool = generateSequence { artistName }
+                    .mapIndexed { index, artist -> "$artist #${index + 1}" }
+                    .take(4 - nonNullNames.size) // repeat correct option to fill for missing once and choose the correct one at random
+                    .toList()
+
+                GuessContext(
+                    nonNullNames + correctArtistPool,
+                    correctArtistPool.random(), // See comment at correctArtistPool
+                    "Looks like you wanted to cheat, by using a playlist whith less than 4 artists in it, so have fun guessing"
+                )
+            } else {
+                GuessContext(
+                    fillerArtists,
+                    artistName,
+                    "Guess the Artist of this song"
+                )
+            }
         }
     }
 }

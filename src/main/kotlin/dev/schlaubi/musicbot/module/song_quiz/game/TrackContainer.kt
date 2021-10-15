@@ -17,6 +17,9 @@ class TrackContainer private constructor(
     private val allArtists = ArrayList(artistPool)
     private val allSongs = ArrayList(songNamePool)
 
+    public val artistCount: Int
+        get() = allArtists.size
+
     fun pollArtistNames(blacklist: String, amount: Int = 3): List<String> =
         artistPool.poll(allArtists, blacklist, amount)
 

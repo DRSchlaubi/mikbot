@@ -2,6 +2,11 @@ package dev.schlaubi.musicbot.module.song_quiz
 
 suspend fun SongQuizModule.spotifyPlaylistSongs() {
     startGameCommand(
+        "dont",
+        "Just don't ask questions",
+        "https://open.spotify.com/playlist/2jcBlzxl8ZErijuZzF78N0"
+    )
+    startGameCommand(
         "shit",
         "Quiz about music I was listening to back in 2017",
         "https://open.spotify.com/playlist/6s2CcoPOwavAGSqnypq4Pt"

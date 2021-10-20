@@ -88,7 +88,7 @@ private suspend fun FollowupMessageModifyBuilder.addCards(
         actionRow {
             it.forEach { (card, index) ->
                 interactionButton(card.buttonStyle, "play_card_$index") {
-                    emoji = DiscordPartialEmoji(id = Snowflake(card.emoji))
+                    emoji = DiscordPartialEmoji(id = Snowflake(card.emoji), name = "1")
                     label = discordUnoPlayer.translate(card.translationKey)
                     disabled = !active || !card.canBePlayedOn(discordUnoPlayer.game.game.topCard)
                 }

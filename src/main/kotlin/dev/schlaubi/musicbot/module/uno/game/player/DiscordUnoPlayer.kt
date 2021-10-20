@@ -14,6 +14,7 @@ import dev.schlaubi.musicbot.utils.deleteAfterwards
 import dev.schlaubi.uno.Game
 import dev.schlaubi.uno.Player
 import dev.schlaubi.uno.cards.AbstractWildCard
+import dev.schlaubi.uno.cards.DiscardAllCardsCard
 import kotlinx.coroutines.launch
 import kotlin.time.Duration
 import dev.schlaubi.musicbot.game.Player as GamePlayer
@@ -119,6 +120,10 @@ class DiscordUnoPlayer(
             else -> {
                 val cardId = cardName.substringAfter("play_card_").toInt()
                 val card = deck[cardId]
+                if (card is DiscardAllCardsCard) {
+                    uno() // you cannot say uno unless having two cards, so we just auto-uno here
+                }
+
                 if (card is AbstractWildCard && deck.size != 1) { // ignore pick on last card
                     val color = pickWildCardColor()
                     playCard(game.game, card, color)

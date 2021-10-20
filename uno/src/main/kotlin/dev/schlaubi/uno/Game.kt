@@ -2,6 +2,7 @@ package dev.schlaubi.uno
 
 import dev.schlaubi.uno.cards.ActionCard
 import dev.schlaubi.uno.cards.Card
+import dev.schlaubi.uno.cards.DiscardAllCardsCard
 import dev.schlaubi.uno.cards.DrawTwoCard
 import dev.schlaubi.uno.cards.DrawingCard
 import dev.schlaubi.uno.cards.PlayedCard
@@ -80,20 +81,14 @@ public open class Player {
  * @property flash enable flash mode (Player sequence is completely random)
  */
 public class Game<T : Player>(
-        initialPlayers: List<T>,
-        private val extreme: Boolean = false,
-        flash: Boolean = false
+    initialPlayers: List<T>,
+    private val extreme: Boolean = false,
+    flash: Boolean = false
 ) {
     private val playerSequence: PlayerSequence<T> =
-            if (flash) FlashPlayerSequence() else NormalPlayerSequence()
-    private val deck =
-            LinkedList(
-                    with(playerSequence) {
-                        // e.g no skip/reverse in flash mode
-                        defaultUnoDeck.filterIncompatbile()
-                    }
-            )
-    private val playedDeck: MutableList<PlayedCard> = mutableListOf()
+        if (flash) FlashPlayerSequence() else NormalPlayerSequence()
+    private val deck = getDefaultUnoDeck(extreme, flash)
+    internal val playedDeck: MutableList<PlayedCard> = mutableListOf()
     private val _players = ArrayList(initialPlayers)
 
     // last player cannot win
@@ -118,6 +113,8 @@ public class Game<T : Player>(
         players.forEach {
             it.deck = mutableListOf()
             handOutCards(it, 7)
+            val cards = UnoColor.values().map { DiscardAllCardsCard(it) }
+            it.deck.addAll(cards)
         }
 
         // Poll first card
@@ -182,7 +179,7 @@ public class Game<T : Player>(
 
         // Play card
         if (card is ActionCard) {
-            card.applyToGame(this)
+            card.applyToGame(this, player)
         }
         if (card is DrawingCard) {
             if (card.canStackWith(topCard)) {
@@ -229,7 +226,7 @@ public class Game<T : Player>(
     private fun extremeDrawCards(player: Player) {
         val random = Random.nextInt(1, 100)
         if (random < 65)
-                return // 65% chance, I don't actually know if this is 65% chance because I suck at
+            return // 65% chance, I don't actually know if this is 65% chance because I suck at
         // math, but let's just hope it is
         handOutCards(player, Random.nextInt(1, 4))
         drawCardSum = 0
@@ -286,8 +283,6 @@ public class Game<T : Player>(
         override fun next(): T = nextPlayer?.also { nextPlayer = null } ?: _players.random()
 
         override fun nextWithoutProgress(): T = nextPlayer ?: next().also { nextPlayer = it }
-
-        override fun List<Card>.filterIncompatbile() = filterNot { it is ReverseCard }
     }
 }
 
@@ -295,8 +290,30 @@ private interface PlayerSequence<T : Player> : Iterator<T> {
     var lastIndex: Int
 
     fun nextWithoutProgress(): T
+}
 
-    fun List<Card>.filterIncompatbile() = this
+@OptIn(ExperimentalStdlibApi::class)
+private val extremeDeck: List<Card> = buildList(UnoColor.values().size * 2) {
+    UnoColor.values().forEach { color ->
+        repeat(2) {
+            add(DiscardAllCardsCard(color))
+        }
+    }
+}
+
+/**
+ * Provides a [LinkedList] containing all cards applicable for the specified rules.
+ */
+public fun getDefaultUnoDeck(extreme: Boolean, flash: Boolean): LinkedList<Card> {
+    val deck = LinkedList(defaultUnoDeck)
+    if (extreme) {
+        deck.addAll(extremeDeck)
+    }
+    if (flash) {
+        deck.removeIf { it is ReverseCard }
+    }
+
+    return deck
 }
 
 /**
@@ -306,27 +323,27 @@ private interface PlayerSequence<T : Player> : Iterator<T> {
  */
 @OptIn(ExperimentalStdlibApi::class)
 public val defaultUnoDeck: List<Card> =
-        buildList(108) {
-            UnoColor.values().forEach { color ->
-                // each color has one 0 card
-                add(SimpleCard(0, color))
+    buildList(108) {
+        UnoColor.values().forEach { color ->
+            // each color has one 0 card
+            add(SimpleCard(0, color))
 
-                // each color has 2 cards for each number from 1 to 9
-                for (number in 1..9) {
-                    repeat(2) { add(SimpleCard(number, color)) }
-                }
-
-                // Each color has two of each colored action cards
-                repeat(2) {
-                    add(DrawTwoCard(color))
-                    add(ReverseCard(color))
-                    add(SkipCard(color))
-                }
+            // each color has 2 cards for each number from 1 to 9
+            for (number in 1..9) {
+                repeat(2) { add(SimpleCard(number, color)) }
             }
 
-            // There is are 4 wild cards of each type
-            repeat(4) {
-                add(WildCard())
-                add(WildCardDraw4())
+            // Each color has two of each colored action cards
+            repeat(2) {
+                add(DrawTwoCard(color))
+                add(ReverseCard(color))
+                add(SkipCard(color))
             }
         }
+
+        // There is are 4 wild cards of each type
+        repeat(4) {
+            add(WildCard())
+            add(WildCardDraw4())
+        }
+    }

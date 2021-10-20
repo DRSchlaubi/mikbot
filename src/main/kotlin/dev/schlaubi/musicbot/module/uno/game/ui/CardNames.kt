@@ -3,6 +3,7 @@ package dev.schlaubi.musicbot.module.uno.game.ui
 import dev.schlaubi.uno.cards.AbstractWildCard
 import dev.schlaubi.uno.cards.Card
 import dev.schlaubi.uno.cards.ColoredCard
+import dev.schlaubi.uno.cards.DiscardAllCardsCard
 import dev.schlaubi.uno.cards.DrawTwoCard
 import dev.schlaubi.uno.cards.DrawingCard
 import dev.schlaubi.uno.cards.PlayedCard
@@ -44,6 +45,7 @@ val ColoredCard.translationKey: String
             is DrawTwoCard -> "draw2"
             is ReverseCard -> "reverse"
             is SkipCard -> "skip"
+            is DiscardAllCardsCard -> "discard_all_cards"
         }
 
         return "$coloredTranslation$name"

@@ -4,6 +4,7 @@ import dev.schlaubi.uno.UnoColor
 import dev.schlaubi.uno.cards.AbstractWildCard
 import dev.schlaubi.uno.cards.Card
 import dev.schlaubi.uno.cards.ColoredCard
+import dev.schlaubi.uno.cards.DiscardAllCardsCard
 import dev.schlaubi.uno.cards.DrawTwoCard
 import dev.schlaubi.uno.cards.DrawingCard
 import dev.schlaubi.uno.cards.PlayedCard
@@ -53,7 +54,8 @@ private val ColoredCard.redColor
         893105958753038376,
         893105958606217257,
         893105958694289448,
-        893105958761410561
+        893105958761410561,
+        900531808658137118
     )
 
 private val ColoredCard.yellowColor
@@ -70,7 +72,8 @@ private val ColoredCard.yellowColor
         893106808544186438,
         893106808439341076,
         893106808443531324,
-        893106808250564659
+        893106808250564659,
+        900531808721047603
     )
 
 private val ColoredCard.blueColor
@@ -87,7 +90,8 @@ private val ColoredCard.blueColor
         893108289339019264,
         893108289536147516,
         893108289531936809,
-        893108289393532938
+        893108289393532938,
+        900531808804962346
     )
 
 private val ColoredCard.greenColor
@@ -104,7 +108,8 @@ private val ColoredCard.greenColor
         893107335441051659,
         893107335424245771,
         893107335424245770,
-        893107335327809557
+        893107335327809557,
+        900531808767193118
     )
 
 private fun AbstractWildCard.s(normal: Long, drawing: Long): Long = if (this is DrawingCard) drawing else normal
@@ -122,12 +127,14 @@ private fun ColoredCard.s(
     e9: Long,
     skip: Long,
     reverse: Long,
-    draw2: Long
+    draw2: Long,
+    discardAllCards: Long
 ): Long {
     return when (this) {
         is ReverseCard -> reverse
         is SkipCard -> skip
         is DrawTwoCard -> draw2
+        is DiscardAllCardsCard -> discardAllCards
         else -> when (val number = (this as SimpleCard).number) {
             0 -> e0
             1 -> e1

@@ -1,6 +1,7 @@
 package dev.schlaubi.uno.cards
 
 import dev.schlaubi.uno.Game
+import dev.schlaubi.uno.Player
 import dev.schlaubi.uno.UnoColor
 
 /**
@@ -29,8 +30,10 @@ public sealed interface Card : Comparable<Card> {
 public sealed interface ActionCard : Card {
     /**
      * Applies this cards action to [game].
+     *
+     * @param player the [Player] who played this card.
      */
-    public fun applyToGame(game: Game<*>)
+    public fun applyToGame(game: Game<*>, player: Player)
 }
 
 /**

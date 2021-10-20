@@ -27,6 +27,7 @@ import dev.kord.x.emoji.DiscordEmoji
 import dev.kord.x.emoji.Emojis
 import dev.schlaubi.musicbot.core.io.Database
 import dev.schlaubi.musicbot.core.io.findGuild
+import dev.schlaubi.musicbot.module.music.player.ChapterQueuedTrack
 import dev.schlaubi.musicbot.module.music.player.MusicPlayer
 import dev.schlaubi.musicbot.utils.addSong
 import dev.schlaubi.musicbot.utils.confirmation
@@ -53,6 +54,7 @@ private class MusicChannelArguments : Arguments() {
 const val playPause = "playPause"
 const val stop = "stop"
 const val skip = "skip"
+const val skipChapter = "skip_chapter"
 const val loop = "loop"
 const val repeatOne = "repeatOne"
 const val shuffle = "shuffle"
@@ -141,10 +143,18 @@ suspend fun updateMessage(
             // afterwards we will just send null (or effectively no value) to shrink down the request size
             content = ""
         }
+        val playingQueueTrack = musicPlayer.playingTrack
         embed {
-            val playingTrack = musicPlayer.playingTrack?.track
+            val playingTrack = playingQueueTrack?.track
             if (playingTrack != null) {
                 addSong({ key, group -> translationsProvider.translate(key, bundleName = group) }, playingTrack)
+
+                if (playingQueueTrack is ChapterQueuedTrack) {
+                    field {
+                        name = "Chapter"
+                        value = playingQueueTrack.chapters[playingQueueTrack.chapterIndex].title
+                    }
+                }
 
                 val remainingTime = playingTrack.length - Duration.Companion.milliseconds(musicPlayer.player.position)
                 val nextSongAt = Clock.System.now() + remainingTime
@@ -184,10 +194,18 @@ suspend fun updateMessage(
             musicButton(
                 musicPlayer,
                 skip,
-                Emojis.fastForward,
+                Emojis.nextTrack,
                 // You cannot skip, if there is no next item in the queue
                 additionalCondition = musicPlayer.queuedTracks.isNotEmpty()
             )
+            if (playingQueueTrack is ChapterQueuedTrack) {
+                musicButton(
+                    musicPlayer,
+                    skipChapter,
+                    Emojis.fastForward,
+                    additionalCondition = !playingQueueTrack.isOnLast
+                )
+            }
         }
         actionRow {
             musicButton(

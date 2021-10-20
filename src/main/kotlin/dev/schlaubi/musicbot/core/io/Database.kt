@@ -7,6 +7,7 @@ import dev.schlaubi.musicbot.module.music.playlist.Playlist
 import dev.schlaubi.musicbot.module.owner.verification.Invitation
 import dev.schlaubi.musicbot.module.settings.BotGuild
 import dev.schlaubi.musicbot.module.settings.BotUser
+import dev.schlaubi.musicbot.utils.DurationSerializer
 import dev.schlaubi.musicbot.utils.TrackSerializer
 import org.litote.kmongo.coroutine.coroutine
 import org.litote.kmongo.reactivestreams.KMongo
@@ -15,6 +16,7 @@ import org.litote.kmongo.serialization.registerSerializer
 class Database {
     init {
         registerSerializer(TrackSerializer)
+        registerSerializer(DurationSerializer)
     }
 
     private val client = KMongo.createClient(Config.MONGO_URL).coroutine

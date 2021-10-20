@@ -28,8 +28,8 @@ suspend fun EmbedBuilder.addSong(translate: Translator, track: Track) {
         value = track.length.toString()
     }
 
-    if (track.uri?.contains("youtu(?:be)?".toRegex()) == true) {
-        val video = getVideoById(track.identifier)
+    val video = track.findOnYoutube()
+    if (video != null) {
         val info = video.snippet
         val channel = getFirstChannelById(info.channelId).snippet
         thumbnail {

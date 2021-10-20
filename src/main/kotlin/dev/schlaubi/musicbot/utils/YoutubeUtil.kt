@@ -9,6 +9,7 @@ import com.google.api.services.youtube.model.Channel
 import com.google.api.services.youtube.model.ChannelListResponse
 import com.google.api.services.youtube.model.Video
 import com.google.api.services.youtube.model.VideoListResponse
+import dev.schlaubi.lavakord.audio.player.Track
 import dev.schlaubi.musicbot.config.Config
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -56,6 +57,13 @@ suspend fun searchForYouTubeMusicVideos(query: String) {
     response.items.forEach {
         it.snippet
     }
+}
+
+suspend fun Track.findOnYoutube(): Video? {
+    if (uri?.contains("youtu(?:be)?".toRegex()) == true) {
+        return getVideoById(identifier)
+    }
+    return null
 }
 
 private class RequestInitializer : YouTubeRequestInitializer() {

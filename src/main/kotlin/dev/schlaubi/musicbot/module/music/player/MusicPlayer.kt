@@ -19,11 +19,10 @@ import dev.schlaubi.musicbot.core.io.findGuild
 import dev.schlaubi.musicbot.module.music.sponsorblock.checkAndSkipSponsorBlockSegments
 import dev.schlaubi.musicbot.module.music.sponsorblock.deleteSponsorBlockCache
 import dev.schlaubi.musicbot.module.settings.updateMessage
+import dev.schlaubi.musicbot.utils.findOnYoutube
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.serialization.Contextual
-import kotlinx.serialization.Serializable
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.util.LinkedList
@@ -41,6 +40,7 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
     private val translationsProvider: TranslationsProvider by inject()
 
     private var sponsorBlockJob: Job? = null
+    private var chapterUpdater: Job? = null
 
     init {
         guild.kord.launch {
@@ -198,9 +198,21 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
     }
 
     @Suppress("UNUSED_PARAMETER")
-    private fun onTrackStart(event: TrackStartEvent) {
+    private suspend fun onTrackStart(event: TrackStartEvent) {
         updateMusicChannelMessage()
         applySponsorBlock(event)
+
+        guild.kord.launch {
+            val youtubeTrack = event.track.findOnYoutube() ?: return@launch
+            val description = youtubeTrack.snippet.description
+            val chapters = description.parseChapters()
+            if (chapters != null) {
+                val queuedBy = playingTrack?.queuedBy ?: Snowflake(0)
+                playingTrack = ChapterQueuedTrack(event.track, queuedBy, chapters)
+                updateMusicChannelMessage()
+                restartChapterUpdater()
+            }
+        }
     }
 
     private fun applySponsorBlock(event: TrackStartEvent) {
@@ -247,6 +259,33 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
         }
         startNextSong()
         updateMusicChannelMessage()
+    }
+
+    suspend fun skipChapter() {
+        val chapterTrack = (playingTrack as? ChapterQueuedTrack) ?: return
+        val chapter = chapterTrack.nextChapter()
+        player.seekTo(chapter.startTime)
+        restartChapterUpdater(chapter.startTime)
+        updateMusicChannelMessage()
+    }
+
+    private suspend fun restartChapterUpdater(position: Duration? = null) {
+        chapterUpdater?.cancel()
+        chapterUpdater = lavakord.launch {
+            val chapterTrack = (playingTrack as? ChapterQueuedTrack) ?: return@launch
+            if (chapterTrack.isOnLast) {
+                return@launch
+            }
+
+            val nextChapter = chapterTrack.chapters[chapterTrack.chapterIndex + 1]
+
+            val diff = nextChapter.startTime - (position ?: player.positionDuration)
+            delay(diff)
+
+            chapterTrack.nextChapter()
+            updateMusicChannelMessage()
+            restartChapterUpdater(nextChapter.startTime)
+        }
     }
 
     private suspend fun startNextSong(lastSong: Track? = null, force: Boolean = false) {
@@ -307,7 +346,3 @@ private fun <T : MutableList<*>> T.countRemoves(mutator: T.() -> Unit): Int {
     apply(mutator)
     return currentSize - size
 }
-
-@Serializable
-@JvmRecord
-data class QueuedTrack(@Contextual val track: Track, val queuedBy: Snowflake)

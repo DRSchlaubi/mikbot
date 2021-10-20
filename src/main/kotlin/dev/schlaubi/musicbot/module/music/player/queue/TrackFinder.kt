@@ -13,7 +13,7 @@ import dev.schlaubi.lavakord.rest.TrackResponse
 import dev.schlaubi.lavakord.rest.loadItem
 import dev.schlaubi.lavakord.rest.mapToTrack
 import dev.schlaubi.musicbot.module.music.player.MusicPlayer
-import dev.schlaubi.musicbot.module.music.player.QueuedTrack
+import dev.schlaubi.musicbot.module.music.player.SimpleQueuedTrack
 import dev.schlaubi.musicbot.utils.EditableMessageSender
 import mu.KotlinLogging
 import kotlin.time.Duration
@@ -180,7 +180,7 @@ suspend fun CommandContext.queueTracks(
         musicPlayer.queueTrack(
             arguments.force,
             arguments.top,
-            searchResult.tracks.map { QueuedTrack(it, getUser()!!.id) }
+            searchResult.tracks.map { SimpleQueuedTrack(it, getUser()!!.id) }
         )
     }
 }

@@ -1,6 +1,5 @@
 package dev.schlaubi.musicbot.module.music.commands
 
-import com.kotlindiscord.kord.extensions.checks.guildFor
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalInt
 import com.kotlindiscord.kord.extensions.extensions.publicSlashCommand

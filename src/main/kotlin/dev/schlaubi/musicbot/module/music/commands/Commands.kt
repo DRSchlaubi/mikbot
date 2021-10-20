@@ -18,6 +18,7 @@ suspend fun MusicModule.commands() {
     replayCommand()
     clearCommand()
     fixCommand()
+    nextCommand()
 
     if (Config.HAPPI_KEY != null) {
         lyricsCommand()

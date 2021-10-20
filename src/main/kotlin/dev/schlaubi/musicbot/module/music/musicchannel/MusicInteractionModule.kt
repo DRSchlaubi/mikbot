@@ -29,6 +29,7 @@ import dev.schlaubi.musicbot.module.settings.playPause
 import dev.schlaubi.musicbot.module.settings.repeatOne
 import dev.schlaubi.musicbot.module.settings.shuffle
 import dev.schlaubi.musicbot.module.settings.skip
+import dev.schlaubi.musicbot.module.settings.skipChapter
 import dev.schlaubi.musicbot.module.settings.stop
 import dev.schlaubi.musicbot.utils.Confirmation
 import dev.schlaubi.musicbot.utils.MessageBuilder
@@ -81,33 +82,22 @@ class MusicInteractionModule : Extension() {
                 }
 
                 when (interaction.componentId) {
-                    playPause -> {
-                        player.pause()
-                    }
-                    stop -> {
-                        player.stop()
-                    }
-                    skip -> {
-                        player.skip()
-                    }
-                    loop -> {
-                        updateSchedulerOptions(
-                            MusicPlayer::loopQueue,
-                            MusicPlayer::shuffle, MusicPlayer::repeat
-                        )
-                    }
-                    repeatOne -> {
-                        updateSchedulerOptions(
-                            MusicPlayer::repeat,
-                            MusicPlayer::loopQueue, MusicPlayer::shuffle
-                        )
-                    }
-                    shuffle -> {
-                        updateSchedulerOptions(
-                            MusicPlayer::shuffle,
-                            MusicPlayer::loopQueue, MusicPlayer::repeat
-                        )
-                    }
+                    playPause -> player.pause()
+                    stop -> player.stop()
+                    skip -> player.skip()
+                    skipChapter -> player.skipChapter()
+                    loop -> updateSchedulerOptions(
+                        MusicPlayer::loopQueue,
+                        MusicPlayer::shuffle, MusicPlayer::repeat
+                    )
+                    repeatOne -> updateSchedulerOptions(
+                        MusicPlayer::repeat,
+                        MusicPlayer::loopQueue, MusicPlayer::shuffle
+                    )
+                    shuffle -> updateSchedulerOptions(
+                        MusicPlayer::shuffle,
+                        MusicPlayer::loopQueue, MusicPlayer::repeat
+                    )
                 }
 
                 return@action

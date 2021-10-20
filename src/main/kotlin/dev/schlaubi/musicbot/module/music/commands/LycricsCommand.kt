@@ -6,6 +6,7 @@ import com.kotlindiscord.kord.extensions.extensions.publicSlashCommand
 import com.kotlindiscord.kord.extensions.types.editingPaginator
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.musicbot.module.music.MusicModule
+import dev.schlaubi.musicbot.module.music.checks.musicQuizAntiCheat
 import dev.schlaubi.musicbot.utils.fetchLyrics
 import dev.schlaubi.musicbot.utils.forList
 import dev.schlaubi.musicbot.utils.searchHappiSong
@@ -18,6 +19,10 @@ class LyricsArguments : Arguments() {
 suspend fun MusicModule.lyricsCommand() = publicSlashCommand(::LyricsArguments) {
     name = "lyrics"
     description = "Displays the lyrics for the current song or the specified query"
+
+    check {
+        musicQuizAntiCheat(this@lyricsCommand)
+    }
 
     action {
         val query = arguments.name ?: player.playingTrack?.title

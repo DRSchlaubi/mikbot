@@ -8,6 +8,7 @@ import com.kotlindiscord.kord.extensions.types.respond
 import dev.kord.rest.builder.message.create.embed
 import dev.schlaubi.musicbot.module.music.MusicModule
 import dev.schlaubi.musicbot.module.music.checks.anyMusicPlaying
+import dev.schlaubi.musicbot.module.music.checks.musicQuizAntiCheat
 import dev.schlaubi.musicbot.utils.addSong
 
 class NowPlayingArguments : Arguments() {
@@ -22,10 +23,7 @@ suspend fun MusicModule.nowPlayingCommand() = publicSlashCommand(::NowPlayingArg
 
     check {
         anyMusicPlaying(this@nowPlayingCommand)
-        failIf(translate("commands.now_playing.cheat_attempt", "music")) {
-            val musicPlayer = getMusicPlayer(guildFor(event)!!)
-            musicPlayer.disableMusicChannel
-        }
+        musicQuizAntiCheat(this@nowPlayingCommand)
     }
 
     action {

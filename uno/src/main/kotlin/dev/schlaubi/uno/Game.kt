@@ -113,8 +113,6 @@ public class Game<T : Player>(
         players.forEach {
             it.deck = mutableListOf()
             handOutCards(it, 7)
-            val cards = UnoColor.values().map { DiscardAllCardsCard(it) }
-            it.deck.addAll(cards)
         }
 
         // Poll first card

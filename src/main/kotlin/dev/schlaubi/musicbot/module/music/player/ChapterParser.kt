@@ -26,7 +26,7 @@ fun String.parseChapters(): List<Chapter>? {
 
 private fun String.parseDuration(): Duration {
     val units = split(timeSeparator)
-    val unitCount = units.size -1
+    val unitCount = units.size - 1
     val multiplierOffset = if (unitCount > 2) 1 else 0
 
     val seconds = units.foldRightIndexed(0) { index, input, acc ->

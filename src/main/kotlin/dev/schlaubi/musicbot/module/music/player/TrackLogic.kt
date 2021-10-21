@@ -28,6 +28,9 @@ data class ChapterQueuedTrack(
     val chapters: List<Chapter>
 ) : QueuedTrack() {
     var chapterIndex: Int = 0
+        private set
+    val chapter: Chapter
+        get() = chapters[chapterIndex]
 
     val isOnLast: Boolean
         get() = chapterIndex >= chapters.lastIndex

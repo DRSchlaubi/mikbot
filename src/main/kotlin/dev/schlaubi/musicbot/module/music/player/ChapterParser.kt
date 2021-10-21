@@ -5,19 +5,26 @@ import kotlinx.serialization.Serializable
 import kotlin.math.pow
 import kotlin.time.Duration
 
-// https://regex101.com/r/9gDHnl/5
-private val chapterPattern = """((?:[0-9]+(?::|\s))+)\s*(.*)""".toRegex()
+// https://regex101.com/r/9gDHnl/9
+private val normalPattern = """(?<time>(?:[0-9]+(?::|\s)){2,})[\s-]*(?<title>.*)""".toRegex()
+
+// https://regex101.com/r/7G0kx4/3
+private val appendingPattern = """(?<title>[0-9]+\..*(?= [0-9])\s)(?<time>(?:[0-9]+(?::|\s|${'$'}))+)""".toRegex()
 private const val timeSeparator = ':'
 
 fun String.parseChapters(): List<Chapter>? {
-    val matches = chapterPattern.findAll(this)
+    val appendingFormat = appendingPattern.findAll(this).toList()
+    val matches = appendingFormat.ifEmpty {
+        normalPattern.findAll(this).toList()
+    }
     val chapters = matches.map {
-        val (time, title) = it.destructured
+        val time = it.groups["time"]!!.value
+        val title = it.groups["title"]!!.value
+
         val startTime = time.parseDuration()
 
         Chapter(startTime, title)
     }
-        .toList()
 
     return chapters.ifEmpty {
         return null

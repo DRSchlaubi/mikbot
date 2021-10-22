@@ -21,7 +21,7 @@ sealed class QueuedTrack {
 data class SimpleQueuedTrack(@Contextual override val track: Track, override val queuedBy: Snowflake) : QueuedTrack()
 
 @Serializable
-@SerialName("simple")
+@SerialName("chartered")
 data class ChapterQueuedTrack(
     @Contextual override val track: Track,
     override val queuedBy: Snowflake,

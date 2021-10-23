@@ -8,6 +8,8 @@ import dev.kord.core.behavior.edit
 import dev.kord.core.behavior.interaction.respondEphemeral
 import dev.kord.rest.builder.message.create.actionRow
 import dev.kord.rest.builder.message.modify.embed
+import dev.schlaubi.lavakord.rest.TrackResponse
+import dev.schlaubi.lavakord.rest.loadItem
 import dev.schlaubi.musicbot.game.translate
 import dev.schlaubi.musicbot.module.music.player.queue.findTrack
 import dev.schlaubi.musicbot.module.music.player.queue.toNamedTrack
@@ -19,15 +21,12 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlin.time.Duration
+import dev.schlaubi.lavakord.audio.player.Track as LavalinkTrack
 
 suspend fun SongQuizGame.turn(track: Track) {
     val (wrongOptions, correctOption, title) = decideTurnParameters(track)
 
-    val lavalinkTrack = track.toNamedTrack().findTrack(musicPlayer)
-    if (lavalinkTrack == null) {
-        thread.createMessage("There was an error whilst finding the media for the next song, so I skipped it")
-        return
-    }
+    val lavalinkTrack = findTrack(track) ?: return
 
     val turnStart = Clock.System.now()
     musicPlayer.player.playTrack(lavalinkTrack)
@@ -151,6 +150,23 @@ private fun SongQuizGame.decideTurnParameters(track: Track): GuessContext {
             }
         }
     }
+}
+
+private suspend fun SongQuizGame.findTrack(track: Track): LavalinkTrack? {
+    val previewLoadResult = musicPlayer.loadItem(track.previewUrl)
+
+    if (previewLoadResult.loadType == TrackResponse.LoadType.TRACK_LOADED) {
+        return previewLoadResult.track.toTrack()
+    }
+
+    val youtubeTrack = track.toNamedTrack().findTrack(musicPlayer)
+
+    if (youtubeTrack == null) {
+        thread.createMessage("There was an error whilst finding the media for the next song, so I skipped it")
+        return null
+    }
+
+    return youtubeTrack
 }
 
 @JvmRecord

@@ -16,7 +16,7 @@ class LavalinkManager : Extension() {
     override suspend fun setup() {
     }
 
-    public suspend fun load() {
+    suspend fun load() {
         lavalink = kord.lavakord()
 
         database.lavalinkServers.find().toList().forEach { (url, password) ->

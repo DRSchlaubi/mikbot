@@ -153,9 +153,9 @@ private fun SongQuizGame.decideTurnParameters(track: Track): GuessContext {
 }
 
 private suspend fun SongQuizGame.findTrack(track: Track): LavalinkTrack? {
-    val previewLoadResult = musicPlayer.loadItem(track.previewUrl)
+    val previewLoadResult = track.previewUrl?.let { musicPlayer.loadItem(it) }
 
-    if (previewLoadResult.loadType == TrackResponse.LoadType.TRACK_LOADED) {
+    if (previewLoadResult?.loadType == TrackResponse.LoadType.TRACK_LOADED) {
         return previewLoadResult.track.toTrack()
     }
 
@@ -165,6 +165,7 @@ private suspend fun SongQuizGame.findTrack(track: Track): LavalinkTrack? {
         thread.createMessage("There was an error whilst finding the media for the next song, so I skipped it")
         return null
     }
+    thread.createMessage("Spotify doesn't have a preview for this song, so I looked it up on YouTube, the quality might be slightly worse")
 
     return youtubeTrack
 }

@@ -37,8 +37,8 @@ suspend fun <T, S> Collection<T>.parallelMapNotNullIndexed(
                         block()
                     }
                 } catch (e: Throwable) {
-                    cancel()
                     exception = e
+                    this@coroutineScope.cancel()
                 }
             }
         }

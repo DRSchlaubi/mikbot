@@ -270,22 +270,22 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
     }
 
     private suspend fun restartChapterUpdater(position: Duration? = null) {
-        chapterUpdater?.cancel()
-        chapterUpdater = lavakord.launch {
-            val chapterTrack = (playingTrack as? ChapterQueuedTrack) ?: return@launch
-            if (chapterTrack.isOnLast) {
-                return@launch
-            }
-
-            val nextChapter = chapterTrack.chapters[chapterTrack.chapterIndex + 1]
-
-            val diff = nextChapter.startTime - (position ?: player.positionDuration)
-            delay(diff)
-
-            chapterTrack.nextChapter()
-            updateMusicChannelMessage()
-            restartChapterUpdater(nextChapter.startTime)
-        }
+//        chapterUpdater?.cancel()
+//        chapterUpdater = guild.kord.launch {
+//            val chapterTrack = (playingTrack as? ChapterQueuedTrack) ?: return@launch
+//            if (chapterTrack.isOnLast) {
+//                return@launch
+//            }
+//
+//            val nextChapter = chapterTrack.chapters[chapterTrack.chapterIndex + 1]
+//
+//            val diff = nextChapter.startTime - (position ?: player.positionDuration)
+//            delay(diff)
+//
+//            chapterTrack.nextChapter()
+//            updateMusicChannelMessage()
+//            restartChapterUpdater(nextChapter.startTime)
+//        }
     }
 
     private suspend fun startNextSong(lastSong: Track? = null, force: Boolean = false) {

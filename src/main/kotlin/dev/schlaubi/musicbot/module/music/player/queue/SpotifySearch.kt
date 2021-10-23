@@ -11,14 +11,8 @@ import dev.schlaubi.lavakord.audio.player.Track
 import dev.schlaubi.lavakord.rest.TrackResponse
 import dev.schlaubi.lavakord.rest.loadItem
 import dev.schlaubi.musicbot.config.Config
-import dev.schlaubi.musicbot.utils.parallelMapNotNull
 import dev.schlaubi.musicbot.utils.parallelMapNotNullIndexed
-import io.ktor.utils.io.preventFreeze
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.future.await
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Semaphore
-import kotlinx.coroutines.sync.withPermit
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import org.apache.http.client.utils.URIBuilder
@@ -97,7 +91,7 @@ private suspend fun <T> Array<T>.mapToTracks(
     link: Link,
     maxConcurrentRequests: Int? = null,
     mapper: suspend (T) -> NamedTrack
-): List<Track> = toList().parallelMapNotNullIndexed { index, item ->
+): List<Track> = toList().parallelMapNotNullIndexed(maxConcurrentRequests) { index, item ->
     val found = mapper(item).findTrack(link)
     found?.let { IndexedTrack(index, it) }
 }

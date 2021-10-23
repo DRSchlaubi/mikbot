@@ -1,5 +1,6 @@
 package dev.schlaubi.musicbot.module.music.player.queue
 
+import com.neovisionaries.i18n.CountryCode
 import com.wrapper.spotify.SpotifyApi
 import com.wrapper.spotify.model_objects.specification.Artist
 import com.wrapper.spotify.model_objects.specification.Playlist
@@ -10,6 +11,9 @@ import dev.schlaubi.lavakord.audio.player.Track
 import dev.schlaubi.lavakord.rest.TrackResponse
 import dev.schlaubi.lavakord.rest.loadItem
 import dev.schlaubi.musicbot.config.Config
+import dev.schlaubi.musicbot.utils.parallelMapNotNull
+import dev.schlaubi.musicbot.utils.parallelMapNotNullIndexed
+import io.ktor.utils.io.preventFreeze
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.launch
@@ -93,34 +97,14 @@ private suspend fun <T> Array<T>.mapToTracks(
     link: Link,
     maxConcurrentRequests: Int? = null,
     mapper: suspend (T) -> NamedTrack
-): List<Track> {
-    val list = ArrayList<IndexedTrack>(size)
-
-    val semaphore = maxConcurrentRequests?.let { Semaphore(it) }
-
-    coroutineScope {
-        forEachIndexed { index, it ->
-            launch {
-                val block = suspend {
-                    val found = mapper(it).findTrack(link)
-                    if (found != null) {
-                        list.add(IndexedTrack(index, found))
-                    }
-                }
-
-                if (semaphore != null) {
-                    semaphore.withPermit { block() }
-                } else {
-                    block()
-                }
-            }
-        }
-    }
-
-    return list
-        .sortedBy { it.index }
-        .map { it.track }
+): List<Track> = toList().parallelMapNotNullIndexed { index, item ->
+    val found = mapper(item).findTrack(link)
+    found?.let { IndexedTrack(index, it) }
 }
+    .asSequence()
+    .sortedBy { it.index }
+    .map { it.track }
+    .toList()
 
 private suspend fun buildTrack(link: Link, trackMatch: MatchResult): List<Track> {
     val (trackId) = trackMatch.destructured
@@ -128,7 +112,8 @@ private suspend fun buildTrack(link: Link, trackMatch: MatchResult): List<Track>
     return listOfNotNull(getTrack(link, trackId))
 }
 
-suspend fun getTrack(trackId: String): SpotifyTrack = api().getTrack(trackId).build().await()
+suspend fun getTrack(trackId: String): SpotifyTrack = api().getTrack(trackId)
+    .market(CountryCode.US).build().await()
 
 suspend fun getArtist(artistId: String): Artist = api().getArtist(artistId).build().await()
 

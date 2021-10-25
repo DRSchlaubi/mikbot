@@ -40,7 +40,7 @@ class TrackContainer private constructor(
     companion object {
         suspend operator fun invoke(playlist: Playlist, size: Int): TrackContainer {
             val playlistTracks =
-                playlist.tracks.items.toList().shuffled().parallelMapNotNull(maxConcurrentRequests = 5) {
+                playlist.tracks.items.toList().shuffled().parallelMapNotNull(maxConcurrentRequests = 3) {
                     it.track.id?.let { id -> getTrack(id) }
                 }
             val artists = HashSet<String>(playlistTracks.size)

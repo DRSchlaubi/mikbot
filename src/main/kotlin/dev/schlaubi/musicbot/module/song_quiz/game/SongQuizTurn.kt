@@ -135,10 +135,11 @@ private fun SongQuizGame.decideTurnParameters(track: Track): GuessContext {
                     .mapIndexed { index, artist -> "$artist #${index + 1}" }
                     .take(4 - nonNullNames.size) // repeat correct option to fill for missing once and choose the correct one at random
                     .toList()
+                val correct = correctArtistPool.random()
 
                 GuessContext(
-                    nonNullNames + correctArtistPool,
-                    correctArtistPool.random(), // See comment at correctArtistPool
+                    (nonNullNames + correctArtistPool) - correct,
+                    correct,
                     "Looks like you wanted to cheat, by using a playlist whith less than 4 artists in it, so have fun guessing"
                 )
             } else {

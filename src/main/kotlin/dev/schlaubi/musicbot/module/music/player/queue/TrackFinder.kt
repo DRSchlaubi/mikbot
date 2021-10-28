@@ -12,6 +12,7 @@ import dev.schlaubi.lavakord.audio.player.Track
 import dev.schlaubi.lavakord.rest.TrackResponse
 import dev.schlaubi.lavakord.rest.loadItem
 import dev.schlaubi.lavakord.rest.mapToTrack
+import dev.schlaubi.musicbot.module.music.autocomplete.autoCompletedYouTubeQuery
 import dev.schlaubi.musicbot.module.music.player.MusicPlayer
 import dev.schlaubi.musicbot.module.music.player.SimpleQueuedTrack
 import dev.schlaubi.musicbot.utils.EditableMessageSender
@@ -30,7 +31,7 @@ interface QueueOptions {
 }
 
 abstract class QueueArguments : Arguments(), QueueOptions {
-    override val query by string("query", "The query to play")
+    override val query by autoCompletedYouTubeQuery("The query to play")
     override val force by defaultingBoolean("force", "Makes this item skip the queueTracks", false)
     override val top by defaultingBoolean("top", "Adds this item to the top of the queueTracks", false)
     override val soundcloud by defaultingBoolean(

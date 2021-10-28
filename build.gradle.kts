@@ -21,7 +21,7 @@ dependencies {
     implementation(project(":uno"))
 
     // Bot
-    implementation("dev.kord", "kord-core", "0.8.x-SNAPSHOT") {
+    implementation("kord", "core") {
         version {
             branch = "feature/autocomplete"
         }

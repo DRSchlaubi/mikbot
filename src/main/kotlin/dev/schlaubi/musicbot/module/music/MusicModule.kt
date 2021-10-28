@@ -21,6 +21,7 @@ import dev.schlaubi.lavakord.audio.player.Player
 import dev.schlaubi.lavakord.kord.connectAudio
 import dev.schlaubi.musicbot.core.audio.LavalinkManager
 import dev.schlaubi.musicbot.core.io.Database
+import dev.schlaubi.musicbot.module.music.autocomplete.registerAutoCompleteHandler
 import dev.schlaubi.musicbot.module.music.checks.musicControlCheck
 import dev.schlaubi.musicbot.module.music.commands.commands
 import dev.schlaubi.musicbot.module.music.context.playMessageAction
@@ -68,7 +69,8 @@ class MusicModule : Extension() {
         }
 
         commands()
-        playMessageAction()
+        //playMessageAction()
+        registerAutoCompleteHandler()
 
         event<ReadyEvent> {
             action {

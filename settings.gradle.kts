@@ -5,6 +5,6 @@ include("uno")
 
 sourceControl {
     gitRepository(URI.create("https://github.com/DRSchlaubi/kord.git")) {
-        producesModule("dev.kord:kord-core")
+        producesModule("kord:core")
     }
 }

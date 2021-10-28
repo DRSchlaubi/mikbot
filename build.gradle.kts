@@ -23,7 +23,7 @@ dependencies {
     // Bot
     implementation("dev.kord", "kord-core", "0.8.x-SNAPSHOT") {
         version {
-            strictly("0.8.x-SNAPSHOT")
+            branch = "feature/autocomplete"
         }
     }
     implementation("com.kotlindiscord.kord.extensions", "kord-extensions", "1.5.1-SNAPSHOT")

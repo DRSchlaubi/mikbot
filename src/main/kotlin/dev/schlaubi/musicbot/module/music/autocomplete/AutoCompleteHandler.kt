@@ -4,7 +4,6 @@ import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.extensions.event
 import dev.kord.core.behavior.interaction.respond
 import dev.kord.core.behavior.interaction.respondString
-import dev.kord.core.entity.interaction.SubCommand
 import dev.kord.core.event.interaction.AutoCompleteInteractionCreateEvent
 import mu.KotlinLogging
 

@@ -2,7 +2,6 @@ package dev.schlaubi.musicbot.module.music.autocomplete
 
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.converters.SingleConverter
-import com.kotlindiscord.kord.extensions.commands.converters.impl.string
 
 /**
  * Creates a `query` argument with [description] supporting YouTube Auto-complete.

@@ -23,7 +23,7 @@ dependencies {
     // Bot
     implementation("kord", "core") {
         version {
-            branch = "feature/autocomplete"
+            branch = "feature/autocomplete-mikmusic"
         }
     }
     implementation("com.kotlindiscord.kord.extensions", "kord-extensions", "1.5.1-SNAPSHOT")

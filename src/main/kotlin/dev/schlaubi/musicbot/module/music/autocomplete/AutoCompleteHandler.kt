@@ -11,9 +11,9 @@ private val LOG = KotlinLogging.logger { }
 
 suspend fun Extension.registerAutoCompleteHandler() = event<AutoCompleteInteractionCreateEvent> {
     action {
-        val myOption = event.interaction.data.data.options.value!!.first { it.name == AUTOCOMPLETE_QUERY_OPTION }
-        if (myOption.focused.orElse(false)) {
-            val input = event.interaction.command.options[AUTOCOMPLETE_QUERY_OPTION]!!.value.toString()
+        val myOption = event.interaction.command.options[AUTOCOMPLETE_QUERY_OPTION]!!
+        if (myOption.focused) {
+            val input = myOption.value as String
 
             if (input.isBlank()) {
                 return@action event.interaction.respond<String>(emptyList())

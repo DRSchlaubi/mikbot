@@ -5,6 +5,7 @@ import com.kotlindiscord.kord.extensions.checks.hasPermission
 import com.kotlindiscord.kord.extensions.commands.application.slash.SlashCommand
 import com.kotlindiscord.kord.extensions.extensions.Extension
 import dev.kord.common.entity.Permission
+import dev.schlaubi.musicbot.config.Config
 import dev.schlaubi.musicbot.core.io.Database
 import dev.schlaubi.musicbot.module.music.MusicModule
 import dev.schlaubi.musicbot.utils.extension
@@ -30,5 +31,8 @@ fun SlashCommand<*, *>.guildAdminOnly() {
     check {
         anyGuild()
         hasPermission(Permission.ManageGuild)
+        if (event.interaction.user.id in Config.BOT_OWNERS) {
+            pass() // bypass permission checks for bot owners
+        }
     }
 }

@@ -1,8 +1,10 @@
 package dev.schlaubi.musicbot.module.settings
 
 import dev.kord.common.entity.Snowflake
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlin.time.Duration
 
 @JvmRecord
 @Serializable
@@ -15,7 +17,9 @@ data class BotGuild(
     val musicChannelData: MusicChannelData? = null,
     val verified: Boolean = false,
     val defaultSchedulerSettings: SchedulerSettings? = null,
-    val useSponsorBlock: Boolean = true
+    val useSponsorBlock: Boolean = true,
+    @Contextual
+    val leaveTimeout: Duration = Duration.seconds(30)
 )
 
 @JvmRecord

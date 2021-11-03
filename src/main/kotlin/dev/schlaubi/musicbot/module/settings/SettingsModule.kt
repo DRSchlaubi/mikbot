@@ -24,6 +24,7 @@ class SettingsModule : Extension() {
         fixMusicChannel()
         djModeCommand()
         sponsorBlockCommand()
+        leaveTimeoutCommand()
     }
 }
 

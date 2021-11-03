@@ -41,6 +41,7 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
 
     private var sponsorBlockJob: Job? = null
     private var chapterUpdater: Job? = null
+    private var leaveTimeout: Job? = null
 
     init {
         guild.kord.launch {
@@ -199,6 +200,7 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
 
     @Suppress("UNUSED_PARAMETER")
     private suspend fun onTrackStart(event: TrackStartEvent) {
+        leaveTimeout?.cancel()
         updateMusicChannelMessage()
         applySponsorBlock(event)
 
@@ -227,7 +229,11 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
     private suspend fun onTrackEnd(event: TrackEndEvent) {
         event.track.deleteSponsorBlockCache()
         if ((!repeat && !loopQueue && queue.isEmpty()) && event.reason != TrackEndEvent.EndReason.REPLACED) {
-            return stop()
+            leaveTimeout = lavakord.launch {
+                delay(database.guildSettings.findGuild(guild).leaveTimeout)
+                stop()
+            }
+            return
         }
 
         // In order to loop the queueTracks we just add every track back to the queueTracks

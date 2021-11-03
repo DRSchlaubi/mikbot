@@ -27,6 +27,7 @@ dependencies {
         }
     }
     implementation("com.kotlindiscord.kord.extensions", "kord-extensions", "1.5.1-SNAPSHOT")
+    implementation("com.kotlindiscord.kord.extensions", "java-time", "1.5.1-SNAPSHOT")
     implementation("dev.kord.x", "emoji", "0.5.0")
     implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-jdk8", "1.5.2")
     implementation("dev.schlaubi.lavakord", "kord", "3.0.1")

@@ -47,6 +47,7 @@ dependencies {
 
     // Util
     implementation("dev.schlaubi", "envconf", "1.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.3.1")
 
     // SponsorBlock Client
     implementation("dev.nycode", "sponsorblock-kt", "1.0-SNAPSHOT")

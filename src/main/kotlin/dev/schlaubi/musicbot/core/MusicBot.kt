@@ -1,20 +1,11 @@
 package dev.schlaubi.musicbot.core
 
 import com.kotlindiscord.kord.extensions.ExtensibleBot
-import com.kotlindiscord.kord.extensions.i18n.SupportedLocales
 import dev.kord.common.entity.PresenceStatus
-import dev.schlaubi.musicbot.config.Config
-import dev.schlaubi.musicbot.core.audio.LavalinkManager
-import dev.schlaubi.musicbot.core.io.Database
-import dev.schlaubi.musicbot.core.io.findUser
-import dev.schlaubi.musicbot.module.gdpr.GDPRModule
-import dev.schlaubi.musicbot.module.music.MusicModule
-import dev.schlaubi.musicbot.module.music.musicchannel.MusicInteractionModule
-import dev.schlaubi.musicbot.module.music.playlist.commands.PlaylistModule
-import dev.schlaubi.musicbot.module.owner.OwnerModule
-import dev.schlaubi.musicbot.module.settings.SettingsModule
-import dev.schlaubi.musicbot.module.song_quiz.SongQuizModule
-import dev.schlaubi.musicbot.module.uno.UnoModule
+import dev.schlaubi.mikbot.plugin.api.config.Config
+import dev.schlaubi.mikbot.plugin.api.io.Database
+import dev.schlaubi.musicbot.module.owner.OwnerModuleImpl
+import dev.schlaubi.musicbot.module.settings.SettingsModuleImpl
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -28,16 +19,8 @@ class MusicBot : KoinComponent {
     suspend fun start() {
         bot = ExtensibleBot(Config.DISCORD_TOKEN) {
             extensions {
-                add(::GameAnimator)
-                add(::SettingsModule)
-                add(::LavalinkManager)
-                add(::MusicModule)
-                add(::PlaylistModule)
-                add(::OwnerModule)
-                add(::GDPRModule)
-                add(::MusicInteractionModule)
-                add(::UnoModule)
-                add(::SongQuizModule)
+                add(::SettingsModuleImpl)
+                add(::OwnerModuleImpl)
 
                 sentry {
                     enable = Config.ENVIRONMENT.useSentry
@@ -75,15 +58,6 @@ class MusicBot : KoinComponent {
                 }
             }
 
-            i18n {
-                defaultLocale = SupportedLocales.ENGLISH
-                localeResolver { _, _, user ->
-                    user?.let {
-                        database.users.findUser(it).language
-                    }
-                }
-            }
-
             hooks {
                 afterKoinSetup {
                     registerKoinModules()
@@ -94,9 +68,6 @@ class MusicBot : KoinComponent {
         coroutineScope {
             launch {
                 bot.start()
-            }
-            launch {
-                bot.findExtension<LavalinkManager>()!!.load()
             }
         }
     }

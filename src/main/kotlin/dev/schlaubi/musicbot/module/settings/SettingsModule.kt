@@ -1,39 +1,16 @@
 package dev.schlaubi.musicbot.module.settings
 
-import com.kotlindiscord.kord.extensions.checks.anyGuild
-import com.kotlindiscord.kord.extensions.checks.hasPermission
-import com.kotlindiscord.kord.extensions.commands.application.slash.SlashCommand
-import com.kotlindiscord.kord.extensions.extensions.Extension
-import dev.kord.common.entity.Permission
-import dev.schlaubi.musicbot.config.Config
-import dev.schlaubi.musicbot.core.io.Database
-import dev.schlaubi.musicbot.module.music.MusicModule
-import dev.schlaubi.musicbot.utils.extension
+import dev.schlaubi.mikbot.plugin.api.InternalAPI
+import dev.schlaubi.mikbot.plugin.api.ModuleExtensionPoint
+import dev.schlaubi.mikbot.plugin.api.io.Database
+import dev.schlaubi.mikbot.plugin.api.settings.SettingsExtensionPoint
+import dev.schlaubi.mikbot.plugin.api.settings.SettingsModule
 import org.koin.core.component.inject
+import kotlin.reflect.KClass
 
-class SettingsModule : Extension() {
+class SettingsModuleImpl : SettingsModule() {
     override val name: String = "settings"
+    override val extensionClazz: KClass<out ModuleExtensionPoint<SettingsModule>> = SettingsExtensionPoint::class
     override val bundle: String = "settings"
     val database: Database by inject()
-    val musicModule: MusicModule by extension()
-
-    override suspend fun setup() {
-        languageCommand()
-        musicChannel()
-        optionsCommand()
-        fixMusicChannel()
-        djModeCommand()
-        sponsorBlockCommand()
-        leaveTimeoutCommand()
-    }
-}
-
-fun SlashCommand<*, *>.guildAdminOnly() {
-    check {
-        anyGuild()
-        hasPermission(Permission.ManageGuild)
-        if (event.interaction.user.id in Config.BOT_OWNERS) {
-            pass() // bypass permission checks for bot owners
-        }
-    }
 }

@@ -8,5 +8,5 @@ group = "dev.schlaubi.mikbot"
 version = "1.0-SNAPSHOT"
 
 dependencies {
-    compileOnly(project(":core:gdpr"))
+    optionalPlugin(project(":core:gdpr"))
 }

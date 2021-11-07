@@ -7,6 +7,6 @@ group = "dev.schlaubi.mikbot"
 version = "1.0-SNAPSHOT"
 
 dependencies {
-    compileOnly(project(":game:game-api"))
+    plugin(project(":game:game-api"))
     implementation(project(":game:uno"))
 }

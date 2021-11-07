@@ -4,6 +4,8 @@ import ch.qos.logback.classic.Level
 import dev.kord.common.entity.Snowflake
 import dev.schlaubi.envconf.EnvironmentVariable
 import dev.schlaubi.envconf.getEnv
+import java.nio.file.Path
+import kotlin.io.path.Path
 import dev.schlaubi.envconf.Config as EnvironmentConfig
 
 public object Config : EnvironmentConfig("") {
@@ -17,6 +19,8 @@ public object Config : EnvironmentConfig("") {
     public val DISCORD_TOKEN: String by environment
     public val MONGO_URL: String by environment
     public val MONGO_DATABASE: String by environment
+
+    public val PLUGIN_PATH: Path by getEnv(Path("plugins")) { Path(it) }
 
     public val TEST_GUILD: Snowflake? by getEnv { Snowflake(it) }.optional()
 }

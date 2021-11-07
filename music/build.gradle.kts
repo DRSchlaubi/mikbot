@@ -26,8 +26,8 @@ dependencies {
     implementation("dev.inmo", "krontab", "0.6.5")
 
     // redeploy support
-    compileOnly(project(":core:redeploy-hook"))
+    optionalPlugin(project(":core:redeploy-hook"))
 
     // GDPR support
-    compileOnly(project(":core:gdpr"))
+    optionalPlugin(project(":core:gdpr"))
 }

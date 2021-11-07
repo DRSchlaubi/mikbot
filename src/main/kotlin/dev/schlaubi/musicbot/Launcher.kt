@@ -1,13 +1,24 @@
 package dev.schlaubi.musicbot
 
 import ch.qos.logback.classic.Logger
+import dev.schlaubi.mikbot.plugin.api._pluginSystem
 import dev.schlaubi.mikbot.plugin.api.config.Config
 import dev.schlaubi.musicbot.core.MusicBot
+import dev.schlaubi.musicbot.core.plugin.PluginLoader
 import org.slf4j.LoggerFactory
+import kotlin.io.path.absolutePathString
 
 suspend fun main() {
     initializeLogging()
+    loadPlugins()
     MusicBot().start()
+}
+
+private fun loadPlugins() {
+    System.setProperty("pf4j.pluginsDir", Config.PLUGIN_PATH.absolutePathString())
+    _pluginSystem = PluginLoader.system
+    PluginLoader.loadPlugins()
+    PluginLoader.startPlugins()
 }
 
 private fun initializeLogging() {

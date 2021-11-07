@@ -8,6 +8,8 @@ sourceControl {
         producesModule("kord:core")
     }
 }
+
+include("api:annotations")
 include("api")
 
 include("core")
@@ -25,3 +27,4 @@ include("game:music-quiz")
 
 include("utils")
 include("utils:verification-system")
+include("plugin-processor")

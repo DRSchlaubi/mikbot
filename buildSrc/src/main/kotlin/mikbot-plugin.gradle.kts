@@ -35,12 +35,17 @@ ksp {
 }
 
 tasks {
+    // KSP caches forgets about annotations all the tme
+    val deleteKspCache = task<Delete>("deleteKspCache") {
+        delete(buildDir.resolve("kspCaches"))
+    }
+
     jar {
-        dependsOn("kspKotlin")
+        dependsOn(deleteKspCache, "kspKotlin")
     }
 
     // Taken from: https://github.com/twatzl/pf4j-kotlin-demo/blob/master/plugins/build.gradle.kts#L20-L35
-    tasks.register<Jar>("assemblePlugin") {
+    register<Jar>("assemblePlugin") {
         dependsOn(jar)
 
         destinationDirectory.set(buildDir.resolve("plugin"))

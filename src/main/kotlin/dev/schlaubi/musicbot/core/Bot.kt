@@ -6,6 +6,7 @@ import dev.kord.common.entity.PresenceStatus
 import dev.schlaubi.mikbot.plugin.api.config.Config
 import dev.schlaubi.mikbot.plugin.api.io.Database
 import dev.schlaubi.musicbot.core.plugin.PluginLoader
+import dev.schlaubi.musicbot.core.plugin.PluginTranslationProvider
 import dev.schlaubi.musicbot.module.owner.OwnerModuleImpl
 import dev.schlaubi.musicbot.module.settings.SettingsModuleImpl
 import kotlinx.coroutines.coroutineScope
@@ -13,7 +14,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.dsl.module
 
-class MusicBot : KoinComponent {
+class Bot : KoinComponent {
 
     private lateinit var bot: ExtensibleBot
     private val database = Database()
@@ -83,6 +84,14 @@ class MusicBot : KoinComponent {
             register = true
             Config.TEST_GUILD?.let {
                 defaultGuild(it)
+            }
+        }
+
+        i18n {
+            translationsProvider {
+                PluginTranslationProvider {
+                    defaultLocale
+                }
             }
         }
 

@@ -35,12 +35,13 @@ tasks {
             val project = (it as ProjectDependency).dependencyProject
             project.buildDir.resolve("plugin").absolutePath
         }.distinct()
+
         from(sources)
         include("*.zip")
         into(pluginsFolder)
     }
 
-    "classes" {
+    classes {
         dependsOn(copyPlugins)
     }
 }

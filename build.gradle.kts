@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm")
+    `mikbot-module`
     kotlin("plugin.serialization") version "1.5.31"
     id("org.jlleitschuh.gradle.ktlint") version "10.2.0"
     application
@@ -45,7 +45,6 @@ kotlin {
 tasks {
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions {
-            jvmTarget = "16"
             freeCompilerArgs = listOf("-Xopt-in=dev.schlaubi.mikbot.plugin.api.InternalAPI")
         }
     }

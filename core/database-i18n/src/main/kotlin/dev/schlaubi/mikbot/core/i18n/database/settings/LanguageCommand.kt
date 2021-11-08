@@ -27,7 +27,7 @@ suspend fun SettingsModule.languageCommand() {
         action {
             val locale = java.util.Locale.forLanguageTag(arguments.language)
 
-            val botUser = LanguageDatabase.collection.findOneById(user)
+            val botUser = LanguageDatabase.collection.findOneById(user.id)
             val newUser = botUser?.copy(locale = locale) ?: LangaugeUser(user.id, locale)
             LanguageDatabase.collection.save(newUser)
 

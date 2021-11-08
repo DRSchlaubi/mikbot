@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "dev.schlaubi.mikbot"
-version = "1.0-SNAPSHOT"
+version = "1.0.0"
 
 kotlin {
     explicitApi()
@@ -12,6 +12,12 @@ kotlin {
 dependencies {
     // Api base
     api(project("annotations"))
+    // Bot
+    api("kord", "core") {
+        version {
+            branch = "feature/autocomplete-mikmusic"
+        }
+    }
     api("com.kotlindiscord.kord.extensions", "kord-extensions", "1.5.1-SNAPSHOT")
     api("dev.kord.x", "emoji", "0.5.0")
     api("org.jetbrains.kotlinx", "kotlinx-coroutines-jdk8", "1.5.2")

@@ -19,6 +19,7 @@ class MusicPlugin(wrapper: PluginWrapper) : Plugin(wrapper) {
     }
 
     override fun ExtensibleBotBuilder.ExtensionsBuilder.addExtensions() {
+        add(::LavalinkManager)
         add(::MusicModule)
         add(::PlaylistModule)
         add(::MusicInteractionModule)

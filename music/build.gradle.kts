@@ -5,14 +5,9 @@ plugins {
 }
 
 group = "dev.schlaubi.mikbot"
-version = "1.0-SNAPSHOT"
+version = "1.0.0"
 
 dependencies {
-    compileOnly("kord", "core") {
-        version {
-            branch = "feature/autocomplete-mikmusic"
-        }
-    }
     api("dev.schlaubi.lavakord", "kord", "3.0.1")
 
     // Plattform support

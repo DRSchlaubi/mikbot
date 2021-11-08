@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "dev.schlaubi"
-version = "1.0-SNAPSHOT"
+version = "1.0.0"
 
 allprojects {
     repositories {
@@ -20,13 +20,8 @@ allprojects {
 
 dependencies {
 
-    // Bot
-    implementation("kord", "core") {
-        version {
-            branch = "feature/autocomplete-mikmusic"
-        }
-    }
     implementation("org.pf4j", "pf4j", "3.6.0")
+    implementation("org.ow2.asm", "asm", "9.2") // pf4j doesn't declare a real dep on it
 
     // Logging
     implementation("ch.qos.logback", "logback-classic", "1.2.6")

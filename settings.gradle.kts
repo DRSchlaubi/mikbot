@@ -12,6 +12,8 @@ sourceControl {
 include("api:annotations")
 include("api")
 
+include("plugin-processor")
+
 include("core")
 include("core:game-animator")
 include("core:gdpr")
@@ -27,4 +29,5 @@ include("game:music-quiz")
 
 include("utils")
 include("utils:verification-system")
-include("plugin-processor")
+
+include("mikmusic-bot")

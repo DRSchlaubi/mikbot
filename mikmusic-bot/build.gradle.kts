@@ -6,6 +6,7 @@ group = "dev.schlaubi"
 version = "1.0.0"
 
 dependencies {
+    implementation(project(":"))
     plugins(project(":music"))
 
     plugins(project(":game:game-api"))

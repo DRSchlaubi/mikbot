@@ -6,7 +6,6 @@ import dev.schlaubi.mikbot.plugin.api.config.Config
 import dev.schlaubi.mikbot.plugin.api.io.Database
 import dev.schlaubi.mikbot.plugin.api.owner.OwnerExtensionPoint
 import dev.schlaubi.mikbot.plugin.api.owner.OwnerModule
-import dev.schlaubi.mikbot.plugin.api.settings.SettingsModule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
@@ -24,7 +23,6 @@ class OwnerModuleImpl : OwnerModule() {
     override suspend fun setup() {
         slashCommandCheck {
             failIfNot(translate("checks.owner.failed")) { event.interaction.user.id in Config.BOT_OWNERS }
-
         }
 
         super.setup()

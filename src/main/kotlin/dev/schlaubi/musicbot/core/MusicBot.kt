@@ -3,9 +3,6 @@ package dev.schlaubi.musicbot.core
 import com.kotlindiscord.kord.extensions.ExtensibleBot
 import com.kotlindiscord.kord.extensions.builders.ExtensibleBotBuilder
 import dev.kord.common.entity.PresenceStatus
-import dev.kord.common.entity.Snowflake
-import dev.kord.core.Kord
-import dev.kord.core.behavior.createApplicationCommands
 import dev.schlaubi.mikbot.plugin.api.config.Config
 import dev.schlaubi.mikbot.plugin.api.io.Database
 import dev.schlaubi.musicbot.core.plugin.PluginLoader

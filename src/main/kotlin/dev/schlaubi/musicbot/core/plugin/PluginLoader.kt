@@ -2,7 +2,10 @@ package dev.schlaubi.musicbot.core.plugin
 
 import dev.schlaubi.mikbot.plugin.api.Plugin
 import dev.schlaubi.mikbot.plugin.api.PluginSystem
-import org.pf4j.*
+import org.pf4j.DefaultPluginManager
+import org.pf4j.ManifestPluginDescriptorFinder
+import org.pf4j.PluginDescriptorFinder
+import org.pf4j.PluginManager
 import java.nio.file.Path
 import kotlin.io.path.div
 import kotlin.io.path.exists

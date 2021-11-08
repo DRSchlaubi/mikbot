@@ -1,6 +1,5 @@
 package dev.schlaubi.musicbot.module.settings
 
-import dev.schlaubi.mikbot.plugin.api.InternalAPI
 import dev.schlaubi.mikbot.plugin.api.ModuleExtensionPoint
 import dev.schlaubi.mikbot.plugin.api.io.Database
 import dev.schlaubi.mikbot.plugin.api.settings.SettingsExtensionPoint

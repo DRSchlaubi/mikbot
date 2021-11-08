@@ -29,7 +29,6 @@ dependencies {
     // Util
     implementation("dev.schlaubi", "envconf", "1.1")
 
-
     implementation(project(":api"))
 }
 

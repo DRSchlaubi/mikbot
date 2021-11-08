@@ -20,7 +20,7 @@ private object LanguageDataPoint : PermanentlyStoredDataPoint("database-i18n", "
     }
 
     override suspend fun requestFor(user: User): List<String> {
-        val language = LanguageDatabase.collection.findOneById(user.id)?.locale?.language.toString()
-        return listOf(language)
+        val language = LanguageDatabase.collection.findOneById(user.id)?.locale?.let { it.getDisplayName(it) }
+        return listOf(language.toString())
     }
 }

@@ -14,6 +14,10 @@ dependencies {
     implementation("io.ktor", "ktor-locations")
 }
 
+mikbotPlugin {
+    description.set("Plugin requiring each invite of the bot to be manually confirmed by an owner")
+}
+
 tasks {
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions {

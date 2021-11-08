@@ -4,7 +4,6 @@ import dev.kord.common.entity.Snowflake
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-
 @Serializable
 data class UserSettings(
     @SerialName("_id")

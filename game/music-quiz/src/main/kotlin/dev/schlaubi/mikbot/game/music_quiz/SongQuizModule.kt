@@ -37,7 +37,7 @@ open class SongQuizPlaylistArguments : SongQuizSizeArguments() {
 
 class SongQuizModule : GameModule<SongQuizPlayer, SongQuizGame>() {
     override val name: String = "song-quiz"
-    override val gameStats: CoroutineCollection<UserGameStats> = database.getCollection("song_quiz_stats")
+    override val gameStats: CoroutineCollection<UserGameStats> = MusicQuizDatabase.stats
     override val bundle: String = "song_quiz"
     private val musicModule: MusicModule by extension()
 

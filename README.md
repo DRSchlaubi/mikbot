@@ -1,44 +1,17 @@
-# Mik Music
+# Mik Bot
 
-Mik's cool self-hosted ~~music~~-bot.
+A modular framework for building Discord bots in [Kotlin](https://kotlinlang.org)
+using [Kordex](https://github.com/Kord-Extensions/kord-extensions/) and [Kord](https://github.com/kordlib)
 
-## Disclaimer
-
-For legal reasons: There is **no** official public instance of this bot, so don't bother asking
-
-# Platform Support
-
-- All native Lavaplayer platforms
-- Spotify
-
-# Features
-
-- slash-commands for everything
-- Queue songs from context actions (Also supports Discord file
-  uploads) ([DEMO](https://rice.by.devs-from.asia/TEzu3/tUVeLizo46.png))
-- Music channel (
-  Like [Hydra](https://hydra.bot)) ([DEMO](https://cdn.discordapp.com/attachments/890344418320719973/891144736151318568/music_channel_demo.gif))
-- Bot internal playlist system (Supports import from other sources, just
-  do `/playlist add name: <name> query: <existing yt/spotify playlist>`)
-- i18n
-- Ability to skip thorugh [YouTube Chapters](https://support.google.com/youtube/answer/9884579?hl=en) with `/next`
-- Song guizes (Inpired by the [AirConsole](https://www.airconsole.com)
-  game [MusicGuess](https://www.airconsole.com/play/battle-games/musicguess))
-- UNO as a minigame - Just don't even ask why
+**If you are here for mikmusic, click [here](music) and [there](mikmusic-bot)
 
 ## Deployment
 
 ### Requirements
 
-- [Youtube Data API key](https://console.cloud.google.com/apis/api/youtube/overview)
-- [Spotify API application](https://developer.spotify.com/dashboard/applications)
-- [One Lavalink instance](https://github.com/freyacodes/lavalink#server-configuration)
 - [Sentry](https://sentry.io) (Optional)
 - [Docker](https://docs.docker.com/get-docker/)
 - [Docker Compose](https://docs.docker.com/compose/install/)
-- [Guild Members Intent (Required to listen for Thread member updates in games)](https://discord.com/developers/docs/topics/gateway#privileged-intents)
-
-**Required permissions**: [`328576854080`](https://finitereality.github.io/permissions-calculator/?v=-2135627712)
 
 ## Example Environment file
 
@@ -49,18 +22,11 @@ For legal reasons: There is **no** official public instance of this bot, so don'
 ENVIRONMENT=PRODUCTION
 SENTRY_TOKEN=<>
 DISCORD_TOKEN=<>
-GAMES=p: some funny games,w: unfunny funny compilations on YouTube,l: to silence,p: lästert über aktuelle Musik,p: lästert über aktuelle Musik,p: Würde lieber Justin Bieber hören,p: Würde lieber Justin Bieber hören
 MONGO_URL=mongodb://bot:bot@mongo
 MONGO_DATABASE=bot_prod
 LOG_LEVEL=DEBUG
-YOUTUBE_API_KEY=<>
-SPOTIFY_CLIENT_SECRET=<>
-SPOTIFY_CLIENT_ID=<>
-REDEPLOY_HOST=<>
-REDEPLOY_TOKEN=<>
 BOT_OWNERS=416902379598774273
 OWNER_GUILD=<>
-HAPPI_KEY=<token from happi.dev for lyrics>
 ```
 
 </details>
@@ -70,88 +36,13 @@ HAPPI_KEY=<token from happi.dev for lyrics>
 Docker image from: https://github.com/DRSchlaubi/mikmusic/pkgs/container/mikmusic%2Fbot
 
 - Clone this repo
-- Run `docker-compose up -d mongo`
-- Run `docker-compose exec mongo mongo -u bot -p bot`
-- Run this mongo shell commands
-
-```mongo
-use bot_prod
-db.createCollection("lavalink_servers")
-db.lavalink_servers.insertOne({"url": "wss://...", "password": "<password>"})
-``` 
-
 - Run `docker-compose up -d`
-
-### Redeployment
-
-Section inspired by [Devcordbot](https://github.com/devcordde/DevcordBot)
-
-This section describes how to properly setup `/redeploy`
-Service installation: https://github.com/adnanh/webhook#installation
-
-Env vars `REDEPLOY_HOST`,`REDEPLOY_TOKEN`,`OWNER_GUILD` and `BOT_OWNERS` need to be set
-
-hooks.json
-
-```json
-{
-  "id": "redeploy-mikmusic",
-  "execute-command": "/usr/bin/sh",
-  "pass-arguments-to-command": [
-    {
-      "source": "string",
-      "name": "/path/to/mikmusic/redeploy.sh"
-    }
-  ],
-  "command-working-directory": "/path/to/mikmusic",
-  "trigger-rule": {
-    "match": {
-      "type": "value",
-      "value": "YOUR_SECRET_TOKEN",
-      "parameter": {
-        "source": "header",
-        "name": "Redeploy-Token"
-      }
-    }
-  }
-}
-```
-
-redeploy.sh
-
-```shell
-#!/usr/bin/env sh
-docker-compose pull && docker-compose up -d
-```
-
-<details>
-<summary>Guild verification</summary>
-
-If you want to run a "public" instance of this bot, but limit the people who can use it you can turn on verification
-mode
-
-### .env changes
-
-```
-VERIFIED_MODE=true
-VERIFY_SERVER_URL=<The webserver>
-VERIFY_CLIENT_ID=<Discord client id>
-VERIFY_CLIENT_SECRET=<Discord client secret (NOT BOT TOKEN)>
-VERIFY_SERVER_HOST=0.0.0.0
-```
-
-</details>
-
-### OAuth2 Grant
-
-Set require oauth 2 grant to true in the Discord bot settings
-![](https://rice.by.devs-from.asia/TEzu3/kaqOkeCu74.png)
-
-**Note** It's recommended to setup a [reverse proxy](https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/) for the verification server
 
 # For developers
 
 JDK is required it can be obtained [here](https://adoptium.net) (Recommended for Windows but works everywhere)
 and [here](https://sdkman.io/) (Recommended for Linux/Mac)
 
-Please set the `ENVIRONMENT` env var to `DEVELOPMENT` whilst developing the bot
+**Currently you can only use JDK 16, we will migrate to JDK 17 as soon as Kotlin 1.6 becomes stable**
+Please set the `ENVIRONMENT` env var to `DEVELOPMENT` whilst developing the bot.
+Also set a `TEST_GUILD` environment variable, for local commands

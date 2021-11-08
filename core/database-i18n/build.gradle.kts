@@ -10,3 +10,7 @@ version = "1.0.0"
 dependencies {
     optionalPlugin(project(":core:gdpr"))
 }
+
+mikbotPlugin {
+    description.set("Implementation of the bots i18n-system backed by a database")
+}

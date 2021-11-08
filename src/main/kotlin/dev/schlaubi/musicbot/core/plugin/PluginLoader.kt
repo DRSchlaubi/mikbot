@@ -23,7 +23,7 @@ object PluginLoader : DefaultPluginManager() {
     override fun loadPlugins() {
         super.loadPlugins()
 
-        checkForUpdates()
+        //checkForUpdates()
 
         pluginBundles = buildMap {
             plugins.values.forEach { plugin ->

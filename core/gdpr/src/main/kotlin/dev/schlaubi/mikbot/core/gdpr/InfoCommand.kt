@@ -22,19 +22,19 @@ fun GDPRModule.infoCommand() = ephemeralSubCommand {
 
                 field {
                     name = translate("commands.gdpr.info.stored_data")
-                    value = storedData.joinToString("\n")
+                    val explainer = translate("gdpr.general.persistent_data.explainer")
+                    value = (listOf(explainer) + storedData).joinToString("\n\n")
                 }
-
                 field {
                     name = translate("commands.gdpr.info.anonymized_data")
-                    value = anonymizedData.joinToString("\n")
+                    value = anonymizedData.joinToString("\n\n")
                 }
                 field {
                     name = translate("commands.gdpr.info.data_processing")
-                    value = processedData.joinToString("\n")
+                    val explainer = translate("gdpr.general.processed_data.explainer")
+                    value = (listOf(explainer) + storedData).joinToString("\n\n")
                 }
             }
-
         }
     }
 }
@@ -52,6 +52,7 @@ private suspend fun List<DataPoint>.toDescription(commandContext: CommandContext
         if (sharingDescriptionKey != null) {
             appendLine()
             append(commandContext.translate("gdpr.general.data_sharing"))
+            append(' ')
             append(commandContext.translate(sharingDescriptionKey!!, module))
         }
     }

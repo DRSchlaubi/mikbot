@@ -15,7 +15,10 @@ class GDPRModule : SubCommandModule() {
     override val commandName: String = "gdpr"
 
     val dataPoints: List<DataPoint> =
-        pluginSystem.getExtensions<GDPRExtensionPoint>().flatMap { it.provideDataPoints() }
+        pluginSystem.getExtensions<GDPRExtensionPoint>().flatMap { it.provideDataPoints() } + listOf(
+            UserIdDataPoint,
+            SentryDataPoint
+        )
 
     val interactiveDataPoints = dataPoints.filterIsInstance<PermanentlyStoredDataPoint>()
 

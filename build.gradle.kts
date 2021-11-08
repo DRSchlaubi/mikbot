@@ -21,6 +21,7 @@ allprojects {
 dependencies {
 
     implementation("org.pf4j", "pf4j", "3.6.0")
+    implementation("org.pf4j", "pf4j-update", "2.3.0")
     implementation("org.ow2.asm", "asm", "9.2") // pf4j doesn't declare a real dep on it
 
     // Logging

@@ -1,6 +1,5 @@
 package dev.schlaubi.mikbot.core.redeploy_hook
 
-import dev.schlaubi.mikbot.core.redeploy_hook.api.RedeployExtensionPoint
 import dev.schlaubi.mikbot.plugin.api.Plugin
 import dev.schlaubi.mikbot.plugin.api.PluginMain
 import dev.schlaubi.mikbot.plugin.api.PluginWrapper

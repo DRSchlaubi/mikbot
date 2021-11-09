@@ -1,14 +1,12 @@
 package dev.schlaubi.mikmusic.util
 
 import dev.schlaubi.mikmusic.core.Config
-import io.ktor.client.HttpClient
-import io.ktor.client.features.defaultRequest
+import io.ktor.client.*
+import io.ktor.client.features.*
 import io.ktor.client.features.json.JsonFeature
-import io.ktor.client.features.json.serializer.KotlinxSerializer
-import io.ktor.client.request.get
-import io.ktor.client.request.header
-import io.ktor.client.request.parameter
-import io.ktor.http.Url
+import io.ktor.client.features.json.serializer.*
+import io.ktor.client.request.*
+import io.ktor.http.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json

@@ -1,6 +1,6 @@
 package dev.schlaubi.mikbot.plugin.api.util
 
-import java.util.LinkedList
+import java.util.*
 
 /**
  * Polls [amount] items from this [LinkedList].

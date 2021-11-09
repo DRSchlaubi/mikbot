@@ -5,7 +5,7 @@ import com.wrapper.spotify.model_objects.specification.Track
 import dev.schlaubi.mikbot.plugin.api.util.parallelMapNotNull
 import dev.schlaubi.mikbot.plugin.api.util.poll
 import dev.schlaubi.mikmusic.player.queue.getTrack
-import java.util.LinkedList
+import java.util.*
 
 class TrackContainer private constructor(
     val spotifyPlaylist: Playlist,

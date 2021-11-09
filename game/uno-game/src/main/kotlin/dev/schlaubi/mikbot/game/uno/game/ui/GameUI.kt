@@ -7,7 +7,7 @@ import dev.schlaubi.mikbot.game.api.translate
 import dev.schlaubi.mikbot.game.uno.game.DiscordUnoGame
 import dev.schlaubi.uno.Direction
 import dev.schlaubi.uno.UnoColor
-import java.util.Locale
+import java.util.*
 import java.awt.Color as JColor
 
 fun EmbedBuilder.welcomeMessage(uno: DiscordUnoGame) {

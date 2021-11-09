@@ -62,7 +62,6 @@ open class OpenResourceBundleTranslations(
         }
     }
 
-
     /**
      * Loads the [ResourceBundle] called [bundle] for [locale].
      *

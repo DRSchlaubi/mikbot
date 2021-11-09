@@ -20,13 +20,7 @@ import dev.kord.x.emoji.Emojis
 import dev.schlaubi.mikbot.game.api.events.interactionHandler
 import dev.schlaubi.mikbot.game.api.events.watchThread
 import dev.schlaubi.mikbot.game.api.module.GameModule
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.koin.core.component.KoinComponent
 import org.litote.kmongo.coroutine.CoroutineCollection
 import kotlin.coroutines.CoroutineContext

@@ -1,17 +1,7 @@
 package dev.schlaubi.mikbot.game.uno.game.ui
 
-import dev.schlaubi.uno.cards.AbstractWildCard
-import dev.schlaubi.uno.cards.Card
-import dev.schlaubi.uno.cards.ColoredCard
-import dev.schlaubi.uno.cards.DiscardAllCardsCard
-import dev.schlaubi.uno.cards.DrawTwoCard
-import dev.schlaubi.uno.cards.DrawingCard
-import dev.schlaubi.uno.cards.PlayedCard
-import dev.schlaubi.uno.cards.ReverseCard
-import dev.schlaubi.uno.cards.SimpleCard
-import dev.schlaubi.uno.cards.SkipCard
-import dev.schlaubi.uno.cards.WildCard
-import java.util.Locale
+import dev.schlaubi.uno.cards.*
+import java.util.*
 
 private const val BASE_TRANSLATION = "uno.cards."
 

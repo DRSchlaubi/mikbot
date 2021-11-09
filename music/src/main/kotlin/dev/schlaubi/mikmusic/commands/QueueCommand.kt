@@ -3,9 +3,9 @@ package dev.schlaubi.mikmusic.commands
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
 import com.kotlindiscord.kord.extensions.types.editingPaginator
 import com.kotlindiscord.kord.extensions.types.respond
-import dev.schlaubi.mikmusic.core.MusicModule
-import dev.schlaubi.mikmusic.checks.anyMusicPlaying
 import dev.schlaubi.mikbot.plugin.api.util.forList
+import dev.schlaubi.mikmusic.checks.anyMusicPlaying
+import dev.schlaubi.mikmusic.core.MusicModule
 import dev.schlaubi.mikmusic.util.format
 
 suspend fun MusicModule.queueCommand() = ephemeralSlashCommand {

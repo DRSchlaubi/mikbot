@@ -142,3 +142,4 @@ gradle-app.setting
 # Plugins folder for local testing
 plugins/
 **/bin/main
+!buildSrc/src/main/kotlin/**

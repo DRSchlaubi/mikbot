@@ -4,12 +4,12 @@ import com.kotlindiscord.kord.extensions.commands.application.message.EphemeralM
 import com.kotlindiscord.kord.extensions.extensions.ephemeralMessageCommand
 import com.kotlindiscord.kord.extensions.types.editingPaginator
 import com.kotlindiscord.kord.extensions.types.respond
-import dev.schlaubi.mikmusic.core.MusicModule
+import dev.schlaubi.mikbot.plugin.api.util.attachmentOrContentQuery
 import dev.schlaubi.mikmusic.checks.joinSameChannelCheck
+import dev.schlaubi.mikmusic.core.MusicModule
 import dev.schlaubi.mikmusic.player.MusicPlayer
 import dev.schlaubi.mikmusic.player.queue.QueueOptions
 import dev.schlaubi.mikmusic.player.queue.queueTracks
-import dev.schlaubi.mikbot.plugin.api.util.attachmentOrContentQuery
 
 const val playActionName = "Play as track"
 

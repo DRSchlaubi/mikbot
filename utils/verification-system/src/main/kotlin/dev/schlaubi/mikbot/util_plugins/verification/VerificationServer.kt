@@ -16,22 +16,19 @@ import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.util.*
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 import org.bson.types.ObjectId
-import kotlin.collections.mutableMapOf
 import kotlin.collections.set
 
 @Location("/invitations")
 class Invitations {
 
     @Location("/{id}")
-    
+
     data class Specific(val id: String, val invitations: Invitations) {
         @Location("/accept")
-        
+
         data class Accept(val specific: Specific)
     }
 }

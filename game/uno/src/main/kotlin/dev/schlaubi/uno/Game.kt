@@ -1,19 +1,9 @@
 package dev.schlaubi.uno
 
-import dev.schlaubi.uno.cards.ActionCard
-import dev.schlaubi.uno.cards.Card
-import dev.schlaubi.uno.cards.DiscardAllCardsCard
-import dev.schlaubi.uno.cards.DrawTwoCard
-import dev.schlaubi.uno.cards.DrawingCard
-import dev.schlaubi.uno.cards.PlayedCard
-import dev.schlaubi.uno.cards.ReverseCard
-import dev.schlaubi.uno.cards.SimpleCard
-import dev.schlaubi.uno.cards.SkipCard
-import dev.schlaubi.uno.cards.WildCard
-import dev.schlaubi.uno.cards.WildCardDraw4
+import dev.schlaubi.uno.cards.*
 import dev.schlaubi.uno.exceptions.CardDoesntMatchException
 import dev.schlaubi.uno.exceptions.PlayerDoesNotHaveCardException
-import java.util.LinkedList
+import java.util.*
 import kotlin.random.Random
 
 /** The direction in which the game is going. */

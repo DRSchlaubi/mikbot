@@ -5,7 +5,6 @@ import dev.schlaubi.mikbot.plugin.api.InternalAPI
 import dev.schlaubi.mikbot.plugin.api.ModuleExtensionPoint
 import dev.schlaubi.mikbot.plugin.api.ModuleExtensionPointImpl
 import dev.schlaubi.mikbot.plugin.api.config.Config
-import dev.schlaubi.mikbot.plugin.api.settings.SettingsModule
 import kotlinx.coroutines.CoroutineScope
 
 @OptIn(InternalAPI::class)

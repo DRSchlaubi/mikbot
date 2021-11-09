@@ -1,4 +1,3 @@
-import org.gradle.api.artifacts.ProjectDependency;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.InputDirectory;
 import org.gradle.api.tasks.TaskAction;

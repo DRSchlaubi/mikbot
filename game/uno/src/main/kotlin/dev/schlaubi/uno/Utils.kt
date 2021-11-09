@@ -1,6 +1,6 @@
 package dev.schlaubi.uno
 
-import java.util.LinkedList
+import java.util.*
 
 /**
  * Polls [amount] items from this [LinkedList].

@@ -3,8 +3,8 @@ package dev.schlaubi.mikbot.plugin.api
 import com.kotlindiscord.kord.extensions.ExtensibleBot
 import com.kotlindiscord.kord.extensions.builders.ExtensibleBotBuilder
 import kotlinx.coroutines.CoroutineScope
-import org.pf4j.PluginWrapper as PF4JPluginWrapper
 import org.pf4j.Plugin as PF4JPlugin
+import org.pf4j.PluginWrapper as PF4JPluginWrapper
 
 public typealias PluginWrapper = PF4JPluginWrapper
 

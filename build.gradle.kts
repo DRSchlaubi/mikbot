@@ -50,3 +50,7 @@ tasks {
         }
     }
 }
+
+ktlint {
+    disabledRules.add("no-wildcard-imports")
+}

@@ -71,7 +71,7 @@ jobs:
         with:
           name: build_folder
           path: build
-      - run: mkdir ci-repo
+      - run: mkdir ci-repo && rm -rf .git/ # delete .git here to ignore the parent git repo and only care about plugin-repo
       - uses: gradle/gradle-build-action@v1
         with:
           arguments: copyFilesIntoRepo
@@ -91,4 +91,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: plugin-repo
-          directors: plugin-repo
+          directory: plugin-repo

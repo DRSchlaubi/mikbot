@@ -38,7 +38,7 @@ abstract class MakeRepositoryIndexTask : DefaultTask() {
                         project.version as String,
                         Date(),
                         extension.requires.getOrElse(project.project(":").version as String),
-                        repositoryUrl.get() + project.pluginFilePath
+                        repositoryUrl.get() + "/" + project.pluginFilePath
                     )
                 )
             )

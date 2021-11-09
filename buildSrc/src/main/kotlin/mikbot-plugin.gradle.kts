@@ -6,13 +6,14 @@ import java.nio.file.Files
 plugins {
     id("com.google.devtools.ksp") // used for plugin-processor
     kotlin("jvm")
-    kotlin("kapt") // used for pf4j processor
+    //kotlin("kapt") // used for pf4j processor (currently self-made with ksp)
 }
 
 extensions.create<PluginExtension>(pluginExtensionName)
 
 val pluginMainPath = buildDir.toPath().resolve("plugin-reports").resolve(name)
 val pluginMainFile = pluginMainPath.resolve("plugin-main-class.txt")
+val extensionsFile = pluginMainPath.resolve("extensions.txt")
 
 val plugin by configurations.creating
 val optionalPlugin by configurations.creating
@@ -27,7 +28,7 @@ configurations {
 dependencies {
     compileOnly(kotlin("stdlib-jdk8")) // this one is included in the bot itself
     compileOnly(project(":api"))
-    kapt("org.pf4j", "pf4j", "3.6.0")
+    //kapt("org.pf4j", "pf4j", "3.6.0")
     ksp(project(":plugin-processor"))
 }
 
@@ -92,6 +93,13 @@ tasks {
                     attributes["Plugin-Provider"] = extension.provider.getOrElse("MikBot Contributors")
                     attributes["Plugin-License"] = extension.license.getOrElse("Apache 2.0")
                 }
+            }
+
+            into("META-INF") {
+                val extensionFileName = extensionsFile.fileName.toString()
+                from(pluginMainPath)
+                include(extensionFileName)
+                rename(extensionFileName, "extensions.idx")
             }
         }
     }

@@ -59,6 +59,7 @@ jobs:
     name: Update repository
     runs-on: ubuntu-20.04
     needs: [ build ]
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v2

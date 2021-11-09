@@ -25,7 +25,7 @@ jobs:
   push:
     name: Push
     runs-on: ubuntu-20.04
-    needs: [build]
+    needs: [ build ]
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     steps:
       - name: Download Artifact
@@ -40,10 +40,42 @@ jobs:
       - name: Login
         env:
           GITHUB_TOKEN: ${{ secrets.DOCKER_TOKEN }}
-        run:  docker login ghcr.io --username phanatic --password "$GITHUB_TOKEN"
+        run: docker login ghcr.io --username phanatic --password "$GITHUB_TOKEN"
       - name: Build & Tag
-        run:  docker build -t ghcr.io/drschlaubi/mikmusic/bot:latest -t ghcr.io/drschlaubi/mikmusic/bot:"$GITHUB_SHA" . --file Dockerfile
+        run: docker build -t ghcr.io/drschlaubi/mikmusic/bot:latest -t ghcr.io/drschlaubi/mikmusic/bot:"$GITHUB_SHA" . --file Dockerfile
       - name: Push
-        run:  docker push ghcr.io/drschlaubi/mikmusic/bot:latest
+        run: docker push ghcr.io/drschlaubi/mikmusic/bot:latest
       - name: Push specific tag
         run: docker push ghcr.io/drschlaubi/mikmusic/bot:"$GITHUB_SHA"
+  update_repository:
+    name: Update repository
+    runs-on: ubuntu-20.04
+    needs: [ build ]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Download Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build_folder
+          path: build
+      - uses: gradle/gradle-build-action@v1
+        with:
+          arguments: copyFilesIntoRepo
+      - uses: actions/checkout@v2
+        with:
+          ref: plugin-repo
+          path: plugin-repo
+      - run: yes | cp -rf ci-repo/ plugin-repo/
+      - uses: actions/add-commit@v7
+      - run: |
+          cd plugin-repo
+          git config --local user.email "actions@github.com"
+          git config --local user.name "actions-user"
+          git add .
+          git commit -m "Update plugin repository"
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: plugin-repo
+          directors: plugin-repo

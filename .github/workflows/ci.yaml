@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: gradle/gradle-build-action@v1
         with:
-          arguments: classes ktlintCheck
+          arguments: classes ktlintCheck --stacktrace
       - name: Upload artifact
         uses: actions/upload-artifact@v2.2.3
         with:

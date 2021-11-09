@@ -23,6 +23,11 @@ public object Config : EnvironmentConfig("") {
     public val PLUGIN_PATH: Path by getEnv(Path("plugins")) { Path(it) }
 
     public val TEST_GUILD: Snowflake? by getEnv { Snowflake(it) }.optional()
+
+    public val PLUGIN_REPOSITORIES: List<String> by getEnv(emptyList()) { it.split(",") }
+    public val DOWNLOAD_PLUGINS: List<PluginSpec> by getEnv(emptyList()) {
+        it.split(",").map { spec -> PluginSpec.parse(spec) }
+    }
 }
 
 @Suppress("unused")
@@ -36,3 +41,16 @@ private inline fun <reified T : Enum<T>> getEnvEnum(
     default: T? = null
 ): EnvironmentVariable<T> =
     getEnv(prefix, default) { java.lang.Enum.valueOf(T::class.java, it) }
+
+public data class PluginSpec(public val id: String, public val version: String?) {
+    public companion object {
+        public fun parse(spec: String): PluginSpec {
+            val at = spec.indexOf('@')
+            return if (at >= 0) {
+                PluginSpec(spec.substring(0, at), spec.substring(at, spec.length))
+            } else {
+                PluginSpec(spec, null)
+            }
+        }
+    }
+}

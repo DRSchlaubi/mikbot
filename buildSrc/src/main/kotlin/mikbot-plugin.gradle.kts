@@ -1,3 +1,6 @@
+import dev.schlaubi.mikbot.plugins.gradle.publishing.MakeRepositoryIndexTask
+import dev.schlaubi.mikbot.plugins.gradle.publishing.PluginExtension
+import dev.schlaubi.mikbot.plugins.gradle.publishing.pluginExtensionName
 import java.nio.file.Files
 
 plugins {
@@ -5,8 +8,6 @@ plugins {
     kotlin("jvm")
     kotlin("kapt") // used for pf4j processor
 }
-
-val pluginExtensionName = "mikbotPlugin"
 
 extensions.create<PluginExtension>(pluginExtensionName)
 
@@ -45,7 +46,7 @@ tasks {
     }
 
     // Taken from: https://github.com/twatzl/pf4j-kotlin-demo/blob/master/plugins/build.gradle.kts#L20-L35
-    register<Jar>("assemblePlugin") {
+    val archive = register<Jar>("assemblePlugin") {
         dependsOn(jar)
 
         destinationDirectory.set(buildDir.resolve("plugin"))
@@ -94,6 +95,23 @@ tasks {
             }
         }
     }
+
+    val repository = rootProject.file("ci-repo").toPath()
+
+    val buildRepository = task<MakeRepositoryIndexTask>("buildRepository") {
+        targetDirectory.set(repository)
+        repositoryUrl.set("https://plugin-repository.mikbot.schlaubi.net")
+    }
+
+    afterEvaluate {
+        task<Copy>("copyFilesIntoRepo") {
+            dependsOn(buildRepository)
+            from(archive)
+            include("*.zip")
+            // providing version manually, as of weird evaluation errors
+            into(repository.resolve("${project.name}/$version"))
+        }
+    }
 }
 
 fun buildDependenciesString(): String {
@@ -111,15 +129,6 @@ fun Dependency.toDependencyString(optional: Boolean = false): String {
     }
 
     return "$name${if (optional) "?" else ""}@$version"
-}
-
-abstract class PluginExtension {
-    abstract val mainClass: Property<String>
-    abstract val requires: Property<String>
-    abstract val dependencies: ListProperty<String>
-    abstract val description: Property<String>
-    abstract val provider: Property<String>
-    abstract val license: Property<String>
 }
 
 fun File.removeVersion() = name.takeWhile { !it.isDigit() }

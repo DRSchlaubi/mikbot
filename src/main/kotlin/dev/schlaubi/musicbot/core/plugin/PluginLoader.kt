@@ -27,9 +27,11 @@ object PluginLoader : DefaultPluginManager() {
 
         pluginBundles = buildMap {
             plugins.values.forEach { plugin ->
-                plugin.pluginClassLoader.findTranslations().forEach {
-                    this[it] = plugin.pluginId
-                }
+                plugin.pluginClassLoader.findTranslations()
+                    .filter { it !in rootTranslations }
+                    .forEach {
+                        this[it] = plugin.pluginId
+                    }
             }
         }
 

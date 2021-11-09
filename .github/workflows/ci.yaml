@@ -79,7 +79,6 @@ jobs:
           ref: plugin-repo
           path: plugin-repo
       - run: yes | cp -rf ci-repo/ plugin-repo/
-      - uses: actions/add-commit@v7
       - run: |
           cd plugin-repo
           git config --local user.email "actions@github.com"

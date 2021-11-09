@@ -71,6 +71,7 @@ jobs:
         with:
           name: build_folder
           path: build
+      - run: mkdir ci-repo
       - uses: gradle/gradle-build-action@v1
         with:
           arguments: copyFilesIntoRepo

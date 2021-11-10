@@ -6,6 +6,7 @@ import dev.schlaubi.lavakord.LavaKord
 import dev.schlaubi.lavakord.kord.getLink
 import dev.schlaubi.lavakord.kord.lavakord
 import dev.schlaubi.mikbot.plugin.api.io.Database
+import dev.schlaubi.mikbot.plugin.api.io.getCollection
 import org.koin.core.component.inject
 
 class LavalinkManager : Extension() {

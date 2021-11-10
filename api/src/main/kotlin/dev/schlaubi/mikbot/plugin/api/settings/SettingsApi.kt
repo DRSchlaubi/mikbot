@@ -9,6 +9,11 @@ import dev.schlaubi.mikbot.plugin.api.ModuleExtensionPoint
 import dev.schlaubi.mikbot.plugin.api.ModuleExtensionPointImpl
 import dev.schlaubi.mikbot.plugin.api.config.Config
 
+/**
+ * Extension for settings.
+ *
+ * @see guildAdminOnly
+ */
 @OptIn(InternalAPI::class)
 public abstract class SettingsModule : ModuleExtensionPointImpl<SettingsModule>()
 

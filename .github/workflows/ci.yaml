@@ -92,3 +92,27 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: plugin-repo
           directory: plugin-repo
+  update_maven:
+    name: Push to maven repo
+    runs-on: ubuntu-20.04
+    needs: [ build ]
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build_folder
+          path: build
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '16'
+      - uses: gradle/gradle-build-action@v1
+        env:
+          JFROG_USER: ${{ secrets.JFROG_USER }}
+          JFROG_KEY: ${{ secrets.JFROG_KEY }}
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+        with:
+          arguments: publish

@@ -4,6 +4,7 @@ import ch.qos.logback.classic.Logger
 import dev.schlaubi.mikbot.plugin.api._pluginSystem
 import dev.schlaubi.mikbot.plugin.api.config.Config
 import dev.schlaubi.musicbot.core.Bot
+import dev.schlaubi.musicbot.core.io.DatabaseImpl
 import dev.schlaubi.musicbot.core.plugin.PluginLoader
 import org.slf4j.LoggerFactory
 import kotlin.io.path.absolutePathString

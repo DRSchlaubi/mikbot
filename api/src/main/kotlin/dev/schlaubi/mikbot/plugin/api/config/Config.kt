@@ -8,23 +8,81 @@ import java.nio.file.Path
 import kotlin.io.path.Path
 import dev.schlaubi.envconf.Config as EnvironmentConfig
 
+/**
+ * Default Configuration options for the bot.
+ */
 public object Config : EnvironmentConfig("") {
 
+    /**
+     * The guild used for owner module commands.
+     */
     public val OWNER_GUILD: Snowflake? by getEnv { Snowflake(it) }.optional()
+
+    /**
+     * A list of bot owners.
+     */
     public val BOT_OWNERS: List<Snowflake> by getEnv(emptyList()) { it.split(",").map { id -> Snowflake(id) } }
+
+    /**
+     * The Environment the bot runs in
+     *
+     * @see Environment
+     */
     public val ENVIRONMENT: Environment by getEnvEnum(default = Environment.PRODUCTION)
+
+    /**
+     * The [LOG_LEVEL] of the bot
+     *
+     * @see Level
+     */
     public val LOG_LEVEL: Level by getEnv(Level.INFO, Level::valueOf)
+
+    /**
+     * The Sentry token.
+     */
     public val SENTRY_TOKEN: String? by environment.optional()
 
+    /**
+     * The Discord token.
+     */
     public val DISCORD_TOKEN: String by environment
+
+    /**
+     * The [Mongo connection String](https://docs.mongodb.com/manual/reference/connection-string/) used for the bots Database features.
+     */
     public val MONGO_URL: String by environment
+
+    /**
+     * The database to use.
+     *
+     * **This has to be specified, even if there is a database in [MONGO_URL]**
+     */
     public val MONGO_DATABASE: String by environment
 
+    /**
+     * The path to the plugins folder.
+     */
     public val PLUGIN_PATH: Path by getEnv(Path("plugins")) { Path(it) }
 
+    /**
+     * If you set this variable, all commands will be only registered for this guild, only use this in testing.
+     */
     public val TEST_GUILD: Snowflake? by getEnv { Snowflake(it) }.optional()
 
-    public val PLUGIN_REPOSITORIES: List<String> by getEnv(emptyList()) { it.split(",") }
+    /**
+     * A list of plugin repositories.
+     */
+    public val PLUGIN_REPOSITORIES: List<String> by getEnv(listOf("https://plugin-repository.mikbot.schlaubi.net/")) {
+        it.split(
+            ","
+        )
+    }
+
+    /**
+     * The bot will try and download all plugins in this list from [PLUGIN_REPOSITORIES] on startup.
+     *
+     * **This doesn't download depnendency plugins**
+     */
     public val DOWNLOAD_PLUGINS: List<PluginSpec> by getEnv(emptyList()) {
         it.split(",").map { spec -> PluginSpec.parse(spec) }
     }

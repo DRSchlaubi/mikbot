@@ -45,8 +45,20 @@ SPOTIFY_CLIENT_ID=<>
 HAPPI_KEY=<token from happi.dev for lyrics>
 ```
 
+# Plugins
+If you want to deploy this Bot I recommend these plugins
+```shell
+DOWNLOAD_PLUGINS=gdpr,database-i18n,game-animator,music,music-quiz
+```
+I personally run my instance with these plugins
+```shell
+DOWNLOAD_PLUGINS=redeploy-hook,gdpr,database-i18n,game-animator,music,game-api,music-quiz,uno-game,verification-system
+```
+
+For additional configuration please check [redeploy-hook](../core/redeploy-hook) and [verification-system](../utils/verification-system)
+
 # Setup
-Using this plugin requires addional first-time setup
+Using this plugin requires additional first-time setup
 
 Run this commands before running `docker-compose up -d`
 - Run `docker-compose up -d mongo`

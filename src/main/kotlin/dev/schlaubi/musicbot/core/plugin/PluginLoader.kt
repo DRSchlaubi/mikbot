@@ -6,10 +6,7 @@ import dev.schlaubi.mikbot.plugin.api.PluginWrapper
 import dev.schlaubi.mikbot.plugin.api.config.Config
 import io.ktor.util.generateNonce
 import mu.KotlinLogging
-import org.pf4j.DefaultPluginManager
-import org.pf4j.ManifestPluginDescriptorFinder
-import org.pf4j.PluginDescriptorFinder
-import org.pf4j.PluginManager
+import org.pf4j.*
 import org.pf4j.update.DefaultUpdateRepository
 import org.pf4j.update.UpdateManager
 import org.pf4j.update.UpdateRepository
@@ -128,7 +125,7 @@ private class MikBotPluginDescriptionFinder : ManifestPluginDescriptorFinder() {
 }
 
 private class DefaultPluginSystem(private val manager: PluginManager) : PluginSystem {
-    override fun <T : Any> getExtensions(type: KClass<T>): List<T> = manager.getExtensions(type.java)
+    override fun <T : ExtensionPoint> getExtensions(type: KClass<T>): List<T> = manager.getExtensions(type.java)
 }
 
 private fun ClassLoader.findTranslations(): Sequence<String> {

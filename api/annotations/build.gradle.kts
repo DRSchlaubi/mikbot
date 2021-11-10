@@ -1,9 +1,10 @@
 plugins {
     `mikbot-module`
+    `mikbot-publishing`
 }
 
 group = "dev.schlaubi"
-version = "1.0.0"
+version = Project.version
 
 kotlin {
     explicitApi()

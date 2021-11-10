@@ -14,6 +14,8 @@ services:
       - .env
     depends_on:
       - mongo
+    volumes:
+      - ./plugins:/usr/app/plugins
     ports:
       # only needed for verification_mode
       - "127.0.0.1:7725:8080"

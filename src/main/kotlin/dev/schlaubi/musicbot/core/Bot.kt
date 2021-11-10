@@ -5,6 +5,7 @@ import com.kotlindiscord.kord.extensions.builders.ExtensibleBotBuilder
 import dev.kord.common.entity.PresenceStatus
 import dev.schlaubi.mikbot.plugin.api.config.Config
 import dev.schlaubi.mikbot.plugin.api.io.Database
+import dev.schlaubi.musicbot.core.io.DatabaseImpl
 import dev.schlaubi.musicbot.core.plugin.PluginLoader
 import dev.schlaubi.musicbot.core.plugin.PluginTranslationProvider
 import dev.schlaubi.musicbot.module.owner.OwnerModuleImpl
@@ -17,7 +18,7 @@ import org.koin.dsl.module
 class Bot : KoinComponent {
 
     private lateinit var bot: ExtensibleBot
-    private val database = Database()
+    private val database: Database = DatabaseImpl()
 
     suspend fun start() {
         bot = ExtensibleBot(Config.DISCORD_TOKEN) {

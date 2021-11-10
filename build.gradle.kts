@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "dev.schlaubi"
-version = "1.0.0"
+version = Project.version
 
 allprojects {
     repositories {
@@ -46,7 +46,7 @@ kotlin {
 tasks {
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions {
-            freeCompilerArgs = listOf("-Xopt-in=dev.schlaubi.mikbot.plugin.api.InternalAPI")
+            freeCompilerArgs = freeCompilerArgs + listOf("-Xopt-in=dev.schlaubi.mikbot.plugin.api.InternalAPI")
         }
     }
 }

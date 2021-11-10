@@ -5,13 +5,24 @@ import com.kotlindiscord.kord.extensions.commands.application.slash.*
 import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
 
+/**
+ * Builder lambda for slash command groups.
+ */
 public typealias GroupBuilder = suspend SlashGroup.() -> Unit
 
+/**
+ * Bot [Extension] which registers all commands als subCommands.
+ */
 public abstract class SubCommandModule : Extension() {
     private val ephemeralSubCommandBodies = mutableListOf<EphemeralCommandPair<*>>()
     private val publicSubCommandBodies = mutableListOf<PublicCommandPair<*>>()
     private val groupBodies = mutableListOf<GroupPair>()
+
+    /**
+     * The name of the root command.
+     */
     public abstract val commandName: String
+
     public fun <T : Arguments> ephemeralSubCommand(
         argumentBody: (() -> T),
         body: suspend EphemeralSlashCommand<T>.() -> Unit
@@ -50,6 +61,9 @@ public abstract class SubCommandModule : Extension() {
         }
     }
 
+    /**
+     * Additional [setup] instructions.
+     */
     public abstract suspend fun overrideSetup()
 }
 

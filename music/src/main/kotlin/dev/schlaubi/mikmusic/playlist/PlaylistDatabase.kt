@@ -1,5 +1,6 @@
 package dev.schlaubi.mikmusic.playlist
 
+import dev.schlaubi.mikbot.plugin.api.io.getCollection
 import dev.schlaubi.mikbot.plugin.api.util.database
 import org.koin.core.component.KoinComponent
 

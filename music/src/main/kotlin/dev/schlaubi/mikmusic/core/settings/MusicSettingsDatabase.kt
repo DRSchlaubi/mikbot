@@ -2,6 +2,7 @@ package dev.schlaubi.mikmusic.core.settings
 
 import dev.kord.core.behavior.GuildBehavior
 import dev.kord.core.behavior.UserBehavior
+import dev.schlaubi.mikbot.plugin.api.io.getCollection
 import dev.schlaubi.mikbot.plugin.api.util.database
 import org.koin.core.component.KoinComponent
 

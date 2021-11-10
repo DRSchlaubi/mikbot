@@ -1,5 +1,6 @@
 plugins {
     `mikbot-module`
+    `mikbot-publishing`
 }
 
 group = "dev.schlaubi"

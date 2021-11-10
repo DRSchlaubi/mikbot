@@ -4,7 +4,13 @@ import com.kotlindiscord.kord.extensions.extensions.Extension
 import org.pf4j.ExtensionPoint
 import kotlin.reflect.KClass
 
+/**
+ * Extension point for the module [T].
+ */
 public interface ModuleExtensionPoint<T : Extension> : ExtensionPoint {
+    /**
+     * Applies instructions to the module.
+     */
     public suspend fun T.apply()
 }
 

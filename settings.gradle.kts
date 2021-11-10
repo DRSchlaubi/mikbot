@@ -1,7 +1,6 @@
 import java.net.URI
 
 rootProject.name = "mikmusic"
-include("uno")
 
 sourceControl {
     gitRepository(URI.create("https://github.com/DRSchlaubi/kord.git")) {
@@ -9,25 +8,21 @@ sourceControl {
     }
 }
 
-include("api:annotations")
-include("api")
-
-include("plugin-processor")
-
-include("core")
-include("core:game-animator")
-include("core:gdpr")
-include("core:database-i18n")
-include("core:redeploy-hook")
-
-include("music")
-
-include("game:uno")
-include("game:game-api")
-include("game:uno-game")
-include("game:music-quiz")
-
-include("utils")
-include("utils:verification-system")
-
-// include("mikmusic-bot")
+include(
+    "api",
+    "api:annotations",
+    "plugin-processor",
+    "core",
+    "core:database-i18n",
+    "core:game-animator",
+    "core:gdpr",
+    "core:redeploy-hook",
+    "music",
+    // "mikmusic-bot",
+    "game:uno",
+    "game:game-api",
+    "game:uno-game",
+    "game:music-quiz",
+    "utils",
+    "utils:verification-system"
+)

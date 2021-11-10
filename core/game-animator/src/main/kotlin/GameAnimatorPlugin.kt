@@ -73,33 +73,29 @@ data class Game(val type: ActivityType, val status: PresenceStatus, val text: St
 
     companion object {
         fun parse(game: String): Game {
-            if (game.startsWith("p: ")) return Game(
-                ActivityType.Game,
-                PresenceStatus.Online,
-                game.replaceFirst(
-                    "p: ".toRegex(),
-                    ""
+
+            return when(game.firstOrNull()) {
+                'p' -> Game(
+                    ActivityType.Game,
+                    PresenceStatus.Online,
+                    game.replaceFirst("p: ".toRegex(), "")
                 )
-            ) else if (game.startsWith("l: ")) return Game(
-                ActivityType.Listening,
-                PresenceStatus.Online,
-                game.replaceFirst(
-                    "l: ".toRegex(),
-                    ""
+                'l' -> Game(
+                    ActivityType.Listening,
+                    PresenceStatus.Online,
+                    game.replaceFirst("l: ".toRegex(), "")
                 )
-            ) else if (game.startsWith("s: ")) return Game(
-                ActivityType.Streaming,
-                PresenceStatus.Online,
-                game.replaceFirst("s: ".toRegex(), ""),
-            ) else if (game.startsWith("w: ")) return Game(
-                ActivityType.Watching,
-                PresenceStatus.Online,
-                game.replaceFirst(
-                    "w: ".toRegex(),
-                    ""
+                's' -> Game(
+                    ActivityType.Streaming,
+                    PresenceStatus.Online,
+                    game.replaceFirst("s: ".toRegex(), "")
                 )
-            ) else {
-                error("Invalid game: $this")
+                'w' -> Game(
+                    ActivityType.Watching,
+                    PresenceStatus.Online,
+                    game.replaceFirst("w: ".toRegex(), "")
+                )
+                else -> error("Invalid game: $this")
             }
         }
     }

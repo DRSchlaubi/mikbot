@@ -14,17 +14,25 @@ fun List<PluginInfo>.writeTo(path: Path) {
 }
 
 fun List<PluginInfo>.addPlugins(vararg plugins: PluginInfo): List<PluginInfo> {
-    val (new, toUpdate) = plugins.partition { it !in this }
-    val backlog = filter { it !in plugins }
-    val map = associateBy { it.id }
-    val updated = toUpdate.map {
-        val parent = map[it.id]!! // retrieve existing releases
+    val existingPlugins = map { PluginWrapper(it) }
+    val addedPlugins = plugins.map { PluginWrapper(it) }
 
-        it.copy(releases = parent.releases + it.releases)
+    val (new, toUpdate) = addedPlugins.partition { it !in existingPlugins }
+    val backlog = existingPlugins.filter { it !in addedPlugins }
+    val map = existingPlugins.associateBy { (plugin) -> plugin.id }
+    val updated = toUpdate.map { (plugin) ->
+        val (parent) = map[plugin.id]!! // retrieve existing releases
+
+        plugin.copy(releases = parent.releases + plugin.releases)
     }
 
-    return new + backlog + updated
+    return (new + backlog).map { it.pluginInfo } + updated
 }
 
 val Project.pluginFilePath: String
     get() = "${name}/${version}/plugin-${name}-${version}.zip"
+
+private data class PluginWrapper(val pluginInfo: PluginInfo) {
+    override fun equals(other: Any?): Boolean = (other as? PluginWrapper)?.pluginInfo?.id == pluginInfo.id
+    override fun hashCode(): Int = pluginInfo.id.hashCode()
+}

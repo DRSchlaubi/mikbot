@@ -4,7 +4,7 @@ import dev.schlaubi.mikbot.plugin.api.Plugin
 import dev.schlaubi.mikbot.plugin.api.PluginSystem
 import dev.schlaubi.mikbot.plugin.api.PluginWrapper
 import dev.schlaubi.mikbot.plugin.api.config.Config
-import io.ktor.util.generateNonce
+import io.ktor.util.*
 import mu.KotlinLogging
 import org.pf4j.*
 import org.pf4j.update.DefaultUpdateRepository
@@ -131,8 +131,8 @@ private class DefaultPluginSystem(private val manager: PluginManager) : PluginSy
 private fun ClassLoader.findTranslations(): Sequence<String> {
     val resourcePath = getResource("translations")?.file
 
-    if (resourcePath != null) {
-        val path = Path(resourcePath)
+    val path = resourcePath?.let { path -> Path(path) }
+    if (path != null && path.isDirectory()) {
         return path.listDirectoryEntries()
             .asSequence()
             .filter { it.isDirectory() }

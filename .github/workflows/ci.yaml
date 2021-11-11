@@ -71,17 +71,16 @@ jobs:
         with:
           name: build_folder
           path: build
-      - run: mkdir ci-repo && rm -rf .git/ # delete .git here to ignore the parent git repo and only care about plugin-repo
-      - uses: gradle/gradle-build-action@v1
-        with:
-          arguments: copyFilesIntoRepo
+      - run: rm -rf .git/ # delete .git here to ignore the parent git repo and only care about plugin-repo
       - uses: actions/checkout@v2
         with:
           ref: plugin-repo
-          path: plugin-repo
-      - run: yes | cp -rf ci-repo/* plugin-repo/
+          path: ci-repo
+      - uses: gradle/gradle-build-action@v1
+        with:
+          arguments: copyFilesIntoRepo
       - run: |
-          cd plugin-repo
+          cd ci-repo
           git config --local user.email "actions@github.com"
           git config --local user.name "actions-user"
           git add .
@@ -91,7 +90,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: plugin-repo
-          directory: plugin-repo
+          directory: ci-repo
   update_maven:
     name: Push to maven repo
     runs-on: ubuntu-20.04

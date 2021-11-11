@@ -1,7 +1,7 @@
 package dev.schlaubi.uno
 
 import dev.schlaubi.uno.cards.*
-import dev.schlaubi.uno.exceptions.CardDoesntMatchException
+import dev.schlaubi.uno.exceptions.CardDoesNotMatchException
 import dev.schlaubi.uno.exceptions.PlayerDoesNotHaveCardException
 import java.util.*
 import kotlin.random.Random
@@ -149,7 +149,7 @@ public class Game<T : Player>(
     public fun removePlayer(player: Player): Boolean = _players.remove(player)
 
     public fun dropIn(player: Player, card: PlayedCard) {
-        if (topCard != card) throw CardDoesntMatchException(topCard, card)
+        if (topCard != card) throw CardDoesNotMatchException(topCard, card)
         if (player.deck.size == 2) player.uno()
         playerSequence.lastIndex = _players.indexOf(player)
         player.playCard(this, card)
@@ -157,7 +157,7 @@ public class Game<T : Player>(
 
     internal fun playCard(player: Player, card: PlayedCard) {
         // Check card matches
-        if (!card.canBePlayedOn(topCard)) throw CardDoesntMatchException(topCard, card)
+        if (!card.canBePlayedOn(topCard)) throw CardDoesNotMatchException(topCard, card)
 
         // Check uno rule
         if (player.deck.size == 1 && !player.saidUno) {

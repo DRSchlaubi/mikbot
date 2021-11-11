@@ -11,5 +11,5 @@ import dev.schlaubi.uno.cards.PlayedCard
  *
  * @see Game.topCard
  */
-public class CardDoesntMatchException(public val currentCard: PlayedCard, public val triedCard: PlayedCard) :
+public class CardDoesNotMatchException(public val currentCard: PlayedCard, public val triedCard: PlayedCard) :
     RuntimeException()

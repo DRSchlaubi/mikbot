@@ -23,7 +23,9 @@ fun List<PluginInfo>.addPlugins(vararg plugins: PluginInfo): List<PluginInfo> {
     val updated = toUpdate.map { (plugin) ->
         val (parent) = map[plugin.id]!! // retrieve existing releases
 
-        plugin.copy(releases = parent.releases + plugin.releases)
+        val newReleases = (parent.releases + plugin.releases).distinctBy { it.version }
+
+        plugin.copy(releases = newReleases)
     }
 
     return (new + backlog).map { it.pluginInfo } + updated

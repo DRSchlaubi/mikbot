@@ -11,3 +11,8 @@ public fun <T> LinkedList<T>.poll(amount: Int): List<T?> = buildList(amount) {
         add(poll())
     }
 }
+
+/**
+ * Performs the given [action] on each element.
+ */
+public inline fun <T> Iterable<T>.onEach(action: T.() -> Unit): Unit = forEach { it.action() }

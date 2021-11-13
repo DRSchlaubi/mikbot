@@ -5,6 +5,7 @@ import com.kotlindiscord.kord.extensions.builders.ExtensibleBotBuilder
 import dev.kord.common.entity.PresenceStatus
 import dev.schlaubi.mikbot.plugin.api.config.Config
 import dev.schlaubi.mikbot.plugin.api.io.Database
+import dev.schlaubi.mikbot.plugin.api.util.onEach
 import dev.schlaubi.musicbot.core.io.DatabaseImpl
 import dev.schlaubi.musicbot.core.plugin.PluginLoader
 import dev.schlaubi.musicbot.core.plugin.PluginTranslationProvider
@@ -22,11 +23,12 @@ class Bot : KoinComponent {
 
     suspend fun start() {
         bot = ExtensibleBot(Config.DISCORD_TOKEN) {
+            PluginLoader.botPlugins.onEach {
+                apply()
+            }
             extensions {
-                PluginLoader.botPlugins.forEach {
-                    with(it) {
-                        addExtensions()
-                    }
+                PluginLoader.botPlugins.onEach {
+                    addExtensions()
                 }
             }
 
@@ -37,10 +39,8 @@ class Bot : KoinComponent {
             launch {
                 bot.start()
             }
-            PluginLoader.botPlugins.forEach {
-                with(it) {
-                    atLaunch(bot)
-                }
+            PluginLoader.botPlugins.onEach {
+                atLaunch(bot)
             }
         }
     }

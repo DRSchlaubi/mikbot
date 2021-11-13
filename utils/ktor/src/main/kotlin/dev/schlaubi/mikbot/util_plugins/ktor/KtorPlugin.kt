@@ -8,6 +8,7 @@ import io.ktor.features.*
 import io.ktor.http.*
 import io.ktor.locations.*
 import io.ktor.response.*
+import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import kotlinx.coroutines.*
@@ -24,6 +25,12 @@ class KtorPlugin(wrapper: PluginWrapper) : Plugin(wrapper), CoroutineScope {
 
                 install(StatusPages) {
                     exception<NotFoundException> { call.respond(HttpStatusCode.NotFound) }
+                }
+
+                routing {
+                    handle {
+                        call.respondRedirect("https://teamseas.org")
+                    }
                 }
 
                 pluginSystem.getExtensions<KtorExtensionPoint>().forEach {

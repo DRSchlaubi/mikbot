@@ -25,5 +25,6 @@ include(
     "game:music-quiz",
     "utils",
     "utils:ktor",
-    "utils:verification-system"
+    "utils:verification-system",
+    "utils:epic-games-notifier"
 )

@@ -48,7 +48,6 @@ object PluginLoader : DefaultPluginManager(), KoinComponent {
         buildExtensionGraph()
     }
 
-
     @OptIn(ExperimentalStdlibApi::class)
     private fun buildTranslationGraph() {
         pluginBundles = buildMap {

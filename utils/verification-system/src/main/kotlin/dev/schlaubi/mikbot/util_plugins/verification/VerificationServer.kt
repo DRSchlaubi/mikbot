@@ -49,16 +49,12 @@ data class Thanks(
 
 @Extension
 class VerificationServer : KtorExtensionPoint, KoinComponent {
-    private val verifyClientId = Config.VERIFY_CLIENT_ID ?: notConfigured()
-    private val verifyClientSecret = Config.VERIFY_CLIENT_SECRET ?: notConfigured()
+    private val verifyClientId = Config.DISCORD_CLIENT_ID ?: notConfigured()
+    private val verifyClientSecret = Config.DISCORD_CLIENT_SECRET ?: notConfigured()
     private val kord: Kord by inject()
 
     override fun Application.apply() {
         routing {
-            handle {
-                call.respondRedirect("https://teamtrees.org")
-            }
-
             get<Invitations.Specific.Accept> { (parent) ->
                 val id = parent.id
                 val invitation = VerificationDatabase.invites.findOneById(ObjectId(id))

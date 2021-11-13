@@ -9,10 +9,10 @@ Plugin requiring each invite of the bot to be manually confirmed by an owner
 This plugin adds the following new env variables.
 
 ```
-VERIFY_SERVER_URL=<The webserver>
-VERIFY_CLIENT_ID=<Discord client id>
-VERIFY_CLIENT_SECRET=<Discord client secret (NOT BOT TOKEN)>
-VERIFY_SERVER_HOST=0.0.0.0
+WEB_SERVER_URL=<The webserver>
+DISCORD_CLIENT_ID=<Discord client id>
+DISCORD_CLIENT_SECRET=<Discord client secret (NOT BOT TOKEN)>
+WEB_SERVER_HOST=0.0.0.0
 ```
 
 # Setup

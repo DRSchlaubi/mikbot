@@ -1,17 +1,12 @@
 package dev.schlaubi.musicbot.core.plugin
 
-import com.kotlindiscord.kord.extensions.ExtensibleBot
-import com.kotlindiscord.kord.extensions.builders.ExtensibleBotBuilder
-import com.kotlindiscord.kord.extensions.extensions.Extension
 import dev.schlaubi.mikbot.plugin.api.Plugin
 import dev.schlaubi.mikbot.plugin.api.PluginSystem
 import dev.schlaubi.mikbot.plugin.api.PluginWrapper
 import dev.schlaubi.mikbot.plugin.api.config.Config
 import io.ktor.util.*
-import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import org.pf4j.*
 import org.pf4j.update.DefaultUpdateRepository
 import org.pf4j.update.UpdateManager
@@ -33,10 +28,7 @@ object PluginLoader : DefaultPluginManager(), KoinComponent {
     private val updateManager = UpdateManager(this, repos)
     private val rootTranslations = ClassLoader.getSystemClassLoader().findTranslations()
 
-    private val bot: ExtensibleBot by inject()
     private lateinit var pluginBundles: Map<String, String>
-    private lateinit var pluginExtensions: Map<String, List<String>>
-    lateinit var extensions: List<Extension>
 
     override fun getPluginDescriptorFinder(): PluginDescriptorFinder = MikBotPluginDescriptionFinder()
 
@@ -45,7 +37,6 @@ object PluginLoader : DefaultPluginManager(), KoinComponent {
 
         checkForUpdates()
         buildTranslationGraph()
-        buildExtensionGraph()
     }
 
     @OptIn(ExperimentalStdlibApi::class)
@@ -117,36 +108,6 @@ object PluginLoader : DefaultPluginManager(), KoinComponent {
                     LOG.info { "Installation for plugin ${plugin.id} failed" }
                 }
             }
-        }
-    }
-
-    private fun buildExtensionGraph() {
-        val extensionMap = botPlugins.associate {
-            val pluginBuilder = ExtensibleBotBuilder.ExtensionsBuilder()
-            with(it) {
-                pluginBuilder.addExtensions()
-            }
-
-            it.wrapper.pluginId to pluginBuilder.extensions.map { it() }
-        }
-
-        pluginExtensions = extensionMap.mapValues { (_, extensions) ->
-            extensions.map { it.name }
-        }
-        LOG.debug { "Build plugin extension graph: $pluginExtensions" }
-        extensions = extensionMap.values.flatten()
-    }
-
-    override fun unloadPlugin(pluginId: String, unloadDependents: Boolean): Boolean {
-        return runBlocking {
-            val extensionNames = pluginExtensions[pluginId]
-            if (extensionNames != null) {
-                LOG.debug { "Unloading extensions for plugin $pluginId: $extensionNames" }
-                extensionNames.forEach {
-                    bot.unloadExtension(it)
-                }
-            }
-            super.unloadPlugin(pluginId, unloadDependents)
         }
     }
 

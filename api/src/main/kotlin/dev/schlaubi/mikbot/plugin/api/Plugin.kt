@@ -1,6 +1,7 @@
 package dev.schlaubi.mikbot.plugin.api
 
 import com.kotlindiscord.kord.extensions.ExtensibleBot
+import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.builders.ExtensibleBotBuilder
 import kotlinx.coroutines.CoroutineScope
 import org.pf4j.Plugin as PF4JPlugin
@@ -20,6 +21,8 @@ public typealias PluginWrapper = PF4JPluginWrapper
 public abstract class Plugin(wrapper: PluginWrapper) : PF4JPlugin(wrapper) {
     /**
      * Add additional [ExtensibleBot] settings.
+     *
+     * **Do not add [Extensions][Extension] in here, use [addExtensions] instead.**
      */
     public open suspend fun ExtensibleBotBuilder.apply(): Unit = Unit
 

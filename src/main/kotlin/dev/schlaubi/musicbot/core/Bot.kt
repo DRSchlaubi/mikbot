@@ -22,13 +22,9 @@ class Bot : KoinComponent {
 
     suspend fun start() {
         bot = ExtensibleBot(Config.DISCORD_TOKEN) {
-            PluginLoader.botPlugins.forEach {
-                with(it) {
-                    apply()
-
-                    extensions {
-                        addExtensions()
-                    }
+            extensions {
+                PluginLoader.extensions.forEach {
+                    add { it }
                 }
             }
 

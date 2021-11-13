@@ -5,6 +5,7 @@ import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.mikbot.plugin.api.owner.OwnerModule
 import dev.schlaubi.mikbot.plugin.api.owner.ownerOnly
 import org.litote.kmongo.newId
+import dev.schlaubi.mikbot.util_plugins.ktor.api.Config as KtorConfig
 
 suspend fun OwnerModule.inviteCommand() = ephemeralSlashCommand(::VerificationArguments) {
     name = "Invite"
@@ -17,7 +18,7 @@ suspend fun OwnerModule.inviteCommand() = ephemeralSlashCommand(::VerificationAr
         VerificationDatabase.invites.save(invite)
 
         respond {
-            content = "<" + Config.VERIFY_SERVER_URL + "/invitations/" + invite.id + "/accept" + ">"
+            content = "<" + KtorConfig.WEB_SERVER_URL + "/invitations/" + invite.id + "/accept" + ">"
         }
     }
 }

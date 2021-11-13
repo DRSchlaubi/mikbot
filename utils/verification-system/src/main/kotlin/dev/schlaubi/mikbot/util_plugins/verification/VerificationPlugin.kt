@@ -26,18 +26,12 @@ class VerificationModule : Extension() {
 class VerificationPlugin(wrapper: PluginWrapper) : Plugin(wrapper), CoroutineScope, KoinComponent {
     val kord by inject<Kord>()
     override val coroutineContext: CoroutineContext = Dispatchers.IO + SupervisorJob()
-    private val server = makeServer()
-
-    override fun start() {
-        server.start()
-    }
 
     override fun ExtensibleBotBuilder.ExtensionsBuilder.addExtensions() {
         add(::VerificationModule)
     }
 
     override fun stop() {
-        server.stop(1000, 1000)
         coroutineContext.cancel()
     }
 }

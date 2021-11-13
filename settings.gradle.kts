@@ -24,5 +24,6 @@ include(
     "game:uno-game",
     "game:music-quiz",
     "utils",
+    "utils:ktor",
     "utils:verification-system"
 )

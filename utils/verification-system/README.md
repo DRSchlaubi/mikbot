@@ -2,6 +2,8 @@
 
 Plugin requiring each invite of the bot to be manually confirmed by an owner
 
+**Requirement:** This plugin depends on [ktor](../ktor)
+
 ## Configuration
 
 This plugin adds the following new env variables.

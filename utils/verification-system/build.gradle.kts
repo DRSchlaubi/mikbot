@@ -8,10 +8,7 @@ group = "dev.schlaubi.mikbot"
 version = "1.0.1"
 
 dependencies {
-    // Verification Server
-    implementation(platform("io.ktor:ktor-bom:1.6.2"))
-    implementation("io.ktor", "ktor-server-netty")
-    implementation("io.ktor", "ktor-locations")
+    plugin(project(":utils:ktor"))
 }
 
 mikbotPlugin {

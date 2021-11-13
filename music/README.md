@@ -52,7 +52,7 @@ DOWNLOAD_PLUGINS=gdpr,database-i18n,game-animator,music,music-quiz
 ```
 I personally run my instance with these plugins
 ```shell
-DOWNLOAD_PLUGINS=redeploy-hook,gdpr,database-i18n,game-animator,music,game-api,music-quiz,uno-game,verification-system
+DOWNLOAD_PLUGINS=redeploy-hook,gdpr,database-i18n,game-animator,music,game-api,music-quiz,uno-game,ktor,verification-system
 ```
 
 For additional configuration please check [redeploy-hook](../core/redeploy-hook) and [verification-system](../utils/verification-system)

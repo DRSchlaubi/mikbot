@@ -38,8 +38,7 @@ fun GameModule<*, *>.leaderboardCommand(
                 user,
                 count,
                 all,
-                {
-                    val stats = gameStats.findOneById(it.stats)!!.stats
+                { (_, stats) ->
                     val ratio = stats.ratio.formatPercentage()
                     "${
                         user.asMemberOrNull(safeGuild.id)?.mention ?: user.asUserOrNull()?.username

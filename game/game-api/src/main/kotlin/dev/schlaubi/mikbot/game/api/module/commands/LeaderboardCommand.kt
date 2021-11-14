@@ -38,10 +38,12 @@ fun GameModule<*, *>.leaderboardCommand(
                 user,
                 count,
                 all,
-                { (_, stats) ->
+                { (userId, stats) ->
                     val ratio = stats.ratio.formatPercentage()
+                    val user = kord.unsafe.user(userId)
+                    
                     "${
-                        user.asMemberOrNull(safeGuild.id)?.mention ?: user.asUserOrNull()?.username
+                        user?.mention ?: user.asUserOrNull()?.username
                         ?: user.mention
                     } - ${stats.wins}/${stats.losses} ($ratio)"
                 },

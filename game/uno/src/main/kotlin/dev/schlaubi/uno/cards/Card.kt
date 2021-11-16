@@ -33,7 +33,7 @@ public sealed interface ActionCard : Card {
      *
      * @param player the [Player] who played this card.
      */
-    public fun applyToGame(game: Game<*>, player: Player)
+    public suspend fun applyToGame(game: Game<*>, player: Player)
 }
 
 /**

@@ -3,6 +3,7 @@ package dev.schlaubi.uno
 import dev.schlaubi.uno.cards.*
 import dev.schlaubi.uno.exceptions.CardDoesNotMatchException
 import dev.schlaubi.uno.exceptions.PlayerDoesNotHaveCardException
+import kotlinx.coroutines.runBlocking
 import java.util.*
 import kotlin.random.Random
 
@@ -44,9 +45,9 @@ public open class Player {
      *
      * @throws PlayerDoesNotHaveCardException if the player doesn't have an instance of [card] in
      * his deck
-     * @throws CardDoesntMatchException if the card doesn't match the top card
+     * @throws CardDoesNotMatchException if the card doesn't match the top card
      */
-    public fun playCard(game: Game<*>, card: Card, color: UnoColor = UnoColor.BLUE) {
+    public suspend fun playCard(game: Game<*>, card: Card, color: UnoColor = UnoColor.BLUE) {
         if (!deck.remove(card)) {
             throw PlayerDoesNotHaveCardException(card)
         }
@@ -56,6 +57,18 @@ public open class Player {
 
     /** Makes the player draw 1 card in [game]. */
     public fun draw(game: Game<*>): Unit = game.drawCards(this, 1)
+
+    /**
+     * Callback if a [SlapCard] is played.
+     *
+     * This expects to call [SlapContext.slap]
+     */
+    public open fun onSlap(context: SlapContext): Unit = Unit
+
+    /**
+     * Callback if a [SlapCard] is played and you were to slow.
+     */
+    public open fun onSlapEnd(): Unit = Unit
 }
 
 /**
@@ -80,6 +93,7 @@ public class Game<T : Player>(
     private val deck = getDefaultUnoDeck(extreme, flash)
     internal val playedDeck: MutableList<PlayedCard> = mutableListOf()
     private val _players = ArrayList(initialPlayers)
+    private val slapPlayers: MutableList<Player> = mutableListOf()
 
     // last player cannot win
     private val _wonPlayers = ArrayList<T>(initialPlayers.size - 1)
@@ -101,14 +115,19 @@ public class Game<T : Player>(
 
         // Hand out each player's initial cards
         players.forEach {
-            it.deck = mutableListOf()
+            it.deck = ArrayList(7)
+            UnoColor.values().forEach { color ->
+                it.deck.add(SlapCard(color))
+            }
             handOutCards(it, 7)
         }
 
         // Poll first card
-        playedDeck.add(deck.poll().play(UnoColor.BLUE))
+        playedDeck.add(deck.pollNonSlapCard().play(UnoColor.BLUE))
         // Play first card as first player
-        playCard(players.first(), playedDeck.first())
+        runBlocking {
+            playCard(players.first(), playedDeck.first())
+        }
     }
 
     /** The index of the last player, having a turn. */
@@ -148,14 +167,15 @@ public class Game<T : Player>(
 
     public fun removePlayer(player: Player): Boolean = _players.remove(player)
 
-    public fun dropIn(player: Player, card: PlayedCard) {
+    public suspend fun dropIn(player: Player, card: PlayedCard) {
         if (topCard != card) throw CardDoesNotMatchException(topCard, card)
         if (player.deck.size == 2) player.uno()
         playerSequence.lastIndex = _players.indexOf(player)
         player.playCard(this, card)
     }
 
-    internal fun playCard(player: Player, card: PlayedCard) {
+
+    internal suspend fun playCard(player: Player, card: PlayedCard) {
         // Check card matches
         if (!card.canBePlayedOn(topCard)) throw CardDoesNotMatchException(topCard, card)
 
@@ -230,6 +250,18 @@ public class Game<T : Player>(
         player.deck.addAll(drawedCards)
     }
 
+    private tailrec fun LinkedList<Card>.pollNonSlapCard(): Card {
+        val card = poll()
+        return if (card is SlapCard) {
+            playedDeck.add(card)
+
+            pollNonSlapCard()
+        } else {
+            card
+        }
+    }
+
+
     private inner class NormalPlayerSequence : PlayerSequence<T> {
         override var lastIndex = -1
 
@@ -256,6 +288,14 @@ public class Game<T : Player>(
 
             return player
         }
+    }
+
+    /**
+     * Initiates a slap round initiated by [player].
+     */
+    public suspend fun initiateSlapRound(player: Player) {
+
+        slapPlayers.clear()
     }
 
     /** Sequence selecting players completely random, simmilar to the UNO variant UNO flash */
@@ -299,6 +339,13 @@ public fun getDefaultUnoDeck(extreme: Boolean, flash: Boolean): LinkedList<Card>
     }
     if (flash) {
         deck.removeIf { it is ReverseCard }
+        val slapCards = UnoColor.values().flatMap { color ->
+            (0 until 2).map {
+                SlapCard(color)
+            }
+        }
+
+        deck.addAll(slapCards)
     }
 
     return deck

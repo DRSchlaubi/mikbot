@@ -30,6 +30,8 @@ tasks {
     // KSP caches forgets about annotations all the tme
     val deleteKspCache = task<Delete>("deleteKspCache") {
         delete(buildDir.resolve("kspCaches"))
+        delete(buildDir.resolve("libs"))
+        delete(buildDir.resolve("plugin"))
     }
 
     jar {

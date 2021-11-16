@@ -13,5 +13,5 @@ import dev.schlaubi.uno.UnoColor
 @Suppress("DataClassCanBeRecord")
 public data class ReverseCard(override val color: UnoColor) : ColoredCard(), ActionCard {
     override fun canBePlayedOn(card: PlayedCard): Boolean = super.canBePlayedOn(card) || card is ReverseCard
-    override fun applyToGame(game: Game<*>, player: Player): Unit = game.reverse()
+    override suspend fun applyToGame(game: Game<*>, player: Player): Unit = game.reverse()
 }

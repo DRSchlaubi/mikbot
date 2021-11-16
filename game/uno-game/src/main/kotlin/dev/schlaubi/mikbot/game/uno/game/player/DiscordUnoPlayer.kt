@@ -4,6 +4,7 @@ import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.edit
+import dev.kord.core.behavior.interaction.followUp
 import dev.kord.core.behavior.interaction.followUpEphemeral
 import dev.kord.core.entity.interaction.InteractionFollowup
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
@@ -15,6 +16,8 @@ import dev.schlaubi.uno.Game
 import dev.schlaubi.uno.Player
 import dev.schlaubi.uno.cards.AbstractWildCard
 import dev.schlaubi.uno.cards.DiscardAllCardsCard
+import dev.schlaubi.uno.cards.SlapCard
+import dev.schlaubi.uno.cards.SlapContext
 import kotlinx.coroutines.launch
 import kotlin.time.Duration
 import dev.schlaubi.mikbot.game.api.Player as GamePlayer
@@ -124,6 +127,10 @@ class DiscordUnoPlayer(
                     uno() // you cannot say uno unless having two cards, so we just auto-uno here
                 }
 
+                if (card is SlapCard) {
+                    updateControls(false) // Disable controls for player during slap turn
+                }
+
                 if (card is AbstractWildCard && deck.size != 1) { // ignore pick on last card
                     val color = pickWildCardColor()
                     playCard(game.game, card, color)
@@ -208,4 +215,21 @@ class DiscordUnoPlayer(
     override fun hashCode(): Int {
         return user.hashCode()
     }
+
+    override fun onSlap(context: SlapContext) {
+        game.launch {
+            openSlapCardUI(context)
+        }
+    }
+
+    override fun onSlapEnd() {
+        game.launch {
+            updateControls(false)
+            response.followUp {
+                translate("game.slap_session.lost")
+            }
+        }
+    }
+
+    override fun toString(): String = user.toString()
 }

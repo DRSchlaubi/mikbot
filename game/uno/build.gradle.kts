@@ -3,10 +3,14 @@ plugins {
 }
 
 group = "dev.schlaubi"
-version = "1.0.1"
+version = "1.1.0"
 
 repositories {
     mavenCentral()
+}
+
+dependencies {
+    implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-core", "1.5.2")
 }
 
 kotlin {

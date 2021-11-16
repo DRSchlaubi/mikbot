@@ -8,11 +8,16 @@ import dev.schlaubi.mikbot.plugin.api.util.MessageBuilder
 import dev.schlaubi.mikbot.plugin.api.util.getLocale
 import java.util.*
 
-suspend fun AbstractGame<*>.confirmation(ack: EphemeralInteractionResponseBehavior, messageBuilder: MessageBuilder) =
+suspend fun AbstractGame<*>.confirmation(
+    ack: EphemeralInteractionResponseBehavior,
+    hasNoOption: Boolean = true,
+    messageBuilder: MessageBuilder
+) =
     dev.schlaubi.mikbot.plugin.api.util.confirmation(
         {
             ack.followUpEphemeral { it() }
         },
+        hasNoOption = hasNoOption,
         messageBuilder = messageBuilder,
         translate = translationsProvider::translate
     )

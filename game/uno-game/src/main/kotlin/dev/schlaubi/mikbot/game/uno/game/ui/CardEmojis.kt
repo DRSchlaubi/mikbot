@@ -46,7 +46,8 @@ private val ColoredCard.redColor
         893105958606217257,
         893105958694289448,
         893105958761410561,
-        900531808658137118
+        900531808658137118,
+        909944153859829822
     )
 
 private val ColoredCard.yellowColor
@@ -64,7 +65,8 @@ private val ColoredCard.yellowColor
         893106808439341076,
         893106808443531324,
         893106808250564659,
-        900531808721047603
+        900531808721047603,
+        909944863506726983
     )
 
 private val ColoredCard.blueColor
@@ -82,7 +84,8 @@ private val ColoredCard.blueColor
         893108289536147516,
         893108289531936809,
         893108289393532938,
-        900531808804962346
+        900531808804962346,
+        909942679847202836
     )
 
 private val ColoredCard.greenColor
@@ -100,7 +103,8 @@ private val ColoredCard.greenColor
         893107335424245771,
         893107335424245770,
         893107335327809557,
-        900531808767193118
+        900531808767193118,
+        909944587727032320
     )
 
 private fun AbstractWildCard.s(normal: Long, drawing: Long): Long = if (this is DrawingCard) drawing else normal
@@ -119,13 +123,15 @@ private fun ColoredCard.s(
     skip: Long,
     reverse: Long,
     draw2: Long,
-    discardAllCards: Long
+    discardAllCards: Long,
+    slap: Long
 ): Long {
     return when (this) {
         is ReverseCard -> reverse
         is SkipCard -> skip
         is DrawTwoCard -> draw2
         is DiscardAllCardsCard -> discardAllCards
+        is SlapCard -> slap
         else -> when (val number = (this as SimpleCard).number) {
             0 -> e0
             1 -> e1

@@ -53,19 +53,21 @@ private suspend fun CommandContext.confirmation(
     sendMessage: EditableMessageSender,
     timeout: Duration = Duration.seconds(30),
     messageBuilder: MessageBuilder
-): Confirmation = confirmation(sendMessage, timeout, messageBuilder) { key, group ->
+): Confirmation = confirmation(sendMessage, timeout, messageBuilder, translate = { key, group ->
     translate(key, group)
-}
+})
 
 /**
  * Bare bone confirmation implementation.
  */
 public suspend fun confirmation(
     sendMessage: EditableMessageSender,
-    timeout: Duration = Duration.seconds(30),
+    timeout: Duration? = Duration.seconds(30),
     messageBuilder: MessageBuilder,
     hasNoOption: Boolean = true,
-    translate: Translator
+    translate: Translator,
+    yesWord: String? = null,
+    noWord: String? = null
 ): Confirmation {
     val message = sendMessage {
         messageBuilder()
@@ -73,19 +75,19 @@ public suspend fun confirmation(
         components {
             actionRow {
                 interactionButton(ButtonStyle.Success, yes) {
-                    label = translate("general.yes", "general")
+                    label = yesWord ?: translate("general.yes", "general")
                 }
 
                 if (hasNoOption) {
                     interactionButton(ButtonStyle.Danger, no) {
-                        label = translate("general.no", "general")
+                        label = noWord ?: translate("general.no", "general")
                     }
                 }
             }
         }
     }
 
-    val response = message.kord.waitFor<InteractionCreateEvent>(timeout.inWholeMilliseconds) {
+    val response = message.kord.waitFor<InteractionCreateEvent>(timeout?.inWholeMilliseconds) {
         (interaction as? ComponentInteraction)?.let {
             it.message?.id == message.id
         } == true

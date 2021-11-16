@@ -36,6 +36,7 @@ val ColoredCard.translationKey: String
             is ReverseCard -> "reverse"
             is SkipCard -> "skip"
             is DiscardAllCardsCard -> "discard_all_cards"
+            is SlapCard -> "slap"
         }
 
         return "$coloredTranslation$name"

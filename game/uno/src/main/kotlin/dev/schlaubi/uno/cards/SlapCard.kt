@@ -14,6 +14,8 @@ import kotlin.time.ExperimentalTime
  * The Slap card from the variant UNO Flash.
  */
 public class SlapCard(override val color: UnoColor) : ColoredCard(), ActionCard {
+    override fun canBePlayedOn(card: PlayedCard): Boolean = super.canBePlayedOn(card) || card is SlapCard
+
     @OptIn(ExperimentalTime::class)
     override suspend fun applyToGame(game: Game<*>, player: Player) {
         if (game.players.size > 2) {

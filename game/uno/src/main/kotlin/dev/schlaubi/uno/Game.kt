@@ -116,9 +116,6 @@ public class Game<T : Player>(
         // Hand out each player's initial cards
         players.forEach {
             it.deck = ArrayList(7)
-            UnoColor.values().forEach { color ->
-                it.deck.add(SlapCard(color))
-            }
             handOutCards(it, 7)
         }
 

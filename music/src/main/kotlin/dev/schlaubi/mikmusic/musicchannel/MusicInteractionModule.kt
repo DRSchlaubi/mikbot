@@ -4,7 +4,6 @@ import com.kotlindiscord.kord.extensions.checks.guildFor
 import com.kotlindiscord.kord.extensions.checks.inChannel
 import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.extensions.event
-import dev.kord.core.behavior.channel.MessageChannelBehavior
 import dev.kord.core.behavior.channel.withTyping
 import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.followUpEphemeral
@@ -113,32 +112,33 @@ class MusicInteractionModule : Extension() {
             }
 
             action {
-                val guild = guildFor(event) ?: return@action
+                event.message.channel.withTyping {
+                    val guild = event.getGuild()!!
+                    event.message.delete()
+                    val player = musicModule.getMusicPlayer(guild)
+                    val tracks = player.takeFirstMatch(
+                        player,
+                        event.message.content
+                    )
 
-                val player = musicModule.getMusicPlayer(guild)
-                val tracks = player.takeFirstMatch(
-                    event.message.channel,
-                    player, event.message.content
-                )
+                    player.queueTrack(
+                        force = false,
+                        onTop = false,
+                        tracks = tracks.mapToQueuedTrack(event.message.author!!)
+                    )
 
-                player.queueTrack(
-                    force = false,
-                    onTop = false,
-                    tracks = tracks.mapToQueuedTrack(event.message.author!!)
-                )
-                event.message.deleteAfterwards()
-
-                if (tracks.isEmpty()) {
-                    event.message
-                        .reply { content = translate("music.queue.no_matches", "music") }
-                        .deleteAfterwards()
+                    if (tracks.isEmpty()) {
+                        event.message
+                            .reply { content = translate("music.queue.no_matches", "music") }
+                            .deleteAfterwards()
+                    }
                 }
             }
         }
     }
 }
 
-suspend fun Link.takeFirstMatch(channel: MessageChannelBehavior, musicPlayer: MusicPlayer, query: String): List<Track> {
+suspend fun Link.takeFirstMatch(musicPlayer: MusicPlayer, query: String): List<Track> {
     val isUrl = query.startsWith("http")
     val queryString = if (isUrl) {
         query
@@ -147,10 +147,7 @@ suspend fun Link.takeFirstMatch(channel: MessageChannelBehavior, musicPlayer: Mu
     }
 
     if (isUrl) {
-        val spotifySearch: List<Track>?
-        channel.withTyping {
-            spotifySearch = findSpotifySongs(musicPlayer, query)
-        }
+        val spotifySearch: List<Track>? = findSpotifySongs(musicPlayer, query)
 
         if (!spotifySearch.isNullOrEmpty()) {
             return spotifySearch

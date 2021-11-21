@@ -32,6 +32,7 @@ dependencies {
     implementation("dev.schlaubi", "envconf", "1.1")
 
     implementation(project(":api"))
+    implementation(kotlin("reflect"))
 }
 
 application {

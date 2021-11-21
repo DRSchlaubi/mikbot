@@ -27,6 +27,7 @@ object PluginLoader : DefaultPluginManager(), KoinComponent {
     }
     private val updateManager = UpdateManager(this, repos)
     private val rootTranslations = ClassLoader.getSystemClassLoader().findTranslations()
+    override fun createExtensionFinder(): ExtensionFinder = DependencyCheckingExtensionFinder(this)
 
     private lateinit var pluginBundles: Map<String, String>
 

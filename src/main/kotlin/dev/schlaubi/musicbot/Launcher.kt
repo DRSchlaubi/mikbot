@@ -15,7 +15,10 @@ suspend fun main() {
 }
 
 private fun loadPlugins() {
-    System.setProperty("pf4j.pluginsDir", Config.PLUGIN_PATH.absolutePathString())
+    if (System.getProperty("pf4j.pluginsDir").isNullOrBlank()) {
+        System.setProperty("pf4j.pluginsDir", Config.PLUGIN_PATH.absolutePathString())
+    }
+
     _pluginSystem = PluginLoader.system
     PluginLoader.loadPlugins()
     PluginLoader.startPlugins()

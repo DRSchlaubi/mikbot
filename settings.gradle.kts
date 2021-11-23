@@ -28,3 +28,4 @@ include(
     "utils:verification-system",
     "utils:epic-games-notifier"
 )
+include("test-bot")

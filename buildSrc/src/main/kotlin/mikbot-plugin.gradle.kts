@@ -2,6 +2,7 @@ import dev.schlaubi.mikbot.plugins.gradle.publishing.MakeRepositoryIndexTask
 import dev.schlaubi.mikbot.plugins.gradle.publishing.PluginExtension
 import dev.schlaubi.mikbot.plugins.gradle.publishing.pluginExtensionName
 import java.nio.file.Files
+import java.nio.file.Path
 
 plugins {
     id("com.google.devtools.ksp") // used for plugin-processor
@@ -11,12 +12,18 @@ plugins {
 
 extensions.create<PluginExtension>(pluginExtensionName)
 
-val pluginMainPath = buildDir.toPath().resolve("plugin-reports").resolve(name)
-val pluginMainFile = pluginMainPath.resolve("plugin-main-class.txt")
-val extensionsFile = pluginMainPath.resolve("extensions.txt")
+// There might be a better way of doing this, but for now I can't be bothered figuring it out
+val pluginMainFile: Path = buildDir
+    .resolve("generated")
+    .resolve("ksp")
+    .resolve("main")
+    .resolve("resources")
+    .resolve("META-INF")
+    .resolve("MANIFEST.MF")
+    .toPath()
 
-val plugin by configurations.creating
-val optionalPlugin by configurations.creating
+val plugin: Configuration by configurations.creating
+val optionalPlugin: Configuration by configurations.creating
 
 configurations {
     compileOnly {
@@ -28,26 +35,13 @@ configurations {
 dependencies {
     compileOnly(kotlin("stdlib-jdk8")) // this one is included in the bot itself
     compileOnly(project(":api"))
-    //kapt("org.pf4j", "pf4j", "3.6.0")
     ksp(project(":plugin-processor"))
 }
 
-ksp {
-    arg("output-dir", pluginMainPath.toAbsolutePath().toString())
-}
-
 tasks {
-    // KSP caches forgets about annotations all the tme
-    val deleteKspCache = task<Delete>("deleteKspCache") {
-        delete({ tasks["kspKotlin"] })
-    }
-
-    jar {
-        dependsOn(deleteKspCache, "kspKotlin")
-    }
-
     // Taken from: https://github.com/twatzl/pf4j-kotlin-demo/blob/master/plugins/build.gradle.kts#L20-L35
     val archive = register<Jar>("assemblePlugin") {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         dependsOn(jar)
 
         destinationDirectory.set(buildDir.resolve("plugin"))
@@ -77,6 +71,8 @@ tasks {
         jar {
             doLast {
                 val mainClass = Files.readString(pluginMainFile)
+                    .substringAfter("Plugin-Class: ")
+                    .substringBefore(System.lineSeparator())
                 val extension = project.extensions.getByName<PluginExtension>(pluginExtensionName)
                 manifest {
                     attributes["Plugin-Class"] = mainClass
@@ -93,13 +89,6 @@ tasks {
                     attributes["Plugin-Provider"] = extension.provider.getOrElse("MikBot Contributors")
                     attributes["Plugin-License"] = extension.license.getOrElse("Apache 2.0")
                 }
-            }
-
-            into("META-INF") {
-                val extensionFileName = extensionsFile.fileName.toString()
-                from(pluginMainPath)
-                include(extensionFileName)
-                rename(extensionFileName, "extensions.idx")
             }
         }
     }

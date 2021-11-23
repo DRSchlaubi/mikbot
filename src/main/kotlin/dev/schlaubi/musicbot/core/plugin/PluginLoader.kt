@@ -122,7 +122,23 @@ object PluginLoader : DefaultPluginManager(), KoinComponent {
     val botPlugins: List<Plugin> get() = plugins.values.map { it.plugin.asPlugin() }
 }
 
-private class MikBotPluginDescriptionFinder : ManifestPluginDescriptorFinder() {
+private class MikBotPluginDescriptionFinder : PluginDescriptorFinder {
+    private val propertiesFinder = PropertiesPluginDescriptorFinder()
+    private val manifestFinder = MikBotPluginManifestDescriptionFinder()
+
+    override fun isApplicable(pluginPath: Path): Boolean = pluginPath.exists() && pluginPath.isDirectory()
+
+    override fun find(pluginPath: Path): PluginDescriptor {
+        val newPath = pluginPath / "META-INF" / "plugin.properties"
+        if (newPath.exists()) {
+            return propertiesFinder.find(pluginPath)
+        }
+
+        return manifestFinder.find(pluginPath)
+    }
+}
+
+private class MikBotPluginManifestDescriptionFinder : ManifestPluginDescriptorFinder() {
     override fun isApplicable(pluginPath: Path): Boolean = pluginPath.exists() && pluginPath.isDirectory()
 
     override fun getManifestPath(pluginPath: Path): Path {

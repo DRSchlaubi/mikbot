@@ -4,6 +4,9 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.gradle.api.Project
+import org.gradle.api.artifacts.Dependency
+import org.gradle.api.artifacts.ProjectDependency
+import org.gradle.kotlin.dsl.provideDelegate
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -37,4 +40,24 @@ val Project.pluginFilePath: String
 private data class PluginWrapper(val pluginInfo: PluginInfo) {
     override fun equals(other: Any?): Boolean = (other as? PluginWrapper)?.pluginInfo?.id == pluginInfo.id
     override fun hashCode(): Int = pluginInfo.id.hashCode()
+}
+
+fun Project.buildDependenciesString(): String {
+    val plugin  = configurations.getByName("plugin")
+    val optionalPlugin  = configurations.getByName("optionalPlugin")
+
+    val required = plugin.allDependencies.map { it.toDependencyString() }
+    val optional = optionalPlugin.allDependencies.map { it.toDependencyString(true) }
+
+    return (required + optional).joinToString(", ")
+}
+
+fun Dependency.toDependencyString(optional: Boolean = false): String {
+    val name = if (this is ProjectDependency) {
+        dependencyProject.name
+    } else {
+        name
+    }
+
+    return "$name${if (optional) "?" else ""}@$version"
 }

@@ -1,7 +1,6 @@
 import dev.schlaubi.mikbot.plugins.gradle.publishing.MakeRepositoryIndexTask
 import dev.schlaubi.mikbot.plugins.gradle.publishing.PluginExtension
 import dev.schlaubi.mikbot.plugins.gradle.publishing.pluginExtensionName
-import java.nio.file.Files
 import java.nio.file.Path
 
 plugins {
@@ -39,6 +38,23 @@ dependencies {
 }
 
 tasks {
+    val patchProperties = task<PatchPropertiesTask>("patchPluginProperties") {
+        dependsOn("kspKotlin")
+        propertiesFile.set(
+            buildDir.resolve("generated")
+                .resolve("ksp")
+                .resolve("main")
+                .resolve("resources")
+                .resolve("META-INF")
+                .resolve("plugin.properties")
+                .toPath()
+        )
+    }
+
+    jar {
+        dependsOn(patchProperties)
+    }
+
     // Taken from: https://github.com/twatzl/pf4j-kotlin-demo/blob/master/plugins/build.gradle.kts#L20-L35
     val archive = register<Jar>("assemblePlugin") {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
@@ -65,31 +81,10 @@ tasks {
             })
         }
         archiveExtension.set("zip")
-    }
 
-    afterEvaluate {
-        jar {
-            doLast {
-                val mainClass = Files.readString(pluginMainFile)
-                    .substringAfter("Plugin-Class: ")
-                    .substringBefore(System.lineSeparator())
-                val extension = project.extensions.getByName<PluginExtension>(pluginExtensionName)
-                manifest {
-                    attributes["Plugin-Class"] = mainClass
-                    attributes["Plugin-Id"] = project.name
-                    attributes["Plugin-Version"] = (project.version as String)
-                    extension.requires.orNull?.let { requires ->
-                        attributes["Plugin-Requires"] = requires
-                    }
-                    buildDependenciesString().takeIf { it.isNotBlank() }?.let { dependencies ->
-                        attributes["Plugin-Dependencies"] = dependencies
-                    }
-
-                    attributes["Plugin-Description"] = extension.description.getOrElse("<no description>")
-                    attributes["Plugin-Provider"] = extension.provider.getOrElse("MikBot Contributors")
-                    attributes["Plugin-License"] = extension.license.getOrElse("Apache 2.0")
-                }
-            }
+        into(".") {
+            from(pluginMainFile.parent)
+            include("plugin.properties")
         }
     }
 
@@ -109,23 +104,6 @@ tasks {
             into(repository.resolve("${project.name}/$version"))
         }
     }
-}
-
-fun buildDependenciesString(): String {
-    val required = plugin.allDependencies.map { it.toDependencyString() }
-    val optional = optionalPlugin.allDependencies.map { it.toDependencyString(true) }
-
-    return (required + optional).joinToString(", ")
-}
-
-fun Dependency.toDependencyString(optional: Boolean = false): String {
-    val name = if (this is ProjectDependency) {
-        dependencyProject.name
-    } else {
-        name
-    }
-
-    return "$name${if (optional) "?" else ""}@$version"
 }
 
 fun File.removeVersion() = name.takeWhile { !it.isDigit() }

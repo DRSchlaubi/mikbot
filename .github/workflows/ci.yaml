@@ -20,7 +20,7 @@ jobs:
           java-version: '16'
       - uses: gradle/gradle-build-action@v1
         with:
-          arguments: classes ktlintCheck
+          arguments: :classes ktlintCheck
       - name: Upload artifact
         uses: actions/upload-artifact@v2.2.3
         with:
@@ -44,7 +44,7 @@ jobs:
           java-version: '16'
       - uses: gradle/gradle-build-action@v1
         with:
-          arguments: installDist
+          arguments: :installDist
       - name: Login
         env:
           GITHUB_TOKEN: ${{ secrets.DOCKER_TOKEN }}

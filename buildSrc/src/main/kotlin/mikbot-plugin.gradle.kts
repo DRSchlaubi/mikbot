@@ -82,7 +82,7 @@ tasks {
         }
         archiveExtension.set("zip")
 
-        into(".") {
+        into("") {
             from(pluginMainFile.parent)
             include("plugin.properties")
         }

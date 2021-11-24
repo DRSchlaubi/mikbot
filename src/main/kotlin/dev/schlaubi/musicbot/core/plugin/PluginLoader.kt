@@ -129,7 +129,7 @@ private class MikBotPluginDescriptionFinder : PluginDescriptorFinder {
     override fun isApplicable(pluginPath: Path): Boolean = pluginPath.exists() && pluginPath.isDirectory()
 
     override fun find(pluginPath: Path): PluginDescriptor {
-        val newPath = pluginPath / "META-INF" / "plugin.properties"
+        val newPath = pluginPath / "plugin.properties"
         if (newPath.exists()) {
             return propertiesFinder.find(pluginPath)
         }
@@ -151,7 +151,13 @@ private class DefaultPluginSystem(private val manager: PluginManager) : PluginSy
 }
 
 private fun ClassLoader.findTranslations(): Sequence<String> {
-    val resourcePath = getResource("translations")?.file
+    val resourcePath = getResource("translations")?.file?.let {
+        if (isWindows()) {
+            it.drop(1)
+        } else {
+            it
+        }
+    }
 
     val path = resourcePath?.let { path -> Path(path) }
     if (path != null && path.isDirectory()) {
@@ -163,3 +169,5 @@ private fun ClassLoader.findTranslations(): Sequence<String> {
 
     return emptySequence()
 }
+
+private fun isWindows() = System.getProperty("os.name").startsWith("Windows")

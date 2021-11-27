@@ -17,16 +17,20 @@ dependencies {
 }
 
 tasks {
-    val pluginsTxt = file("plugins.txt")
-    val plugins = Files.readAllLines(pluginsTxt.toPath())
-        .asSequence()
-        .filterNot { it.startsWith("#") }
-        .filterNot { it.isBlank() }
-        .toList()
+    val pluginsTxt = file("plugins.txt").toPath()
+    val plugins = if(Files.exists(pluginsTxt)) {
+        Files.readAllLines(pluginsTxt)
+            .asSequence()
+            .filterNot { it.startsWith("#") }
+            .filterNot { it.isBlank() }
+            .toList()
+    } else {
+        emptyList()
+    }
     val pluginsDirectory = file("plugins")
 
     val deleteObsoletePlugins = task<Delete>("deleteObsoletePlugins") {
-        file("plugins").listFiles()!!.forEach {
+        file("plugins").listFiles()?.forEach {
             delete(it)
         }
     }

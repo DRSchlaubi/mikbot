@@ -67,7 +67,6 @@ tasks {
                 const val transientDependencies = "${files.joinToString("\\n")}"
             """.trimIndent()
 
-
             Files.writeString(Path.of("/home/mik/IdeaProjects/mikmusic/gradle-plugin/src/main/kotlin/dev/schlaubi/mikbot/gradle/TransientDependencies.kt"), kotlinFile)
         }
     }

@@ -14,6 +14,7 @@ dependencies {
 
 tasks {
     "buildRepository"(MakeRepositoryIndexTask::class) {
+        repositoryUrl.set("https://plugin-repository.mikbot.schlaubi.net")
         targetDirectory.set(rootProject.file("ci-repo").toPath())
     }
 }

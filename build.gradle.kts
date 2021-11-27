@@ -55,10 +55,20 @@ tasks {
         }
     }
 
+    // This is probbably the worst way of doing this,
+    // but I tried to use JVM resources or compilation file manipulation for 3 hrs now with no luck
     task("exportDependencies") {
         doLast {
             val files = configurations["runtimeClasspath"].files.mapNotNull { it.removeVersion() }
-            Files.writeString(Path.of("main-dependency-export.txt"), files.joinToString("\n"))
+
+            val kotlinFile = """
+                package dev.schlaubi.mikbot.gradle
+                
+                const val transientDependencies = "${files.joinToString("\\n")}"
+            """.trimIndent()
+
+
+            Files.writeString(Path.of("/home/mik/IdeaProjects/mikmusic/gradle-plugin/src/main/kotlin/dev/schlaubi/mikbot/gradle/TransientDependencies.kt"), kotlinFile)
         }
     }
 }

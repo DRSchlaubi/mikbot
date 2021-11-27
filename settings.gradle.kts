@@ -26,6 +26,8 @@ include(
     "utils",
     "utils:ktor",
     "utils:verification-system",
-    "utils:epic-games-notifier"
+    "utils:epic-games-notifier",
+    "test-bot"
 )
-include("test-bot")
+
+includeBuild("gradle-plugin")

@@ -1,6 +1,5 @@
-import dev.schlaubi.mikbot.plugins.gradle.publishing.ExtensionKt;
-import dev.schlaubi.mikbot.plugins.gradle.publishing.PluginExtension;
-import dev.schlaubi.mikbot.plugins.gradle.publishing.UtilKt;
+package dev.schlaubi.mikbot.gradle;
+
 import org.gradle.api.DefaultTask;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.InputFile;

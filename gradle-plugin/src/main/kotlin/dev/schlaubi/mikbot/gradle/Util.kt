@@ -1,4 +1,4 @@
-package dev.schlaubi.mikbot.plugins.gradle.publishing
+package dev.schlaubi.mikbot.gradle
 
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
@@ -6,7 +6,6 @@ import kotlinx.serialization.json.Json
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Dependency
 import org.gradle.api.artifacts.ProjectDependency
-import org.gradle.kotlin.dsl.provideDelegate
 import java.nio.file.Files
 import java.nio.file.Path
 

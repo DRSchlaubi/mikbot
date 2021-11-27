@@ -1,3 +1,6 @@
+import java.nio.file.Files
+import java.nio.file.Path
+
 plugins {
     `mikbot-module`
     kotlin("plugin.serialization") version "1.5.31"
@@ -51,8 +54,23 @@ tasks {
             freeCompilerArgs = freeCompilerArgs + listOf("-Xopt-in=dev.schlaubi.mikbot.plugin.api.InternalAPI")
         }
     }
+
+    task("exportDependencies") {
+        doLast {
+            val files = configurations["runtimeClasspath"].files.mapNotNull { it.removeVersion() }
+            Files.writeString(Path.of("main-dependency-export.txt"), files.joinToString("\n"))
+        }
+    }
 }
 
 ktlint {
     disabledRules.add("no-wildcard-imports")
+}
+
+fun File.removeVersion(): String? {
+    val possibleVersions = name.split("-[0-9]".toRegex())
+    if (possibleVersions.size <= 1) return null
+    val version = possibleVersions.last()
+
+    return name.substring(0, name.length - version.length - 2)
 }

@@ -1,4 +1,4 @@
-package dev.schlaubi.mikbot.plugins.gradle.publishing
+package dev.schlaubi.mikbot.gradle
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.provider.Property

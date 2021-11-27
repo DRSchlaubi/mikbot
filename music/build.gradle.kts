@@ -27,3 +27,7 @@ dependencies {
     // GDPR support
     optionalPlugin(project(":core:gdpr"))
 }
+
+mikbotPlugin {
+    description.set("Plugin providing full music functionality for the bot")
+}

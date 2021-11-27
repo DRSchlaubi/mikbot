@@ -1,4 +1,4 @@
-package dev.schlaubi.mikbot.plugins.gradle.publishing
+package dev.schlaubi.mikbot.gradle
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable

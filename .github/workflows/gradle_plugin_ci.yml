@@ -3,12 +3,12 @@ name: Gradle Plugin CI
 on:
   push:
     paths:
-      - gradle-plugin
+      - gradle-plugin/**
     branches:
       - main
   pull_request:
     paths:
-      - gradle-plugin
+      - gradle-plugin/**
     types:
       - opened
       - synchronize

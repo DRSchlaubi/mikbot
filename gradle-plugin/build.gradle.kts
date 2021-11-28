@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "dev.schlaubi"
-version = "1.0.0"
+version = "1.0.1"
 
 repositories {
     mavenCentral()
@@ -32,7 +32,7 @@ pluginBundle {
     website = "https://github.com/DRSchlaubi/mikbot/tree/main/gradle-plugin"
     vcsUrl = "https://github.com/DRSchlaubi/mikbot"
 
-    description = "Automatically download your dependencies at runtime on Spigot 1.16.5+"
+    description = "Utility plugin to build Mikbot and PF4J plugins"
 
     (plugins) {
         "mikbot-plugin-gradle-plugin" {

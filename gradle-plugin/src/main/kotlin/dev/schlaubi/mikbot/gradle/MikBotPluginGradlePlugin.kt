@@ -20,7 +20,7 @@ private val Project.pluginMainFile: Path
         .resolve("main")
         .resolve("resources")
         .resolve("META-INF")
-        .resolve("MANIFEST.MF")
+        .resolve("plugin.properties")
         .toPath()
 
 @Suppress("unused")
@@ -47,7 +47,12 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
                 group = "mikbot-plugin"
 
                 dependsOn("kspKotlin")
-                propertiesFile.set(mikbotPluginExtension.pluginMainFileLocation.getOrElse(project.pluginMainFile))
+                propertiesFile.set(
+                    project
+                        .mikbotPluginExtension
+                        .pluginMainFileLocation
+                        .getOrElse(project.pluginMainFile)
+                )
             }
         }
 
@@ -77,7 +82,7 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
                 dependsOn(configurations.getByName("runtimeClasspath"))
                 into("lib") {
                     it.from({
-                        val mainConfiguration = if (!mikbotPluginExtension
+                        val mainConfiguration = if (!project.mikbotPluginExtension
                                 .ignoreDependencies
                                 .getOrElse(false)
                         ) {
@@ -96,7 +101,7 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
                 }
 
                 into("") { // not specifying "" brakes Gradle btw
-                    val file = mikbotPluginExtension.pluginMainFileLocation
+                    val file = project.mikbotPluginExtension.pluginMainFileLocation
                         .getOrElse(pluginMainFile)
                     it.from(file.parent)
                     it.include(file.name)

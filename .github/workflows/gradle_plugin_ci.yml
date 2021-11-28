@@ -42,6 +42,8 @@ jobs:
         env:
           GRADLE_CONFIG: ${{ secrets.GRADLE_CONFIG }}
         run: echo "$GRADLE_CONFIG" > ~/.gradle/gradle.properties
+      - name: Update dependency list
+        run: rebuild-plugin-dependency-list.sh
       - name: Gradle Publish
         if: "github.event_name == 'push'"
         run: ./gradlew publishPlugins

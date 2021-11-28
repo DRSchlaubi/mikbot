@@ -1,3 +1,6 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+import java.nio.file.Files
+
 plugins {
     id("com.gradle.plugin-publish") version "0.16.0"
     `java-gradle-plugin`
@@ -14,6 +17,44 @@ repositories {
 
 dependencies {
     implementation("org.jetbrains.kotlinx", "kotlinx-serialization-json", "1.3.1")
+}
+
+tasks {
+    val sourcesForRelease = task<Copy>("sourcesForRelease") {
+        val exportFile = rootDir.parentFile.toPath().resolve("main-dependency-export.txt")
+        val exists = Files.exists(exportFile)
+        if (!exists) {
+            logger.warn("main-dependency-export.txt not found, consider running ./gradlew exportDependencies")
+        }
+        val dependencies = if (exists) {
+            Files.readString(exportFile).replace("\n", "\\n")
+        } else {
+            ""
+        }
+
+        from("src/main/java") {
+            include("**/TransientDependencies.java")
+            val tokens = mapOf("transient_dependencies" to dependencies)
+            filter<ReplaceTokens>(mapOf("tokens" to tokens))
+        }
+        into("build/filteredSrc")
+        includeEmptyDirs = false
+    }
+
+    compileJava {
+        dependsOn(sourcesForRelease)
+
+        source(sourcesForRelease.destinationDir)
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            // provided by sourcesForRelease task
+            exclude("**/TransientDependencies.java")
+        }
+    }
 }
 
 gradlePlugin {

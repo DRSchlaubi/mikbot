@@ -46,4 +46,4 @@ jobs:
         run: ./rebuild-plugin-dependency-list.sh
       - name: Gradle Publish
         if: "github.event_name == 'push'"
-        run: ./gradlew publishPlugins
+        run: ./gradlew :gradle-plugin:publishPlugins

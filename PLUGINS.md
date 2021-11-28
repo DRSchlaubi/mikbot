@@ -4,8 +4,7 @@ This Bot provides a plugin system with various extension points
 
 # Default plugin
 
-If you want to make a plugin you should really use [Gradle](https://gradle.org) using Maven is possible, but I don't
-want to look into a lot of it so this Guide will only work with Gradle.
+If you want to make a plugin you should really use [Gradle](https://gradle.org) using Maven is possible, but all official tooling is only provided for Gradle.
 
 build.gradle.kts
 ```kotlin
@@ -15,11 +14,21 @@ plugins {
     id("dev.schlaubi.mikbot.gradle-plugin") version "1.0.0"
 }
 
-dependencies {
-    compileOnly(kotlin("stdlib-jdk8")) // this one is included in the bot itself
-    compileOnly(project(":api"))
-    ksp(project(":plugin-processor"))
+repositories {
+    maven("https://schlaubi.jfrog.io/artifactory/mikbot/")
 }
+
+dependencies {
+    // this one is included in the bot itself, therefore we make it compileOnly
+    compileOnly(kotlin("stdlib-jdk8"))
+    compileOnly("dev.schlaubi", "mikbot-api", "2.0.1")
+    ksp("dev.schlaubi", "plugin-processor", "2.0.1")
+}
+
+mikbotPlugin {
+    description.set("This is a cool plugin!")
+}
+
 ```
 And then you can run `./gradlew assemblePlugin` to get your plugin.zip file.
 Alternatively to generating a zip file, you can also use shadowJar, but make sure to add the manifest is added.
@@ -79,3 +88,6 @@ You can then access that point you can use this
 ```kotlin
 pluginSystem.getExtensions<GDPRExtensionPoint>()
 ```
+
+# Publishing
+Please read [this](gradle-plugin/README.md#publishing) to learn how to publish plugins

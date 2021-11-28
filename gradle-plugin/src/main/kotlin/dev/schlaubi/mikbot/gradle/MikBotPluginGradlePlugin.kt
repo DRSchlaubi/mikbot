@@ -9,8 +9,8 @@ import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.TaskContainer
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.bundling.Jar
-import java.io.File
 import java.nio.file.Path
+import kotlin.io.path.name
 
 // There might be a better way of doing this, but for now I can't be bothered figuring it out
 private val Project.pluginMainFile: Path
@@ -47,15 +47,7 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
                 group = "mikbot-plugin"
 
                 dependsOn("kspKotlin")
-                propertiesFile.set(
-                    buildDir.resolve("generated")
-                        .resolve("ksp")
-                        .resolve("main")
-                        .resolve("resources")
-                        .resolve("META-INF")
-                        .resolve("plugin.properties")
-                        .toPath()
-                )
+                propertiesFile.set(mikbotPluginExtension.pluginMainFileLocation.getOrElse(project.pluginMainFile))
             }
         }
 
@@ -85,9 +77,16 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
                 dependsOn(configurations.getByName("runtimeClasspath"))
                 into("lib") {
                     it.from({
-                        val mainConfiguration = transientDependencies
-                            .lines()
-                            .filterNot { file -> file.startsWith("#") || file.isBlank() }
+                        val mainConfiguration = if (!mikbotPluginExtension
+                                .ignoreDependencies
+                                .getOrElse(false)
+                        ) {
+                            transientDependencies
+                                .lines()
+                                .filterNot { file -> file.startsWith("#") || file.isBlank() }
+                        } else {
+                            emptyList()
+                        }
 
                         // filter out dupe dependencies
                         configurations.getByName("runtimeClasspath").files.filter { file ->
@@ -96,9 +95,11 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
                     })
                 }
 
-                into("") {
-                    it.from(pluginMainFile.parent)
-                    it.include("plugin.properties")
+                into("") { // not specifying "" brakes Gradle btw
+                    val file = mikbotPluginExtension.pluginMainFileLocation
+                        .getOrElse(pluginMainFile)
+                    it.from(file.parent)
+                    it.include(file.name)
                 }
         }
     }
@@ -150,5 +151,3 @@ private inline fun <reified T : Task> TaskContainer.register(name: String, cross
 
 private fun pluginNotAppliedError(name: String): Nothing =
     error("Please make sure the $name plugin is applied before the mikbot plugin")
-
-fun File.removeVersion() = name.takeWhile { !it.isDigit() }.dropLast(1)

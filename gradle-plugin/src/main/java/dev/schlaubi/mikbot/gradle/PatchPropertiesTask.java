@@ -21,7 +21,7 @@ public abstract class PatchPropertiesTask extends DefaultTask {
         var properties = new Properties();
 
         var extension = ((PluginExtension) getProject().getExtensions()
-                .getByName(ExtensionKt.getPluginExtensionName()));
+                .getByName(ExtensionKt.pluginExtensionName));
 
         var file = getPropertiesFile().get();
         properties.load(Files.newBufferedReader(file));

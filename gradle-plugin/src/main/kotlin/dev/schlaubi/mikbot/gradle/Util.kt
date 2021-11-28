@@ -6,16 +6,17 @@ import kotlinx.serialization.json.Json
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Dependency
 import org.gradle.api.artifacts.ProjectDependency
+import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
 
-fun readPluginsJson(path: Path): List<PluginInfo> = Files.readString(path).run { Json.decodeFromString(this) }
+internal fun readPluginsJson(path: Path): List<PluginInfo> = Files.readString(path).run { Json.decodeFromString(this) }
 
-fun List<PluginInfo>.writeTo(path: Path) {
+internal fun List<PluginInfo>.writeTo(path: Path) {
     Files.writeString(path, Json.encodeToString(this))
 }
 
-fun List<PluginInfo>.addPlugins(vararg plugins: PluginInfo): List<PluginInfo> {
+internal fun List<PluginInfo>.addPlugins(vararg plugins: PluginInfo): List<PluginInfo> {
     val existingPlugins = map { PluginWrapper(it) }
     val addedPlugins = plugins.map { PluginWrapper(it) }
 
@@ -33,7 +34,7 @@ fun List<PluginInfo>.addPlugins(vararg plugins: PluginInfo): List<PluginInfo> {
     return (new + backlog).map { it.pluginInfo } + updated
 }
 
-val Project.pluginFilePath: String
+internal val Project.pluginFilePath: String
     get() = "${name}/${version}/plugin-${name}-${version}.zip"
 
 private data class PluginWrapper(val pluginInfo: PluginInfo) {
@@ -41,9 +42,9 @@ private data class PluginWrapper(val pluginInfo: PluginInfo) {
     override fun hashCode(): Int = pluginInfo.id.hashCode()
 }
 
-fun Project.buildDependenciesString(): String {
-    val plugin  = configurations.getByName("plugin")
-    val optionalPlugin  = configurations.getByName("optionalPlugin")
+internal fun Project.buildDependenciesString(): String {
+    val plugin = configurations.getByName("plugin")
+    val optionalPlugin = configurations.getByName("optionalPlugin")
 
     val required = plugin.allDependencies.map { it.toDependencyString() }
     val optional = optionalPlugin.allDependencies.map { it.toDependencyString(true) }
@@ -51,7 +52,7 @@ fun Project.buildDependenciesString(): String {
     return (required + optional).joinToString(", ")
 }
 
-fun Dependency.toDependencyString(optional: Boolean = false): String {
+internal fun Dependency.toDependencyString(optional: Boolean = false): String {
     val name = if (this is ProjectDependency) {
         dependencyProject.name
     } else {
@@ -59,4 +60,29 @@ fun Dependency.toDependencyString(optional: Boolean = false): String {
     }
 
     return "$name${if (optional) "?" else ""}@$version"
+}
+
+/**
+ * This removes the version part of Gradle artifacts and just returns the module name.
+ */
+fun File.removeVersion(): String? {
+    val possibleVersions = name.split("-[0-9]".toRegex())
+    if (possibleVersions.size <= 1) return null
+    val version = possibleVersions.last()
+
+    return name.substring(0, name.length - version.length - 2)
+}
+
+/**
+ * Tries to configure this project for raw PF4J.
+ */
+fun Project.usePF4J() {
+    extensions.configure<PluginExtension>(pluginExtensionName) {
+        with(it) {
+            ignoreDependencies.set(true)
+            pluginMainFileLocation.set(
+                buildDir.resolve("resources").resolve("main").resolve("plugin.properties").toPath()
+            )
+        }
+    }
 }

@@ -46,3 +46,5 @@ and [here](https://sdkman.io/) (Recommended for Linux/Mac)
 **Currently you can only use JDK 16, we will migrate to JDK 17 as soon as Kotlin 1.6 becomes stable**
 Please set the `ENVIRONMENT` env var to `DEVELOPMENT` whilst developing the bot.
 Also set a `TEST_GUILD` environment variable, for local commands
+
+If you are making any changes to the bots official plugins (aka the plugins in this repo), please run the `rebuild-plugin-dependency-list.sh` script first, otherwise your plugins won't be loaded properly

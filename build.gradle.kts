@@ -1,3 +1,4 @@
+import dev.schlaubi.mikbot.gradle.removeVersion
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -6,6 +7,8 @@ plugins {
     kotlin("plugin.serialization") version "1.5.31"
     id("org.jlleitschuh.gradle.ktlint") version "10.2.0"
     application
+    // This exists to add the removeVersion extension to this buildscript
+    id("dev.schlaubi.mikbot.gradle-plugin") apply false
 }
 
 group = "dev.schlaubi"
@@ -59,7 +62,9 @@ tasks {
     // but I tried to use JVM resources or compilation file manipulation for 3 hrs now with no luck
     task("exportDependencies") {
         doLast {
-            val files = configurations["runtimeClasspath"].files.mapNotNull { it.removeVersion() }
+            val files = configurations["runtimeClasspath"].files.mapNotNull {
+                it.removeVersion()
+            }
 
             val kotlinFile = """
                 package dev.schlaubi.mikbot.gradle
@@ -75,12 +80,4 @@ tasks {
 
 ktlint {
     disabledRules.add("no-wildcard-imports")
-}
-
-fun File.removeVersion(): String? {
-    val possibleVersions = name.split("-[0-9]".toRegex())
-    if (possibleVersions.size <= 1) return null
-    val version = possibleVersions.last()
-
-    return name.substring(0, name.length - version.length - 2)
 }

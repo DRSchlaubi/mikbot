@@ -1,6 +1,3 @@
-import org.apache.tools.ant.filters.ReplaceTokens
-import java.nio.file.Files
-
 plugins {
     id("com.gradle.plugin-publish") version "0.16.0"
     `java-gradle-plugin`
@@ -9,7 +6,7 @@ plugins {
 }
 
 group = "dev.schlaubi"
-version = "1.0.1"
+version = "1.0.2"
 
 repositories {
     mavenCentral()

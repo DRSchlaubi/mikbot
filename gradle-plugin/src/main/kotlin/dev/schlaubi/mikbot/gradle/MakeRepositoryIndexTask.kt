@@ -11,11 +11,23 @@ import java.util.*
 
 abstract class MakeRepositoryIndexTask : DefaultTask() {
 
+    /**
+     * The directory to save the repository to.
+     */
     @get:InputDirectory
     abstract val targetDirectory: Property<Path>
 
+    /**
+     * The URL were the repository is hosted (used for URLs in plugins.json).
+     */
     @get:Input
     abstract val repositoryUrl: Property<String>
+
+    /**
+     * The URL of this project.
+     */
+    @get:Input
+    abstract val projectUrl: Property<String>
 
     @TaskAction
     fun upload() {
@@ -32,7 +44,7 @@ abstract class MakeRepositoryIndexTask : DefaultTask() {
                 project.name,
                 project.name,
                 extension.description.getOrElse(""),
-                "https://github.com/DRSchlaubi/mikbot${project.path.replace(":", "/")}",
+                projectUrl.get(),
                 listOf(
                     PluginRelease(
                         project.version as String,

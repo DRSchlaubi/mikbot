@@ -83,6 +83,8 @@ tasks {
         repositoryUrl.set("https://plugin-repository.mikbot.schlaubi.net")
         // The directory the generated repository should be in
         targetDirectory.set(rootProject.file("ci-repo").toPath())
+        // The URL of the project
+        projectUrl.set("https://github.com/DRSchlaubi/mikbot")
     }
 }
 ```

@@ -1,0 +1,7 @@
+# Plugins I use in Mikmusic
+:core:gdpr
+:core:database-i18n
+:music
+:game:game-api
+:game:music-quiz
+:game:uno-game

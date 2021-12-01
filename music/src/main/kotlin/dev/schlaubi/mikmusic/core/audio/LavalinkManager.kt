@@ -21,6 +21,12 @@ class LavalinkManager : Extension() {
     suspend fun load() {
         lavalink = kord.lavakord()
 
+        lavalinkServers.insertOne(
+            LavalinkServer(
+                "wss://joachim.lava-hosts.schlaubi.net/",
+                "jcdrNb7Y8D8TTo6D64x&msiA3CzD"
+            )
+        )
         lavalinkServers.find().toList().forEach { (url, password) ->
             lavalink.addNode(url, password)
         }

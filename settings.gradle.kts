@@ -10,7 +10,6 @@ include(
     "core:gdpr",
     "core:redeploy-hook",
     "music",
-    // "mikmusic-bot",
     "game:uno",
     "game:game-api",
     "game:uno-game",
@@ -19,7 +18,8 @@ include(
     "utils:ktor",
     "utils:verification-system",
     "utils:epic-games-notifier",
-    "test-bot"
+    "test-bot",
+    "mikmusic-bot"
 )
 
 includeBuild("gradle-plugin")

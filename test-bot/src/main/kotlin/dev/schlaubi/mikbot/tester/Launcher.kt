@@ -2,10 +2,15 @@ package dev.schlaubi.mikbot.tester
 
 import kotlin.io.path.Path
 import kotlin.io.path.absolutePathString
+import kotlin.io.path.div
+import kotlin.io.path.readText
 import dev.schlaubi.musicbot.main as botMain
 
 suspend fun main() {
-    val pluginsDirectory = Path("test-bot", "plugins")
+    val projectPathFile = Path(ClassLoader.getSystemClassLoader().getResource("bot-project-path.txt")!!.file)
+    val projectPath = Path(projectPathFile.readText())
+    val pluginsDirectory = projectPath / "plugins"
+
     System.setProperty("pf4j.pluginsDir", pluginsDirectory.absolutePathString())
 
     botMain()

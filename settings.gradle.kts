@@ -20,12 +20,12 @@ include(
     "utils:ktor",
     "utils:verification-system",
     "utils:epic-games-notifier",
-    "test-bot",
-    "mikmusic-bot",
-    "votebot",
-    "votebot:chart-service-client"
     "utils:profiles",
     "utils:role-selector",
+    "votebot",
+    "votebot:common",
+    "votebot:chart-service-client",
+    "test-bot",
     "mikmusic-bot",
 )
 

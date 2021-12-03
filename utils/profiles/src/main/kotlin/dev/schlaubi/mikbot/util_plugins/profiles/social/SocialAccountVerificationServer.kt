@@ -1,5 +1,6 @@
 package dev.schlaubi.mikbot.util_plugins.profiles.social
 
+import dev.schlaubi.mikbot.util_plugins.ktor.api.Config.WEB_SERVER_URL
 import dev.schlaubi.mikbot.util_plugins.ktor.api.KtorExtensionPoint
 import dev.schlaubi.mikbot.util_plugins.profiles.InvalidServiceException
 import dev.schlaubi.mikbot.util_plugins.profiles.ProfileConfig
@@ -51,7 +52,7 @@ class SocialAccountVerificationServer : KtorExtensionPoint, KoinComponent {
         install(Authentication) {
             for (type in types) {
                 oauth(type.id) {
-                    urlProvider = { "http://localhost:8080/profiles/social/connect/${type.id}" }
+                    urlProvider = { "${WEB_SERVER_URL}/profiles/social/connect/${type.id}" }
                     providerLookup = {
                         type.oauthSettings
                     }
@@ -67,7 +68,7 @@ class SocialAccountVerificationServer : KtorExtensionPoint, KoinComponent {
                         println("Set to ${type.id}")
                     }
                     println(sessions.get("service"))
-                    "http://localhost:8080/profiles/social/callback"
+                    "$WEB_SERVER_URL/profiles/social/callback"
                 }
                 providerLookup = {
                     OAuthServerSettings.OAuth2ServerSettings(
@@ -114,7 +115,7 @@ class SocialAccountVerificationServer : KtorExtensionPoint, KoinComponent {
                         header(HttpHeaders.Authorization, "Bearer ${principal.accessToken}")
                     }
                     call.sessions.set(DiscordSession(user.id.toLong()))
-                    call.respondRedirect("http://localhost:8080/profiles/social/connect/${service.id}")
+                    call.respondRedirect("$WEB_SERVER_URL/profiles/social/connect/${service.id}")
                 }
             }
             get("/profiles/connected") {

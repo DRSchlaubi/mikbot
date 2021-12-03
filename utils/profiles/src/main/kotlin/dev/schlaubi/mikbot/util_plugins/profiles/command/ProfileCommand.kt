@@ -17,6 +17,7 @@ import dev.kord.rest.builder.message.create.embed
 import dev.schlaubi.mikbot.plugin.api.settings.SettingsModule
 import dev.schlaubi.mikbot.plugin.api.util.effectiveAvatar
 import dev.schlaubi.mikbot.plugin.api.util.embed
+import dev.schlaubi.mikbot.util_plugins.ktor.api.Config
 import dev.schlaubi.mikbot.util_plugins.profiles.Profile
 import dev.schlaubi.mikbot.util_plugins.profiles.ProfileDatabase
 import dev.schlaubi.mikbot.util_plugins.profiles.Pronoun
@@ -87,7 +88,7 @@ suspend fun SettingsModule.profileCommand() {
                 respond {
                     embed {
                         description =
-                            "Click [here](http://localhost:8080/profiles/social/connect/${arguments.service}) to connect your account."
+                            "Click [here](${Config.WEB_SERVER_URL}/profiles/social/connect/${arguments.service}) to connect your account."
                     }
                 }
             }

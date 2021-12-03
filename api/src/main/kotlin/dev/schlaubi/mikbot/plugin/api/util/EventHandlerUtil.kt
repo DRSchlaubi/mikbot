@@ -1,6 +1,7 @@
 package dev.schlaubi.mikbot.plugin.api.util
 
 import com.kotlindiscord.kord.extensions.checks.types.CheckContext
+import dev.kord.core.behavior.interaction.ActionInteractionBehavior
 import dev.kord.core.behavior.interaction.respondEphemeral
 import dev.kord.core.behavior.reply
 import dev.kord.core.event.Event
@@ -14,7 +15,7 @@ import kotlinx.coroutines.launch
  */
 @JvmName("respondIfFailedInInteraction")
 public suspend fun <T : InteractionCreateEvent> CheckContext<T>.respondIfFailed(): Unit = respondIfFailed {
-    event.interaction.respondEphemeral { content = it }
+    (event.interaction as? ActionInteractionBehavior)?.respondEphemeral { content = it }
 }
 
 /**

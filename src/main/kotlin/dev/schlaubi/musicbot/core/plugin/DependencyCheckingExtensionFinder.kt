@@ -4,6 +4,7 @@ import mu.KotlinLogging
 import org.pf4j.*
 import kotlin.reflect.KClass
 import kotlin.reflect.full.isSubclassOf
+import kotlin.jvm.kotlin
 
 private val LOG = KotlinLogging.logger { }
 
@@ -14,8 +15,8 @@ private val LOG = KotlinLogging.logger { }
  */
 @OptIn(ExperimentalStdlibApi::class)
 class DependencyCheckingExtensionFinder(pluginManager: PluginManager) : LegacyExtensionFinder(pluginManager) {
-    override fun <T> find(type: Class<T>, pluginId: String?): List<ExtensionWrapper<T>> {
-        val kType = type::class
+    override fun <T : Any> find(type: Class<T>, pluginId: String?): List<ExtensionWrapper<T>> {
+        val kType = type.kotlin
         LOG.debug {
             "Finding extensions of extension point '${kType.qualifiedName}' for plugin '$pluginId'"
         }
@@ -46,7 +47,7 @@ class DependencyCheckingExtensionFinder(pluginManager: PluginManager) : LegacyEx
                         return@forEach
                     }
                     LOG.debug { "Checking extension type '$className'" }
-                    if (kType.isSubclassOf(extensionClass)) {
+                    if (extensionClass.isSubclassOf(kType)) {
                         val extensionWrapper = createExtensionWrapper(extensionClass)
                         @Suppress("UNCHECKED_CAST")
                         add(extensionWrapper as ExtensionWrapper<T>)

@@ -4,6 +4,7 @@ import dev.schlaubi.mikbot.plugin.api.Plugin
 import dev.schlaubi.mikbot.plugin.api.PluginSystem
 import dev.schlaubi.mikbot.plugin.api.PluginWrapper
 import dev.schlaubi.mikbot.plugin.api.config.Config
+import dev.schlaubi.mikbot.plugin.api.util.ensurePath
 import io.ktor.util.*
 import mu.KotlinLogging
 import org.koin.core.component.KoinComponent
@@ -151,13 +152,7 @@ private class DefaultPluginSystem(private val manager: PluginManager) : PluginSy
 }
 
 private fun ClassLoader.findTranslations(): Sequence<String> {
-    val resourcePath = getResource("translations")?.file?.let {
-        if (isWindows()) {
-            it.drop(1)
-        } else {
-            it
-        }
-    }
+    val resourcePath = getResource("translations")?.file?.ensurePath()
 
     val path = resourcePath?.let { path -> Path(path) }
     if (path != null && path.isDirectory()) {
@@ -169,5 +164,3 @@ private fun ClassLoader.findTranslations(): Sequence<String> {
 
     return emptySequence()
 }
-
-private fun isWindows() = System.getProperty("os.name").startsWith("Windows")

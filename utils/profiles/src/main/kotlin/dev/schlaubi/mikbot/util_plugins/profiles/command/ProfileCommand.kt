@@ -21,6 +21,7 @@ import dev.schlaubi.mikbot.util_plugins.ktor.api.Config
 import dev.schlaubi.mikbot.util_plugins.profiles.Profile
 import dev.schlaubi.mikbot.util_plugins.profiles.ProfileDatabase
 import dev.schlaubi.mikbot.util_plugins.profiles.Pronoun
+import dev.schlaubi.mikbot.util_plugins.profiles.social.BasicUser
 import dev.schlaubi.mikbot.util_plugins.profiles.social.SocialAccountConnection
 import dev.schlaubi.mikbot.util_plugins.profiles.social.SocialAccountConnectionType
 import kotlinx.coroutines.async
@@ -111,8 +112,10 @@ private suspend fun User.renderProfile(translateWrapper: suspend (String, String
         val profile =
             async { id.findProfile() }
         val connections = ProfileDatabase.connections.find(SocialAccountConnection::userId eq id).toFlow()
-            .map { it to it.type.retrieveUserFromId(it.platformId) }
-            .toList()
+            .map {
+                it to BasicUser(it.platformId, it.url, it.username)
+            }.toList()
+
         val pronoun = profile.await().pronouns.randomOrNull() ?: Pronoun.THEY_THEM
         embed {
             author {

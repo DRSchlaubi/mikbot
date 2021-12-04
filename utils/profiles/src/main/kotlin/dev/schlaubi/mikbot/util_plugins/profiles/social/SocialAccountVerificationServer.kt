@@ -19,6 +19,9 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.sessions.*
 import org.koin.core.component.KoinComponent
+import org.litote.kmongo.and
+import org.litote.kmongo.eq
+import org.litote.kmongo.newId
 import org.pf4j.Extension
 import kotlinx.serialization.json.Json as KotlinxJson
 
@@ -52,7 +55,12 @@ class SocialAccountVerificationServer : KtorExtensionPoint, KoinComponent {
         install(Authentication) {
             for (type in types) {
                 oauth(type.id) {
-                    urlProvider = { "${WEB_SERVER_URL}/profiles/social/connect/${type.id}" }
+                    urlProvider = {
+                        val typeName = request.path().substringAfterLast("/")
+                        val type = serviceByName(typeName)
+                        sessions.set(ServiceSession(type.id))
+                        "${WEB_SERVER_URL}/profiles/social/connect/${type.id}"
+                    }
                     providerLookup = {
                         type.oauthSettings
                     }
@@ -61,13 +69,6 @@ class SocialAccountVerificationServer : KtorExtensionPoint, KoinComponent {
             }
             oauth("discord") {
                 urlProvider = {
-                    val typeName = request.path().substringAfterLast("/")
-                    if (typeName != "callback") {
-                        val type = serviceByName(typeName)
-                        sessions.set(ServiceSession(type.id))
-                        println("Set to ${type.id}")
-                    }
-                    println(sessions.get("service"))
                     "$WEB_SERVER_URL/profiles/social/callback"
                 }
                 providerLookup = {
@@ -78,7 +79,7 @@ class SocialAccountVerificationServer : KtorExtensionPoint, KoinComponent {
                         requestMethod = HttpMethod.Post,
                         clientId = ProfileConfig.DISCORD_CLIENT_ID,
                         clientSecret = ProfileConfig.DISCORD_CLIENT_SECRET,
-                        defaultScopes = listOf("identify")
+                        defaultScopes = listOf("identify"),
                     )
                 }
                 client = httpClient
@@ -95,15 +96,27 @@ class SocialAccountVerificationServer : KtorExtensionPoint, KoinComponent {
                         get("/profiles/social/connect/${type.id}") {
                             val principal = call.principal<OAuthAccessTokenResponse.OAuth2>()!!
                             val discordSession = call.sessions.get<DiscordSession>()!!.id
-                            val accountType = serviceByName(call.sessions.get<ServiceSession>()!!.name)
+                            val accountType = serviceByName(type.id)
                             val user = accountType.retrieveUserFromToken(principal.accessToken)
+                            val existingConnection =
+                                ProfileDatabase.connections.findOne(
+                                    and(
+                                        SocialAccountConnection::userId eq discordSession,
+                                        SocialAccountConnection::type eq accountType,
+                                        SocialAccountConnection::platformId eq user.id
+                                    )
+                                )
                             ProfileDatabase.connections.save(
                                 SocialAccountConnection(
+                                    id = existingConnection?.id ?: newId(),
                                     userId = discordSession,
                                     type = accountType,
+                                    username = user.displayName,
+                                    url = user.url,
                                     platformId = user.id
                                 )
                             )
+                            call.sessions.clear<ServiceSession>()
                             call.respondRedirect("/profiles/connected")
                         }
                     }

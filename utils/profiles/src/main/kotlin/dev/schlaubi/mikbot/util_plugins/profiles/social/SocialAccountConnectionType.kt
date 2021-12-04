@@ -17,7 +17,7 @@ import kotlinx.serialization.Serializable
 sealed class SocialAccountConnectionType : ChoiceEnum {
 
     companion object {
-        val ALL: List<SocialAccountConnectionType> = listOf(GitHub)
+        val ALL: List<SocialAccountConnectionType> = listOf(GitHub, GitLab)
 
         private val httpClient = HttpClient() {
             install(JsonFeature) {
@@ -72,5 +72,31 @@ sealed class SocialAccountConnectionType : ChoiceEnum {
             val user: SimpleUser = httpClient.get("https://api.github.com/user/$platformId")
             return BasicUser(user.id.toString(), user.url, user.login)
         }
+    }
+
+    object GitLab : SocialAccountConnectionType() {
+        override val id: String = "gitlab"
+        override val displayName: String = "GitLab"
+        override val oauthSettings: OAuthServerSettings.OAuth2ServerSettings = OAuthServerSettings.OAuth2ServerSettings(
+            name = "gitlab",
+            authorizeUrl = "https://gitlab.com/oauth/authorize",
+            accessTokenUrl = "https://gitlab.com/oauth/token",
+            requestMethod = HttpMethod.Post,
+            clientId = ProfileConfig.GITLAB_CLIENT_ID,
+            clientSecret = ProfileConfig.GITLAB_CLIENT_SECRET,
+            defaultScopes = listOf("read_user")
+        )
+        override val emoji: String = "<:gitlab:916773274262831244>"
+
+        override suspend fun retrieveUserFromToken(token: String): User {
+            return httpClient.get<GitLabUser>("https://gitlab.com/api/v4/user") {
+                header(HttpHeaders.Authorization, "Bearer $token")
+            }
+        }
+
+        override suspend fun retrieveUserFromId(platformId: String): User {
+            return httpClient.get<GitLabUser>("https://gitlab.com/api/v4/users/$platformId")
+        }
+
     }
 }

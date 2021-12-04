@@ -13,5 +13,7 @@ data class SocialAccountConnection(
     val id: Id<SocialAccountConnection> = newId(),
     val userId: Long,
     val type: SocialAccountConnectionType,
+    val username: String,
+    val url: String,
     val platformId: String
 )

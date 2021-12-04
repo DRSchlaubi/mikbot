@@ -58,7 +58,7 @@ suspend fun SettingsModule.profileCommand() {
             action {
                 val user = (arguments.user ?: user).asUser()
                 respond {
-                    embeds.add(user.renderProfile())
+                    embeds.add(user.renderProfile(::translate))
                 }
             }
         }
@@ -76,7 +76,7 @@ suspend fun SettingsModule.profileCommand() {
                 }
                 ProfileDatabase.profiles.save(newProfile)
                 respond {
-                    content = "Your profile has been updated."
+                    content = translate("profiles.profile_updated", "profiles")
                 }
             }
         }
@@ -87,8 +87,11 @@ suspend fun SettingsModule.profileCommand() {
             action {
                 respond {
                     embed {
-                        description =
-                            "Click [here](${Config.WEB_SERVER_URL}/profiles/social/connect/${arguments.service}) to connect your account."
+                        description = translate(
+                            "profiles.connect_service",
+                            "profiles",
+                            arrayOf("${Config.WEB_SERVER_URL}/profiles/social/connect/${arguments.service}")
+                        )
                     }
                 }
             }
@@ -96,49 +99,69 @@ suspend fun SettingsModule.profileCommand() {
     }
 }
 
-private suspend fun User.renderProfile(): EmbedBuilder = coroutineScope {
-    val id = id.value.toLong()
-    val profile =
-        async { id.findProfile() }
-    val connections = ProfileDatabase.connections.find(SocialAccountConnection::userId eq id).toFlow()
-        .map { it to it.type.retrieveUserFromId(it.platformId) }
-        .toList()
-    val pronoun = profile.await().pronouns.randomOrNull() ?: Pronoun.THEY_THEM
-    embed {
-        author {
-            name = "$username#$discriminator"
-            icon = effectiveAvatar
-            url = "https://discord.com/users/$id"
-        }
-        description = """
-            ${profile.await().badges.joinToString(separator = "\n") { "${it.emoji} | **${it.displayName}**" }}
-            
-            **Connected Accounts:**
-            ${
-            connections.joinToString(separator = "\n") { (connection, user) ->
-                "**•** ${connection.type.emoji} **[${user.displayName}](${user.url})**"
-            }.ifEmpty {
-                "**•** :x: **No connected Accounts. :(**"
+private suspend fun User.renderProfile(translateWrapper: suspend (String, String?, Array<Any?>) -> String): EmbedBuilder =
+    coroutineScope {
+        suspend fun translate(
+            key: String,
+            bundleName: String? = "profiles",
+            replacements: Array<Any?> = emptyArray()
+        ) = translateWrapper(key, bundleName, replacements)
+
+        val id = id.value.toLong()
+        val profile =
+            async { id.findProfile() }
+        val connections = ProfileDatabase.connections.find(SocialAccountConnection::userId eq id).toFlow()
+            .map { it to it.type.retrieveUserFromId(it.platformId) }
+            .toList()
+        val pronoun = profile.await().pronouns.randomOrNull() ?: Pronoun.THEY_THEM
+        embed {
+            author {
+                name = "$username#$discriminator"
+                icon = effectiveAvatar
+                url = "https://discord.com/users/$id"
             }
-        }
+            description = """
+            ${
+                profile.await().badges.map { translate(it.displayName) to it.emoji }
+                    .joinToString(separator = "\n") { (translation, emoji) ->
+                        "$emoji | **$translation**"
+                    }
+            }
+            
+            **${translate("profiles.profile.connected_accounts")}:**
+            ${
+                connections.joinToString(separator = "\n") { (connection, user) ->
+                    "**•** ${connection.type.emoji} **[${user.displayName}](${user.url})**"
+                }.ifEmpty {
+                    "**•** :x: **${translate("profiles.profile.no_connected_accounts")}**"
+                }
+            }
         
         **Pronouns:**
         ${
-            profile.await().pronouns.joinToString("\n") {
-                "**• [${it.displayName}](https://pronoun.is/${it.displayName})**"
-            }.ifEmpty {
-                "**•** :x: **No Pronouns**\nAsk them what pronouns they would like to use."
+                profile.await().pronouns.map { translate(it.displayName) to it.url }
+                    .joinToString("\n") { (translation, url) ->
+                        "**• [$translation](${url})**"
+                    }.ifEmpty {
+                        "**•** :x: ${translate("profiles.profile.no_pronouns")}\n${translate("profiles.profile.ask_for_pronouns")}"
+                    }
             }
-        }
         
-        ${pronoun.firstPerson.replaceFirstChar(Char::uppercaseChar)} created ${pronoun.thirdPerson} account on ${
-            Snowflake(id).timestamp.toMessageFormat(
-                DiscordTimestampStyle.LongDateTime
-            )
-        }
+        ${
+                translate(
+                    "profiles.profile.creation_date",
+                    replacements = arrayOf(
+                        translate(pronoun.firstPerson).replaceFirstChar(Char::uppercaseChar),
+                        translate(pronoun.thirdPerson),
+                        Snowflake(id).timestamp.toMessageFormat(
+                            DiscordTimestampStyle.LongDateTime
+                        )
+                    )
+                )
+            }
         """.trimIndent()
+        }
     }
-}
 
 private suspend inline fun Long.findProfile(): Profile {
     return ProfileDatabase.profiles.findOneById(this) ?: Profile(this, emptySet(), emptySet())

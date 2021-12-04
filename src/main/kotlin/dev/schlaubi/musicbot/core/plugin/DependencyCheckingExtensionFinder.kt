@@ -4,7 +4,6 @@ import mu.KotlinLogging
 import org.pf4j.*
 import kotlin.reflect.KClass
 import kotlin.reflect.full.isSubclassOf
-import kotlin.jvm.kotlin
 
 private val LOG = KotlinLogging.logger { }
 

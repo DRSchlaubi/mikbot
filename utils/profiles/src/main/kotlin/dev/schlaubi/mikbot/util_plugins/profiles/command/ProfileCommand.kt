@@ -17,7 +17,7 @@ import dev.kord.rest.builder.message.create.embed
 import dev.schlaubi.mikbot.plugin.api.settings.SettingsModule
 import dev.schlaubi.mikbot.plugin.api.util.effectiveAvatar
 import dev.schlaubi.mikbot.plugin.api.util.embed
-import dev.schlaubi.mikbot.util_plugins.ktor.api.Config
+import dev.schlaubi.mikbot.util_plugins.ktor.api.buildBotUrl
 import dev.schlaubi.mikbot.util_plugins.profiles.Profile
 import dev.schlaubi.mikbot.util_plugins.profiles.ProfileDatabase
 import dev.schlaubi.mikbot.util_plugins.profiles.Pronoun
@@ -91,7 +91,11 @@ suspend fun SettingsModule.profileCommand() {
                         description = translate(
                             "profiles.connect_service",
                             "profiles",
-                            arrayOf("${Config.WEB_SERVER_URL}/profiles/social/connect/${arguments.service}")
+                            arrayOf(
+                                buildBotUrl {
+                                    path("profiles", "social", "connect", arguments.service)
+                                }.toString()
+                            )
                         )
                     }
                 }

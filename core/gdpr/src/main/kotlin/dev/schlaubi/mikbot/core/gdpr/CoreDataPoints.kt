@@ -20,5 +20,5 @@ object UserIdDataPoint : PermanentlyStoredDataPoint(
         // and just exists for descriptive purposes
     }
 
-    override suspend fun requestFor(user: User): List<String> = listOf(user.id.asString)
+    override suspend fun requestFor(user: User): List<String> = listOf(user.id.toString())
 }

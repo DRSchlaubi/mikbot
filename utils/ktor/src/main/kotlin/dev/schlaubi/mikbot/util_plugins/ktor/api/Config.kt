@@ -1,6 +1,8 @@
 package dev.schlaubi.mikbot.util_plugins.ktor.api
 
 import dev.schlaubi.mikbot.plugin.api.EnvironmentConfig
+import dev.schlaubi.mikbot.plugin.api.InternalAPI
+import io.ktor.http.*
 
 /**
  * Configuration of the Ktor web server.
@@ -19,5 +21,6 @@ object Config : EnvironmentConfig("") {
     /**
      * The web server url
      */
-    val WEB_SERVER_URL by getEnv("http://localhost:8080")
+    @InternalAPI
+    val WEB_SERVER_URL by getEnv(Url("http://localhost:8080")) { Url(it) }
 }

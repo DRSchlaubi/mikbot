@@ -5,6 +5,7 @@ import dev.schlaubi.mikbot.plugin.api.PluginSystem
 import dev.schlaubi.mikbot.plugin.api.PluginWrapper
 import dev.schlaubi.mikbot.plugin.api.config.Config
 import dev.schlaubi.mikbot.plugin.api.util.ensurePath
+import dev.schlaubi.musicbot.core.Bot
 import io.ktor.util.*
 import mu.KotlinLogging
 import org.koin.core.component.KoinComponent
@@ -20,7 +21,6 @@ import kotlin.reflect.KClass
 private val LOG = KotlinLogging.logger { }
 
 object PluginLoader : DefaultPluginManager(), KoinComponent {
-    internal val system: PluginSystem = DefaultPluginSystem(this)
     private val repos: List<UpdateRepository> = Config.PLUGIN_REPOSITORIES.map {
         DefaultUpdateRepository(
             generateNonce(), URL(it)
@@ -147,8 +147,10 @@ private class MikBotPluginManifestDescriptionFinder : ManifestPluginDescriptorFi
     }
 }
 
-private class DefaultPluginSystem(private val manager: PluginManager) : PluginSystem {
-    override fun <T : ExtensionPoint> getExtensions(type: KClass<T>): List<T> = manager.getExtensions(type.java)
+internal class DefaultPluginSystem(private val bot: Bot) : PluginSystem {
+    override fun <T : ExtensionPoint> getExtensions(type: KClass<T>): List<T> = PluginLoader.getExtensions(type.java)
+    override fun translate(key: String, bundleName: String, replacements: Array<Any?>): String =
+        bot.translationProivder.translate(key, bundleName, replacements)
 }
 
 private fun ClassLoader.findTranslations(): Sequence<String> {

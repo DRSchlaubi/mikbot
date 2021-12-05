@@ -1,5 +1,5 @@
 package dev.schlaubi.epic_games_notifier
 
-import dev.schlaubi.mikbot.util_plugins.ktor.api.Config
+import dev.schlaubi.mikbot.util_plugins.ktor.api.buildBotUrl
 
-val redirectUri = Config.WEB_SERVER_URL + "webhooks/thanks"
+val redirectUri = buildBotUrl { path("webhooks", "thanks") }

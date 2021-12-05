@@ -19,7 +19,7 @@ fun GDPRModule.requestCommand() = ephemeralSubCommand {
 
                 field {
                     name = translate("commands.gdpr.request.id")
-                    value = discordUser.id.asString
+                    value = discordUser.id.toString()
                 }
 
                 interactiveDataPoints.forEach { dataPoint ->

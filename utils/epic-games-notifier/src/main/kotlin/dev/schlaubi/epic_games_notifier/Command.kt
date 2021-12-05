@@ -27,8 +27,8 @@ suspend fun SettingsModule.notifierCommand() = ephemeralSlashCommand {
     action {
         respond {
             val url = URLBuilder("https://discord.com/oauth2/authorize").apply {
-                parameters.append("client_id", this@notifierCommand.kord.selfId.asString)
-                parameters.append("redirect_uri", redirectUri)
+                parameters.append("client_id", this@notifierCommand.kord.selfId.toString())
+                parameters.append("redirect_uri", redirectUri.toString())
                 parameters.append("response_type", "code")
                 parameters.append("scope", "webhook.incoming")
             }.buildString()

@@ -5,7 +5,8 @@ plugins {
     kotlin("jvm")
 }
 
-val experimentalAnnotations = listOf("kotlin.RequiresOptIn", "kotlin.time.ExperimentalTime")
+val experimentalAnnotations =
+    listOf("kotlin.RequiresOptIn", "kotlin.time.ExperimentalTime", "kotlin.contracts.ExperimentalContracts")
 
 tasks {
     withType<KotlinCompile> {

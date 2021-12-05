@@ -20,8 +20,9 @@ include(
     "utils:ktor",
     "utils:verification-system",
     "utils:epic-games-notifier",
-    "mikmusic-bot",
     "utils:profiles",
+    "utils:role-selector",
+    "mikmusic-bot",
     "test-bot"
 )
 

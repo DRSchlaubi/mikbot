@@ -21,6 +21,7 @@ allprojects {
         maven("https://schlaubi.jfrog.io/artifactory/envconf/")
         maven("https://schlaubi.jfrog.io/artifactory/lavakord/")
         maven("https://nycode.jfrog.io/artifactory/snapshots/")
+        maven("https://oss.sonatype.org/content/repositories/snapshots")
     }
 }
 
@@ -36,6 +37,16 @@ dependencies {
 
     // Util
     implementation("dev.schlaubi", "envconf", "1.1")
+    implementation("org.jetbrains.kotlinx", "kotlinx-serialization-json") {
+        version {
+            strictly("1.3.1")
+        }
+    }
+    implementation("org.jetbrains.kotlinx", "kotlinx-serialization-core") {
+        version {
+            strictly("1.3.1")
+        }
+    }
 
     implementation(project(":api"))
     implementation(kotlin("reflect"))

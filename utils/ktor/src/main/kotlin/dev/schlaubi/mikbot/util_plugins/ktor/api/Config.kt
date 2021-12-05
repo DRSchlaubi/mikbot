@@ -19,5 +19,5 @@ object Config : EnvironmentConfig("") {
     /**
      * The web server url
      */
-    val WEB_SERVER_URL by getEnv("http://127.0.0.1")
+    val WEB_SERVER_URL by getEnv("http://localhost:8080")
 }

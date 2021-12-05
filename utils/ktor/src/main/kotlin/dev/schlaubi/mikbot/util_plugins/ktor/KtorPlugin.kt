@@ -23,8 +23,14 @@ class KtorPlugin(wrapper: PluginWrapper) : Plugin(wrapper), CoroutineScope {
             embeddedServer(Netty, port = Config.WEB_SERVER_PORT, host = Config.WEB_SERVER_HOST) {
                 install(Locations)
 
+                val extensions = pluginSystem.getExtensions<KtorExtensionPoint>()
                 install(StatusPages) {
                     exception<NotFoundException> { call.respond(HttpStatusCode.NotFound) }
+                    extensions.forEach {
+                        with(it) {
+                            apply()
+                        }
+                    }
                 }
 
                 routing {
@@ -33,7 +39,7 @@ class KtorPlugin(wrapper: PluginWrapper) : Plugin(wrapper), CoroutineScope {
                     }
                 }
 
-                pluginSystem.getExtensions<KtorExtensionPoint>().forEach {
+                extensions.forEach {
                     with(it) {
                         apply()
                     }

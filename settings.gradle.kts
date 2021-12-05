@@ -1,5 +1,7 @@
 rootProject.name = "mikmusic"
 
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 include(
     "api",
     "api:annotations",
@@ -18,8 +20,9 @@ include(
     "utils:ktor",
     "utils:verification-system",
     "utils:epic-games-notifier",
-    "test-bot",
-    "mikmusic-bot"
+    "mikmusic-bot",
+    "utils:profiles",
+    "test-bot"
 )
 
 includeBuild("gradle-plugin")

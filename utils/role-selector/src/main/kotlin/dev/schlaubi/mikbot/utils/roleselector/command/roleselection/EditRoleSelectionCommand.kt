@@ -53,8 +53,6 @@ suspend fun EphemeralSlashCommand<*>.editRoleSelectionCommand() = ephemeralSubCo
                     )
                 )
 
-                println(newRoleSelectionMessage)
-
                 RoleSelectorDatabase.roleSelectionCollection.save(newRoleSelectionMessage)
 
                 updateMessage(message, newRoleSelectionMessage)

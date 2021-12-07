@@ -13,10 +13,3 @@ suspend fun SettingsModule.createRoleMessageCommand() = ephemeralSlashCommand {
     removeRoleSelectionCommand()
     editRoleSelectionCommand()
 }
-
-
-
-
-
-
-

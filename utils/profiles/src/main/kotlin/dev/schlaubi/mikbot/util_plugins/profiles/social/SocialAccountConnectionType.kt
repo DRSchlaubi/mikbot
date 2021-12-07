@@ -178,11 +178,8 @@ sealed class SocialAccountConnectionType : ChoiceEnum {
             }.data
         }
 
-        override suspend fun retrieveUserFromId(platformId: String): User {
-            return httpClient.get<TwitterUser>("https://api.twitter.com/1.1/users/show.json") {
-                parameter("user_id", platformId)
-            }
-        }
+        override suspend fun retrieveUserFromId(platformId: String): User =
+            throw UnsupportedOperationException("Twitter doesn't allow unauthenticated user requests")
     }
 
     @Serializable(with = SocialAccountConnectionTypeSerializer::class)
@@ -202,13 +199,12 @@ sealed class SocialAccountConnectionType : ChoiceEnum {
         override val emoji: String = "<:twitch:887421020938584104>"
 
         override suspend fun retrieveUserFromOAuth2Token(token: OAuthAccessTokenResponse.OAuth2): User {
-            return httpClient.get<GitLabUser>("https://gitlab.com/api/v4/user") {
+            return httpClient.get<TwitchUser>("https://id.twitch.tv/oauth2/validate") {
                 header(HttpHeaders.Authorization, "Bearer ${token.accessToken}")
             }
         }
 
-        override suspend fun retrieveUserFromId(platformId: String): User {
-            return httpClient.get<GitLabUser>("https://gitlab.com/api/v4/users/$platformId")
-        }
+        override suspend fun retrieveUserFromId(platformId: String): User =
+            throw UnsupportedOperationException("Twitch doesn't allow unauthenticated user requests")
     }
 }

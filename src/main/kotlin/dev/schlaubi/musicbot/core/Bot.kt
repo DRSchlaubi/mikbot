@@ -2,11 +2,14 @@ package dev.schlaubi.musicbot.core
 
 import com.kotlindiscord.kord.extensions.ExtensibleBot
 import com.kotlindiscord.kord.extensions.builders.ExtensibleBotBuilder
+import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
 import dev.kord.common.entity.PresenceStatus
+import dev.schlaubi.mikbot.plugin.api.PluginSystem
 import dev.schlaubi.mikbot.plugin.api.config.Config
 import dev.schlaubi.mikbot.plugin.api.io.Database
 import dev.schlaubi.mikbot.plugin.api.util.onEach
 import dev.schlaubi.musicbot.core.io.DatabaseImpl
+import dev.schlaubi.musicbot.core.plugin.DefaultPluginSystem
 import dev.schlaubi.musicbot.core.plugin.PluginLoader
 import dev.schlaubi.musicbot.core.plugin.PluginTranslationProvider
 import dev.schlaubi.musicbot.module.owner.OwnerModuleImpl
@@ -20,6 +23,8 @@ class Bot : KoinComponent {
 
     private lateinit var bot: ExtensibleBot
     private val database: Database = DatabaseImpl()
+    lateinit var translationProivder: TranslationsProvider
+    internal val pluginSystem: PluginSystem = DefaultPluginSystem(this)
 
     suspend fun start() {
         bot = ExtensibleBot(Config.DISCORD_TOKEN) {
@@ -88,9 +93,10 @@ class Bot : KoinComponent {
 
         i18n {
             translationsProvider {
-                PluginTranslationProvider {
+                translationProivder = PluginTranslationProvider {
                     defaultLocale
                 }
+                translationProivder
             }
         }
 

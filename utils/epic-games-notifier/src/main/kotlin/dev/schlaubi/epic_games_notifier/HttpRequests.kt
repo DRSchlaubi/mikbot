@@ -51,7 +51,7 @@ object HttpRequests {
                 append("client_secret", Config.DISCORD_CLIENT_SECRET)
                 append("code", code)
                 append("grant_type", "authorization_code")
-                append("redirect_uri", redirectUri)
+                append("redirect_uri", redirectUri.toString())
             }
 
             body = FormDataContent(data)

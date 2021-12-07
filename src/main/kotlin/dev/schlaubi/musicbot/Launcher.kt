@@ -10,16 +10,17 @@ import kotlin.io.path.absolutePathString
 
 suspend fun main() {
     initializeLogging()
-    loadPlugins()
-    Bot().start()
+    val bot = Bot()
+    loadPlugins(bot)
+    bot.start()
 }
 
-private fun loadPlugins() {
+private fun loadPlugins(bot: Bot) {
     if (System.getProperty("pf4j.pluginsDir").isNullOrBlank()) {
         System.setProperty("pf4j.pluginsDir", Config.PLUGIN_PATH.absolutePathString())
     }
 
-    _pluginSystem = PluginLoader.system
+    _pluginSystem = bot.pluginSystem
     PluginLoader.loadPlugins()
     PluginLoader.startPlugins()
 }

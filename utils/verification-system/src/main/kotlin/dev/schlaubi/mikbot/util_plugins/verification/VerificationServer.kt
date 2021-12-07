@@ -3,6 +3,7 @@ package dev.schlaubi.mikbot.util_plugins.verification
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
 import dev.schlaubi.mikbot.util_plugins.ktor.api.KtorExtensionPoint
+import dev.schlaubi.mikbot.util_plugins.ktor.api.buildBotUrl
 import io.ktor.application.*
 import io.ktor.client.*
 import io.ktor.client.features.*
@@ -107,16 +108,16 @@ class VerificationServer : KtorExtensionPoint, KoinComponent {
 
 private class NotFoundException : RuntimeException()
 
-private val redirectUri = KtorConfig.WEB_SERVER_URL + "/thanks"
+private val redirectUri = buildBotUrl { path("thanks") }.toString()
 private fun notFound(): Nothing = throw NotFoundException()
 
 @OptIn(InternalAPI::class)
 private fun Kord.generateInviteForGuild(guildId: Snowflake, state: String) =
     URLBuilder("https://discord.com/oauth2/authorize").apply {
         parameters.apply {
-            append("client_id", selfId.asString)
+            append("client_id", selfId.toString())
             append("permissions", "328576854080")
-            append("guild_id", guildId.asString)
+            append("guild_id", guildId.toString())
             append("scope", "bot applications.commands identify")
             append("redirect_uri", redirectUri)
             append("response_type", "code")

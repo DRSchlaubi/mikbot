@@ -65,12 +65,12 @@ sealed class SocialAccountConnectionType : ChoiceEnum {
             val user: SimpleUser = httpClient.get("https://api.github.com/user") {
                 header(HttpHeaders.Authorization, "Bearer $token")
             }
-            return BasicUser(user.id.toString(), user.url, user.login)
+            return BasicUser(user.id.toString(), user.htmlUrl, user.login)
         }
 
         override suspend fun retrieveUserFromId(platformId: String): User {
             val user: SimpleUser = httpClient.get("https://api.github.com/user/$platformId")
-            return BasicUser(user.id.toString(), user.url, user.login)
+            return BasicUser(user.id.toString(), user.htmlUrl, user.login)
         }
     }
 

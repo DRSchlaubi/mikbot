@@ -39,7 +39,7 @@ fun PlaylistModule.listCommand() = ephemeralSubCommand(::PlayListListArguments) 
         val tracks = translate("music.general.tracks")
         editingPaginator {
             forFlow(
-                user, playlistCount, playlists, { "${it.name} - ${it.songs.size} $tracks by <@${it.authorId.asString}>" },
+                user, playlistCount, playlists, { "${it.name} - ${it.songs.size} $tracks by <@${it.authorId.toString()}>" },
                 { current, total ->
                     translate(
                         "commands.playlist.list.paginator.title",

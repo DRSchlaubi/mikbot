@@ -2,6 +2,7 @@ package dev.schlaubi.mikbot.util_plugins.profiles.social
 
 import dev.schlaubi.mikbot.util_plugins.ktor.api.Config.WEB_SERVER_URL
 import dev.schlaubi.mikbot.util_plugins.ktor.api.KtorExtensionPoint
+import dev.schlaubi.mikbot.util_plugins.ktor.api.buildBotUrl
 import dev.schlaubi.mikbot.util_plugins.profiles.InvalidServiceException
 import dev.schlaubi.mikbot.util_plugins.profiles.ProfileConfig
 import dev.schlaubi.mikbot.util_plugins.profiles.ProfileDatabase
@@ -59,7 +60,9 @@ class SocialAccountVerificationServer : KtorExtensionPoint, KoinComponent {
                         val typeName = request.path().substringAfterLast("/")
                         val type = serviceByName(typeName)
                         sessions.set(ServiceSession(type.id))
-                        "${WEB_SERVER_URL}/profiles/social/connect/${type.id}"
+                        buildBotUrl {
+                            path("profiles", "social", "connect", type.id.toString())
+                        }.toString()
                     }
                     providerLookup = {
                         type.oauthSettings
@@ -69,7 +72,9 @@ class SocialAccountVerificationServer : KtorExtensionPoint, KoinComponent {
             }
             oauth("discord") {
                 urlProvider = {
-                    "$WEB_SERVER_URL/profiles/social/callback"
+                    buildBotUrl {
+                        path("profiles", "social", "callback")
+                    }.toString()
                 }
                 providerLookup = {
                     OAuthServerSettings.OAuth2ServerSettings(
@@ -128,7 +133,10 @@ class SocialAccountVerificationServer : KtorExtensionPoint, KoinComponent {
                         header(HttpHeaders.Authorization, "Bearer ${principal.accessToken}")
                     }
                     call.sessions.set(DiscordSession(user.id.toLong()))
-                    call.respondRedirect("$WEB_SERVER_URL/profiles/social/connect/${service.id}")
+                    val url = buildBotUrl {
+                        path("profiles", "social", "connect", service.id)
+                    }
+                    call.respondRedirect(url.toString())
                 }
             }
             get("/profiles/connected") {

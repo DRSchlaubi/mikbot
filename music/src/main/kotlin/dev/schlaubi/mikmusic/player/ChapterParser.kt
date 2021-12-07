@@ -26,9 +26,8 @@ fun String.parseChapters(): List<Chapter>? {
         Chapter(startTime, title)
     }
 
-    return chapters.ifEmpty {
-        return null
-    }
+    // If there is only one chapter, this is likely due to wrong parsing error and does not serve any purpose
+    return if (chapters.size > 1) chapters else null
 }
 
 private fun String.parseDuration(): Duration {
@@ -47,7 +46,6 @@ private fun String.parseDuration(): Duration {
 }
 
 @Serializable
-
 data class Chapter(
     @Contextual
     val startTime: Duration,

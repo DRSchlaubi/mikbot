@@ -144,7 +144,7 @@ private suspend fun User.renderProfile(translateWrapper: suspend (String, String
                 }
             }
         
-        **Pronouns:**
+        **${translate("profiles.profile.pronouns")}:**
         ${
                 profile.await().pronouns.map { translate(it.displayName) to it.url }
                     .joinToString("\n") { (translation, url) ->

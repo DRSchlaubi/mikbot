@@ -167,6 +167,9 @@ private suspend fun User.renderProfile(translateWrapper: suspend (String, String
                 )
             }
         """.trimIndent()
+            thumbnail {
+                url = effectiveAvatar
+            }
         }
     }
 

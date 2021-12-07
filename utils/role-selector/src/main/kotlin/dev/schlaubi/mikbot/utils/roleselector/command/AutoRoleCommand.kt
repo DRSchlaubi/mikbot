@@ -62,16 +62,14 @@ class AutoRoleArguments : Arguments() {
                 it.getPosition()
             } ?: 0
             if (role!!.getPosition() >= highestBotRole) {
-                throw DiscordRelayedException(translateString("error.commands.autorole.missing-permission.role.bot"))
+                throw DiscordRelayedException(translateString("error.commands.missing-permission.role.bot"))
             }
             if (member.asMember().isOwner()) return@optionalRole
             val highestMemberRole = member.asMember().roles.toList().maxOfOrNull {
                 it.getPosition()
             } ?: 0
             if (role.getPosition() >= highestMemberRole) {
-                throw DiscordRelayedException(translateString("error.commands.autorole.missing-permission.role.member"))
+                throw DiscordRelayedException(translateString("error.commands.missing-permission.role.member"))
             }
-
-
         })
 }

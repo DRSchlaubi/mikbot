@@ -23,7 +23,7 @@ import kotlinx.serialization.Serializable
 sealed class SocialAccountConnectionType : ChoiceEnum {
 
     companion object {
-        val ALL: List<SocialAccountConnectionType> = listOf(GitHub, GitLab, Twitter)
+        val ALL: List<SocialAccountConnectionType> = listOf(GitHub, GitLab, Twitter, Twitch)
 
         private val httpClient = HttpClient {
             install(JsonFeature) {
@@ -196,11 +196,9 @@ sealed class SocialAccountConnectionType : ChoiceEnum {
             accessTokenUrl = "https://id.twitch.tv/oauth2/token",
             requestMethod = HttpMethod.Post,
             clientId = ProfileConfig.TWITCH_CLIENT_ID,
-            clientSecret = ProfileConfig.TWITCH_CLIENT_SECRET,
-            defaultScopes = listOf(
-                "user:read:subscriptions"
-            )
+            clientSecret = ProfileConfig.TWITCH_CLIENT_SECRET
         )
+
         override val emoji: String = "<:twitch:887421020938584104>"
 
         override suspend fun retrieveUserFromOAuth2Token(token: OAuthAccessTokenResponse.OAuth2): User {

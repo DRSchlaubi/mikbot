@@ -59,12 +59,12 @@ class SocialAccountVerificationServer : KtorExtensionPoint, KoinComponent {
                 oauth(type.id) {
                     urlProvider = {
                         val typeName = request.path().substringAfterLast("/")
-                        val type = serviceByName(typeName)
-                        sessions.set(ServiceSession(type.id))
+                        val service = serviceByName(typeName)
                         buildBotUrl {
-                            path("profiles", "social", "connect", type.id.toString())
+                            path("profiles", "social", "connect", service.id)
                         }.toString()
                     }
+
                     providerLookup = {
                         type.oauthSettings
                     }
@@ -96,52 +96,70 @@ class SocialAccountVerificationServer : KtorExtensionPoint, KoinComponent {
         }
         install(CallLogging)
         routing {
-            authenticate("discord") {
-                for (type in types) {
-                    authenticate(type.id) {
-                        get("/profiles/social/connect/${type.id}") {
-                            val principal = call.principal<OAuthAccessTokenResponse.OAuth2>()!!
-                            val discordSession = call.sessions.get<DiscordSession>()!!.id
-                            val accountType = serviceByName(type.id)
-                            val user = accountType.retrieveUserFromToken(principal.accessToken)
-                            val existingConnection =
-                                ProfileDatabase.connections.findOne(
-                                    and(
-                                        SocialAccountConnection::userId eq discordSession,
-                                        SocialAccountConnection::type eq accountType,
-                                        SocialAccountConnection::platformId eq user.id
+            route("/profiles") {
+                route("social") {
+                    intercept(ApplicationCallPipeline.Features) {
+                        val url = Url(call.request.uri).encodedPath
+                        if ("profiles/social/connect" in url) {
+                            val serviceName =
+                                url.substringAfter("profiles/social/connect/")
+                            val service = serviceByName(serviceName)
+
+                            call.sessions.set(ServiceSession(service.id))
+                        }
+
+                        proceed()
+                    }
+                    authenticate("discord") {
+                        for (type in types) {
+                            authenticate(type.id) {
+                                get("connect/${type.id}") {
+                                    val principal = call.principal<OAuthAccessTokenResponse>()!!
+                                    val discordSession = call.sessions.get<DiscordSession>()!!.id
+                                    val accountType = serviceByName(type.id)
+                                    val user = accountType.retrieveUserFromToken(principal)
+                                    val existingConnection =
+                                        ProfileDatabase.connections.findOne(
+                                            and(
+                                                SocialAccountConnection::userId eq discordSession,
+                                                SocialAccountConnection::type eq accountType,
+                                                SocialAccountConnection::platformId eq user.id
+                                            )
+                                        )
+                                    ProfileDatabase.connections.save(
+                                        SocialAccountConnection(
+                                            id = existingConnection?.id ?: newId(),
+                                            userId = discordSession,
+                                            type = accountType,
+                                            username = user.displayName,
+                                            url = user.url,
+                                            platformId = user.id
+                                        )
                                     )
-                                )
-                            ProfileDatabase.connections.save(
-                                SocialAccountConnection(
-                                    id = existingConnection?.id ?: newId(),
-                                    userId = discordSession,
-                                    type = accountType,
-                                    username = user.displayName,
-                                    url = user.url,
-                                    platformId = user.id
-                                )
-                            )
-                            call.sessions.clear<ServiceSession>()
-                            call.respondRedirect("/profiles/connected")
+                                    call.sessions.clear<ServiceSession>()
+                                    call.respondRedirect("/profiles/connected")
+                                }
+                            }
+                        }
+                        get("callback") {
+                            val principal =
+                                call.principal<OAuthAccessTokenResponse.OAuth2>()
+                                    ?: error("Discord OAuth principal not found")
+                            val service = serviceByName(call.sessions.get<ServiceSession>()!!.name)
+                            val (user) = httpClient.get<DiscordOAuthUserResponse>("https://discord.com/api/oauth2/@me") {
+                                header(HttpHeaders.Authorization, "Bearer ${principal.accessToken}")
+                            }
+                            call.sessions.set(DiscordSession(user.id.toLong()))
+                            val url = buildBotUrl {
+                                path("profiles", "social", "connect", service.id)
+                            }
+                            call.respondRedirect(url.toString())
                         }
                     }
                 }
-                get("/profiles/social/callback") {
-                    val principal = call.principal<OAuthAccessTokenResponse.OAuth2>()!!
-                    val service = serviceByName(call.sessions.get<ServiceSession>()!!.name)
-                    val (user) = httpClient.get<DiscordOAuthUserResponse>("https://discord.com/api/oauth2/@me") {
-                        header(HttpHeaders.Authorization, "Bearer ${principal.accessToken}")
-                    }
-                    call.sessions.set(DiscordSession(user.id.toLong()))
-                    val url = buildBotUrl {
-                        path("profiles", "social", "connect", service.id)
-                    }
-                    call.respondRedirect(url.toString())
+                get("connected") {
+                    call.respondText("Account connected. You can close this tab now.")
                 }
-            }
-            get("/profiles/connected") {
-                call.respondText("Account connected. You can close this tab now.")
             }
         }
     }

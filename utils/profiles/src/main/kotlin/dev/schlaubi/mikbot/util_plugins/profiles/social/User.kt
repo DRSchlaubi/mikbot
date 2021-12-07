@@ -5,5 +5,4 @@ interface User {
     val id: String
     val url: String
     val displayName: String
-
 }

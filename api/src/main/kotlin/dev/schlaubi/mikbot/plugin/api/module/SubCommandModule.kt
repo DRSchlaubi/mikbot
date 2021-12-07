@@ -117,5 +117,4 @@ public class PublicCommandPair<T : Arguments>(
     }
 }
 
-
 private data class GroupPair(val name: String, val body: GroupBuilder)

@@ -10,8 +10,8 @@ import dev.schlaubi.uno.UnoColor
  * @see Game.extreme
  */
 public class DiscardAllCardsCard(override val color: UnoColor) : ColoredCard(), ActionCard {
-    override fun canBePlayedOn(card: PlayedCard): Boolean = super.canBePlayedOn(card)
-            || card is DiscardAllCardsCard
+    override fun canBePlayedOn(card: PlayedCard): Boolean = super.canBePlayedOn(card) ||
+        card is DiscardAllCardsCard
 
     override suspend fun applyToGame(game: Game<*>, player: Player) {
         val cards = player.deck.filter { (it as? ColoredCard)?.color == color }

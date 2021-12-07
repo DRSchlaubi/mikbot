@@ -43,9 +43,12 @@ class EpicGamesNotifierModule : Extension(), CoroutineScope {
             .toFlow()
             .onEach {
                 try {
-                    it.sendGames(kord, games
-                        .filter { (_, id) -> id !in it.sentPromotions }
-                        .map { (embed) -> embed }, gameIds
+                    it.sendGames(
+                        kord,
+                        games
+                            .filter { (_, id) -> id !in it.sentPromotions }
+                            .map { (embed) -> embed },
+                        gameIds
                     )
                 } catch (e: RequestException) {
                     failedWebhooks += it.id

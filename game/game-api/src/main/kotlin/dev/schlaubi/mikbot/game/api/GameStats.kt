@@ -20,7 +20,6 @@ data class GameStats(
     val totalGamesPlayed: Int
 )
 
-
 @Serializable
 data class UserGameStats(
     @SerialName("_id")

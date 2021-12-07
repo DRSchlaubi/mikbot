@@ -3,13 +3,12 @@ package dev.schlaubi.mikbot.plugin.api.io
 import org.litote.kmongo.coroutine.CoroutineCollection
 import org.litote.kmongo.coroutine.CoroutineDatabase
 
-
 /**
  * API for Database.
  *
  * @see getCollection
  */
-public interface Database{
+public interface Database {
     /**
      * The [CoroutineDatabase] used for all bot collections.
      */

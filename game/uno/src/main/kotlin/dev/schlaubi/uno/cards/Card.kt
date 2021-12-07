@@ -21,7 +21,6 @@ public sealed interface Card : Comparable<Card> {
      * @see ColoredCard
      */
     public fun play(color: UnoColor): PlayedCard
-
 }
 
 /**

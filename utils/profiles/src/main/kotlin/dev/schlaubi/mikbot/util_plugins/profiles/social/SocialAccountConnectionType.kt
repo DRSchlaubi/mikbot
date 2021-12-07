@@ -21,9 +21,11 @@ sealed class SocialAccountConnectionType : ChoiceEnum {
 
         private val httpClient = HttpClient() {
             install(JsonFeature) {
-                serializer = KotlinxSerializer(kotlinx.serialization.json.Json {
-                    ignoreUnknownKeys = true
-                })
+                serializer = KotlinxSerializer(
+                    kotlinx.serialization.json.Json {
+                        ignoreUnknownKeys = true
+                    }
+                )
             }
         }
     }
@@ -97,6 +99,5 @@ sealed class SocialAccountConnectionType : ChoiceEnum {
         override suspend fun retrieveUserFromId(platformId: String): User {
             return httpClient.get<GitLabUser>("https://gitlab.com/api/v4/users/$platformId")
         }
-
     }
 }

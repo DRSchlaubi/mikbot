@@ -1,11 +1,9 @@
 import dev.schlaubi.mikbot.gradle.removeVersion
 import java.nio.file.Files
-import java.nio.file.Path
 
 plugins {
     `mikbot-module`
     kotlin("plugin.serialization") version "1.5.31"
-    id("org.jlleitschuh.gradle.ktlint") version "10.2.0"
     application
     // This exists to add the removeVersion extension to this buildscript
     id("dev.schlaubi.mikbot.gradle-plugin") apply false
@@ -25,8 +23,12 @@ allprojects {
     }
 }
 
-dependencies {
+subprojects {
+    apply(plugin = "org.jlleitschuh.gradle.ktlint")
+}
 
+dependencies {
+    // Plugin system
     implementation("org.pf4j", "pf4j", "3.6.0")
     implementation("org.pf4j", "pf4j-update", "2.3.0")
     implementation("com.google.code.gson", "gson", "2.8.9")
@@ -83,11 +85,10 @@ tasks {
                 const val transientDependencies = "${files.joinToString("\\n")}"
             """.trimIndent()
 
-            Files.writeString(Path.of("/home/mik/IdeaProjects/mikmusic/gradle-plugin/src/main/kotlin/dev/schlaubi/mikbot/gradle/TransientDependencies.kt"), kotlinFile)
+            Files.writeString(
+                file("gradle-plugin/src/main/kotlin/dev/schlaubi/mikbot/gradle/TransientDependencies.kt").toPath(),
+                kotlinFile
+            )
         }
     }
-}
-
-ktlint {
-    disabledRules.add("no-wildcard-imports")
 }

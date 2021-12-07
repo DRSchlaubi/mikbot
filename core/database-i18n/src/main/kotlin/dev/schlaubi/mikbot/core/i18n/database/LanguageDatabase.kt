@@ -13,6 +13,5 @@ object LanguageDatabase : KoinComponent {
     val collection = database.getCollection<LangaugeUser>("language_users")
 }
 
-
 @Serializable
 data class LangaugeUser(@SerialName("_id") val id: Snowflake, @Contextual val locale: Locale)

@@ -171,7 +171,6 @@ public class Game<T : Player>(
         player.playCard(this, card)
     }
 
-
     internal suspend fun playCard(player: Player, card: PlayedCard) {
         // Check card matches
         if (!card.canBePlayedOn(topCard)) throw CardDoesNotMatchException(topCard, card)
@@ -257,7 +256,6 @@ public class Game<T : Player>(
             card
         }
     }
-
 
     private inner class NormalPlayerSequence : PlayerSequence<T> {
         override var lastIndex = -1

@@ -6,7 +6,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration
 
-
 @Serializable
 data class GuildSettings(
     @SerialName("_id")
@@ -20,7 +19,6 @@ data class GuildSettings(
     @Contextual
     val leaveTimeout: Duration = Duration.seconds(30)
 )
-
 
 @Serializable
 data class MusicChannelData(

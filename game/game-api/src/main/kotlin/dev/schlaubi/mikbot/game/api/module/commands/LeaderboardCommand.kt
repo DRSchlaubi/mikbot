@@ -43,7 +43,7 @@ fun GameModule<*, *>.leaderboardCommand(
                     val user = user.kord.unsafe.user(userId)
 
                     "${
-                        user.asMemberOrNull(safeGuild.id)?.mention ?: user.asUserOrNull()?.username
+                    user.asMemberOrNull(safeGuild.id)?.mention ?: user.asUserOrNull()?.username
                         ?: user.mention
                     } - ${stats.wins}/${stats.losses} ($ratio)"
                 },

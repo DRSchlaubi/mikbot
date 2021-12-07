@@ -21,14 +21,14 @@ class RoleSelectorPlugin(wrapper: PluginWrapper) : Plugin(wrapper) {
 }
 
 @Extension
-class RoleSelectorSettingsExtension: SettingsExtensionPoint {
+class RoleSelectorSettingsExtension : SettingsExtensionPoint {
     override suspend fun SettingsModule.apply() {
         autoRoleCommand()
         createRoleMessageCommand()
     }
 }
 
-class RoleSelectorModule: KordExtension() {
+class RoleSelectorModule : KordExtension() {
     override val name: String = "role selector event handler"
 
     override suspend fun setup() {

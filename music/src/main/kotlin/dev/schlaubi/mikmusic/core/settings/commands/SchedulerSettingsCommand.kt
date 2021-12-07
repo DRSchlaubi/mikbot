@@ -54,8 +54,8 @@ suspend fun SettingsModule.optionsCommand() {
             doUpdate({
                 MusicSettingsDatabase.findGuild(safeGuild)
             }, GuildSettings::defaultSchedulerSettings) {
-                MusicSettingsDatabase.guild.save(copy(defaultSchedulerSettings = it))
-            }
+            MusicSettingsDatabase.guild.save(copy(defaultSchedulerSettings = it))
+        }
         }
     }
 

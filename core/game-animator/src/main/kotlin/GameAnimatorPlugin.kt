@@ -54,7 +54,6 @@ class GameAnimatorPlugin(wrapper: PluginWrapper) : Plugin(wrapper) {
     }
 }
 
-
 data class Game(val type: ActivityType, val status: PresenceStatus, val text: String) {
     suspend fun apply(kord: Kord) {
         kord.editPresence {
@@ -74,7 +73,7 @@ data class Game(val type: ActivityType, val status: PresenceStatus, val text: St
     companion object {
         fun parse(game: String): Game {
 
-            return when(game.firstOrNull()) {
+            return when (game.firstOrNull()) {
                 'p' -> Game(
                     ActivityType.Game,
                     PresenceStatus.Online,

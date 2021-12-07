@@ -84,7 +84,6 @@ private suspend fun buildPlaylist(link: Link, matchResult: MatchResult): List<Tr
 
 suspend fun getPlaylist(playlistId: String): Playlist? = api().getPlaylist(playlistId).build().await()
 
-
 private data class IndexedTrack(val index: Int, val track: Track)
 
 private suspend fun <T> Array<T>.mapToTracks(
@@ -130,7 +129,6 @@ private suspend fun Link.takeFirstMatch(query: String): Track? {
 
 fun SpotifyTrack.toNamedTrack(): NamedTrack = NamedTrack(name, artists.first().name)
 private fun TrackSimplified.toNamedTrack(): NamedTrack = NamedTrack(name, artists.first().name)
-
 
 data class NamedTrack(val name: String, val artist: String?)
 

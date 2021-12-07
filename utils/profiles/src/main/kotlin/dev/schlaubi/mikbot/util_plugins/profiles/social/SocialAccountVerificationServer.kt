@@ -1,6 +1,5 @@
 package dev.schlaubi.mikbot.util_plugins.profiles.social
 
-import dev.schlaubi.mikbot.util_plugins.ktor.api.Config.WEB_SERVER_URL
 import dev.schlaubi.mikbot.util_plugins.ktor.api.KtorExtensionPoint
 import dev.schlaubi.mikbot.util_plugins.ktor.api.buildBotUrl
 import dev.schlaubi.mikbot.util_plugins.profiles.InvalidServiceException
@@ -35,9 +34,11 @@ class SocialAccountVerificationServer : KtorExtensionPoint, KoinComponent {
 
     private val httpClient = HttpClient {
         install(JsonFeature) {
-            serializer = KotlinxSerializer(KotlinxJson {
-                ignoreUnknownKeys = true
-            })
+            serializer = KotlinxSerializer(
+                KotlinxJson {
+                    ignoreUnknownKeys = true
+                }
+            )
         }
     }
 

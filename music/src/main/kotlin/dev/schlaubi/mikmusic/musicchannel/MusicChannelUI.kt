@@ -133,7 +133,6 @@ suspend fun updateMessage(
     }
 }
 
-
 suspend fun findMessageSafe(guildId: Snowflake, kord: Kord): Message? {
     val guildSettings = MusicSettingsDatabase.guild.findOneById(guildId)
     val (channelId, messageId) = guildSettings?.musicChannelData ?: return null

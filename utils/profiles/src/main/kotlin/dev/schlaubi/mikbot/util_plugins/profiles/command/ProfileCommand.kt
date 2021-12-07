@@ -44,7 +44,8 @@ private class ConnectArguments : Arguments() {
     val service by stringChoice(
         "social-service",
         "Choose the service to connect",
-        SocialAccountConnectionType.ALL.associate { it.displayName to it.id })
+        SocialAccountConnectionType.ALL.associate { it.displayName to it.id }
+    )
 }
 
 suspend fun SettingsModule.profileCommand() {
@@ -129,44 +130,44 @@ private suspend fun User.renderProfile(translateWrapper: suspend (String, String
             }
             description = """
             ${
-                profile.await().badges.map { translate(it.displayName) to it.emoji }
-                    .joinToString(separator = "\n") { (translation, emoji) ->
-                        "$emoji | **$translation**"
-                    }
+            profile.await().badges.map { translate(it.displayName) to it.emoji }
+                .joinToString(separator = "\n") { (translation, emoji) ->
+                    "$emoji | **$translation**"
+                }
             }
             
             **${translate("profiles.profile.connected_accounts")}:**
             ${
-                connections.joinToString(separator = "\n") { (connection, user) ->
-                    "**•** ${connection.type.emoji} **[${user.displayName}](${user.url})**"
-                }.ifEmpty {
-                    "**•** :x: **${translate("profiles.profile.no_connected_accounts")}**"
-                }
+            connections.joinToString(separator = "\n") { (connection, user) ->
+                "**•** ${connection.type.emoji} **[${user.displayName}](${user.url})**"
+            }.ifEmpty {
+                "**•** :x: **${translate("profiles.profile.no_connected_accounts")}**"
+            }
             }
         
         **${translate("profiles.profile.pronouns")}:**
         ${
-                profile.await().pronouns.map { translate(it.displayName) to it.url }
-                    .joinToString("\n") { (translation, url) ->
-                        "**• [$translation](${url})**"
-                    }.ifEmpty {
-                        "**•** :x: ${translate("profiles.profile.no_pronouns")}\n${translate("profiles.profile.ask_for_pronouns")}"
-                    }
+            profile.await().pronouns.map { translate(it.displayName) to it.url }
+                .joinToString("\n") { (translation, url) ->
+                    "**• [$translation]($url)**"
+                }.ifEmpty {
+                    "**•** :x: ${translate("profiles.profile.no_pronouns")}\n${translate("profiles.profile.ask_for_pronouns")}"
+                }
             }
         
         ${
-                translate(
-                    "profiles.profile.creation_date",
-                    replacements = arrayOf(
-                        translate(pronoun.firstPerson).replaceFirstChar(Char::uppercaseChar),
-                        translate(pronoun.thirdPerson),
-                        Snowflake(id).timestamp.toMessageFormat(
-                            DiscordTimestampStyle.LongDateTime
-                        )
+            translate(
+                "profiles.profile.creation_date",
+                replacements = arrayOf(
+                    translate(pronoun.firstPerson).replaceFirstChar(Char::uppercaseChar),
+                    translate(pronoun.thirdPerson),
+                    Snowflake(id).timestamp.toMessageFormat(
+                        DiscordTimestampStyle.LongDateTime
                     )
                 )
+            )
             }
-        """.trimIndent()
+            """.trimIndent()
             thumbnail {
                 url = effectiveAvatar
             }

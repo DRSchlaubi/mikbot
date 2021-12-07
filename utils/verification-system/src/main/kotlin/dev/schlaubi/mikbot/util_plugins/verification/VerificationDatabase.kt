@@ -12,6 +12,5 @@ object VerificationDatabase : KoinComponent {
     val invites = database.getCollection<Invitation>("invites")
 }
 
-
 @Serializable
 data class VerificationListEntry(@SerialName("_id") val guildId: Snowflake, val verified: Boolean)

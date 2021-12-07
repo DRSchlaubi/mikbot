@@ -171,7 +171,6 @@ private suspend fun SongQuizGame.findTrack(track: Track): LavalinkTrack? {
     return youtubeTrack
 }
 
-
 private data class GuessContext(
     val wrongOptionSource: List<String>,
     val correctOption: String,

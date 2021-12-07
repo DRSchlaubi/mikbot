@@ -6,7 +6,6 @@ import dev.schlaubi.mikbot.plugin.api.owner.OwnerModule
 import dev.schlaubi.mikbot.plugin.api.owner.ownerOnly
 import dev.schlaubi.mikbot.util_plugins.ktor.api.buildBotUrl
 import org.litote.kmongo.newId
-import dev.schlaubi.mikbot.util_plugins.ktor.api.Config as KtorConfig
 
 suspend fun OwnerModule.inviteCommand() = ephemeralSlashCommand(::VerificationArguments) {
     name = "Invite"

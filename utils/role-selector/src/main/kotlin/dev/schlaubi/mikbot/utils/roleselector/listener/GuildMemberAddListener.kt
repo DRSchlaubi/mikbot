@@ -15,9 +15,8 @@ suspend fun RoleSelectorModule.guildMemeberAddListener() = event<MemberJoinEvent
         } catch (ex: RestRequestException) {
             event.guild.asGuild().owner.getDmChannel().createMessage {
                 content = "Something went wrong while trying to give the set Auto Role to the new joining Member\n" +
-                        "Error: ${ex.error?.message}"
+                    "Error: ${ex.error?.message}"
             }
         }
-
     }
 }

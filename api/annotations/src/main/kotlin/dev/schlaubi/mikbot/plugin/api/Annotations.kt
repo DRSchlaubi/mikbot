@@ -8,7 +8,6 @@ package dev.schlaubi.mikbot.plugin.api
 @Retention(AnnotationRetention.BINARY)
 public annotation class InternalAPI
 
-
 /**
  * Class used to mark the main class of a plugin.
  */

@@ -22,7 +22,6 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.pf4j.Extension
 import kotlin.collections.set
-import dev.schlaubi.mikbot.util_plugins.ktor.api.Config as KtorConfig
 
 @Location("/invitations")
 class Invitations {
@@ -40,7 +39,6 @@ private val states = mutableMapOf<String, Invitation>()
 private val httpClient = HttpClient()
 private val LOG = KotlinLogging.logger { }
 private fun notConfigured(): Nothing = error("Please set all verify env vars")
-
 
 @Location("/thanks")
 data class Thanks(

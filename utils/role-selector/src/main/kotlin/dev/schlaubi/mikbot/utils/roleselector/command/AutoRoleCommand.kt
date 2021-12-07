@@ -71,5 +71,6 @@ class AutoRoleArguments : Arguments() {
             if (role.getPosition() >= highestMemberRole) {
                 throw DiscordRelayedException(translateString("error.commands.missing-permission.role.member"))
             }
-        })
+        }
+    )
 }

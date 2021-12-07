@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm")
+    id("org.jlleitschuh.gradle.ktlint")
 }
 
 val experimentalAnnotations =
@@ -21,4 +22,8 @@ kotlin {
     jvmToolchain {
         (this as DefaultToolchainSpec).languageVersion.set(JavaLanguageVersion.of(16))
     }
+}
+
+ktlint {
+    disabledRules.add("no-wildcard-imports")
 }

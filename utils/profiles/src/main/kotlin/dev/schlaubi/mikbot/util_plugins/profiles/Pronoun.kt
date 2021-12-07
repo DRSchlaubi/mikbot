@@ -36,5 +36,4 @@ enum class Pronoun(
     );
 
     override val readableName: String = englishDisplayName
-
 }

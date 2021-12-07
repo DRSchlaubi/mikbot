@@ -13,8 +13,8 @@ fun GDPRModule.infoCommand() = ephemeralSubCommand {
     description = "Shows the bots privacy policy"
 
     action {
-        val (storedData, anonymizedData, processedData)
-                = dataPoints.toDescription(this)
+        val (storedData, anonymizedData, processedData) =
+            dataPoints.toDescription(this)
 
         respond {
             embed {
@@ -38,7 +38,6 @@ fun GDPRModule.infoCommand() = ephemeralSubCommand {
         }
     }
 }
-
 
 private data class DataPointsDescriptions(
     val storedData: List<String>,

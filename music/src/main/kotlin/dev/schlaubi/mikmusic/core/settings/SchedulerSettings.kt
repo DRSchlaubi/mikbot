@@ -2,7 +2,6 @@ package dev.schlaubi.mikmusic.core.settings
 
 import kotlinx.serialization.Serializable
 
-
 @Serializable
 data class SchedulerSettings(
     val loopQueue: Boolean? = null,

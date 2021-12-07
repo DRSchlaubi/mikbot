@@ -8,7 +8,6 @@ import dev.schlaubi.mikmusic.core.settings.SchedulerSettings
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 
-
 @Serializable
 data class PersistentPlayerState(
     val guildId: Snowflake,
@@ -53,7 +52,6 @@ data class MutableFilters(
     override val vibrato: Filters.Vibrato? = null,
     override var volume: Float? = null
 ) : Filters
-
 
 @Serializable
 data class SerializableFilters(

@@ -84,7 +84,6 @@ private suspend inline fun <T : Event> CheckContext<T>.abstractMusicCheck(
 
 private fun CheckContext<*>.translateM(key: String) = translate(key, "music")
 
-
 private data class MusicCheckContext(
     val voiceChannel: Snowflake,
     val botChannel: Snowflake?,

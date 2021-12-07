@@ -37,12 +37,12 @@ suspend fun EphemeralSlashCommand<*>.addRoleMessageCommand() = ephemeralSubComma
 
         RoleSelectorDatabase.roleSelectionCollection.save(
             RoleSelectionMessage(
-            message.id,
-            embedTitle,
-            embedDescription,
-            embedColor,
-            emptyList()
-        )
+                message.id,
+                embedTitle,
+                embedDescription,
+                embedColor,
+                emptyList()
+            )
         )
 
         respond {

@@ -9,9 +9,9 @@ If you want to make a plugin you should really use [Gradle](https://gradle.org) 
 build.gradle.kts
 ```kotlin
 plugins {
-    id("com.google.devtools.ksp") // used for plugin-processor
-    kotlin("jvm")
-    id("dev.schlaubi.mikbot.gradle-plugin") version "1.0.0"
+    id("com.google.devtools.ksp") version "1.6.0-1.0.1" // used for plugin-processor
+    kotlin("jvm") version "1.6.0"
+    id("dev.schlaubi.mikbot.gradle-plugin") version "1.0.2"
 }
 
 repositories {

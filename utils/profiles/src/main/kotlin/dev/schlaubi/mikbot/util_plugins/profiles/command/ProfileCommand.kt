@@ -23,7 +23,7 @@ import dev.schlaubi.mikbot.util_plugins.profiles.ProfileDatabase
 import dev.schlaubi.mikbot.util_plugins.profiles.Pronoun
 import dev.schlaubi.mikbot.util_plugins.profiles.social.BasicUser
 import dev.schlaubi.mikbot.util_plugins.profiles.social.SocialAccountConnection
-import dev.schlaubi.mikbot.util_plugins.profiles.social.SocialAccountConnectionType
+import dev.schlaubi.mikbot.util_plugins.profiles.social.type.SocialAccountConnectionType
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.map

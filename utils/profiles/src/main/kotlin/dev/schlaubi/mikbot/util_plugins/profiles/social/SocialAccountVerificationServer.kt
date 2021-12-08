@@ -7,6 +7,7 @@ import dev.schlaubi.mikbot.util_plugins.profiles.Profile
 import dev.schlaubi.mikbot.util_plugins.profiles.ProfileConfig
 import dev.schlaubi.mikbot.util_plugins.profiles.ProfileDatabase
 import dev.schlaubi.mikbot.util_plugins.profiles.discord.DiscordOAuthUserResponse
+import dev.schlaubi.mikbot.util_plugins.profiles.social.type.SocialAccountConnectionType
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.client.*

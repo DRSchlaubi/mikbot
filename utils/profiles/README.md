@@ -65,8 +65,8 @@ GITABB_CLIENT_SECRET=<>
 - Set these environment variables to what the Twitch website shows you:
 
 ```
-TWITCH_CLIENT_ID
-TWITCH_CLIENT_SECRET
+TWITCH_CLIENT_ID=
+TWITCH_CLIENT_SECRET=
 ```
 
 </details>
@@ -84,6 +84,25 @@ Callback: `<value of WEB_SERVER_URL>/profiles/social/connect/twitter`
 ```
 TWITTER_CONSUMER_KEY
 TWITTER_CONSUMER_SECRET
+```
+
+</details>
+
+# Reddit
+
+<details>
+<summary>Reddit</summary>
+
+- Go to this page: https://www.reddit.com/prefs/apps
+- Click on the `New App` button on the very bottom
+  - Name: Whatever you want
+  - Description: Whatever you want
+  - Info URL: Whatever you want (or https://github.com/DRSchlaubi/mikbot)
+  - Redirect URI: `<value of WEB_SERVER_URL>/profiles/social/connect/reddit`
+
+```
+REDDIT_CLIENT_ID=
+REDDIT_CLIENT_SECRET=
 ```
 
 </details>

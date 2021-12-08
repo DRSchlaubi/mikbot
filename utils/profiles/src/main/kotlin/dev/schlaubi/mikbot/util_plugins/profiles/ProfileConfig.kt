@@ -17,4 +17,7 @@ object ProfileConfig {
 
     val DISCORD_CLIENT_ID by environment
     val DISCORD_CLIENT_SECRET by environment
+
+    val REDDIT_CLIENT_ID by environment
+    val REDDIT_CLIENT_SECRET by environment
 }

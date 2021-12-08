@@ -1,5 +1,6 @@
 package dev.schlaubi.mikbot.util_plugins.profiles.social
 
+import dev.schlaubi.mikbot.util_plugins.profiles.social.type.SocialAccountConnectionType
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

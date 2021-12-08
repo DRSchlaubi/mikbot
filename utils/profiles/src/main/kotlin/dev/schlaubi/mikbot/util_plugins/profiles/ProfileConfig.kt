@@ -20,4 +20,7 @@ object ProfileConfig {
 
     val REDDIT_CLIENT_ID by environment
     val REDDIT_CLIENT_SECRET by environment
+
+    val INSTAGRAM_CLIENT_ID by environment
+    val INSTAGRAM_CLIENT_SECRET by environment
 }

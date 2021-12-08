@@ -56,7 +56,7 @@ internal fun Dependency.toDependencyString(optional: Boolean = false): String {
     val name = if (this is ProjectDependency) {
         dependencyProject.name
     } else {
-        name
+        name.substringAfter("mikbot-")
     }
 
     return "$name${if (optional) "?" else ""}@$version"

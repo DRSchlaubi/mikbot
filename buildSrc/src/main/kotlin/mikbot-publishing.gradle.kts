@@ -3,15 +3,26 @@ import java.util.*
 plugins {
     `maven-publish`
     signing
+    java
 }
 
 tasks {
+    val sourcesJar = task<Jar>("sourcesJar") {
+        archiveClassifier.set("sources")
+        destinationDirectory.set(buildDir)
+        from(sourceSets["main"].allSource)
+    }
+
     publishing {
         publications {
             create<MavenPublication>("maven") {
                 groupId = "dev.schlaubi"
                 artifactId = "mikbot-${project.name}"
                 version = Project.version
+
+                from(components["java"])
+                artifact(sourcesJar)
+
 
                 pom {
                     name.set("mikbot")

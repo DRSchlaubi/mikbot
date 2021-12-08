@@ -23,4 +23,7 @@ object ProfileConfig {
 
     val INSTAGRAM_CLIENT_ID by environment
     val INSTAGRAM_CLIENT_SECRET by environment
+
+    val SPOTIFY_CLIENT_ID by environment
+    val SPOTIFY_CLIENT_SECRET by environment
 }

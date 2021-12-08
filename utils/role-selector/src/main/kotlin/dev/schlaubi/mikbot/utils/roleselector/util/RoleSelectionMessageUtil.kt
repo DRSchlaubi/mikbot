@@ -22,14 +22,16 @@ suspend fun updateMessage(message: Message, roleSelectionMessage: RoleSelectionM
             description = embedDescription.toString()
             color = roleSelectionMessage.embedColor
         }
-        actionRow {
-            roleSelectionMessage.roleSelections.forEach {
-                interactionButton(
-                    ButtonStyle.Primary,
-                    it.buttonId
-                ) {
-                    this.emoji = it.emoji
-                    this.label = it.label
+        roleSelectionMessage.roleSelections.chunked(5) {
+            actionRow {
+                it.forEach {
+                    interactionButton(
+                        ButtonStyle.Primary,
+                        it.buttonId
+                    ) {
+                        this.emoji = it.emoji
+                        this.label = it.label
+                    }
                 }
             }
         }

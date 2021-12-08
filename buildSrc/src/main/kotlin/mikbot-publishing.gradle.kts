@@ -18,7 +18,7 @@ tasks {
             create<MavenPublication>("maven") {
                 groupId = "dev.schlaubi"
                 artifactId = "mikbot-${project.name}"
-                version = Project.version
+                version = project.version as String
 
                 from(components["java"])
                 artifact(sourcesJar)

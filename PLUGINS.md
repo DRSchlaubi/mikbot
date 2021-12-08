@@ -33,10 +33,11 @@ mikbotPlugin {
 }
 
 tasks {
-    buildRepository {
-        repositoryUrl.set("https://plugin-repository.mikbot.schlaubi.net")
-        targetDirectory.set(rootProject.file("ci-repo").toPath())
-        projectUrl.set("https://github.com/DRSchlaubi/tree/main/${project.path.drop(1).replace(":", "/")}")
+    task<Copy>("buildAndCopy") {
+        dependsOn(assemblePlugin)
+        from(assemblePlugin)
+        include("*.zip")
+        into("plugins")
     }
 }
 
@@ -106,6 +107,42 @@ You can then access that point you can use this
 ```kotlin
 pluginSystem.getExtensions<GDPRExtensionPoint>()
 ```
+
+# Development
+<details>
+    <summary>Run with Docker-Compose</summary>
+    
+```yaml
+# dev.docker-compose.yaml
+version: "2.0"
+
+services:
+  mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: bot
+      MONGO_INITDB_ROOT_PASSWORD: bot
+    volumes:
+      - mongo-data:/data/db
+  bot:
+    image: ghcr.io/drschlaubi/mikmusic/bot:latest
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+    volumes:
+      - ./plugins:/usr/app/plugins
+    ports:
+      - "8080:8080"
+volumes:
+  mongo-data: { }
+```
+    
+Instead of running `gradle assemble`, now run `gradle buildAndCopy` to automatically load it into the plugins folder.
+    
+Then use `docker-compose -f dev.docker-compose.yaml up`.
+
+</details>
 
 # Publishing
 Please read [this](gradle-plugin/README.md#publishing) to learn how to publish plugins

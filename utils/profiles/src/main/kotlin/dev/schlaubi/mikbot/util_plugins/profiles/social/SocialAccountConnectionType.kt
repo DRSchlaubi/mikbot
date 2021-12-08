@@ -2,6 +2,7 @@ package dev.schlaubi.mikbot.util_plugins.profiles.social
 
 import com.kotlindiscord.kord.extensions.commands.application.slash.converters.ChoiceEnum
 import dev.nycode.github.model.SimpleUser
+import dev.schlaubi.mikbot.util_plugins.profiles.Badge
 import dev.schlaubi.mikbot.util_plugins.profiles.ProfileConfig
 import dev.schlaubi.mikbot.util_plugins.profiles.auth.oAuthTokenSecret
 import dev.schlaubi.mikbot.util_plugins.profiles.auth.oauth1a
@@ -18,12 +19,29 @@ import io.ktor.util.*
 import kotlinx.datetime.Clock
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import mu.KotlinLogging
+
+private val LOG = KotlinLogging.logger { }
 
 @Serializable(with = SocialAccountConnectionTypeSerializer::class)
 sealed class SocialAccountConnectionType : ChoiceEnum {
 
     companion object {
-        val ALL: List<SocialAccountConnectionType> = listOf(GitHub, GitLab, Twitter, Twitch)
+        val ALL: List<SocialAccountConnectionType> = run {
+            val clazz = SocialAccountConnectionType::class
+
+            // OAuth1a, OAuth2
+            val rootClasses = clazz.sealedSubclasses
+            val implementations = rootClasses.flatMap { it.sealedSubclasses }
+            implementations.mapNotNull {
+                try {
+                    it.objectInstance
+                } catch (e: ExceptionInInitializerError) {
+                    LOG.warn(e) { "Could not initialize SocialAccountConnectionType: ${it.simpleName}" }
+                    null
+                }
+            }
+        }
 
         private val httpClient = HttpClient {
             install(JsonFeature) {
@@ -35,7 +53,10 @@ sealed class SocialAccountConnectionType : ChoiceEnum {
             }
 
             Auth {
-                oauth1a("api.twitter.com", ProfileConfig.TWITTER_CONSUMER_SECRET)
+                try {
+                    oauth1a("api.twitter.com", ProfileConfig.TWITTER_CONSUMER_SECRET)
+                } catch (ignored: IllegalStateException) {
+                } // If this is missing we just ignore it
             }
         }
     }
@@ -53,6 +74,7 @@ sealed class SocialAccountConnectionType : ChoiceEnum {
 
     abstract suspend fun retrieveUserFromToken(token: OAuthAccessTokenResponse): User
     abstract suspend fun retrieveUserFromId(platformId: String): User
+    open suspend fun grantBadges(user: User) = emptySet<Badge>()
 
     sealed class OAuth2 : SocialAccountConnectionType() {
         abstract override val oauthSettings: OAuthServerSettings.OAuth2ServerSettings
@@ -76,6 +98,8 @@ sealed class SocialAccountConnectionType : ChoiceEnum {
     @SerialName("github")
     object GitHub : OAuth2() {
 
+        private val API_BASE = Url("https://api.github.com")
+
         override val id: String = "github"
 
         override val displayName: String = "GitHub"
@@ -89,7 +113,15 @@ sealed class SocialAccountConnectionType : ChoiceEnum {
             clientSecret = ProfileConfig.GITHUB_CLIENT_SECRET
         )
 
-        override val emoji: String = "<:github:912756097562054666>"
+        override val emoji: String = Badge.CONTRIBUTOR.emoji
+
+        private suspend fun retrieveContributors(): List<GitHubContributor> {
+            return httpClient.get(API_BASE) {
+                url {
+                    path("repos", "DRSchlaubi", "mikbot", "contributors")
+                }
+            }
+        }
 
         override suspend fun retrieveUserFromOAuth2Token(token: OAuthAccessTokenResponse.OAuth2): User {
             val user: SimpleUser = httpClient.get("https://api.github.com/user") {
@@ -102,6 +134,18 @@ sealed class SocialAccountConnectionType : ChoiceEnum {
             val user: SimpleUser = httpClient.get("https://api.github.com/user/$platformId")
             return BasicUser(user.id.toString(), user.htmlUrl, user.login)
         }
+
+        override suspend fun grantBadges(user: User): Set<Badge> {
+            val githubContributors = retrieveContributors()
+            return if (githubContributors.any { it.htmlUrl == user.url }) {
+                setOf(Badge.CONTRIBUTOR)
+            } else {
+                emptySet()
+            }
+        }
+
+        @Serializable
+        data class GitHubContributor(@SerialName("login") val name: String, @SerialName("html_url") val htmlUrl: String)
     }
 
     @Serializable(with = SocialAccountConnectionTypeSerializer::class)

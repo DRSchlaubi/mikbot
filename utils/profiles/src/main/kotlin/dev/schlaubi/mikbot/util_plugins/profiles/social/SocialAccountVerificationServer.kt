@@ -3,6 +3,7 @@ package dev.schlaubi.mikbot.util_plugins.profiles.social
 import dev.schlaubi.mikbot.util_plugins.ktor.api.KtorExtensionPoint
 import dev.schlaubi.mikbot.util_plugins.ktor.api.buildBotUrl
 import dev.schlaubi.mikbot.util_plugins.profiles.InvalidServiceException
+import dev.schlaubi.mikbot.util_plugins.profiles.Profile
 import dev.schlaubi.mikbot.util_plugins.profiles.ProfileConfig
 import dev.schlaubi.mikbot.util_plugins.profiles.ProfileDatabase
 import dev.schlaubi.mikbot.util_plugins.profiles.discord.DiscordOAuthUserResponse
@@ -126,6 +127,8 @@ class SocialAccountVerificationServer : KtorExtensionPoint, KoinComponent {
                                                 SocialAccountConnection::platformId eq user.id
                                             )
                                         )
+
+                                    val badges = accountType.grantBadges(user)
                                     ProfileDatabase.connections.save(
                                         SocialAccountConnection(
                                             id = existingConnection?.id ?: newId(),
@@ -136,6 +139,18 @@ class SocialAccountVerificationServer : KtorExtensionPoint, KoinComponent {
                                             platformId = user.id
                                         )
                                     )
+                                    if (badges.isNotEmpty()) {
+                                        val existingProfile =
+                                            ProfileDatabase.profiles.findOneById(discordSession) ?: Profile(
+                                                discordSession,
+                                                emptySet(),
+                                                emptySet()
+                                            )
+                                        ProfileDatabase.profiles.save(
+                                            existingProfile
+                                                .copy(badges = existingProfile.badges + badges)
+                                        )
+                                    }
                                     call.sessions.clear<ServiceSession>()
                                     call.respondRedirect("/profiles/connected")
                                 }

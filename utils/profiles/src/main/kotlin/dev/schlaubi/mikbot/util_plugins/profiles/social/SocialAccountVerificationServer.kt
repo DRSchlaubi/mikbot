@@ -29,8 +29,6 @@ import org.litote.kmongo.newId
 import org.pf4j.Extension
 import kotlinx.serialization.json.Json as KotlinxJson
 
-private val LOG = KotlinLogging.logger {}
-
 data class ServiceSession(val name: String)
 data class DiscordSession(val id: Long)
 
@@ -45,15 +43,6 @@ class SocialAccountVerificationServer : KtorExtensionPoint, KoinComponent {
                     ignoreUnknownKeys = true
                 }
             )
-        }
-
-        Logging {
-            level = LogLevel.ALL
-            logger = object : Logger {
-                override fun log(message: String) {
-                    LOG.info(message)
-                }
-            }
         }
     }
 

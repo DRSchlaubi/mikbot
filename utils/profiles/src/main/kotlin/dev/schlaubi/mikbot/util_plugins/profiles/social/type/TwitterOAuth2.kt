@@ -7,6 +7,7 @@ import dev.schlaubi.mikbot.util_plugins.profiles.social.TwitterUser
 import dev.schlaubi.mikbot.util_plugins.profiles.social.User
 import io.ktor.auth.*
 import io.ktor.client.request.*
+import io.ktor.content.*
 import io.ktor.http.*
 import io.ktor.util.*
 import kotlinx.serialization.SerialName
@@ -15,8 +16,6 @@ import kotlinx.serialization.Serializable
 @Serializable(with = SocialAccountConnectionTypeSerializer::class)
 @SerialName("twitter")
 object TwitterOAuth2 : SocialAccountConnectionType.OAuth2() {
-    private val apiKey = ProfileConfig.TWITTER_API_KEY
-    private val apiSecret = ProfileConfig.TWITTER_API_SECRET
     @OptIn(InternalAPI::class)
     override val oauthSettings: OAuthServerSettings.OAuth2ServerSettings = OAuthServerSettings.OAuth2ServerSettings(
         name = "twitter",
@@ -31,18 +30,23 @@ object TwitterOAuth2 : SocialAccountConnectionType.OAuth2() {
             parameters.append("code_challenge_method", "plain")
         },
         accessTokenInterceptor = {
-            println("Run intercept")
             headers.remove(HttpHeaders.Authorization)
-            println(url.buildString())
+            val content = body as TextContent
+            val formBody = content.text.parseUrlEncodedParameters()
+            val updatedBody = ParametersBuilder().apply {
+                appendAll(formBody)
+                append("code_verifier", this["state"]!!)
+            }.build().formUrlEncode()
+
+            body = TextContent(updatedBody, content.contentType, content.status)
         }
     )
 
     override suspend fun retrieveUserFromOAuth2Token(token: OAuthAccessTokenResponse.OAuth2): User {
-        println("Got parameters " + token.extraParameters)
-
         return httpClient.get<TwitterData<TwitterUser>>(TwitterUser.requestUserEndpoint) {
+            token.addToRequest(this)
             url {
-                encodedPath += "userId"
+                encodedPath += "me"
             }
         }.data
     }

@@ -58,11 +58,6 @@ jobs:
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '16'
-      - name: Download Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: build_folder
-          path: build
       - run: rm -rf .git/ # delete .git here to ignore the parent git repo and only care about plugin-repo
       - uses: actions/checkout@v2
         with:

@@ -23,24 +23,12 @@ jobs:
       - uses: gradle/gradle-build-action@v1
         with:
           arguments: classes ktlintCheck
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2.2.3
-        with:
-          name: build_folder
-          path: |
-            **/.gradle
-            **/build
   push:
     name: Push
     runs-on: ubuntu-20.04
     needs: [ build ]
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     steps:
-      - name: Download Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: build_folder
-          path: .
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v2
         with:
@@ -65,11 +53,6 @@ jobs:
     needs: [ build ]
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     steps:
-      - name: Download Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: build_folder
-          path: .
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v2
         with:
@@ -106,11 +89,6 @@ jobs:
     needs: [ build ]
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     steps:
-      - name: Download Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: build_folder
-          path: .
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v2
         with:

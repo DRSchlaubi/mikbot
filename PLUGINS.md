@@ -9,28 +9,47 @@ If you want to make a plugin you should really use [Gradle](https://gradle.org) 
 build.gradle.kts
 ```kotlin
 plugins {
-    id("com.google.devtools.ksp") // used for plugin-processor
-    kotlin("jvm")
-    id("dev.schlaubi.mikbot.gradle-plugin") version "1.0.0"
+    id("com.google.devtools.ksp") version "1.6.0-1.0.1" // used for plugin-processor
+    kotlin("jvm") version "1.6.0"
+    id("dev.schlaubi.mikbot.gradle-plugin") version "1.0.3"
 }
 
 repositories {
+    mavenCentral()
     maven("https://schlaubi.jfrog.io/artifactory/mikbot/")
+    maven("https://schlaubi.jfrog.io/artifactory/envconf/")
+    maven("https://maven.kotlindiscord.com/repository/maven-public/")
 }
 
 dependencies {
     // this one is included in the bot itself, therefore we make it compileOnly
     compileOnly(kotlin("stdlib-jdk8"))
     compileOnly("dev.schlaubi", "mikbot-api", "2.0.1")
-    ksp("dev.schlaubi", "plugin-processor", "2.0.1")
+    ksp("dev.schlaubi", "plugin-processor", "1.0.0")
 }
 
 mikbotPlugin {
     description.set("This is a cool plugin!")
 }
 
+tasks {
+    task<Copy>("buildAndCopy") {
+        dependsOn(assemblePlugin)
+        from(assemblePlugin)
+        include("*.zip")
+        into("plugins")
+    }
+}
+
 ```
+
 And then you can run `./gradlew assemblePlugin` to get your plugin.zip file.
+<details>
+<summary>In case of <b>File not found</b> exception</summary>
+
+Set `ksp("dev.schlaubi", "plugin-processor", "2.0.1")` to `implementation("dev.schlaubi", "plugin-processor", "2.0.1")` and reload your dependencies. Then change it back again. _(Workaround)_
+    
+</details>
 Alternatively to generating a zip file, you can also use shadowJar, but make sure to add the manifest is added.
 For more information about Packaging read [the packaging documentation](https://pf4j.org/doc/packaging.html) and [the plugins documentation](https://pf4j.org/doc/plugins.html)
 
@@ -88,6 +107,42 @@ You can then access that point you can use this
 ```kotlin
 pluginSystem.getExtensions<GDPRExtensionPoint>()
 ```
+
+# Development
+<details>
+    <summary>Run with Docker-Compose</summary>
+    
+```yaml
+# dev.docker-compose.yaml
+version: "2.0"
+
+services:
+  mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: bot
+      MONGO_INITDB_ROOT_PASSWORD: bot
+    volumes:
+      - mongo-data:/data/db
+  bot:
+    image: ghcr.io/drschlaubi/mikmusic/bot:latest
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+    volumes:
+      - ./plugins:/usr/app/plugins
+    ports:
+      - "8080:8080"
+volumes:
+  mongo-data: { }
+```
+    
+Instead of running `gradle assemble`, now run `gradle buildAndCopy` to automatically load it into the plugins folder.
+    
+Then use `docker-compose -f dev.docker-compose.yaml up`.
+
+</details>
 
 # Publishing
 Please read [this](gradle-plugin/README.md#publishing) to learn how to publish plugins

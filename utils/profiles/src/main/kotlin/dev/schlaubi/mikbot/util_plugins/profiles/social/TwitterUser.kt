@@ -1,5 +1,6 @@
 package dev.schlaubi.mikbot.util_plugins.profiles.social
 
+import io.ktor.http.*
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonNames
@@ -18,4 +19,9 @@ data class TwitterUser @OptIn(ExperimentalSerializationApi::class) constructor(
         get() = "https://twitter.com/$screenName"
     override val displayName: String
         get() = screenName
+
+
+    companion object {
+        val requestUserEndpoint = Url("https://api.twitter.com/2/users/")
+    }
 }

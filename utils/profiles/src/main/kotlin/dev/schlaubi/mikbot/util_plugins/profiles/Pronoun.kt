@@ -10,8 +10,7 @@ enum class Pronoun(
     val thirdPerson: String,
     val url: String,
     englishDisplayName: String
-) :
-    ChoiceEnum {
+) : ChoiceEnum {
 
     SHE_HER(
         "profiles.pronouns.she_her",

@@ -13,6 +13,7 @@ import io.ktor.auth.*
 import io.ktor.client.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
+import io.ktor.client.features.logging.*
 import io.ktor.client.request.*
 import io.ktor.features.*
 import io.ktor.http.*
@@ -20,12 +21,15 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.sessions.*
+import mu.KotlinLogging
 import org.koin.core.component.KoinComponent
 import org.litote.kmongo.and
 import org.litote.kmongo.eq
 import org.litote.kmongo.newId
 import org.pf4j.Extension
 import kotlinx.serialization.json.Json as KotlinxJson
+
+private val LOG = KotlinLogging.logger {}
 
 data class ServiceSession(val name: String)
 data class DiscordSession(val id: Long)
@@ -41,6 +45,15 @@ class SocialAccountVerificationServer : KtorExtensionPoint, KoinComponent {
                     ignoreUnknownKeys = true
                 }
             )
+        }
+
+        Logging {
+            level = LogLevel.ALL
+            logger = object : Logger {
+                override fun log(message: String) {
+                    LOG.info(message)
+                }
+            }
         }
     }
 

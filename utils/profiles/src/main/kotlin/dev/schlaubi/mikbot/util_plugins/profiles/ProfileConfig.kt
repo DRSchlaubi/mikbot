@@ -12,6 +12,10 @@ object ProfileConfig {
     val TWITTER_CONSUMER_KEY by environment
     val TWITTER_CONSUMER_SECRET by environment
 
+    val TWITTER_CLIENT_ID by environment
+    val TWITTER_API_KEY by environment
+    val TWITTER_API_SECRET by environment
+
     val TWITCH_CLIENT_ID by environment
     val TWITCH_CLIENT_SECRET by environment
 

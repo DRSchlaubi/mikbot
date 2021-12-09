@@ -18,6 +18,7 @@ dependencies {
         exclude("org.slf4j", "slf4j-api")
     }
     implementation("io.ktor", "ktor-client-serialization")
+    implementation("io.ktor", "ktor-client-logging", "1.6.2")
 }
 
 mikbotPlugin {

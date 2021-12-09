@@ -17,8 +17,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable(with = SocialAccountConnectionTypeSerializer::class)
 @SerialName("twitter")
-object Twitter : SocialAccountConnectionType.OAuth1a() {
-    private val requestUserEndpoint = Url("https://api.twitter.com/2/users/")
+object TwitterOAuth1a : SocialAccountConnectionType.OAuth1a() {
 
     override val id: String = "twitter"
     override val displayName: String = "Twitter"
@@ -39,7 +38,7 @@ object Twitter : SocialAccountConnectionType.OAuth1a() {
         val (oauthToken, oauthTokenSecret, parameters) = token
         val userId = parameters["user_id"].toString()
 
-        return httpClient.get<TwitterData<TwitterUser>>(requestUserEndpoint) {
+        return httpClient.get<TwitterData<TwitterUser>>(TwitterUser.requestUserEndpoint) {
             url {
                 encodedPath += userId
             }

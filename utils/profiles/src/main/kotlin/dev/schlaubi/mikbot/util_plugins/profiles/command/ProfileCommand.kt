@@ -23,11 +23,13 @@ import dev.schlaubi.mikbot.util_plugins.profiles.ProfileDatabase
 import dev.schlaubi.mikbot.util_plugins.profiles.Pronoun
 import dev.schlaubi.mikbot.util_plugins.profiles.social.BasicUser
 import dev.schlaubi.mikbot.util_plugins.profiles.social.SocialAccountConnection
+import dev.schlaubi.mikbot.util_plugins.profiles.social.serviceByName
 import dev.schlaubi.mikbot.util_plugins.profiles.social.type.SocialAccountConnectionType
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
+import org.litote.kmongo.and
 import org.litote.kmongo.eq
 
 private class ProfileArguments : Arguments() {
@@ -43,7 +45,7 @@ private class PronounArguments : Arguments() {
 private class ConnectArguments : Arguments() {
     val service by stringChoice(
         "social-service",
-        "Choose the service to connect",
+        "Choose the service to connect or disconnect",
         SocialAccountConnectionType.ALL.associate { it.displayName to it.id }
     )
 }
@@ -99,6 +101,25 @@ suspend fun SettingsModule.profileCommand() {
                             )
                         )
                     }
+                }
+            }
+        }
+
+        publicSubCommand(::ConnectArguments) {
+            name = "unlink"
+            description = "Unlinks a social service"
+
+            action {
+                val service = serviceByName(arguments.service)
+                ProfileDatabase.connections.deleteMany(
+                    and(
+                        SocialAccountConnection::userId eq user.id.value.toLong(),
+                        SocialAccountConnection::type eq service
+                    )
+                )
+
+                respond {
+                    content = translate("commands.profile.unlinked.success", arrayOf(service.displayName))
                 }
             }
         }

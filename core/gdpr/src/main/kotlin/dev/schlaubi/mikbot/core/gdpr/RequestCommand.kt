@@ -23,9 +23,12 @@ fun GDPRModule.requestCommand() = ephemeralSubCommand {
                 }
 
                 interactiveDataPoints.forEach { dataPoint ->
-                    field {
-                        name = translate(dataPoint.displayNameKey, dataPoint.module)
-                        value = dataPoint.requestFor(discordUser).joinToString(",")
+                    val data = dataPoint.requestFor(discordUser)
+                    if (data.isNotEmpty()) {
+                        field {
+                            name = translate(dataPoint.displayNameKey, dataPoint.module)
+                            value = data.joinToString(",")
+                        }
                     }
                 }
             }

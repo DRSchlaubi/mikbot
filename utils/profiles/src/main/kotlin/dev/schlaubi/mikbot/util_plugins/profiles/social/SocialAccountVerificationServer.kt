@@ -182,12 +182,13 @@ class SocialAccountVerificationServer : KtorExtensionPoint, KoinComponent {
         }
     }
 
-    private fun serviceByName(typeName: String) =
-        SocialAccountConnectionType.ALL.firstOrNull { it.id == typeName } ?: throw InvalidServiceException(typeName)
-
     override fun StatusPages.Configuration.apply() {
         exception<InvalidServiceException> {
             call.respond(HttpStatusCode.BadRequest, it.message ?: "don't buy apple products.")
         }
     }
+
 }
+
+fun serviceByName(typeName: String) =
+    SocialAccountConnectionType.ALL.firstOrNull { it.id == typeName } ?: throw InvalidServiceException(typeName)

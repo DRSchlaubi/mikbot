@@ -2,9 +2,21 @@ package space.votebot.core
 
 import com.kotlindiscord.kord.extensions.events.EventContext
 import com.kotlindiscord.kord.extensions.extensions.event
+import dev.kord.core.Kord
 import dev.kord.core.behavior.interaction.followUpEphemeral
 import dev.kord.core.event.interaction.GuildButtonInteractionCreateEvent
 import space.votebot.common.models.Poll
+import space.votebot.util.reFetch
+
+suspend fun Poll.close(kord: Kord) {
+    with(reFetch()) {
+        updateMessages(kord, removeButton = true, highlightWinner = true)
+        if (settings.showChartAfterClose) {
+            // TODO("Chart")
+        }
+    }
+    VoteBotDatabase.polls.deleteOneById(id)
+}
 
 suspend fun VoteBotModule.voteExecutor() = event<GuildButtonInteractionCreateEvent> {
     action {

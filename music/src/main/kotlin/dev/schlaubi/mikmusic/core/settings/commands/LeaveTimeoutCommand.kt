@@ -8,11 +8,8 @@ import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.mikbot.plugin.api.settings.SettingsModule
 import dev.schlaubi.mikbot.plugin.api.settings.guildAdminOnly
 import dev.schlaubi.mikbot.plugin.api.util.safeGuild
+import dev.schlaubi.mikbot.plugin.api.util.toDuration
 import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase
-import kotlinx.datetime.Clock
-import kotlinx.datetime.DateTimePeriod
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.plus
 import kotlin.time.Duration
 
 private val limit = Duration.minutes(10)
@@ -41,11 +38,4 @@ suspend fun SettingsModule.leaveTimeoutCommand() = ephemeralSlashCommand(::Leave
             content = translate("commands.leave_timeout.success", arrayOf(duration))
         }
     }
-}
-
-private fun DateTimePeriod.toDuration(): Duration {
-    val now = Clock.System.now()
-    val applied = now.plus(this, TimeZone.UTC)
-
-    return now - applied
 }

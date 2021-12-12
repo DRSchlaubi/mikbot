@@ -6,6 +6,7 @@ import com.kotlindiscord.kord.extensions.commands.converters.impl.string
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.kord.core.entity.channel.Channel
+import dev.schlaubi.mikbot.plugin.api.util.toDuration
 import space.votebot.common.models.PollSettings
 import space.votebot.common.models.StoredPollSettings
 import space.votebot.core.VoteBotModule
@@ -20,10 +21,11 @@ class CreateOptions : Arguments(), CreateSettings {
 
     private val maxVotes by optionalInt("max-votes", "How many times a user is allowed to vote")
     private val maxChanges by optionalInt("max-changes", "How many times a user is allowed to change their vote")
+    private val expireIn by voteDuration()
 
     override val settings: PollSettings by lazy {
         StoredPollSettings(
-            maxVotes = maxVotes, maxChanges = maxChanges
+            maxVotes = maxVotes, maxChanges = maxChanges, deleteAfter = expireIn?.toDuration()
         )
     }
 }

@@ -78,19 +78,25 @@ public data class Poll(
 /**
  * Representation of a vote result option.
  *
- * @property option the name of the option
+ * @property option the option
  * @property amount how many people voted for this option
+ * @property percentage the percentage of this option
  */
-public data class VoteOption(val option: String, val amount: Int)
+public data class VoteOption(val option: Option, val amount: Int, val percentage: Double)
 
 /**
  * Sums all votes into a list of [vote options][VoteOption].
  */
-public fun Poll.sumUp(): List<VoteOption> = options.mapIndexed { index, (_, name) ->
-    val votes = votes
-        .asSequence()
-        .filter { it.forOption == index }
-        .sumOf { it.amount }
+public fun Poll.sumUp(): List<VoteOption> {
+    val totalVotes = votes.sumOf { it.amount }
+    return options
+        .mapIndexed { index, option ->
+            val votes = votes
+                .asSequence()
+                .filter { it.forOption == index }
+                .sumOf { it.amount }
 
-    VoteOption(name, votes)
+            VoteOption(option, votes, (votes.toDouble() / totalVotes).coerceAtLeast(0.0))
+        }
+        .sortedBy { (option) -> option.position }
 }

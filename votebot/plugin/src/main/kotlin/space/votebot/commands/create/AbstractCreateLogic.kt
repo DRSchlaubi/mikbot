@@ -13,6 +13,7 @@ import org.litote.kmongo.newId
 import space.votebot.common.models.Poll
 import space.votebot.common.models.merge
 import space.votebot.core.VoteBotDatabase
+import space.votebot.core.addExpirationListener
 import space.votebot.core.updateMessages
 import space.votebot.util.toPollMessage
 
@@ -72,4 +73,7 @@ suspend fun <A : Arguments> EphemeralSlashCommandContext<A>.createVote(
 
     VoteBotDatabase.polls.save(poll)
     poll.updateMessages(channel.kord)
+    if(finalSettings.deleteAfter != null) {
+        poll.addExpirationListener(message.kord)
+    }
 }

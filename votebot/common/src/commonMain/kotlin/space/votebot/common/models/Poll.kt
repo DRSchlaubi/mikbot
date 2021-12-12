@@ -1,6 +1,7 @@
 package space.votebot.common.models
 
 import kotlinx.datetime.Instant
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import space.votebot.common.models.Poll.*
 
@@ -11,19 +12,25 @@ import space.votebot.common.models.Poll.*
  * @property authorId the id of the author of the poll.
  * @property title the title of the poll
  * @property options the [options][Option] which are available
+ * @property changes the amount of changes per user
  * @property votes a list of [votes][Vote] made by users
  * @property messages a list of [messages][Message] displaying the vote status
  * @property createdAt the [Instant] at which the poll was created
+ * @property settings the settings for this poll
  */
 @Serializable
-public class Poll(
+public data class Poll(
+    @SerialName("_id")
+    public val id: String,
     public val guildId: ULong,
     public val authorId: ULong,
     public val title: String,
     public val options: List<Option>,
+    public val changes: Map<ULong, Int>,
     public val votes: List<Vote>,
     public val messages: List<Message>,
-    public val createdAt: Instant
+    public val createdAt: Instant,
+    public val settings: FinalPollSettings
 ) {
     /**
      * Representation of a poll option.

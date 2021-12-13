@@ -1,6 +1,7 @@
 package space.votebot.pie_char_service.client
 
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * Request to create a pie chart.@
@@ -10,6 +11,7 @@ import kotlinx.serialization.SerialName
  * @property height the height of the pie chart
  * @property votes a list of [votes][Vote] shown in the Pie Chart
  */
+@Serializable
 public data class PieChartCreateRequest(
     val title: String,
     val width: Int,
@@ -23,4 +25,5 @@ public data class PieChartCreateRequest(
  * @property voteCount how many people voted for this option
  * @property title the title of the option
  */
+@Serializable
 public data class Vote(@SerialName("vote_count") val voteCount: Int, val title: String)

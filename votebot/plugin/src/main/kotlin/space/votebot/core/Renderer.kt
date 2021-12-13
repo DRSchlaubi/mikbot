@@ -13,9 +13,14 @@ import dev.kord.rest.request.KtorRequestException
 import dev.schlaubi.mikbot.plugin.api.util.effectiveAvatar
 import dev.schlaubi.mikbot.plugin.api.util.embed
 import dev.schlaubi.mikbot.plugin.api.util.forEachParallel
+import io.ktor.utils.io.jvm.javaio.*
 import kotlinx.datetime.Clock
+import mu.KotlinLogging
 import space.votebot.common.models.Poll
 import space.votebot.common.models.sumUp
+import space.votebot.pie_char_service.client.PieChartCreateRequest
+import space.votebot.pie_char_service.client.PieChartServiceClient
+import space.votebot.pie_char_service.client.Vote
 import space.votebot.util.toBehavior
 import java.text.DecimalFormat
 
@@ -24,21 +29,39 @@ private val percentage = DecimalFormat("#.##%")
 const val block = "■"
 const val blockBarLength = 30
 
-suspend fun Poll.updateMessages(kord: Kord, removeButton: Boolean = false, highlightWinner: Boolean = false) =
+private val pieChartService = PieChartServiceClient(VoteBotConfig.PIE_CHART_SERVICE_URL)
+
+private val LOG = KotlinLogging.logger { }
+
+suspend fun Poll.updateMessages(kord: Kord, removeButton: Boolean = false, highlightWinner: Boolean = false) {
+    val pieChart = if (highlightWinner && settings.showChartAfterClose) {
+        pieChartService
+            .createPieChart(toPieChartCreateRequest())
+            .toInputStream()
+    } else {
+        null
+    }
+
     messages.forEachParallel { message ->
         try {
             message.toBehavior(kord).edit {
-                content = ""
-                embeds = mutableListOf(toEmbed(kord, highlightWinner))
-                if (removeButton) {
-                    components = mutableListOf()
+                if (pieChart != null) {
+                    addFile("chart.png", pieChart)
                 } else {
-                    addButtons(this@updateMessages)
+                    content = ""
+                    embeds = mutableListOf(toEmbed(kord, highlightWinner))
+                    if (removeButton) {
+                        components = mutableListOf()
+                    } else {
+                        addButtons(this@updateMessages)
+                    }
                 }
             }
         } catch (ignored: KtorRequestException) {
+            LOG.debug(ignored) { "An error occurred whilst updating a poll message" }
         }
     }
+}
 
 fun MessageModifyBuilder.addButtons(poll: Poll) {
     poll.options.withIndex().sortedBy { (_, option) -> option.position }.chunked(5).forEach { options ->
@@ -109,4 +132,14 @@ suspend fun Poll.toEmbed(kord: Kord, highlightWinner: Boolean): EmbedBuilder = e
     }
 
     timestamp = createdAt
+}
+
+private fun Poll.toPieChartCreateRequest(): PieChartCreateRequest {
+    val votes = sumUp()
+
+    return PieChartCreateRequest(
+        title,
+        512, 512,
+        votes.map { (option, count) -> Vote(count, option.option) }
+    )
 }

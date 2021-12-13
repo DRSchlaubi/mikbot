@@ -11,9 +11,6 @@ import space.votebot.util.reFetch
 suspend fun Poll.close(kord: Kord) {
     with(reFetch()) {
         updateMessages(kord, removeButton = true, highlightWinner = true)
-        if (settings.showChartAfterClose) {
-            // TODO("Chart")
-        }
     }
     VoteBotDatabase.polls.deleteOneById(id)
 }

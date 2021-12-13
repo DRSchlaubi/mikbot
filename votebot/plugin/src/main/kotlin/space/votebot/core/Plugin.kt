@@ -10,7 +10,7 @@ import dev.schlaubi.mikbot.plugin.api.Plugin
 import dev.schlaubi.mikbot.plugin.api.PluginMain
 import dev.schlaubi.mikbot.plugin.api.PluginWrapper
 import kotlinx.coroutines.cancel
-import space.votebot.commands.create.createCommands
+import space.votebot.commands.commands
 
 @PluginMain
 class VoteBotPlugin(wrapper: PluginWrapper) : Plugin(wrapper) {
@@ -29,7 +29,7 @@ class VoteBotModule : Extension() {
     override suspend fun setup() {
         slashCommandCheck { anyGuild() }
 
-        createCommands()
+        commands()
         voteExecutor()
 
         event<ReadyEvent> {

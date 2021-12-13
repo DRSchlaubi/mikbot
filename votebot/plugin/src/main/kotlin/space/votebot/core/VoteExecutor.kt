@@ -8,9 +8,9 @@ import dev.kord.core.event.interaction.GuildButtonInteractionCreateEvent
 import space.votebot.common.models.Poll
 import space.votebot.util.reFetch
 
-suspend fun Poll.close(kord: Kord) {
+suspend fun Poll.close(kord: Kord, showChart: Boolean? = null) {
     with(reFetch()) {
-        updateMessages(kord, removeButton = true, highlightWinner = true)
+        updateMessages(kord, removeButton = true, highlightWinner = true, showChart)
     }
     VoteBotDatabase.polls.deleteOneById(id)
 }

@@ -33,8 +33,13 @@ private val pieChartService = PieChartServiceClient(VoteBotConfig.PIE_CHART_SERV
 
 private val LOG = KotlinLogging.logger { }
 
-suspend fun Poll.updateMessages(kord: Kord, removeButton: Boolean = false, highlightWinner: Boolean = false) {
-    val pieChart = if (highlightWinner && settings.showChartAfterClose) {
+suspend fun Poll.updateMessages(
+    kord: Kord,
+    removeButton: Boolean = false,
+    highlightWinner: Boolean = false,
+    showChart: Boolean? = null
+) {
+    val pieChart = if (highlightWinner && showChart ?: settings.showChartAfterClose) {
         pieChartService
             .createPieChart(toPieChartCreateRequest())
             .toInputStream()

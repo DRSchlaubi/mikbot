@@ -20,7 +20,6 @@ data class TwitterUser @OptIn(ExperimentalSerializationApi::class) constructor(
     override val displayName: String
         get() = screenName
 
-
     companion object {
         val requestUserEndpoint = Url("https://api.twitter.com/2/users/")
     }

@@ -138,8 +138,18 @@ To add plugins the `plugin` and `optionalPlugin` dependency configurations exist
 
 - The plugin is a local Gradle module, built with this plugin
 - The plugin is a remote plugin
-    - built with this plugin
-    - using it's artifact name as a plugin id
+  - built with this plugin
+  - using its artifact name as a plugin id
+
+# Default resource Bundle
+
+If you want to use a specific resource bundle as a fallback you can generate a fallback bundle by executing this task:
+
+```kotlin
+task<GenerateDefaultTranslationBundleTask>("generateDefaultResourceBundle") {
+  defaultLocale.set(Locale("en", "GB"))
+}
+```
 
 # Using outside Mikbot
 
@@ -149,7 +159,7 @@ Automatically:
 
 ```kotlin
 mikBotPlugin {
-    usePF4J()
+  usePF4J()
 }
 ```
 

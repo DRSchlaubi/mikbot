@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "dev.schlaubi.mikbot"
-version = "1.1.3"
+version = "1.1.4"
 
 repositories {
     maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
@@ -19,7 +19,6 @@ dependencies {
         exclude("org.slf4j", "slf4j-api")
     }
     implementation("io.ktor", "ktor-client-serialization")
-    implementation("io.ktor", "ktor-client-logging", "1.6.2")
 }
 
 mikbotPlugin {

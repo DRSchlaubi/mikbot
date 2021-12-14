@@ -1,4 +1,6 @@
+import dev.schlaubi.mikbot.gradle.GenerateDefaultTranslationBundleTask
 import dev.schlaubi.mikbot.gradle.MakeRepositoryIndexTask
+import java.util.*
 
 plugins {
     id("com.google.devtools.ksp") // used for plugin-processor
@@ -18,4 +20,13 @@ tasks {
         targetDirectory.set(rootProject.file("ci-repo").toPath())
         projectUrl.set("https://github.com/DRSchlaubi/tree/main/${project.path.drop(1).replace(":", "/")}")
     }
+
+    val generateDefaultResourceBundle = task<GenerateDefaultTranslationBundleTask>("generateDefaultResourceBundle") {
+        defaultLocale.set(Locale("en", "GB"))
+    }
+
+    assemblePlugin {
+        dependsOn(generateDefaultResourceBundle)
+    }
 }
+

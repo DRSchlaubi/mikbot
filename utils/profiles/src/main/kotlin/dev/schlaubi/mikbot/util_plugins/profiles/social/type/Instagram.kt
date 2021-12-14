@@ -1,6 +1,7 @@
 package dev.schlaubi.mikbot.util_plugins.profiles.social.type
 
 import dev.schlaubi.mikbot.util_plugins.profiles.ProfileConfig
+import dev.schlaubi.mikbot.util_plugins.profiles.serialization.SocialAccountConnectionTypeSerializer
 import dev.schlaubi.mikbot.util_plugins.profiles.social.User
 import io.ktor.auth.*
 import io.ktor.client.request.*
@@ -8,7 +9,7 @@ import io.ktor.http.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@Serializable
+@Serializable(with = SocialAccountConnectionTypeSerializer::class)
 @SerialName("instagram")
 object Instagram : SocialAccountConnectionType.OAuth2() {
     override val id: String = "instagram"

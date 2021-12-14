@@ -24,7 +24,7 @@ object TwitterOAuth2 : SocialAccountConnectionType.OAuth2() {
         requestMethod = HttpMethod.Post,
         clientId = ProfileConfig.TWITTER_CLIENT_ID,
         clientSecret = "<invalid>",
-        defaultScopes = listOf("offline.access"),
+        defaultScopes = listOf("offline.access", "tweet.read", "users.read"),
         authorizeUrlInterceptor = {
             parameters.append("code_challenge", parameters["state"]!!)
             parameters.append("code_challenge_method", "plain")

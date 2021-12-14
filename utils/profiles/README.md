@@ -82,8 +82,12 @@ Get these environment variables from here: https://developer.twitter.com/en/port
 Callback: `<value of WEB_SERVER_URL>/profiles/social/connect/twitter`
 
 ```
-TWITTER_CONSUMER_KEY
-TWITTER_CONSUMER_SECRET
+// For OAuth 1.1
+TWITTER_CONSUMER_KEY=<>
+TWITTER_CONSUMER_SECRET=<>
+
+// For OAuth 2
+TWITTER_CLIENT_ID=<>
 ```
 
 </details>

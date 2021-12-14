@@ -106,8 +106,8 @@ suspend fun SettingsModule.profileCommand() {
         }
 
         publicSubCommand(::ConnectArguments) {
-            name = "unlink"
-            description = "Unlinks a social service"
+            name = "disconnect"
+            description = "Disconnects a social service"
 
             action {
                 val service = serviceByName(arguments.service)
@@ -119,7 +119,7 @@ suspend fun SettingsModule.profileCommand() {
                 )
 
                 respond {
-                    content = translate("commands.profile.unlinked.success", arrayOf(service.displayName))
+                    content = translate("commands.profile.unlinked.success", "profiles", arrayOf(service.displayName))
                 }
             }
         }

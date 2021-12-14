@@ -2,11 +2,13 @@ package dev.schlaubi.mikbot.core.gdpr
 
 import com.kotlindiscord.kord.extensions.commands.CommandContext
 import com.kotlindiscord.kord.extensions.types.respond
+import dev.kord.rest.builder.message.EmbedBuilder
 import dev.kord.rest.builder.message.create.embed
 import dev.schlaubi.mikbot.core.gdpr.api.AnonymizedData
 import dev.schlaubi.mikbot.core.gdpr.api.DataPoint
 import dev.schlaubi.mikbot.core.gdpr.api.PermanentlyStoredDataPoint
 import dev.schlaubi.mikbot.core.gdpr.api.ProcessedData
+import dev.schlaubi.mikbot.plugin.api.util.splitIntoPages
 
 fun GDPRModule.infoCommand() = ephemeralSubCommand {
     name = "info"
@@ -20,20 +22,31 @@ fun GDPRModule.infoCommand() = ephemeralSubCommand {
             embed {
                 title = translate("commands.gdpr.info.title")
 
-                field {
-                    name = translate("commands.gdpr.info.stored_data")
-                    val explainer = translate("gdpr.general.persistent_data.explainer")
-                    value = (listOf(explainer) + storedData).joinToString("\n\n")
-                }
-                field {
-                    name = translate("commands.gdpr.info.anonymized_data")
-                    value = anonymizedData.joinToString("\n\n")
-                }
-                field {
-                    name = translate("commands.gdpr.info.data_processing")
-                    val explainer = translate("gdpr.general.processed_data.explainer")
-                    value = (listOf(explainer) + storedData).joinToString("\n\n")
-                }
+                dataPoint(
+                    translate("commands.gdpr.info.stored_data"),
+                    storedData,
+                    translate("gdpr.general.persistent_data.explainer")
+                )
+                dataPoint(translate("commands.gdpr.info.anonymized_data"), anonymizedData)
+                dataPoint(
+                    translate("commands.gdpr.info.data_processing"),
+                    processedData,
+                    translate("gdpr.general.processed_data.explainer")
+                )
+            }
+        }
+    }
+}
+
+private fun EmbedBuilder.dataPoint(name: String, values: List<String>, explainer: String? = null) {
+    val value = (listOfNotNull(explainer) + values)
+        .map { "$it \n\n" }
+        .splitIntoPages(1024)
+    value.forEachIndexed { index, text ->
+        if (text.isNotBlank()) {
+            field {
+                this.name = name + if (value.size > 1) " (${index + 1})" else ""
+                this.value = text
             }
         }
     }

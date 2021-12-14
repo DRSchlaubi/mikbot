@@ -13,7 +13,6 @@ import io.ktor.auth.*
 import io.ktor.client.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
-import io.ktor.client.features.logging.*
 import io.ktor.client.request.*
 import io.ktor.features.*
 import io.ktor.http.*
@@ -21,7 +20,6 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.sessions.*
-import mu.KotlinLogging
 import org.koin.core.component.KoinComponent
 import org.litote.kmongo.and
 import org.litote.kmongo.eq

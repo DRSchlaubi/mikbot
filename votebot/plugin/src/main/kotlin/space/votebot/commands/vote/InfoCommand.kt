@@ -96,7 +96,6 @@ suspend fun VoteBotModule.infoCommand() = publicSlashCommand {
                     inline = false
                 }
 
-
                 field {
                     name = translate("commands.info.version.mikbot")
                     value = MikBotInfo.VERSION

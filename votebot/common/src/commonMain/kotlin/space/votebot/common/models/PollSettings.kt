@@ -14,11 +14,10 @@ public interface PollSettings {
     public val maxChanges: Int?
 
     public val complete: Boolean
-        get() = deleteAfter != null
-                && showChartAfterClose != null
-                && maxVotes != null
-                && maxChanges != null
-
+        get() = deleteAfter != null &&
+            showChartAfterClose != null &&
+            maxVotes != null &&
+            maxChanges != null
 }
 
 @Serializable

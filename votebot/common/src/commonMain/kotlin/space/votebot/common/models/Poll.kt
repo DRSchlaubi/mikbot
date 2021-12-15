@@ -3,7 +3,6 @@ package space.votebot.common.models
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import space.votebot.common.models.Poll.*
 
 /**
  * Representation of a poll.
@@ -130,7 +129,7 @@ public data class Poll(
  * @property amount how many people voted for this option
  * @property percentage the percentage of this option
  */
-public data class VoteOption(val option: RenderableOption, val amount: Int, val percentage: Double)
+public data class VoteOption(val option: Poll.RenderableOption, val amount: Int, val percentage: Double)
 
 /**
  * Sums all votes into a list of [vote options][VoteOption].

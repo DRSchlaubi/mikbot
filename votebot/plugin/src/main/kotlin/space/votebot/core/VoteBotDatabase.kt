@@ -17,7 +17,7 @@ object VoteBotDatabase : KoinComponent {
 }
 
 // For some reason KMongo cannot seem to serialize this properly
-suspend fun CoroutineCollection<Poll>.findByMessage(pollMessage: Poll.Message) =
+suspend fun CoroutineCollection<Poll>.findOneByMessage(pollMessage: Poll.Message) =
     findOne(
         Document.parse(
             """{"messages": {"messageId": NumberLong("${pollMessage.messageId}"), 
@@ -27,4 +27,4 @@ suspend fun CoroutineCollection<Poll>.findByMessage(pollMessage: Poll.Message) =
         )
     )
 
-suspend fun CoroutineCollection<Poll>.findByMessage(message: Message) = findByMessage(message.toPollMessage())
+suspend fun CoroutineCollection<Poll>.findOneByMessage(message: Message) = findOneByMessage(message.toPollMessage())

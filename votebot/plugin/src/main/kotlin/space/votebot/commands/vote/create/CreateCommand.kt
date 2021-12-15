@@ -1,4 +1,4 @@
-package space.votebot.commands.create
+package space.votebot.commands.vote.create
 
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalInt

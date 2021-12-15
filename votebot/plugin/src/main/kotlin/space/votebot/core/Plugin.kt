@@ -25,6 +25,7 @@ class VoteBotPlugin(wrapper: PluginWrapper) : Plugin(wrapper) {
 
 class VoteBotModule : Extension() {
     override val name: String = "votebot"
+    override val bundle: String = "votebot"
 
     override suspend fun setup() {
         slashCommandCheck { anyGuild() }
@@ -33,7 +34,9 @@ class VoteBotModule : Extension() {
         voteExecutor()
 
         event<ReadyEvent> {
-            rescheduleAllPollExpires(kord)
+            action {
+                rescheduleAllPollExpires(kord)
+            }
         }
     }
 }

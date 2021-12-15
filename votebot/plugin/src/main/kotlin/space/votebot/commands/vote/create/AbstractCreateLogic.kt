@@ -1,4 +1,4 @@
-package space.votebot.commands.create
+package space.votebot.commands.vote.create
 
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommandContext
@@ -14,7 +14,7 @@ import space.votebot.common.models.Poll
 import space.votebot.common.models.merge
 import space.votebot.core.VoteBotDatabase
 import space.votebot.core.addExpirationListener
-import space.votebot.core.updateMessages
+import space.votebot.core.addMessage
 import space.votebot.util.toPollMessage
 
 suspend fun <A> EphemeralSlashCommandContext<A>.createVote()
@@ -56,24 +56,22 @@ suspend fun <A : Arguments> EphemeralSlashCommandContext<A>.createVote(
         settings.settings.merge(globalSettings)
     }
 
-    val message = channel.createMessage("New vote loading")
-
     val poll = Poll(
         newId<Poll>().toString(),
         safeGuild.id.value,
         user.id.value,
         settings.title,
-        settings.answers.mapIndexed { index, option -> Poll.Option(index, option) },
+        settings.answers.map { Poll.Option.ActualOption(null, it) },
         emptyMap(),
         emptyList(),
-        listOf(message.toPollMessage()),
+        emptyList(),
         Clock.System.now(),
         finalSettings
     )
+    val message = poll.addMessage(channel, addButtons = true, addToDatabase = false)
+    VoteBotDatabase.polls.save(poll.copy(messages = listOf(message.toPollMessage())))
 
-    VoteBotDatabase.polls.save(poll)
-    poll.updateMessages(channel.kord)
-    if(finalSettings.deleteAfter != null) {
-        poll.addExpirationListener(message.kord)
+    if (finalSettings.deleteAfter != null) {
+        poll.addExpirationListener(channel.kord)
     }
 }

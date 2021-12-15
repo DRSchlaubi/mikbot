@@ -5,10 +5,13 @@ import com.kotlindiscord.kord.extensions.time.toDiscord
 import dev.kord.common.entity.ButtonStyle
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
+import dev.kord.core.behavior.channel.MessageChannelBehavior
+import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.behavior.edit
+import dev.kord.core.entity.Message
+import dev.kord.rest.builder.component.ActionRowBuilder
+import dev.kord.rest.builder.component.MessageComponentBuilder
 import dev.kord.rest.builder.message.EmbedBuilder
-import dev.kord.rest.builder.message.modify.MessageModifyBuilder
-import dev.kord.rest.builder.message.modify.actionRow
 import dev.kord.rest.request.KtorRequestException
 import dev.schlaubi.mikbot.plugin.api.util.effectiveAvatar
 import dev.schlaubi.mikbot.plugin.api.util.embed
@@ -22,6 +25,7 @@ import space.votebot.pie_char_service.client.PieChartCreateRequest
 import space.votebot.pie_char_service.client.PieChartServiceClient
 import space.votebot.pie_char_service.client.Vote
 import space.votebot.util.toBehavior
+import space.votebot.util.toPollMessage
 import java.text.DecimalFormat
 
 private val percentage = DecimalFormat("#.##%")
@@ -33,9 +37,28 @@ private val pieChartService = PieChartServiceClient(VoteBotConfig.PIE_CHART_SERV
 
 private val LOG = KotlinLogging.logger { }
 
+suspend fun Poll.addMessage(
+    channel: MessageChannelBehavior,
+    addButtons: Boolean,
+    addToDatabase: Boolean
+): Message {
+    val message = channel.createMessage {
+        embeds.add(toEmbed(channel.kord, false))
+        if (addButtons) {
+            components.addAll(makeButtons())
+        }
+    }
+
+    if (addToDatabase) {
+        VoteBotDatabase.polls.save(copy(messages = messages + message.toPollMessage()))
+    }
+
+    return message
+}
+
 suspend fun Poll.updateMessages(
     kord: Kord,
-    removeButton: Boolean = false,
+    removeButtons: Boolean = false,
     highlightWinner: Boolean = false,
     showChart: Boolean? = null
 ) {
@@ -47,6 +70,8 @@ suspend fun Poll.updateMessages(
         null
     }
 
+    val failedMessages = mutableListOf<Poll.Message>()
+
     messages.forEachParallel { message ->
         try {
             message.toBehavior(kord).edit {
@@ -55,32 +80,38 @@ suspend fun Poll.updateMessages(
                 } else {
                     content = ""
                     embeds = mutableListOf(toEmbed(kord, highlightWinner))
-                    if (removeButton) {
-                        components = mutableListOf()
-                    } else {
-                        addButtons(this@updateMessages)
-                    }
+                }
+                components = if (removeButtons) {
+                    mutableListOf()
+                } else {
+                    makeButtons().toMutableList()
                 }
             }
         } catch (ignored: KtorRequestException) {
             LOG.debug(ignored) { "An error occurred whilst updating a poll message" }
+            failedMessages += message
         }
+    }
+
+    if (failedMessages.isNotEmpty()) {
+        VoteBotDatabase.polls.save(copy(messages = messages - failedMessages.toSet()))
     }
 }
 
-fun MessageModifyBuilder.addButtons(poll: Poll) {
-    poll.options.withIndex().sortedBy { (_, option) -> option.position }.chunked(5).forEach { options ->
-            actionRow {
-                options.forEach { (index, option) ->
+private fun Poll.makeButtons(): List<MessageComponentBuilder> =
+    sortedOptions
+        .chunked(5)
+        .map { options ->
+            ActionRowBuilder().apply {
+                options.forEach { (_, index, option) ->
                     interactionButton(ButtonStyle.Primary, "vote_$index") {
-                        label = option.option
+                        label = option
                     }
                 }
             }
         }
-}
 
-suspend fun Poll.toEmbed(kord: Kord, highlightWinner: Boolean): EmbedBuilder = embed {
+suspend fun Poll.toEmbed(kord: Kord, highlightWinner: Boolean = false): EmbedBuilder = embed {
     title = this@toEmbed.title
 
     author {
@@ -89,15 +120,17 @@ suspend fun Poll.toEmbed(kord: Kord, highlightWinner: Boolean): EmbedBuilder = e
         icon = user?.effectiveAvatar
     }
 
-    val names = options
-        .sortedBy { it.position }
-        .joinToString("\n") { "${it.position + 1}. ${it.option}" }
+    val names = sortedOptions
+        .joinToString("\n") { (index, _, value) ->
+            "${index + 1}. $value"
+        }
 
     val totalVotes = votes.sumOf { it.amount }
-    val results = sumUp().joinToString(separator = "\n") { (option, _, votePercentage) ->
+    val results = sumUp()
+        .joinToString(separator = "\n") { (option, _, votePercentage) ->
             val blocksForOption = (votePercentage * blockBarLength).toInt()
 
-            " ${option.position + 1} | ${
+            " ${option.positionedIndex + 1} | ${
                 block.repeat(blocksForOption).padEnd(blockBarLength)
             } | (${percentage.format(votePercentage)})"
         }

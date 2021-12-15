@@ -1,6 +1,7 @@
 plugins {
     `mikbot-module`
     `mikbot-publishing`
+    `mikbot-template`
 }
 
 group = "dev.schlaubi.mikbot"
@@ -25,4 +26,9 @@ dependencies {
 
     // Logging
     api("ch.qos.logback", "logback-classic", "1.2.6")
+}
+
+template {
+    files.add("MikBotInfo.java")
+    tokens.put("VERSION", project.version)
 }

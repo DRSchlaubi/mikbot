@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="16">
-      <module name="mikmusic.votebot" target="17" />
-      <module name="mikmusic.votebot.common" target="17" />
-      <module name="mikmusic.votebot.main" target="17" />
-      <module name="mikmusic.votebot.test" target="17" />
-    </bytecodeTargetLevel>
+    <bytecodeTargetLevel target="16" />
   </component>
 </project>

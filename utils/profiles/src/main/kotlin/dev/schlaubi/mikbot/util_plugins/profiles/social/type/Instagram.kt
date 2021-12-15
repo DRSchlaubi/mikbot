@@ -44,5 +44,5 @@ data class InstagramUser(@SerialName("username") override val displayName: Strin
     override val id: String
         get() = displayName
     override val url: String
-        get() = "https://www.instagra.com/$displayName"
+        get() = "https://www.instagram.com/$displayName"
 }

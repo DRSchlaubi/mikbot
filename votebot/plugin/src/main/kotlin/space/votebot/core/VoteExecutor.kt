@@ -10,7 +10,7 @@ import space.votebot.util.reFetch
 
 suspend fun Poll.close(kord: Kord, showChart: Boolean? = null) {
     with(reFetch()) {
-        updateMessages(kord, removeButton = true, highlightWinner = true, showChart)
+        updateMessages(kord, removeButtons = true, highlightWinner = true, showChart)
     }
     VoteBotDatabase.polls.deleteOneById(id)
 }
@@ -25,7 +25,7 @@ private suspend fun EventContext<GuildButtonInteractionCreateEvent>.onVote() {
     val interaction = event.interaction
 
     val message = interaction.message ?: return
-    val poll = VoteBotDatabase.polls.findByMessage(message) ?: return
+    val poll = VoteBotDatabase.polls.findOneByMessage(message) ?: return
 
     val option = interaction.componentId.substringAfter("vote_").toIntOrNull() ?: return
 

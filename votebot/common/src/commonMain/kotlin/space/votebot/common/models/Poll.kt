@@ -33,14 +33,62 @@ public data class Poll(
     public val settings: FinalPollSettings
 ) {
     /**
+     * All [actual options][Option.ActualOption] sorted by [Option.position].
+     */
+    @Suppress("UNCHECKED_CAST")
+    val sortedOptions: List<RenderableOption>
+        get() = options
+            .withIndex()
+            .mapNotNull {
+                if (it.value is Option.ActualOption) {
+                    it
+                } else {
+                    null
+                }
+            }
+            .sortedBy { (index, option) -> option.position ?: (index + 1) }
+            .mapIndexed { positionedIndex, (globalIndex, option) ->
+                RenderableOption(positionedIndex, globalIndex, (option as Option.ActualOption).option)
+            }
+
+    /**
+     * Option which can be rendered easily.
+     *
+     * @property positionedIndex the index which it has under all actual options (inside [sortedOptions])
+     * @property index the actual index inside [options]
+     * @property option the option text
+     */
+    @Serializable
+    public data class RenderableOption(val positionedIndex: Int, val index: Int, val option: String)
+
+    /**
      * Representation of a poll option.
      *
      * @property position the position at which the option is displayed
      *                      (this is used so rearranging doesn't change the option index)
-     * @property option the text of the option
+     *                      (if null the index will be used)
      */
     @Serializable
-    public data class Option(val position: Int, val option: String)
+    public sealed class Option {
+        public abstract val position: Int?
+
+        /**
+         * Representation of a poll option.
+         *
+
+         * @property option the text of the option
+         */
+        @Serializable
+        @SerialName("actual")
+        public data class ActualOption(override val position: Int?, val option: String) : Option()
+
+        /**
+         * Option used as a spacer, to make other options remain correct index.
+         */
+        @Serializable
+        @SerialName("spacer")
+        public data class Spacer(override val position: Int?) : Option()
+    }
 
     /**
      * Representation of a user vote.
@@ -82,21 +130,21 @@ public data class Poll(
  * @property amount how many people voted for this option
  * @property percentage the percentage of this option
  */
-public data class VoteOption(val option: Option, val amount: Int, val percentage: Double)
+public data class VoteOption(val option: RenderableOption, val amount: Int, val percentage: Double)
 
 /**
  * Sums all votes into a list of [vote options][VoteOption].
  */
 public fun Poll.sumUp(): List<VoteOption> {
     val totalVotes = votes.sumOf { it.amount }
-    return options
-        .mapIndexed { index, option ->
+    return sortedOptions
+        .map { renderableOption ->
+            val (_, index, _) = renderableOption
             val votes = votes
                 .asSequence()
                 .filter { it.forOption == index }
                 .sumOf { it.amount }
 
-            VoteOption(option, votes, (votes.toDouble() / totalVotes).coerceAtLeast(0.0))
+            VoteOption(renderableOption, votes, (votes.toDouble() / totalVotes).coerceAtLeast(0.0))
         }
-        .sortedBy { (option) -> option.position }
 }

@@ -44,21 +44,3 @@ private fun Arguments.unSettableBooleanString(
     ),
     validator = validator
 )
-
-private fun <InputType : Any?, OutputType : Any?, NamedInputType : Any, ResultType : Any, B : Any?> Converter<InputType, OutputType, NamedInputType, ResultType>.map(
-    mapper: (OutputType) -> B
-): Converter<B, B, NamedInputType, ResultType> =
-    object : Converter<B, B, NamedInputType, ResultType>() {
-        private var parsedValue: Any? = null
-        override var parsed: B
-            @Suppress("UNCHECKED_CAST")
-            get() = parsedValue as B
-            set(value) {}
-        override val signatureTypeString: String = this@map.signatureTypeString + ".mapped"
-
-        override suspend fun parse(parser: StringParser?, context: CommandContext, named: NamedInputType?): ResultType {
-            val result = this@map.parse(parser, context, named)
-            parsedValue = mapper(this@map.parsed)
-            return result
-        }
-    }

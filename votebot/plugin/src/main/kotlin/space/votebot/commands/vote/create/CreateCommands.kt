@@ -1,4 +1,4 @@
-package space.votebot.commands.create
+package space.votebot.commands.vote.create
 
 import space.votebot.core.VoteBotModule
 

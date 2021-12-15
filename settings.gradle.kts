@@ -22,6 +22,7 @@ include(
     "utils:epic-games-notifier",
     "utils:profiles",
     "utils:role-selector",
+    "utils:botblock",
     "votebot",
     "votebot:common",
     "votebot:chart-service-client",

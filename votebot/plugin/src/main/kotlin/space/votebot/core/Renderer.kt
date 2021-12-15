@@ -131,7 +131,7 @@ suspend fun Poll.toEmbed(kord: Kord, highlightWinner: Boolean = false): EmbedBui
             val blocksForOption = (votePercentage * blockBarLength).toInt()
 
             " ${option.positionedIndex + 1} | ${
-                block.repeat(blocksForOption).padEnd(blockBarLength)
+            block.repeat(blocksForOption).padEnd(blockBarLength)
             } | (${percentage.format(votePercentage)})"
         }
 
@@ -140,7 +140,6 @@ suspend fun Poll.toEmbed(kord: Kord, highlightWinner: Boolean = false): EmbedBui
         
         ```$results```
     """.trimIndent()
-
 
     if (settings.deleteAfter != null) {
         val deleteAt = createdAt + settings.deleteAfter!!

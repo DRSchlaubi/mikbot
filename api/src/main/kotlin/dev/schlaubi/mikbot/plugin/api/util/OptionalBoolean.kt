@@ -1,12 +1,10 @@
 package dev.schlaubi.mikbot.plugin.api.util
 
 import com.kotlindiscord.kord.extensions.commands.Arguments
-import com.kotlindiscord.kord.extensions.commands.CommandContext
 import com.kotlindiscord.kord.extensions.commands.application.slash.converters.impl.optionalStringChoice
 import com.kotlindiscord.kord.extensions.commands.converters.Converter
 import com.kotlindiscord.kord.extensions.commands.converters.ConverterToOptional
 import com.kotlindiscord.kord.extensions.commands.converters.Validator
-import com.kotlindiscord.kord.extensions.parser.StringParser
 
 public enum class UnSetableBoolean(public val value: Boolean?) {
     TRUE(true),

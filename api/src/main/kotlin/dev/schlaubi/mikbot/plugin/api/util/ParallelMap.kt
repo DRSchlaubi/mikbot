@@ -28,11 +28,11 @@ public suspend fun <T, S> Collection<T>.parallelMapNotNullIndexed(
                     }
                 }
 
-                    if (semaphore != null) {
-                        semaphore.withPermit { block() }
-                    } else {
-                        block()
-                    }
+                if (semaphore != null) {
+                    semaphore.withPermit { block() }
+                } else {
+                    block()
+                }
             }
         }
     }

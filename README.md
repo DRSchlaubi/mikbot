@@ -47,4 +47,5 @@ and [here](https://sdkman.io/) (Recommended for Linux/Mac)
 Please set the `ENVIRONMENT` env var to `DEVELOPMENT` whilst developing the bot.
 Also set a `TEST_GUILD` environment variable, for local commands
 
-If you are making any changes to the bots official plugins (aka the plugins in this repo), please run the `rebuild-plugin-dependency-list.sh` script first, otherwise your plugins won't be loaded properly
+If you are making any changes to the bots official plugins (aka the plugins in this repo),
+please run the `rebuild-plugin-dependency-list.sh` script first, otherwise your plugins won't be loaded properly

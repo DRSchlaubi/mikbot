@@ -35,7 +35,7 @@ class EpicGamesNotifierModule : Extension(), CoroutineScope {
     }
 
     private suspend fun checkForGames() {
-        val games = HttpRequests.fetchFreeGames().map { it.toEmbed() to it.id }
+        val games = HttpRequests.fetchFreeGames().map { it to it.id }
         val gameIds = games.map { (_, id) -> id }
         val failedWebhooks = mutableListOf<Id<Webhook>>()
 
@@ -46,8 +46,11 @@ class EpicGamesNotifierModule : Extension(), CoroutineScope {
                     it.sendGames(
                         kord,
                         games
+                            .asSequence()
                             .filter { (_, id) -> id !in it.sentPromotions }
-                            .map { (embed) -> embed },
+                            .filterNot { (game) -> game.urlSlug.endsWith("mysterygame") }
+                            .map { (game) -> game.toEmbed() }
+                            .toList(),
                         gameIds
                     )
                 } catch (e: RequestException) {

@@ -1,17 +1,15 @@
 package space.votebot.commands.vote.create
 
 import com.kotlindiscord.kord.extensions.commands.Arguments
-import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalInt
 import com.kotlindiscord.kord.extensions.commands.converters.impl.string
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.kord.core.entity.channel.Channel
-import dev.schlaubi.mikbot.plugin.api.util.toDuration
+import space.votebot.command.PollSettingsArguments
 import space.votebot.common.models.PollSettings
-import space.votebot.common.models.StoredPollSettings
 import space.votebot.core.VoteBotModule
 
-class CreateOptions : Arguments(), CreateSettings {
+class CreateOptions : Arguments(), CreateSettings, PollSettingsArguments {
     override val title: String by voteTitle()
 
     private val answersOptions by string("answers", "The options for the poll")
@@ -19,15 +17,12 @@ class CreateOptions : Arguments(), CreateSettings {
 
     override val channel: Channel? by voteChannel()
 
-    private val maxVotes by optionalInt("max-votes", "How many times a user is allowed to vote")
-    private val maxChanges by optionalInt("max-changes", "How many times a user is allowed to change their vote")
-    private val expireIn by voteDuration()
+    override val maxVotes by maxVotes("How many times a user is allowed to vote")
+    override val maxChanges by maxChanges("How many times a user is allowed to change their vote")
+    override val deleteAfterPeriod by voteDuration("Amount of time after which this poll should expire")
+    override val showChartAfterClose: Boolean? by showChart("Whether to show a chart after the poll finished or not")
 
-    override val settings: PollSettings by lazy {
-        StoredPollSettings(
-            maxVotes = maxVotes, maxChanges = maxChanges, deleteAfter = expireIn?.toDuration()
-        )
-    }
+    override val settings: PollSettings get() = this
 }
 
 suspend fun VoteBotModule.createCommand() = ephemeralSlashCommand(::CreateOptions) {

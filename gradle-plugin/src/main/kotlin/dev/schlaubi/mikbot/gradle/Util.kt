@@ -60,7 +60,7 @@ internal fun Project.buildDependenciesString(): String {
 
 internal fun Dependency.toDependencyString(optional: Boolean = false): String {
     val name = if (this is ProjectDependency) {
-        dependencyProject.name
+        dependencyProject.pluginId
     } else {
         name.substringAfter("mikbot-")
     }

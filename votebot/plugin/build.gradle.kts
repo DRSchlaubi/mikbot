@@ -12,6 +12,7 @@ dependencies {
 
 mikbotPlugin {
     description.set("Plugin adding VoteBot functionality")
+    pluginId.set("votebot")
 }
 
 template {

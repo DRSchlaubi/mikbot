@@ -30,3 +30,7 @@ tasks {
     }
 }
 
+mikbotPlugin {
+    license.set("MIT License")
+    provider.set("Mikbot Official Plugins")
+}

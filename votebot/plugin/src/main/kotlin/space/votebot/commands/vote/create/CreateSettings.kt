@@ -27,10 +27,3 @@ interface CreateSettings {
 
     fun Arguments.voteTitle() = string("title", "The title of the vote")
 }
-
-fun Arguments.voteDuration() =
-    optionalDuration("duration", "Amount of time after which this poll should expire.") { arg, period ->
-        if (period != null && period.toDuration() < Duration.minutes(1)) {
-            discordError(translate("vote.create.too_short"))
-        }
-    }

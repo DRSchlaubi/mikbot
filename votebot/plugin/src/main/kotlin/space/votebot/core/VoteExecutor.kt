@@ -17,10 +17,12 @@ suspend fun Poll.close(kord: Kord, showChart: Boolean? = null) {
     }
     VoteBotDatabase.polls.deleteOneById(id)
 
-    kord.getUser(Snowflake(authorId))?.dm {
-        content = "This message contains the requested vote statistic for your poll: $id"
+    if (settings.publicResults) {
+        kord.getUser(Snowflake(authorId))?.dm {
+            content = "This message contains the requested vote statistic for your poll: $id"
 
-        addFile("votes.csv", generateCSVFile())
+            addFile("votes.csv", generateCSVFile())
+        }
     }
 }
 
@@ -88,8 +90,8 @@ private suspend fun EventContext<GuildButtonInteractionCreateEvent>.onVote() {
     VoteBotDatabase.polls.save(newPoll)
     newPoll.updateMessages(interaction.kord)
     if(poll.settings.hideResults) {
-        ack.followUp {
-            embeds.add(poll.toEmbed(ack.kord, highlightWinner = false, overwriteHideResults = true))
+        ack.followUpEphemeral {
+            embeds.add(newPoll.toEmbed(ack.kord, highlightWinner = false, overwriteHideResults = true))
         }
     }
 }

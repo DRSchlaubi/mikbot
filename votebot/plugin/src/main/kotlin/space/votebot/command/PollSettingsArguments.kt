@@ -27,7 +27,7 @@ interface PollSettingsArguments : PollSettings {
     fun Arguments.maxChanges(description: String) = optionalInt("max-changes", description)
     fun Arguments.showChart(description: String) = optionalBoolean("show-chart", description)
 
-    fun Arguments.hideResults(description: String) = optionalBoolean("show-results", description)
+    fun Arguments.hideResults(description: String) = optionalBoolean("hide-results", description)
     fun Arguments.publicResults(description: String) = optionalBoolean("public-results", description)
 }
 

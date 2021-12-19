@@ -111,7 +111,11 @@ private fun Poll.makeButtons(): List<MessageComponentBuilder> =
             }
         }
 
-suspend fun Poll.toEmbed(kord: Kord, highlightWinner: Boolean = false, overwriteHideResults: Boolean = false): EmbedBuilder = embed {
+suspend fun Poll.toEmbed(
+    kord: Kord,
+    highlightWinner: Boolean = false,
+    overwriteHideResults: Boolean = false
+): EmbedBuilder = embed {
     title = this@toEmbed.title
 
     author {
@@ -127,7 +131,7 @@ suspend fun Poll.toEmbed(kord: Kord, highlightWinner: Boolean = false, overwrite
 
     val totalVotes = votes.sumOf { it.amount }
     val results = if (!settings.hideResults || highlightWinner || overwriteHideResults) {
-        sumUp()
+        val resultsText = sumUp()
             .joinToString(separator = "\n") { (option, _, votePercentage) ->
                 val blocksForOption = (votePercentage * blockBarLength).toInt()
 
@@ -135,6 +139,7 @@ suspend fun Poll.toEmbed(kord: Kord, highlightWinner: Boolean = false, overwrite
                     block.repeat(blocksForOption).padEnd(blockBarLength)
                 } | (${percentage.format(votePercentage)})"
             }
+        """```$resultsText```"""
     } else {
         "The results will be hidden until the Poll is over"
     }
@@ -142,7 +147,7 @@ suspend fun Poll.toEmbed(kord: Kord, highlightWinner: Boolean = false, overwrite
     description = """
         $names
         
-        ```$results```
+        $results
     """.trimIndent()
 
     if (settings.deleteAfter != null) {

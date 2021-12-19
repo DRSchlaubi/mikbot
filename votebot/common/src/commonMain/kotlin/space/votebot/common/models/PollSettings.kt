@@ -46,8 +46,8 @@ public data class StoredPollSettings(
     override val showChartAfterClose: Boolean? = null,
     override val maxVotes: Int? = null,
     override val maxChanges: Int? = null,
-    override val hideResults: Boolean?,
-    override val publicResults: Boolean?
+    override val hideResults: Boolean? = null,
+    override val publicResults: Boolean? = null
 ) : PollSettings
 
 /**

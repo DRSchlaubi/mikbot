@@ -2,7 +2,10 @@ package space.votebot.core
 
 import com.kotlindiscord.kord.extensions.events.EventContext
 import com.kotlindiscord.kord.extensions.extensions.event
+import com.kotlindiscord.kord.extensions.utils.dm
+import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
+import dev.kord.core.behavior.interaction.followUp
 import dev.kord.core.behavior.interaction.followUpEphemeral
 import dev.kord.core.event.interaction.GuildButtonInteractionCreateEvent
 import space.votebot.common.models.Poll
@@ -13,6 +16,12 @@ suspend fun Poll.close(kord: Kord, showChart: Boolean? = null) {
         updateMessages(kord, removeButtons = true, highlightWinner = true, showChart)
     }
     VoteBotDatabase.polls.deleteOneById(id)
+
+    kord.getUser(Snowflake(authorId))?.dm {
+        content = "This message contains the requested vote statistic for your poll: $id"
+
+        addFile("votes.csv", generateCSVFile())
+    }
 }
 
 suspend fun VoteBotModule.voteExecutor() = event<GuildButtonInteractionCreateEvent> {
@@ -78,4 +87,9 @@ private suspend fun EventContext<GuildButtonInteractionCreateEvent>.onVote() {
 
     VoteBotDatabase.polls.save(newPoll)
     newPoll.updateMessages(interaction.kord)
+    if(poll.settings.hideResults) {
+        ack.followUp {
+            embeds.add(poll.toEmbed(ack.kord, highlightWinner = false, overwriteHideResults = true))
+        }
+    }
 }

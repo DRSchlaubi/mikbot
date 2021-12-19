@@ -32,9 +32,10 @@ public data class Confirmation(val value: Boolean, private val response: Followu
  * @return whether the user confirmed the form or not
  */
 public suspend fun EphemeralSlashCommandContext<*>.confirmation(
-    timeout: Duration = Duration.seconds(30),
-    messageBuilder: MessageBuilder
-): Confirmation = confirmation({ respond { it() } }, timeout, messageBuilder)
+    yesWord: String? = null,
+    noWord: String? = null,
+    timeout: Duration = Duration.seconds(30), messageBuilder: MessageBuilder
+): Confirmation = confirmation(yesWord, noWord, { respond { it() } }, timeout, messageBuilder)
 
 /**
  * Initiates a button based confirmation form for a [PublicSlashCommandContext].
@@ -45,11 +46,15 @@ public suspend fun EphemeralSlashCommandContext<*>.confirmation(
  * @return whether the user confirmed the form or not
  */
 public suspend fun PublicSlashCommandContext<*>.confirmation(
+    yesWord: String? = null,
+    noWord: String? = null,
+    messageBuilder: MessageBuilder,
     timeout: Duration = Duration.seconds(30),
-    messageBuilder: MessageBuilder
-): Confirmation = confirmation({ respond { it() } }, timeout, messageBuilder)
+): Confirmation = confirmation(yesWord, noWord, { respond { it() } }, timeout, messageBuilder)
 
 private suspend fun CommandContext.confirmation(
+    yesWord: String? = null,
+    noWord: String? = null,
     sendMessage: EditableMessageSender,
     timeout: Duration = Duration.seconds(30),
     messageBuilder: MessageBuilder

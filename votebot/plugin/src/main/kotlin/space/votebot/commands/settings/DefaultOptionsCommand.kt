@@ -15,6 +15,8 @@ class DefaultOptionsArgument : Arguments(), PollSettingsArguments {
     override val maxChanges by maxChanges("How many times a user is allowed to change their vote")
     override val deleteAfterPeriod by voteDuration("Amount of time after which a poll should expire")
     override val showChartAfterClose: Boolean? by showChart("Whether to show a chart after a poll finished or not")
+    override val hideResults: Boolean? by hideResults("Whether to show results only to people who voted or not")
+    override val publicResults: Boolean? by publicResults("Whether to share who voted for what with the author or not")
 }
 
 suspend fun SettingsModule.defaultOptionsCommand() = ephemeralSlashCommand(::DefaultOptionsArgument) {
@@ -29,6 +31,8 @@ suspend fun SettingsModule.defaultOptionsCommand() = ephemeralSlashCommand(::Def
             decide(currentSettings?.showChartAfterClose, arguments.showChartAfterClose),
             decide(currentSettings?.maxVotes, arguments.maxVotes),
             decide(currentSettings?.maxChanges, arguments.maxChanges),
+            decide(currentSettings?.hideResults, arguments.hideResults),
+            decide(currentSettings?.publicResults, arguments.publicResults),
         )
 
         VoteBotDatabase.userSettings.save(UserSettings(user.id, newSettings))

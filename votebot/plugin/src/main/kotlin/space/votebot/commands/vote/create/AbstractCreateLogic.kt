@@ -6,6 +6,7 @@ import dev.kord.common.entity.Permission
 import dev.kord.common.entity.Permissions
 import dev.kord.core.behavior.channel.asChannelOf
 import dev.kord.core.entity.channel.TopGuildMessageChannel
+import dev.schlaubi.mikbot.plugin.api.util.confirmation
 import dev.schlaubi.mikbot.plugin.api.util.discordError
 import dev.schlaubi.mikbot.plugin.api.util.safeGuild
 import kotlinx.datetime.Clock
@@ -56,6 +57,10 @@ suspend fun <A : Arguments> EphemeralSlashCommandContext<A>.createVote(
         settings.settings.merge(globalSettings)
     }
 
+    if (finalSettings.publicResults && !attemptSendingDMs()) {
+        return
+    }
+
     val poll = Poll(
         newId<Poll>().toString(),
         safeGuild.id.value,
@@ -74,4 +79,21 @@ suspend fun <A : Arguments> EphemeralSlashCommandContext<A>.createVote(
     if (finalSettings.deleteAfter != null) {
         poll.addExpirationListener(channel.kord)
     }
+}
+
+private suspend fun <A : Arguments> EphemeralSlashCommandContext<A>.attemptSendingDMs(): Boolean {
+    if (user.getDmChannelOrNull() == null) {
+        val (agreed) = confirmation(
+            yesWord = translate("vote.create.retry"),
+            noWord = translate("vote.create.cancel"),
+        ) {
+            content = translate("vote.create.dms_disabled")
+        }
+        if (agreed) {
+            return attemptSendingDMs()
+        }
+        return false
+    }
+
+    return true
 }

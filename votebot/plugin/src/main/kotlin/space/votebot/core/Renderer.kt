@@ -111,7 +111,7 @@ private fun Poll.makeButtons(): List<MessageComponentBuilder> =
             }
         }
 
-suspend fun Poll.toEmbed(kord: Kord, highlightWinner: Boolean = false): EmbedBuilder = embed {
+suspend fun Poll.toEmbed(kord: Kord, highlightWinner: Boolean = false, overwriteHideResults: Boolean = false): EmbedBuilder = embed {
     title = this@toEmbed.title
 
     author {
@@ -126,14 +126,18 @@ suspend fun Poll.toEmbed(kord: Kord, highlightWinner: Boolean = false): EmbedBui
         }
 
     val totalVotes = votes.sumOf { it.amount }
-    val results = sumUp()
-        .joinToString(separator = "\n") { (option, _, votePercentage) ->
-            val blocksForOption = (votePercentage * blockBarLength).toInt()
+    val results = if (!settings.hideResults || highlightWinner || overwriteHideResults) {
+        sumUp()
+            .joinToString(separator = "\n") { (option, _, votePercentage) ->
+                val blocksForOption = (votePercentage * blockBarLength).toInt()
 
-            " ${option.positionedIndex + 1} | ${
-            block.repeat(blocksForOption).padEnd(blockBarLength)
-            } | (${percentage.format(votePercentage)})"
-        }
+                " ${option.positionedIndex + 1} | ${
+                    block.repeat(blocksForOption).padEnd(blockBarLength)
+                } | (${percentage.format(votePercentage)})"
+            }
+    } else {
+        "The results will be hidden until the Poll is over"
+    }
 
     description = """
         $names
@@ -160,6 +164,13 @@ suspend fun Poll.toEmbed(kord: Kord, highlightWinner: Boolean = false): EmbedBui
         field {
             name = if (winners.size > 1) "Winners" else "Winner"
             value = if (winners.isEmpty()) "No one voted" else winners.joinToString(", ") { it.option.option }
+        }
+    }
+
+    if (settings.publicResults) {
+        field {
+            name = "Privacy Notice"
+            value = "The author of this Poll will be able to see, what you have voted for."
         }
     }
 

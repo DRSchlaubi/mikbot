@@ -144,6 +144,6 @@ public fun Poll.sumUp(): List<VoteOption> {
                 .filter { it.forOption == index }
                 .sumOf { it.amount }
 
-            VoteOption(renderableOption, votes, (votes.toDouble() / totalVotes).coerceAtLeast(0.0))
+            VoteOption(renderableOption, votes, votes.toDouble() / totalVotes.coerceAtLeast(1))
         }
 }

@@ -18,7 +18,7 @@ suspend fun RoleSelectorModule.interactionCreateListener() = event<ComponentInte
 
         if (
             interaction.message != null &&
-            RoleSelectorDatabase.roleSelectionCollection.findOneById(interaction.message!!.channel.id) != null
+            RoleSelectorDatabase.roleSelectionCollection.findOneById(interaction.message!!.channel.id) == null
         ) return@action
 
         val guild = interaction.message?.getGuildOrNull()!!

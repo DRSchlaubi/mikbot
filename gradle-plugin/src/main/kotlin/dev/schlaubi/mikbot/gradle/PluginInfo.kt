@@ -29,7 +29,8 @@ internal data class PluginRelease(
     @Serializable(with = DateSerializer::class)
     val date: Date,
     val requires: String? = null,
-    val url: String
+    val url: String,
+    val sha256sum: String? = null
 )
 
 internal object DateSerializer : KSerializer<Date> {

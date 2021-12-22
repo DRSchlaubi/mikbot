@@ -5,6 +5,7 @@ import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.TaskAction
+import org.gradle.jvm.tasks.Jar
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.*
@@ -38,6 +39,8 @@ abstract class MakeRepositoryIndexTask : DefaultTask() {
             emptyList()
         }
 
+        val pluginTask = project.tasks.getByName("assemblePlugin") as Jar
+
         val extension = project.mikbotPluginExtension
         val newPlugins = plugins.addPlugins(
             PluginInfo(
@@ -50,7 +53,8 @@ abstract class MakeRepositoryIndexTask : DefaultTask() {
                         project.version as String,
                         Date(),
                         extension.requires.getOrElse(project.project(":").version as String),
-                        repositoryUrl.get() + "/" + project.pluginFilePath
+                        repositoryUrl.get() + "/" + project.pluginFilePath,
+                        pluginTask.archiveFile.get().asFile.toPath().sha512Checksum()
                     )
                 )
             )

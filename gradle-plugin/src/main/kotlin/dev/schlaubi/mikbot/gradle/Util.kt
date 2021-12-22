@@ -9,6 +9,8 @@ import org.gradle.api.artifacts.ProjectDependency
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
+import java.security.MessageDigest
+import kotlin.io.path.readBytes
 
 internal fun readPluginsJson(path: Path): List<PluginInfo> = Files.readString(path).run { Json.decodeFromString(this) }
 
@@ -28,7 +30,11 @@ internal fun List<PluginInfo>.addPlugins(vararg plugins: PluginInfo): List<Plugi
 
         val newReleases = (parent.releases + plugin.releases).distinctBy { it.version }
 
-        plugin.copy(releases = newReleases)
+        if (newReleases.size == parent.releases.size) {
+            plugin // do not change existing sha512 checksums
+        } else{
+            plugin.copy(releases = newReleases)
+        }
     }
 
     return (new + backlog).map { it.pluginInfo } + updated
@@ -85,4 +91,12 @@ fun Project.usePF4J() {
             )
         }
     }
+}
+
+fun Path.sha512Checksum(): String = readBytes().sha512Checksum()
+
+fun ByteArray.sha512Checksum(): String {
+    val digest = MessageDigest.getInstance("SHA-512")
+    val hashBytes = digest.digest(this)
+    return hashBytes.fold("") { str, it -> str + "%02x".format(it) }
 }

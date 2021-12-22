@@ -106,8 +106,8 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
                     it.from(file.parent)
                     it.include(file.name)
                 }
+            }
         }
-    }
 
     private fun Project.createPluginExtensions() {
         extensions.create<PluginExtension>(pluginExtensionName)
@@ -138,6 +138,12 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
                 include("*.zip")
                 // providing version manually, as of weird evaluation errors
                 into(buildRepository.get().targetDirectory.get().resolve("${project.name}/$version"))
+
+                eachFile {
+                    if (it.relativePath.getFile(destinationDir).exists()) {
+                        it.exclude() // exclude existing files, so checksums don't change
+                    }
+                }
             }
         }
     }

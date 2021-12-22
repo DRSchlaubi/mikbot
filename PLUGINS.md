@@ -25,7 +25,7 @@ dependencies {
     // this one is included in the bot itself, therefore we make it compileOnly
     compileOnly(kotlin("stdlib-jdk8"))
     compileOnly("dev.schlaubi", "mikbot-api", "2.0.1")
-    ksp("dev.schlaubi", "plugin-processor", "1.0.0")
+    ksp("dev.schlaubi", "mikbot-plugin-processor", "1.0.0")
 }
 
 mikbotPlugin {

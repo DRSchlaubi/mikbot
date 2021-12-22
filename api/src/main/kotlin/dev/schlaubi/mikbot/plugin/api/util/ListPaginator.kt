@@ -95,7 +95,7 @@ private fun <T> PaginatorBuilder.addPage(
     additionalPageConfig: suspend EmbedBuilder.() -> Unit
 ) {
     page {
-        this.title = title((myOffset + 1), pages.size)
+        this.title = title((myOffset + 1), pages.groups.size)
 
         description =
             items.mapIndexed { index, it ->

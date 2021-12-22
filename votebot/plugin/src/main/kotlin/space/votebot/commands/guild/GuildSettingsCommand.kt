@@ -7,6 +7,7 @@ import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.kord.core.behavior.channel.asChannelOfOrNull
 import dev.kord.core.entity.channel.TopGuildMessageChannel
+import dev.schlaubi.mikbot.plugin.api.settings.guildAdminOnly
 import dev.schlaubi.mikbot.plugin.api.util.discordError
 import org.litote.kmongo.newId
 import space.votebot.core.VoteBotDatabase
@@ -22,6 +23,7 @@ class SetVoteChannelArguments : Arguments() {
 suspend fun VoteBotModule.addGuildSettingsCommand() = ephemeralSlashCommand {
     name = "settings"
     description = "Manages settings for your guild"
+    guildAdminOnly()
 
     ephemeralSubCommand(::SetVoteChannelArguments) {
         name = "set-vote-channel"

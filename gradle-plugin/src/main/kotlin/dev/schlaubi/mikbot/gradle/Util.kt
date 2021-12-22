@@ -31,7 +31,7 @@ internal fun List<PluginInfo>.addPlugins(vararg plugins: PluginInfo): List<Plugi
         val newReleases = (parent.releases + plugin.releases).distinctBy { it.version }
 
         if (newReleases.size == parent.releases.size) {
-            plugin // do not change existing sha512 checksums
+            parent // do not change existing sha512 checksums
         } else{
             plugin.copy(releases = newReleases)
         }

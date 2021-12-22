@@ -8,12 +8,19 @@ import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.rest.builder.message.create.allowedMentions
 import dev.kord.rest.request.RestRequestException
 import dev.schlaubi.mikbot.plugin.api.util.respondEphemeral
+import dev.schlaubi.mikbot.utils.roleselector.RoleSelectorDatabase
 import dev.schlaubi.mikbot.utils.roleselector.RoleSelectorModule
 import dev.schlaubi.mikbot.utils.roleselector.util.translateString
 
 suspend fun RoleSelectorModule.interactionCreateListener() = event<ComponentInteractionCreateEvent> {
     action {
         val interaction = event.interaction
+
+        if (
+            interaction.message != null &&
+            RoleSelectorDatabase.roleSelectionCollection.findOneById(interaction.message!!.channel.id) == null
+        ) return@action
+
         val guild = interaction.message?.getGuildOrNull()!!
         val member = interaction.user.asMember(guild.id)
         val role = guild.getRole(Snowflake(interaction.componentId))

@@ -2,8 +2,7 @@ package space.votebot.commands.vote.create
 
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommandContext
-import dev.kord.common.entity.Permission
-import dev.kord.common.entity.Permissions
+import dev.kord.core.Kord
 import dev.kord.core.behavior.channel.asChannelOf
 import dev.kord.core.entity.channel.TopGuildMessageChannel
 import dev.schlaubi.mikbot.plugin.api.util.confirmation
@@ -16,6 +15,8 @@ import space.votebot.common.models.merge
 import space.votebot.core.VoteBotDatabase
 import space.votebot.core.addExpirationListener
 import space.votebot.core.addMessage
+import space.votebot.core.findOneByGuild
+import space.votebot.util.checkPermissions
 import space.votebot.util.toPollMessage
 
 suspend fun <A> EphemeralSlashCommandContext<A>.createVote()
@@ -24,19 +25,14 @@ suspend fun <A> EphemeralSlashCommandContext<A>.createVote()
 suspend fun <A : Arguments> EphemeralSlashCommandContext<A>.createVote(
     optionProvider: EphemeralSlashCommandContext<A>.() -> CreateSettings
 ) {
+    val kord = getKoin().get<Kord>()
     val settings = optionProvider()
-    val channel = (settings.channel ?: this.channel).asChannelOf<TopGuildMessageChannel>()
-
-    val selfPermissions = channel.getEffectivePermissions(channel.kord.selfId)
-    val requiredPermissions = Permissions(Permission.SendMessages, Permission.EmbedLinks)
-    if (requiredPermissions !in selfPermissions) {
-        discordError(translate("vote.create.missing_permissions.bot"))
+    val guildVoteChannel = VoteBotDatabase.guildSettings.findOneByGuild(guild!!.id)?.voteChannelId?.let {
+        kord.getChannelOf<TopGuildMessageChannel>(it)
     }
+    val channel = (guildVoteChannel ?: settings.channel ?: this.channel).asChannelOf<TopGuildMessageChannel>()
 
-    val userPermissions = channel.getEffectivePermissions(user.id)
-    if (requiredPermissions !in userPermissions) {
-        discordError(translate("vote.create.missing_permissions.user"))
-    }
+    checkPermissions(channel)
 
     if (settings.answers.size > 25) {
         discordError(translate("vote.create.too_many_options"))

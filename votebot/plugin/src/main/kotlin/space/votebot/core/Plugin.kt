@@ -10,10 +10,18 @@ import dev.schlaubi.mikbot.plugin.api.Plugin
 import dev.schlaubi.mikbot.plugin.api.PluginMain
 import dev.schlaubi.mikbot.plugin.api.PluginWrapper
 import kotlinx.coroutines.cancel
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.builtins.serializer
+import org.litote.kmongo.serialization.registerSerializer
 import space.votebot.commands.commands
 
 @PluginMain
 class VoteBotPlugin(wrapper: PluginWrapper) : Plugin(wrapper) {
+    @OptIn(ExperimentalSerializationApi::class, ExperimentalUnsignedTypes::class)
+    override fun start() {
+        registerSerializer(ULong.serializer())
+    }
+
     override fun ExtensibleBotBuilder.ExtensionsBuilder.addExtensions() {
         add(::VoteBotModule)
     }

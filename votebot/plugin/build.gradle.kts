@@ -8,6 +8,7 @@ plugins {
 dependencies {
     implementation(projects.votebot.common)
     implementation(projects.votebot.chartServiceClient)
+    implementation("info.debatty", "java-string-similarity", "2.0.0")
 }
 
 mikbotPlugin {

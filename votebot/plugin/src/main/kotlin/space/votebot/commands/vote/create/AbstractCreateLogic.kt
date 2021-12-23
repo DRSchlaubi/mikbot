@@ -34,6 +34,11 @@ suspend fun <A : Arguments> EphemeralSlashCommandContext<A>.createVote(
 
     checkPermissions(channel)
 
+    if (settings.answers.size < 2) {
+
+        discordError(translate("vote.create.not_enough_options"))
+    }
+
     if (settings.answers.size > 25) {
         discordError(translate("vote.create.too_many_options"))
     }

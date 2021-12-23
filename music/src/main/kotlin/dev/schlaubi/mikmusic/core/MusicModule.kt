@@ -22,7 +22,6 @@ import dev.schlaubi.lavakord.kord.connectAudio
 import dev.schlaubi.mikbot.plugin.api.io.Database
 import dev.schlaubi.mikbot.plugin.api.io.getCollection
 import dev.schlaubi.mikbot.plugin.api.util.*
-import dev.schlaubi.mikmusic.autocomplete.registerAutoCompleteHandler
 import dev.schlaubi.mikmusic.checks.musicControlCheck
 import dev.schlaubi.mikmusic.commands.commands
 import dev.schlaubi.mikmusic.core.audio.LavalinkManager
@@ -67,7 +66,6 @@ class MusicModule : Extension() {
 
         commands()
         // playMessageAction()
-        registerAutoCompleteHandler()
 
         event<ReadyEvent> {
             action {

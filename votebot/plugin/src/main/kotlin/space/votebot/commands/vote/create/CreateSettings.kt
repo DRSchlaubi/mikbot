@@ -2,14 +2,11 @@ package space.votebot.commands.vote.create
 
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalChannel
-import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalDuration
 import com.kotlindiscord.kord.extensions.commands.converters.impl.string
 import dev.kord.common.entity.ChannelType
 import dev.kord.core.entity.channel.Channel
 import dev.schlaubi.mikbot.plugin.api.util.discordError
-import dev.schlaubi.mikbot.plugin.api.util.toDuration
 import space.votebot.common.models.PollSettings
-import kotlin.time.Duration
 
 interface CreateSettings {
     val title: String

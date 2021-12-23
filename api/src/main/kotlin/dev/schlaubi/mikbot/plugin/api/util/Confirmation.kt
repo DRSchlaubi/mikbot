@@ -34,7 +34,8 @@ public data class Confirmation(val value: Boolean, private val response: Followu
 public suspend fun EphemeralSlashCommandContext<*>.confirmation(
     yesWord: String? = null,
     noWord: String? = null,
-    timeout: Duration = Duration.seconds(30), messageBuilder: MessageBuilder
+    timeout: Duration = Duration.seconds(30),
+    messageBuilder: MessageBuilder
 ): Confirmation = confirmation(yesWord, noWord, { respond { it() } }, timeout, messageBuilder)
 
 /**

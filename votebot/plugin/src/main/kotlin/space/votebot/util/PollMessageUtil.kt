@@ -19,4 +19,4 @@ fun Poll.Message.toBehavior(kord: Kord) = kord.unsafe.message(
 )
 
 val Poll.Message.jumpUrl: String
-    get() = "https://discord.com/channels/${guildId}/${channelId}/${messageId}"
+    get() = "https://discord.com/channels/$guildId/$channelId/$messageId"

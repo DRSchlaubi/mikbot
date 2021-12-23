@@ -136,7 +136,7 @@ suspend fun Poll.toEmbed(
                 val blocksForOption = (votePercentage * blockBarLength).toInt()
 
                 " ${option.positionedIndex + 1} | ${
-                    block.repeat(blocksForOption).padEnd(blockBarLength)
+                block.repeat(blocksForOption).padEnd(blockBarLength)
                 } | (${percentage.format(votePercentage)})"
             }
         """```$resultsText```"""

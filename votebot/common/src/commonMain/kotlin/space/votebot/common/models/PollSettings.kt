@@ -30,11 +30,11 @@ public interface PollSettings {
      */
     public val complete: Boolean
         get() = deleteAfter != null &&
-                showChartAfterClose != null &&
-                maxVotes != null &&
-                maxChanges != null &&
-                hideResults != null &&
-                publicResults != null
+            showChartAfterClose != null &&
+            maxVotes != null &&
+            maxChanges != null &&
+            hideResults != null &&
+            publicResults != null
 }
 
 /**

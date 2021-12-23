@@ -15,7 +15,6 @@ interface PollSettingsArguments : PollSettings {
     override val deleteAfter: Duration?
         get() = deleteAfterPeriod?.toDuration()
 
-
     fun Arguments.voteDuration(description: String) =
         optionalDuration("duration", description) { _, period ->
             if (period != null && period.toDuration() < Duration.minutes(1)) {

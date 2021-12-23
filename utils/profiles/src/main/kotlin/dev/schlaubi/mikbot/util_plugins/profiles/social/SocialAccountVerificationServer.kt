@@ -185,7 +185,6 @@ class SocialAccountVerificationServer : KtorExtensionPoint, KoinComponent {
             call.respond(HttpStatusCode.BadRequest, it.message ?: "don't buy apple products.")
         }
     }
-
 }
 
 fun serviceByName(typeName: String) =

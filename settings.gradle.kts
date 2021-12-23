@@ -22,8 +22,13 @@ include(
     "utils:epic-games-notifier",
     "utils:profiles",
     "utils:role-selector",
+    "utils:botblock",
+    "votebot",
+    "votebot:common",
+    "votebot:chart-service-client",
+    "votebot:plugin",
+    "test-bot",
     "mikmusic-bot",
-    "test-bot"
 )
 
 includeBuild("gradle-plugin")

@@ -80,13 +80,13 @@ private suspend fun FollowupMessageModifyBuilder.addControlButtons(
 }
 
 private suspend fun FollowupMessageModifyBuilder.addCards(
-    cards: List<List<Pair<Card, Int>>>,
+    cards: List<List<IndexedValue<Card>>>,
     discordUnoPlayer: DiscordUnoPlayer,
     active: Boolean
 ) {
     cards.forEach {
         actionRow {
-            it.forEach { (card, index) ->
+            it.forEach { (index, card) ->
                 interactionButton(card.buttonStyle, "play_card_$index") {
                     emoji = DiscordPartialEmoji(id = Snowflake(card.emoji), name = "1")
                     label = discordUnoPlayer.translate(card.translationKey)

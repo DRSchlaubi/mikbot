@@ -1,5 +1,6 @@
 package dev.schlaubi.mikbot.gradle
 
+import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionAware
 import org.gradle.api.provider.Property
 import java.nio.file.Path
@@ -14,6 +15,11 @@ internal val ExtensionAware.mikbotPluginExtension: PluginExtension
  * Extension for configuring plugins for PF4J.
  */
 abstract class PluginExtension {
+    /**
+     * Plugin id used for building and publishing (defaults to the project name)
+     */
+    abstract val pluginId: Property<String>
+
     /**
      * The version of the application this plugin requires (optional).
      */
@@ -54,3 +60,6 @@ abstract class PluginExtension {
      */
     abstract val pluginMainFileLocation: Property<Path>
 }
+
+internal val Project.pluginId: String
+    get() = mikbotPluginExtension.pluginId.getOrElse(name)

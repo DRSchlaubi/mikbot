@@ -14,6 +14,7 @@ version = Project.version
 
 allprojects {
     repositories {
+        maven("https://schlaubi.jfrog.io/artifactory/mikbot/")
         mavenCentral()
         maven("https://maven.kotlindiscord.com/repository/maven-public/")
         maven("https://schlaubi.jfrog.io/artifactory/envconf/")

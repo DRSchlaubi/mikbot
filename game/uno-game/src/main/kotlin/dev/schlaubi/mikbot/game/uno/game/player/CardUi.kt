@@ -6,14 +6,12 @@ import dev.schlaubi.uno.cards.PlayedCard
 
 private const val cardLimit = 20
 
-typealias CardIntPair = Pair<Card, Int>
-
-private fun List<CardIntPair>.filterOutCards(topCard: PlayedCard): Pair<List<CardIntPair>, List<CardIntPair>> {
-    val remainingCards = ArrayList<CardIntPair>(size)
-    val safeCards = ArrayList<CardIntPair>(size)
+private fun Iterable<IndexedValue<Card>>.filterOutCards(topCard: PlayedCard): Pair<List<IndexedValue<Card>>, List<IndexedValue<Card>>> {
+    val remainingCards = ArrayList<IndexedValue<Card>>()
+    val safeCards = ArrayList<IndexedValue<Card>>()
 
     forEach {
-        if (it !in safeCards && it.first.canBePlayedOn(topCard)) {
+        if (it !in safeCards && it.value.canBePlayedOn(topCard)) {
             safeCards.add(it)
         } else {
             remainingCards.add(it)
@@ -23,14 +21,14 @@ private fun List<CardIntPair>.filterOutCards(topCard: PlayedCard): Pair<List<Car
     return remainingCards.toList() to safeCards.toList()
 }
 
-suspend fun DiscordUnoPlayer.displayableCards(): List<Pair<Card, Int>> {
+suspend fun DiscordUnoPlayer.displayableCards(): List<IndexedValue<Card>> {
     val (remainingCards, safeCards) = deck
-        .mapIndexed { index, card -> card to index }
+        .withIndex()
         .filterOutCards(game.game.topCard)
     return if (safeCards.size > cardLimit) {
         val diff = safeCards.size - cardLimit
         val brokenCards = safeCards.takeLast(diff)
-        deck.removeAll(brokenCards.map { (card) -> card })
+        deck.removeAll(brokenCards.map { (_, card) -> card })
         response.followUpEphemeral {
             content = translate("uno.controls.removed_cards", arrayOf(diff))
         }

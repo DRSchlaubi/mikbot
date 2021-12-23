@@ -45,7 +45,7 @@ abstract class PollArguments(pollArgumentDescription: String) : Arguments() {
 
 suspend fun <A : PollArguments> SlashCommandContext<*, A>.poll(): Poll {
     val poll = VoteBotDatabase.polls.findOneByMessage(arguments.pollMessage)
-        ?: discordError(translate("commands.generic.poll_bot_found"))
+        ?: discordError(translate("commands.generic.poll_not_found"))
     val user = getUser()
     if (user.id.value != poll.authorId &&
         getMember()?.run { asMember().hasPermission(Permission.ManageGuild) } != true

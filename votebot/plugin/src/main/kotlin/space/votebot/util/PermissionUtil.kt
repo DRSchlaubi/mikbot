@@ -13,11 +13,11 @@ suspend fun <A : Arguments> EphemeralSlashCommandContext<A>.checkPermissions(
     val selfPermissions = channel.getEffectivePermissions(channel.kord.selfId)
     val requiredPermissions = Permissions(Permission.SendMessages, Permission.EmbedLinks)
     if (requiredPermissions !in selfPermissions) {
-        discordError(translate("vote.create.missing_permissions.bot"))
+        discordError(translate("vote.create.missing_permissions.bot", arrayOf(channel.mention)))
     }
 
     val userPermissions = channel.getEffectivePermissions(user.id)
     if (requiredPermissions !in userPermissions) {
-        discordError(translate("vote.create.missing_permissions.user"))
+        discordError(translate("vote.create.missing_permissions.user", arrayOf(channel.mention)))
     }
 }

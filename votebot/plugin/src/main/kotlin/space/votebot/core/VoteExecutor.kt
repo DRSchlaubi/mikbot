@@ -5,7 +5,6 @@ import com.kotlindiscord.kord.extensions.extensions.event
 import com.kotlindiscord.kord.extensions.utils.dm
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
-import dev.kord.core.behavior.interaction.followUp
 import dev.kord.core.behavior.interaction.followUpEphemeral
 import dev.kord.core.event.interaction.GuildButtonInteractionCreateEvent
 import space.votebot.common.models.Poll
@@ -66,13 +65,13 @@ private suspend fun EventContext<GuildButtonInteractionCreateEvent>.onVote() {
 
                 poll.copy(votes = poll.votes - existingVote + newVote)
             } else {
-                ack.followUpEphemeral { content = translate("vote.too_many_votes") }
+                ack.followUpEphemeral { content = translate("vote.too_many_votes", arrayOf(settings.maxVotes)) }
                 return
             }
         } else { // maxChanges >= 1
             val changes = poll.changes[userId] ?: 0
             if (changes >= settings.maxChanges) {
-                ack.followUpEphemeral { content = translate("vote.too_many_changes") }
+                ack.followUpEphemeral { content = translate("vote.too_many_changes", arrayOf(settings.maxChanges)) }
                 return
             }
             val oldVote = poll.votes.first { it.userId == userId }

@@ -31,14 +31,14 @@ suspend fun SettingsModule.addGuildSettingsCommand() = ephemeralSlashCommand {
 
         action {
             val channel = arguments.channel.asChannelOfOrNull<TopGuildMessageChannel>()
-                ?: discordError(translate("vote.settings.invalid-channel-type"))
+                ?: discordError(translate("commands.create.invalid_channel"))
             checkPermissions(channel)
 
             val guildSettings =
                 VoteBotDatabase.guildSettings.findOneByGuild(guild!!.id) ?: GuildSettings(newId(), guild!!.id, null)
             VoteBotDatabase.guildSettings.save(guildSettings.copy(voteChannelId = channel.id))
             respond {
-                content = translate("vote.settings.vote-channel-updated")
+                content = translate("vote.settings.vote_channel_updated")
             }
         }
     }
@@ -52,14 +52,14 @@ suspend fun SettingsModule.addGuildSettingsCommand() = ephemeralSlashCommand {
                 VoteBotDatabase.guildSettings.findOneByGuild(guild!!.id) ?: GuildSettings(newId(), guild!!.id, null)
             if (guildSettings.voteChannelId == null) {
                 respond {
-                    content = translate("vote.settings.no-channel-defined")
+                    content = translate("vote.settings.no_channel_defined")
                 }
                 return@action
             }
 
             VoteBotDatabase.guildSettings.save(guildSettings.copy(voteChannelId = null))
             respond {
-                content = translate("vote.settings.vote-channel-removed")
+                content = translate("vote.settings.vote_channel_removed")
             }
         }
     }

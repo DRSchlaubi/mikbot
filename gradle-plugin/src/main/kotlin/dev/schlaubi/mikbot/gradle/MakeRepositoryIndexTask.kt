@@ -44,7 +44,7 @@ abstract class MakeRepositoryIndexTask : DefaultTask() {
         val extension = project.mikbotPluginExtension
         val newPlugins = plugins.addPlugins(
             PluginInfo(
-                project.name,
+                project.pluginId,
                 project.name,
                 extension.description.getOrElse(""),
                 projectUrl.get(),

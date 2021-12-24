@@ -41,7 +41,7 @@ internal fun List<PluginInfo>.addPlugins(vararg plugins: PluginInfo): List<Plugi
 }
 
 internal val Project.pluginFilePath: String
-    get() = "${name}/${version}/plugin-${name}-${version}.zip"
+    get() = "${name}/${version}/plugin-${pluginId}-${version}.zip"
 
 private data class PluginWrapper(val pluginInfo: PluginInfo) {
     override fun equals(other: Any?): Boolean = (other as? PluginWrapper)?.pluginInfo?.id == pluginInfo.id

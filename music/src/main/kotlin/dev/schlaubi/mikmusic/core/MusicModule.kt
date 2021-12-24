@@ -24,6 +24,7 @@ import dev.schlaubi.mikbot.plugin.api.io.getCollection
 import dev.schlaubi.mikbot.plugin.api.util.*
 import dev.schlaubi.mikmusic.checks.musicControlCheck
 import dev.schlaubi.mikmusic.commands.commands
+import dev.schlaubi.mikmusic.context.playMessageAction
 import dev.schlaubi.mikmusic.core.audio.LavalinkManager
 import dev.schlaubi.mikmusic.player.MusicPlayer
 import dev.schlaubi.mikmusic.player.PersistentPlayerState
@@ -65,7 +66,7 @@ class MusicModule : Extension() {
         }
 
         commands()
-        // playMessageAction()
+        playMessageAction()
 
         event<ReadyEvent> {
             action {

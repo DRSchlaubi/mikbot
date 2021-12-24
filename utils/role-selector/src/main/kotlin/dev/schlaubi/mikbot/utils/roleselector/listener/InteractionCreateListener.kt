@@ -16,14 +16,14 @@ suspend fun RoleSelectorModule.interactionCreateListener() = event<ComponentInte
     action {
         val interaction = event.interaction
 
-        if (
-            interaction.message != null &&
-            RoleSelectorDatabase.roleSelectionCollection.findOneById(interaction.message!!.channel.id) == null
-        ) return@action
+        val messageId = interaction.message?.id ?: return@action
+        val selector = RoleSelectorDatabase.roleSelectionCollection.findOneById(messageId) ?: return@action
+        val roleId = Snowflake(interaction.componentId)
+        if (selector.roleSelections.none { it.roleId == roleId }) return@action
 
         val guild = interaction.message?.getGuildOrNull()!!
         val member = interaction.user.asMember(guild.id)
-        val role = guild.getRole(Snowflake(interaction.componentId))
+        val role = guild.getRole(roleId)
 
         try {
             if (!member.hasRole(role)) {

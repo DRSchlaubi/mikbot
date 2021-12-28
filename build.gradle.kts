@@ -25,7 +25,9 @@ allprojects {
 }
 
 subprojects {
-    apply(plugin = "org.jlleitschuh.gradle.ktlint")
+    if (path != ":votebot:common") { // MPP projects don't work with ktlint
+        apply(plugin = "org.jlleitschuh.gradle.ktlint")
+    }
 }
 
 dependencies {
@@ -42,16 +44,7 @@ dependencies {
 
     // Util
     implementation("dev.schlaubi", "envconf", "1.1")
-    implementation("org.jetbrains.kotlinx", "kotlinx-serialization-json") {
-        version {
-            strictly("1.3.1")
-        }
-    }
-    implementation("org.jetbrains.kotlinx", "kotlinx-serialization-core") {
-        version {
-            strictly("1.3.1")
-        }
-    }
+    implementation("org.jetbrains.kotlinx", "kotlinx-serialization-json", "1.3.2")
 
     implementation(project(":api"))
     implementation(kotlin("reflect"))

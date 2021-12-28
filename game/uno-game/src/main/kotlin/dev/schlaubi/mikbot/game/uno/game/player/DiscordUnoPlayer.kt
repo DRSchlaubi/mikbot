@@ -19,10 +19,10 @@ import dev.schlaubi.uno.cards.DiscardAllCardsCard
 import dev.schlaubi.uno.cards.SlapCard
 import dev.schlaubi.uno.cards.SlapContext
 import kotlinx.coroutines.launch
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 import dev.schlaubi.mikbot.game.api.Player as GamePlayer
 
-internal val unoInteractionTimeout = Duration.seconds(30).inWholeMilliseconds
+internal val unoInteractionTimeout = 30.seconds.inWholeMilliseconds
 
 const val drawCardButton = "draw_card"
 const val sayUnoButton = "say_uno"
@@ -155,7 +155,7 @@ class DiscordUnoPlayer(
         game.kord.launch {
             runCatching {
                 // Ignore thread is archived errors
-                message.deleteAfterwards(Duration.seconds(15))
+                message.deleteAfterwards(15.seconds)
             }
         }
     }

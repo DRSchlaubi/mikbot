@@ -21,10 +21,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import mu.KotlinLogging
 import kotlin.random.Random
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 private val LOG = KotlinLogging.logger { }
-private val timeoutDuration = Duration.seconds(5)
+private val timeoutDuration = 5.seconds
 
 suspend fun DiscordUnoGame.checkForDropIns() {
     if (allowDropIns) {

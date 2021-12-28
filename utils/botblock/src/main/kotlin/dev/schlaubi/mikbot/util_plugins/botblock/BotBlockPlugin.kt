@@ -10,7 +10,7 @@ import dev.schlaubi.mikbot.plugin.api.PluginMain
 import dev.schlaubi.mikbot.plugin.api.PluginWrapper
 import kotlinx.coroutines.*
 import mu.KotlinLogging
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 
 private val LOG = KotlinLogging.logger { }
 
@@ -32,7 +32,7 @@ class BotBlockExtension : Extension() {
 
     private fun startLoop() {
         scope.launch {
-            delay(Duration.minutes(Config.BOTBLOCK_DELAY))
+            delay(Config.BOTBLOCK_DELAY.minutes)
             try {
                 kord.postStats(Config.BOT_LIST_TOKENS)
             } catch (e: KtorRequestException) {

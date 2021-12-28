@@ -9,7 +9,7 @@ import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
 import kotlinx.coroutines.flow.toList
 import kotlinx.serialization.json.*
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 
 private val client = HttpClient {
     install(JsonFeature) {
@@ -18,8 +18,8 @@ private val client = HttpClient {
 
     install(HttpTimeout) {
         // Timeout extremely long because of botblock
-        requestTimeoutMillis = Duration.minutes(5).inWholeMilliseconds
-        connectTimeoutMillis = Duration.minutes(5).inWholeMilliseconds
+        requestTimeoutMillis = 5.minutes.inWholeMilliseconds
+        connectTimeoutMillis = 5.minutes.inWholeMilliseconds
     }
 }
 

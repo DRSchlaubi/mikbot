@@ -15,7 +15,7 @@ import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.channels.ticker
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 @PluginMain
 class GameAnimatorPlugin(wrapper: PluginWrapper) : Plugin(wrapper) {
@@ -28,7 +28,7 @@ class GameAnimatorPlugin(wrapper: PluginWrapper) : Plugin(wrapper) {
         override val name: String = "GameAnimator"
 
         @OptIn(ObsoleteCoroutinesApi::class)
-        private val ticker = ticker(Duration.seconds(30).inWholeMilliseconds, 0)
+        private val ticker = ticker(30.seconds.inWholeMilliseconds, 0)
         private val games: List<Game> = Config.GAMES
         private lateinit var runner: Job
 

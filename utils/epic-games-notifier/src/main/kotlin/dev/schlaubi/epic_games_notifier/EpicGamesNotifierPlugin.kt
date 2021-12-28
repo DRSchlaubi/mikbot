@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.onEach
 import org.litote.kmongo.Id
 import org.litote.kmongo.`in`
 import kotlin.coroutines.CoroutineContext
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.hours
 
 private const val googleLogo =
     "https://lh3.googleusercontent.com/COxitqgJr1sJnIDe8-jiKhxDx1FrYbtRHKJ9z_hELisAlapwE9LUPh6fcXIfb5vwpbMl4xl9H9TRFPc5NOO8Sb3VSgIBrfRYvW6cUA"
@@ -29,7 +29,7 @@ class EpicGamesNotifierModule : Extension(), CoroutineScope {
     private fun startLoop() {
         launch {
             checkForGames()
-            delay(Duration.hours(5))
+            delay(5.hours)
             startLoop()
         }
     }

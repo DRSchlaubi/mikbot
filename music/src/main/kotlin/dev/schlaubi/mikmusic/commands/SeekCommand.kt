@@ -7,7 +7,8 @@ import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.mikmusic.checks.anyMusicPlaying
 import dev.schlaubi.mikmusic.core.MusicModule
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 
 private val seekRegex = "([0-9]+)(?::([0-9]+))?".toRegex()
 
@@ -31,10 +32,10 @@ suspend fun MusicModule.seekCommand() = ephemeralSlashCommand(::SeekArguments) {
         val (minutes, seconds) = seekRegex.find(arguments.to)!!.destructured
 
         val position =
-            Duration.minutes(minutes.toInt()) + if (seconds.isEmpty()) {
-                Duration.seconds(0)
+            minutes.toInt().minutes + if (seconds.isEmpty()) {
+                0.seconds
             } else {
-                Duration.seconds(seconds.toInt())
+                seconds.toInt().seconds
             }
 
         player.seekTo(position)

@@ -20,7 +20,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 import dev.schlaubi.lavakord.audio.player.Track as LavalinkTrack
 
 suspend fun SongQuizGame.turn(track: Track) {
@@ -55,7 +55,7 @@ suspend fun SongQuizGame.turn(track: Track) {
         job = launch {
             val liveMessage = message.componentLive()
             launch { // this blocks this scope until we cancel it
-                delay(Duration.seconds(30))
+                delay(30.seconds)
                 endTurn()
             }
 
@@ -107,7 +107,7 @@ suspend fun SongQuizGame.turn(track: Track) {
         }
     }
 
-    delay(Duration.seconds(3))
+    delay(3.seconds)
 }
 
 private fun SongQuizGame.failRemainingPlayers(turnStart: Instant, answers: MutableMap<UserBehavior, Boolean>) {

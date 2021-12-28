@@ -10,9 +10,9 @@ import dev.schlaubi.mikbot.plugin.api.settings.guildAdminOnly
 import dev.schlaubi.mikbot.plugin.api.util.safeGuild
 import dev.schlaubi.mikbot.plugin.api.util.toDuration
 import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 
-private val limit = Duration.minutes(10)
+private val limit = 10.minutes
 
 class LeaveTimeoutArguments : Arguments() {
     val timeout by duration("timeout", "The amount of time until the bot times out", validator = { _, timeout ->

@@ -16,7 +16,7 @@ import dev.schlaubi.mikmusic.autocomplete.autoCompletedYouTubeQuery
 import dev.schlaubi.mikmusic.player.MusicPlayer
 import dev.schlaubi.mikmusic.player.SimpleQueuedTrack
 import mu.KotlinLogging
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
 private val LOG = KotlinLogging.logger { }
 
@@ -164,7 +164,7 @@ suspend fun CommandContext.queueTracks(
 
             footer {
                 val estimatedIn = musicPlayer.remainingQueueDuration
-                val item = if (estimatedIn == Duration.milliseconds(0)) {
+                val item = if (estimatedIn == 0.milliseconds) {
                     translate("music.general.now")
                 } else {
                     musicPlayer.remainingQueueDuration.toString()

@@ -28,6 +28,8 @@ import org.koin.core.component.inject
 import java.util.*
 import kotlin.random.Random
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, private val database: Database) :
     Link by link, KoinComponent {
@@ -104,11 +106,11 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
     val remainingQueueDuration: Duration
         get() {
             val remainingOfCurrentTrack =
-                player.playingTrack?.length?.minus(Duration.milliseconds(player.position))
-                    ?: Duration.milliseconds(0)
+                player.playingTrack?.length?.minus(player.position.milliseconds)
+                    ?: 0.milliseconds
 
             val remainingQueue = queuedTracks
-                .fold(Duration.seconds(0)) { acc, track -> acc + track.track.length }
+                .fold(0.seconds) { acc, track -> acc + track.track.length }
 
             return remainingOfCurrentTrack + remainingQueue
         }
@@ -255,7 +257,7 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
     private suspend fun waitForPlayerUpdate() {
         // Delay .5 seconds to wait for player update event
         // Otherwise updateMusicChannelMessage() won't get the update
-        delay(Duration.milliseconds(500))
+        delay(500.milliseconds)
     }
 
     suspend fun skip(to: Int = 1) {

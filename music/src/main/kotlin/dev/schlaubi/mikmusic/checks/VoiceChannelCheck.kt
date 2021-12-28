@@ -16,7 +16,7 @@ import dev.schlaubi.mikmusic.core.audio.LavalinkManager
 import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.count
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
 suspend fun <T : Event> CheckContext<T>.joinSameChannelCheck(extensibleBot: ExtensibleBot) {
     abstractMusicCheck {
@@ -26,7 +26,7 @@ suspend fun <T : Event> CheckContext<T>.joinSameChannelCheck(extensibleBot: Exte
 
             if (botChannel != null) {
                 lavalink.disconnectAudio()
-                delay(Duration.milliseconds(400)) // wait for Discord API to propagate
+                delay(400.milliseconds) // wait for Discord API to propagate
             }
             lavalink.connectAudio(voiceChannel)
 

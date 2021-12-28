@@ -16,7 +16,7 @@ import kotlinx.coroutines.future.await
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import org.apache.http.client.utils.URIBuilder
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 import com.wrapper.spotify.model_objects.specification.Track as SpotifyTrack
 
 val PLAYLIST_PATTERN =
@@ -38,7 +38,7 @@ private suspend fun api(): SpotifyApi {
     }
 
     val credentials = api.clientCredentials().build().await()
-    tokenExpiry = Clock.System.now() + Duration.seconds(credentials.expiresIn)
+    tokenExpiry = Clock.System.now() + credentials.expiresIn.seconds
     return api.apply {
         accessToken = credentials.accessToken
     }

@@ -5,6 +5,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlin.math.round
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
 @Suppress("DataClassCanBeRecord")
 data class Statistics(
@@ -14,7 +15,7 @@ data class Statistics(
 ) : Comparable<Statistics> {
     val average: Duration by lazy {
         val average = round(responseTimes.map { it.inWholeMilliseconds }.average())
-        Duration.milliseconds(average)
+        average.milliseconds
     }
 
     override fun compareTo(other: Statistics): Int {

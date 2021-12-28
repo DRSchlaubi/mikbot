@@ -30,7 +30,7 @@ import dev.schlaubi.mikmusic.player.queue.spotifyUriToUrl
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 
 private const val requestStats = "request_stats"
 
@@ -161,7 +161,7 @@ class SongQuizGame(
                 }
             }
 
-            delay(Duration.minutes(1))
+            delay(1.minutes)
             message.edit { components = mutableListOf() }
             live.cancel()
         }

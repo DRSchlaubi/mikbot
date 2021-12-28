@@ -9,6 +9,7 @@ import dev.schlaubi.mikbot.plugin.api.util.toDuration
 import kotlinx.datetime.DateTimePeriod
 import space.votebot.common.models.PollSettings
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 
 interface PollSettingsArguments : PollSettings {
     val deleteAfterPeriod: DateTimePeriod?
@@ -17,7 +18,7 @@ interface PollSettingsArguments : PollSettings {
 
     fun Arguments.voteDuration(description: String) =
         optionalDuration("duration", description) { _, period ->
-            if (period != null && period.toDuration() < Duration.minutes(1)) {
+            if (period != null && period.toDuration() < 1.minutes) {
                 discordError(translate("vote.create.too_short"))
             }
         }

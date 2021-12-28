@@ -7,7 +7,7 @@ import dev.schlaubi.lavakord.audio.player.Player
 import dev.schlaubi.lavakord.audio.player.Track
 import mu.KotlinLogging
 import java.util.concurrent.ConcurrentHashMap
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
 private val client = SponsorBlockClient()
 
@@ -39,7 +39,7 @@ suspend fun Track.checkAndSkipSponsorBlockSegments(player: Player) {
     for (segment in segments) {
         val segmentRange = segment.segment.first..segment.segment.second
         if (player.position / 1000.0 in segmentRange) {
-            player.seekTo(Duration.milliseconds((segment.segment.second * 1000).toInt() + 1))
+            player.seekTo(((segment.segment.second * 1000).toInt() + 1).milliseconds)
             logger.debug { "Skipped sponsorblock segment ${segment.category} ${segment.segment}" }
             break
         }

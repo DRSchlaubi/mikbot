@@ -13,7 +13,7 @@ import dev.schlaubi.lavakord.rest.mapToTrack
 import dev.schlaubi.mikbot.plugin.api.util.EditableMessageSender
 import dev.schlaubi.mikbot.plugin.api.util.forList
 import dev.schlaubi.mikmusic.util.format
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 import kotlin.time.ExperimentalTime
 
 typealias EditingPaginatorBuilder = suspend PaginatorBuilder.() -> Unit
@@ -40,7 +40,7 @@ suspend fun CommandContext.searchSong(
 
     paginator.send()
 
-    val response = waitForResponse(timeout = Duration.minutes(2).inWholeMilliseconds) {
+    val response = waitForResponse(timeout = 2.minutes.inWholeMilliseconds) {
         val index = message.content.toIntOrNull() ?: -1
         val pass = index <= tracks.size && index > 0
 

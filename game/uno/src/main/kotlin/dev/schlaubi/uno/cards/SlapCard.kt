@@ -7,7 +7,7 @@ import kotlinx.coroutines.*
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
 
 /**
@@ -20,7 +20,7 @@ public class SlapCard(override val color: UnoColor) : ColoredCard(), ActionCard 
     override suspend fun applyToGame(game: Game<*>, player: Player) {
         if (game.players.size > 2) {
             val safePlayers = mutableListOf<Player>()
-            withTimeoutOrNull(Duration.seconds(30)) {
+            withTimeoutOrNull(30.seconds) {
                 suspendCoroutine<List<Player>> { cont ->
                     val context = SlapContext(game, player, cont, safePlayers)
                     (game.players - player).forEach {

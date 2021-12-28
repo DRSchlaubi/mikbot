@@ -9,6 +9,8 @@ public fun <InputType : Any?, OutputType : Any?, NamedInputType : Any, ResultTyp
 ): Converter<B, B, NamedInputType, ResultType> =
     object : Converter<B, B, NamedInputType, ResultType>() {
         private var parsedValue: Any? = null
+
+        @Suppress("UNUSED_PARAMETER") // the setter is irrelevant here
         override var parsed: B
             @Suppress("UNCHECKED_CAST")
             get() = mapper(this@map.parsed)

@@ -4,6 +4,7 @@ import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import kotlin.math.pow
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 // https://regex101.com/r/9gDHnl/9
 private val normalPattern = """(?<time>(?:[0-9]+(?::|\s)){2,})[\s-]*(?<title>.*)""".toRegex()
@@ -42,7 +43,7 @@ private fun String.parseDuration(): Duration {
         acc + parsed
     }
 
-    return Duration.seconds(seconds)
+    return seconds.seconds
 }
 
 @Serializable

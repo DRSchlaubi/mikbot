@@ -15,6 +15,7 @@ import dev.kord.core.entity.interaction.EphemeralFollowupMessage
 import dev.kord.core.event.interaction.InteractionCreateEvent
 import dev.kord.rest.builder.message.create.actionRow
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 private const val yes = "yes"
 private const val no = "no"
@@ -34,7 +35,7 @@ public data class Confirmation(val value: Boolean, private val response: Followu
 public suspend fun EphemeralSlashCommandContext<*>.confirmation(
     yesWord: String? = null,
     noWord: String? = null,
-    timeout: Duration = Duration.seconds(30),
+    timeout: Duration = 30.seconds,
     messageBuilder: MessageBuilder
 ): Confirmation = confirmation(yesWord, noWord, { respond { it() } }, timeout, messageBuilder)
 
@@ -50,25 +51,25 @@ public suspend fun PublicSlashCommandContext<*>.confirmation(
     yesWord: String? = null,
     noWord: String? = null,
     messageBuilder: MessageBuilder,
-    timeout: Duration = Duration.seconds(30),
+    timeout: Duration = 30.seconds,
 ): Confirmation = confirmation(yesWord, noWord, { respond { it() } }, timeout, messageBuilder)
 
 private suspend fun CommandContext.confirmation(
     yesWord: String? = null,
     noWord: String? = null,
     sendMessage: EditableMessageSender,
-    timeout: Duration = Duration.seconds(30),
+    timeout: Duration = 30.seconds,
     messageBuilder: MessageBuilder
 ): Confirmation = confirmation(sendMessage, timeout, messageBuilder, translate = { key, group ->
     translate(key, group)
-})
+}, yesWord = yesWord, noWord = noWord)
 
 /**
  * Bare bone confirmation implementation.
  */
 public suspend fun confirmation(
     sendMessage: EditableMessageSender,
-    timeout: Duration? = Duration.seconds(30),
+    timeout: Duration? = 30.seconds,
     messageBuilder: MessageBuilder,
     hasNoOption: Boolean = true,
     translate: Translator,

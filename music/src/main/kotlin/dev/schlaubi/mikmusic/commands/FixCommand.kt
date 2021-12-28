@@ -8,7 +8,7 @@ import dev.schlaubi.mikmusic.core.MusicModule
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 suspend fun MusicModule.fixCommand() = ephemeralControlSlashCommand {
     name = "fix"
@@ -31,7 +31,7 @@ suspend fun MusicModule.fixCommand() = ephemeralControlSlashCommand {
             channel.edit {
                 rtcRegion = fallbackRegion
             }
-            delay(Duration.seconds(15))
+            delay(15.seconds)
             channel.edit {
                 rtcRegion = currentRegion
             }

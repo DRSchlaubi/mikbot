@@ -24,7 +24,7 @@ import kotlinx.coroutines.*
 import org.koin.core.component.KoinComponent
 import org.litote.kmongo.coroutine.CoroutineCollection
 import kotlin.coroutines.CoroutineContext
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 
 /**
  * Abstract implementation of a game.
@@ -179,6 +179,7 @@ abstract class AbstractGame<T : Player>(
     /**
      * Ends the game.
      */
+    @Suppress("SuspendFunctionOnCoroutineScope") // we don't want this to have the same context
     suspend fun doEnd() {
         if (gameJob?.isActive == true) {
             gameJob!!.cancel()
@@ -210,7 +211,7 @@ abstract class AbstractGame<T : Player>(
         }
 
         launch {
-            delay(Duration.minutes(2)) // delay so users cann discuss game end and click the stats button
+            delay(2.minutes) // delay so users cann discuss game end and click the stats button
             thread.edit {
                 reason = "Game ended"
                 archived = true

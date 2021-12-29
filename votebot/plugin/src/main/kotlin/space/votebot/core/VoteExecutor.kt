@@ -13,14 +13,15 @@ import space.votebot.util.reFetch
 suspend fun Poll.close(kord: Kord, showChart: Boolean? = null) {
     with(reFetch()) {
         updateMessages(kord, removeButtons = true, highlightWinner = true, showChart)
-    }
-    VoteBotDatabase.polls.deleteOneById(id)
 
-    if (settings.publicResults) {
-        kord.getUser(Snowflake(authorId))?.dm {
-            content = "This message contains the requested vote statistic for your poll: $id"
+        VoteBotDatabase.polls.deleteOneById(id)
 
-            addFile("votes.csv", generateCSVFile())
+        if (settings.publicResults) {
+            kord.getUser(Snowflake(authorId))?.dm {
+                content = "This message contains the requested vote statistic for your poll: $id"
+
+                addFile("votes.csv", generateCSVFile())
+            }
         }
     }
 }

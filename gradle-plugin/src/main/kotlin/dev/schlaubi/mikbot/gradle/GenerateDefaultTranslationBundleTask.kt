@@ -32,7 +32,7 @@ abstract class GenerateDefaultTranslationBundleTask : DefaultTask() {
 
                 bundles.get().ifEmpty { listOf("strings") }.forEach {
                     val name = "${it}_${locale}.properties"
-                    include("translations/${project.name}/$name")
+                    include("translations/${project.pluginId}/$name")
                     rename(name, "${it}.properties")
                 }
             }

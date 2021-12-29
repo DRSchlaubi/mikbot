@@ -137,7 +137,7 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
                 from(assemblePluginTask)
                 include("*.zip")
                 // providing version manually, as of weird evaluation errors
-                into(buildRepository.get().targetDirectory.get().resolve("${project.name}/$version"))
+                into(buildRepository.get().targetDirectory.get().resolve("${project.pluginId}/$version"))
 
                 eachFile {
                     if (it.relativePath.getFile(destinationDir).exists()) {

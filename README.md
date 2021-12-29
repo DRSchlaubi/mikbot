@@ -5,6 +5,11 @@ using [Kordex](https://github.com/Kord-Extensions/kord-extensions/) and [Kord](h
 
 **If you are here for mikmusic, click [here](music) and [there](mikmusic-bot)
 
+# Help translating this project
+<a href="https://hosted.weblate.org/engage/mikbot/">
+<img src="https://hosted.weblate.org/widgets/mikbot/-/287x66-grey.png" alt="Übersetzungsstatus" />
+</a>
+
 ## Deployment
 
 ### Requirements

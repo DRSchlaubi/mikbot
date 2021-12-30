@@ -19,7 +19,7 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '16'
+          java-version: '17'
       - uses: gradle/gradle-build-action@v1
         with:
           arguments: classes ktlintCheck
@@ -33,7 +33,7 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '16'
+          java-version: '17'
       - uses: gradle/gradle-build-action@v1
         with:
           arguments: :installDist
@@ -57,7 +57,7 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '16'
+          java-version: '17'
       - run: rm -rf .git/ # delete .git here to ignore the parent git repo and only care about plugin-repo
       - uses: actions/checkout@v2
         with:
@@ -89,7 +89,7 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '16'
+          java-version: '17'
       - uses: gradle/gradle-build-action@v1
         env:
           JFROG_USER: ${{ secrets.JFROG_USER }}

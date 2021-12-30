@@ -107,7 +107,7 @@ this workflow to generate my own repository.
       - uses: actions/setup-java@v2
         with:
           distribution: 'temurin'
-          java-version: '16'
+          java-version: '17'
       - run: rm -rf .git/ # delete .git here to ignore the parent git repo and only care about plugin-repo
       - uses: actions/checkout@v2
         with:

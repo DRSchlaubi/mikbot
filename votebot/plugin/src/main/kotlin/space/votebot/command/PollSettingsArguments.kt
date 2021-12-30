@@ -17,22 +17,23 @@ interface PollSettingsArguments : PollSettings {
     override val deleteAfter: Duration?
         get() = deleteAfterPeriod?.toDuration()
 
-    fun Arguments.voteDuration(description: String) =
-        optionalDuration("duration", description) { _, period ->
-            if (period != null && period.toDuration() < 1.minutes) {
-                discordError(translate("vote.create.too_short"))
-            }
+    fun Arguments.voteDuration(description: String) = optionalDuration(
+        "duration",
+        description, required = true
+    ) { _, period ->
+        if (period != null && period.toDuration() < 1.minutes) {
+            discordError(translate("vote.create.too_short"))
         }
+    }
 
-    fun Arguments.maxVotes(description: String) = optionalInt("max-votes", description)
-    fun Arguments.maxChanges(description: String) = optionalInt("max-changes", description)
-    fun Arguments.showChart(description: String) = optionalBoolean("show-chart", description)
+    fun Arguments.maxVotes(description: String) = optionalInt("max-votes", description, required = true)
+    fun Arguments.maxChanges(description: String) = optionalInt("max-changes", description, required = true)
+    fun Arguments.showChart(description: String) = optionalBoolean("show-chart", description, required = true)
 
-    fun Arguments.hideResults(description: String) = optionalBoolean("hide-results", description)
-    fun Arguments.publicResults(description: String) = optionalBoolean("public-results", description)
+    fun Arguments.hideResults(description: String) = optionalBoolean("hide-results", description, required = true)
+    fun Arguments.publicResults(description: String) = optionalBoolean("public-results", description, required = true)
     fun Arguments.emojiMode(description: String) = optionalEnum<PollSettings.EmojiMode>(
-        "emoji-mode", description, required = true,
-        "EmojiMode"
+        "emoji-mode", description, required = true, "EmojiMode"
     )
 }
 

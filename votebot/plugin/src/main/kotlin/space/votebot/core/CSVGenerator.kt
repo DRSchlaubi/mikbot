@@ -1,16 +1,18 @@
 package space.votebot.core
 
+import dev.kord.common.entity.Snowflake
+import dev.kord.core.Kord
 import space.votebot.common.models.Poll
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 
 private val header = listOf("user_id", "vote_option", "amount").joinToString(separator = ",")
 
-fun Poll.generateCSV(): String = buildString {
+suspend fun Poll.generateCSV(kord: Kord): String = buildString {
     append(header)
     appendLine()
     votes.forEach {
-        append(it.userId)
+        append(kord.getUser(Snowflake(it.userId))?.tag ?: "<unknown user>").append(it.userId)
         append(',')
         append(it.forOption + 1)
         append(',')
@@ -19,4 +21,4 @@ fun Poll.generateCSV(): String = buildString {
     }
 }
 
-fun Poll.generateCSVFile(): InputStream = ByteArrayInputStream(generateCSV().toByteArray())
+suspend fun Poll.generateCSVFile(kord: Kord): InputStream = ByteArrayInputStream(generateCSV(kord).toByteArray())

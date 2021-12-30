@@ -20,7 +20,7 @@ suspend fun Poll.close(kord: Kord, showChart: Boolean? = null) {
             kord.getUser(Snowflake(authorId))?.dm {
                 content = "This message contains the requested vote statistic for your poll: $id"
 
-                addFile("votes.csv", generateCSVFile())
+                addFile("votes.csv", generateCSVFile(kord))
             }
         }
     }

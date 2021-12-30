@@ -13,6 +13,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.builtins.serializer
 import org.litote.kmongo.serialization.registerSerializer
+import space.votebot.command.legacyCommandParser
 import space.votebot.commands.commands
 
 @PluginMain
@@ -40,6 +41,7 @@ class VoteBotModule : Extension() {
 
         commands()
         voteExecutor()
+        legacyCommandParser()
 
         event<ReadyEvent> {
             action {

@@ -3,11 +3,13 @@ package space.votebot.commands.vote
 import com.kotlindiscord.kord.extensions.commands.converters.impl.int
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
 import com.kotlindiscord.kord.extensions.types.respond
+import dev.schlaubi.mikbot.plugin.api.util.safeGuild
 import space.votebot.command.PollArguments
 import space.votebot.command.poll
 import space.votebot.common.models.Poll
 import space.votebot.core.VoteBotDatabase
 import space.votebot.core.VoteBotModule
+import space.votebot.core.recalculateEmojis
 import space.votebot.core.updateMessages
 
 class RemoveOptionArguments : PollArguments("The poll you want to remove the option from") {
@@ -34,7 +36,7 @@ suspend fun VoteBotModule.removeOptionCommand() = ephemeralSlashCommand(::Remove
         val newVotes = poll.votes.filterNot { (forOption) ->
             forOption == selectedOption.index
         }
-        val newPoll = poll.copy(options = newOptions, votes = newVotes)
+        val newPoll = poll.copy(options = newOptions, votes = newVotes).recalculateEmojis(safeGuild)
 
         VoteBotDatabase.polls.save(newPoll)
         newPoll.updateMessages(channel.kord)

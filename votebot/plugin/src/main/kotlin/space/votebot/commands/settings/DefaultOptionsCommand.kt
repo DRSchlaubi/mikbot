@@ -6,6 +6,7 @@ import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.mikbot.plugin.api.settings.SettingsModule
 import space.votebot.command.PollSettingsArguments
 import space.votebot.command.decide
+import space.votebot.common.models.PollSettings
 import space.votebot.common.models.StoredPollSettings
 import space.votebot.core.VoteBotDatabase
 import space.votebot.models.UserSettings
@@ -17,6 +18,7 @@ class DefaultOptionsArgument : Arguments(), PollSettingsArguments {
     override val showChartAfterClose: Boolean? by showChart("Whether to show a chart after a poll finished or not")
     override val hideResults: Boolean? by hideResults("Whether to show results only to people who voted or not")
     override val publicResults: Boolean? by publicResults("Whether to share who voted for what with the author or not")
+    override val emojiMode: PollSettings.EmojiMode? by emojiMode("How to use emojis in polls")
 }
 
 suspend fun SettingsModule.defaultOptionsCommand() = ephemeralSlashCommand(::DefaultOptionsArgument) {

@@ -25,6 +25,7 @@ class CreateOptions : Arguments(), CreateSettings, PollSettingsArguments {
     override val publicResults: Boolean? by publicResults("Whether to share who voted for what with the author or not")
     override val deleteAfterPeriod by voteDuration("Amount of time after which this poll should expire")
     override val showChartAfterClose: Boolean? by showChart("Whether to show a chart after the poll finished or not")
+    override val emojiMode: PollSettings.EmojiMode? by emojiMode("How to use emojis in this poll")
 
     override val settings: PollSettings get() = this
 }

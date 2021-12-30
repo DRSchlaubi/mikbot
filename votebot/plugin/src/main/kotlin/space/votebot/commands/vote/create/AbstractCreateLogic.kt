@@ -12,10 +12,7 @@ import kotlinx.datetime.Clock
 import org.litote.kmongo.newId
 import space.votebot.common.models.Poll
 import space.votebot.common.models.merge
-import space.votebot.core.VoteBotDatabase
-import space.votebot.core.addExpirationListener
-import space.votebot.core.addMessage
-import space.votebot.core.findOneByGuild
+import space.votebot.core.*
 import space.votebot.util.checkPermissions
 import space.votebot.util.toPollMessage
 
@@ -62,12 +59,19 @@ suspend fun <A : Arguments> EphemeralSlashCommandContext<A>.createVote(
         return
     }
 
+    val emojis = finalSettings.selectEmojis(
+        safeGuild,
+        settings.answers.size
+    )
+
     val poll = Poll(
         newId<Poll>().toString(),
         safeGuild.id.value,
         user.id.value,
         settings.title,
-        settings.answers.map { Poll.Option.ActualOption(null, it) },
+        settings.answers.mapIndexed { index, it ->
+            Poll.Option.ActualOption(null, it, emojis.getOrNull(index))
+        },
         emptyMap(),
         emptyList(),
         emptyList(),

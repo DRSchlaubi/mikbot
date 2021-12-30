@@ -4,11 +4,13 @@ import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalInt
 import com.kotlindiscord.kord.extensions.commands.converters.impl.string
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
 import com.kotlindiscord.kord.extensions.types.respond
+import dev.schlaubi.mikbot.plugin.api.util.safeGuild
 import space.votebot.command.PollArguments
 import space.votebot.command.poll
 import space.votebot.common.models.Poll
 import space.votebot.core.VoteBotDatabase
 import space.votebot.core.VoteBotModule
+import space.votebot.core.recalculateEmojis
 import space.votebot.core.updateMessages
 
 class AddOptionArguments : PollArguments("The poll you want to add the argument to") {
@@ -22,12 +24,13 @@ suspend fun VoteBotModule.addOptionCommand() = ephemeralSlashCommand(::AddOption
 
     action {
         val poll = poll()
-        val newPoll = poll.copy(
-            options = poll.options + Poll.Option.ActualOption(
-                arguments.position?.minus(1),
-                arguments.option
-            )
+        val option = Poll.Option.ActualOption(
+            arguments.position?.minus(1),
+            arguments.option,
+            null
         )
+
+        val newPoll = poll.copy(options = poll.options + option).recalculateEmojis(safeGuild)
 
         VoteBotDatabase.polls.save(newPoll)
         newPoll.updateMessages(channel.kord)

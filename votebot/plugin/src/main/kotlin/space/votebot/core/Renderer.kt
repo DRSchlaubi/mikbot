@@ -3,6 +3,7 @@ package space.votebot.core
 import com.kotlindiscord.kord.extensions.time.TimestampType
 import com.kotlindiscord.kord.extensions.time.toDiscord
 import dev.kord.common.entity.ButtonStyle
+import dev.kord.common.entity.DiscordPartialEmoji
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
 import dev.kord.core.behavior.channel.MessageChannelBehavior
@@ -103,9 +104,10 @@ private fun Poll.makeButtons(): List<MessageComponentBuilder> =
         .chunked(5)
         .map { options ->
             ActionRowBuilder().apply {
-                options.forEach { (_, index, option) ->
+                options.forEach { (_, index, option, emoji) ->
                     interactionButton(ButtonStyle.Primary, "vote_$index") {
                         label = option
+                        this.emoji = emoji?.toDiscordPartialEmoji()
                     }
                 }
             }
@@ -125,8 +127,9 @@ suspend fun Poll.toEmbed(
     }
 
     val names = sortedOptions
-        .joinToString("\n") { (index, _, value) ->
-            "${index + 1}. $value"
+        .joinToString("\n") { (index, _, value, emoji) ->
+            val prefix = emoji?.toDiscordPartialEmoji()?.mention ?: "${index + 1}"
+            "${prefix}. $value"
         }
 
     val totalVotes = votes.sumOf { it.amount }
@@ -196,3 +199,11 @@ private fun Poll.toPieChartCreateRequest(): PieChartCreateRequest {
         votes.map { (option, count) -> Vote(count, option.option) }
     )
 }
+
+private val DiscordPartialEmoji.mention: String
+    get() =
+        if (id == null) {
+            name!! // unicode
+        } else {
+            "<:$name:$id>" // custom emote
+        }

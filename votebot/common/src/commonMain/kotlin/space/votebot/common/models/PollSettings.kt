@@ -16,6 +16,7 @@ import kotlin.time.ExperimentalTime
  * @property maxChanges the maximum amount of times a user is allowed to change their vote
  * @property hideResults whether to hide results from users, who don't have voted yet
  * @property publicResults whether to share who voted for what with the author of the poll
+ * @property emojiMode how to use emojis on this vote
  */
 public interface PollSettings {
     public val deleteAfter: Duration?
@@ -24,17 +25,28 @@ public interface PollSettings {
     public val maxChanges: Int?
     public val hideResults: Boolean?
     public val publicResults: Boolean?
+    public val emojiMode: EmojiMode?
 
     /**
      * Indicated whether this instance already contains all available information.
      */
     public val complete: Boolean
         get() = deleteAfter != null &&
-            showChartAfterClose != null &&
-            maxVotes != null &&
-            maxChanges != null &&
-            hideResults != null &&
-            publicResults != null
+                showChartAfterClose != null &&
+                maxVotes != null &&
+                maxChanges != null &&
+                hideResults != null &&
+                publicResults != null
+
+    /**
+     * Describes how to use emojis on this poll.
+     */
+    @Serializable
+    public enum class EmojiMode {
+        ON,
+        OFF,
+        CUSTOM
+    }
 }
 
 /**
@@ -47,7 +59,8 @@ public data class StoredPollSettings(
     override val maxVotes: Int? = null,
     override val maxChanges: Int? = null,
     override val hideResults: Boolean? = null,
-    override val publicResults: Boolean? = null
+    override val publicResults: Boolean? = null,
+    override val emojiMode: PollSettings.EmojiMode? = null
 ) : PollSettings
 
 /**
@@ -60,7 +73,8 @@ public data class FinalPollSettings(
     override val maxVotes: Int,
     override val maxChanges: Int,
     override val hideResults: Boolean,
-    override val publicResults: Boolean
+    override val publicResults: Boolean,
+    override val emojiMode: PollSettings.EmojiMode
 ) : PollSettings
 
 /**
@@ -72,5 +86,6 @@ public fun PollSettings.merge(other: PollSettings?): FinalPollSettings = FinalPo
     maxVotes ?: other?.maxVotes ?: 1,
     maxChanges ?: other?.maxChanges ?: 0,
     hideResults ?: other?.hideResults ?: false,
-    publicResults ?: other?.publicResults ?: false
+    publicResults ?: other?.publicResults ?: false,
+    emojiMode ?: other?.emojiMode ?: PollSettings.EmojiMode.ON
 )

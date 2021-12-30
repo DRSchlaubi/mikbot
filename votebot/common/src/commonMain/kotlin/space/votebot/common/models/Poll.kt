@@ -3,6 +3,7 @@ package space.votebot.common.models
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import space.votebot.common.models.Poll.*
 
 /**
  * Representation of a poll.
@@ -38,16 +39,10 @@ public data class Poll(
     val sortedOptions: List<RenderableOption>
         get() = options
             .withIndex()
-            .mapNotNull {
-                if (it.value is Option.ActualOption) {
-                    it
-                } else {
-                    null
-                }
-            }
+            .filter { (_, option) -> option is Option.ActualOption }
             .sortedBy { (index, option) -> option.position ?: (index + 1) }
             .mapIndexed { positionedIndex, (globalIndex, option) ->
-                RenderableOption(positionedIndex, globalIndex, (option as Option.ActualOption).option)
+                RenderableOption(positionedIndex, globalIndex, (option as Option.ActualOption).option, option.emoji)
             }
 
     /**
@@ -58,7 +53,12 @@ public data class Poll(
      * @property option the option text
      */
     @Serializable
-    public data class RenderableOption(val positionedIndex: Int, val index: Int, val option: String)
+    public data class RenderableOption(
+        val positionedIndex: Int,
+        val index: Int,
+        val option: String,
+        val emoji: Option.ActualOption.Emoji?
+    )
 
     /**
      * Representation of a poll option.
@@ -79,7 +79,10 @@ public data class Poll(
          */
         @Serializable
         @SerialName("actual")
-        public data class ActualOption(override val position: Int?, val option: String) : Option()
+        public data class ActualOption(override val position: Int?, val option: String, val emoji: Emoji?) : Option() {
+            @Serializable
+            public data class Emoji(val id: ULong?, val name: String?)
+        }
 
         /**
          * Option used as a spacer, to make other options remain correct index.
@@ -87,6 +90,7 @@ public data class Poll(
         @Serializable
         @SerialName("spacer")
         public data class Spacer(override val position: Int?) : Option()
+
     }
 
     /**
@@ -129,7 +133,7 @@ public data class Poll(
  * @property amount how many people voted for this option
  * @property percentage the percentage of this option
  */
-public data class VoteOption(val option: Poll.RenderableOption, val amount: Int, val percentage: Double)
+public data class VoteOption(val option: RenderableOption, val amount: Int, val percentage: Double)
 
 /**
  * Sums all votes into a list of [vote options][VoteOption].

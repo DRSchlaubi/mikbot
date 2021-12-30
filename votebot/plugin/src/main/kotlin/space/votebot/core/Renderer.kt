@@ -129,7 +129,7 @@ suspend fun Poll.toEmbed(
     val names = sortedOptions
         .joinToString("\n") { (index, _, value, emoji) ->
             val prefix = emoji?.toDiscordPartialEmoji()?.mention ?: "${index + 1}"
-            "${prefix}. $value"
+            "$prefix. $value"
         }
 
     val totalVotes = votes.sumOf { it.amount }

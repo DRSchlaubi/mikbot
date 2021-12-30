@@ -37,7 +37,6 @@ suspend fun VoteBotModule.legacyCommandParser() {
             failIfNot { event.message.content.startsWith(prefix) }
         }
 
-
         action {
             val commandName = event.message.content.substringAfter(prefix).substringBefore(' ').lowercase()
             val command = commands.firstOrNull { commandName in it }?.first()

@@ -59,7 +59,8 @@ suspend fun FinalPollSettings.selectEmojis(
 }
 
 private fun selectDefaultEmojis(
-    optionCount: Int, usedEmojis: Set<Poll.Option.ActualOption.Emoji>
+    optionCount: Int,
+    usedEmojis: Set<Poll.Option.ActualOption.Emoji>
 ): List<Poll.Option.ActualOption.Emoji> {
     val emojis = if (optionCount <= 9) {
         numbers
@@ -78,11 +79,13 @@ private suspend fun selectCustomEmojis(
     val guildEmojis = guild.emojis.toList().take(optionCount)
     val filler = fallbackEmojis.take(optionCount - guildEmojis.size)
 
-    return (guildEmojis.map {
-        Poll.Option.ActualOption.Emoji(
-            it.id.value, it.name
-        )
-    } + filler.toPollEmoji()) - usedEmojis
+    return (
+        guildEmojis.map {
+            Poll.Option.ActualOption.Emoji(
+                it.id.value, it.name
+            )
+        } + filler.toPollEmoji()
+        ) - usedEmojis
 }
 
 private fun Iterable<DiscordEmoji>.toPollEmoji() = map { Poll.Option.ActualOption.Emoji(name = it.unicode, id = null) }
@@ -99,11 +102,13 @@ suspend fun Poll.recalculateEmojis(guild: GuildBehavior): Poll {
     // using a queue doesn't mess up indices
     val emojiQueue = LinkedList(emojis)
 
-    return copy(options = options.map {
-        if (it is Poll.Option.ActualOption) {
-            it.copy(emoji = emojiQueue.poll())
-        } else {
-            it
+    return copy(
+        options = options.map {
+            if (it is Poll.Option.ActualOption) {
+                it.copy(emoji = emojiQueue.poll())
+            } else {
+                it
+            }
         }
-    })
+    )
 }

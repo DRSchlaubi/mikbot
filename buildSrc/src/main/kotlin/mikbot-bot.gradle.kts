@@ -19,7 +19,7 @@ dependencies {
 
 tasks {
     val pluginsTxt = file("plugins.txt").toPath()
-    val plugins = if(Files.exists(pluginsTxt)) {
+    val plugins = if (Files.exists(pluginsTxt)) {
         Files.readAllLines(pluginsTxt)
             .asSequence()
             .filterNot { it.startsWith("#") }
@@ -28,12 +28,10 @@ tasks {
     } else {
         emptyList()
     }
-    val pluginsDirectory = file("plugins")
+    val pluginsDirectory = buildDir.resolve("installed-plugins")
 
     val deleteObsoletePlugins = task<Delete>("deleteObsoletePlugins") {
-        file("plugins").listFiles()?.forEach {
-            delete(it)
-        }
+        delete(pluginsDirectory.absolutePath + "/*")
     }
 
     val installPlugins = task<Copy>("installPlugins") {
@@ -56,7 +54,7 @@ tasks {
 
         doFirst {
             val path = output.toPath()
-            Files.writeString(path, projectDir.absolutePath)
+            Files.writeString(path, pluginsDirectory.absolutePath)
         }
     }
 

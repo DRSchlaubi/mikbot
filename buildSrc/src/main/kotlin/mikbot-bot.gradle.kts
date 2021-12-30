@@ -30,25 +30,27 @@ tasks {
     }
     val pluginsDirectory = buildDir.resolve("installed-plugins")
 
-    val deleteObsoletePlugins = task<Delete>("deleteObsoletePlugins") {
+    val deleteObsoletePlugins = register<Delete>("deleteObsoletePlugins") {
         delete(pluginsDirectory.absolutePath + "/*")
     }
 
-    val installPlugins = task<Copy>("installPlugins") {
+    val installPlugins = register<Copy>("installPlugins") {
         dependsOn(deleteObsoletePlugins)
 
         outputs.dir(pluginsDirectory)
 
         plugins.forEach {
-            dependsOn("$it:assemblePlugin")
+            val task = project(it).tasks.getByName("assemblePlugin") as Jar
 
-            from(project(it).buildDir.resolve("plugin"))
-            include("*.zip")
+            dependsOn(task)
+
+            from(task.destinationDirectory)
+            include(task.archiveFile.get().asFile.name)
             into(pluginsDirectory)
         }
     }
 
-    val exportProjectPath = task("exportProjectPath") {
+    val exportProjectPath = register("exportProjectPath") {
         val output = buildDir.resolve("resources").resolve("main").resolve("bot-project-path.txt")
         outputs.file(output)
 

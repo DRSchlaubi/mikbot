@@ -6,6 +6,7 @@ import dev.kord.core.behavior.reply
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.gateway.Intent
 import dev.kord.rest.builder.message.create.embed
+import io.ktor.http.*
 import space.votebot.core.VoteBotModule
 
 private const val prefix = "v!"
@@ -28,6 +29,8 @@ private val commands = listOf(
     listOf("addoption", "add-option", "ao"),
     listOf("removeoption", "remove-option", "ro")
 )
+private val invite =
+    Url("https://discord.com/api/oauth2/authorize?client_id=569936566965764126&permissions=274878187520&scope=bot%20applications.commands")
 
 suspend fun VoteBotModule.legacyCommandParser() {
     event<MessageCreateEvent> {
@@ -46,7 +49,14 @@ suspend fun VoteBotModule.legacyCommandParser() {
 
             event.message.reply {
                 embed {
-                    description = translate("bot.generic.legacy_commands.explainer")
+                    val thisServerUrl = URLBuilder(invite).apply {
+                        if (event.guildId != null) {
+                            parameters.append("guild_id", event.guildId.toString())
+                        }
+                    }
+
+                    description =
+                        translate("bot.generic.legacy_commands.explainer", arrayOf(thisServerUrl.buildString()))
                     field {
                         name = translate("bot.generic-legacy_commands.how_to_now.title")
                         value = commandExplainer

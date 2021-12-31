@@ -2,8 +2,12 @@ package dev.schlaubi.musicbot.core
 
 import com.kotlindiscord.kord.extensions.ExtensibleBot
 import com.kotlindiscord.kord.extensions.builders.ExtensibleBotBuilder
+import com.kotlindiscord.kord.extensions.extensions.Extension
+import com.kotlindiscord.kord.extensions.extensions.event
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
 import dev.kord.common.entity.PresenceStatus
+import dev.kord.core.event.gateway.DisconnectEvent
+import dev.kord.core.event.gateway.ReadyEvent
 import dev.schlaubi.mikbot.plugin.api.PluginSystem
 import dev.schlaubi.mikbot.plugin.api.config.Config
 import dev.schlaubi.mikbot.plugin.api.io.Database
@@ -16,16 +20,18 @@ import dev.schlaubi.musicbot.module.owner.OwnerModuleImpl
 import dev.schlaubi.musicbot.module.settings.SettingsModuleImpl
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import mu.KotlinLogging
 import org.koin.core.component.KoinComponent
 import org.koin.dsl.module
 
-class Bot : KoinComponent {
+private val LOG = KotlinLogging.logger { }
 
+class Bot : KoinComponent {
     private lateinit var bot: ExtensibleBot
+
     private val database: Database = DatabaseImpl()
     lateinit var translationProivder: TranslationsProvider
     internal val pluginSystem: PluginSystem = DefaultPluginSystem(this)
-
     suspend fun start() {
         bot = ExtensibleBot(Config.DISCORD_TOKEN) {
             PluginLoader.botPlugins.onEach {
@@ -35,6 +41,7 @@ class Bot : KoinComponent {
                 PluginLoader.botPlugins.onEach {
                     addExtensions()
                 }
+                add(::BotModule)
             }
 
             builtIns()
@@ -113,5 +120,30 @@ class Bot : KoinComponent {
                 module { single { database } }
             )
         )
+    }
+
+}
+
+private class BotModule : Extension() {
+    override val name: String = "bot"
+
+    override suspend fun setup() {
+        val loggedInShards = mutableListOf<Int>()
+        event<ReadyEvent> {
+            action {
+                loggedInShards += event.shard
+                LOG.info { "Logged in with shard ${event.shard}, Remaining ${kord.resources.shards.indices - loggedInShards.toSet()}" }
+            }
+        }
+
+        event<DisconnectEvent> {
+            action {
+                loggedInShards -= event.shard
+                LOG.warn {
+                    "Shard got disconnected ${event.shard} ${event::class.simpleName}," +
+                            " Awaiting login from: ${kord.resources.shards.indices - loggedInShards.toSet()}"
+                }
+            }
+        }
     }
 }

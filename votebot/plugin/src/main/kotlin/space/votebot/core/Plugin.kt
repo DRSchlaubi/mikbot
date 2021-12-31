@@ -9,6 +9,10 @@ import dev.kord.core.event.gateway.ReadyEvent
 import dev.schlaubi.mikbot.plugin.api.Plugin
 import dev.schlaubi.mikbot.plugin.api.PluginMain
 import dev.schlaubi.mikbot.plugin.api.PluginWrapper
+import dev.schlaubi.mikbot.plugin.api.config.Config
+import dev.schlaubi.mikbot.plugin.api.config.Environment
+import io.ktor.client.*
+import io.ktor.client.engine.cio.*
 import kotlinx.coroutines.cancel
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.builtins.serializer
@@ -21,6 +25,18 @@ class VoteBotPlugin(wrapper: PluginWrapper) : Plugin(wrapper) {
     @OptIn(ExperimentalSerializationApi::class, ExperimentalUnsignedTypes::class)
     override fun start() {
         registerSerializer(ULong.serializer())
+    }
+
+    override suspend fun ExtensibleBotBuilder.apply() {
+        if(Config.ENVIRONMENT == Environment.PRODUCTION) {
+            kord {
+                httpClient = HttpClient(CIO) {
+                    engine {
+                        threadsCount = 12
+                    }
+                }
+            }
+        }
     }
 
     override fun ExtensibleBotBuilder.ExtensionsBuilder.addExtensions() {

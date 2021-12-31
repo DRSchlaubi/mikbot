@@ -37,7 +37,7 @@ suspend fun VoteBotModule.createCommand() = ephemeralSlashCommand(::CreateOption
     action {
         createVote()
         respond {
-            content = translate("commands.create.success", arguments.title)
+            content = translate("commands.create.success", arrayOf(arguments.title))
         }
     }
 }

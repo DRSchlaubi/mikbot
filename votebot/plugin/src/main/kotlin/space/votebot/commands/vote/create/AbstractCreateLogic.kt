@@ -2,8 +2,13 @@ package space.votebot.commands.vote.create
 
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommandContext
+import com.kotlindiscord.kord.extensions.types.respond
+import dev.kord.common.entity.Permission
+import dev.kord.common.entity.Permissions
+import dev.kord.common.exception.RequestException
 import dev.kord.core.Kord
 import dev.kord.core.behavior.channel.asChannelOf
+import dev.kord.core.entity.channel.TextChannel
 import dev.kord.core.entity.channel.TopGuildMessageChannel
 import dev.schlaubi.mikbot.plugin.api.util.confirmation
 import dev.schlaubi.mikbot.plugin.api.util.discordError
@@ -32,7 +37,6 @@ suspend fun <A : Arguments> EphemeralSlashCommandContext<A>.createVote(
     checkPermissions(channel)
 
     if (settings.answers.size < 2) {
-
         discordError(translate("vote.create.not_enough_options"))
     }
 
@@ -78,7 +82,21 @@ suspend fun <A : Arguments> EphemeralSlashCommandContext<A>.createVote(
         Clock.System.now(),
         finalSettings
     )
-    val message = poll.addMessage(channel, addButtons = true, addToDatabase = false)
+    if (channel == this.channel) {
+        if (Permissions(Permission.EmbedLinks, Permission.SendMessages) !in channel.asChannelOf<TextChannel>().getEffectivePermissions(kord.selfId)) {
+            respond {
+            }
+            return
+        }
+    }
+    val message = try {
+        poll.addMessage(channel, addButtons = true, addToDatabase = false)
+    } catch (e: RequestException) {
+        respond {
+            content = translate("vote.create.missing_permissions.bot", arrayOf(channel.mention))
+        }
+        return
+    }
     VoteBotDatabase.polls.save(poll.copy(messages = listOf(message.toPollMessage())))
 
     if (finalSettings.deleteAfter != null) {

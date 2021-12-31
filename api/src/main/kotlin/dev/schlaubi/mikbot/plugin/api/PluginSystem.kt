@@ -1,7 +1,7 @@
 package dev.schlaubi.mikbot.plugin.api
 
-import dev.kord.core.event.Event
 import dev.kord.core.Kord
+import dev.kord.core.event.Event
 import org.pf4j.ExtensionPoint
 import kotlin.reflect.KClass
 

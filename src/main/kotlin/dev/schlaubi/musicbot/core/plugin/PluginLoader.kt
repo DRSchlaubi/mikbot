@@ -1,5 +1,6 @@
 package dev.schlaubi.musicbot.core.plugin
 
+import dev.kord.core.event.Event
 import dev.schlaubi.mikbot.plugin.api.Plugin
 import dev.schlaubi.mikbot.plugin.api.PluginSystem
 import dev.schlaubi.mikbot.plugin.api.PluginWrapper
@@ -7,6 +8,7 @@ import dev.schlaubi.mikbot.plugin.api.config.Config
 import dev.schlaubi.mikbot.plugin.api.util.ensurePath
 import dev.schlaubi.musicbot.core.Bot
 import io.ktor.util.*
+import kotlinx.coroutines.flow.MutableSharedFlow
 import mu.KotlinLogging
 import org.koin.core.component.KoinComponent
 import org.pf4j.*
@@ -148,9 +150,12 @@ private class MikBotPluginManifestDescriptionFinder : ManifestPluginDescriptorFi
 }
 
 internal class DefaultPluginSystem(private val bot: Bot) : PluginSystem {
+    internal val events = MutableSharedFlow<Event>()
+
     override fun <T : ExtensionPoint> getExtensions(type: KClass<T>): List<T> = PluginLoader.getExtensions(type.java)
     override fun translate(key: String, bundleName: String, replacements: Array<Any?>): String =
         bot.translationProivder.translate(key, bundleName, replacements)
+    override suspend fun emitEvent(event: Event) = events.emit(event)
 }
 
 private fun ClassLoader.findTranslations(): Sequence<String> {

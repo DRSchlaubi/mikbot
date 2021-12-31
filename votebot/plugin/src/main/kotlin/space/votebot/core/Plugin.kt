@@ -28,7 +28,7 @@ class VoteBotPlugin(wrapper: PluginWrapper) : Plugin(wrapper) {
     }
 
     override suspend fun ExtensibleBotBuilder.apply() {
-        if(Config.ENVIRONMENT == Environment.PRODUCTION) {
+        if (Config.ENVIRONMENT == Environment.PRODUCTION) {
             kord {
                 httpClient = HttpClient(CIO) {
                     engine {

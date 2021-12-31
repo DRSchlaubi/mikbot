@@ -21,7 +21,6 @@ public class AllShardsReadyEvent(
     public companion object {
         @OptIn(InternalAPI::class)
         public fun listen(coroutineScope: CoroutineScope, listener: suspend AllShardsReadyEvent.() -> Unit): Job = readyEventFlow.onEach {
-
         }.launchIn(coroutineScope)
     }
 }

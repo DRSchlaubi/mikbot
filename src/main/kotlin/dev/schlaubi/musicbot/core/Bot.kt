@@ -123,7 +123,6 @@ class Bot : KoinComponent {
             )
         )
     }
-
 }
 
 private class BotModule : Extension() {
@@ -147,7 +146,7 @@ private class BotModule : Extension() {
                 loggedInShards -= event.shard
                 LOG.warn {
                     "Shard got disconnected ${event.shard} ${event::class.simpleName}," +
-                            " Awaiting login from: ${kord.resources.shards.indices - loggedInShards.toSet()}"
+                        " Awaiting login from: ${kord.resources.shards.indices - loggedInShards.toSet()}"
                 }
             }
         }

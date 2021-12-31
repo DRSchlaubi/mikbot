@@ -2,14 +2,13 @@ package dev.schlaubi.mikbot.core.game_animator
 
 import com.kotlindiscord.kord.extensions.builders.ExtensibleBotBuilder
 import com.kotlindiscord.kord.extensions.extensions.Extension
-import com.kotlindiscord.kord.extensions.extensions.event
 import dev.kord.common.entity.ActivityType
 import dev.kord.common.entity.PresenceStatus
 import dev.kord.core.Kord
-import dev.kord.core.event.gateway.ReadyEvent
 import dev.schlaubi.mikbot.plugin.api.Plugin
 import dev.schlaubi.mikbot.plugin.api.PluginMain
 import dev.schlaubi.mikbot.plugin.api.PluginWrapper
+import dev.schlaubi.mikbot.plugin.api.util.AllShardsReadyEvent
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.channels.ticker
@@ -33,8 +32,8 @@ class GameAnimatorPlugin(wrapper: PluginWrapper) : Plugin(wrapper) {
         private lateinit var runner: Job
 
         override suspend fun setup() {
-            event<ReadyEvent> {
-                action { start() }
+            AllShardsReadyEvent.listen(kord) {
+                start()
             }
         }
 

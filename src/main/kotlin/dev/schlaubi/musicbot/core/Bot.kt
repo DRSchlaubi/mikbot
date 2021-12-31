@@ -11,7 +11,9 @@ import dev.kord.core.event.gateway.ReadyEvent
 import dev.schlaubi.mikbot.plugin.api.PluginSystem
 import dev.schlaubi.mikbot.plugin.api.config.Config
 import dev.schlaubi.mikbot.plugin.api.io.Database
+import dev.schlaubi.mikbot.plugin.api.util.AllShardsReadyEvent
 import dev.schlaubi.mikbot.plugin.api.util.onEach
+import dev.schlaubi.mikbot.plugin.api.util.readyEventFlow
 import dev.schlaubi.musicbot.core.io.DatabaseImpl
 import dev.schlaubi.musicbot.core.plugin.DefaultPluginSystem
 import dev.schlaubi.musicbot.core.plugin.PluginLoader
@@ -132,7 +134,11 @@ private class BotModule : Extension() {
         event<ReadyEvent> {
             action {
                 loggedInShards += event.shard
-                LOG.info { "Logged in with shard ${event.shard}, Remaining ${kord.resources.shards.indices - loggedInShards.toSet()}" }
+                val remaining = kord.resources.shards.indices - loggedInShards.toSet()
+                if (remaining.isEmpty()) {
+                    readyEventFlow.emit(AllShardsReadyEvent(kord, -1, event.coroutineContext))
+                }
+                LOG.info { "Logged in with shard ${event.shard}, Remaining $remaining" }
             }
         }
 

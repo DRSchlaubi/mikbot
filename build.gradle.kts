@@ -22,6 +22,10 @@ allprojects {
         maven("https://nycode.jfrog.io/artifactory/snapshots/")
         maven("https://oss.sonatype.org/content/repositories/snapshots")
     }
+
+    dependencyLocking {
+        lockAllConfigurations()
+    }
 }
 
 subprojects {

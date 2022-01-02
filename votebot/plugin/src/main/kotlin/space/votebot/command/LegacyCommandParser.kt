@@ -2,7 +2,10 @@ package space.votebot.command
 
 import com.kotlindiscord.kord.extensions.checks.anyGuild
 import com.kotlindiscord.kord.extensions.extensions.event
+import dev.kord.common.entity.Permission
+import dev.kord.common.entity.Permissions
 import dev.kord.core.behavior.reply
+import dev.kord.core.entity.channel.TopGuildMessageChannel
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.gateway.Intent
 import dev.kord.rest.builder.message.create.embed
@@ -38,6 +41,12 @@ suspend fun VoteBotModule.legacyCommandParser() {
         check {
             anyGuild()
             failIfNot { event.message.content.startsWith(prefix) }
+            failIfNot {
+                val permissions =
+                    (event.message.channel as? TopGuildMessageChannel)?.getEffectivePermissions(kord.selfId)
+
+                permissions?.contains(Permissions(Permission.SendMessages, Permission.EmbedLinks)) == true
+            }
         }
 
         action {

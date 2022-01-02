@@ -1,15 +1,16 @@
 plugins {
     `mikbot-plugin`
+    groovy
     `mikbot-module`
     `mikbot-publishing`
     kotlin("plugin.serialization")
 }
 
 group = "dev.schlaubi.mikbot"
-version = "1.0.4"
+version = "1.0.5"
 
 dependencies {
-    api("dev.schlaubi.lavakord", "kord", "3.0.1")
+    api("dev.schlaubi.lavakord", "kord", "3.1.0")
 
     // Plattform support
     implementation("com.google.apis", "google-api-services-youtube", "v3-rev205-1.25.0")

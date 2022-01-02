@@ -2,7 +2,7 @@
 
 Do polls on your server using Discord buttons
 
-[![Discord Bots](https://top.gg/api/widget/servers/569936566965764126.svg)(https://top.gg/bot/569936566965764126)
+[![Discord Bots](https://top.gg/api/widget/servers/569936566965764126.svg)](https://top.gg/bot/569936566965764126)
 
 **Invite Public Instance Now**: https://look-at.it/votebot
 ![Demo Video](https://cdn.discordapp.com/attachments/694999866132135996/919396792175579166/vote_bot_update_1.gif)

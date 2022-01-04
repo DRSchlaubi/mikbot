@@ -37,4 +37,15 @@ interface PollSettingsArguments : PollSettings {
     )
 }
 
+@Suppress("LeakingThis") // This isn't huge of an issue here
+abstract class AbstractPollSettingsArguments : Arguments(), PollSettingsArguments {
+    override val maxVotes by maxVotes("How many times a user is allowed to vote")
+    override val maxChanges by maxChanges("How many times a user is allowed to change their vote")
+    override val hideResults: Boolean? by hideResults("Whether to show results only to people who voted or not")
+    override val publicResults: Boolean? by publicResults("Whether to share who voted for what with the author or not")
+    override val deleteAfterPeriod by voteDuration("Amount of time after which this poll should expire")
+    override val showChartAfterClose: Boolean? by showChart("Whether to show a chart after the poll finished or not")
+    override val emojiMode: PollSettings.EmojiMode? by emojiMode("How to use emojis in this poll")
+}
+
 fun <T> decide(current: T?, new: T?): T? = new ?: current

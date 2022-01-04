@@ -11,14 +11,18 @@ import space.votebot.core.VoteBotModule
 private val optionsRegex = "\\s*\\|\\s*".toRegex()
 
 class CreateOptions : AbstractPollSettingsArguments(), CreateSettings {
-    override val title: String by voteTitle()
+    override val channel: Channel? by voteChannel()
 
+    override val title: String by voteTitle()
     private val answersOptions by string("answers", "A pipe (|) seperated list of available options")
+
     override val answers: List<String> by lazy { answersOptions.split(optionsRegex) }
 
     override val settings: PollSettings get() = this
 
-    override val channel: Channel? by voteChannel()
+    init {
+        args.reverse()
+    }
 }
 
 suspend fun VoteBotModule.createCommand() = ephemeralSlashCommand(::CreateOptions) {

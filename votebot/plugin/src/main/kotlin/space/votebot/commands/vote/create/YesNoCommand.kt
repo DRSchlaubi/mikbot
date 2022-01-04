@@ -21,6 +21,7 @@ class YesNoArguments : AbstractPollSettingsArguments(), CreateSettings {
     override val title: String by voteTitle()
 
     init {
+        // https://github.com/Kord-Extensions/kord-extensions/issues/123
         args.reverse()
     }
 }

@@ -10,11 +10,12 @@ import space.votebot.core.VoteBotModule
 
 private val optionsRegex = "\\s*\\|\\s*".toRegex()
 
+// For the weird order and reverse(): https://github.com/Kord-Extensions/kord-extensions/issues/123
 class CreateOptions : AbstractPollSettingsArguments(), CreateSettings {
     override val channel: Channel? by voteChannel()
 
-    override val title: String by voteTitle()
     private val answersOptions by string("answers", "A pipe (|) seperated list of available options")
+    override val title: String by voteTitle()
 
     override val answers: List<String> by lazy { answersOptions.split(optionsRegex) }
 

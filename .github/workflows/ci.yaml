@@ -45,8 +45,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.DOCKER_TOKEN }}
         run: docker login ghcr.io --username DRSchlaubi --password "$GITHUB_TOKEN"
-      - name: Build & Tag
-        run: docker build -t ghcr.io/drschlaubi/mikmusic/bot:latest -t ghcr.io/drschlaubi/mikmusic/bot:"$GITHUB_SHA" . --file Dockerfile
       - name: Push Image
         run: |
           docker buildx build \

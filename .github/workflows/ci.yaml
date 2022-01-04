@@ -51,6 +51,7 @@ jobs:
         run: |
           docker buildx build \
                   --tag  ghcr.io/drschlaubi/mikmusic/bot:"$GITHUB_SHA" \
+                  --tag  ghcr.io/drschlaubi/mikmusic/bot:latest \
                   --file ./Dockerfile \
                   --output type=image,push=true .
   update_repository:

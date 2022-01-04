@@ -82,7 +82,7 @@ suspend fun <A : Arguments> EphemeralSlashCommandContext<A>.createVote(
         Clock.System.now(),
         finalSettings
     )
-    if (channel == this.channel) {
+    if (channel.id == this.channel.id) {
         if (Permissions(Permission.EmbedLinks, Permission.SendMessages) !in channel.asChannelOf<TextChannel>().getEffectivePermissions(kord.selfId)) {
             respond {
             }

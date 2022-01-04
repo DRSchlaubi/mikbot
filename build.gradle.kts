@@ -41,8 +41,8 @@ dependencies {
     implementation("com.google.code.gson", "gson", "2.8.9")
     implementation("org.ow2.asm", "asm", "9.2") // pf4j doesn't declare a real dep on it
 
-    sourceSets {
-    }
+    implementation("io.insert-koin", "koin-core", "3.1.4")
+
     // Logging
     implementation("ch.qos.logback", "logback-classic", "1.2.6")
 

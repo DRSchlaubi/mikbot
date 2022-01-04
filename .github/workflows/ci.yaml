@@ -37,16 +37,22 @@ jobs:
       - uses: gradle/gradle-build-action@v1
         with:
           arguments: :installDist
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
       - name: Login
         env:
           GITHUB_TOKEN: ${{ secrets.DOCKER_TOKEN }}
-        run: docker login ghcr.io --username phanatic --password "$GITHUB_TOKEN"
+        run: docker login ghcr.io --username DRSchlaubi --password "$GITHUB_TOKEN"
       - name: Build & Tag
         run: docker build -t ghcr.io/drschlaubi/mikmusic/bot:latest -t ghcr.io/drschlaubi/mikmusic/bot:"$GITHUB_SHA" . --file Dockerfile
-      - name: Push
-        run: docker push ghcr.io/drschlaubi/mikmusic/bot:latest
-      - name: Push specific tag
-        run: docker push ghcr.io/drschlaubi/mikmusic/bot:"$GITHUB_SHA"
+      - name: Push Image
+        run: |
+          docker buildx build \
+                  --tag  ghcr.io/drschlaubi/mikmusic/bot:"$GITHUB_SHA" \
+                  --file ./Dockerfile \
+                  --output type=image,push=true .
   update_repository:
     name: Update repository
     runs-on: ubuntu-20.04

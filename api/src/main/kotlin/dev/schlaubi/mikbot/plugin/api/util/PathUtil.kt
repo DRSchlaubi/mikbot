@@ -1,11 +1,14 @@
 package dev.schlaubi.mikbot.plugin.api.util
 
+private val driveLetterRegex = "[A-Z]:".toRegex()
+
 public fun String.ensurePath(): String =
     if (isWindows()) {
-        if (startsWith("file://")) {
-            drop("file://".length)
+        val driveLetter = driveLetterRegex.find(this)
+        if (driveLetter != null) {
+            drop(driveLetter.range.first)
         } else {
-            drop(1)
+            this
         }
     } else {
         this

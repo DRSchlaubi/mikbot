@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "dev.schlaubi"
-version = Project.version
+version = Project.version + "-SNAPSHOT"
 
 allprojects {
     repositories {
@@ -91,5 +91,17 @@ tasks {
                 kotlinFile
             )
         }
+    }
+
+    distTar {
+        compression = Compression.GZIP
+        archiveExtension.set("tar.gz")
+    }
+
+    task<Copy>("installCi") {
+        dependsOn(distTar)
+        from(distTar)
+        include("*.tar.gz")
+        into("ci-repo/$version")
     }
 }

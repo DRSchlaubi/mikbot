@@ -132,6 +132,7 @@ jobs:
         uses: ad-m/github-push-action@master
         continue-on-error: true # if this job fails, this is usually because there was no update and should not indicate a build fail
         with:
+          lfs: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: binary-repo
           directory: ci-repo

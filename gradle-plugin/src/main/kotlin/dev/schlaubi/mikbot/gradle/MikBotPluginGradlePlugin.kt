@@ -39,6 +39,23 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
         jar.dependsOn(patchPropertiesTask)
         val assemblePlugin = createAssemblePluginTask(jar)
         createPublishingTasks(assemblePlugin)
+        createTestBotTasks(assemblePlugin)
+    }
+
+    private fun Project.createTestBotTasks(assemblePlugin: TaskProvider<Jar>) {
+        tasks.run {
+            val installBotTask = create("installBot", InstallBotTask::class.java)
+            val installPlugins = task<InstallPluginsToTestBotTask>("installPluginsToTestBot") {
+                dependsOn(assemblePlugin)
+
+                pluginArchive.set(assemblePlugin)
+            }
+
+            task<RunBotTask>("runBot") {
+                dependsOn(installBotTask, installPlugins)
+                installTask.set(installBotTask)
+            }
+        }
     }
 
     private fun Project.createPatchPropertiesTask() =

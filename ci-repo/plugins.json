@@ -1,4 +1,0 @@
-
-
-
-[{"id":"redeploy-hook","name":"redeploy-hook","description":"Plugin adding a /redeploy command, backed by a webhook","projectUrl":"https://github.com/DRSchlaubi/tree/main/core/redeploy-hook","releases":[{"version":"1.0.0","date":"Dec 22, 2021, 5:24:02 PM","requires":"2.0.1","url":"https://plugin-repository.mikbot.schlaubi.net/redeploy-hook/1.0.0/plugin-redeploy-hook-1.0.0.zip","sha256sum":"c6295ee091a03c169e552aaabb26a1dff4edadebdb69bd694e23e8d6c8754ad68c05fc3f0272ba3c715eef040cd03f2af99ccf92a4f9c90fba407735a66e0209"}]}]

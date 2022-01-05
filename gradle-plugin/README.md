@@ -151,6 +151,26 @@ task<GenerateDefaultTranslationBundleTask>("generateDefaultResourceBundle") {
 }
 ```
 
+# Run the bot
+
+This plugin also has an easy way to start the bot.
+
+**Note:** This only works for single plugins, if you have multiple Plugins in your project
+use [Docker](../README.md#starting-the-bot)
+
+**Environment Variables:** If you want to set environment variables please create a file named `.test-env` in the
+project root and list all variables in a `KEY=VALUE` format
+
+Therefore, please add the following to your Gradle buildscript
+
+```kotlin
+tasks {
+  installBot {
+    botVersion.set("2.0.1-SNAPSHOT")
+  }
+}
+```
+
 # Using outside Mikbot
 
 This plugin also works outside Mikbot, therefore you need to configure the following:

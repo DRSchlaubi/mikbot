@@ -59,6 +59,7 @@ abstract class PluginExtension {
      * If you use the KSP processor you don't need to worry about this.
      */
     abstract val pluginMainFileLocation: Property<Path>
+
 }
 
 internal val Project.pluginId: String

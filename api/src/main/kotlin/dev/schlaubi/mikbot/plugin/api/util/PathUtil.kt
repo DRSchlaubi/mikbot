@@ -2,7 +2,11 @@ package dev.schlaubi.mikbot.plugin.api.util
 
 public fun String.ensurePath(): String =
     if (isWindows()) {
-        drop(1)
+        if (startsWith("file://")) {
+            drop("file://".length)
+        } else {
+            drop(1)
+        }
     } else {
         this
     }

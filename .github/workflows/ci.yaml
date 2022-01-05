@@ -111,6 +111,12 @@ jobs:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '17'
+      - run: rm -rf .git/ # delete .git here to ignore the parent git repo and only care about binary-repo
+      - uses: actions/checkout@v2
         with:
           ref: binary-repo
           path: ci-repo

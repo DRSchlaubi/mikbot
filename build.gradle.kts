@@ -7,10 +7,11 @@ plugins {
     application
     // This exists to add the removeVersion extension to this buildscript
     id("dev.schlaubi.mikbot.gradle-plugin") apply false
+    `mikbot-publishing`
 }
 
 group = "dev.schlaubi"
-version = Project.version
+version = Project.version + "-SNAPSHOT"
 
 allprojects {
     repositories {
@@ -41,8 +42,8 @@ dependencies {
     implementation("com.google.code.gson", "gson", "2.8.9")
     implementation("org.ow2.asm", "asm", "9.2") // pf4j doesn't declare a real dep on it
 
-    sourceSets {
-    }
+    implementation("io.insert-koin", "koin-core", "3.1.4")
+
     // Logging
     implementation("ch.qos.logback", "logback-classic", "1.2.6")
 
@@ -90,5 +91,17 @@ tasks {
                 kotlinFile
             )
         }
+    }
+
+    distTar {
+        compression = Compression.GZIP
+        archiveExtension.set("tar.gz")
+    }
+
+    task<Copy>("installCi") {
+        dependsOn(distTar)
+        from(distTar)
+        include("*.tar.gz")
+        into("ci-repo/$version")
     }
 }

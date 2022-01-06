@@ -8,13 +8,15 @@ import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.mikbot.core.i18n.database.LangaugeUser
 import dev.schlaubi.mikbot.core.i18n.database.LanguageDatabase
 import dev.schlaubi.mikbot.plugin.api.settings.SettingsModule
+import java.util.*
 
 private class LanguageArguments : Arguments() {
     val language by stringChoice(
         "language", "The language you want to use",
         mapOf(
             "German" to SupportedLocales.GERMAN.toLanguageTag(),
-            "Englisch" to SupportedLocales.ENGLISH.toLanguageTag()
+            "Englisch" to SupportedLocales.ENGLISH.toLanguageTag(),
+            "Italian" to Locale("it", "IT").toLanguageTag()
         )
     )
 }
@@ -25,7 +27,7 @@ suspend fun SettingsModule.languageCommand() {
         description = "Changed the language of the bot"
 
         action {
-            val locale = java.util.Locale.forLanguageTag(arguments.language)
+            val locale = Locale.forLanguageTag(arguments.language)
 
             val botUser = LanguageDatabase.collection.findOneById(user.id)
             val newUser = botUser?.copy(locale = locale) ?: LangaugeUser(user.id, locale)

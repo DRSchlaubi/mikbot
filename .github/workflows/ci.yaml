@@ -104,3 +104,41 @@ jobs:
           SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
         with:
           arguments: publish
+  update_binary:
+    name: Push binary to binary repo
+    runs-on: ubuntu-20.04
+    needs: [build]
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '17'
+      - run: rm -rf .git/ # delete .git here to ignore the parent git repo and only care about binary-repo
+      - uses: actions/checkout@v2
+        with:
+          ref: binary-repo
+          path: ci-repo
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '17'
+      - uses: gradle/gradle-build-action@v1
+        with:
+          arguments: installCi
+      - name: Commit changes
+        run: |
+          cd ci-repo
+          git config --local user.email "actions@github.com"
+          git config --local user.name "actions-user"
+          git add .
+          git commit -m "Update plugin repository" --allow-empty
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        continue-on-error: true # if this job fails, this is usually because there was no update and should not indicate a build fail
+        with:
+          lfs: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: binary-repo
+          directory: ci-repo

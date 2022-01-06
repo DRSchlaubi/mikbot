@@ -10,7 +10,6 @@ import space.votebot.common.models.StoredPollSettings
 import space.votebot.core.VoteBotModule
 
 class YesNoArguments : AbstractPollSettingsArguments(), CreateSettings {
-    override val title: String by voteTitle()
     override val settings: PollSettings = StoredPollSettings(
         maxChanges = 0,
         maxVotes = 1
@@ -19,6 +18,12 @@ class YesNoArguments : AbstractPollSettingsArguments(), CreateSettings {
     private val yesWord by defaultingString("yes-word", "The word you want for the 'Yes' option", "Yes")
     private val noWord by defaultingString("no-word", "The word you want for the 'Yes' option", "No")
     override val answers: List<String> by lazy { listOf(yesWord, noWord) }
+    override val title: String by voteTitle()
+
+    init {
+        // https://github.com/Kord-Extensions/kord-extensions/issues/123
+        args.reverse()
+    }
 }
 
 suspend fun VoteBotModule.yesNowCommand() = ephemeralSlashCommand(::YesNoArguments) {

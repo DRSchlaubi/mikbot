@@ -74,7 +74,7 @@ public data class FinalPollSettings(
     override val maxChanges: Int,
     override val hideResults: Boolean,
     override val publicResults: Boolean,
-    override val emojiMode: PollSettings.EmojiMode
+    override val emojiMode: PollSettings.EmojiMode = PollSettings.EmojiMode.OFF
 ) : PollSettings
 
 /**

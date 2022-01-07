@@ -48,7 +48,7 @@ suspend fun Poll.addMessage(
     addToDatabase: Boolean
 ): Message {
     val message = channel.createMessage {
-        embeds.add(toEmbed(channel.kord, guild,false))
+        embeds.add(toEmbed(channel.kord, guild, false))
         if (addButtons) {
             components.addAll(makeButtons(channel.kord, guild))
         }
@@ -145,7 +145,7 @@ suspend fun Poll.toEmbed(
                 val blocksForOption = (votePercentage * blockBarLength).toInt()
 
                 " ${option.positionedIndex + 1} | ${
-                    block.repeat(blocksForOption).padEnd(blockBarLength)
+                block.repeat(blocksForOption).padEnd(blockBarLength)
                 } | (${percentage.format(votePercentage)})"
             }
         """```$resultsText```"""

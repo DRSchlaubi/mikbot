@@ -13,7 +13,6 @@ interface MessageTransformer {
      * Transforms the message
      */
     suspend fun transform(message: String, context: TransformerContext): String
-
 }
 
 private val transformers: List<MessageTransformer> =

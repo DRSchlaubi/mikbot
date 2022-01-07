@@ -14,7 +14,7 @@ data class Statistics(
     val gameSize: Int
 ) : Comparable<Statistics> {
     val average: Duration by lazy {
-        val average = round(responseTimes.map { it.inWholeMilliseconds }.average())
+        val average = round(responseTimes.map { if (it.isInfinite()) -1 else it.inWholeMilliseconds }.average())
         average.milliseconds
     }
 

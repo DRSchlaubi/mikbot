@@ -6,11 +6,17 @@ import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.behavior.edit
 import dev.kord.core.behavior.interaction.respondEphemeral
+import dev.kord.core.builder.components.emoji
+import dev.kord.core.entity.ReactionEmoji
 import dev.kord.rest.builder.message.create.actionRow
 import dev.kord.rest.builder.message.modify.embed
+import dev.kord.x.emoji.Emojis
 import dev.schlaubi.lavakord.rest.TrackResponse
 import dev.schlaubi.lavakord.rest.loadItem
 import dev.schlaubi.mikbot.game.api.translate
+import dev.schlaubi.mikbot.game.music_quiz.LikedSongs
+import dev.schlaubi.mikbot.game.music_quiz.MusicQuizDatabase
+import dev.schlaubi.mikbot.game.music_quiz.toLikedSong
 import dev.schlaubi.mikbot.plugin.api.util.componentLive
 import dev.schlaubi.mikmusic.player.queue.findTrack
 import dev.schlaubi.mikmusic.player.queue.toNamedTrack
@@ -30,13 +36,14 @@ suspend fun SongQuizGame.turn(track: Track) {
     val lavalinkTrack = findTrack(track) ?: return
 
     val turnStart = Clock.System.now()
+    currentTrack = track
     musicPlayer.player.playTrack(lavalinkTrack)
     val backupAnswers = generateSequence {
         "Yeah I don't have an answer here but here is a random Number: ${Random.nextInt(1000)}"
     }
 
-    val availableAnswers = (wrongOptions + correctOption).filter { it.isBlank() }
-    val allAnswers = (availableAnswers + backupAnswers.take(availableAnswers.size - 4)).shuffled()
+    val availableAnswers = (wrongOptions + correctOption).filter { it.isNotBlank() }
+    val allAnswers = (availableAnswers + backupAnswers.take(4 - availableAnswers.size)).shuffled()
 
     val message = thread.createMessage {
         content = title
@@ -45,6 +52,10 @@ suspend fun SongQuizGame.turn(track: Track) {
                 interactionButton(ButtonStyle.Secondary, "choose_$index") {
                     label = (name as String?)?.take(80) ?: "<Spotify broke the name of this>"
                 }
+            }
+
+            interactionButton(ButtonStyle.Primary, "like") {
+                emoji(ReactionEmoji.Unicode(Emojis.heart.unicode))
             }
         }
     }
@@ -68,6 +79,15 @@ suspend fun SongQuizGame.turn(track: Track) {
 
             liveMessage.onInteraction {
                 val user = interaction.user
+                if (interaction.componentId == "like") {
+                    interaction.respondEphemeral {
+                        val likedSongs =
+                            MusicQuizDatabase.likedSongs.findOneById(user.id) ?: LikedSongs(user.id, emptyList())
+                        MusicQuizDatabase.likedSongs.save(likedSongs.copy(songs = likedSongs.songs + currentTrack.toLikedSong()))
+                        content = translate(user, "song_quiz.game.liked_song")
+                    }
+                    return@onInteraction
+                }
                 val player = interaction.gamePlayer
                 if (player == null) {
                     interaction.respondEphemeral {
@@ -130,7 +150,7 @@ private fun SongQuizGame.decideTurnParameters(track: Track): GuessContext {
         GuessingMode.NAME -> GuessContext(
             trackContainer.pollSongNames(track.name),
             track.name,
-            "Guess the Name of this song"
+            "Guess the Name of this song",
         )
         GuessingMode.ARTIST -> {
             val artistName = track.artists.first().name
@@ -147,13 +167,13 @@ private fun SongQuizGame.decideTurnParameters(track: Track): GuessContext {
                 GuessContext(
                     (nonNullNames + correctArtistPool) - correct,
                     correct,
-                    "Looks like you wanted to cheat, by using a playlist whith less than 4 artists in it, so have fun guessing"
+                    "Looks like you wanted to cheat, by using a playlist whith less than 4 artists in it, so have fun guessing",
                 )
             } else {
                 GuessContext(
                     fillerArtists.filterNotNull(),
                     artistName,
-                    "Guess the Artist of this song"
+                    "Guess the Artist of this song",
                 )
             }
         }
@@ -181,5 +201,5 @@ private suspend fun SongQuizGame.findTrack(track: Track): LavalinkTrack? {
 private data class GuessContext(
     val wrongOptionSource: List<String>,
     val correctOption: String,
-    val title: String
+    val title: String,
 )

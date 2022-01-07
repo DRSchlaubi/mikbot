@@ -51,6 +51,7 @@ class SongQuizModule : GameModule<SongQuizPlayer, SongQuizGame>() {
         stopGameCommand()
         leaderboardCommand("commands.song_quiz.leaderboard.page.title")
         profileCommand()
+        likedSongsCommand()
     }
 
     suspend fun startGameCommand(

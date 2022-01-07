@@ -15,7 +15,10 @@ import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.channels.ticker
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import mu.KotlinLogging
 import kotlin.time.Duration.Companion.seconds
+
+private val LOG = KotlinLogging.logger { }
 
 @PluginMain
 class GameAnimatorPlugin(wrapper: PluginWrapper) : Plugin(wrapper) {
@@ -43,8 +46,12 @@ class GameAnimatorPlugin(wrapper: PluginWrapper) : Plugin(wrapper) {
         private suspend fun start() {
             runner = coroutineScope {
                 launch {
-                    for (unit in ticker) {
-                        games.random().apply(kord)
+                    if (games.isNotEmpty()) {
+                        for (unit in ticker) {
+                            games.random().apply(kord)
+                        }
+                    } else {
+                        LOG.warn { "No games set, please set the GAMES env variable" }
                     }
                 }
             }

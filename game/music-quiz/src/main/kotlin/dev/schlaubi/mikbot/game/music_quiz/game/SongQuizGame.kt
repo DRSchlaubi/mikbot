@@ -1,6 +1,7 @@
 package dev.schlaubi.mikbot.game.music_quiz.game
 
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
+import com.wrapper.spotify.model_objects.specification.Track
 import dev.kord.common.annotation.KordPreview
 import dev.kord.common.entity.ButtonStyle
 import dev.kord.common.entity.Snowflake
@@ -47,6 +48,7 @@ class SongQuizGame(
     override val playerRange: IntRange = 1..10
     val gameStats = mutableMapOf<Snowflake, Statistics>()
     private var beforePlayerState: PersistentPlayerState? = null
+    lateinit var currentTrack: Track
     override val wonPlayers: List<SongQuizPlayer>
         get() =
             players.sortedByDescending {

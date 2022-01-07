@@ -7,4 +7,5 @@ import org.koin.core.component.KoinComponent
 
 object MusicQuizDatabase : KoinComponent {
     val stats = database.getCollection<UserGameStats>("song_quiz_stats")
+    val likedSongs = database.getCollection<LikedSongs>("liked_songs")
 }

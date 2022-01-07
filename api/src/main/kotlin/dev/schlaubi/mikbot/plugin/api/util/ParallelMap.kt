@@ -44,7 +44,7 @@ public suspend fun <T, S> Collection<T>.parallelMapIndexed(
     maxConcurrentRequests: Int? = null,
     mapper: suspend (index: Int, T) -> S
 ): List<S> {
-    val result = ArrayList<S>(size)
+    val result = ArrayList<IndexedValue<S>>(size)
 
     val semaphore = maxConcurrentRequests?.let { Semaphore(it) }
 
@@ -53,9 +53,7 @@ public suspend fun <T, S> Collection<T>.parallelMapIndexed(
             launch {
                 val block = suspend {
                     val found = mapper(index, item)
-                    if (found != null) {
-                        result.add(index, found)
-                    }
+                    result.add(IndexedValue(index, found))
                 }
 
                 if (semaphore != null) {
@@ -68,4 +66,6 @@ public suspend fun <T, S> Collection<T>.parallelMapIndexed(
     }
 
     return result
+        .sortedBy(IndexedValue<S>::index)
+        .map(IndexedValue<S>::value)
 }

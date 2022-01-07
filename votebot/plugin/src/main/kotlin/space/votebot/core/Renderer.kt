@@ -25,6 +25,7 @@ import space.votebot.common.models.sumUp
 import space.votebot.pie_char_service.client.PieChartCreateRequest
 import space.votebot.pie_char_service.client.PieChartServiceClient
 import space.votebot.pie_char_service.client.Vote
+import space.votebot.transformer.transformMessage
 import space.votebot.util.toBehavior
 import space.votebot.util.toPollMessage
 import java.text.DecimalFormat
@@ -46,7 +47,7 @@ suspend fun Poll.addMessage(
     val message = channel.createMessage {
         embeds.add(toEmbed(channel.kord, false))
         if (addButtons) {
-            components.addAll(makeButtons())
+            components.addAll(makeButtons(channel.kord))
         }
     }
 
@@ -65,7 +66,7 @@ suspend fun Poll.updateMessages(
 ) {
     val pieChart = if (highlightWinner && showChart ?: settings.showChartAfterClose) {
         pieChartService
-            .createPieChart(toPieChartCreateRequest())
+            .createPieChart(toPieChartCreateRequest(kord))
             .toInputStream()
     } else {
         null
@@ -85,7 +86,7 @@ suspend fun Poll.updateMessages(
                 components = if (removeButtons) {
                     mutableListOf()
                 } else {
-                    makeButtons().toMutableList()
+                    makeButtons(kord).toMutableList()
                 }
             }
         } catch (ignored: KtorRequestException) {
@@ -99,14 +100,14 @@ suspend fun Poll.updateMessages(
     }
 }
 
-private fun Poll.makeButtons(): List<MessageComponentBuilder> =
+private suspend fun Poll.makeButtons(kord: Kord): List<MessageComponentBuilder> =
     sortedOptions
         .chunked(5)
         .map { options ->
             ActionRowBuilder().apply {
                 options.forEach { (_, index, option, emoji) ->
                     interactionButton(ButtonStyle.Primary, "vote_$index") {
-                        label = option
+                        label = transformMessage(option, kord)
                         this.emoji = emoji?.toDiscordPartialEmoji()
                     }
                 }
@@ -118,7 +119,7 @@ suspend fun Poll.toEmbed(
     highlightWinner: Boolean = false,
     overwriteHideResults: Boolean = false
 ): EmbedBuilder = embed {
-    title = this@toEmbed.title
+    title = transformMessage(this@toEmbed.title, kord)
 
     author {
         val user = kord.getUser(Snowflake(authorId))
@@ -127,10 +128,10 @@ suspend fun Poll.toEmbed(
     }
 
     val names = sortedOptions
-        .joinToString("\n") { (index, _, value, emoji) ->
+        .map { (index, _, value, emoji) ->
             val prefix = emoji?.toDiscordPartialEmoji()?.mention ?: "${index + 1}"
-            "$prefix. $value"
-        }
+            "$prefix. ${transformMessage(value, kord, true)}"
+        }.joinToString(separator = "\n")
 
     val totalVotes = votes.sumOf { it.amount }
     val results = if (!settings.hideResults || highlightWinner || overwriteHideResults) {
@@ -139,7 +140,7 @@ suspend fun Poll.toEmbed(
                 val blocksForOption = (votePercentage * blockBarLength).toInt()
 
                 " ${option.positionedIndex + 1} | ${
-                block.repeat(blocksForOption).padEnd(blockBarLength)
+                    block.repeat(blocksForOption).padEnd(blockBarLength)
                 } | (${percentage.format(votePercentage)})"
             }
         """```$resultsText```"""
@@ -171,7 +172,8 @@ suspend fun Poll.toEmbed(
 
         field {
             name = if (winners.size > 1) "Winners" else "Winner"
-            value = if (winners.isEmpty()) "No one voted" else winners.joinToString(", ") { it.option.option }
+            value = if (winners.isEmpty()) "No one voted" else winners.map { transformMessage(it.option.option, kord) }
+                .joinToString(", ")
         }
     }
 
@@ -190,13 +192,13 @@ suspend fun Poll.toEmbed(
     timestamp = createdAt
 }
 
-private fun Poll.toPieChartCreateRequest(): PieChartCreateRequest {
+private suspend fun Poll.toPieChartCreateRequest(kord: Kord): PieChartCreateRequest {
     val votes = sumUp()
 
     return PieChartCreateRequest(
         title,
         512, 512,
-        votes.map { (option, count) -> Vote(count, option.option) }
+        votes.map { (option, count) -> Vote(count, transformMessage(option.option, kord)) }
     )
 }
 

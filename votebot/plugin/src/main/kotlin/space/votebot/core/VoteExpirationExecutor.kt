@@ -1,5 +1,8 @@
 package space.votebot.core
 
+import dev.kord.common.annotation.KordExperimental
+import dev.kord.common.annotation.KordUnsafe
+import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.launchIn
@@ -21,6 +24,7 @@ suspend fun rescheduleAllPollExpires(kord: Kord) = coroutineScope {
         }.launchIn(this)
 }
 
+@OptIn(KordUnsafe::class, KordExperimental::class)
 fun Poll.addExpirationListener(kord: Kord) {
     val duration = settings.deleteAfter ?: error("This vote does not have an expiration Date")
     val expireAt = createdAt + duration
@@ -31,6 +35,6 @@ fun Poll.addExpirationListener(kord: Kord) {
             delay(timeUntilExpiry)
         }
 
-        close(kord)
+        close(kord, guild = kord.unsafe.guild(Snowflake(guildId)))
     }
 }

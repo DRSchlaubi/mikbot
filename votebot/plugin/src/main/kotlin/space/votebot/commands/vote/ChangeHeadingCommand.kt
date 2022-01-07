@@ -24,7 +24,7 @@ suspend fun VoteBotModule.changeHeadingCommand() = ephemeralSlashCommand(::Chang
         }
 
         if (newPoll.title != poll.title) {
-            newPoll.updateMessages(channel.kord)
+            newPoll.updateMessages(channel.kord, guild!!)
         }
     }
 }

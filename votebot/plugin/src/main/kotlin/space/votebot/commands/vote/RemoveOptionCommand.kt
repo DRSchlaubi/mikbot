@@ -11,6 +11,8 @@ import space.votebot.core.VoteBotDatabase
 import space.votebot.core.VoteBotModule
 import space.votebot.core.recalculateEmojis
 import space.votebot.core.updateMessages
+import space.votebot.transformer.TransformerContext
+import space.votebot.transformer.transformMessage
 
 class RemoveOptionArguments : PollArguments("The poll you want to remove the option from") {
     val position by int(
@@ -39,9 +41,17 @@ suspend fun VoteBotModule.removeOptionCommand() = ephemeralSlashCommand(::Remove
         val newPoll = poll.copy(options = newOptions, votes = newVotes).recalculateEmojis(safeGuild)
 
         VoteBotDatabase.polls.save(newPoll)
-        newPoll.updateMessages(channel.kord)
+        newPoll.updateMessages(channel.kord, guild!!)
         respond {
-            content = translate("commands.remove_option.success", arrayOf(selectedOption.option))
+            content = translate(
+                "commands.remove_option.success",
+                arrayOf(
+                    transformMessage(
+                        selectedOption.option,
+                        TransformerContext(guild!!, this@removeOptionCommand.kord, true)
+                    )
+                )
+            )
         }
     }
 }

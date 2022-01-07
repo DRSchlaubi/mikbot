@@ -33,7 +33,7 @@ suspend fun VoteBotModule.addOptionCommand() = ephemeralSlashCommand(::AddOption
         val newPoll = poll.copy(options = poll.options + option).recalculateEmojis(safeGuild)
 
         VoteBotDatabase.polls.save(newPoll)
-        newPoll.updateMessages(channel.kord)
+        newPoll.updateMessages(channel.kord, guild!!)
         respond {
             content = translate("commands.add_option.success", arrayOf(arguments.option))
         }

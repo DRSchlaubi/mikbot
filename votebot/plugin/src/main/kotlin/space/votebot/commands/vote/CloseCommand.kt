@@ -17,7 +17,7 @@ suspend fun VoteBotModule.closeCommand() = ephemeralSlashCommand(::CloseArgument
     description = "Closes a poll"
 
     action {
-        poll().close(channel.kord, arguments.showChart)
+        poll().close(channel.kord, arguments.showChart, guild!!)
 
         respond {
             content = translate("commands.close.success")

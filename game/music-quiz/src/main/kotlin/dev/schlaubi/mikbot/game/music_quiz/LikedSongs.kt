@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 data class LikedSongs(
     @SerialName("_id")
     val owner: Snowflake,
-    val songs: List<LikedSong>
+    val songs: Set<LikedSong>
 )
 
 @Serializable

@@ -38,7 +38,7 @@ suspend fun SongQuizModule.likedSongsCommand() = ephemeralSlashCommand {
             editingPaginator {
                 forList(
                     user,
-                    songs!!.songs,
+                    songs!!.songs.toList(),
                     { "[${it.name} - ${it.artist}](${it.url})" },
                     { current, all -> translate("commands.song_likes.show.title", arrayOf(current, all)) }
                 )
@@ -72,11 +72,11 @@ suspend fun SongQuizModule.likedSongsCommand() = ephemeralSlashCommand {
             }
             val removedSong = newSongList.removeAt(arguments.position - 1)
 
-            val newSongs = songs.copy(songs = newSongList)
+            val newSongs = songs.copy(songs = newSongList.toSet())
             MusicQuizDatabase.likedSongs.save(newSongs)
 
             respond {
-                translate("commands.song_likes.removed", arrayOf(removedSong.name))
+                content = translate("commands.song_likes.removed", arrayOf(removedSong.name))
             }
         }
     }

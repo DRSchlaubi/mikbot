@@ -82,7 +82,7 @@ suspend fun SongQuizGame.turn(track: Track) {
                 if (interaction.componentId == "like") {
                     interaction.respondEphemeral {
                         val likedSongs =
-                            MusicQuizDatabase.likedSongs.findOneById(user.id) ?: LikedSongs(user.id, emptyList())
+                            MusicQuizDatabase.likedSongs.findOneById(user.id) ?: LikedSongs(user.id, emptySet())
                         MusicQuizDatabase.likedSongs.save(likedSongs.copy(songs = likedSongs.songs + currentTrack.toLikedSong()))
                         content = translate(user, "song_quiz.game.liked_song")
                     }

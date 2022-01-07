@@ -20,6 +20,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
+import kotlin.random.Random
 import kotlin.time.Duration.Companion.seconds
 import dev.schlaubi.lavakord.audio.player.Track as LavalinkTrack
 
@@ -30,7 +31,13 @@ suspend fun SongQuizGame.turn(track: Track) {
 
     val turnStart = Clock.System.now()
     musicPlayer.player.playTrack(lavalinkTrack)
-    val allAnswers = (wrongOptions + correctOption).shuffled()
+    val backupAnswers = generateSequence {
+        "Yeah I don't have an answer here but here is a random Number: ${Random.nextInt(1000)}"
+    }
+
+    val availableAnswers = (wrongOptions + correctOption).filter { it.isBlank() }
+    val allAnswers = (availableAnswers + backupAnswers.take(availableAnswers.size - 4)).shuffled()
+
     val message = thread.createMessage {
         content = title
         actionRow {

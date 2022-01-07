@@ -6,21 +6,14 @@ import dev.kord.core.Kord
 import dev.kord.core.entity.channel.GuildChannel
 import mu.KotlinLogging
 
-object ChannelMessageTransformer : MessageTransformer {
+object ChannelMessageTransformer : RegexReplaceTransformer() {
+    override val regex = Regex("<#(\\d+)>")
+    override val skipInMarkdownContext: Boolean = true
 
-    private val regex = Regex("<#(\\d+)>")
-
-    override suspend fun transform(message: String, kord: Kord, inMarkdownContext: Boolean): String {
-        if (inMarkdownContext) {
-            return message
-        }
-        return regex.findAll(message).toSet().mapNotNull { match ->
-            val (channelId) = match.destructured
-            val channel = kord.tryGetChannel(channelId) ?: return@mapNotNull null
-            match.value to channel.name
-        }.fold(message) { acc, (value, name) ->
-            acc.replace(value, "#$name")
-        }
+    override suspend fun TransformerContext.transform(match: MatchResult): String? {
+        val (channelId) = match.destructured
+        val channel = kord.tryGetChannel(channelId) ?: return null
+        return "#${channel.name}"
     }
 }
 

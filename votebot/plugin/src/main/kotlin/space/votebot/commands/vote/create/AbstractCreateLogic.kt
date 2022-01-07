@@ -90,7 +90,7 @@ suspend fun <A : Arguments> EphemeralSlashCommandContext<A>.createVote(
         }
     }
     val message = try {
-        poll.addMessage(channel, addButtons = true, addToDatabase = false)
+        poll.addMessage(channel, addButtons = true, addToDatabase = false, guild = guild!!)
     } catch (e: RequestException) {
         respond {
             content = translate("vote.create.missing_permissions.bot", arrayOf(channel.mention))

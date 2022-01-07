@@ -7,20 +7,14 @@ import dev.kord.core.entity.User
 import dev.kord.core.exception.EntityNotFoundException
 import mu.KotlinLogging
 
-object UserMessageTransformer : MessageTransformer {
-    private val regex = Regex("<@!?(\\d+)>")
+object UserMessageTransformer : RegexReplaceTransformer() {
+    override val regex = Regex("<@!?(\\d+)>")
+    override val skipInMarkdownContext: Boolean = true
 
-    override suspend fun transform(message: String, kord: Kord, inMarkdownContext: Boolean): String {
-        if (inMarkdownContext) {
-            return message
-        }
-        return regex.findAll(message).toSet().mapNotNull { match ->
-            val (userId) = match.destructured
-            val user = kord.tryGetUser(userId) ?: return@mapNotNull null
-            match.value to "${user.username}#${user.discriminator}"
-        }.fold(message) { acc, (value, name) ->
-            acc.replace(value, "@$name")
-        }
+    override suspend fun TransformerContext.transform(match: MatchResult): String? {
+        val (userId) = match.destructured
+        val user = kord.tryGetUser(userId) ?: return null
+        return "${user.username}#${user.discriminator}"
     }
 }
 

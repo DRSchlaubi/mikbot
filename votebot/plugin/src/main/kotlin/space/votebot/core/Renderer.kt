@@ -6,6 +6,7 @@ import dev.kord.common.entity.ButtonStyle
 import dev.kord.common.entity.DiscordPartialEmoji
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
+import dev.kord.core.behavior.GuildBehavior
 import dev.kord.core.behavior.channel.MessageChannelBehavior
 import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.behavior.edit
@@ -25,6 +26,7 @@ import space.votebot.common.models.sumUp
 import space.votebot.pie_char_service.client.PieChartCreateRequest
 import space.votebot.pie_char_service.client.PieChartServiceClient
 import space.votebot.pie_char_service.client.Vote
+import space.votebot.transformer.TransformerContext
 import space.votebot.transformer.transformMessage
 import space.votebot.util.toBehavior
 import space.votebot.util.toPollMessage
@@ -41,13 +43,14 @@ private val LOG = KotlinLogging.logger { }
 
 suspend fun Poll.addMessage(
     channel: MessageChannelBehavior,
+    guild: GuildBehavior,
     addButtons: Boolean,
     addToDatabase: Boolean
 ): Message {
     val message = channel.createMessage {
-        embeds.add(toEmbed(channel.kord, false))
+        embeds.add(toEmbed(channel.kord, guild,false))
         if (addButtons) {
-            components.addAll(makeButtons(channel.kord))
+            components.addAll(makeButtons(channel.kord, guild))
         }
     }
 
@@ -60,13 +63,14 @@ suspend fun Poll.addMessage(
 
 suspend fun Poll.updateMessages(
     kord: Kord,
+    guild: GuildBehavior,
     removeButtons: Boolean = false,
     highlightWinner: Boolean = false,
     showChart: Boolean? = null
 ) {
     val pieChart = if (highlightWinner && showChart ?: settings.showChartAfterClose) {
         pieChartService
-            .createPieChart(toPieChartCreateRequest(kord))
+            .createPieChart(toPieChartCreateRequest(kord, guild))
             .toInputStream()
     } else {
         null
@@ -81,12 +85,12 @@ suspend fun Poll.updateMessages(
                     addFile("chart.png", pieChart)
                 } else {
                     content = ""
-                    embeds = mutableListOf(toEmbed(kord, highlightWinner))
+                    embeds = mutableListOf(toEmbed(kord, guild, highlightWinner))
                 }
                 components = if (removeButtons) {
                     mutableListOf()
                 } else {
-                    makeButtons(kord).toMutableList()
+                    makeButtons(kord, guild).toMutableList()
                 }
             }
         } catch (ignored: KtorRequestException) {
@@ -100,14 +104,14 @@ suspend fun Poll.updateMessages(
     }
 }
 
-private suspend fun Poll.makeButtons(kord: Kord): List<MessageComponentBuilder> =
+private suspend fun Poll.makeButtons(kord: Kord, guild: GuildBehavior): List<MessageComponentBuilder> =
     sortedOptions
         .chunked(5)
         .map { options ->
             ActionRowBuilder().apply {
                 options.forEach { (_, index, option, emoji) ->
                     interactionButton(ButtonStyle.Primary, "vote_$index") {
-                        label = transformMessage(option, kord)
+                        label = transformMessage(option, TransformerContext(guild, kord, false))
                         this.emoji = emoji?.toDiscordPartialEmoji()
                     }
                 }
@@ -116,10 +120,11 @@ private suspend fun Poll.makeButtons(kord: Kord): List<MessageComponentBuilder> 
 
 suspend fun Poll.toEmbed(
     kord: Kord,
+    guild: GuildBehavior,
     highlightWinner: Boolean = false,
     overwriteHideResults: Boolean = false
 ): EmbedBuilder = embed {
-    title = transformMessage(this@toEmbed.title, kord)
+    title = transformMessage(this@toEmbed.title, TransformerContext(guild, kord, false))
 
     author {
         val user = kord.getUser(Snowflake(authorId))
@@ -130,7 +135,7 @@ suspend fun Poll.toEmbed(
     val names = sortedOptions
         .map { (index, _, value, emoji) ->
             val prefix = emoji?.toDiscordPartialEmoji()?.mention ?: "${index + 1}"
-            "$prefix. ${transformMessage(value, kord, true)}"
+            "$prefix. ${transformMessage(value, TransformerContext(guild, kord, true))}"
         }.joinToString(separator = "\n")
 
     val totalVotes = votes.sumOf { it.amount }
@@ -172,7 +177,12 @@ suspend fun Poll.toEmbed(
 
         field {
             name = if (winners.size > 1) "Winners" else "Winner"
-            value = if (winners.isEmpty()) "No one voted" else winners.map { transformMessage(it.option.option, kord) }
+            value = if (winners.isEmpty()) "No one voted" else winners.map {
+                transformMessage(
+                    it.option.option,
+                    TransformerContext(guild, kord, false)
+                )
+            }
                 .joinToString(", ")
         }
     }
@@ -192,13 +202,18 @@ suspend fun Poll.toEmbed(
     timestamp = createdAt
 }
 
-private suspend fun Poll.toPieChartCreateRequest(kord: Kord): PieChartCreateRequest {
+private suspend fun Poll.toPieChartCreateRequest(kord: Kord, guild: GuildBehavior): PieChartCreateRequest {
     val votes = sumUp()
 
     return PieChartCreateRequest(
         title,
         512, 512,
-        votes.map { (option, count) -> Vote(count, transformMessage(option.option, kord)) }
+        votes.map { (option, count) ->
+            Vote(
+                count,
+                transformMessage(option.option, TransformerContext(guild, kord, false))
+            )
+        }
     )
 }
 

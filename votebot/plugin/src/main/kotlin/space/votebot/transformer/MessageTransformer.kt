@@ -1,6 +1,7 @@
 package space.votebot.transformer
 
 import dev.kord.core.Kord
+import dev.kord.core.behavior.GuildBehavior
 
 /**
  * Interface which allows several implementations to replace things in user provided vote texts.
@@ -11,17 +12,24 @@ interface MessageTransformer {
     /**
      * Transforms the message
      */
-    suspend fun transform(message: String, kord: Kord, inMarkdownContext: Boolean): String
+    suspend fun transform(message: String, context: TransformerContext): String
 
 }
 
-private val transformers: List<MessageTransformer> = listOf(ChannelMessageTransformer, UserMessageTransformer)
+private val transformers: List<MessageTransformer> =
+    listOf(ChannelMessageTransformer, UserMessageTransformer, RoleMessageTransformer)
 
 /**
  * Transforms the message using the transformer pipeline.
  */
-suspend fun transformMessage(message: String, kord: Kord, inMarkdownContext: Boolean = false): String {
+suspend fun transformMessage(message: String, context: TransformerContext): String {
     return transformers.fold(message) { acc, transformer ->
-        transformer.transform(acc, kord, inMarkdownContext)
+        transformer.transform(acc, context)
     }
 }
+
+class TransformerContext(
+    val guild: GuildBehavior,
+    val kord: Kord,
+    val inMarkdownContext: Boolean
+)

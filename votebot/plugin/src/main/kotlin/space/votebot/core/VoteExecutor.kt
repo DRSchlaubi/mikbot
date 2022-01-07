@@ -3,16 +3,19 @@ package space.votebot.core
 import com.kotlindiscord.kord.extensions.events.EventContext
 import com.kotlindiscord.kord.extensions.extensions.event
 import com.kotlindiscord.kord.extensions.utils.dm
+import dev.kord.common.annotation.KordExperimental
+import dev.kord.common.annotation.KordUnsafe
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
+import dev.kord.core.behavior.GuildBehavior
 import dev.kord.core.behavior.interaction.followUpEphemeral
 import dev.kord.core.event.interaction.GuildButtonInteractionCreateEvent
 import space.votebot.common.models.Poll
 import space.votebot.util.reFetch
 
-suspend fun Poll.close(kord: Kord, showChart: Boolean? = null) {
+suspend fun Poll.close(kord: Kord, showChart: Boolean? = null, guild: GuildBehavior) {
     with(reFetch()) {
-        updateMessages(kord, removeButtons = true, highlightWinner = true, showChart)
+        updateMessages(kord, removeButtons = true, highlightWinner = true, guild = guild, showChart = showChart)
 
         VoteBotDatabase.polls.deleteOneById(id)
 
@@ -26,13 +29,14 @@ suspend fun Poll.close(kord: Kord, showChart: Boolean? = null) {
     }
 }
 
+@OptIn(KordUnsafe::class, KordExperimental::class)
 suspend fun VoteBotModule.voteExecutor() = event<GuildButtonInteractionCreateEvent> {
     action {
-        onVote()
+        onVote(kord.unsafe.guild(event.interaction.guildId))
     }
 }
 
-private suspend fun EventContext<GuildButtonInteractionCreateEvent>.onVote() {
+private suspend fun EventContext<GuildButtonInteractionCreateEvent>.onVote(guild: GuildBehavior) {
     val interaction = event.interaction
 
     val message = interaction.message ?: return
@@ -88,10 +92,10 @@ private suspend fun EventContext<GuildButtonInteractionCreateEvent>.onVote() {
     }
 
     VoteBotDatabase.polls.save(newPoll)
-    newPoll.updateMessages(interaction.kord)
+    newPoll.updateMessages(interaction.kord, guild)
     if (poll.settings.hideResults) {
         ack.followUpEphemeral {
-            embeds.add(newPoll.toEmbed(ack.kord, highlightWinner = false, overwriteHideResults = true))
+            embeds.add(newPoll.toEmbed(ack.kord, highlightWinner = false, overwriteHideResults = true, guild = guild))
         }
     }
 }

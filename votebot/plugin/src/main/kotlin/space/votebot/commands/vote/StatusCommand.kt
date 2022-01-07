@@ -25,10 +25,10 @@ suspend fun VoteBotModule.statusCommand() = ephemeralSlashCommand(::StatusArgume
         val poll = poll()
         if (!arguments.liveMessage) {
             respond {
-                embeds.add(poll.toEmbed(channel.kord))
+                embeds.add(poll.toEmbed(channel.kord, guild!!))
             }
         } else {
-            poll.addMessage(channel, addButtons = true, addToDatabase = true)
+            poll.addMessage(channel, addButtons = true, addToDatabase = true, guild = guild!!)
 
             respond {
                 content = translate("commands.status.success")

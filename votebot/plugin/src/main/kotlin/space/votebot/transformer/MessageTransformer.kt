@@ -15,7 +15,7 @@ interface MessageTransformer {
 
 }
 
-private val transformers: List<MessageTransformer> = listOf(ChannelMessageTransformer)
+private val transformers: List<MessageTransformer> = listOf(ChannelMessageTransformer, UserMessageTransformer)
 
 /**
  * Transforms the message using the transformer pipeline.

@@ -26,8 +26,8 @@ abstract class InstallBotTask : DefaultTask() {
 
     @TaskAction
     fun runTask() {
-        if (testBotFolder.exists()) {
-            // did work is the most supid name ever
+        if (testBotFolder.exists() && !System.getProperties().containsKey("rerun")) {
+            // did work is the most stupid name ever
             // it actually means whether the task did some work
             // not whether the task worked
             didWork = false

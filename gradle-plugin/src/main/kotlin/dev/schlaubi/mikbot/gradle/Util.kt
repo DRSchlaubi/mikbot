@@ -65,7 +65,7 @@ internal fun Dependency.toDependencyString(optional: Boolean = false): String {
         name.substringAfter("mikbot-")
     }
 
-    return "$name${if (optional) "?" else ""}@$version"
+    return "$name${if (optional) "?" else ""}@>=$version"
 }
 
 /**

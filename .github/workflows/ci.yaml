@@ -120,10 +120,6 @@ jobs:
         with:
           ref: binary-repo
           path: ci-repo
-      - uses: actions/setup-java@v2
-        with:
-          distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '17'
       - uses: gradle/gradle-build-action@v1
         with:
           arguments: installCi

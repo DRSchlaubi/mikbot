@@ -36,11 +36,9 @@ data class PersistentPlayerState(
         if (currentTrack != null) {
             musicPlayer.playingTrack = currentTrack
             musicPlayer.queueTrack(force = true, onTop = false, tracks = listOf(currentTrack))
-        }
-        musicPlayer.queueTrack(force = false, onTop = false, tracks = queue)
-        if (queue.isNotEmpty()) {
             musicPlayer.player.seekTo(position)
         }
+        musicPlayer.queueTrack(force = false, onTop = false, tracks = queue)
         if (paused) {
             musicPlayer.player.pause()
         }

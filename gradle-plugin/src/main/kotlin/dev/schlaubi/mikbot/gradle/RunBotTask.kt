@@ -4,7 +4,9 @@ import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.JavaExec
 import org.gradle.api.tasks.TaskAction
+import kotlin.io.path.isDirectory
 import kotlin.io.path.listDirectoryEntries
+import kotlin.io.path.notExists
 import kotlin.io.path.readLines
 
 abstract class RunBotTask : JavaExec() {
@@ -27,6 +29,9 @@ abstract class RunBotTask : JavaExec() {
 
     private fun configureEnvironment() {
         val envFile = project.file(".test-env").toPath()
+        if (envFile.notExists() || envFile.isDirectory()) {
+            return
+        }
         envFile.readLines().forEach {
             if (it.isNotBlank()) {
                 val (key, value) = it.split('=')

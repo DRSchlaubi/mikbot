@@ -29,6 +29,13 @@ public interface SuspendLazy<out T> {
 public fun <T> suspendLazy(initializer: suspend () -> T): SuspendLazy<T> = SynchronizedSuspendLazyImpl(initializer)
 
 /**
+ * The same as [suspendLazy] but with [LazyThradSafetyMode.NONE]
+ *
+ * Use this for local lazy variables, which only one thread/coroutine can access
+ */
+public fun <T> localSuspendLazy(initializer: suspend () -> T): SuspendLazy<T> = UnsafeSuspendLazyImpl(initializer)
+
+/**
  * @see SuspendLazy
  */
 public fun <T> suspendLazy(mode: LazyThreadSafetyMode, initializer: suspend () -> T): SuspendLazy<T> =

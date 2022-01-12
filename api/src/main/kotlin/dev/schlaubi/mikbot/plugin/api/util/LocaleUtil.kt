@@ -10,7 +10,7 @@ public suspend fun ExtensibleBot.getLocale(channel: GuildChannel, user: User): L
     var locale: Locale? = null
 
     for (resolver in settings.i18nBuilder.localeResolvers) {
-        val result = resolver(channel.guild, channel, user)
+        val result = resolver(channel.guild, channel, user, null)
 
         if (result != null) {
             locale = result

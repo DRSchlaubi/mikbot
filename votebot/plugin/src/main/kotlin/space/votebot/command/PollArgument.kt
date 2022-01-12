@@ -34,7 +34,6 @@ abstract class PollArguments(pollArgumentDescription: String) : Arguments() {
                     .toList()
                     .sortedBy { levenshtein.distance(safeInput, it.title, 50) }
 
-                println(possible)
                 if (possible.isNotEmpty()) {
                     suggestString {
                         possible.subList(0, 25.coerceAtMost(possible.size)).forEach {

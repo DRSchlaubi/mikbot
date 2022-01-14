@@ -95,7 +95,10 @@ private interface RecoveryStep {
     suspend fun EphemeralSlashCommandContext<*>.apply(musicPlayer: MusicPlayer)
 
     companion object {
-        val steps = listOf(UnPausePlayback, RestartPlayback, ReEstablishVoiceConnection, SwitchVoiceServers)
+        val steps = listOf(
+            UnPausePlayback, RestartPlayback, ReEstablishVoiceConnection,
+            SwitchVoiceServers, SkipTrack
+        )
     }
 }
 
@@ -156,5 +159,16 @@ private object SwitchVoiceServers : RecoveryStep {
         channel.edit {
             rtcRegion = currentRegion
         }
+    }
+}
+
+object SkipTrack : RecoveryStep {
+    override val MusicPlayer.applicable: Boolean
+        get() = queuedTracks.isNotEmpty()
+
+    override val nameKey: String = "commands.fix.step.skip_track"
+
+    override suspend fun EphemeralSlashCommandContext<*>.apply(musicPlayer: MusicPlayer) {
+        musicPlayer.skip()
     }
 }

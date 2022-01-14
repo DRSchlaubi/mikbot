@@ -19,7 +19,7 @@ import dev.schlaubi.mikmusic.core.settings.MusicChannelData
 import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase
 import dev.schlaubi.mikmusic.util.musicModule
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.flow.toSet
 
 private class MusicChannelArguments : Arguments() {
     val channel by channel("channel", "Text Channel to use for Music Channel", validator = { _, value ->
@@ -58,6 +58,7 @@ suspend fun SettingsModule.musicChannel() {
             val textChannel = (arguments.channel.fetchChannel() as TextChannel)
                 // disable the cache for this one, because message caching has issues
                 .withStrategy(EntitySupplyStrategy.rest)
+                .fetchChannel()
 
             if (textChannel.getLastMessage() != null) {
                 val (confirmed) = confirmation {
@@ -68,7 +69,7 @@ suspend fun SettingsModule.musicChannel() {
                     val messages = textChannel
                         .messages
                         .map { it.id }
-                        .toList()
+                        .toSet() + setOfNotNull(textChannel.lastMessageId)
                     textChannel.bulkDelete(messages)
                 }
             }

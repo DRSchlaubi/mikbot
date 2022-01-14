@@ -7,10 +7,10 @@ plugins {
 }
 
 group = "dev.schlaubi.mikbot"
-version = "1.2.0"
+version = "1.2.1"
 
 dependencies {
-    api("dev.schlaubi.lavakord", "kord", "3.1.0")
+    api("dev.schlaubi.lavakord", "kord", "3.1.1")
 
     // Plattform support
     implementation("com.google.apis", "google-api-services-youtube", "v3-rev205-1.25.0")

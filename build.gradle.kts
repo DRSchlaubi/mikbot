@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "dev.schlaubi"
-version = Project.version
+version = Project.version + "-SNAPSHOT"
 
 allprojects {
     repositories {

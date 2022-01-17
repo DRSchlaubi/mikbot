@@ -9,7 +9,10 @@ import space.votebot.core.VoteBotModule
 import space.votebot.core.close
 
 class CloseArguments : PollArguments("The Message Link to the poll you want to close") {
-    val showChart by optionalBoolean("show-chart", "Whether to show a pie chart or a Discord message")
+    val showChart by optionalBoolean {
+        name = "show-chart"
+        description = "Whether to show a pie chart or a Discord message"
+    }
 }
 
 suspend fun VoteBotModule.closeCommand() = ephemeralSlashCommand(::CloseArguments) {

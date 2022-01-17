@@ -19,13 +19,21 @@ import dev.schlaubi.mikbot.plugin.api.util.database
 import org.litote.kmongo.coroutine.CoroutineCollection
 
 class UnoArguments : Arguments() {
-    val extreme by defaultingBoolean(
-        "extreme",
-        "Extreme mode (65% of the times, you draw 0 cards, but you can draw up to 6 cards at once)",
-        false
-    )
-    val flash by defaultingBoolean("flash", "Flash mode (Player order is completely random)", false)
-    val dropIns by defaultingBoolean("drop_ins", "Enable or disable drop-ins (Default: disabled)", false)
+    val extreme by defaultingBoolean {
+        name = "extreme"
+        description = "Extreme mode (65% of the times, you draw 0 cards, but you can draw up to 6 cards at once)"
+        defaultValue = false
+    }
+    val flash by defaultingBoolean {
+        name = "flash"
+        description = "Flash mode (Player order is completely random)"
+        defaultValue = false
+    }
+    val dropIns by defaultingBoolean {
+        name = "drop_ins"
+        description = "Enable or disable drop-ins (Default: disabled)"
+        defaultValue = false
+    }
 }
 
 class UnoModule : GameModule<DiscordUnoPlayer, DiscordUnoGame>() {

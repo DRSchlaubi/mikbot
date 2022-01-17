@@ -22,16 +22,26 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toSet
 
 private class MusicChannelArguments : Arguments() {
-    val channel by channel("channel", "Text Channel to use for Music Channel", validator = { _, value ->
-        if (value.type != ChannelType.GuildText) {
-            throw DiscordRelayedException(translate("commands.musicchannel.notextchannel", arrayOf(value.data.name)))
-        }
+    val channel by channel {
+        name = "channel"
+        description = "Text Channel to use for Music Channel"
 
-        val botPermissions = (value.fetchChannel() as TextChannel).getEffectivePermissions(value.kord.selfId)
-        if (Permission.ManageMessages !in botPermissions) {
-            throw DiscordRelayedException(translate("command.music_channel.channel_missing_perms"))
+        validate {
+            if (value.type != ChannelType.GuildText) {
+                throw DiscordRelayedException(
+                    translate(
+                        "commands.musicchannel.notextchannel",
+                        replacements = arrayOf(value.data.name)
+                    )
+                )
+            }
+
+            val botPermissions = (value.fetchChannel() as TextChannel).getEffectivePermissions(value.kord.selfId)
+            if (Permission.ManageMessages !in botPermissions) {
+                throw DiscordRelayedException(translate("command.music_channel.channel_missing_perms"))
+            }
         }
-    })
+    }
 }
 
 suspend fun SettingsModule.musicChannel() {

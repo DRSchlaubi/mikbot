@@ -15,10 +15,10 @@ import space.votebot.transformer.TransformerContext
 import space.votebot.transformer.transformMessage
 
 class RemoveOptionArguments : PollArguments("The poll you want to remove the option from") {
-    val position by int(
-        "position",
-        "The position at which the option should be inserted"
-    )
+    val position by int {
+        name = "position"
+        description = "The position at which the option should be inserted"
+    }
 }
 
 suspend fun VoteBotModule.removeOptionCommand() = ephemeralSlashCommand(::RemoveOptionArguments) {

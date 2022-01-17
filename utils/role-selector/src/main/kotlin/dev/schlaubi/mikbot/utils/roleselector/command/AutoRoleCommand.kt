@@ -52,25 +52,24 @@ suspend fun SettingsModule.autoRoleCommand() = ephemeralSlashCommand(::AutoRoleA
 }
 
 class AutoRoleArguments : Arguments() {
-    val role by optionalRole(
-        "role",
-        "The Role to give (The bot's role has to be above the role that should be given)",
-        required = true,
-        validator = { _, role ->
-            val member = getMember() ?: return@optionalRole
-            val highestBotRole = getGuild()!!.selfMember().roles.toList().maxOfOrNull {
+    val role by optionalRole {
+        name = "role"
+        description = "The Role to give (The bot's role has to be above the role that should be given)"
+        validate {
+            val member = context.getMember() ?: return@validate
+            val highestBotRole = context.getGuild()!!.selfMember().roles.toList().maxOfOrNull {
                 it.getPosition()
             } ?: 0
-            if (role!!.getPosition() >= highestBotRole) {
+            if (value!!.getPosition() >= highestBotRole) {
                 throw DiscordRelayedException(translateString("error.commands.missing-permission.role.bot"))
             }
-            if (member.asMember().isOwner()) return@optionalRole
+            if (member.asMember().isOwner()) return@validate
             val highestMemberRole = member.asMember().roles.toList().maxOfOrNull {
                 it.getPosition()
             } ?: 0
-            if (role.getPosition() >= highestMemberRole) {
+            if (value!!.getPosition() >= highestMemberRole) {
                 throw DiscordRelayedException(translateString("error.commands.missing-permission.role.member"))
             }
         }
-    )
+    }
 }

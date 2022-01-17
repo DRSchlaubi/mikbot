@@ -33,21 +33,28 @@ import org.litote.kmongo.and
 import org.litote.kmongo.eq
 
 private class ProfileArguments : Arguments() {
-    val user by optionalUser(
-        "user", "The user whose profile you want to see"
-    )
+    val user by optionalUser {
+        name = "user"
+        description = "The user whose profile you want to see"
+    }
 }
 
 private class PronounArguments : Arguments() {
-    val pronoun by enumChoice<Pronoun>("Pronoun", "Choose your pronoun", "Pronoun")
+    val pronoun by enumChoice<Pronoun> {
+        name = "Pronoun"
+        description = "Choose your pronoun"
+        typeName = "Pronoun"
+    }
 }
 
 private class ConnectArguments : Arguments() {
-    val service by stringChoice(
-        "social-service",
-        "Choose the service to connect or disconnect",
-        SocialAccountConnectionType.ALL.associate { it.displayName to it.id }
-    )
+    val service by stringChoice {
+        name = "social-service"
+        description = "Choose the service to connect or disconnect"
+        SocialAccountConnectionType.ALL.associate { it.displayName to it.id }.forEach { (name, value) ->
+            choice(name, value)
+        }
+    }
 }
 
 suspend fun SettingsModule.profileCommand() {

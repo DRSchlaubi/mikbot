@@ -11,7 +11,11 @@ import dev.schlaubi.mikmusic.player.queue.QueueArguments
 import dev.schlaubi.mikmusic.player.queue.queueTracks
 
 class PlayArguments : QueueArguments() {
-    val search by defaultingBoolean("search", "Shows multiple search options", false)
+    val search by defaultingBoolean {
+        name = "search"
+        description = "Shows multiple search options"
+        defaultValue = false
+    }
 }
 
 suspend fun MusicModule.playCommand() {

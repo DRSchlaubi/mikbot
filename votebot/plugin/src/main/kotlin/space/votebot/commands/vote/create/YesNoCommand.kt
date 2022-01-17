@@ -15,8 +15,16 @@ class YesNoArguments : AbstractPollSettingsArguments(), CreateSettings {
         maxVotes = 1
     )
     override val channel: Channel? by voteChannel()
-    private val yesWord by defaultingString("yes-word", "The word you want for the 'Yes' option", "Yes")
-    private val noWord by defaultingString("no-word", "The word you want for the 'Yes' option", "No")
+    private val yesWord by defaultingString {
+        name = "yes-word"
+        description = "The word you want for the 'Yes' option"
+        defaultValue = "Yes"
+    }
+    private val noWord by defaultingString {
+        name = "no-word"
+        description = "The word you want for the 'Yes' option"
+        defaultValue = "No"
+    }
     override val answers: List<String> by lazy { listOf(yesWord, noWord) }
     override val title: String by voteTitle()
 

@@ -8,10 +8,14 @@ import dev.schlaubi.lavakord.audio.player.FiltersApi
 import dev.schlaubi.mikmusic.core.MusicModule
 
 class VolumeArguments : Arguments() {
-    val volume by optionalInt("volume", "The desired volume", required = true) { _, value ->
+    val volume by optionalInt {
+        name = "volume"
+        description = "The desired volume"
 
-        if (value !in 0..100) {
-            throw DiscordRelayedException(translate("commands.volume.invalid_range"))
+        validate {
+            if (value !in 0..100) {
+                throw DiscordRelayedException(translate("commands.volume.invalid_range"))
+            }
         }
     }
 }

@@ -6,7 +6,11 @@ import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.mikmusic.core.MusicModule
 
 class SkipArguments : Arguments() {
-    val to by defaultingInt("to", "The position to skip to", 1)
+    val to by defaultingInt {
+        name = "to"
+        description = "The position to skip to"
+        defaultValue = 1
+    }
 }
 
 suspend fun MusicModule.skipCommand() = ephemeralControlSlashCommand(::SkipArguments) {

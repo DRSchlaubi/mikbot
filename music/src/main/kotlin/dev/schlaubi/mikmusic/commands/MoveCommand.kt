@@ -10,12 +10,21 @@ import dev.schlaubi.lavakord.audio.player.Track
 import dev.schlaubi.mikmusic.core.MusicModule
 
 class SingleSongMoveArguments : Arguments() {
-    val song by int("song", "The position of the song to move")
+    val song by int {
+        name = "song"
+        description = "The position of the song to move"
+    }
 }
 
 class MoveArguments : Arguments() {
-    val from by int("from", "The position of the song to move")
-    val to by int("to", "The position to move the song to")
+    val from by int {
+        name = "from"
+        description = "The position of the song to move"
+    }
+    val to by int {
+        name = "to"
+        description = "The position to move the song to"
+    }
 }
 
 suspend fun MusicModule.moveCommand() {

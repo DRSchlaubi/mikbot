@@ -14,7 +14,10 @@ private val optionsRegex = "\\s*\\|\\s*".toRegex()
 class CreateOptions : AbstractPollSettingsArguments(), CreateSettings {
     override val channel: Channel? by voteChannel()
 
-    private val answersOptions by string("answers", "A pipe (|) seperated list of available options")
+    private val answersOptions by string {
+        name = "answers"
+        description = "A pipe (|) seperated list of available options"
+    }
     override val title: String by voteTitle()
 
     override val answers: List<String> by lazy { answersOptions.split(optionsRegex) }

@@ -14,8 +14,14 @@ import space.votebot.core.recalculateEmojis
 import space.votebot.core.updateMessages
 
 class AddOptionArguments : PollArguments("The poll you want to add the argument to") {
-    val option by string("option", "The option you want to add")
-    val position by optionalInt("position", "The position at which the option should be inserted")
+    val option by string {
+        name = "option"
+        description = "The option you want to add"
+    }
+    val position by optionalInt {
+        name = "position"
+        description = "The position at which the option should be inserted"
+    }
 }
 
 suspend fun VoteBotModule.addOptionCommand() = ephemeralSlashCommand(::AddOptionArguments) {

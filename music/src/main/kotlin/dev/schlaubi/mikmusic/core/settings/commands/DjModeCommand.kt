@@ -10,9 +10,10 @@ import dev.schlaubi.mikbot.plugin.api.util.safeGuild
 import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase
 
 private class DjModeArguments : Arguments() {
-    val djRole by optionalRole(
-        "role", "Set a DJ Mode Role",
-    )
+    val djRole by optionalRole {
+        name = "role"
+        description = "Set a DJ Mode Role"
+    }
 }
 
 suspend fun SettingsModule.djModeCommand() {

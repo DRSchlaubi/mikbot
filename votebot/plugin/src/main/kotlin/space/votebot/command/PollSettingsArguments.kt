@@ -17,27 +17,49 @@ interface PollSettingsArguments : PollSettings {
     override val deleteAfter: Duration?
         get() = deleteAfterPeriod?.toDuration()
 
-    fun Arguments.voteDuration(description: String) = optionalDuration(
-        "duration",
-        description, required = true
-    ) { _, period ->
-        if (period != null && period.toDuration() < 1.minutes) {
-            discordError(translate("vote.create.too_short"))
+    fun Arguments.voteDuration(description: String) = optionalDuration {
+        name = "duration"
+        this.description = description
+
+        validate {
+            if (value != null && value!!.toDuration() < 1.minutes) {
+                discordError(translate("vote.create.too_short"))
+            }
         }
     }
 
-    fun Arguments.maxVotes(description: String) = optionalInt("max-votes", description, required = true)
-    fun Arguments.maxChanges(description: String) = optionalInt("max-changes", description, required = true)
-    fun Arguments.showChart(description: String) = optionalBoolean("show-chart", description, required = true)
+    fun Arguments.maxVotes(description: String) = optionalInt {
+        name = "max-votes"
+        this.description = description
+    }
 
-    fun Arguments.hideResults(description: String) = optionalBoolean("hide-results", description, required = true)
-    fun Arguments.publicResults(description: String) = optionalBoolean("public-results", description, required = true)
-    fun Arguments.emojiMode(description: String) = optionalEnum<PollSettings.EmojiMode>(
-        "emoji-mode", description, required = true, "EmojiMode"
-    )
+    fun Arguments.maxChanges(description: String) = optionalInt {
+        name = "max-changes"
+        this.description = description
+    }
+
+    fun Arguments.showChart(description: String) = optionalBoolean {
+        name = "show-chart"
+        this.description = description
+    }
+
+    fun Arguments.hideResults(description: String) = optionalBoolean {
+        name = "hide-results"
+        this.description = description
+    }
+
+    fun Arguments.publicResults(description: String) = optionalBoolean {
+        name = "public-results"
+        this.description = description
+    }
+
+    fun Arguments.emojiMode(description: String) = optionalEnum<PollSettings.EmojiMode> {
+        name = "emoji-mode"
+        this.description = description
+        typeName = "EmojiMode"
+    }
 }
-
-@Suppress("LeakingThis") // This isn't huge of an issue here
+@Suppress("LeakingThis") // This isn't huge
 abstract class AbstractPollSettingsArguments : Arguments(), PollSettingsArguments {
     override val maxVotes by maxVotes("How many times a user is allowed to vote")
     override val maxChanges by maxChanges("How many times a user is allowed to change their vote")

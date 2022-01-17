@@ -11,7 +11,10 @@ import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase
 import dev.schlaubi.mikmusic.util.musicModule
 
 private class SponsorBlockArguments : Arguments() {
-    val enableSponsorBlock by optionalBoolean("use-sponsorblock", "Enable or disable the usage of SponsorBlock")
+    val enableSponsorBlock by optionalBoolean {
+        name = "use-sponsorblock"
+        description = "Enable or disable the usage of SponsorBlock"
+    }
 }
 
 suspend fun SettingsModule.sponsorBlockCommand() {

@@ -70,20 +70,20 @@ suspend fun EphemeralSlashCommand<*>.editRoleSelectionCommand() = ephemeralSubCo
 }
 
 class EditRoleSelectionArguments : Arguments() {
-    val message by message(
-        "message",
-        "The Role-Selection Message to add a Role-Selection to"
-    )
-    val role by role(
-        "role",
-        "The Role to add to the Role-Selection"
-    )
-    val label by optionalString(
-        "label",
-        "The String that shows in the Embed and on the Button"
-    )
-    val emoji by optionalEmoji(
-        "emoji",
-        "The Custom Emoji that should appear in-front the label (Put default emojis in the label)"
-    )
+    val message by message {
+        name = "message"
+        description = "The Role-Selection Message to add a Role-Selection to"
+    }
+    val role by role {
+        name = "role"
+        description = "The Role to add to the Role-Selection"
+    }
+    val label by optionalString {
+        name = "label"
+        description = "The String that shows in the Embed and on the Button"
+    }
+    val emoji by optionalEmoji {
+        name = "emoji"
+        description = "The Custom Emoji that should appear in-front the label (Put default emojis in the label)"
+    }
 }

@@ -18,8 +18,13 @@ import org.litote.kmongo.eq
 import org.litote.kmongo.or
 
 abstract class PlaylistArguments : Arguments() {
-    val name by string("name", "The name of the playlist") { _, value ->
-        getPlaylistOrNull(getUser()!!, value) ?: notFound(value)
+    val name by string {
+        name = "name"
+        description = "The name of the playlist"
+
+        validate {
+            getPlaylistOrNull(context.getUser()!!, value) ?: context.notFound(value)
+        }
     }
 
     private suspend fun CommandContext.notFound(value: String): Nothing {

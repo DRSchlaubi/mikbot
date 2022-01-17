@@ -10,11 +10,11 @@ import space.votebot.core.addMessage
 import space.votebot.core.toEmbed
 
 class StatusArguments : PollArguments("The Message Link to the poll you want to see the status of") {
-    val liveMessage by defaultingBoolean(
-        "live",
-        "Whether you want this to be a message, also accepting votes or not",
-        false
-    )
+    val liveMessage by defaultingBoolean {
+        name = "live"
+        description = "Whether you want this to be a message, also accepting votes or not"
+        defaultValue = false
+    }
 }
 
 suspend fun VoteBotModule.statusCommand() = ephemeralSlashCommand(::StatusArguments) {

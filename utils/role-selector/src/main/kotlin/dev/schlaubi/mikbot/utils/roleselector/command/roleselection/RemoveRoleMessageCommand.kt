@@ -31,8 +31,8 @@ suspend fun EphemeralSlashCommand<*>.removeRoleMessageCommand() = ephemeralSubCo
 }
 
 class RemoveRoleMessageArguments : Arguments() {
-    val message by message(
-        "message",
-        "The Role-Selection Message to remove"
-    )
+    val message by message {
+        name = "message"
+        description = "The Role-Selection Message to remove"
+    }
 }

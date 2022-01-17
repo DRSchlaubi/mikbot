@@ -10,12 +10,16 @@ import dev.schlaubi.mikmusic.playlist.PlaylistDatabase
 
 class PlaylistAddArguments : PlaylistArguments(), QueueOptions {
     override val query by autoCompletedYouTubeQuery("The query to play")
-    override val soundcloud by defaultingBoolean(
-        "soundcloud",
-        "Searches for this item on SoundCloud instead of YouTube",
-        false
-    )
-    val search by defaultingBoolean("search", "Display multiple search results", false)
+    override val soundcloud by defaultingBoolean {
+        name = "soundcloud"
+        description = "Searches for this item on SoundCloud instead of YouTube"
+        defaultValue = false
+    }
+    val search by defaultingBoolean {
+        name = "search"
+        description = "Display multiple search results"
+        defaultValue = false
+    }
     override val top: Boolean = false
     override val force: Boolean = false
 }

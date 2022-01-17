@@ -9,7 +9,10 @@ import dev.schlaubi.mikbot.plugin.api.owner.ownerOnly
 import dev.schlaubi.mikbot.plugin.api.util.confirmation
 
 class VerificationArguments : Arguments() {
-    val guildId by snowflake("guild_id", "The guild id to toggle the verification status on")
+    val guildId by snowflake {
+        name = "guild_id"
+        description = "The guild id to toggle the verification status on"
+    }
 }
 
 suspend fun OwnerModule.unVerifyCommand() =

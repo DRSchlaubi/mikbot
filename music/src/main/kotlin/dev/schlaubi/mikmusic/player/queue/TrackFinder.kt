@@ -31,13 +31,21 @@ interface QueueOptions {
 
 abstract class QueueArguments : Arguments(), QueueOptions {
     override val query by autoCompletedYouTubeQuery("The query to play")
-    override val force by defaultingBoolean("force", "Makes this item skip the queueTracks", false)
-    override val top by defaultingBoolean("top", "Adds this item to the top of the queueTracks", false)
-    override val soundcloud by defaultingBoolean(
-        "soundcloud",
-        "Searches for this item on SoundCloud instead of YouTube",
-        false
-    )
+    override val force by defaultingBoolean {
+        name = "force"
+        description = "Makes this item skip the queueTracks"
+        defaultValue = false
+    }
+    override val top by defaultingBoolean {
+        name = "top"
+        description = "Adds this item to the top of the queueTracks"
+        defaultValue = false
+    }
+    override val soundcloud by defaultingBoolean {
+        name = "soundcloud"
+        description = "Searches for this item on SoundCloud instead of YouTube"
+        defaultValue = false
+    }
 }
 
 suspend fun <T : QueueArguments> EphemeralSlashCommandContext<T>.queueTracks(

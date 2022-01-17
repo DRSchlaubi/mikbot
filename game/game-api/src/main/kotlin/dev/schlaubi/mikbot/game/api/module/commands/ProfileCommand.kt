@@ -14,7 +14,10 @@ import org.litote.kmongo.div
 import org.litote.kmongo.gt
 
 class UnoProfileArguments : Arguments() {
-    val target by optionalUser("user", "The user you want to see the profile of")
+    val target by optionalUser {
+        name = "user"
+        description = "The user you want to see the profile of"
+    }
 }
 
 /**

@@ -11,14 +11,14 @@ import dev.schlaubi.mikbot.plugin.api.settings.SettingsModule
 import java.util.*
 
 private class LanguageArguments : Arguments() {
-    val language by stringChoice(
-        "language", "The language you want to use",
-        mapOf(
-            "German" to SupportedLocales.GERMAN.toLanguageTag(),
-            "Englisch" to SupportedLocales.ENGLISH.toLanguageTag(),
-            "Italian" to Locale("it", "IT").toLanguageTag()
-        )
-    )
+    val language by stringChoice {
+        name = "language"
+        description = "The language you want to use"
+
+        choice("German", SupportedLocales.GERMAN.toLanguageTag())
+        choice("Englisch", SupportedLocales.ENGLISH.toLanguageTag())
+        choice("Italian", Locale("it", "IT").toLanguageTag())
+    }
 }
 
 suspend fun SettingsModule.languageCommand() {

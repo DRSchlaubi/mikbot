@@ -15,7 +15,7 @@ dependencies {
     // Api base
     api(project("annotations"))
     // Bot
-    api("com.kotlindiscord.kord.extensions", "kord-extensions", "1.5.1-MIKBOT")
+    api("com.kotlindiscord.kord.extensions", "kord-extensions", "1.5.2-MIKBOT")
     api("dev.kord.x", "emoji", "0.5.0") {
         exclude("dev.kord")
     }

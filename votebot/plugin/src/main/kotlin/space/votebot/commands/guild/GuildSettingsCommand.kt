@@ -17,7 +17,10 @@ import space.votebot.models.GuildSettings
 import space.votebot.util.checkPermissions
 
 class SetVoteChannelArguments : Arguments() {
-    val channel by channel("channel", "The channel you want to set as the guild vote channel.")
+    val channel by channel {
+        name = "channel"
+        description = "The channel you want to set as the guild vote channel."
+    }
 }
 
 suspend fun SettingsModule.addGuildSettingsCommand() = ephemeralSlashCommand {

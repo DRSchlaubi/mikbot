@@ -14,13 +14,19 @@ interface CreateSettings {
     val settings: PollSettings
     val channel: Channel?
 
-    fun Arguments.voteChannel() = optionalChannel(
-        "channel", "The channel to send the poll in", required = true
-    ) { _, channel ->
-        if (channel?.type != ChannelType.GuildText) {
-            discordError(translate("commands.create.invalid_channel"))
+    fun Arguments.voteChannel() = optionalChannel {
+        name = "channel"
+        description = "The channel to send the poll in"
+
+        validate {
+            if (value?.type != ChannelType.GuildText) {
+                discordError(translate("commands.create.invalid_channel"))
+            }
         }
     }
 
-    fun Arguments.voteTitle() = string("title", "The title of the vote")
+    fun Arguments.voteTitle() = string {
+        name = "title"
+        description = "The title of the vote"
+    }
 }

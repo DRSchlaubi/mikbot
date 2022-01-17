@@ -5,7 +5,10 @@ import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.mikmusic.playlist.PlaylistDatabase
 
 class PlaylistRenameArguments : PlaylistArguments() {
-    val newName by string("new_name", "The new name of the playlist")
+    val newName by string {
+        name = "new_name"
+        description = "The new name of the playlist"
+    }
 }
 
 fun PlaylistModule.renameCommand() = ephemeralSubCommand(::PlaylistRenameArguments) {

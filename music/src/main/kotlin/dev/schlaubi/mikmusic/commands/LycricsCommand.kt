@@ -13,7 +13,10 @@ import dev.schlaubi.mikmusic.util.fetchLyrics
 import dev.schlaubi.mikmusic.util.searchHappiSong
 
 class LyricsArguments : Arguments() {
-    val name by optionalString("song_name", "The name of the song to search for, if no one is playing")
+    val name by optionalString {
+        name = "song_name"
+        description = "The name of the song to search for, if no one is playing"
+    }
 }
 
 suspend fun MusicModule.lyricsCommand() = publicSlashCommand(::LyricsArguments) {

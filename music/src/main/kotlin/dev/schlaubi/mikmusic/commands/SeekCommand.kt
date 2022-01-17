@@ -13,9 +13,14 @@ import kotlin.time.Duration.Companion.seconds
 private val seekRegex = "([0-9]+)(?::([0-9]+))?".toRegex()
 
 class SeekArguments : Arguments() {
-    val to by string("to", "The position to skip to (mm:ss)") { _, value ->
-        if (!value.matches(seekRegex)) {
-            throw DiscordRelayedException(translate("command.seek.invalid_format"))
+    val to by string {
+        name = "to"
+        description = "The position to skip to (mm:ss)"
+
+        validate {
+            if (!value.matches(seekRegex)) {
+                throw DiscordRelayedException(translate("command.seek.invalid_format"))
+            }
         }
     }
 }

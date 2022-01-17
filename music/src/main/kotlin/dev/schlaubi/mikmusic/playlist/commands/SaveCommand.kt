@@ -13,12 +13,19 @@ import dev.schlaubi.mikmusic.playlist.PlaylistDatabase
 import org.litote.kmongo.newId
 
 class PlaylistSaveArguments : Arguments(), QueueOptions {
-    val name by string("name", "The name of the playlist")
-    val public by defaultingBoolean("public", "Whether this playlist is supposed to be public or not", false)
-    val importFrom by optionalString(
-        "import_from",
-        "Link to a Track source (YouTube Video/Playlist, Spotify Song/Playlist/Album) to import"
-    )
+    val name by string {
+        name = "name"
+        description = "The name of the playlist"
+    }
+    val public by defaultingBoolean {
+        name = "public"
+        description = "Whether this playlist is supposed to be public or not"
+        defaultValue = false
+    }
+    val importFrom by optionalString {
+        name = "import_from"
+        description = "Link to a Track source (YouTube Video/Playlist, Spotify Song/Playlist/Album) to import"
+    }
     override val query: String
         get() = importFrom ?: error("Cannot find tracks if importFrom is not specified")
     override val force: Boolean = false

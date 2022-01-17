@@ -11,7 +11,10 @@ import dev.schlaubi.mikmusic.checks.musicQuizAntiCheat
 import dev.schlaubi.mikmusic.util.musicModule
 
 class RemoveArguments : Arguments() {
-    val position by int("position", "The position of the song to remove")
+    val position by int {
+        name = "position"
+        description = "The position of the song to remove"
+    }
 }
 
 suspend fun SongQuizModule.likedSongsCommand() = ephemeralSlashCommand {

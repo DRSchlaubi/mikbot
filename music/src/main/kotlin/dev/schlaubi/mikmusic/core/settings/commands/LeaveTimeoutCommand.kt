@@ -15,11 +15,21 @@ import kotlin.time.Duration.Companion.minutes
 private val limit = 10.minutes
 
 class LeaveTimeoutArguments : Arguments() {
-    val timeout by duration("timeout", "The amount of time until the bot times out", validator = { _, timeout ->
-        if (timeout.toDuration() > limit) {
-            throw DiscordRelayedException(translate("command.leave_timeout.limit_exceeded", arrayOf(limit)))
+    val timeout by duration {
+        name = "timeout"
+        description = "The amount of time until the bot times out"
+
+        validate {
+            if (value.toDuration() > limit) {
+                throw DiscordRelayedException(
+                    translate(
+                        "command.leave_timeout.limit_exceeded",
+                        replacements = arrayOf(limit)
+                    )
+                )
+            }
         }
-    })
+    }
 }
 
 suspend fun SettingsModule.leaveTimeoutCommand() = ephemeralSlashCommand(::LeaveTimeoutArguments) {

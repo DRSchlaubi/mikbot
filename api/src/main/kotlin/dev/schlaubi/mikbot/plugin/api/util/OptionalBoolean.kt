@@ -33,12 +33,13 @@ private fun Arguments.unSettableBooleanString(
     displayName: String,
     description: String,
     validator: Validator<String?> = null
-) = optionalStringChoice(
-    displayName, description,
-    mapOf(
-        "True" to UnSetableBoolean.TRUE.name,
-        "False" to UnSetableBoolean.FALSE.name,
-        "Unset" to UnSetableBoolean.UNSET.name
-    ),
-    validator = validator
-)
+) = optionalStringChoice {
+    name = displayName
+    this.description = description
+
+    choice("True", UnSetableBoolean.TRUE.name)
+    choice("False", UnSetableBoolean.FALSE.name)
+    choice("Unset", UnSetableBoolean.UNSET.name)
+
+    validate(validator)
+}

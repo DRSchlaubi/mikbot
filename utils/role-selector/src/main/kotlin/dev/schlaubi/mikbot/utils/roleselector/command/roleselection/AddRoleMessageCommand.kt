@@ -52,8 +52,20 @@ suspend fun EphemeralSlashCommand<*>.addRoleMessageCommand() = ephemeralSubComma
 }
 
 class CreateRoleMessageArguments : Arguments() {
-    val title by string("title", "The Title of the Message Embed")
-    val description by optionalString("description", "The description of this role selection Embed")
-    val embedColor by optionalColor("color", "The Color of the Role-Selection Embed")
-    val channel by optionalChannel("channel", "The Channel to send the message to (if not given, current channel will be used)")
+    val title by string {
+        name = "title"
+        description = "The Title of the Message Embed"
+    }
+    val description by optionalString {
+        name = "description"
+        description = "The description of this role selection Embed"
+    }
+    val embedColor by optionalColor {
+        name = "color"
+        description = "The Color of the Role-Selection Embed"
+    }
+    val channel by optionalChannel {
+        name = "channel"
+        description = "The Channel to send the message to (if not given, current channel will be used)"
+    }
 }

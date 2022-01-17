@@ -9,7 +9,10 @@ import space.votebot.core.VoteBotModule
 import space.votebot.core.updateMessages
 
 class ChangeHeadingArguments : PollArguments("The Message Link to the poll you want to change the heading of") {
-    val heading by string("new-heading", "The new heading")
+    val heading by string {
+        name = "new-heading"
+        description = "The new heading"
+    }
 }
 
 suspend fun VoteBotModule.changeHeadingCommand() = ephemeralSlashCommand(::ChangeHeadingArguments) {

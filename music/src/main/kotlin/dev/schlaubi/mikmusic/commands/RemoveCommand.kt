@@ -15,12 +15,21 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 
 class RemoveSingleSongArguments : Arguments() {
-    val position by int("position", "The position of the song to remove")
+    val position by int {
+        name = "position"
+        description = "The position of the song to remove"
+    }
 }
 
 class RemoveRangeSongArguments : Arguments() {
-    val from by int("from", "The position of the first song to remove")
-    val to by int("to", "The position of the last song to remove")
+    val from by int {
+        name = "from"
+        description = "The position of the first song to remove"
+    }
+    val to by int {
+        name = "to"
+        description = "The position of the last song to remove"
+    }
 }
 
 suspend fun MusicModule.removeCommand() = ephemeralControlSlashCommand {

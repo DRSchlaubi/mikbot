@@ -18,6 +18,7 @@ public abstract class PatchPropertiesTask extends DefaultTask {
 
     @TaskAction
     public void runTask() throws IOException {
+        if(!getDidWork()) return;
         var properties = new Properties();
 
         var extension = ((PluginExtension) getProject().getExtensions()

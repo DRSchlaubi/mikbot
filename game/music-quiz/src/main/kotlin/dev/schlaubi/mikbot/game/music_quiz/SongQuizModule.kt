@@ -22,11 +22,18 @@ import dev.schlaubi.mikmusic.player.queue.getPlaylist
 import org.litote.kmongo.coroutine.CoroutineCollection
 
 open class SongQuizSizeArguments : Arguments() {
-    val size by defaultingInt("size", "How many songs of the playlist the game should ask", 25)
+    val size by defaultingInt {
+        name = "size"
+        description = "How many songs of the playlist the game should ask"
+        defaultValue = 25
+    }
 }
 
 open class SongQuizPlaylistArguments : SongQuizSizeArguments() {
-    val playlist by string("playlist", "The URL to the spotify playlist you want to quiz about")
+    val playlist by string {
+        name = "playlist"
+        description = " The URL to the spotify playlist you want to quiz about"
+    }
 
     init {
         // Fix optional argument size being before required argument playlist

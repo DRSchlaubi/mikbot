@@ -6,7 +6,10 @@ import dev.schlaubi.mikmusic.playlist.PlaylistDatabase
 import dev.schlaubi.mikmusic.util.format
 
 class PlaylistRemoveArguments : PlaylistArguments() {
-    val index by int("index", "The index of the track to remove")
+    val index by int {
+        name = "index"
+        description = "The index of the track to remove"
+    }
 }
 
 fun PlaylistModule.removeCommand() = ephemeralSubCommand(::PlaylistRemoveArguments) {

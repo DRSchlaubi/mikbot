@@ -11,7 +11,11 @@ import org.litote.kmongo.eq
 import org.litote.kmongo.or
 
 class PlayListListArguments : Arguments() {
-    val onlyMine by defaultingBoolean("only_mine", "Just show my playlist", false)
+    val onlyMine by defaultingBoolean {
+        name = "only_mine"
+        description = "Just show my playlist"
+        defaultValue = false
+    }
 }
 
 fun PlaylistModule.listCommand() = ephemeralSubCommand(::PlayListListArguments) {

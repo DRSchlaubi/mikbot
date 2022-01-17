@@ -11,7 +11,10 @@ import dev.schlaubi.mikmusic.core.MusicModule
 import dev.schlaubi.mikmusic.util.addSong
 
 class NowPlayingArguments : Arguments() {
-    val index by optionalInt("position", "The number of the song in the queue to display the info for")
+    val index by optionalInt {
+        name = "position"
+        description = "The number of the song in the queue to display the info for"
+    }
 }
 
 private val regex = """\.[0-9]*""".toRegex()

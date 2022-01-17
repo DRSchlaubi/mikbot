@@ -8,6 +8,7 @@ import com.mongodb.client.model.Filters.and
 import dev.kord.common.entity.Permission
 import dev.kord.core.behavior.interaction.suggestString
 import dev.kord.core.entity.interaction.GuildAutoCompleteInteraction
+import dev.kord.rest.request.KtorRequestException
 import dev.schlaubi.mikbot.plugin.api.util.discordError
 import info.debatty.java.stringsimilarity.Levenshtein
 import org.litote.kmongo.eq
@@ -35,10 +36,14 @@ abstract class PollArguments(pollArgumentDescription: String) : Arguments() {
                     .sortedBy { levenshtein.distance(safeInput, it.title, 50) }
 
                 if (possible.isNotEmpty()) {
-                    suggestString {
-                        possible.subList(0, 25.coerceAtMost(possible.size)).forEach {
-                            choice(it.title, it.messages.first().jumpUrl)
+                    try {
+                        suggestString {
+                            possible.subList(0, 25.coerceAtMost(possible.size)).forEach {
+                                choice(it.title, it.messages.first().jumpUrl)
+                            }
                         }
+                    } catch (ignored: KtorRequestException) {
+
                     }
                 }
             }

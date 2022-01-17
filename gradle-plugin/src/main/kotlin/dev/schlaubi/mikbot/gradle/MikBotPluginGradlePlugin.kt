@@ -62,7 +62,6 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
         tasks.run {
             task<PatchPropertiesTask>("patchPluginProperties") {
                 group = "mikbot-plugin"
-
                 dependsOn("kspKotlin")
                 propertiesFile.set(
                     project
@@ -70,6 +69,12 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
                         .pluginMainFileLocation
                         .getOrElse(project.pluginMainFile)
                 )
+
+                doFirst {
+                    if (!project.tasks.getByName("kspKotlin").didWork) {
+                        this.didWork = false
+                    }
+                }
             }
         }
 

@@ -159,7 +159,7 @@ class HangmanGame(
                             GameState.Done(players.first { it.user == event.message.author }, guessingState.word)
                     (wrongChars.size + blackList.size) >= maxTries ->
                         state =
-                            GameState.Done(players.first { it.user == wordOwner }, guessingState.word)
+                            GameState.Done(leftPlayers.first { it.user == wordOwner }, guessingState.word)
                     else -> welcomeMessage.edit {
                         embeds = mutableListOf(toEmbed())
                     }

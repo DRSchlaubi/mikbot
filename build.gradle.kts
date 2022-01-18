@@ -51,11 +51,6 @@ dependencies {
     implementation("dev.schlaubi", "envconf", "1.1")
     implementation("org.jetbrains.kotlinx", "kotlinx-serialization-json", "1.3.2")
 
-    implementation("dev.kord", "kord-core", "feature-interaction-i18n-SNAPSHOT") {
-        version {
-            strictly("feature-interaction-i18n-SNAPSHOT")
-        }
-    }
     implementation(project(":api"))
     implementation(kotlin("reflect"))
 }

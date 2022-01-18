@@ -50,7 +50,7 @@ class HangmanGame(
     override val playerRange: IntRange = 2..Int.MAX_VALUE
     private lateinit var winner: HangmanPlayer
     override val wonPlayers: List<HangmanPlayer>
-        get() = if(::wonPlayers.isInitialized) listOf(winner) else emptyList()
+        get() = if (::winner.isInitialized) listOf(winner) else emptyList()
     private val gameCompleter by lazy { CompletableDeferred<Unit>() }
     private var state: GameState = GameState.WaitingForWord
 
@@ -252,7 +252,7 @@ class HangmanGame(
         private const val smallG = "<:google_g:933015489326772304>"
         private const val l = "<:google_I:933015488433369088>"
 
-        val googologo = listOf(capitalG, redO, yellowO, smallG, redO, l, smallG, yellowO)
+        val googologo = listOf(capitalG, redO, yellowO, smallG, redO, l, yellowO, smallG, redO)
         val maxTries = googologo.size
     }
 }

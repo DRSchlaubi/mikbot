@@ -50,7 +50,7 @@ class HangmanGame(
     override val playerRange: IntRange = 2..Int.MAX_VALUE
     private lateinit var winner: HangmanPlayer
     override val wonPlayers: List<HangmanPlayer>
-        get() = listOfNotNull(winner)
+        get() = if(::wonPlayers.isInitialized) listOf(winner) else emptyList()
     private val gameCompleter by lazy { CompletableDeferred<Unit>() }
     private var state: GameState = GameState.WaitingForWord
 

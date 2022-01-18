@@ -48,7 +48,7 @@ class HangmanGame(
 ) : AbstractGame<HangmanPlayer>(host, module) {
     private val wordOwner = lastWinner ?: host
     override val playerRange: IntRange = 2..Int.MAX_VALUE
-    private var winner: HangmanPlayer? = null
+    private lateinit var winner: HangmanPlayer
     override val wonPlayers: List<HangmanPlayer>
         get() = listOfNotNull(winner)
     private val gameCompleter by lazy { CompletableDeferred<Unit>() }
@@ -145,10 +145,19 @@ class HangmanGame(
             state.takeIfIsInstance<GameState.Guessing> {
                 val guessedChars = chars.map { it.lowercase() }
                 when {
-                    guessedChars.containsAll(word.map { it.lowercase() }.distinct()) ->
+                    guessedChars.containsAll(
+                        word
+                            .asSequence()
+                            .map { it.lowercase() }
+                            .filterNot { it.isBlank() } // you do not have to guess white spaces
+                            .distinct()
+                            .toList()
+                    ) ->
                         state =
                             GameState.Done(players.first { it.user == event.message.author }, guessingState.word)
-                    (wrongChars.size + blackList.size) >= maxTries -> state = GameState.Done(null, guessingState.word)
+                    (wrongChars.size + blackList.size) >= maxTries ->
+                        state =
+                            GameState.Done(players.first { it.user == wordOwner }, guessingState.word)
                     else -> welcomeMessage.edit {
                         embeds = mutableListOf(toEmbed())
                     }
@@ -178,7 +187,7 @@ class HangmanGame(
     override suspend fun end() {
         state.close()
         // TODO: Make this a sticker
-        if (state is GameState.Done && winner == null) {
+        if (state is GameState.Done && winner.user == wordOwner) {
             welcomeMessage.reply {
                 content = "https://media.discordapp.net/stickers/861039079151763486.png"
             }
@@ -189,7 +198,7 @@ class HangmanGame(
         if (!running) return
 
         val word = (state as? GameState.HasWord)?.word ?: return
-        if (winner == null) {
+        if (winner.user == wordOwner) {
             description = "So no one was clever enough to guess it but the Word was: `$word`"
         } else {
             field {
@@ -210,7 +219,7 @@ class HangmanGame(
                         val gameMessage = gameThread.createEmbed { description = "The game will begin shortly" }
                         gameMessage.pin(reason = "Game Welcome message")
                         val game = HangmanGame(
-                            winner?.user, host, module as HangmanModule, gameMessage, gameThread, translationsProvider
+                            winner.user, host, module as HangmanModule, gameMessage, gameThread, translationsProvider
                         )
                         val actualPlayers = players + HangmanPlayer(wordOwner)
                         module.registerGame(gameThread.id, game)
@@ -268,7 +277,7 @@ sealed interface GameState {
         }
     }
 
-    data class Done(val winner: HangmanPlayer?, override val word: String) : GameState, HasWord
+    data class Done(val winner: HangmanPlayer, override val word: String) : GameState, HasWord
 }
 
 inline fun <reified T : GameState> GameState.takeIfIsInstance(block: T.() -> Unit) {

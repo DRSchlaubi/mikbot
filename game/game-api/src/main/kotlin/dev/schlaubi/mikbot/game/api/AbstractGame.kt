@@ -50,7 +50,7 @@ abstract class AbstractGame<T : Player>(
         Dispatchers.IO + SupervisorJob() + CoroutineExceptionHandler { coroutineContext, throwable ->
             LOG.debug(throwable) { "An error occurred in Game $coroutineContext " }
         }
-    private val leftPlayers = mutableListOf<T>()
+    protected val leftPlayers = mutableListOf<T>()
 
     abstract val playerRange: IntRange
     abstract val thread: ThreadChannelBehavior

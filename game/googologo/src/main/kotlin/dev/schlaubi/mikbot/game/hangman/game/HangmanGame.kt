@@ -61,9 +61,11 @@ class HangmanGame(
     ): HangmanPlayer = HangmanPlayer(user)
 
     private suspend fun retrieveWord(): String? {
-        players.removeIf { it.user == wordOwner }
+        val wordOwner = players.first { it.user == wordOwner }
+        players.remove(wordOwner)
+        leftPlayers.add(wordOwner)
         val message = thread.createMessage(
-            """${wordOwner.mention} you got randomly,
+            """${wordOwner.user.mention} you got randomly,
                 |..., I mean not really randomly, much more specifically,
                 |anyways,
                 |you were selected to chose the word, so please send me a DM with your word of choice 
@@ -73,13 +75,13 @@ class HangmanGame(
 
         val wordEvent = kord.waitFor<MessageCreateEvent>(1.minutes.inWholeMilliseconds) {
             // Check if message is from wordOwner
-            this.message.channel.asChannelOfOrNull<DmChannel>()?.recipientIds?.contains(wordOwner.id) == true
+            this.message.channel.asChannelOfOrNull<DmChannel>()?.recipientIds?.contains(wordOwner.user.id) == true
         }
         message.delete()
 
         if (wordEvent == null) {
             thread.createMessage {
-                content = "Because ${wordOwner.mention} took to long this game is now over, what an egoistic idiot?"
+                content = "Because ${wordOwner.user.mention} took too long this game is now over, what an egoistic idiot?"
             }
             softEnd()
             return null
@@ -93,7 +95,7 @@ class HangmanGame(
             }
 
             thread.createMessage {
-                content = """${wordOwner.mention} is too dumb to follow simple instructions, which made us think,
+                content = """${wordOwner.user.mention} is too dumb to follow simple instructions, which made us think,
                         |they might be an Apple user, so if you know that's the case feel free to bully them, and if not
                         |bully them anyways, because they were to stupid to follow simple instructions
                     """.trimMargin()

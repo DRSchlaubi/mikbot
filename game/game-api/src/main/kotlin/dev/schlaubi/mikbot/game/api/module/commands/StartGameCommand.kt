@@ -5,19 +5,39 @@ import com.kotlindiscord.kord.extensions.checks.types.CheckContext
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.application.slash.PublicSlashCommandContext
 import com.kotlindiscord.kord.extensions.types.respond
-import dev.kord.common.entity.ButtonStyle
 import dev.kord.common.entity.Permission
 import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
 import dev.kord.core.entity.Message
 import dev.kord.core.event.interaction.InteractionCreateEvent
-import dev.kord.rest.builder.message.create.actionRow
 import dev.kord.rest.builder.message.create.embed
 import dev.schlaubi.mikbot.game.api.AbstractGame
-import dev.schlaubi.mikbot.game.api.joinGameButton
-import dev.schlaubi.mikbot.game.api.leaveButton
 import dev.schlaubi.mikbot.game.api.module.GameModule
-import dev.schlaubi.mikbot.game.api.startGameButton
+
+/**
+ * Adds a /profile command to this [profileCommand].
+ *
+ * @param gameTitleKey the translation key for the embed title
+ * @param threadName the thread name of the game thread
+ * @param arguments the argument body for this command
+ * @param makeNewGame a lambda creating a new game
+ */
+fun <G : AbstractGame<*>> GameModule<*, G>.startGameCommand(
+    gameTitleKey: String,
+    threadName: String,
+    makeNewGame: suspend PublicSlashCommandContext<Arguments>.(gameMessage: Message, gameThread: ThreadChannelBehavior) -> G?,
+    additionalChecks: suspend CheckContext<InteractionCreateEvent>.() -> Unit = {},
+    name: String = "start",
+    description: String = "Starts a new match"
+) = startGameCommand(
+    gameTitleKey,
+    threadName,
+    ::Arguments,
+    makeNewGame,
+    additionalChecks,
+    name,
+    description
+)
 
 /**
  * Adds a /profile command to this [profileCommand].
@@ -87,19 +107,8 @@ fun <A : Arguments, G : AbstractGame<*>, Data> GameModule<*, G>.startGameCommand
                     text = translateGlobal("game.header.footer")
                 }
             }
-
-            actionRow {
-                interactionButton(ButtonStyle.Success, joinGameButton) {
-                    label = translateGlobal("game.header.join")
-                }
-
-                interactionButton(ButtonStyle.Primary, startGameButton) {
-                    label = translateGlobal("game.header.start")
-                }
-
-                leaveButton(translateGlobal("game.header.leave"))
-            }
         }
+
         gameMessage.pin(reason = "Game Welcome message")
         val game = makeNewGame(data, gameMessage, gameThread) ?: return@action
         game.doUpdateWelcomeMessage()

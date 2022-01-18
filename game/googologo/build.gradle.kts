@@ -4,14 +4,13 @@ plugins {
 }
 
 group = "dev.schlaubi.mikbot"
-version = "1.1.3"
+version = "1.0.0"
 
 dependencies {
     plugin(projects.game.gameApi)
-    implementation(projects.game.uno)
     optionalPlugin(projects.core.gdpr)
 }
 
 mikbotPlugin {
-    description.set("Plugin adding functionality to play UNO on Discord")
+    description.set("Hangman but with family friendly")
 }

@@ -21,10 +21,13 @@ import dev.schlaubi.mikbot.game.api.events.interactionHandler
 import dev.schlaubi.mikbot.game.api.events.watchThread
 import dev.schlaubi.mikbot.game.api.module.GameModule
 import kotlinx.coroutines.*
+import mu.KotlinLogging
 import org.koin.core.component.KoinComponent
 import org.litote.kmongo.coroutine.CoroutineCollection
 import kotlin.coroutines.CoroutineContext
 import kotlin.time.Duration.Companion.minutes
+
+private val LOG = KotlinLogging.logger { }
 
 /**
  * Abstract implementation of a game.
@@ -43,7 +46,10 @@ abstract class AbstractGame<T : Player>(
     val module: GameModule<T, out AbstractGame<T>>
 ) : KoinComponent, CoroutineScope {
     val players: MutableList<T> = mutableListOf()
-    override val coroutineContext: CoroutineContext = Dispatchers.IO + SupervisorJob()
+    override val coroutineContext: CoroutineContext =
+        Dispatchers.IO + SupervisorJob() + CoroutineExceptionHandler { coroutineContext, throwable ->
+            LOG.debug(throwable) { "An error occurred in Game $coroutineContext " }
+        }
     private val leftPlayers = mutableListOf<T>()
 
     abstract val playerRange: IntRange
@@ -83,7 +89,7 @@ abstract class AbstractGame<T : Player>(
     /**
      * Adds the welcome message content to this embed builder (add game state to embed).
      */
-    protected abstract fun EmbedBuilder.addWelcomeMessage()
+    protected open fun EmbedBuilder.addWelcomeMessage() = Unit
 
     /**
      * Event handler called if [event] made [player] rejoin.
@@ -180,10 +186,11 @@ abstract class AbstractGame<T : Player>(
      * Ends the game.
      */
     @Suppress("SuspendFunctionOnCoroutineScope") // we don't want this to have the same context
-    suspend fun doEnd() {
+    suspend fun doEnd(abrupt: Boolean = false) {
         if (gameJob?.isActive == true) {
             gameJob!!.cancel()
         }
+        running = !abrupt
         silentEnd = true
         end()
         module.unregisterGame(thread.id)
@@ -195,7 +202,6 @@ abstract class AbstractGame<T : Player>(
         welcomeMessage.edit {
             components = mutableListOf()
             embed {
-                endEmbed()
                 description = "Winners: "
 
                 if (running && wonPlayers.isNotEmpty()) {
@@ -207,11 +213,12 @@ abstract class AbstractGame<T : Player>(
                 } else {
                     description = "The game ended abruptly"
                 }
+                endEmbed(this@edit)
             }
         }
 
         launch {
-            delay(2.minutes) // delay so users cann discuss game end and click the stats button
+            delay(2.minutes) // delay so users can discuss game end and click the stats button
             thread.edit {
                 reason = "Game ended"
                 archived = true
@@ -229,7 +236,7 @@ abstract class AbstractGame<T : Player>(
     /**
      * Adds additional UI to the end embed.
      */
-    protected open fun EmbedBuilder.endEmbed() = Unit
+    protected open suspend fun EmbedBuilder.endEmbed(messageModifyBuilder: MessageModifyBuilder) = Unit
 
     private suspend fun updateStats() {
         // Winning against yourself, doesn't count

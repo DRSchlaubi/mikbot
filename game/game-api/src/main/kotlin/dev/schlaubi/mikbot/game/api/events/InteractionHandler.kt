@@ -5,7 +5,6 @@ import dev.kord.core.behavior.interaction.respondEphemeral
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.core.on
 import dev.schlaubi.mikbot.game.api.*
-import kotlinx.coroutines.launch
 
 internal fun <T : Player> AbstractGame<T>.interactionHandler() = kord.on<ComponentInteractionCreateEvent> {
     if (interaction.message?.id != welcomeMessage.id) return@on
@@ -26,9 +25,8 @@ internal fun <T : Player> AbstractGame<T>.interactionHandler() = kord.on<Compone
             }
 
             interaction.acknowledgeEphemeralDeferredMessageUpdate()
-            launch {
-                doStart()
-            }
+
+            doStart()
         }
         leaveGameButton -> {
             interaction.acknowledgeEphemeralDeferredMessageUpdate()

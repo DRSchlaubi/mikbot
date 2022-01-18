@@ -35,6 +35,6 @@ fun GameModule<*, *>.stopGameCommand() = ephemeralSubCommand {
             content = translateGlobal("commands.stop_game.success")
         }
 
-        game.doEnd()
+        game.doEnd(true)
     }
 }

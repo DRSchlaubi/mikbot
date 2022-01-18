@@ -16,6 +16,7 @@ include(
     "game:game-api",
     "game:uno-game",
     "game:music-quiz",
+    "game:googologo",
     "utils",
     "utils:ktor",
     "utils:verification-system",

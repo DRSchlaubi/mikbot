@@ -34,15 +34,6 @@ mikbotPlugin {
     license.set("MIT")
 }
 
-tasks {
-    task<Copy>("buildAndCopy") {
-        dependsOn(assemblePlugin)
-        from(assemblePlugin)
-        include("*.zip")
-        into("plugins")
-    }
-}
-
 ```
 
 And then you can run `./gradlew assemblePlugin` to get your plugin.zip file.
@@ -145,6 +136,14 @@ Instead of running `gradle assemble`, now run `gradle buildAndCopy` to automatic
 Then use `docker-compose -f dev.docker-compose.yaml up`.
 
 </details>
+
+# Running
+You can simply run a bot with the plugin installed by running `gradle runBot`, please set all required environment variables like this in a `.test-env` file
+```
+DISCORD_TOKEN=thetoken
+```
+
+If you want to use any core plugins please download them using the `DOWNLOAD_PLUGINS` environment variable
 
 # Publishing
 Please read [this](gradle-plugin/README.md#publishing) to learn how to publish plugins

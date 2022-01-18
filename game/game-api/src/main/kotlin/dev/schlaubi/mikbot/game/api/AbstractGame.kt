@@ -186,18 +186,19 @@ abstract class AbstractGame<T : Player>(
      * Ends the game.
      */
     @Suppress("SuspendFunctionOnCoroutineScope") // we don't want this to have the same context
-    suspend fun doEnd(abrupt: Boolean = false) {
+    suspend fun doEnd(abrupt: Boolean = false) = coroutineScope {
         if (gameJob?.isActive == true) {
             gameJob!!.cancel()
+        }
+        if (running) {
+            launch {
+                updateStats()
+            }
         }
         running = !abrupt
         silentEnd = true
         end()
         module.unregisterGame(thread.id)
-
-        if (running) {
-            updateStats()
-        }
 
         welcomeMessage.edit {
             components = mutableListOf()

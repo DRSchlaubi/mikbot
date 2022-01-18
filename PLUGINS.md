@@ -30,6 +30,8 @@ dependencies {
 
 mikbotPlugin {
     description.set("This is a cool plugin!")
+    provider.set("Schlaubi")
+    license.set("MIT")
 }
 
 tasks {

@@ -1,6 +1,5 @@
 package dev.schlaubi.mikbot.util_plugins.botblock
 
-import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
 import io.ktor.client.*
 import io.ktor.client.features.*
@@ -26,7 +25,7 @@ private val client = HttpClient {
 
 data class UpdateServerCountRequest(
     val serverCount: Long,
-    val botId: Snowflake,
+    val botId: String,
     val shards: List<Long>,
     val tokens: Map<String, String>
 ) {
@@ -51,7 +50,7 @@ suspend fun Kord.postStats(tokens: Map<String, String>) = client.post<Unit>("htt
     )
     body = UpdateServerCountRequest(
         allGuilds.size.toLong(),
-        selfId,
+        selfId.toString(),
         byShard,
         tokens
     ).toJsonElement()

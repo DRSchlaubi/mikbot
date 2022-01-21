@@ -3,6 +3,7 @@ package dev.schlaubi.mikmusic.autocomplete
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.converters.SingleConverter
 import com.kotlindiscord.kord.extensions.commands.converters.impl.string
+import com.kotlindiscord.kord.extensions.utils.focusedOption
 import dev.kord.core.behavior.interaction.suggestString
 
 /**
@@ -12,7 +13,9 @@ fun Arguments.autoCompletedYouTubeQuery(description: String): SingleConverter<St
     name = AUTOCOMPLETE_QUERY_OPTION
     this.description = description
 
-    autoComplete { _, input ->
+    autoComplete {
+        val input = focusedOption.value?.toString()
+
         if (!input.isNullOrBlank()) {
             val youtubeResult = requestYouTubeAutoComplete(input)
             suggestString {

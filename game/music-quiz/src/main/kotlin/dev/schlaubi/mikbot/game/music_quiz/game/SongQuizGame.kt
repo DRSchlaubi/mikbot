@@ -3,12 +3,9 @@ package dev.schlaubi.mikbot.game.music_quiz.game
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
 import com.wrapper.spotify.model_objects.specification.Track
 import dev.kord.common.annotation.KordPreview
-import dev.kord.common.entity.ButtonStyle
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.UserBehavior
-import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
-import dev.kord.core.behavior.edit
 import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.edit
 import dev.kord.core.behavior.interaction.followUpEphemeral
@@ -18,47 +15,41 @@ import dev.kord.core.entity.User
 import dev.kord.core.entity.interaction.InteractionFollowup
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.rest.builder.message.EmbedBuilder
-import dev.kord.rest.builder.message.create.actionRow
-import dev.kord.rest.builder.message.create.embed
-import dev.schlaubi.mikbot.game.api.AbstractGame
-import dev.schlaubi.mikbot.game.api.module.GameModule
+import dev.schlaubi.lavakord.rest.TrackResponse
+import dev.schlaubi.lavakord.rest.loadItem
 import dev.schlaubi.mikbot.game.api.translate
-import dev.schlaubi.mikbot.plugin.api.util.componentLive
+import dev.schlaubi.mikbot.game.multiple_choice.MultipleChoiceGame
+import dev.schlaubi.mikbot.game.multiple_choice.player.MultipleChoicePlayer
+import dev.schlaubi.mikbot.game.music_quiz.LikedSongs
+import dev.schlaubi.mikbot.game.music_quiz.MusicQuizDatabase
+import dev.schlaubi.mikbot.game.music_quiz.SongQuizModule
+import dev.schlaubi.mikbot.game.music_quiz.toLikedSong
 import dev.schlaubi.mikmusic.player.MusicPlayer
 import dev.schlaubi.mikmusic.player.PersistentPlayerState
 import dev.schlaubi.mikmusic.player.applyToPlayer
+import dev.schlaubi.mikmusic.player.queue.findTrack
 import dev.schlaubi.mikmusic.player.queue.spotifyUriToUrl
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlin.time.Duration.Companion.minutes
-
-private const val requestStats = "request_stats"
+import dev.schlaubi.mikmusic.player.queue.toNamedTrack
+import dev.schlaubi.lavakord.audio.player.Track as LavalinkTrack
 
 class SongQuizGame(
     host: UserBehavior,
-    module: GameModule<SongQuizPlayer, out AbstractGame<SongQuizPlayer>>,
-    val quizSize: Int,
+    module: SongQuizModule,
+    quizSize: Int,
     val musicPlayer: MusicPlayer,
-    val trackContainer: TrackContainer,
+    trackContainer: TrackContainer,
     override val thread: ThreadChannelBehavior,
     override val welcomeMessage: Message,
     override val translationsProvider: TranslationsProvider
-) : AbstractGame<SongQuizPlayer>(host, module) {
+) : MultipleChoiceGame<MultipleChoicePlayer, TrackQuestion, TrackContainer>(host, module, quizSize, trackContainer) {
     override val playerRange: IntRange = 1..10
-    val gameStats = mutableMapOf<Snowflake, Statistics>()
     private var beforePlayerState: PersistentPlayerState? = null
-    lateinit var currentTrack: Track
-    override val wonPlayers: List<SongQuizPlayer>
-        get() =
-            players.sortedByDescending {
-                gameStats[it.user.id] ?: Statistics(0, emptyList(), quizSize)
-            }
+//    lateinit var currentTrack: Track
 
     override fun EmbedBuilder.addWelcomeMessage() {
         field {
             name = "Playlist"
-            value = trackContainer.spotifyPlaylist.uri.spotifyUriToUrl()
+            value = questionContainer.spotifyPlaylist.uri.spotifyUriToUrl()
         }
     }
 
@@ -71,13 +62,21 @@ class SongQuizGame(
             loading.edit { content = translate(user, "song_quiz.controls.joined") }
         }
 
-    override suspend fun onRejoin(event: ComponentInteractionCreateEvent, player: SongQuizPlayer) {
+    override suspend fun askQuestion(question: TrackQuestion) {
+        val lavalinkTrack = findTrack(question.track) ?: return
+
+        musicPlayer.player.playTrack(lavalinkTrack)
+
+        super.askQuestion(question)
+    }
+
+    override suspend fun onRejoin(event: ComponentInteractionCreateEvent, player: MultipleChoicePlayer) {
         event.interaction.respondEphemeral {
             content = translate(event.interaction.user, "song_quiz.controls.rejoined")
         }
     }
 
-    override suspend fun onJoin(ack: EphemeralInteractionResponseBehavior, player: SongQuizPlayer) {
+    override suspend fun onJoin(ack: EphemeralInteractionResponseBehavior, player: MultipleChoicePlayer) {
         val member = player.user.asMember(thread.guild.id)
         val voiceState = member.getVoiceStateOrNull()
         if (voiceState?.channelId != musicPlayer.lastChannelId?.let { Snowflake(it) }) {
@@ -99,10 +98,8 @@ class SongQuizGame(
         musicPlayer.updateMusicChannelState(true)
         doUpdateWelcomeMessage()
         musicPlayer.clearQueue()
-        val iterator = trackContainer.iterator()
-        while (iterator.hasNext()) {
-            turn(iterator.next())
-        }
+
+        super.runGame()
     }
 
     @OptIn(KordPreview::class)
@@ -117,59 +114,47 @@ class SongQuizGame(
             state.schedulerOptions.applyToPlayer(musicPlayer)
             state.applyToPlayer(musicPlayer)
         }
-        doUpdateWelcomeMessage()
-        launch {
-            endStats()
+        super.end()
+    }
+
+    override suspend fun EmbedBuilder.addQuestion(question: TrackQuestion, hideCorrectAnswer: Boolean) {
+        if (hideCorrectAnswer) {
+            title = question.title
+        } else {
+            addTrack(question.track)
         }
     }
 
-    @OptIn(KordPreview::class)
-    private suspend fun endStats() {
-        if (players.isNotEmpty() && running) {
-            val message = thread.createMessage {
-                embed {
-                    title = "Game final results"
+    private suspend fun findTrack(track: Track): LavalinkTrack? {
+        val previewLoadResult = track.previewUrl?.let { musicPlayer.loadItem(it) }
 
-                    addGameEndEmbed(this@SongQuizGame)
-                }
-
-                actionRow {
-                    interactionButton(ButtonStyle.Primary, requestStats) {
-                        label = "See how bad you were"
-                    }
-                }
-            }
-            val live = message.componentLive()
-            live.onInteraction {
-                val user = interaction.user
-                val winner = wonPlayers.firstOrNull()?.user
-                val statistics = gameStats[interaction.user.id]
-                interaction.respondEphemeral {
-                    if (statistics == null) {
-                        content = translate(user, "song_quiz.game.not_in_game")
-                    } else if (user.id == winner?.id) {
-                        content = translate(user, "song_quiz.game.won")
-                    } else {
-                        embed {
-                            addUserStats(
-                                user,
-                                gameStats[user.id] ?: Statistics(
-                                    0,
-                                    emptyList(), quizSize
-                                )
-                            )
-                        }
-                    }
-                }
-            }
-
-            delay(1.minutes)
-            message.edit { components = mutableListOf() }
-            live.cancel()
+        if (previewLoadResult?.loadType == TrackResponse.LoadType.TRACK_LOADED) {
+            return previewLoadResult.track.toTrack()
         }
+
+        val youtubeTrack = track.toNamedTrack().findTrack(musicPlayer)
+
+        if (youtubeTrack == null) {
+            thread.createMessage("There was an error whilst finding the media for the next song, so I skipped it")
+            return null
+        }
+        thread.createMessage("Spotify doesn't have a preview for this song, so I looked it up on YouTube, the quality might be slightly worse")
+
+        return youtubeTrack
     }
 
-    override suspend fun EmbedBuilder.addWinnerGamecard() = addGameEndEmbed(this@SongQuizGame)
+    override suspend fun ComponentInteractionCreateEvent.handle(question: TrackQuestion): Boolean {
+        if (interaction.componentId == "like") {
+            interaction.respondEphemeral {
+                val likedSongs =
+                    MusicQuizDatabase.likedSongs.findOneById(interaction.user.id) ?: LikedSongs(interaction.user.id, emptySet())
+                MusicQuizDatabase.likedSongs.save(likedSongs.copy(songs = likedSongs.songs + question.track.toLikedSong()))
+                content = translate(interaction.user, "song_quiz.game.liked_song")
+            }
+            return true
+        }
+        return false
+    }
 }
 
 enum class GuessingMode {

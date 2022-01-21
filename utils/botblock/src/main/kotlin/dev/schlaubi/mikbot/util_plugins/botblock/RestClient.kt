@@ -46,7 +46,8 @@ suspend fun Kord.postStats(tokens: Map<String, String>) = client.post<Unit>("htt
         .groupBy { it.gateway }
         .map { (_, value) -> value.size.toLong() }
 
-    contentType(ContentType.Application.Json
+    contentType(
+        ContentType.Application.Json
     )
     body = UpdateServerCountRequest(
         allGuilds.size.toLong(),

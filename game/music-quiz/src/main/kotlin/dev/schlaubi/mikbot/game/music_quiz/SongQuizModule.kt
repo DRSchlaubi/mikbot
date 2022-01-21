@@ -10,6 +10,7 @@ import dev.schlaubi.mikbot.game.api.module.commands.leaderboardCommand
 import dev.schlaubi.mikbot.game.api.module.commands.profileCommand
 import dev.schlaubi.mikbot.game.api.module.commands.startGameCommand
 import dev.schlaubi.mikbot.game.api.module.commands.stopGameCommand
+import dev.schlaubi.mikbot.game.multiple_choice.player.MultipleChoicePlayer
 import dev.schlaubi.mikbot.game.music_quiz.game.SongQuizGame
 import dev.schlaubi.mikbot.game.music_quiz.game.SongQuizPlayer
 import dev.schlaubi.mikbot.game.music_quiz.game.TrackContainer
@@ -41,7 +42,7 @@ open class SongQuizPlaylistArguments : SongQuizSizeArguments() {
     }
 }
 
-class SongQuizModule : GameModule<SongQuizPlayer, SongQuizGame>() {
+class SongQuizModule : GameModule<MultipleChoicePlayer, SongQuizGame>() {
     override val name: String = "song-quiz"
     override val gameStats: CoroutineCollection<UserGameStats> = MusicQuizDatabase.stats
     override val bundle: String = "song_quiz"

@@ -1,6 +1,7 @@
-package dev.schlaubi.mikbot.game.music_quiz.game
+package dev.schlaubi.mikbot.game.multiple_choice.player
 
 import dev.kord.common.entity.Snowflake
+import dev.schlaubi.mikbot.game.multiple_choice.MultipleChoiceGame
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlin.math.round
@@ -8,14 +9,18 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
 @Suppress("DataClassCanBeRecord")
-data class Statistics(
+internal data class Statistics(
     val points: Int,
     val responseTimes: List<Duration>,
     val gameSize: Int
 ) : Comparable<Statistics> {
     val average: Duration by lazy {
         val average = round(responseTimes.map { if (it.isInfinite()) -1 else it.inWholeMilliseconds }.average())
-        average.milliseconds
+        if (average.isNaN() || average <= 0) {
+            Duration.ZERO
+        } else {
+            average.milliseconds
+        }
     }
 
     override fun compareTo(other: Statistics): Int {
@@ -28,7 +33,7 @@ data class Statistics(
     }
 }
 
-fun SongQuizGame.addStats(id: Snowflake, startTime: Instant, scored: Boolean) {
+fun MultipleChoiceGame<*, *, *>.addStats(id: Snowflake, startTime: Instant, scored: Boolean) {
     val stats = gameStats[id] ?: Statistics(0, emptyList(), quizSize)
 
     val newStats = stats.copy(

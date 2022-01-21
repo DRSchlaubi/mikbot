@@ -3,12 +3,14 @@ package space.votebot.command
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.application.slash.SlashCommandContext
 import com.kotlindiscord.kord.extensions.commands.converters.impl.message
+import com.kotlindiscord.kord.extensions.utils.focusedOption
 import com.kotlindiscord.kord.extensions.utils.hasPermission
 import com.mongodb.client.model.Filters.and
 import dev.kord.common.entity.Permission
 import dev.kord.core.behavior.interaction.suggestString
 import dev.kord.core.entity.interaction.GuildAutoCompleteInteraction
 import dev.schlaubi.mikbot.plugin.api.util.discordError
+import dev.schlaubi.mikbot.plugin.api.util.safeInput
 import info.debatty.java.stringsimilarity.Levenshtein
 import org.litote.kmongo.eq
 import space.votebot.common.models.Poll
@@ -23,8 +25,9 @@ abstract class PollArguments(pollArgumentDescription: String) : Arguments() {
         name = "poll"
         description = pollArgumentDescription
 
-        autoComplete { _, value ->
-            val safeInput = value?.content ?: ""
+        autoComplete {
+            val safeInput = focusedOption.safeInput
+
             val possible = VoteBotDatabase.polls
                 .find(
                     and(

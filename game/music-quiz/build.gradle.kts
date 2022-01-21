@@ -5,10 +5,11 @@ plugins {
 }
 
 group = "dev.schlaubi.mikbot"
-version = "1.1.3"
+version = "1.2.0"
 
 dependencies {
-    plugin(project(":game:game-api"))
-    plugin(project(":music"))
-    optionalPlugin(project(":core:gdpr"))
+    plugin(projects.game.gameApi)
+    plugin(projects.music)
+    plugin(projects.game.multipleChoiceGame)
+    optionalPlugin(projects.core.gdpr)
 }

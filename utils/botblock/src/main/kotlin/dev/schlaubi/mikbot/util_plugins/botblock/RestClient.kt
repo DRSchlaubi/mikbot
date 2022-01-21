@@ -7,6 +7,7 @@ import io.ktor.client.features.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
+import io.ktor.http.*
 import kotlinx.coroutines.flow.toList
 import kotlinx.serialization.json.*
 import kotlin.time.Duration.Companion.minutes
@@ -45,6 +46,8 @@ suspend fun Kord.postStats(tokens: Map<String, String>) = client.post<Unit>("htt
         .groupBy { it.gateway }
         .map { (_, value) -> value.size.toLong() }
 
+    contentType(ContentType.Application.Json
+    )
     body = UpdateServerCountRequest(
         allGuilds.size.toLong(),
         selfId,

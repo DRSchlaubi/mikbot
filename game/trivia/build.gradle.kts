@@ -4,6 +4,9 @@ plugins {
     kotlin("plugin.serialization")
 }
 
+group = "dev.schlaubi.mikbot"
+version = "1.0.0"
+
 dependencies {
     plugin(projects.game.gameApi)
     plugin(projects.game.multipleChoiceGame)

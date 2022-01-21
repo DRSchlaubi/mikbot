@@ -29,19 +29,12 @@ data class UpdateServerCountRequest(
     val shards: List<Long>,
     val tokens: Map<String, String>
 ) {
-    fun toJsonElement(): JsonElement {
-        val base = mapOf(
-            "server_count" to Json.encodeToJsonElement(serverCount),
-            "bot_id" to Json.encodeToJsonElement(botId),
-            "shards" to Json.encodeToJsonElement(tokens)
-        )
+    fun toJsonElement(): JsonElement = buildJsonObject {
+        put("server_count", serverCount)
+        put("bot_id", Json.encodeToJsonElement(botId))
+        put("shards", Json.encodeToJsonElement(shards))
 
-        val jsonTokens = tokens.mapValues { (_, value) ->
-            JsonPrimitive(value)
-        }
-
-        val children = base + jsonTokens
-        return JsonObject(children)
+        tokens.forEach { (name, value) -> put(name, value) }
     }
 }
 

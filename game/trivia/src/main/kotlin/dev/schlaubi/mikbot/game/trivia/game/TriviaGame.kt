@@ -14,6 +14,7 @@ import dev.kord.rest.builder.message.EmbedBuilder
 import dev.kord.rest.builder.message.create.MessageCreateBuilder
 import dev.kord.rest.builder.message.create.actionRow
 import dev.kord.rest.builder.message.create.embed
+import dev.schlaubi.mikbot.game.api.Rematchable
 import dev.schlaubi.mikbot.game.multiple_choice.MultipleChoiceGame
 import dev.schlaubi.mikbot.game.multiple_choice.player.MultipleChoicePlayer
 import dev.schlaubi.mikbot.game.trivia.QuestionContainer
@@ -38,7 +39,10 @@ class TriviaGame(
     module,
     quizSize,
     questionContainer
-) {
+),
+    Rematchable<TriviaGame> {
+    override val rematchThreadName: String = "trivia-rematch"
+
     override fun EmbedBuilder.addWelcomeMessage() {
         if (questionContainer.category != null) {
             field {
@@ -134,6 +138,31 @@ class TriviaGame(
         }
 
         return false
+    }
+
+    override suspend fun rematch(thread: ThreadChannelBehavior, welcomeMessage: Message): TriviaGame {
+        val newQuestionContainer = QuestionContainer(
+            questionContainer.size,
+            questionContainer.difficulty,
+            questionContainer.category,
+            questionContainer.type,
+            locale,
+            translationsProvider,
+            module as TriviaModule
+        )
+
+        return TriviaGame(
+            locale,
+            thread,
+            welcomeMessage,
+            translationsProvider,
+            host,
+            module,
+            quizSize,
+            newQuestionContainer
+        ).apply {
+            players.addAll(this@TriviaGame.players)
+        }
     }
 
     private fun translate(key: String) = translationsProvider.translate(key, locale, module.bundle)

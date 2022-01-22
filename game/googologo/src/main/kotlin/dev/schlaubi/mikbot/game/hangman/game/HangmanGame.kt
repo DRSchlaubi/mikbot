@@ -1,14 +1,9 @@
 package dev.schlaubi.mikbot.game.hangman.game
 
-import com.kotlindiscord.kord.extensions.components.components
-import com.kotlindiscord.kord.extensions.components.publicButton
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
-import com.kotlindiscord.kord.extensions.types.respond
 import com.kotlindiscord.kord.extensions.utils.waitFor
 import dev.kord.core.behavior.UserBehavior
-import dev.kord.core.behavior.channel.asChannelOf
 import dev.kord.core.behavior.channel.asChannelOfOrNull
-import dev.kord.core.behavior.channel.createEmbed
 import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
 import dev.kord.core.behavior.edit
@@ -17,13 +12,13 @@ import dev.kord.core.behavior.reply
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.User
 import dev.kord.core.entity.channel.DmChannel
-import dev.kord.core.entity.channel.TextChannel
 import dev.kord.core.entity.interaction.InteractionFollowup
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.kord.rest.builder.message.modify.MessageModifyBuilder
 import dev.schlaubi.mikbot.game.api.AbstractGame
+import dev.schlaubi.mikbot.game.api.Rematchable
 import dev.schlaubi.mikbot.game.api.translate
 import dev.schlaubi.mikbot.game.hangman.HangmanModule
 import kotlinx.coroutines.*
@@ -45,7 +40,8 @@ class HangmanGame(
     override val welcomeMessage: Message,
     override val thread: ThreadChannelBehavior,
     override val translationsProvider: TranslationsProvider,
-) : AbstractGame<HangmanPlayer>(host, module) {
+) : AbstractGame<HangmanPlayer>(host, module), Rematchable<HangmanGame> {
+    override val rematchThreadName: String = "googologo-rematch"
     private val wordOwner = lastWinner ?: host
     override val playerRange: IntRange = 2..Int.MAX_VALUE
     private lateinit var winner: HangmanPlayer
@@ -208,37 +204,15 @@ class HangmanGame(
                 value = word
             }
         }
+    }
 
-        messageModifyBuilder.apply {
-            components(1.minutes) {
-                publicButton {
-                    label = "Rematch"
-                    id = "rematch"
-
-                    action {
-                        val gameThread = thread.parent.asChannelOf<TextChannel>().startPublicThread("googologo-rematch")
-                        gameThread.addUser(user.id) // Add creator
-                        val gameMessage = gameThread.createEmbed { description = "The game will begin shortly" }
-                        gameMessage.pin(reason = "Game Welcome message")
-                        val game = HangmanGame(
-                            winner.user, host, module as HangmanModule, gameMessage, gameThread, translationsProvider
-                        )
-                        val actualPlayers = players + HangmanPlayer(wordOwner)
-                        module.registerGame(gameThread.id, game)
-                        actualPlayers.forEach {
-                            gameThread.addUser(it.user.id)
-                        }
-                        game.players.addAll(actualPlayers)
-                        welcomeMessage.edit { components = mutableListOf() }
-                        respond {
-                            content =
-                                "A rematch has been started here (${gameThread.mention}), if you don't want to participate, just leave"
-                        }
-                        game.doStart()
-                    }
-                }
-            }
-        }
+    override suspend fun rematch(thread: ThreadChannelBehavior, welcomeMessage: Message): HangmanGame {
+        val game = HangmanGame(
+            winner.user, host, module as HangmanModule, welcomeMessage, thread, translationsProvider
+        )
+        val actualPlayers = players + HangmanPlayer(wordOwner)
+        game.players.addAll(actualPlayers)
+        return game
     }
 
     override suspend fun onRejoin(event: ComponentInteractionCreateEvent, player: HangmanPlayer) {

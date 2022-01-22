@@ -1,14 +1,21 @@
 package dev.schlaubi.mikbot.game.api
 
+import com.kotlindiscord.kord.extensions.components.components
+import com.kotlindiscord.kord.extensions.components.publicButton
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
+import com.kotlindiscord.kord.extensions.types.respond
+import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
 import dev.kord.core.behavior.UserBehavior
+import dev.kord.core.behavior.channel.asChannelOf
+import dev.kord.core.behavior.channel.createEmbed
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
 import dev.kord.core.behavior.channel.threads.edit
 import dev.kord.core.behavior.edit
 import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.User
+import dev.kord.core.entity.channel.TextChannel
 import dev.kord.core.entity.interaction.ComponentInteraction
 import dev.kord.core.entity.interaction.EphemeralFollowupMessage
 import dev.kord.core.entity.interaction.InteractionFollowup
@@ -216,6 +223,42 @@ abstract class AbstractGame<T : Player>(
                 }
                 endEmbed(this@edit)
             }
+            if (this@AbstractGame is Rematchable<*>) {
+                components(1.minutes) {
+                    publicButton {
+                        label = "Rematch"
+                        id = "rematch"
+
+                        action {
+                            val gameThread =
+                                thread.parent.asChannelOf<TextChannel>().startPublicThread(rematchThreadName)
+                            gameThread.addUser(user.id) // Add creator
+                            val gameMessage = gameThread.createEmbed { description = "The game will begin shortly" }
+                            gameMessage.pin(reason = "Game Welcome message")
+                            val game = rematch(gameThread, gameMessage)
+
+                            @Suppress("UNCHECKED_CAST")
+                            fun <T : AbstractGame<*>> GameModule<*, T>.registerGame(
+                                id: Snowflake,
+                                game: AbstractGame<*>
+                            ) = registerGame(id, game as T)
+
+                            module.registerGame(gameThread.id, game)
+
+                            game.players.forEach {
+                                gameThread.addUser(it.user.id)
+                            }
+                            game.welcomeMessage.edit { components = mutableListOf() }
+                            respond {
+                                content =
+                                    "A rematch has been started here (${gameThread.mention}), if you don't want to participate, just leave"
+                            }
+                            game.doStart()
+                        }
+                    }
+                }
+            }
+            modifyEndMessage()
         }
 
         launch {
@@ -263,6 +306,8 @@ abstract class AbstractGame<T : Player>(
             }
         }
     }
+
+    open fun MessageModifyBuilder.modifyEndMessage() = Unit
 
     private fun EmbedBuilder.winner(placeIndex: Int) {
         val player = wonPlayers.getOrNull(placeIndex) ?: return

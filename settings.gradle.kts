@@ -19,6 +19,7 @@ include(
     "game:music-quiz",
     "game:googologo",
     "game:trivia",
+    "game:tic-tac-toe",
     "utils",
     "utils:ktor",
     "utils:verification-system",

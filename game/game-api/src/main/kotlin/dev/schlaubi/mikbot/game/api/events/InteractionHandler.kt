@@ -34,6 +34,12 @@ internal fun <T : Player> AbstractGame<T>.interactionHandler() = kord.on<Compone
         }
 
         joinGameButton -> {
+            if (players.size == playerRange.last) {
+                interaction.respondEphemeral {
+                    content = translate("game.join.full")
+                }
+                return@on
+            }
             thread.addUser(interaction.user.id)
             val existingPlayer = interaction.gamePlayer
             if (existingPlayer != null) {

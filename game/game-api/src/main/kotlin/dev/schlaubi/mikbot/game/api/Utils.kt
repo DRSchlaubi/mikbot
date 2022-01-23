@@ -47,3 +47,16 @@ suspend fun AbstractGame<*>.translate(user: UserBehavior, key: String, vararg re
     val locale = module.bot.getLocale(thread.asChannel(), user.asUser())
     return translate(key, locale = locale, replacements = replacements)
 }
+
+@Suppress("UNCHECKED_CAST")
+internal suspend fun AbstractGame<*>.translateInternally(
+    user: UserBehavior,
+    key: String,
+    vararg replacements: Any?
+): String {
+    val locale = module.bot.getLocale(thread.asChannel(), user.asUser())
+    return translationsProvider.translate(
+        key, locale,
+        "games", replacements = replacements as Array<Any?>
+    )
+}

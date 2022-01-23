@@ -63,11 +63,12 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
             task<PatchPropertiesTask>("patchPluginProperties") {
                 group = "mikbot-plugin"
                 dependsOn("kspKotlin")
-                propertiesFile.set(
+                propertiesDirectory.set(
                     project
                         .mikbotPluginExtension
                         .pluginMainFileLocation
                         .getOrElse(project.pluginMainFile)
+                        .parent
                 )
 
                 doFirst {

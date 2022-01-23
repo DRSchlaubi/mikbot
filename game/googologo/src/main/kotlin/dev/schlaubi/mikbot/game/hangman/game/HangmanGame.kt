@@ -17,9 +17,10 @@ import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.kord.rest.builder.message.modify.MessageModifyBuilder
-import dev.schlaubi.mikbot.game.api.AbstractGame
 import dev.schlaubi.mikbot.game.api.Rematchable
+import dev.schlaubi.mikbot.game.api.SingleWinnerGame
 import dev.schlaubi.mikbot.game.api.translate
+import dev.schlaubi.mikbot.game.google_emotes.*
 import dev.schlaubi.mikbot.game.hangman.HangmanModule
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.filter
@@ -40,13 +41,10 @@ class HangmanGame(
     override val welcomeMessage: Message,
     override val thread: ThreadChannelBehavior,
     override val translationsProvider: TranslationsProvider,
-) : AbstractGame<HangmanPlayer>(host, module), Rematchable<HangmanGame> {
+) : SingleWinnerGame<HangmanPlayer>(host, module), Rematchable<HangmanGame> {
     override val rematchThreadName: String = "googologo-rematch"
     private val wordOwner = lastWinner ?: host
     override val playerRange: IntRange = 2..Int.MAX_VALUE
-    private lateinit var winner: HangmanPlayer
-    override val wonPlayers: List<HangmanPlayer>
-        get() = if (::winner.isInitialized) listOf(winner) else emptyList()
     private val gameCompleter by lazy { CompletableDeferred<Unit>() }
     private var state: GameState = GameState.WaitingForWord
 
@@ -185,7 +183,7 @@ class HangmanGame(
     override suspend fun end() {
         state.close()
         // TODO: Make this a sticker
-        if (state is GameState.Done && winner.user == wordOwner) {
+        if (state is GameState.Done && winner!!.user == wordOwner) {
             welcomeMessage.reply {
                 content = "https://media.discordapp.net/stickers/861039079151763486.png"
             }
@@ -196,7 +194,7 @@ class HangmanGame(
         if (!running) return
 
         val word = (state as? GameState.HasWord)?.word ?: return
-        if (winner.user == wordOwner) {
+        if (winner!!.user == wordOwner) {
             description = "So no one was clever enough to guess it but the Word was: `$word`"
         } else {
             field {
@@ -208,7 +206,7 @@ class HangmanGame(
 
     override suspend fun rematch(thread: ThreadChannelBehavior, welcomeMessage: Message): HangmanGame {
         val game = HangmanGame(
-            winner.user, host, module as HangmanModule, welcomeMessage, thread, translationsProvider
+            winner!!.user, host, module as HangmanModule, welcomeMessage, thread, translationsProvider
         )
         val actualPlayers = players + HangmanPlayer(wordOwner)
         game.players.addAll(actualPlayers)
@@ -220,12 +218,6 @@ class HangmanGame(
     }
 
     companion object {
-        private const val capitalG = "<:google_g_capital:933015489393860608>"
-        private const val redO = "<:google_o_red:933015489280606268>"
-        private const val yellowO = "<:google_o_yellow:933015489272221706>"
-        private const val smallG = "<:google_g:933015489326772304>"
-        private const val l = "<:google_I:933015488433369088>"
-
         val googologo = listOf(capitalG, redO, yellowO, smallG, redO, l, yellowO, smallG, redO)
         val maxTries = googologo.size
     }

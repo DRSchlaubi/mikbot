@@ -4,9 +4,10 @@ plugins {
 }
 
 group = "dev.schlaubi.mikbot"
-version = "1.0.4"
+version = "1.1.0"
 
 dependencies {
+    implementation(projects.game.googleEmotes)
     plugin(projects.game.gameApi)
     optionalPlugin(projects.core.gdpr)
 }

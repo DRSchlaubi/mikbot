@@ -1,5 +1,8 @@
 package dev.schlaubi.mikbot.game.api.events
 
+import dev.kord.core.behavior.channel.createMessage
+import dev.kord.core.behavior.interaction.edit
+import dev.kord.core.behavior.interaction.followUp
 import dev.kord.core.behavior.interaction.followUpEphemeral
 import dev.kord.core.behavior.interaction.respondEphemeral
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
@@ -17,14 +20,34 @@ internal fun <T : Player> AbstractGame<T>.interactionHandler() = kord.on<Compone
                 }
                 return@on
             }
-            if (players.size !in playerRange) {
+            if (players.size !in safeRange) {
                 interaction.respondEphemeral {
-                    content = "There need to be $playerRange players in this game, to start!"
+                    val count = if (playerRange.first == playerRange.last) {
+                        playerRange.first.toString()
+                    } else if (playerRange.last == Int.MAX_VALUE) {
+                        "at least ${playerRange.first}"
+                    } else {
+                        "${playerRange.first} - ${playerRange.last}"
+                    }
+
+                    content = "There need to be $count players in this game, to start!"
                 }
                 return@on
             }
 
-            interaction.acknowledgeEphemeralDeferredMessageUpdate()
+            // Add host to controlled games
+            if (hostPlayer == null) {
+                val ack = interaction.acknowledgeEphemeral()
+                val newPlayer = obtainNewPlayer(
+                    interaction.user,
+                    ack,
+                    ack.followUp { content = "Loading ..." }
+                )
+                players.add(newPlayer)
+                doUpdateWelcomeMessage()
+            } else {
+                interaction.acknowledgeEphemeralDeferredMessageUpdate()
+            }
 
             doStart()
         }
@@ -34,7 +57,7 @@ internal fun <T : Player> AbstractGame<T>.interactionHandler() = kord.on<Compone
         }
 
         joinGameButton -> {
-            if (players.size == playerRange.last) {
+            if (players.size == safeRange.last) {
                 interaction.respondEphemeral {
                     content = translate("game.join.full")
                 }
@@ -52,6 +75,24 @@ internal fun <T : Player> AbstractGame<T>.interactionHandler() = kord.on<Compone
                 onJoin(ack, player)
                 doUpdateWelcomeMessage()
             }
+        }
+        resendControlsButton -> {
+            val player = interaction.gamePlayer as? ControlledPlayer ?: return@on
+            val ack = interaction.acknowledgeEphemeral()
+            val confirmed = confirmation(ack) {
+                content = translateInternally(interaction.user, "game.resend_controls.confirm")
+            }.value
+            player.controls.edit {
+                content = translateInternally(interaction.user, "game.controls.reset")
+                components = mutableListOf()
+            }
+            if (confirmed) {
+                thread.createMessage {
+                    content =
+                        translateInternally(interaction.user, "game.resend_controls.blame", interaction.user.mention)
+                }.pin()
+            }
+            player.resendControls(ack)
         }
         else -> onInteraction()
     }

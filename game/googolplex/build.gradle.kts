@@ -4,9 +4,13 @@ plugins {
 }
 
 group = "dev.schlaubi.mikbot"
-version = "1.1.0"
+version = "1.0.0"
 
 dependencies {
     plugin(projects.game.gameApi)
-    optionalPlugin(projects.core.gdpr)
+    implementation(projects.game.googleEmotes)
+}
+
+mikbotPlugin {
+    description.set("My version of mastermind")
 }

@@ -1,9 +1,11 @@
 package dev.schlaubi.mikbot.game.api
 
+import com.kotlindiscord.kord.extensions.DiscordRelayedException
 import com.kotlindiscord.kord.extensions.components.components
 import com.kotlindiscord.kord.extensions.components.publicButton
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
 import com.kotlindiscord.kord.extensions.types.respond
+import dev.kord.common.entity.ButtonStyle
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
 import dev.kord.core.behavior.UserBehavior
@@ -13,6 +15,7 @@ import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
 import dev.kord.core.behavior.channel.threads.edit
 import dev.kord.core.behavior.edit
 import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
+import dev.kord.core.behavior.interaction.edit
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.User
 import dev.kord.core.entity.channel.TextChannel
@@ -22,6 +25,8 @@ import dev.kord.core.entity.interaction.InteractionFollowup
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.kord.rest.builder.message.modify.MessageModifyBuilder
+import dev.kord.rest.builder.message.modify.UserMessageModifyBuilder
+import dev.kord.rest.builder.message.modify.actionRow
 import dev.kord.rest.builder.message.modify.embed
 import dev.kord.x.emoji.Emojis
 import dev.schlaubi.mikbot.game.api.events.interactionHandler
@@ -35,6 +40,8 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.time.Duration.Companion.minutes
 
 private val LOG = KotlinLogging.logger { }
+
+const val resendControlsButton = "resend_controls"
 
 /**
  * Abstract implementation of a game.
@@ -63,11 +70,15 @@ abstract class AbstractGame<T : Player>(
     abstract val thread: ThreadChannelBehavior
     abstract val welcomeMessage: Message
     abstract val wonPlayers: List<T>
+    val hostPlayer: T?
+        get() = players.firstOrNull { it.user == host }
     val bundle: String
         get() = module.bundle
     private val statsCollection: CoroutineCollection<UserGameStats> get() = module.gameStats
     val kord: Kord get() = host.kord
     private var gameJob: Job? = null
+
+    val safeRange get() = if (hostPlayer == null) (playerRange.first - 1) until playerRange.last else playerRange
 
     abstract val translationsProvider: TranslationsProvider
 
@@ -87,6 +98,9 @@ abstract class AbstractGame<T : Player>(
     private val threadWatcher: Job = watchThread()
 
     private var silentEnd = false
+
+    val UserBehavior.gamePlayer: T
+        get() = players.first { it.user.id == id }
 
     /**
      * Event handler for custom events on [welcomeMessage].
@@ -172,6 +186,18 @@ abstract class AbstractGame<T : Player>(
         launch {
             running = true
             coroutineScope {
+                if (this@AbstractGame is ControlledGame<*>) {
+                    welcomeMessage.edit {
+                        actionRow {
+                            if (running) {
+                                interactionButton(ButtonStyle.Secondary, resendControlsButton) {
+                                    label = "Resend Controls"
+                                }
+                            }
+                        }
+                    }
+                }
+
                 gameJob = launch {
                     runGame()
                 }
@@ -204,6 +230,15 @@ abstract class AbstractGame<T : Player>(
         }
         running = !abrupt
         silentEnd = true
+        val playersCopy = players
+        if (this@AbstractGame is ControlledGame<*>) {
+            playersCopy.forEach {
+                (it as ControlledPlayer).controls.edit {
+                    components = mutableListOf()
+                    content = translateInternally(it.user, "game.controls.ended")
+                }
+            }
+        }
         end()
         module.unregisterGame(thread.id)
 
@@ -223,40 +258,8 @@ abstract class AbstractGame<T : Player>(
                 }
                 endEmbed(this@edit)
             }
-            if (this@AbstractGame is Rematchable<*>) {
-                components(1.minutes) {
-                    publicButton {
-                        label = "Rematch"
-                        id = "rematch"
-
-                        action {
-                            val gameThread =
-                                thread.parent.asChannelOf<TextChannel>().startPublicThread(rematchThreadName)
-                            gameThread.addUser(user.id) // Add creator
-                            val gameMessage = gameThread.createEmbed { description = "The game will begin shortly" }
-                            gameMessage.pin(reason = "Game Welcome message")
-                            val game = rematch(gameThread, gameMessage)
-
-                            @Suppress("UNCHECKED_CAST")
-                            fun <T : AbstractGame<*>> GameModule<*, T>.registerGame(
-                                id: Snowflake,
-                                game: AbstractGame<*>
-                            ) = registerGame(id, game as T)
-
-                            module.registerGame(gameThread.id, game)
-
-                            game.players.forEach {
-                                gameThread.addUser(it.user.id)
-                            }
-                            game.welcomeMessage.edit { components = mutableListOf() }
-                            respond {
-                                content =
-                                    "A rematch has been started here (${gameThread.mention}), if you don't want to participate, just leave"
-                            }
-                            game.doStart()
-                        }
-                    }
-                }
+            if (!abrupt) {
+                rematchLogic()
             }
             modifyEndMessage()
         }
@@ -270,6 +273,48 @@ abstract class AbstractGame<T : Player>(
         }
         interactionListener.cancel()
         threadWatcher.cancel()
+    }
+
+    private suspend fun UserMessageModifyBuilder.rematchLogic() {
+        if (this@AbstractGame is Rematchable<*>) {
+            components(1.minutes) {
+                publicButton {
+                    label = "Rematch"
+                    id = "rematch"
+
+                    action {
+                        val gameThread =
+                            thread.parent.asChannelOf<TextChannel>().startPublicThread(rematchThreadName)
+                        gameThread.addUser(user.id) // Add creator
+                        val gameMessage = gameThread.createEmbed { description = "The game will begin shortly" }
+                        gameMessage.pin(reason = "Game Welcome message")
+                        val game = try {
+                            rematch(gameThread, gameMessage)
+                        } catch (ignored: DiscordRelayedException) {
+                            return@action
+                        }
+
+                        @Suppress("UNCHECKED_CAST")
+                        fun <T : AbstractGame<*>> GameModule<*, T>.registerGame(
+                            id: Snowflake,
+                            game: AbstractGame<*>
+                        ) = registerGame(id, game as T)
+
+                        module.registerGame(gameThread.id, game)
+
+                        game.players.forEach {
+                            gameThread.addUser(it.user.id)
+                        }
+                        game.welcomeMessage.edit { components = mutableListOf() }
+                        respond {
+                            content =
+                                "A rematch has been started here (${gameThread.mention}), if you don't want to participate, just leave"
+                        }
+                        game.doStart()
+                    }
+                }
+            }
+        }
     }
 
     /**

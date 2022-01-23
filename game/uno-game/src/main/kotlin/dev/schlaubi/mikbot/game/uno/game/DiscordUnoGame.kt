@@ -1,12 +1,10 @@
 package dev.schlaubi.mikbot.game.uno.game
 
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
-import dev.kord.common.entity.ButtonStyle
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.channel.createEmbed
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
 import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
-import dev.kord.core.behavior.interaction.edit
 import dev.kord.core.behavior.interaction.followUpEphemeral
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.User
@@ -14,22 +12,21 @@ import dev.kord.core.entity.interaction.InteractionFollowup
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.kord.rest.builder.message.modify.MessageModifyBuilder
-import dev.kord.rest.builder.message.modify.actionRow
 import dev.kord.rest.builder.message.modify.embed
 import dev.schlaubi.mikbot.game.api.AbstractGame
+import dev.schlaubi.mikbot.game.api.ControlledGame
+import dev.schlaubi.mikbot.game.api.Rematchable
 import dev.schlaubi.mikbot.game.api.translate
 import dev.schlaubi.mikbot.game.uno.UnoModule
 import dev.schlaubi.mikbot.game.uno.game.player.DiscordUnoPlayer
-import dev.schlaubi.mikbot.game.uno.game.player.translate
 import dev.schlaubi.mikbot.game.uno.game.player.updateControls
 import dev.schlaubi.mikbot.game.uno.game.ui.welcomeMessage
+import dev.schlaubi.mikbot.plugin.api.util.discordError
 import dev.schlaubi.uno.Game
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import mu.KotlinLogging
-
-const val resendControlsButton = "resend_controls"
 
 private val LOG = KotlinLogging.logger { }
 
@@ -42,7 +39,8 @@ class DiscordUnoGame(
     private val extremeMode: Boolean,
     val flashMode: Boolean,
     val allowDropIns: Boolean
-) : AbstractGame<DiscordUnoPlayer>(host, module) {
+) : AbstractGame<DiscordUnoPlayer>(host, module), ControlledGame<DiscordUnoPlayer>, Rematchable<DiscordUnoGame> {
+    override val rematchThreadName: String = "uno-rematch"
     lateinit var game: Game<DiscordUnoPlayer>
         internal set
     override val wonPlayers: List<DiscordUnoPlayer>
@@ -62,14 +60,6 @@ class DiscordUnoGame(
         embed {
             addWelcomeMessage()
         }
-
-        actionRow {
-            if (running) {
-                interactionButton(ButtonStyle.Secondary, resendControlsButton) {
-                    label = "Resend Controls"
-                }
-            }
-        }
     }
 
     override fun EmbedBuilder.addWelcomeMessage() {
@@ -88,20 +78,10 @@ class DiscordUnoGame(
     )
 
     override suspend fun onRejoin(event: ComponentInteractionCreateEvent, player: DiscordUnoPlayer) =
-        player.resendControls(
+        player.resendControlsInternally(
             event,
-            justLoading = true,
-            overrideConfirm = true
+            justLoading = true
         )
-
-    override suspend fun ComponentInteractionCreateEvent.onInteraction() {
-        when (interaction.componentId) {
-            resendControlsButton -> {
-                val player = interaction.gamePlayer ?: return
-                player.resendControls(this)
-            }
-        }
-    }
 
     override suspend fun runGame() {
         game = Game(players, extremeMode, flashMode)
@@ -122,7 +102,7 @@ class DiscordUnoGame(
                         currentPlayer!!.response.followUpEphemeral {
                             content = translate(currentPlayer!!.user, "uno.controls.failed")
                         }
-                        currentPlayer!!.resendControls(null, overrideConfirm = true)
+                        currentPlayer!!.resendControlsInternally(null)
                         LOG.error(e) { "Error occurred whilst updating game" }
                     }
                     doUpdateWelcomeMessage()
@@ -136,13 +116,6 @@ class DiscordUnoGame(
     }
 
     override suspend fun end() {
-        players.forEach {
-            it.controls.edit {
-                components = mutableListOf()
-                content = it.translate("uno.controls.ended")
-            }
-        }
-
         if (!running) return
 
         if (players.size == 1) {
@@ -157,5 +130,25 @@ class DiscordUnoGame(
                         .joinToString("\n") { "${it.user.mention} - ${it.turns}" }
             }
         }
+    }
+
+    override suspend fun rematch(thread: ThreadChannelBehavior, welcomeMessage: Message): DiscordUnoGame {
+        val game = DiscordUnoGame(
+            host,
+            module as UnoModule,
+            welcomeMessage,
+            thread,
+            translationsProvider,
+            extremeMode, flashMode, allowDropIns
+        )
+        if (!askForRematch(
+                thread,
+                game
+            )
+        ) {
+            discordError("Game could not restart")
+        }
+
+        return game
     }
 }

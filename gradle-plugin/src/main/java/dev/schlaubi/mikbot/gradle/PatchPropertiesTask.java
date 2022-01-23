@@ -3,6 +3,7 @@ package dev.schlaubi.mikbot.gradle;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.Input;
+import org.gradle.api.tasks.InputDirectory;
 import org.gradle.api.tasks.TaskAction;
 
 import java.io.IOException;
@@ -13,8 +14,8 @@ import java.util.Properties;
 
 public abstract class PatchPropertiesTask extends DefaultTask {
 
-    @Input
-    public abstract Property<Path> getPropertiesFile();
+    @InputDirectory
+    public abstract Property<Path> getPropertiesDirectory();
 
     @TaskAction
     public void runTask() throws IOException {
@@ -24,7 +25,7 @@ public abstract class PatchPropertiesTask extends DefaultTask {
         var extension = ((PluginExtension) getProject().getExtensions()
                 .getByName(ExtensionKt.pluginExtensionName));
 
-        var file = getPropertiesFile().get();
+        var file = getPropertiesDirectory().get().resolve("plugin.properties");
         if (!Files.exists(file)) {
             throw new IllegalStateException("File %s doesn't exist".formatted(file));
         }

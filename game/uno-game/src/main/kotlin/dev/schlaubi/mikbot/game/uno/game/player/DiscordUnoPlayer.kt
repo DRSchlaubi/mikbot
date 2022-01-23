@@ -1,14 +1,10 @@
 package dev.schlaubi.mikbot.game.uno.game.player
 
 import dev.kord.core.behavior.UserBehavior
-import dev.kord.core.behavior.channel.createMessage
-import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
-import dev.kord.core.behavior.interaction.edit
-import dev.kord.core.behavior.interaction.followUp
-import dev.kord.core.behavior.interaction.followUpEphemeral
+import dev.kord.core.behavior.interaction.*
 import dev.kord.core.entity.interaction.InteractionFollowup
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
-import dev.schlaubi.mikbot.game.api.confirmation
+import dev.schlaubi.mikbot.game.api.ControlledPlayer
 import dev.schlaubi.mikbot.game.uno.game.DiscordUnoGame
 import dev.schlaubi.mikbot.game.uno.game.ui.translationKey
 import dev.schlaubi.mikbot.plugin.api.util.deleteAfterwards
@@ -32,9 +28,12 @@ const val allCardsButton = "request_all_cards"
 class DiscordUnoPlayer(
     override val user: UserBehavior,
     val response: EphemeralInteractionResponseBehavior,
-    var controls: InteractionFollowup,
+    override var controls: InteractionFollowup,
     val game: DiscordUnoGame
-) : Player(), GamePlayer {
+) : Player(), GamePlayer, ControlledPlayer {
+    override val ack: InteractionResponseBehavior
+        get() = response
+
     private var myTurn = false
     internal var drawn = false
     var turns: Int = 0
@@ -174,32 +173,18 @@ class DiscordUnoPlayer(
         }
     }
 
-    suspend fun resendControls(
+    override suspend fun resendControls(ack: EphemeralInteractionResponseBehavior) = resendControlsInternally(null)
+
+    suspend fun resendControlsInternally(
         event: ComponentInteractionCreateEvent?,
-        justLoading: Boolean = false,
-        overrideConfirm: Boolean = false
+        justLoading: Boolean = false
     ) {
         val ack = event?.interaction?.acknowledgeEphemeral() ?: response
-        val confirmed = overrideConfirm || game.confirmation(ack) {
-            content = translate("uno.resend_controls.confirm")
-        }.value
-        if (confirmed) {
-            controls.edit {
-                content = translate("uno.controls.reset")
-                components = mutableListOf()
-            }
-            if (!overrideConfirm) {
-                game.thread.createMessage {
-                    content = translate("uno.resend_controls.blame", user.mention)
-                }.pin()
-            }
-
-            controls = ack.followUpEphemeral {
-                content = translate("uno.controls.loading")
-            }
-            if (!justLoading) {
-                updateControls(myTurn)
-            }
+        controls = ack.followUpEphemeral {
+            content = translate("uno.controls.loading")
+        }
+        if (!justLoading) {
+            updateControls(myTurn)
         }
     }
 

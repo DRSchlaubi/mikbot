@@ -22,7 +22,7 @@ fun GameState.Guessing.toEmbed() = embed {
                 appendLine()
             }
 
-            append(HangmanGame.googologo.take(wrongChars.size + blackList.size).joinToString(" "))
+            append(HangmanGame.googologo.take(wrongChars.size + blackList.size).joinToString(" ") { it.mention })
         }
     }
 

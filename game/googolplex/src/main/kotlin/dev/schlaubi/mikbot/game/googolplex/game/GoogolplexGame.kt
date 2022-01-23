@@ -101,8 +101,7 @@ class GoogolplexGame(
                                     ${googleLogoWhite.mention} means that there is a correct item in the sequence
                                     ${googleLogoColor.mention} means that there is a correct item in the sequence at the correct position
                                     
-                                    If there are wrong items in the sequence, these are just skipped in the hints section,
-                                    so just because there is a ${googleLogoWhite.mention} at position 1, doesn't mean that, that item is correct
+                                    ${googleLogoColor.mention} will always be after ${googleLogoWhite.mention}, so the order of the hints, doesn't necessarily reflect the order in the sequence
                     """.trimIndent()
                 }
             }

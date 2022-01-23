@@ -109,7 +109,6 @@ class GoogolplexGame(
         }
     }
 
-
     private fun List<ReactionEmoji>.buildGuessUI(correctSequence: List<ReactionEmoji>) = buildString {
         this@buildGuessUI.forEach {
             append(it.mention)
@@ -126,9 +125,11 @@ class GoogolplexGame(
     private fun List<ReactionEmoji>.buildHintList(correctSequence: List<ReactionEmoji>): List<String> {
         val correctColors = count { it in correctSequence }
         val correctPositions = withIndex().count { (index, color) -> correctSequence[index] == color }
-        return (generateSequence { googleLogoWhite }.take(correctColors - correctPositions) + generateSequence {
-            googleLogoColor
-        }.take(correctPositions))
+        return (
+            generateSequence { googleLogoWhite }.take(correctColors - correctPositions) + generateSequence {
+                googleLogoColor
+            }.take(correctPositions)
+            )
             .map { it.mention }
             .toList()
     }

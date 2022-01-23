@@ -8,7 +8,7 @@ import dev.schlaubi.mikbot.plugin.api.util.embed
 fun Game.toEmbed(): EmbedBuilder = embed {
     title = this@toEmbed.title
     description = this@toEmbed.description
-    url = "https://www.epicgames.com/store/${Config.COUNTRY_CODE.lowercase()}/p/$urlSlug"
+    url = "https://www.epicgames.com/store/${Config.COUNTRY_CODE.lowercase()}/p/$productSlug"
 
     field {
         name = "Original Price"

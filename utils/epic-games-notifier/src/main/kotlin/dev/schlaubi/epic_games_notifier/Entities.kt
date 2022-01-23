@@ -24,6 +24,7 @@ data class Game(
     val status: String,
     val keyImages: List<KeyImage>,
     val seller: Seller,
+    val productSlug: String,
     val urlSlug: String,
     val price: Price,
     val promotions: PromotionsContainer?

@@ -17,6 +17,9 @@ import dev.schlaubi.mikbot.game.google_emotes.googleLogoColor
 import dev.schlaubi.mikbot.game.google_emotes.googleLogoWhite
 import dev.schlaubi.mikbot.plugin.api.util.discordError
 
+private val correctColor = generateSequence { googleLogoWhite }
+private val correctPosition = generateSequence { googleLogoColor }
+
 class GoogolplexGame(
     val size: Int,
     private val maxTries: Int,
@@ -122,13 +125,13 @@ class GoogolplexGame(
     }
 
     private fun List<ReactionEmoji>.buildHintList(correctSequence: List<ReactionEmoji>): List<String> {
-        val correctColors = count { it in correctSequence }
-        val correctPositions = withIndex().count { (index, color) -> correctSequence[index] == color }
-        return (
-            generateSequence { googleLogoWhite }.take(correctColors - correctPositions) + generateSequence {
-                googleLogoColor
-            }.take(correctPositions)
-            )
+        val (correctPositions, wrongPositions) = withIndex()
+            .partition { (index, color) -> correctSequence[index] == color }
+        val correctColors = wrongPositions.count { (_, color) ->
+            color in correctSequence
+        }
+
+        return (correctColor.take(correctColors) + correctPosition.take(correctPositions.size))
             .map { it.mention }
             .toList()
     }

@@ -109,7 +109,7 @@ class GoogolplexGame(
     }
 
     private fun List<ReactionEmoji>.buildGuessUI(correctSequence: List<ReactionEmoji>) = buildString {
-        correctSequence.forEach {
+        this@buildGuessUI.forEach {
             append(it.mention)
         }
         val hints = buildHintList(correctSequence)

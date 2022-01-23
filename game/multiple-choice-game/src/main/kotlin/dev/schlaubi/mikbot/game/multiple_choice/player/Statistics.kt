@@ -29,7 +29,7 @@ internal data class Statistics(
             return pointsComparison
         }
 
-        return average.compareTo(other.average)
+        return other.average.compareTo(average)
     }
 }
 

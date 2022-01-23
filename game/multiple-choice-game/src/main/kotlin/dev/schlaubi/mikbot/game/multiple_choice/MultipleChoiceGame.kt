@@ -44,7 +44,7 @@ abstract class MultipleChoiceGame<Player : MultipleChoicePlayer, Q : Question, Q
     internal val gameStats = mutableMapOf<Snowflake, Statistics>()
     override val wonPlayers: List<Player>
         get() =
-            players.sortedBy {
+            players.sortedByDescending {
                 gameStats[it.user.id] ?: Statistics(0, emptyList(), quizSize)
             }
 

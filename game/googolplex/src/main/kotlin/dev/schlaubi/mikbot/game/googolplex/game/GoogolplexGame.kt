@@ -29,6 +29,7 @@ class GoogolplexGame(
 ) : SingleWinnerGame<GoogolplexPlayer>(host, module), Rematchable<GoogolplexGame>, ControlledGame<GoogolplexPlayer> {
     override val rematchThreadName: String = "googolplex-rematch"
     override val playerRange: IntRange = 2 until 3
+    lateinit var correctSequence: List<ReactionEmoji>
 
     override suspend fun obtainNewPlayer(
         user: User,
@@ -41,7 +42,7 @@ class GoogolplexGame(
         val startingPlayer = startingUser.gamePlayer
         val guessingPlayer = (players - startingPlayer).first()
 
-        val correctSequence = startingPlayer.awaitInitialSequence(this)
+        correctSequence = startingPlayer.awaitInitialSequence(this)
         startingPlayer.controls.edit {
             components = mutableListOf()
         }
@@ -108,6 +109,7 @@ class GoogolplexGame(
         }
     }
 
+
     private fun List<ReactionEmoji>.buildGuessUI(correctSequence: List<ReactionEmoji>) = buildString {
         this@buildGuessUI.forEach {
             append(it.mention)
@@ -121,14 +123,15 @@ class GoogolplexGame(
         }
     }
 
-    private fun List<ReactionEmoji>.buildHintList(correctSequence: List<ReactionEmoji>) =
-        mapIndexedNotNull { index, item ->
-            when (item) {
-                correctSequence[index] -> googleLogoColor.mention
-                in correctSequence -> googleLogoWhite.mention
-                else -> null
-            }
-        }
+    private fun List<ReactionEmoji>.buildHintList(correctSequence: List<ReactionEmoji>): List<String> {
+        val correctColors = count { it in correctSequence }
+        val correctPositions = withIndex().count { (index, color) -> correctSequence[index] == color }
+        return (generateSequence { googleLogoWhite }.take(correctColors - correctPositions) + generateSequence {
+            googleLogoColor
+        }.take(correctPositions))
+            .map { it.mention }
+            .toList()
+    }
 
     override suspend fun rematch(thread: ThreadChannelBehavior, welcomeMessage: Message): GoogolplexGame {
         val game = GoogolplexGame(

@@ -270,6 +270,7 @@ abstract class AbstractGame<T : Player>(
                 reason = "Game ended"
                 archived = true
             }
+            welcomeMessage.edit { components = mutableListOf() }
         }
         interactionListener.cancel()
         threadWatcher.cancel()

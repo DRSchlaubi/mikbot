@@ -116,6 +116,7 @@ class TicTacToeGame(
         if (winner is WinResult.Winner) {
             addTicTacToeWinner(game, winner as WinResult.Winner)
         } else {
+            embeds = mutableListOf()
             content =
                 "Sooo yeah in order to answer who won, we will ask the almighty MAGIC 8 BALL, therewego its's contacting the oracle, this might just take a bit: ||AND IT'S A NOOOOOOOOOOOO||"
         }

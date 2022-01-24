@@ -8,6 +8,10 @@ on:
     types:
       - opened
       - synchronize
+env:
+  GRADLE_BUILDCACHE_URL: ${{ secrets.BUILDCACHE_URL }}
+  GRADLE_BUILDCACHE_USERNNAME: ${{ secrets.BUILDCACHE_USER }}
+  GRADLE_BUILDCACHE_PASSWORD: ${{ secrets.BUILDCACHE_PASSWORD }}
 
 jobs:
   build:
@@ -31,13 +35,6 @@ jobs:
       - uses: gradle/gradle-build-action@v1
         with:
           arguments: classes ktlintCheck
-      # Cache Gradle build progress
-      # This is at the end, because it just needs to push for upcoming actions
-      - name: Setup Gradle build Cache
-        uses: actions/cache@v2.1.6
-        with:
-          path: '**/build/**'
-          key: ${{ runner.os }}-gradle-build-cache-${{ env.GITHUB_SHA }}
   push:
     name: Push
     runs-on: ubuntu-20.04
@@ -50,11 +47,6 @@ jobs:
         with:
           key:
             ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
-      - name: Download Build Cache
-        uses: actions/cache@v2.1.6
-        with:
-          key:
-            ${{ runner.os }}-gradle-build-cache-${{ env.GITHUB_SHA }}
       - uses: actions/setup-java@v2
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
@@ -89,11 +81,6 @@ jobs:
         with:
           key:
             ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
-      - name: Download Build Cache
-        uses: actions/cache@v2.1.6
-        with:
-          key:
-            ${{ runner.os }}-gradle-build-cache-${{ env.GITHUB_SHA }}
       - uses: actions/setup-java@v2
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
@@ -132,11 +119,6 @@ jobs:
         with:
           key:
             ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
-      - name: Download Build Cache
-        uses: actions/cache@v2.1.6
-        with:
-          key:
-            ${{ runner.os }}-gradle-build-cache-${{ env.GITHUB_SHA }}
       - uses: actions/setup-java@v2
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
@@ -161,11 +143,6 @@ jobs:
         with:
           key:
             ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
-      - name: Download Build Cache
-        uses: actions/cache@v2.1.6
-        with:
-          key:
-            ${{ runner.os }}-gradle-build-cache-${{ env.GITHUB_SHA }}
       - uses: actions/setup-java@v2
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options

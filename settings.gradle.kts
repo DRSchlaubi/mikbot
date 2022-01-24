@@ -38,3 +38,16 @@ include(
 )
 
 includeBuild("gradle-plugin")
+
+if (System.getenv("GRADLE_BUILDCACHE_URL") != null) {
+    buildCache {
+        remote<HttpBuildCache> {
+            isPush = System.getenv("GITHUB_SHA") != null
+            url = uri(System.getenv("GRADLE_BUILDCACHE_URL"))
+            credentials {
+                username = System.getenv("GRADLE_BUILDCACHE_USERNNAME")
+                password = System.getenv("GRADLE_BUILDCACHE_PASSWORD")
+            }
+        }
+    }
+}

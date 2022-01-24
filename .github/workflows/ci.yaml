@@ -16,6 +16,14 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
+      # Cache Gradle cache
+      - name: Setup Gradle Dependencies Cache
+        uses: actions/cache@v2.1.6
+        with:
+          path: |
+            ~/.gradle/caches
+            .gradle
+          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
       - uses: actions/setup-java@v2
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
@@ -23,6 +31,13 @@ jobs:
       - uses: gradle/gradle-build-action@v1
         with:
           arguments: classes ktlintCheck
+      # Cache Gradle build progress
+      # This is at the end, because it just needs to push for upcoming actions
+      - name: Setup Gradle build Cache
+        uses: actions/cache@v2.1.6
+        with:
+          path: '**/build/**'
+          key: ${{ runner.os }}-gradle-build-cache-${{ env.GITHUB_SHA }}
   push:
     name: Push
     runs-on: ubuntu-20.04
@@ -30,6 +45,12 @@ jobs:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v2
+      - name: Download Cache
+        uses: actions/cache@v2.1.6
+        with:
+          restore-keys: |
+            ${{ runner.os }}-gradle-build-cache-${{ env.GITHUB_SHA }}
+            ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
       - uses: actions/setup-java@v2
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
@@ -59,6 +80,12 @@ jobs:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v2
+      - name: Download Cache
+        uses: actions/cache@v2.1.6
+        with:
+          restore-keys: |
+            ${{ runner.os }}-gradle-build-cache-${{ env.GITHUB_SHA }}
+            ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
       - uses: actions/setup-java@v2
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
@@ -92,6 +119,12 @@ jobs:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v2
+      - name: Download Cache
+        uses: actions/cache@v2.1.6
+        with:
+          restore-keys: |
+            ${{ runner.os }}-gradle-build-cache-${{ env.GITHUB_SHA }}
+            ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
       - uses: actions/setup-java@v2
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
@@ -107,10 +140,16 @@ jobs:
   update_binary:
     name: Push binary to binary repo
     runs-on: ubuntu-20.04
-    needs: [build]
+    needs: [ build ]
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v2
+      - name: Download Cache
+        uses: actions/cache@v2.1.6
+        with:
+          restore-keys: |
+            ${{ runner.os }}-gradle-build-cache-${{ env.GITHUB_SHA }}
+            ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
       - uses: actions/setup-java@v2
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options

@@ -103,6 +103,11 @@ data class Game(val type: ActivityType, val status: PresenceStatus, val text: St
                     PresenceStatus.Online,
                     game.replaceFirst("w: ".toRegex(), "")
                 )
+                'c' -> Game(
+                    ActivityType.Competing,
+                    PresenceStatus.Online,
+                    game.replaceFirst("c: ".toRegex(), "")
+                )
                 else -> error("Invalid game: $this")
             }
         }

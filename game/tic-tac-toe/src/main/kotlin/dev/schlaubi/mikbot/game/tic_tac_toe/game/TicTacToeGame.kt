@@ -25,6 +25,7 @@ import kotlin.time.Duration.Companion.minutes
 
 class TicTacToeGame(
     private val lastWinner: PlayerType?,
+    private val size: GameSize,
     override val thread: ThreadChannelBehavior,
     override val welcomeMessage: Message,
     override val translationsProvider: TranslationsProvider,
@@ -34,7 +35,7 @@ class TicTacToeGame(
     override val rematchThreadName: String = "tic-tac-toe-rematch"
     val playerTypeOrder = LinkedList(PlayerType.values().toList().shuffled())
     override val playerRange: IntRange = 2 until 3
-    private val game = TicTacToe()
+    private val game = TicTacToe(size.size)
     private val cycle = PlayerCycle()
 
     private lateinit var winner: WinResult
@@ -106,7 +107,7 @@ class TicTacToeGame(
     override suspend fun rematch(thread: ThreadChannelBehavior, welcomeMessage: Message): TicTacToeGame {
         return TicTacToeGame(
             (winner as? WinResult.Winner)?.type,
-            thread, welcomeMessage, translationsProvider, host, module
+            size, thread, welcomeMessage, translationsProvider, host, module
         ).apply {
             players.addAll(this@TicTacToeGame.players)
         }

@@ -9,15 +9,19 @@ on:
       - opened
       - synchronize
 env:
+  GRADLE_BUILD_CACHE_PUSH: false
   GRADLE_BUILDCACHE_URL: ${{ secrets.BUILDCACHE_URL }}
   GRADLE_BUILDCACHE_USERNNAME: ${{ secrets.BUILDCACHE_USER }}
   GRADLE_BUILDCACHE_PASSWORD: ${{ secrets.BUILDCACHE_PASSWORD }}
+  IS_PR: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build:
     name: Build
     if: "!contains(github.event.commits[0].message, '[skip ci]')"
     runs-on: ubuntu-20.04
+    env:
+      GRADLE_BUILD_CACHE_PUSH: true
     steps:
       - uses: actions/checkout@v2
       # Cache Gradle cache
@@ -42,11 +46,6 @@ jobs:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v2
-      - name: Download Dependencies Cache
-        uses: actions/cache@v2.1.6
-        with:
-          key:
-            ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
       - uses: actions/setup-java@v2
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
@@ -76,11 +75,6 @@ jobs:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v2
-      - name: Download Dependencies Cache
-        uses: actions/cache@v2.1.6
-        with:
-          key:
-            ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
       - uses: actions/setup-java@v2
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
@@ -114,11 +108,6 @@ jobs:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v2
-      - name: Download Dependencies Cache
-        uses: actions/cache@v2.1.6
-        with:
-          key:
-            ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
       - uses: actions/setup-java@v2
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
@@ -138,11 +127,6 @@ jobs:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v2
-      - name: Download Dependencies Cache
-        uses: actions/cache@v2.1.6
-        with:
-          key:
-            ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
       - uses: actions/setup-java@v2
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options

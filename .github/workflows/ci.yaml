@@ -45,12 +45,16 @@ jobs:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v2
-      - name: Download Cache
+      - name: Download Dependencies Cache
         uses: actions/cache@v2.1.6
         with:
-          restore-keys: |
-            ${{ runner.os }}-gradle-build-cache-${{ env.GITHUB_SHA }}
+          key:
             ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
+      - name: Download Build Cache
+        uses: actions/cache@v2.1.6
+        with:
+          key:
+            ${{ runner.os }}-gradle-build-cache-${{ env.GITHUB_SHA }}
       - uses: actions/setup-java@v2
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
@@ -80,12 +84,16 @@ jobs:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v2
-      - name: Download Cache
+      - name: Download Dependencies Cache
         uses: actions/cache@v2.1.6
         with:
-          restore-keys: |
-            ${{ runner.os }}-gradle-build-cache-${{ env.GITHUB_SHA }}
+          key:
             ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
+      - name: Download Build Cache
+        uses: actions/cache@v2.1.6
+        with:
+          key:
+            ${{ runner.os }}-gradle-build-cache-${{ env.GITHUB_SHA }}
       - uses: actions/setup-java@v2
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
@@ -119,12 +127,16 @@ jobs:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v2
-      - name: Download Cache
+      - name: Download Dependencies Cache
         uses: actions/cache@v2.1.6
         with:
-          restore-keys: |
-            ${{ runner.os }}-gradle-build-cache-${{ env.GITHUB_SHA }}
+          key:
             ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
+      - name: Download Build Cache
+        uses: actions/cache@v2.1.6
+        with:
+          key:
+            ${{ runner.os }}-gradle-build-cache-${{ env.GITHUB_SHA }}
       - uses: actions/setup-java@v2
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
@@ -144,12 +156,16 @@ jobs:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v2
-      - name: Download Cache
+      - name: Download Dependencies Cache
         uses: actions/cache@v2.1.6
         with:
-          restore-keys: |
-            ${{ runner.os }}-gradle-build-cache-${{ env.GITHUB_SHA }}
+          key:
             ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
+      - name: Download Build Cache
+        uses: actions/cache@v2.1.6
+        with:
+          key:
+            ${{ runner.os }}-gradle-build-cache-${{ env.GITHUB_SHA }}
       - uses: actions/setup-java@v2
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options

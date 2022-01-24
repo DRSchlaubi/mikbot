@@ -86,7 +86,7 @@ jobs:
           path: ci-repo
       - uses: gradle/gradle-build-action@v1
         with:
-          arguments: copyFilesIntoRepo
+          arguments: buildRepository
       - name: Commit changes
         run: |
           cd ci-repo
@@ -145,7 +145,7 @@ jobs:
           git config --local user.email "actions@github.com"
           git config --local user.name "actions-user"
           git add .
-          git commit -m "Update plugin repository" --allow-empty
+          git commit -m "Update binary repository" --allow-empty
       - name: Push changes
         uses: ad-m/github-push-action@master
         continue-on-error: true # if this job fails, this is usually because there was no update and should not indicate a build fail

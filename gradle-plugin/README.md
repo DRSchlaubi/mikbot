@@ -65,6 +65,7 @@ In order to build a plugin you need to execute the `assemblePlugin` Task, which 
 with PF4J
 
 # Usage
+
 ```kotlin
 plugins {
     id("dev.schlaubi.mikbot.gradle-plugin") version "1.0.0"
@@ -77,15 +78,13 @@ This plugin also supports generating a [pf4j-update](https://github.comm/pf4hj/p
 need to configure the following:
 
 ```kotlin
-tasks {
-    buildRepository {
-        // The address your repository is hosted it
-        repositoryUrl.set("https://plugin-repository.mikbot.schlaubi.net")
-        // The directory the generated repository should be in
-        targetDirectory.set(rootProject.file("ci-repo").toPath())
-        // The URL of the project
-        projectUrl.set("https://github.com/DRSchlaubi/mikbot")
-    }
+pluginPublishing {
+    // The address your repository is hosted it
+    repositoryUrl.set("https://plugin-repository.mikbot.schlaubi.net")
+    // The directory the generated repository should be in
+    targetDirectory.set(rootProject.file("ci-repo").toPath())
+    // The URL of the project
+    projectUrl.set("https://github.com/DRSchlaubi/mikbot")
 }
 ```
 
@@ -115,7 +114,7 @@ this workflow to generate my own repository.
           path: ci-repo
       - uses: gradle/gradle-build-action@v1
         with:
-          arguments: copyFilesIntoRepo
+          arguments: buildRepository
       - run: |
           cd ci-repo
           git config --local user.email "actions@github.com"
@@ -138,8 +137,8 @@ To add plugins the `plugin` and `optionalPlugin` dependency configurations exist
 
 - The plugin is a local Gradle module, built with this plugin
 - The plugin is a remote plugin
-  - built with this plugin
-  - using its artifact name as a plugin id
+    - built with this plugin
+    - using its artifact name as a plugin id
 
 # Default resource Bundle
 
@@ -147,7 +146,7 @@ If you want to use a specific resource bundle as a fallback you can generate a f
 
 ```kotlin
 task<GenerateDefaultTranslationBundleTask>("generateDefaultResourceBundle") {
-  defaultLocale.set(Locale("en", "GB"))
+    defaultLocale.set(Locale("en", "GB"))
 }
 ```
 
@@ -165,9 +164,9 @@ Therefore, please add the following to your Gradle buildscript
 
 ```kotlin
 tasks {
-  installBot {
-    botVersion.set("2.0.1-SNAPSHOT")
-  }
+    installBot {
+        botVersion.set("2.0.1-SNAPSHOT")
+    }
 }
 ```
 
@@ -179,7 +178,7 @@ Automatically:
 
 ```kotlin
 mikBotPlugin {
-  usePF4J()
+    usePF4J()
 }
 ```
 

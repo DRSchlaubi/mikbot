@@ -148,24 +148,36 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
     }
 
     private fun Project.createPublishingTasks(assemblePluginTask: TaskProvider<Jar>) {
+        val extension = project.extensions.create(pluginPublishingExtensionName, BuildRepositoryExtension::class.java)
         tasks.apply {
-            val buildRepository = register<MakeRepositoryIndexTask>("buildRepository") {
+            val copyFilesIntoRepo = register<Copy>("copyFilesIntoRepo") {
                 group = "publishing"
-            }
-
-            register<Copy>("copyFilesIntoRepo") {
-                group = "publishing"
-                dependsOn(buildRepository)
 
                 from(assemblePluginTask)
                 include("*.zip")
                 // providing version manually, as of weird evaluation errors
-                into(buildRepository.get().targetDirectory.get().resolve("${project.pluginId}/$version"))
+                into(extension.targetDirectory.get().resolve("${project.pluginId}/$version"))
 
                 eachFile {
                     if (it.relativePath.getFile(destinationDir).exists()) {
                         it.exclude() // exclude existing files, so checksums don't change
                     }
+                }
+            }
+
+            val repo = register("buildRepository") {
+                group = "publishing"
+                it.dependsOn(copyFilesIntoRepo,)
+            }
+
+            afterEvaluate {
+                val makeIndex = register<MakeRepositoryIndexTask>("makeRepositoryIndex") {
+                    group = "publishing"
+                    dependsOn(assemblePluginTask)
+                }
+
+                repo.configure {
+                    it.dependsOn(makeIndex)
                 }
             }
         }

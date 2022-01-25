@@ -41,7 +41,7 @@ class TicTacToeGame(
     private lateinit var winner: WinResult
 
     override val wonPlayers: List<TicTacToePlayer>
-        get() = if (winner is WinResult.Winner) listOf(players.first { it.type == (winner as? WinResult.Winner)?.type }) else emptyList()
+        get() = if (::winner.isInitialized && winner is WinResult.Winner) listOf(players.first { it.type == (winner as? WinResult.Winner)?.type }) else emptyList()
 
     override suspend fun obtainNewPlayer(
         user: User,
@@ -84,8 +84,8 @@ class TicTacToeGame(
                 val (x, y) = turn.interaction.componentId.substringAfter("select_").split('_').map { it.toInt() }
                 return Coordinate(x, y)
             } else {
-                repeat(game.size) { y ->
-                    repeat(game.size) { x ->
+                repeat(game.size) { x ->
+                    repeat(game.size) { y ->
                         if (game.isFree(x, y)) {
                             return Coordinate(x, y)
                         }

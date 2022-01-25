@@ -30,7 +30,7 @@ mikbotPlugin {
 }
 
 pluginPublishing {
-    repositoryUrl.set("https://plugin-repository.mikbot.schlaubi.net")
+    repositoryUrl.set("https://github.com/DRSchlaubi/mikbot/raw/plugin-repo")
     targetDirectory.set(rootProject.file("ci-repo").toPath())
     projectUrl.set("https://github.com/DRSchlaubi/tree/main/${project.path.drop(1).replace(":", "/")}")
 }

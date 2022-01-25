@@ -70,6 +70,9 @@ object PluginLoader : DefaultPluginManager(), KoinComponent {
             for (plugin in updates) {
                 LOG.debug { "Found update for plugin '${plugin.id}'" }
                 val lastRelease = updateManager.getLastPluginRelease(plugin.id)
+                // Don't update plugins which a specific version requested
+                if (Config.DOWNLOAD_PLUGINS.firstOrNull { it.id == plugin.id }?.version?.equals(lastRelease.version) == false)
+                    continue
                 val lastVersion = lastRelease.version
                 val installedVersion = getPlugin(plugin.id).descriptor.version
 
@@ -155,6 +158,7 @@ internal class DefaultPluginSystem(private val bot: Bot) : PluginSystem {
     override fun <T : ExtensionPoint> getExtensions(type: KClass<T>): List<T> = PluginLoader.getExtensions(type.java)
     override fun translate(key: String, bundleName: String, replacements: Array<Any?>): String =
         bot.translationProivder.translate(key, bundleName, replacements)
+
     override suspend fun emitEvent(event: Event) = events.emit(event)
 }
 

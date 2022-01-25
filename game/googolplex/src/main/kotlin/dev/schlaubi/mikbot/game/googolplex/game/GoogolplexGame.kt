@@ -125,11 +125,12 @@ class GoogolplexGame(
     }
 
     private fun List<ReactionEmoji>.buildHintList(correctSequence: List<ReactionEmoji>): List<String> {
-        val (correctPositions, wrongPositions) = withIndex()
-            .partition { (index, color) -> correctSequence[index] == color }
-        val correctIndexes = correctPositions.map { (index, _) -> index }
+        val (correctPositions, wrongPositions) = correctSequence
+            .withIndex()
+            .partition { (index, color) -> this[index] == color }
+
         val correctColors = wrongPositions.count { (_, color) ->
-            color in correctSequence.filterIndexed { index, _ -> index !in correctIndexes }
+            color in this
         }
 
         return (correctColor.take(correctColors) + correctPosition.take(correctPositions.size))

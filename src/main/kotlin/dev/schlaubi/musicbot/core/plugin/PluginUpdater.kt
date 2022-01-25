@@ -21,8 +21,9 @@ internal fun PluginLoader.checkForUpdates() {
         val exception = it.failedException
         if (exception is DependencyResolver.DependenciesNotFoundException) {
             if (exception.dependencies.all { id ->
-                    getPlugin(id) != null
-                }) {
+                getPlugin(id) != null
+            }
+            ) {
 
                 attemptPluginRestart(it.descriptor)
             }
@@ -30,8 +31,9 @@ internal fun PluginLoader.checkForUpdates() {
 
         if (exception is DependencyResolver.DependenciesWrongVersionException) {
             if (exception.dependencies.all { dependency ->
-                    getPlugin(dependency.dependencyId)?.descriptor?.version == dependency.requiredVersion
-                }) {
+                getPlugin(dependency.dependencyId)?.descriptor?.version == dependency.requiredVersion
+            }
+            ) {
 
                 attemptPluginRestart(it.descriptor)
             }
@@ -96,7 +98,7 @@ private fun PluginLoader.downloadRequestedPlugins() {
             if (plugin.id in installedPlugins) {
                 val installedPlugin = getPlugin(plugin.id)
                 if (installedPlugin.descriptor.version != version) {
-                    LOG.info { "Downgrading plugin ${plugin.id} to ${version}" }
+                    LOG.info { "Downgrading plugin ${plugin.id} to $version" }
                     updateManager.updatePlugin(plugin.id, version)
                 }
             } else {

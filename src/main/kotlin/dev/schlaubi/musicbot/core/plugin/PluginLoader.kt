@@ -90,7 +90,6 @@ object PluginLoader : DefaultPluginManager(), KoinComponent {
                     overrideOptional = true
                 )
 
-
             dependencyConflictPlugins.failPlugins(exception)
 
             LOG.warn(exception) { "Disabling the following plugins, because of a wrong dependency: ${dependencyConflictPlugins.map { it.descriptor.pluginId }}" }
@@ -129,7 +128,6 @@ object PluginLoader : DefaultPluginManager(), KoinComponent {
             (!dependency.isOptional && !overrideOptional) && dependency.pluginId in dependencies
         }
     }
-
 
     fun getPluginForBundle(bundle: String): PluginWrapper? {
         val sanitizedName = bundle.substringAfter("translations.").substringBefore(".")

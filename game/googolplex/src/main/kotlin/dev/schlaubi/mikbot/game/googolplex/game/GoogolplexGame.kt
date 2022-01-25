@@ -17,8 +17,8 @@ import dev.schlaubi.mikbot.game.google_emotes.googleLogoColor
 import dev.schlaubi.mikbot.game.google_emotes.googleLogoWhite
 import dev.schlaubi.mikbot.plugin.api.util.discordError
 
-private val correctColor = generateSequence { googleLogoWhite }
-private val correctPosition = generateSequence { googleLogoColor }
+private val correctColor get() = generateSequence { googleLogoWhite }
+private val correctPosition get() = generateSequence { googleLogoColor }
 
 class GoogolplexGame(
     val size: Int,
@@ -64,7 +64,7 @@ class GoogolplexGame(
             }
             existingGuesses += lastGuess.buildGuessUI(correctSequence)
             updateGameStateMessage(last())
-            done = lastGuess == correctSequence || ++tries > 10
+            done = lastGuess == correctSequence || ++tries > maxTries
         }
         winner = if (tries <= maxTries) {
             guessingPlayer // only the guessing player can win
@@ -127,8 +127,9 @@ class GoogolplexGame(
     private fun List<ReactionEmoji>.buildHintList(correctSequence: List<ReactionEmoji>): List<String> {
         val (correctPositions, wrongPositions) = withIndex()
             .partition { (index, color) -> correctSequence[index] == color }
+        val correctIndexes = correctPositions.map { (index, _) -> index }
         val correctColors = wrongPositions.count { (_, color) ->
-            color in correctSequence
+            color in correctSequence.filterIndexed { index, _ ->  index !in correctIndexes }
         }
 
         return (correctColor.take(correctColors) + correctPosition.take(correctPositions.size))

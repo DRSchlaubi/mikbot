@@ -129,7 +129,7 @@ class GoogolplexGame(
             .partition { (index, color) -> correctSequence[index] == color }
         val correctIndexes = correctPositions.map { (index, _) -> index }
         val correctColors = wrongPositions.count { (_, color) ->
-            color in correctSequence.filterIndexed { index, _ ->  index !in correctIndexes }
+            color in correctSequence.filterIndexed { index, _ -> index !in correctIndexes }
         }
 
         return (correctColor.take(correctColors) + correctPosition.take(correctPositions.size))

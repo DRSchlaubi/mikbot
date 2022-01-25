@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import mu.KotlinLogging
 import org.koin.core.component.KoinComponent
 import org.pf4j.*
+import org.pf4j.DependencyResolver.*
 import org.pf4j.update.DefaultUpdateRepository
 import org.pf4j.update.UpdateManager
 import org.pf4j.update.UpdateRepository
@@ -23,15 +24,15 @@ import kotlin.reflect.KClass
 private val LOG = KotlinLogging.logger { }
 
 object PluginLoader : DefaultPluginManager(), KoinComponent {
-    private val repos: List<UpdateRepository> = Config.PLUGIN_REPOSITORIES.map {
+    internal val repos: List<UpdateRepository> = Config.PLUGIN_REPOSITORIES.map {
         DefaultUpdateRepository(
             generateNonce(), URL(it)
         )
     }
-    private val updateManager = UpdateManager(this, repos)
+    internal val updateManager = UpdateManager(this, repos)
     private val rootTranslations = ClassLoader.getSystemClassLoader().findTranslations()
     override fun createExtensionFinder(): ExtensionFinder = DependencyCheckingExtensionFinder(this)
-
+    val resolver: DependencyResolver get() = dependencyResolver
     private lateinit var pluginBundles: Map<String, String>
 
     override fun getPluginDescriptorFinder(): PluginDescriptorFinder = MikBotPluginDescriptionFinder()
@@ -58,65 +59,77 @@ object PluginLoader : DefaultPluginManager(), KoinComponent {
         LOG.debug { "Built translation provider graph: $pluginBundles" }
     }
 
-    private fun checkForUpdates() {
-        if (repos.isEmpty()) {
-            LOG.warn { "No plugin repositories are defined, Updater will disable itself" }
-            return
+    override fun resolvePlugins() {
+        // retrieves the plugins descriptors
+        val descriptors = plugins.values.map { it.descriptor }
+        val result = dependencyResolver.resolve(descriptors)
+        if (result.hasCyclicDependency()) {
+            // This is too fatal to recover
+            throw CyclicDependencyException()
         }
 
-        if (updateManager.hasUpdates()) {
-            val updates = updateManager.updates
-            LOG.debug { "Found ${updates.size} plugin updates" }
-            for (plugin in updates) {
-                LOG.debug { "Found update for plugin '${plugin.id}'" }
-                val lastRelease = updateManager.getLastPluginRelease(plugin.id)
-                // Don't update plugins which a specific version requested
-                if (Config.DOWNLOAD_PLUGINS.firstOrNull { it.id == plugin.id }?.version?.equals(lastRelease.version) == false)
-                    continue
-                val lastVersion = lastRelease.version
-                val installedVersion = getPlugin(plugin.id).descriptor.version
+        val sortedPluginWrappers = result.sortedPlugins.mapNotNull { plugins[it] }
 
-                LOG.debug { "Update plugin '${plugin.id}' from version $installedVersion to version $lastVersion" }
-                val updated = updateManager.updatePlugin(plugin.id, lastVersion)
-                if (updated) {
-                    LOG.debug { "Updated plugin '${plugin.id}'" }
-                } else {
-                    LOG.error { "Cannot update plugin '${plugin.id}'" }
-                }
-            }
-        } else {
-            LOG.debug { "No updates found" }
+        val notFoundDependencies = result.notFoundDependencies
+        if (notFoundDependencies.isNotEmpty()) {
+            val exception = DependenciesNotFoundException(notFoundDependencies)
+            val missingDependencyPlugins =
+                sortedPluginWrappers.findPluginsDependingOn(notFoundDependencies)
+
+            missingDependencyPlugins.failPlugins(exception)
+
+            LOG.warn(exception) { "Disabling the following plugins, because of a missing dependency: ${missingDependencyPlugins.map { it.descriptor.pluginId }}" }
         }
+        val wrongVersionDependencies = result.wrongVersionDependencies
+        if (wrongVersionDependencies.isNotEmpty()) {
+            val exception = DependenciesWrongVersionException(wrongVersionDependencies)
 
-        if (updateManager.hasAvailablePlugins()) {
-            val installedPlugins = plugins.values.map { it.pluginId }
-            val requestedPlugins = Config.DOWNLOAD_PLUGINS
-                .filter { it.id !in installedPlugins }
-            val availablePlugins = updateManager.availablePlugins
-                .associateBy { it.id }
+            val dependencyConflictPlugins =
+                sortedPluginWrappers.findPluginsDependingOn(
+                    wrongVersionDependencies.map { it.dependencyId },
+                    overrideOptional = true
+                )
 
-            if (requestedPlugins.isNotEmpty()) {
-                LOG.info { "Attempting to download the following plugins: $requestedPlugins" }
-            }
 
-            requestedPlugins.forEach {
-                val plugin = availablePlugins[it.id]
-                if (plugin == null) {
-                    LOG.warn { "Could not find plugin ${it.id} in any repo" }
-                    return@forEach
+            dependencyConflictPlugins.failPlugins(exception)
+
+            LOG.warn(exception) { "Disabling the following plugins, because of a wrong dependency: ${dependencyConflictPlugins.map { it.descriptor.pluginId }}" }
+        }
+        val sortedPlugins = result.sortedPlugins
+
+        // move plugins from "unresolved" to "resolved"
+        for (pluginId in sortedPlugins) {
+            val pluginWrapper = plugins[pluginId]
+            if (unresolvedPlugins.remove(pluginWrapper)) {
+                val pluginState = pluginWrapper!!.pluginState
+                if (pluginState != PluginState.DISABLED) {
+                    pluginWrapper.pluginState = PluginState.RESOLVED
                 }
-
-                val version = it.version ?: updateManager.getLastPluginRelease(plugin.id).version
-
-                val installed = updateManager.installPlugin(plugin.id, version)
-                if (installed) {
-                    LOG.info { "Successfully installed plugin ${plugin.id} from a repository" }
-                } else {
-                    LOG.info { "Installation for plugin ${plugin.id} failed" }
-                }
+                resolvedPlugins.add(pluginWrapper)
+                LOG.info { "Plugin '${getPluginLabel(pluginWrapper.descriptor)}' resolved" }
+                firePluginStateEvent(PluginStateEvent(this, pluginWrapper, pluginState))
             }
         }
     }
+
+    private fun List<PluginWrapper>.failPlugins(
+        exception: Throwable
+    ) {
+        forEach {
+            it.failedException = exception
+            it.pluginState = PluginState.DISABLED
+        }
+    }
+
+    private fun List<PluginWrapper>.findPluginsDependingOn(
+        dependencies: List<String>,
+        overrideOptional: Boolean = false
+    ) = filter {
+        it.descriptor.dependencies.any { dependency ->
+            (!dependency.isOptional && !overrideOptional) && dependency.pluginId in dependencies
+        }
+    }
+
 
     fun getPluginForBundle(bundle: String): PluginWrapper? {
         val sanitizedName = bundle.substringAfter("translations.").substringBefore(".")
@@ -125,7 +138,16 @@ object PluginLoader : DefaultPluginManager(), KoinComponent {
         return getPlugin(pluginName)
     }
 
-    val botPlugins: List<Plugin> get() = plugins.values.map { it.plugin.asPlugin() }
+    val botPlugins: List<Plugin>
+        get() = plugins.values
+            .asSequence()
+            .filter {
+                it.pluginState != PluginState.FAILED && it.pluginState != PluginState.STOPPED && it.pluginState != PluginState.DISABLED
+            }
+            // If the plugin loading fails there is no classloader, but not necessarily a specific state
+            .filter { it.pluginClassLoader != null }
+            .map { it.plugin.asPlugin() }
+            .toList()
 }
 
 private class MikBotPluginDescriptionFinder : PluginDescriptorFinder {

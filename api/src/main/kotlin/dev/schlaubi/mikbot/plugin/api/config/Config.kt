@@ -105,7 +105,7 @@ public data class PluginSpec(public val id: String, public val version: String?)
         public fun parse(spec: String): PluginSpec {
             val at = spec.indexOf('@')
             return if (at >= 0) {
-                PluginSpec(spec.substring(0, at), spec.substring(at, spec.length))
+                PluginSpec(spec.substring(0, at), spec.substring(at + 1, spec.length))
             } else {
                 PluginSpec(spec, null)
             }

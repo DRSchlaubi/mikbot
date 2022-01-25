@@ -7,6 +7,8 @@ import dev.schlaubi.musicbot.core.Bot
 import dev.schlaubi.musicbot.core.plugin.PluginLoader
 import org.slf4j.LoggerFactory
 import kotlin.io.path.absolutePathString
+import kotlin.io.path.createDirectories
+import kotlin.io.path.exists
 
 suspend fun main() {
     initializeLogging()
@@ -18,6 +20,10 @@ suspend fun main() {
 private fun loadPlugins(bot: Bot) {
     if (System.getProperty("pf4j.pluginsDir").isNullOrBlank()) {
         System.setProperty("pf4j.pluginsDir", Config.PLUGIN_PATH.absolutePathString())
+    }
+
+    if (!Config.PLUGIN_PATH.exists()) {
+        Config.PLUGIN_PATH.createDirectories()
     }
 
     _pluginSystem = bot.pluginSystem

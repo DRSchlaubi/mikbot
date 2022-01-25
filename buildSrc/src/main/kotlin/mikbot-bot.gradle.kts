@@ -19,19 +19,19 @@ dependencies {
 
 tasks {
     val pluginsTxt = file("plugins.txt").toPath()
-    val plugins = if (Files.exists(pluginsTxt)) {
+    fun plugins() = if (Files.exists(pluginsTxt)) {
         Files.readAllLines(pluginsTxt)
             .asSequence()
             .filterNot { it.startsWith("#") }
             .filterNot { it.isBlank() }
-            .toList()
+            .toList().plusDependencies()
     } else {
         emptyList()
     }
     val pluginsDirectory = buildDir.resolve("installed-plugins")
 
     val deleteObsoletePlugins = register<Delete>("deleteObsoletePlugins") {
-        delete(pluginsDirectory.absolutePath + "/*")
+        delete(pluginsDirectory.absolutePath)
     }
 
     val installPlugins = register<Copy>("installPlugins") {
@@ -39,7 +39,7 @@ tasks {
 
         outputs.dir(pluginsDirectory)
 
-        plugins.forEach {
+        plugins().forEach {
             val task = project(it).tasks.getByName("assemblePlugin") as Jar
 
             dependsOn(task)
@@ -63,4 +63,18 @@ tasks {
     classes {
         dependsOn(exportProjectPath, installPlugins)
     }
+}
+
+fun List<String>.plusDependencies(): List<String> {
+    val dependencies = flatMap {
+        val project = project(it)
+        val hardDependencies = project.configurations["plugin"].dependencies.toList()
+        val optionalDependencies = project.configurations["optionalPlugin"].dependencies.toList()
+
+        (hardDependencies + optionalDependencies).mapNotNull { dependency ->
+            (dependency as? ProjectDependency)?.dependencyProject?.path
+        }.plusDependencies()
+    }
+
+    return (this + dependencies).distinct()
 }

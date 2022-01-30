@@ -56,6 +56,11 @@ class PluginExtension {
      * If you use the KSP processor you don't need to worry about this.
      */
     val pluginMainFileLocation: Path
+
+    /** 
+     * The optional override for the projects resources bundle folder.
+     */
+    abstract val bundle: String
 }
 ```
 

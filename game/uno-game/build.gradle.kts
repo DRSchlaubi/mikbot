@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "dev.schlaubi.mikbot"
-version = "1.2.0"
+version = "1.2.1"
 
 dependencies {
     plugin(projects.game.gameApi)
@@ -14,4 +14,5 @@ dependencies {
 
 mikbotPlugin {
     description.set("Plugin adding functionality to play UNO on Discord")
+    bundle.set("uno")
 }

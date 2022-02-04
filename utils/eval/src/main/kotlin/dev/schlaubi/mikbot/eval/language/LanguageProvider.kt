@@ -6,7 +6,7 @@ interface LanguageProvider {
     val displayName: String
     val id: String
 
-    fun execute(code: String): ExecutionResult
+    suspend fun execute(code: String): ExecutionResult
 
     companion object {
         val providers = listOf<LanguageProvider>(JavaScriptLanguageProvider())

@@ -60,7 +60,7 @@ suspend fun EvalExtension.evalCommand() = publicSlashCommand(::EvalArguments) {
         val language = LanguageProvider.providers.first { it.id == arguments.language }
         response.edit {
             embed {
-                description = "Running <a:loading:547513249835384833"
+                description = "Running <a:loading:547513249835384833>"
             }
         }
         val execution = measureTimedValue {
@@ -75,8 +75,10 @@ suspend fun EvalExtension.evalCommand() = publicSlashCommand(::EvalArguments) {
                     text = "Execution took ${execution.duration}"
                 }
                 color = if (execution.value.wasSuccessful) {
+                    title = ":white_check_mark: Successful execution"
                     Color(0x17cf17)
                 } else {
+                    title = ":x: Execution failed."
                     Color(0xcf3917)
                 }
             }

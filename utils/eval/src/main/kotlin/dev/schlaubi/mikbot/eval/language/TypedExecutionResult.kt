@@ -1,10 +1,9 @@
-package dev.schlaubi.mikbot.eval.language.javascript
+package dev.schlaubi.mikbot.eval.language
 
 import dev.kord.rest.builder.message.EmbedBuilder
-import dev.schlaubi.mikbot.eval.language.ExecutionResult
 
-abstract class JavaScriptExecutionResult : ExecutionResult() {
-    class Success(val result: Any) : ExecutionResult() {
+sealed class TypedExecutionResult : ExecutionResult() {
+    class Success(val result: Any) : TypedExecutionResult() {
         override val wasSuccessful: Boolean = true
 
         override suspend fun EmbedBuilder.applyToEmbed() {
@@ -17,14 +16,14 @@ abstract class JavaScriptExecutionResult : ExecutionResult() {
         }
     }
 
-    class Failing(val error: String, val stacktrace: String) : ExecutionResult() {
+    class Failing(val error: String, val stacktrace: String?) : TypedExecutionResult() {
         override val wasSuccessful: Boolean = false
 
         override suspend fun EmbedBuilder.applyToEmbed() {
             field("Error") {
                 "`${error}`"
             }
-            if (stacktrace.isNotBlank()) {
+            if (stacktrace?.isNotBlank() == true) {
                 field("Stacktrace") {
                     """
                     |```

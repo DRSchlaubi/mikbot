@@ -8,7 +8,7 @@ import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.respondEphemeral
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.User
-import dev.kord.core.entity.interaction.InteractionFollowup
+import dev.kord.core.entity.interaction.FollowupMessage
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.kord.rest.builder.message.create.MessageCreateBuilder
@@ -76,7 +76,7 @@ class TriviaGame(
     override suspend fun obtainNewPlayer(
         user: User,
         ack: EphemeralInteractionResponseBehavior,
-        loading: InteractionFollowup
+        loading: FollowupMessage
     ): MultipleChoicePlayer = MultipleChoicePlayer(user)
 
     override suspend fun EmbedBuilder.addQuestion(question: TriviaQuestion, hideCorrectAnswer: Boolean) {

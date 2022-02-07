@@ -9,7 +9,7 @@ import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.InteractionResponseBehavior
 import dev.kord.core.behavior.interaction.edit
 import dev.kord.core.behavior.interaction.followUp
-import dev.kord.core.entity.interaction.InteractionFollowup
+import dev.kord.core.entity.interaction.FollowupMessage
 import dev.kord.rest.builder.component.ActionRowBuilder
 import dev.kord.rest.builder.message.create.actionRow
 import dev.kord.rest.builder.message.modify.actionRow
@@ -99,7 +99,7 @@ interface ControlledGame<P : ControlledPlayer> {
  */
 interface ControlledPlayer : Player {
     val ack: InteractionResponseBehavior
-    val controls: InteractionFollowup
+    val controls: FollowupMessage
 
     /**
      * Requests new controls for this placer.

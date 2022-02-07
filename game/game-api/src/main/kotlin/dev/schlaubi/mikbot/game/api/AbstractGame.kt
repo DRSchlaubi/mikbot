@@ -21,7 +21,7 @@ import dev.kord.core.entity.User
 import dev.kord.core.entity.channel.TextChannel
 import dev.kord.core.entity.interaction.ComponentInteraction
 import dev.kord.core.entity.interaction.EphemeralFollowupMessage
-import dev.kord.core.entity.interaction.InteractionFollowup
+import dev.kord.core.entity.interaction.FollowupMessage
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.kord.rest.builder.message.modify.MessageModifyBuilder
@@ -148,7 +148,7 @@ abstract class AbstractGame<T : Player>(
     abstract suspend fun obtainNewPlayer(
         user: User,
         ack: EphemeralInteractionResponseBehavior,
-        loading: InteractionFollowup
+        loading: FollowupMessage
     ): T
 
     /**
@@ -266,11 +266,11 @@ abstract class AbstractGame<T : Player>(
 
         launch {
             delay(2.minutes) // delay so users can discuss game end and click the stats button
+            welcomeMessage.edit { components = mutableListOf() }
             thread.edit {
                 reason = "Game ended"
                 archived = true
             }
-            welcomeMessage.edit { components = mutableListOf() }
         }
         interactionListener.cancel()
         threadWatcher.cancel()

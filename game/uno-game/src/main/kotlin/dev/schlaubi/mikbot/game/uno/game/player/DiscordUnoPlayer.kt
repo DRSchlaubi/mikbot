@@ -2,7 +2,7 @@ package dev.schlaubi.mikbot.game.uno.game.player
 
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.interaction.*
-import dev.kord.core.entity.interaction.InteractionFollowup
+import dev.kord.core.entity.interaction.FollowupMessage
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.schlaubi.mikbot.game.api.ControlledPlayer
 import dev.schlaubi.mikbot.game.uno.game.DiscordUnoGame
@@ -28,7 +28,7 @@ const val allCardsButton = "request_all_cards"
 class DiscordUnoPlayer(
     override val user: UserBehavior,
     val response: EphemeralInteractionResponseBehavior,
-    override var controls: InteractionFollowup,
+    override var controls: FollowupMessage,
     val game: DiscordUnoGame
 ) : Player(), GamePlayer, ControlledPlayer {
     override val ack: InteractionResponseBehavior

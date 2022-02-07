@@ -1,9 +1,10 @@
 package space.votebot.command
 
 import com.kotlindiscord.kord.extensions.commands.Arguments
+import com.kotlindiscord.kord.extensions.commands.application.slash.converters.ChoiceEnum
+import com.kotlindiscord.kord.extensions.commands.application.slash.converters.impl.optionalEnumChoice
 import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalBoolean
 import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalDuration
-import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalEnum
 import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalInt
 import dev.schlaubi.mikbot.plugin.api.util.discordError
 import dev.schlaubi.mikbot.plugin.api.util.toDuration
@@ -53,12 +54,19 @@ interface PollSettingsArguments : PollSettings {
         this.description = description
     }
 
-    fun Arguments.emojiMode(description: String) = optionalEnum<PollSettings.EmojiMode> {
+    fun Arguments.emojiMode(description: String) = optionalEnumChoice<ChoiceEmojiMode> {
         name = "emoji-mode"
         this.description = description
         typeName = "EmojiMode"
     }
 }
+
+enum class ChoiceEmojiMode(override val readableName: String, val mode: PollSettings.EmojiMode) : ChoiceEnum {
+    ON("Random Emojis", PollSettings.EmojiMode.ON),
+    OFF("Numbers", PollSettings.EmojiMode.OFF),
+    CUSTOM("Custom Emotes", PollSettings.EmojiMode.CUSTOM)
+}
+
 @Suppress("LeakingThis") // This isn't huge
 abstract class AbstractPollSettingsArguments : Arguments(), PollSettingsArguments {
     override val maxVotes by maxVotes("How many times a user is allowed to vote")
@@ -67,7 +75,9 @@ abstract class AbstractPollSettingsArguments : Arguments(), PollSettingsArgument
     override val publicResults: Boolean? by publicResults("Whether to share who voted for what with the author or not")
     override val deleteAfterPeriod by voteDuration("Amount of time after which this poll should expire")
     override val showChartAfterClose: Boolean? by showChart("Whether to show a chart after the poll finished or not")
-    override val emojiMode: PollSettings.EmojiMode? by emojiMode("How to use emojis in this poll")
+    private val emojiModeOption by emojiMode("How to use emojis in this poll")
+    override val emojiMode: PollSettings.EmojiMode?
+        get() = emojiModeOption?.mode
 }
 
 fun <T> decide(current: T?, new: T?): T? = new ?: current

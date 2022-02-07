@@ -18,7 +18,9 @@ class DefaultOptionsArgument : Arguments(), PollSettingsArguments {
     override val showChartAfterClose: Boolean? by showChart("Whether to show a chart after a poll finished or not")
     override val hideResults: Boolean? by hideResults("Whether to show results only to people who voted or not")
     override val publicResults: Boolean? by publicResults("Whether to share who voted for what with the author or not")
-    override val emojiMode: PollSettings.EmojiMode? by emojiMode("How to use emojis in polls")
+    private val emojiModeOption by emojiMode("How to use emojis in polls")
+    override val emojiMode: PollSettings.EmojiMode?
+        get() = emojiModeOption?.mode
 }
 
 suspend fun SettingsModule.defaultOptionsCommand() = ephemeralSlashCommand(::DefaultOptionsArgument) {

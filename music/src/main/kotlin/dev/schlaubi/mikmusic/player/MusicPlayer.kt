@@ -11,7 +11,6 @@ import dev.schlaubi.lavakord.audio.TrackEndEvent
 import dev.schlaubi.lavakord.audio.TrackStartEvent
 import dev.schlaubi.lavakord.audio.on
 import dev.schlaubi.lavakord.audio.player.Filters
-import dev.schlaubi.lavakord.audio.player.FiltersApi
 import dev.schlaubi.lavakord.audio.player.Track
 import dev.schlaubi.lavakord.audio.player.applyFilters
 import dev.schlaubi.mikbot.plugin.api.io.Database
@@ -193,7 +192,6 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
         updateMusicChannelMessage()
     }
 
-    @OptIn(FiltersApi::class)
     suspend fun applyFilters(builder: Filters.() -> Unit) {
         val filters = MutableFilters().apply(builder)
         player.applyFilters(builder)

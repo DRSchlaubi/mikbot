@@ -8,7 +8,7 @@ import dev.kord.core.behavior.interaction.edit
 import dev.kord.core.behavior.interaction.followUpEphemeral
 import dev.kord.core.builder.components.emoji
 import dev.kord.core.entity.ReactionEmoji
-import dev.kord.core.entity.interaction.InteractionFollowup
+import dev.kord.core.entity.interaction.FollowupMessage
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.rest.builder.message.modify.MessageModifyBuilder
 import dev.kord.rest.builder.message.modify.actionRow
@@ -20,7 +20,7 @@ import kotlinx.coroutines.CompletableDeferred
 
 class GoogolplexPlayer(
     override val user: UserBehavior,
-    override var controls: InteractionFollowup,
+    override var controls: FollowupMessage,
     override val ack: InteractionResponseBehavior,
 ) : ControlledPlayer {
 

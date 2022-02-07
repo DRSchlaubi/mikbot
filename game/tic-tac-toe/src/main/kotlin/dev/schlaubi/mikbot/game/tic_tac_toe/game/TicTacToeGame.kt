@@ -9,7 +9,7 @@ import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.edit
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.User
-import dev.kord.core.entity.interaction.InteractionFollowup
+import dev.kord.core.entity.interaction.FollowupMessage
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.rest.builder.message.modify.MessageModifyBuilder
 import dev.schlaubi.mikbot.game.api.AbstractGame
@@ -46,7 +46,7 @@ class TicTacToeGame(
     override suspend fun obtainNewPlayer(
         user: User,
         ack: EphemeralInteractionResponseBehavior,
-        loading: InteractionFollowup
+        loading: FollowupMessage
     ): TicTacToePlayer {
         val type = playerTypeOrder.poll()
         ack.edit {

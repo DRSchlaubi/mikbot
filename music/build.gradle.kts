@@ -7,13 +7,13 @@ plugins {
 }
 
 group = "dev.schlaubi.mikbot"
-version = "1.2.4"
+version = "1.2.5"
 
 dependencies {
-    api("dev.schlaubi.lavakord", "kord", "3.1.1")
+    api("dev.schlaubi.lavakord", "kord", "3.4.0")
 
     // Plattform support
-    implementation("com.google.apis", "google-api-services-youtube", "v3-rev205-1.25.0")
+    implementation("com.google.apis", "google-api-services-youtube", "v3-rev222-1.25.0")
     api("se.michaelthelin.spotify", "spotify-web-api-java", "6.5.4")
 
     // SponsorBlock Client

@@ -3,6 +3,8 @@ package dev.schlaubi.mikbot.game.music_quiz.game
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
 import com.wrapper.spotify.model_objects.specification.Track
 import dev.kord.common.annotation.KordPreview
+import dev.kord.common.entity.ButtonStyle
+import dev.kord.common.entity.DiscordPartialEmoji
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
@@ -12,9 +14,12 @@ import dev.kord.core.behavior.interaction.followUpEphemeral
 import dev.kord.core.behavior.interaction.respondEphemeral
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.User
-import dev.kord.core.entity.interaction.InteractionFollowup
+import dev.kord.core.entity.interaction.FollowupMessage
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.rest.builder.message.EmbedBuilder
+import dev.kord.rest.builder.message.create.MessageCreateBuilder
+import dev.kord.rest.builder.message.create.actionRow
+import dev.kord.x.emoji.Emojis
 import dev.schlaubi.lavakord.rest.TrackResponse
 import dev.schlaubi.lavakord.rest.loadItem
 import dev.schlaubi.mikbot.game.api.translate
@@ -36,7 +41,7 @@ class SongQuizGame(
     host: UserBehavior,
     module: SongQuizModule,
     quizSize: Int,
-    val musicPlayer: MusicPlayer,
+    private val musicPlayer: MusicPlayer,
     trackContainer: TrackContainer,
     override val thread: ThreadChannelBehavior,
     override val welcomeMessage: Message,
@@ -44,7 +49,6 @@ class SongQuizGame(
 ) : MultipleChoiceGame<MultipleChoicePlayer, TrackQuestion, TrackContainer>(host, module, quizSize, trackContainer) {
     override val playerRange: IntRange = 1..10
     private var beforePlayerState: PersistentPlayerState? = null
-//    lateinit var currentTrack: Track
 
     override fun EmbedBuilder.addWelcomeMessage() {
         field {
@@ -56,7 +60,7 @@ class SongQuizGame(
     override suspend fun obtainNewPlayer(
         user: User,
         ack: EphemeralInteractionResponseBehavior,
-        loading: InteractionFollowup
+        loading: FollowupMessage
     ): SongQuizPlayer =
         SongQuizPlayer(user).also {
             loading.edit { content = translate(user, "song_quiz.controls.joined") }
@@ -115,6 +119,14 @@ class SongQuizGame(
             state.applyToPlayer(musicPlayer)
         }
         super.end()
+    }
+
+    override fun MessageCreateBuilder.questionUI(question: TrackQuestion) {
+        actionRow {
+            interactionButton(ButtonStyle.Primary, "like") {
+                emoji = DiscordPartialEmoji(name = Emojis.heart.unicode)
+            }
+        }
     }
 
     override suspend fun EmbedBuilder.addQuestion(question: TrackQuestion, hideCorrectAnswer: Boolean) {

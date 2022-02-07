@@ -9,7 +9,7 @@ import dev.kord.core.behavior.interaction.edit
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.ReactionEmoji
 import dev.kord.core.entity.User
-import dev.kord.core.entity.interaction.InteractionFollowup
+import dev.kord.core.entity.interaction.FollowupMessage
 import dev.kord.rest.builder.message.modify.embed
 import dev.schlaubi.mikbot.game.api.*
 import dev.schlaubi.mikbot.game.api.module.GameModule
@@ -37,7 +37,7 @@ class GoogolplexGame(
     override suspend fun obtainNewPlayer(
         user: User,
         ack: EphemeralInteractionResponseBehavior,
-        loading: InteractionFollowup
+        loading: FollowupMessage
     ): GoogolplexPlayer = GoogolplexPlayer(user, loading, ack)
 
     override suspend fun runGame() {

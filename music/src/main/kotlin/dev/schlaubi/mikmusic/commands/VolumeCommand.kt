@@ -4,7 +4,6 @@ import com.kotlindiscord.kord.extensions.DiscordRelayedException
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalInt
 import com.kotlindiscord.kord.extensions.types.respond
-import dev.schlaubi.lavakord.audio.player.FiltersApi
 import dev.schlaubi.mikmusic.core.MusicModule
 
 class VolumeArguments : Arguments() {
@@ -20,7 +19,6 @@ class VolumeArguments : Arguments() {
     }
 }
 
-@OptIn(FiltersApi::class)
 suspend fun MusicModule.volumeCommand() = ephemeralControlSlashCommand(::VolumeArguments) {
     name = "volume"
     description = "Changes the volume of the bot"

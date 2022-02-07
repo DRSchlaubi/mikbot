@@ -12,7 +12,7 @@ import dev.kord.core.behavior.reply
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.User
 import dev.kord.core.entity.channel.DmChannel
-import dev.kord.core.entity.interaction.InteractionFollowup
+import dev.kord.core.entity.interaction.FollowupMessage
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.rest.builder.message.EmbedBuilder
@@ -51,7 +51,7 @@ class HangmanGame(
     override suspend fun obtainNewPlayer(
         user: User,
         ack: EphemeralInteractionResponseBehavior,
-        loading: InteractionFollowup
+        loading: FollowupMessage
     ): HangmanPlayer = HangmanPlayer(user)
 
     private suspend fun retrieveWord(): String? {

@@ -15,12 +15,12 @@ dependencies {
     // Api base
     api(project("annotations"))
     // Bot
-    api("com.kotlindiscord.kord.extensions", "kord-extensions", "1.5.2-MIKBOT")
+    api("com.kotlindiscord.kord.extensions", "kord-extensions", "1.5.2-RC1")
     api("dev.kord.x", "emoji", "0.5.0") {
         exclude("dev.kord")
     }
-    api("org.jetbrains.kotlinx", "kotlinx-coroutines-jdk8", "1.5.2")
-    api("org.litote.kmongo", "kmongo-coroutine-serialization", "4.3.0")
+    api("org.jetbrains.kotlinx", "kotlinx-coroutines-jdk8", "1.6.0")
+    api("org.litote.kmongo", "kmongo-coroutine-serialization", "4.4.0")
     api("org.pf4j", "pf4j", "3.6.0")
 
     // Util

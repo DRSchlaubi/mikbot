@@ -8,7 +8,7 @@ import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.followUpEphemeral
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.User
-import dev.kord.core.entity.interaction.InteractionFollowup
+import dev.kord.core.entity.interaction.FollowupMessage
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.kord.rest.builder.message.modify.MessageModifyBuilder
@@ -69,7 +69,7 @@ class DiscordUnoGame(
     override suspend fun obtainNewPlayer(
         user: User,
         ack: EphemeralInteractionResponseBehavior,
-        loading: InteractionFollowup
+        loading: FollowupMessage
     ): DiscordUnoPlayer = DiscordUnoPlayer(
         user,
         ack,

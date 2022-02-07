@@ -13,6 +13,7 @@ env:
   GRADLE_BUILDCACHE_URL: ${{ secrets.BUILDCACHE_URL }}
   GRADLE_BUILDCACHE_USERNNAME: ${{ secrets.BUILDCACHE_USER }}
   GRADLE_BUILDCACHE_PASSWORD: ${{ secrets.BUILDCACHE_PASSWORD }}
+  ORG_GRADLE_CACHING: true
   IS_PR: ${{ github.event_name == 'pull_request' }}
 
 jobs:

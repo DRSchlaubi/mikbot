@@ -5,6 +5,7 @@ import dev.nycode.sponsorblock.model.Category
 import dev.nycode.sponsorblock.model.SkipSegment
 import dev.schlaubi.lavakord.audio.player.Player
 import dev.schlaubi.lavakord.audio.player.Track
+import dev.schlaubi.mikmusic.util.youtubeId
 import mu.KotlinLogging
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.time.Duration.Companion.milliseconds
@@ -21,7 +22,7 @@ private val logger = KotlinLogging.logger {}
  * @return the loaded information or `null` if it's not a track from youtube.
  */
 suspend fun Track.loadSponsorBlockInfo(): List<SkipSegment>? {
-    val videoId = this.getYouTubeVideoId() ?: return null
+    val videoId = youtubeId ?: return null
     return runCatching {
         cache.getOrPut(videoId) {
             client.segments.getSkipSegments(videoId) {
@@ -50,12 +51,7 @@ suspend fun Track.checkAndSkipSponsorBlockSegments(player: Player) {
  * Deletes the local cached data for the current track
  */
 fun Track.deleteSponsorBlockCache() {
-    cache.remove(getYouTubeVideoId())
+    if (youtubeId != null) {
+        cache.remove(youtubeId)
+    }
 }
-
-/**
- * Parses a YouTube video's id from the url
- */
-private fun Track.getYouTubeVideoId(): String? = if (source == "youtube") {
-    uri?.substringAfter("https://www.youtube.com/watch?v=")
-} else null

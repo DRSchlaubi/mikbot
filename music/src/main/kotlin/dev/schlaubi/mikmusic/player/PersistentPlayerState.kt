@@ -1,5 +1,3 @@
-@file:OptIn(FiltersApi::class)
-
 package dev.schlaubi.mikmusic.player
 
 import dev.kord.common.entity.Snowflake
@@ -50,7 +48,12 @@ data class MutableFilters(
     override val timescale: Filters.Timescale? = null,
     override val tremolo: Filters.Tremolo? = null,
     override val vibrato: Filters.Vibrato? = null,
-    override var volume: Float? = null
+    override var volume: Float? = null,
+    override val bands: MutableList<Band> = mutableListOf(),
+    override val channelMix: Filters.ChannelMix? = null,
+    override val distortion: Filters.Distortion? = null,
+    override val lowPass: Filters.LowPass? = null,
+    override val rotation: Filters.Rotation? = null
 ) : Filters
 
 @Serializable

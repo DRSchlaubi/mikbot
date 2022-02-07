@@ -59,11 +59,11 @@ suspend fun searchForYouTubeMusicVideos(query: String) {
     }
 }
 
-suspend fun Track.findOnYoutube(): Video? {
-    if (uri?.contains("youtu(?:be)?".toRegex()) == true) {
-        return getVideoById(identifier)
-    }
-    return null
+val Track.youtubeId: String?
+    get() = if (uri?.contains("youtu(?:be)?".toRegex()) == true) identifier else null
+
+suspend fun Track.findOnYoutube(): Video? = youtubeId?.let {
+    getVideoById(it)
 }
 
 private class RequestInitializer : YouTubeRequestInitializer() {

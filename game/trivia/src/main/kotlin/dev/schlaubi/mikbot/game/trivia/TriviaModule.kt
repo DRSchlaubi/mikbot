@@ -3,7 +3,6 @@ package dev.schlaubi.mikbot.game.trivia
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.application.slash.converters.impl.optionalEnumChoice
 import com.kotlindiscord.kord.extensions.commands.converters.impl.defaultingInt
-import com.kotlindiscord.kord.extensions.utils.convertToISO
 import dev.schlaubi.mikbot.game.api.UserGameStats
 import dev.schlaubi.mikbot.game.api.module.GameModule
 import dev.schlaubi.mikbot.game.api.module.commands.leaderboardCommand
@@ -15,6 +14,7 @@ import dev.schlaubi.mikbot.game.trivia.game.TriviaGame
 import dev.schlaubi.mikbot.game.trivia.open_trivia.Category
 import dev.schlaubi.mikbot.game.trivia.open_trivia.Difficulty
 import dev.schlaubi.mikbot.game.trivia.open_trivia.Type
+import dev.schlaubi.mikbot.plugin.api.util.convertToISO
 import org.litote.kmongo.coroutine.CoroutineCollection
 
 class StartTriviaArguments : Arguments() {

@@ -12,6 +12,7 @@ import dev.kord.core.behavior.interaction.followUp
 import dev.kord.core.entity.interaction.FollowupMessage
 import dev.kord.rest.builder.component.ActionRowBuilder
 import dev.kord.rest.builder.message.create.actionRow
+import dev.kord.rest.builder.message.modify.MessageModifyBuilder
 import dev.kord.rest.builder.message.modify.actionRow
 import dev.schlaubi.mikbot.plugin.api.util.componentLive
 import kotlinx.coroutines.CompletableDeferred
@@ -27,6 +28,20 @@ private const val REQUEST_CONTROLS = "request_controls"
  */
 interface ControlledGame<P : ControlledPlayer> {
     val players: List<P>
+    val running: Boolean
+
+    /**
+     * Adds the resend controlls button.
+     */
+    fun MessageModifyBuilder.addResendControlsButton() {
+        actionRow {
+            if (running) {
+                interactionButton(ButtonStyle.Secondary, resendControlsButton) {
+                    label = "Resend Controls"
+                }
+            }
+        }
+    }
 
     suspend fun AbstractGame<P>.askForRematch(newThread: ThreadChannelBehavior, newGame: AbstractGame<P>): Boolean {
         val waitingPlayers = players.map { it.user }.toMutableList()

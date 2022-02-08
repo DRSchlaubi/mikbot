@@ -5,7 +5,6 @@ import com.kotlindiscord.kord.extensions.components.components
 import com.kotlindiscord.kord.extensions.components.publicButton
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
 import com.kotlindiscord.kord.extensions.types.respond
-import dev.kord.common.entity.ButtonStyle
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
 import dev.kord.core.behavior.UserBehavior
@@ -26,7 +25,6 @@ import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.kord.rest.builder.message.modify.MessageModifyBuilder
 import dev.kord.rest.builder.message.modify.UserMessageModifyBuilder
-import dev.kord.rest.builder.message.modify.actionRow
 import dev.kord.rest.builder.message.modify.embed
 import dev.kord.x.emoji.Emojis
 import dev.schlaubi.mikbot.game.api.events.interactionHandler
@@ -156,6 +154,10 @@ abstract class AbstractGame<T : Player>(
      */
     suspend fun doUpdateWelcomeMessage() {
         welcomeMessage.edit {
+            if (this@AbstractGame is ControlledGame<*>) {
+                addResendControlsButton()
+            }
+
             if (running) {
                 updateWelcomeMessage()
             } else {
@@ -188,13 +190,7 @@ abstract class AbstractGame<T : Player>(
             coroutineScope {
                 if (this@AbstractGame is ControlledGame<*>) {
                     welcomeMessage.edit {
-                        actionRow {
-                            if (running) {
-                                interactionButton(ButtonStyle.Secondary, resendControlsButton) {
-                                    label = "Resend Controls"
-                                }
-                            }
-                        }
+                        addResendControlsButton()
                     }
                 }
 

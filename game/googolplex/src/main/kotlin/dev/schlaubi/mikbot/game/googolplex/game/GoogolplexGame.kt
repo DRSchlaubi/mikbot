@@ -78,6 +78,8 @@ class GoogolplexGame(
         current: List<ReactionEmoji>? = null
     ) {
         welcomeMessage.edit {
+            addResendControlsButton()
+
             val description = buildString {
                 appendLine("**Guesses:**")
 

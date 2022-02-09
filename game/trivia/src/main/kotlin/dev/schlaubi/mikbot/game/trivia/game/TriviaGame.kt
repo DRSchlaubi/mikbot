@@ -76,7 +76,8 @@ class TriviaGame(
     override suspend fun obtainNewPlayer(
         user: User,
         ack: EphemeralInteractionResponseBehavior,
-        loading: FollowupMessage
+        loading: FollowupMessage,
+        userLocale: dev.kord.common.Locale?
     ): MultipleChoicePlayer = MultipleChoicePlayer(user)
 
     override suspend fun EmbedBuilder.addQuestion(question: TriviaQuestion, hideCorrectAnswer: Boolean) {

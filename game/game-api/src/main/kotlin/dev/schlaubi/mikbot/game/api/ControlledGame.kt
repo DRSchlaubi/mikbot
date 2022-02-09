@@ -72,7 +72,8 @@ interface ControlledGame<P : ControlledPlayer> {
             val newPlayer = newGame.obtainNewPlayer(
                 interaction.user,
                 ack,
-                ack.followUp { content = "Loading ..." }
+                ack.followUp { content = "Loading ..." },
+                interaction.locale
             )
             newGame.players.add(newPlayer)
             waitingPlayers.remove(newPlayer.user)

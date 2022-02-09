@@ -8,13 +8,14 @@ import dev.kord.core.behavior.interaction.edit
 import dev.kord.core.behavior.interaction.followUpEphemeral
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.schlaubi.mikbot.plugin.api.util.MessageBuilder
+import dev.schlaubi.mikbot.plugin.api.util.convertToISO
 import dev.schlaubi.mikbot.plugin.api.util.getLocale
 
 @Suppress("UNCHECKED_CAST")
 suspend fun DiscordUnoPlayer.translate(key: String, vararg replacements: Any?) =
     game.translationsProvider.translate(
         key,
-        getKoin().get<ExtensibleBot>().getLocale(game.thread.asChannel(), user.asUser()),
+        discordLocale?.convertToISO()?.asJavaLocale() ?: getKoin().get<ExtensibleBot>().getLocale(game.thread.asChannel(), user.asUser()),
         "uno",
         replacements = replacements as Array<Any?>
     )

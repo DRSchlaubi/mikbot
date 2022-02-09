@@ -1,6 +1,7 @@
 package dev.schlaubi.mikbot.game.googolplex.game
 
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
+import dev.kord.common.Locale
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
 import dev.kord.core.behavior.edit
@@ -37,7 +38,8 @@ class GoogolplexGame(
     override suspend fun obtainNewPlayer(
         user: User,
         ack: EphemeralInteractionResponseBehavior,
-        loading: FollowupMessage
+        loading: FollowupMessage,
+        userLocale: Locale?
     ): GoogolplexPlayer = GoogolplexPlayer(user, loading, ack)
 
     override suspend fun runGame() {

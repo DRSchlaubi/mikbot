@@ -5,6 +5,7 @@ import com.kotlindiscord.kord.extensions.components.components
 import com.kotlindiscord.kord.extensions.components.publicButton
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
 import com.kotlindiscord.kord.extensions.types.respond
+import dev.kord.common.Locale
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
 import dev.kord.core.behavior.UserBehavior
@@ -142,11 +143,13 @@ abstract class AbstractGame<T : Player>(
      *
      * @param ack the [EphemeralInteractionResponseBehavior] for the triggering interaction
      * @param loading the [EphemeralFollowupMessage] for the user who joined
+     * @param userLocale the locale Discord included in the interaction
      */
     abstract suspend fun obtainNewPlayer(
         user: User,
         ack: EphemeralInteractionResponseBehavior,
-        loading: FollowupMessage
+        loading: FollowupMessage,
+        userLocale: Locale?
     ): T
 
     /**

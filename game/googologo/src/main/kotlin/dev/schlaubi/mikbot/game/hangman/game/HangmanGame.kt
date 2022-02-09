@@ -51,7 +51,8 @@ class HangmanGame(
     override suspend fun obtainNewPlayer(
         user: User,
         ack: EphemeralInteractionResponseBehavior,
-        loading: FollowupMessage
+        loading: FollowupMessage,
+        userLocale: dev.kord.common.Locale?
     ): HangmanPlayer = HangmanPlayer(user)
 
     private suspend fun retrieveWord(): String? {

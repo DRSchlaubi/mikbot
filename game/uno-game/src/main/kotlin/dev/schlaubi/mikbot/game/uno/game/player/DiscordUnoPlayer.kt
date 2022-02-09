@@ -1,5 +1,6 @@
 package dev.schlaubi.mikbot.game.uno.game.player
 
+import dev.kord.common.Locale
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.interaction.*
 import dev.kord.core.entity.interaction.FollowupMessage
@@ -29,7 +30,8 @@ class DiscordUnoPlayer(
     override val user: UserBehavior,
     val response: EphemeralInteractionResponseBehavior,
     override var controls: FollowupMessage,
-    val game: DiscordUnoGame
+    val game: DiscordUnoGame,
+    val discordLocale: Locale?
 ) : Player(), GamePlayer, ControlledPlayer {
     override val ack: InteractionResponseBehavior
         get() = response

@@ -1,6 +1,7 @@
 package dev.schlaubi.mikbot.game.uno.game
 
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
+import dev.kord.common.Locale
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.channel.createEmbed
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
@@ -69,12 +70,14 @@ class DiscordUnoGame(
     override suspend fun obtainNewPlayer(
         user: User,
         ack: EphemeralInteractionResponseBehavior,
-        loading: FollowupMessage
+        loading: FollowupMessage,
+        userLocale: Locale?
     ): DiscordUnoPlayer = DiscordUnoPlayer(
         user,
         ack,
         loading,
-        this
+        this,
+        userLocale
     )
 
     override suspend fun onRejoin(event: ComponentInteractionCreateEvent, player: DiscordUnoPlayer) =

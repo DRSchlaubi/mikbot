@@ -2,6 +2,7 @@ package dev.schlaubi.mikbot.game.tic_tac_toe.game
 
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
 import com.kotlindiscord.kord.extensions.utils.waitFor
+import dev.kord.common.Locale
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
 import dev.kord.core.behavior.edit
@@ -46,7 +47,8 @@ class TicTacToeGame(
     override suspend fun obtainNewPlayer(
         user: User,
         ack: EphemeralInteractionResponseBehavior,
-        loading: FollowupMessage
+        loading: FollowupMessage,
+        userLocale: Locale?
     ): TicTacToePlayer {
         val type = playerTypeOrder.poll()
         ack.edit {

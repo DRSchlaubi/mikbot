@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "dev.schlaubi"
-version = "1.0.1"
+version = "1.1.0"
 
 dependencies {
     implementation("com.google.devtools.ksp", "symbol-processing-api", "1.6.10-1.0.2")

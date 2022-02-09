@@ -1,5 +1,6 @@
 package dev.schlaubi.mikbot.plugin.processor
 
+import com.google.devtools.ksp.containingFile
 import com.google.devtools.ksp.processing.Dependencies
 import com.google.devtools.ksp.processing.Resolver
 import com.google.devtools.ksp.processing.SymbolProcessor
@@ -9,12 +10,9 @@ import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import dev.schlaubi.mikbot.plugin.api.PluginMain
 import org.pf4j.Extension
-import org.slf4j.LoggerFactory
 import java.util.*
 
 class PluginProcessor(private val environment: SymbolProcessorEnvironment) : SymbolProcessor {
-
-    private val logger = LoggerFactory.getLogger(PluginProcessor::class.java)
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
         // this prevents the processor from running twice
@@ -42,6 +40,12 @@ class PluginProcessor(private val environment: SymbolProcessorEnvironment) : Sym
             .map { it.asString() }
 
         val file = environment.codeGenerator.createNewFile(Dependencies.ALL_FILES, "META-INF", "extensions", "idx")
+        environment.codeGenerator.associate(
+            symbols.map { it.containingFile!! }.toList(),
+            "META-INF",
+            "extensions",
+            "idx"
+        )
         file.bufferedWriter().use { it.write(names.joinToString("\n")) }
     }
 
@@ -54,7 +58,7 @@ class PluginProcessor(private val environment: SymbolProcessorEnvironment) : Sym
         )
         val symbols = symbolsSequence.take(2).toList()
         if (symbols.isEmpty()) {
-            logger.warn("No @PluginMain found in this module: $symbols")
+            environment.logger.warn("No @PluginMain found in this module: $symbols")
             return false
         }
         require(symbols.size == 1) {
@@ -68,6 +72,7 @@ class PluginProcessor(private val environment: SymbolProcessorEnvironment) : Sym
 
         val name = symbol.qualifiedName?.asString() ?: error("Symbol does not have a name: $symbol")
         val path = environment.codeGenerator.createNewFile(Dependencies(false), "META-INF", "plugin", "properties")
+        environment.codeGenerator.associate(listOf(symbol.containingFile!!), "META-INF", "plugin", "properties")
         val properties = Properties().apply {
             setProperty("plugin.class", name)
         }

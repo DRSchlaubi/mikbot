@@ -34,8 +34,8 @@ interface ControlledGame<P : ControlledPlayer> {
      * Adds the resend controlls button.
      */
     fun MessageModifyBuilder.addResendControlsButton() {
-        actionRow {
-            if (running) {
+        if (running) {
+            actionRow {
                 interactionButton(ButtonStyle.Secondary, resendControlsButton) {
                     label = "Resend Controls"
                 }
@@ -69,7 +69,7 @@ interface ControlledGame<P : ControlledPlayer> {
         message.componentLive(this).onInteraction {
 
             val ack = interaction.acknowledgeEphemeral()
-            val newPlayer = obtainNewPlayer(
+            val newPlayer = newGame.obtainNewPlayer(
                 interaction.user,
                 ack,
                 ack.followUp { content = "Loading ..." }

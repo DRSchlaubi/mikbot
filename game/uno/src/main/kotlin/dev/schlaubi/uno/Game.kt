@@ -88,6 +88,11 @@ public class Game<T : Player>(
     private val extreme: Boolean = false,
     flash: Boolean = false
 ) {
+    init {
+        println()
+        println()
+    }
+
     private val playerSequence: PlayerSequence<T> =
         if (flash) FlashPlayerSequence() else NormalPlayerSequence()
     private val deck = getDefaultUnoDeck(extreme, flash)

@@ -6,6 +6,7 @@ import dev.kord.core.behavior.edit
 import dev.kord.rest.builder.message.modify.actionRow
 import dev.kord.x.emoji.DiscordEmoji
 import dev.kord.x.emoji.Emojis
+import dev.schlaubi.mikbot.game.connect_four.Connect4
 import dev.schlaubi.mikbot.game.connect_four.Coordinate
 import dev.schlaubi.mikbot.game.connect_four.WinResult
 
@@ -24,11 +25,13 @@ val Int.emoji: DiscordEmoji.Generic
         else -> error("$this exceeds Range of 9")
     }
 
-fun Connect4Game.buildGameBoard() = buildString {
+fun Connect4Game.buildGameBoard() = game.buildGameBoard(winResult)
+
+fun Connect4.buildGameBoard(winResult: WinResult? = null) = buildString {
     // Header
     append(filler)
         .apply {
-            (1..game.width).forEach {
+            (1..width).forEach {
                 append(it.emoji)
             }
         }
@@ -36,7 +39,7 @@ fun Connect4Game.buildGameBoard() = buildString {
         .appendLine()
 
     // Game content
-    game.forEachCoordinate({ append(filler) }, {
+    forEachCoordinate({ append(filler) }, {
         append(filler)
         appendLine()
     }) { (x, y) ->
@@ -47,12 +50,12 @@ fun Connect4Game.buildGameBoard() = buildString {
             null
         }
 
-        val emoji = (game.grid[x][y])?.getEmoji(winningType)?.mention ?: Emojis.brownSquare
+        val emoji = (grid[x][y])?.getEmoji(winningType)?.mention ?: Emojis.brownSquare
         append(emoji)
     }
 
     // Bottom Row
-    repeat(game.width + 2) {
+    repeat(width + 2) {
         append(filler)
     }
 }
@@ -78,5 +81,5 @@ suspend fun Connect4Game.updateBoard(player: Connect4Player, winner: Boolean) {
     }
 }
 
-private val DiscordPartialEmoji.mention: String
+val DiscordPartialEmoji.mention: String
     get() = "<:$name:$id>"

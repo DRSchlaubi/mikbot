@@ -22,6 +22,7 @@ include(
     "game:trivia",
     "game:tic-tac-toe",
     "game:googolplex",
+    "game:connect-four",
     "utils",
     "utils:ktor",
     "utils:verification-system",

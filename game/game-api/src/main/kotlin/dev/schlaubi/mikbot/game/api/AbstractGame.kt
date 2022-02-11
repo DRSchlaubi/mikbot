@@ -61,7 +61,7 @@ abstract class AbstractGame<T : Player>(
     val players: MutableList<T> = mutableListOf()
     override val coroutineContext: CoroutineContext =
         Dispatchers.IO + SupervisorJob() + CoroutineExceptionHandler { coroutineContext, throwable ->
-            LOG.debug(throwable) { "An error occurred in Game $coroutineContext " }
+            LOG.error(throwable) { "An error occurred in Game $coroutineContext " }
         }
     protected val leftPlayers = mutableListOf<T>()
 
@@ -69,6 +69,7 @@ abstract class AbstractGame<T : Player>(
     abstract val thread: ThreadChannelBehavior
     abstract val welcomeMessage: Message
     abstract val wonPlayers: List<T>
+    open val isEligibleForStats = true
     val hostPlayer: T?
         get() = players.firstOrNull { it.user == host }
     val bundle: String
@@ -100,6 +101,11 @@ abstract class AbstractGame<T : Player>(
 
     val UserBehavior.gamePlayer: T
         get() = players.first { it.user.id == id }
+
+    /**
+     * Require the game to be started to do this.
+     */
+    protected fun requireRunning() = check(running) { "Game has to be started to perform this action" }
 
     /**
      * Event handler for custom events on [welcomeMessage].
@@ -328,6 +334,9 @@ abstract class AbstractGame<T : Player>(
     protected open suspend fun EmbedBuilder.endEmbed(messageModifyBuilder: MessageModifyBuilder) = Unit
 
     private suspend fun updateStats() {
+        if (!isEligibleForStats) {
+            return
+        }
         // Winning against yourself, doesn't count
         if ((players.size + leftPlayers.size) == 1) return
         val winner = wonPlayers.firstOrNull()

@@ -68,7 +68,7 @@ suspend fun Poll.updateMessages(
     highlightWinner: Boolean = false,
     showChart: Boolean? = null
 ) {
-    val pieChart = if (highlightWinner && showChart ?: settings.showChartAfterClose) {
+    val pieChart = if (highlightWinner && showChart ?: settings.showChartAfterClose && votes.isNotEmpty()) {
         pieChartService
             .createPieChart(toPieChartCreateRequest(kord, guild))
             .toInputStream()

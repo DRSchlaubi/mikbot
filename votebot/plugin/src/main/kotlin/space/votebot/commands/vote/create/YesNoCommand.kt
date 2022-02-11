@@ -10,10 +10,15 @@ import space.votebot.common.models.StoredPollSettings
 import space.votebot.core.VoteBotModule
 
 class YesNoArguments : AbstractPollSettingsArguments(), CreateSettings {
-    override val settings: PollSettings = StoredPollSettings(
-        maxChanges = 0,
-        maxVotes = 1
-    )
+    override val settings: PollSettings
+        get() = StoredPollSettings(
+            maxChanges = 0,
+            maxVotes = 1,
+            showChartAfterClose = showChartAfterClose,
+            hideResults = hideResults,
+            publicResults = publicResults,
+            emojiMode = emojiMode
+        )
     override val channel: Channel? by voteChannel()
     private val yesWord by defaultingString {
         name = "yes-word"

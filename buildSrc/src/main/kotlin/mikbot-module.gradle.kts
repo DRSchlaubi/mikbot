@@ -13,7 +13,7 @@ tasks {
     withType<KotlinCompile> {
         kotlinOptions {
             jvmTarget = "17"
-            freeCompilerArgs = freeCompilerArgs + experimentalAnnotations.map { "-Xopt-in=$it" }
+            freeCompilerArgs = freeCompilerArgs + "-Xbackend-threads=16" + experimentalAnnotations.map { "-opt-in=$it" }
         }
     }
 }

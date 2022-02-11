@@ -75,7 +75,9 @@ class Connect4Module : GameModule<Connect4Player, AbstractGame<Connect4Player>>(
                         translationsProvider,
                         user,
                         this@Connect4Module
-                    )
+                    ).apply {
+                        players.add(Connect4Player(user, Connect4.Player.RED))
+                    }
                 } else {
                     Connect4Game(
                         arguments.height,

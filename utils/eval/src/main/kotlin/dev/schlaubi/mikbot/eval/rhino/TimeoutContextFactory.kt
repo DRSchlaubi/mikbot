@@ -19,6 +19,7 @@ class TimeoutContextFactory(private val timeout: Duration) : ContextFactory() {
         // Make Rhino runtime to call observeInstructionCount
         // each 10000 bytecode instructions
         cx.instructionObserverThreshold = 10000
+        cx.javaToJSONConverter = KotlinxSerializationJsonConverter()
         return cx
     }
 

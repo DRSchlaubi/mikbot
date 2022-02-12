@@ -7,6 +7,7 @@ import dev.schlaubi.mikbot.eval.rhino.ScriptTimedoutException
 import dev.schlaubi.mikbot.eval.rhino.TimeoutContextFactory
 import org.mozilla.javascript.Context
 import org.mozilla.javascript.RhinoException
+import org.mozilla.javascript.ScriptableObject
 import kotlin.time.Duration.Companion.seconds
 
 class JavaScriptLanguageProvider : LanguageProvider {
@@ -18,7 +19,11 @@ class JavaScriptLanguageProvider : LanguageProvider {
         return try {
             val scope = context.initSafeStandardObjects()
             val result = context.evaluateString(scope, code, "eval.js", 1, null)
-            TypedExecutionResult.Success(result)
+            if (result is ScriptableObject) {
+                TypedExecutionResult.Success(result, result.typeOf)
+            } else {
+                TypedExecutionResult.Success(result, result::class.java.simpleName)
+            }
         } catch (exception: ScriptTimedoutException) {
             TypedExecutionResult.Failing("Timed out", null)
         } catch (exception: RhinoException) {

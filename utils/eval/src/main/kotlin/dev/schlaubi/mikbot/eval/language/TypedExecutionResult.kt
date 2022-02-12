@@ -3,7 +3,7 @@ package dev.schlaubi.mikbot.eval.language
 import dev.kord.rest.builder.message.EmbedBuilder
 
 sealed class TypedExecutionResult : ExecutionResult() {
-    class Success(val result: Any) : TypedExecutionResult() {
+    class Success(val result: Any, val type: String) : TypedExecutionResult() {
         override val wasSuccessful: Boolean = true
 
         override suspend fun EmbedBuilder.applyToEmbed() {
@@ -11,7 +11,7 @@ sealed class TypedExecutionResult : ExecutionResult() {
                 "`$result`"
             }
             field("Type") {
-                "`${result::class.java.simpleName}`"
+                "`$type`"
             }
         }
     }

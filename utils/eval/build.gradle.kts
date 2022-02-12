@@ -8,6 +8,7 @@ version = "1.0.0"
 
 dependencies {
     implementation("org.mozilla", "rhino", "1.7.14")
+    implementation(projects.utils.hasteClient)
     ksp("com.kotlindiscord.kord.extensions", "annotation-processor", "1.5.2-RC1")
 }
 

@@ -1,5 +1,6 @@
 package dev.schlaubi.mikbot.eval.language.javascript
 
+import dev.kord.core.behavior.GuildBehavior
 import dev.schlaubi.mikbot.eval.language.ExecutionResult
 import dev.schlaubi.mikbot.eval.language.LanguageProvider
 import dev.schlaubi.mikbot.eval.language.TypedExecutionResult
@@ -8,19 +9,24 @@ import dev.schlaubi.mikbot.eval.rhino.TimeoutContextFactory
 import org.mozilla.javascript.Context
 import org.mozilla.javascript.RhinoException
 import org.mozilla.javascript.ScriptableObject
+import org.mozilla.javascript.Wrapper
 import kotlin.time.Duration.Companion.seconds
 
 class JavaScriptLanguageProvider : LanguageProvider {
     override val displayName: String = "JavaScript (Rhino)"
     override val id: String = "js-rhino"
 
-    override suspend fun execute(code: String): ExecutionResult {
+    override suspend fun execute(code: String, guild: GuildBehavior): ExecutionResult {
         val context = TimeoutContextFactory(10.seconds).enterContext()
         return try {
             val scope = context.initSafeStandardObjects()
+            val jsGuild = Context.javaToJS(guild.asGuild(), scope, context)
+            ScriptableObject.putProperty(scope, "guild", jsGuild)
             val result = context.evaluateString(scope, code, "eval.js", 1, null)
             if (result is ScriptableObject) {
                 TypedExecutionResult.Success(result, result.typeOf)
+            } else if (result is Wrapper) {
+                TypedExecutionResult.Success(result.unwrap(), result.unwrap()::class.java.simpleName)
             } else {
                 TypedExecutionResult.Success(result, result::class.java.simpleName)
             }

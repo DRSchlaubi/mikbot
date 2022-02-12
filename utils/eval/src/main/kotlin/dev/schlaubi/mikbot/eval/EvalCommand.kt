@@ -14,6 +14,7 @@ import dev.kord.rest.builder.message.create.embed
 import dev.kord.rest.builder.message.modify.embed
 import dev.schlaubi.mikbot.eval.language.converter.language
 import dev.schlaubi.mikbot.plugin.api.settings.botOwnerOnly
+import dev.schlaubi.mikbot.plugin.api.util.safeGuild
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.single
@@ -64,7 +65,7 @@ suspend fun EvalExtension.evalCommand() = publicSlashCommand(::EvalArguments) {
             }
         }
         val execution = measureTimedValue {
-            language.execute(result.message.content)
+            language.execute(result.message.content, safeGuild)
         }
         response.edit {
             embed {

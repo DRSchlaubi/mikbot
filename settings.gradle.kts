@@ -31,6 +31,7 @@ include(
     "utils:role-selector",
     "utils:botblock",
     "utils:eval",
+    "utils:haste-client",
     "utils:leaderboard",
     "votebot",
     "votebot:common",

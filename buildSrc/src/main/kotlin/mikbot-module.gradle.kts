@@ -16,6 +16,9 @@ tasks {
             freeCompilerArgs = freeCompilerArgs + "-Xbackend-threads=16" + experimentalAnnotations.map { "-opt-in=$it" }
         }
     }
+    withType<Test> {
+        useJUnitPlatform()
+    }
 }
 
 kotlin {

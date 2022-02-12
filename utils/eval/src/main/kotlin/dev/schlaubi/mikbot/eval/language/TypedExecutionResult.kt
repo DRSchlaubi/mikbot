@@ -1,14 +1,25 @@
 package dev.schlaubi.mikbot.eval.language
 
 import dev.kord.rest.builder.message.EmbedBuilder
+import dev.schlaubi.mikbot.haste.HasteClient
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 sealed class TypedExecutionResult : ExecutionResult() {
-    class Success(val result: Any, val type: String) : TypedExecutionResult() {
+    class Success(val result: Any, val type: String) : TypedExecutionResult(), KoinComponent {
         override val wasSuccessful: Boolean = true
+
+        private val hasteClient by inject<HasteClient>()
 
         override suspend fun EmbedBuilder.applyToEmbed() {
             field("Result") {
-                "`$result`"
+                if (result.toString().length > 1024) {
+                    // Too long to post into discord. We create a haste for that.
+                    val haste = hasteClient.createHaste(result.toString())
+                    "Result was too long to show.\nView it [here](${haste.url})."
+                } else {
+                    "`$result`"
+                }
             }
             field("Type") {
                 "`$type`"

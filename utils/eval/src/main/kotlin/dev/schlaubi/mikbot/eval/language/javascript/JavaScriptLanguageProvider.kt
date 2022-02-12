@@ -1,6 +1,6 @@
 package dev.schlaubi.mikbot.eval.language.javascript
 
-import dev.kord.core.behavior.GuildBehavior
+import dev.schlaubi.mikbot.eval.integration.ExecutionContext
 import dev.schlaubi.mikbot.eval.language.ExecutionResult
 import dev.schlaubi.mikbot.eval.language.LanguageProvider
 import dev.schlaubi.mikbot.eval.language.TypedExecutionResult
@@ -16,12 +16,11 @@ class JavaScriptLanguageProvider : LanguageProvider {
     override val displayName: String = "JavaScript (Rhino)"
     override val id: String = "js-rhino"
 
-    override suspend fun execute(code: String, guild: GuildBehavior): ExecutionResult {
+    override suspend fun execute(code: String, executionContext: ExecutionContext): ExecutionResult {
         val context = TimeoutContextFactory(10.seconds).enterContext()
         return try {
             val scope = context.initSafeStandardObjects()
-            val jsGuild = Context.javaToJS(guild.asGuild(), scope, context)
-            ScriptableObject.putProperty(scope, "guild", jsGuild)
+            applyExecutionContext(executionContext, scope, context)
             when (val result = context.evaluateString(scope, code, "eval.js", 1, null)) {
                 is ScriptableObject -> {
                     TypedExecutionResult.Success(result, result.typeOf)
@@ -40,5 +39,20 @@ class JavaScriptLanguageProvider : LanguageProvider {
         } finally {
             Context.exit()
         }
+    }
+
+    private fun applyExecutionContext(
+        executionContext: ExecutionContext,
+        scope: ScriptableObject,
+        context: Context?
+    ) = mapOf(
+        "guild" to executionContext.guild,
+        "member" to executionContext.member,
+        "user" to executionContext.user,
+        "interaction" to executionContext.interaction,
+        "channel" to executionContext.channel
+    ).forEach { (name, value) ->
+        val js = Context.javaToJS(value, scope, context)
+        ScriptableObject.putProperty(scope, name, js)
     }
 }

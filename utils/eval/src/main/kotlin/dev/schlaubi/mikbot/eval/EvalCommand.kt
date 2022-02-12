@@ -12,9 +12,11 @@ import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.core.live.channel.live
 import dev.kord.rest.builder.message.create.embed
 import dev.kord.rest.builder.message.modify.embed
+import dev.schlaubi.mikbot.eval.integration.ExecutionContext
 import dev.schlaubi.mikbot.eval.language.converter.language
 import dev.schlaubi.mikbot.plugin.api.settings.botOwnerOnly
 import dev.schlaubi.mikbot.plugin.api.util.safeGuild
+import dev.schlaubi.mikbot.plugin.api.util.safeMember
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.single
@@ -64,8 +66,15 @@ suspend fun EvalExtension.evalCommand() = publicSlashCommand(::EvalArguments) {
                 description = "Running <a:loading:547513249835384833>"
             }
         }
+        val context = ExecutionContext(
+            safeGuild.asGuild(),
+            safeMember.asMember(),
+            user.asUser(),
+            event.interaction,
+            channel.asChannelOf()
+        )
         val execution = measureTimedValue {
-            language.execute(result.message.content, safeGuild)
+            language.execute(result.message.content, context)
         }
         response.edit {
             embed {

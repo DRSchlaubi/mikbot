@@ -22,13 +22,16 @@ class JavaScriptLanguageProvider : LanguageProvider {
             val scope = context.initSafeStandardObjects()
             val jsGuild = Context.javaToJS(guild.asGuild(), scope, context)
             ScriptableObject.putProperty(scope, "guild", jsGuild)
-            val result = context.evaluateString(scope, code, "eval.js", 1, null)
-            if (result is ScriptableObject) {
-                TypedExecutionResult.Success(result, result.typeOf)
-            } else if (result is Wrapper) {
-                TypedExecutionResult.Success(result.unwrap(), result.unwrap()::class.java.simpleName)
-            } else {
-                TypedExecutionResult.Success(result, result::class.java.simpleName)
+            when (val result = context.evaluateString(scope, code, "eval.js", 1, null)) {
+                is ScriptableObject -> {
+                    TypedExecutionResult.Success(result, result.typeOf)
+                }
+                is Wrapper -> {
+                    TypedExecutionResult.Success(result.unwrap(), result.unwrap()::class.java.simpleName)
+                }
+                else -> {
+                    TypedExecutionResult.Success(result, result::class.java.simpleName)
+                }
             }
         } catch (exception: ScriptTimedoutException) {
             TypedExecutionResult.Failing("Timed out", null)

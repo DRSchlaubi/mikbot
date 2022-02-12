@@ -45,7 +45,7 @@ sealed class TypedExecutionResult : ExecutionResult() {
 
         override suspend fun EmbedBuilder.applyToEmbed() {
             field("Error") {
-                "`${error}`"
+                "`$error`"
             }
             if (stacktrace?.isNotBlank() == true) {
                 field("Stacktrace") {

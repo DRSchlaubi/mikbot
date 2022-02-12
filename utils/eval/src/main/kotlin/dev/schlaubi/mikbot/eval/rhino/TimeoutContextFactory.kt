@@ -32,8 +32,10 @@ class TimeoutContextFactory(private val timeout: Duration) : ContextFactory() {
 
     override fun doTopCall(
         callable: Callable,
-        cx: Context, scope: Scriptable,
-        thisObj: Scriptable, args: Array<Any>?
+        cx: Context,
+        scope: Scriptable,
+        thisObj: Scriptable,
+        args: Array<Any>?
     ): Any {
         val mcx = cx as TimeoutContext
         mcx.startTime = Clock.System.now()

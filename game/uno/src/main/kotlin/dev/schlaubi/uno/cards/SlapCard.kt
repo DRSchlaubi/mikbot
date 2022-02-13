@@ -28,10 +28,6 @@ public class SlapCard(override val color: UnoColor) : ColoredCard(), ActionCard 
                     }
                 }
             }
-
-            (game.players - safePlayers.toSet()).forEach {
-                game.drawCards(it, 2)
-            }
         }
     }
 }

@@ -35,8 +35,14 @@ public open class Player {
     /** Function called if the player won [place]. */
     public open fun onWin(place: Int): Unit = Unit
 
+    /**
+     * Callback when player is allowed to see [otherPlayer]'s cards.
+     */
     public open fun onVisibleCards(otherPlayer: Player): Unit = Unit
 
+    /**
+     * Callback to indicate, that the players cards changed.
+     */
     public open fun refreshCards(): Unit = Unit
 
     /** Makes the player say uno. */
@@ -65,10 +71,10 @@ public open class Player {
      * @see playCard
      */
     public suspend fun playCard(game: Game<*>, card: SimpleCard, player: Player) {
+        require(card.number == 7) { "Card needs to be a 7 for switching" }
         if (!deck.remove(card)) {
             throw PlayerDoesNotHaveCardException(card)
         }
-        require(card.number == 7) { "Card needs to be a 7 for switching" }
 
         game.playCard(this, CardSwitching7(player, card.color))
     }
@@ -159,11 +165,9 @@ public class Game<T : Player>(
             handOutCards(it, 7)
         }
 
-        // Poll first card
-        playedDeck.add(deck.pollNonSlapCard().play(UnoColor.BLUE))
         // Play first card as first player
         runBlocking {
-            playCard(players.first(), playedDeck.first())
+            playCard(players.first(), deck.pollNonSlapCard().play(UnoColor.BLUE))
         }
     }
 
@@ -202,8 +206,14 @@ public class Game<T : Player>(
         win(player)
     }
 
+    /**
+     * Removes [player] from the game.
+     */
     public fun removePlayer(player: Player): Boolean = _players.remove(player)
 
+    /**
+     * Let's [player] drop in a [card].
+     */
     public suspend fun dropIn(player: Player, card: PlayedCard) {
         if (topCard != card) throw CardDoesNotMatchException(topCard, card)
         if (player.deck.size == 2) player.uno()
@@ -233,12 +243,13 @@ public class Game<T : Player>(
     }
 
     internal suspend fun playCard(player: Player, card: PlayedCard) {
+        // Check card matches
+        if (!card.canBePlayedOn(topCard)) throw CardDoesNotMatchException(topCard, card)
+
         challengePossible = true
         if (card is WildCardDraw4) {
             challengeablePlayer = player
         }
-        // Check card matches
-        if (!card.canBePlayedOn(topCard)) throw CardDoesNotMatchException(topCard, card)
 
         // Check uno rule
         if (player.deck.size == 1 && !player.saidUno) {
@@ -285,7 +296,7 @@ public class Game<T : Player>(
     internal fun drawCards(player: Player, cards: Int) {
         do {
             if (extreme) {
-                repeat(drawCardSum.coerceAtLeast(1)) { extremeDrawCards(player) }
+                repeat(drawCardSum.coerceAtLeast(cards)) { extremeDrawCards(player) }
             } else if (drawCardSum >= 1 && cards != drawCardSum) {
                 return drawSummedCards(player)
             } else {
@@ -333,7 +344,6 @@ public class Game<T : Player>(
             get() {
                 val copy = NormalPlayerSequence(lastIndex)
 
-                // the + 1 causes one rotation to happen, so zipWithNext() can actually zipWithNext()
                 return copy.asSequence().take(players.size).toList()
             }
 

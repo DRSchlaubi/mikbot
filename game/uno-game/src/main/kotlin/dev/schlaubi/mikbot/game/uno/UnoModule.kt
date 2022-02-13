@@ -98,5 +98,6 @@ class UnoModule : GameModule<DiscordUnoPlayer, DiscordUnoGame>() {
         stopGameCommand()
         profileCommand()
         leaderboardCommand("commands.uno.leaderboard.page.title")
+        bluffingCommand()
     }
 }

@@ -36,7 +36,7 @@ class Connect4Arguments : Arguments() {
         name = "width"
         description = "The width of the connect4 field"
         validate {
-            if (value > 10) {
+            if (value > 9) {
                 discordError(translate("commands.start.too_high_width", bundle))
             } else if (value <= 0) {
                 discordError(translate("commands.start.too_low_width", bundle))

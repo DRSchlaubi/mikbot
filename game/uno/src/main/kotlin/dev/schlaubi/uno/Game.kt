@@ -5,7 +5,6 @@ import dev.schlaubi.uno.exceptions.CardDoesNotMatchException
 import dev.schlaubi.uno.exceptions.PlayerDoesNotHaveCardException
 import kotlinx.coroutines.runBlocking
 import java.util.*
-import kotlin.properties.Delegates
 import kotlin.random.Random
 
 /** The direction in which the game is going. */
@@ -145,9 +144,7 @@ public class Game<T : Player>(
         get() = _wonPlayers.toList() // last player cannot win
     public val cardsPlayed: Int
         get() = playedDeck.size
-    public var drawCardSum: Int by Delegates.vetoable(0) { _, _, _ ->
-        allowDrawCardStacking // this will essentially force it to 0 if card stacking is disabled
-    }
+    public var drawCardSum: Int = 0
 
     private var challengeablePlayer: Player? = null
 
@@ -254,7 +251,7 @@ public class Game<T : Player>(
             card.applyToGame(this, player)
         }
         if (card is DrawingCard) {
-            if (card.canStackWith(topCard)) {
+            if (allowDrawCardStacking && card.canStackWith(topCard)) {
                 drawCardSum += card.cards
             } else {
                 drawSummedCards(player)
@@ -286,17 +283,15 @@ public class Game<T : Player>(
     }
 
     internal fun drawCards(player: Player, cards: Int) {
-        if (extreme) {
-            repeat(drawCardSum.coerceAtLeast(1)) { extremeDrawCards(player) }
-        } else if (drawCardSum >= 1 && cards != drawCardSum) {
-            return drawSummedCards(player)
-        } else {
-            handOutCards(player, cards)
-        }
-
-        while (drawUntilPlayable && player.deck.none { it.canBePlayedOn(topCard) }) {
-            handOutCards(player, 1)
-        }
+        do {
+            if (extreme) {
+                repeat(drawCardSum.coerceAtLeast(1)) { extremeDrawCards(player) }
+            } else if (drawCardSum >= 1 && cards != drawCardSum) {
+                return drawSummedCards(player)
+            } else {
+                handOutCards(player, cards)
+            }
+        } while (drawUntilPlayable && player.deck.none { it.canBePlayedOn(topCard) })
     }
 
     private fun extremeDrawCards(player: Player) {

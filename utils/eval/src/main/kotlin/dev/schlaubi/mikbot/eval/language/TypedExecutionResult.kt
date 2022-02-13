@@ -8,7 +8,9 @@ import dev.schlaubi.mikbot.plugin.api.pluginSystem
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-private val extensions = pluginSystem.getExtensions<SecretExtensionPoint>()
+private val extensions by lazy {
+    pluginSystem.getExtensions<SecretExtensionPoint>()
+}
 
 sealed class TypedExecutionResult : ExecutionResult() {
     class Success(result: Any, val type: String) : TypedExecutionResult(), KoinComponent {

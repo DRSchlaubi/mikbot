@@ -130,9 +130,6 @@ public class Game<T : Player>(
     private val deck = getDefaultUnoDeck(extreme, flash, useSpecial7And0)
     internal val playedDeck: MutableList<PlayedCard> = mutableListOf()
 
-    /**
-     * This contains the first player twice (at the end as well).
-     */
     internal val orderedPlayers: List<T>
         get() = (playerSequence as? OrderedPlayerSequence<T>)?.playersInOrder
             ?: error("orderedPlayers is only available when using OrderedPlayerSequence implementations")
@@ -342,7 +339,7 @@ public class Game<T : Player>(
                 val copy = NormalPlayerSequence(lastIndex)
 
                 // the + 1 causes one rotation to happen, so zipWithNext() can actually zipWithNext()
-                return copy.asSequence().take(players.size + 1).toList()
+                return copy.asSequence().take(players.size).toList()
             }
 
         // Winning players get removed => only one player left means game ended

@@ -26,7 +26,8 @@ public class CardSwitching7(private val switchWith: Player, override val color: 
 public class CardRotating0(override val color: UnoColor) : NumberedCard(), ActionCard {
     override val number: Int = 0
     override suspend fun applyToGame(game: Game<*>, player: Player) {
-        val players = game.orderedPlayers.zipWithNext()
+        // Adding the first player to the end is required so zipWithNext() zips the last player with the first player
+        val players = (game.orderedPlayers + game.orderedPlayers.first()).zipWithNext()
 
         val toSwitchDecks = players.map { (switchWith, original) ->
             original to (if (switchWith == player) (player.deck - this) else switchWith.deck).toMutableList()

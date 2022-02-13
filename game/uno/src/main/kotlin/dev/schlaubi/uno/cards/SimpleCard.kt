@@ -3,14 +3,16 @@ package dev.schlaubi.uno.cards
 import dev.schlaubi.uno.UnoColor
 
 /**
- * A simple uno card.
+ * Abstract implementation of colored cards with numbers on them.
  *
  * @property number the number of this card
  *
  * @see ColoredCard
+ * @see SimpleCard
  */
-@Suppress("DataClassCanBeRecord")
-public data class SimpleCard(val number: Int, override val color: UnoColor) : ColoredCard() {
+public abstract class NumberedCard : ColoredCard() {
+    public abstract val number: Int
+
     override fun canBePlayedOn(card: PlayedCard): Boolean {
         if (super.canBePlayedOn(card)) return true // color check
         return (card as? SimpleCard)?.number == number
@@ -29,3 +31,9 @@ public data class SimpleCard(val number: Int, override val color: UnoColor) : Co
         }
     }
 }
+
+/**
+ * A simple uno card.
+ */
+@Suppress("DataClassCanBeRecord")
+public data class SimpleCard(override val number: Int, override val color: UnoColor) : NumberedCard()

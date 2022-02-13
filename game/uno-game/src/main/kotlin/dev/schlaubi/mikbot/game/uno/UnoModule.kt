@@ -16,6 +16,7 @@ import dev.schlaubi.mikbot.game.uno.game.DiscordUnoGame
 import dev.schlaubi.mikbot.game.uno.game.player.DiscordUnoPlayer
 import dev.schlaubi.mikbot.plugin.api.io.getCollection
 import dev.schlaubi.mikbot.plugin.api.util.database
+import dev.schlaubi.mikbot.plugin.api.util.discordError
 import org.litote.kmongo.coroutine.CoroutineCollection
 
 class UnoArguments : Arguments() {
@@ -32,6 +33,35 @@ class UnoArguments : Arguments() {
     val dropIns by defaultingBoolean {
         name = "drop_ins"
         description = "Enable or disable drop-ins (Default: disabled)"
+        defaultValue = false
+    }
+    val drawUntilPlayable by defaultingBoolean {
+        name = "draw_until_playable"
+        description = "forces players to draw until they have at least one playable card"
+        defaultValue = false
+    }
+    val forcePlay by defaultingBoolean {
+        name = "force_play"
+        description = "Force a player to play card after drawing, if possible"
+        defaultValue = false
+    }
+
+    val enableDrawCardStacking by defaultingBoolean {
+        name = "card_stacking"
+        description =
+            "Allows to conter drawing cards by placing another drawing card on top (defaults to true)"
+        defaultValue = true
+    }
+
+    val enableBluffing by defaultingBoolean {
+        name = "bluffing"
+        description = "See /uno bluffing for more information"
+        defaultValue = false
+    }
+
+    val useSpecial7and0 by defaultingBoolean {
+        name = "0-7"
+        description = "7 = Switch cards with specific player, 0 = rotate cardds"
         defaultValue = false
     }
 }
@@ -51,10 +81,17 @@ class UnoModule : GameModule<DiscordUnoPlayer, DiscordUnoGame>() {
             "uno.game.title",
             "uno-game",
             ::UnoArguments,
-            { welcomeMessage, thread ->
+            {
+                if (arguments.flash && arguments.useSpecial7and0) {
+                    discordError(translate("commands.uno.start_game.special_7_and_0.incompatible.flash"))
+                }
+            },
+            { _, welcomeMessage, thread ->
                 DiscordUnoGame(
                     user, this@UnoModule, welcomeMessage, thread, translationsProvider,
-                    arguments.extreme, arguments.flash, arguments.dropIns
+                    arguments.extreme, arguments.flash, arguments.dropIns, arguments.drawUntilPlayable,
+                    arguments.forcePlay, arguments.enableDrawCardStacking, arguments.enableBluffing,
+                    arguments.useSpecial7and0
                 )
             }
         )

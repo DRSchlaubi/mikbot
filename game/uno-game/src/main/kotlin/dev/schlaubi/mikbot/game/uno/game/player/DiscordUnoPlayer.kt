@@ -11,10 +11,8 @@ import dev.schlaubi.mikbot.game.uno.game.ui.translationKey
 import dev.schlaubi.mikbot.plugin.api.util.deleteAfterwards
 import dev.schlaubi.uno.Game
 import dev.schlaubi.uno.Player
-import dev.schlaubi.uno.cards.AbstractWildCard
-import dev.schlaubi.uno.cards.DiscardAllCardsCard
-import dev.schlaubi.uno.cards.SlapCard
-import dev.schlaubi.uno.cards.SlapContext
+import dev.schlaubi.uno.cards.*
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 import dev.schlaubi.mikbot.game.api.Player as GamePlayer
@@ -25,6 +23,7 @@ const val drawCardButton = "draw_card"
 const val sayUnoButton = "say_uno"
 const val skipButton = "skip"
 const val allCardsButton = "request_all_cards"
+const val challengeWildCard = "challenge_wild_card"
 
 class DiscordUnoPlayer(
     override val user: UserBehavior,
@@ -51,6 +50,12 @@ class DiscordUnoPlayer(
         }
     }
 
+    override fun refreshCards() {
+        game.launch {
+            updateControls(false)
+        }
+    }
+
     override fun onWin(place: Int) {
         game.kord.launch {
             game.thread.createMessage("${user.mention} finished the game!")
@@ -69,6 +74,21 @@ class DiscordUnoPlayer(
         }
     }
 
+    override fun onVisibleCards(otherPlayer: Player) {
+        game.launch {
+            val cards = ack.followUpEphemeral {
+                val cards = otherPlayer.deck.map { translate(it.translationKey) }.joinToString(", ")
+
+                content = translate(
+                    "uno.controls.view_cards.show",
+                    (otherPlayer as DiscordUnoPlayer).user.mention, cards
+                )
+            }
+            delay(2.3.seconds)
+            cards.edit { content = translate("uno.controls.view_cards.over") }
+        }
+    }
+
     suspend fun turn() {
         myTurn = true
         updateControls(true)
@@ -77,7 +97,7 @@ class DiscordUnoPlayer(
             if (cantPlay) {
                 return endTurn() // auto-skip if drawn and can't play
             }
-        } else if (game.game.drawCardSum >= 1 && cantPlay) {
+        } else if (game.game.drawCardSum >= 1 && cantPlay && (!game.game.canBeChallenged)) {
             doDraw() // auto draw if there is no other option
             return turn()
         }
@@ -86,7 +106,16 @@ class DiscordUnoPlayer(
 
         myTurn = false // Prevent clicking again
         if (cardName != null) {
-            if (normalPlay(cardName)) { // if the action calls for a new turn repeat
+            if (normalPlay(cardName)) {
+                val playable = deck.filter { it.canBePlayedOn(game.game.topCard) }
+                // Auto-play with force play
+                if (game.forcePlay && playable.size == 1) {
+                    saidUno = true
+                    updateControls(false)
+                    normalPlay("play_card_${deck.indexOf(playable.first())}")
+                    return
+                }
+                // if the action calls for a new turn repeat
                 return turn()
             }
         } else {
@@ -105,6 +134,10 @@ class DiscordUnoPlayer(
     private suspend fun normalPlay(cardName: String): Boolean {
         @Suppress("DUPLICATE_LABEL_IN_WHEN") // not duplicated, we want to purposely not skip
         when (cardName) {
+            challengeWildCard -> {
+                game.game.challenge(this)
+                return false
+            }
             drawCardButton -> {
                 doDraw()
                 return true
@@ -135,6 +168,9 @@ class DiscordUnoPlayer(
                 if (card is AbstractWildCard && deck.size != 1) { // ignore pick on last card
                     val color = pickWildCardColor()
                     playCard(game.game, card, color)
+                } else if ((card as? SimpleCard)?.number == 7 && game.useSpecial7and0) {
+                    val player = pickPlayer()
+                    playCard(game.game, card, player)
                 } else {
                     playCard(game.game, card)
                 }

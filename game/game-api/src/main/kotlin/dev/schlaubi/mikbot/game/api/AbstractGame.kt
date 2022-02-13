@@ -176,7 +176,14 @@ abstract class AbstractGame<T : Player>(
                     if (players.isNotEmpty() && fields.none { it.name == "Players" }) {
                         field {
                             name = "Players"
-                            value = players.joinToString(", ") { it.user.mention }
+                            val mentions = players.map { it.user.mention }
+                            val players = if ((this@AbstractGame as? ControlledGame<*>)?.supportsAutoJoin == true) {
+                                listOf("(${host.mention})") + mentions
+                            } else {
+                                mentions
+                            }
+
+                            value = players.joinToString(", ")
                         }
                     }
                 }

@@ -132,7 +132,7 @@ private fun ColoredCard.s(
         is DrawTwoCard -> draw2
         is DiscardAllCardsCard -> discardAllCards
         is SlapCard -> slap
-        else -> when (val number = (this as SimpleCard).number) {
+        else -> when (val number = (this as NumberedCard).number) {
             0 -> e0
             1 -> e1
             2 -> e2

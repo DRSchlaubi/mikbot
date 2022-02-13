@@ -30,7 +30,7 @@ val AbstractWildCard.imageUrl: String
 val ColoredCard.imageUrl: String
     get() {
         val name = when (this) {
-            is SimpleCard -> number.toString()
+            is NumberedCard -> number.toString()
             is DrawTwoCard -> "draw2"
             is ReverseCard -> "reverse"
             is SkipCard -> "skip"

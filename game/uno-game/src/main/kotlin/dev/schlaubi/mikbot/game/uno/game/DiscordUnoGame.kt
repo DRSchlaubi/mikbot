@@ -39,7 +39,12 @@ class DiscordUnoGame(
     override val translationsProvider: TranslationsProvider,
     private val extremeMode: Boolean,
     val flashMode: Boolean,
-    val allowDropIns: Boolean
+    val allowDropIns: Boolean,
+    val drawUntilPlayable: Boolean,
+    val forcePlay: Boolean,
+    val allowDrawCardStacking: Boolean,
+    val allowBluffing: Boolean,
+    val useSpecial7and0: Boolean
 ) : AbstractGame<DiscordUnoPlayer>(host, module), ControlledGame<DiscordUnoPlayer>, Rematchable<DiscordUnoGame> {
     override val rematchThreadName: String = "uno-rematch"
     lateinit var game: Game<DiscordUnoPlayer>
@@ -87,7 +92,15 @@ class DiscordUnoGame(
         )
 
     override suspend fun runGame() {
-        game = Game(players, extremeMode, flashMode)
+        game = Game(
+            players.sortedByDescending { if (lastPlayer != null) it == lastPlayer else it.user == host },
+            extremeMode,
+            flashMode,
+            drawUntilPlayable,
+            allowDrawCardStacking,
+            allowBluffing,
+            useSpecial7and0
+        )
 
         players.forEach {
             it.updateControls(false)
@@ -142,7 +155,8 @@ class DiscordUnoGame(
             welcomeMessage,
             thread,
             translationsProvider,
-            extremeMode, flashMode, allowDropIns
+            extremeMode, flashMode, allowDropIns, drawUntilPlayable, forcePlay, allowDrawCardStacking,
+            allowBluffing, useSpecial7and0
         )
         if (!askForRematch(
                 thread,

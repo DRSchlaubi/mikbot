@@ -56,7 +56,7 @@ private suspend fun FollowupMessageModifyBuilder.addControlButtons(
         } else {
             interactionButton(ButtonStyle.Danger, skipButton) {
                 label = discordUnoPlayer.translate("uno.actions.skip")
-                disabled = !active || !discordUnoPlayer.drawn
+                disabled = !active || !discordUnoPlayer.drawn || discordUnoPlayer.game.forcePlay
             }
         }
 
@@ -74,6 +74,13 @@ private suspend fun FollowupMessageModifyBuilder.addControlButtons(
             ) {
                 label = discordUnoPlayer.translate("uno.actions.say_uno")
                 disabled = !active || discordUnoPlayer.deck.size <= 1 || discordUnoPlayer.saidUno
+            }
+        }
+
+        if (discordUnoPlayer.game.game.canBeChallenged) {
+            interactionButton(ButtonStyle.Danger, challengeWildCard) {
+                label = discordUnoPlayer.translate("uno.actions.challenge_wild_card")
+                disabled = !active
             }
         }
     }

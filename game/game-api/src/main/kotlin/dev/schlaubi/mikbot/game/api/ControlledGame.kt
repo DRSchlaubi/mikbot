@@ -29,6 +29,7 @@ private const val REQUEST_CONTROLS = "request_controls"
 interface ControlledGame<P : ControlledPlayer> {
     val players: List<P>
     val running: Boolean
+    val supportsAutoJoin get() = true
 
     /**
      * Adds the resend controlls button.

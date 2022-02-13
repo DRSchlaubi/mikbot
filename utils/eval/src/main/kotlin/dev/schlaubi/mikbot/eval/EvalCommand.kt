@@ -10,6 +10,7 @@ import dev.kord.core.behavior.channel.asChannelOf
 import dev.kord.core.behavior.interaction.edit
 import dev.kord.rest.builder.message.create.embed
 import dev.kord.rest.builder.message.modify.embed
+import dev.kord.x.emoji.Emojis
 import dev.schlaubi.mikbot.eval.integration.ExecutionContext
 import dev.schlaubi.mikbot.eval.language.converter.language
 import dev.schlaubi.mikbot.plugin.api.owner.ownerOnly
@@ -73,10 +74,10 @@ suspend fun EvalExtension.evalCommand() = publicSlashCommand(::EvalArguments) {
                     text = "Execution took ${execution.duration}"
                 }
                 color = if (execution.value.wasSuccessful) {
-                    title = ":white_check_mark: Successful execution"
+                    title = "${Emojis.whiteCheckMark} Successful execution"
                     Color(0x17cf17)
                 } else {
-                    title = ":x: Execution failed."
+                    title = "${Emojis.x} Execution failed."
                     Color(0xcf3917)
                 }
             }

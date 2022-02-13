@@ -30,9 +30,3 @@ public fun SlashCommand<*, *>.guildAdminOnly() {
         }
     }
 }
-
-public fun SlashCommand<*, *>.botOwnerOnly() {
-    check {
-        failIfNot("You are not allowed to do this!") { event.interaction.user.id in Config.BOT_OWNERS }
-    }
-}

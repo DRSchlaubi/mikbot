@@ -14,7 +14,7 @@ import dev.kord.rest.builder.message.create.embed
 import dev.kord.rest.builder.message.modify.embed
 import dev.schlaubi.mikbot.eval.integration.ExecutionContext
 import dev.schlaubi.mikbot.eval.language.converter.language
-import dev.schlaubi.mikbot.plugin.api.settings.botOwnerOnly
+import dev.schlaubi.mikbot.plugin.api.owner.ownerOnly
 import dev.schlaubi.mikbot.plugin.api.util.safeGuild
 import dev.schlaubi.mikbot.plugin.api.util.safeMember
 import kotlinx.coroutines.flow.filter
@@ -36,7 +36,7 @@ class EvalArguments : Arguments() {
 suspend fun EvalExtension.evalCommand() = publicSlashCommand(::EvalArguments) {
     name = "eval"
     description = "Execute some code."
-    botOwnerOnly()
+    ownerOnly()
 
     action {
         val response = respond {

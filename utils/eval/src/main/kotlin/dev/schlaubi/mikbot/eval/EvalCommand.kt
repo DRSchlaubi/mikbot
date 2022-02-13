@@ -3,13 +3,11 @@ package dev.schlaubi.mikbot.eval
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.extensions.publicSlashCommand
 import com.kotlindiscord.kord.extensions.types.respond
+import com.kotlindiscord.kord.extensions.utils.waitForMessage
 import dev.kord.common.Color
 import dev.kord.common.annotation.KordPreview
 import dev.kord.core.behavior.channel.asChannelOf
 import dev.kord.core.behavior.interaction.edit
-import dev.kord.core.entity.channel.TextChannel
-import dev.kord.core.event.message.MessageCreateEvent
-import dev.kord.core.live.channel.live
 import dev.kord.rest.builder.message.create.embed
 import dev.kord.rest.builder.message.modify.embed
 import dev.schlaubi.mikbot.eval.integration.ExecutionContext
@@ -17,11 +15,6 @@ import dev.schlaubi.mikbot.eval.language.converter.language
 import dev.schlaubi.mikbot.plugin.api.owner.ownerOnly
 import dev.schlaubi.mikbot.plugin.api.util.safeGuild
 import dev.schlaubi.mikbot.plugin.api.util.safeMember
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.single
-import kotlinx.coroutines.flow.take
-import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.measureTimedValue
 
@@ -44,15 +37,10 @@ suspend fun EvalExtension.evalCommand() = publicSlashCommand(::EvalArguments) {
                 description = "Please enter the code which you want to execute."
             }
         }
-        val result = withTimeoutOrNull(60.seconds) {
-            channel.asChannelOf<TextChannel>().live()
-                .events
-                .filterIsInstance<MessageCreateEvent>()
-                .filter { it.member?.id == member?.id }
-                .take(1)
-                .single()
+        val message = channel.waitForMessage(60.seconds.inWholeMilliseconds) {
+            member?.id == safeMember.id
         }
-        if (result == null) {
+        if (message == null) {
             response.edit {
                 embed {
                     description = "You did not provide some code in the given time."
@@ -74,7 +62,7 @@ suspend fun EvalExtension.evalCommand() = publicSlashCommand(::EvalArguments) {
             channel.asChannelOf()
         )
         val execution = measureTimedValue {
-            language.execute(result.message.content, context)
+            language.execute(message.content, context)
         }
         response.edit {
             embed {

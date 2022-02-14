@@ -48,7 +48,6 @@ Docker image from: https://github.com/DRSchlaubi/mikmusic/pkgs/container/mikmusi
 JDK is required it can be obtained [here](https://adoptium.net) (Recommended for Windows but works everywhere)
 and [here](https://sdkman.io/) (Recommended for Linux/Mac)
 
-**Currently you can only use JDK 16, we will migrate to JDK 17 as soon as Kotlin 1.6 becomes stable**
 Please set the `ENVIRONMENT` env var to `DEVELOPMENT` whilst developing the bot.
 Also set a `TEST_GUILD` environment variable, for local commands
 

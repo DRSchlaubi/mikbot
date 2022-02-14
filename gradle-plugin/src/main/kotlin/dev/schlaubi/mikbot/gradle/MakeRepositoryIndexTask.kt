@@ -13,7 +13,7 @@ import java.util.*
 abstract class MakeRepositoryIndexTask : DefaultTask() {
 
     init {
-        outputs.file(project.pluginPublishingExtension.targetDirectory.get().resolve("plugins.json"))
+        outputs.dir(project.pluginPublishingExtension.targetDirectory)
     }
 
     @TaskAction

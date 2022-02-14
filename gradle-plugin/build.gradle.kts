@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "dev.schlaubi"
-version = "1.4.3"
+version = "1.4.4"
 
 repositories {
     mavenCentral()

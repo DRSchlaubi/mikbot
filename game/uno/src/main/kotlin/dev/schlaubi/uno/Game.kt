@@ -167,7 +167,9 @@ public class Game<T : Player>(
 
         // Play first card as first player
         runBlocking {
-            playCard(players.first(), deck.pollNonSlapCard().play(UnoColor.BLUE))
+            playedDeck.add(deck.pollNonSlapCard().play(UnoColor.BLUE))
+            playCard(players.first(), playedDeck.first())
+            playedDeck.removeAt(0)
         }
     }
 

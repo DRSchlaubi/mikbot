@@ -8,7 +8,6 @@ import dev.kord.common.entity.Permissions
 import dev.kord.common.exception.RequestException
 import dev.kord.core.Kord
 import dev.kord.core.behavior.channel.asChannelOf
-import dev.kord.core.entity.channel.TextChannel
 import dev.kord.core.entity.channel.TopGuildMessageChannel
 import dev.schlaubi.mikbot.plugin.api.util.confirmation
 import dev.schlaubi.mikbot.plugin.api.util.discordError
@@ -83,9 +82,7 @@ suspend fun <A : Arguments> EphemeralSlashCommandContext<A>.createVote(
         finalSettings
     )
     if (channel.id == this.channel.id) {
-        if (Permissions(Permission.EmbedLinks, Permission.SendMessages) !in channel.asChannelOf<TextChannel>().getEffectivePermissions(kord.selfId)) {
-            respond {
-            }
+        if (Permissions(Permission.EmbedLinks, Permission.SendMessages) !in channel.asChannelOf<TopGuildMessageChannel>().getEffectivePermissions(kord.selfId)) {
             return
         }
     }

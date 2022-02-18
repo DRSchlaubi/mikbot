@@ -26,11 +26,11 @@ class GoogolplexGame(
     private val maxTries: Int,
     private val lastWinner: GoogolplexPlayer?,
     host: UserBehavior,
-    module: GameModule<GoogolplexPlayer, out AbstractGame<GoogolplexPlayer>>,
+    module: GameModule<GoogolplexPlayer, AbstractGame<GoogolplexPlayer>>,
     override val thread: ThreadChannelBehavior,
     override val welcomeMessage: Message,
     override val translationsProvider: TranslationsProvider
-) : SingleWinnerGame<GoogolplexPlayer>(host, module), Rematchable<GoogolplexGame>, ControlledGame<GoogolplexPlayer> {
+) : SingleWinnerGame<GoogolplexPlayer>(host, module), Rematchable<GoogolplexPlayer, GoogolplexGame>, ControlledGame<GoogolplexPlayer> {
     override val rematchThreadName: String = "googolplex-rematch"
     override val playerRange: IntRange = 2 until 3
     lateinit var correctSequence: List<ReactionEmoji>

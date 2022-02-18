@@ -45,7 +45,7 @@ class DiscordUnoGame(
     val allowDrawCardStacking: Boolean,
     val allowBluffing: Boolean,
     val useSpecial7and0: Boolean
-) : AbstractGame<DiscordUnoPlayer>(host, module), ControlledGame<DiscordUnoPlayer>, Rematchable<DiscordUnoGame> {
+) : AbstractGame<DiscordUnoPlayer>(host, module.asType), ControlledGame<DiscordUnoPlayer>, Rematchable<DiscordUnoPlayer, DiscordUnoGame> {
     override val rematchThreadName: String = "uno-rematch"
     lateinit var game: Game<DiscordUnoPlayer>
         internal set

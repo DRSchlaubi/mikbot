@@ -15,9 +15,9 @@ version = Project.version + "-SNAPSHOT"
 
 allprojects {
     repositories {
-        maven("https://schlaubi.jfrog.io/artifactory/mikbot/")
         mavenCentral()
         maven("https://maven.kotlindiscord.com/repository/maven-public/")
+        maven("https://schlaubi.jfrog.io/artifactory/mikbot/")
         maven("https://schlaubi.jfrog.io/artifactory/envconf/")
         maven("https://schlaubi.jfrog.io/artifactory/lavakord/")
         maven("https://nycode.jfrog.io/artifactory/snapshots/")

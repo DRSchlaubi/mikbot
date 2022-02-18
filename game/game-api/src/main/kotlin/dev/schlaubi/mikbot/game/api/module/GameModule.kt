@@ -28,6 +28,9 @@ import org.litote.kmongo.coroutine.CoroutineCollection
 abstract class GameModule<P : Player, G : AbstractGame<P>> : SubCommandModule() {
 
     private val games = mutableMapOf<Snowflake, G>()
+
+    @Suppress("UNCHECKED_CAST")
+    val asType: GameModule<P, AbstractGame<P>> get() = this as GameModule<P, AbstractGame<P>>
     abstract override val bundle: String
 
     override val commandName: String

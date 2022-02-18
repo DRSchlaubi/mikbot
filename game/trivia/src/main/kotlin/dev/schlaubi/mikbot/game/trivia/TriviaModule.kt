@@ -76,9 +76,7 @@ class TriviaModule : GameModule<MultipleChoicePlayer, TriviaGame>() {
                     this@TriviaModule,
                     arguments.amount,
                     questionContainer
-                ).also {
-                    it.players.add(MultipleChoicePlayer(user))
-                }
+                )
             }
         )
 

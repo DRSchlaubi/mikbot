@@ -6,7 +6,7 @@ import dev.kord.core.entity.Message
 /**
  * Interface for adding a "Rematch" button at the winner card
  */
-interface Rematchable<T : AbstractGame<*>> {
+interface Rematchable<P : Player, T : AbstractGame<P>> : Game<P> {
     /**
      * Name of a rematch thread.
      */

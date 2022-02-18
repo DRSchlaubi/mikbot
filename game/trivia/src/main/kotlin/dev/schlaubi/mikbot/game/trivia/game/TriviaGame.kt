@@ -14,6 +14,7 @@ import dev.kord.rest.builder.message.EmbedBuilder
 import dev.kord.rest.builder.message.create.MessageCreateBuilder
 import dev.kord.rest.builder.message.create.actionRow
 import dev.kord.rest.builder.message.create.embed
+import dev.schlaubi.mikbot.game.api.AutoJoinableGame
 import dev.schlaubi.mikbot.game.api.Rematchable
 import dev.schlaubi.mikbot.game.multiple_choice.MultipleChoiceGame
 import dev.schlaubi.mikbot.game.multiple_choice.player.MultipleChoicePlayer
@@ -36,11 +37,12 @@ class TriviaGame(
     questionContainer: QuestionContainer
 ) : MultipleChoiceGame<MultipleChoicePlayer, TriviaQuestion, QuestionContainer>(
     host,
-    module,
+    module.asType,
     quizSize,
     questionContainer
 ),
-    Rematchable<TriviaGame> {
+    Rematchable<MultipleChoicePlayer, TriviaGame>,
+    AutoJoinableGame<MultipleChoicePlayer> {
     override val rematchThreadName: String = "trivia-rematch"
 
     override fun EmbedBuilder.addWelcomeMessage() {
@@ -72,6 +74,8 @@ class TriviaGame(
             text = "Powered by Open Trivia & Google"
         }
     }
+
+    override fun obtainNewPlayer(user: User): MultipleChoicePlayer = MultipleChoicePlayer(user)
 
     override suspend fun obtainNewPlayer(
         user: User,

@@ -9,9 +9,12 @@ import dev.kord.common.entity.Permission
 import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
 import dev.kord.core.entity.Message
+import dev.kord.core.entity.User
 import dev.kord.core.event.interaction.InteractionCreateEvent
 import dev.kord.rest.builder.message.create.embed
 import dev.schlaubi.mikbot.game.api.AbstractGame
+import dev.schlaubi.mikbot.game.api.AutoJoinableGame
+import dev.schlaubi.mikbot.game.api.Player
 import dev.schlaubi.mikbot.game.api.module.GameModule
 
 /**
@@ -98,7 +101,6 @@ fun <A : Arguments, G : AbstractGame<*>, Data> GameModule<*, G>.startGameCommand
     action {
         val data = prepareData() ?: return@action
         val gameThread = textChannel.startPublicThread(threadName)
-        gameThread.addUser(user.id) // Add creator
         val gameMessage = gameThread.createMessage {
             embed {
                 title = translate(gameTitleKey)
@@ -111,6 +113,13 @@ fun <A : Arguments, G : AbstractGame<*>, Data> GameModule<*, G>.startGameCommand
 
         gameMessage.pin(reason = "Game Welcome message")
         val game = makeNewGame(data, gameMessage, gameThread) ?: return@action
+
+        fun <T : Player> AutoJoinableGame<T>.addPlayer(player: User) = players.add(obtainNewPlayer(player))
+
+        if (game is AutoJoinableGame<*>) {
+            gameThread.addUser(user.id) // Add creator
+            game.addPlayer(user.asUser())
+        }
         game.doUpdateWelcomeMessage()
         registerGame(gameThread.id, game)
         respond {

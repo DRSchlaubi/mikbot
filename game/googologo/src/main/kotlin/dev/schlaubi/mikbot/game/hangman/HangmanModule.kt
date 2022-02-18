@@ -23,11 +23,7 @@ class HangmanModule : GameModule<HangmanPlayer, HangmanGame>() {
             "hangman.game.title",
             "googologo",
             { message, thread ->
-                val game = HangmanGame(null, user, this@HangmanModule, message, thread, translationsProvider)
-                val hostPlayer = HangmanPlayer(user)
-                game.players.add(hostPlayer)
-
-                game
+                HangmanGame(null, user, this@HangmanModule, message, thread, translationsProvider)
             }
         )
         stopGameCommand()

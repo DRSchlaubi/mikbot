@@ -23,6 +23,7 @@ import dev.kord.rest.builder.message.create.actionRow
 import dev.kord.x.emoji.Emojis
 import dev.schlaubi.lavakord.rest.TrackResponse
 import dev.schlaubi.lavakord.rest.loadItem
+import dev.schlaubi.mikbot.game.api.AutoJoinableGame
 import dev.schlaubi.mikbot.game.api.translate
 import dev.schlaubi.mikbot.game.multiple_choice.MultipleChoiceGame
 import dev.schlaubi.mikbot.game.multiple_choice.player.MultipleChoicePlayer
@@ -47,7 +48,13 @@ class SongQuizGame(
     override val thread: ThreadChannelBehavior,
     override val welcomeMessage: Message,
     override val translationsProvider: TranslationsProvider
-) : MultipleChoiceGame<MultipleChoicePlayer, TrackQuestion, TrackContainer>(host, module, quizSize, trackContainer) {
+) : MultipleChoiceGame<MultipleChoicePlayer, TrackQuestion, TrackContainer>(
+    host,
+    module.asType,
+    quizSize,
+    trackContainer
+),
+    AutoJoinableGame<MultipleChoicePlayer> {
     override val playerRange: IntRange = 1..10
     private var beforePlayerState: PersistentPlayerState? = null
 
@@ -58,6 +65,7 @@ class SongQuizGame(
         }
     }
 
+    override fun obtainNewPlayer(user: User): MultipleChoicePlayer = SongQuizPlayer(user)
     override suspend fun obtainNewPlayer(
         user: User,
         ack: EphemeralInteractionResponseBehavior,
@@ -161,7 +169,10 @@ class SongQuizGame(
         if (interaction.componentId == "like") {
             interaction.respondEphemeral {
                 val likedSongs =
-                    MusicQuizDatabase.likedSongs.findOneById(interaction.user.id) ?: LikedSongs(interaction.user.id, emptySet())
+                    MusicQuizDatabase.likedSongs.findOneById(interaction.user.id) ?: LikedSongs(
+                        interaction.user.id,
+                        emptySet()
+                    )
                 MusicQuizDatabase.likedSongs.save(likedSongs.copy(songs = likedSongs.songs + question.track.toLikedSong()))
                 content = translate(interaction.user, "song_quiz.game.liked_song")
             }

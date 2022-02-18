@@ -6,7 +6,6 @@ import com.kotlindiscord.kord.extensions.components.publicButton
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.kord.common.Locale
-import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.channel.asChannelOf
@@ -46,7 +45,6 @@ const val resendControlsButton = "resend_controls"
  * Abstract implementation of a game.
  *
  * @param T the [Player] type
- * @property players a list of all players in the game, which are still playing
  * @property thread the [ThreadChannelBehavior] the game is in
  * @property welcomeMessage the [Message] at the top of the thread
  * @property wonPlayers a list of [T] with all won players
@@ -56,9 +54,10 @@ const val resendControlsButton = "resend_controls"
  */
 abstract class AbstractGame<T : Player>(
     val host: UserBehavior,
-    val module: GameModule<T, out AbstractGame<T>>
-) : KoinComponent, CoroutineScope {
-    val players: MutableList<T> = mutableListOf()
+    override val module: GameModule<T, AbstractGame<T>>
+) : KoinComponent, CoroutineScope, Game<T> {
+    override val players: MutableList<T> = mutableListOf()
+
     override val coroutineContext: CoroutineContext =
         Dispatchers.IO + SupervisorJob() + CoroutineExceptionHandler { coroutineContext, throwable ->
             LOG.error(throwable) { "An error occurred in Game $coroutineContext " }
@@ -173,17 +172,19 @@ abstract class AbstractGame<T : Player>(
                 embed {
                     title = welcomeMessage.embeds.firstOrNull()?.title
                     addWelcomeMessage()
-                    if (players.isNotEmpty() && fields.none { it.name == "Players" }) {
+                    val supportsControlledAutoJoin =
+                        (this@AbstractGame as? ControlledGame<*>)?.supportsAutoJoin == true && hostPlayer == null
+                    if ((players.isNotEmpty() || supportsControlledAutoJoin) && fields.none { it.name == "Players" }) {
+                        val normalPlayers = players.joinToString(", ") { it.user.mention }
+                        val players = if (supportsControlledAutoJoin) {
+                            normalPlayers + "(${host.mention})"
+                        } else {
+                            normalPlayers
+                        }
+
                         field {
                             name = "Players"
-                            val mentions = players.map { it.user.mention }
-                            val players = if ((this@AbstractGame as? ControlledGame<*>)?.supportsAutoJoin == true) {
-                                listOf("(${host.mention})") + mentions
-                            } else {
-                                mentions
-                            }
-
-                            value = players.joinToString(", ")
+                            value = players
                         }
                     }
                 }
@@ -289,7 +290,7 @@ abstract class AbstractGame<T : Player>(
     }
 
     private suspend fun UserMessageModifyBuilder.rematchLogic() {
-        if (this@AbstractGame is Rematchable<*>) {
+        suspend fun <P : Player, G : AbstractGame<P>> Rematchable<P, G>.rematchUI() {
             components(1.minutes) {
                 publicButton {
                     label = "Rematch"
@@ -307,12 +308,6 @@ abstract class AbstractGame<T : Player>(
                             return@action
                         }
 
-                        @Suppress("UNCHECKED_CAST")
-                        fun <T : AbstractGame<*>> GameModule<*, T>.registerGame(
-                            id: Snowflake,
-                            game: AbstractGame<*>
-                        ) = registerGame(id, game as T)
-
                         module.registerGame(gameThread.id, game)
 
                         game.players.forEach {
@@ -327,6 +322,10 @@ abstract class AbstractGame<T : Player>(
                     }
                 }
             }
+        }
+
+        if (this@AbstractGame is Rematchable<*, *>) {
+            this@AbstractGame.rematchUI()
         }
     }
 

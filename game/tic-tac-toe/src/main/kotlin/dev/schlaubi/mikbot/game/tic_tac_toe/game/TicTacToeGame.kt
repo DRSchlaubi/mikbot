@@ -14,6 +14,7 @@ import dev.kord.core.entity.interaction.FollowupMessage
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.rest.builder.message.modify.MessageModifyBuilder
 import dev.schlaubi.mikbot.game.api.AbstractGame
+import dev.schlaubi.mikbot.game.api.AutoJoinableGame
 import dev.schlaubi.mikbot.game.api.Rematchable
 import dev.schlaubi.mikbot.game.api.module.GameModule
 import dev.schlaubi.mikbot.game.api.translate
@@ -31,10 +32,10 @@ class TicTacToeGame(
     override val welcomeMessage: Message,
     override val translationsProvider: TranslationsProvider,
     host: UserBehavior,
-    module: GameModule<TicTacToePlayer, out AbstractGame<TicTacToePlayer>>
-) : AbstractGame<TicTacToePlayer>(host, module), Rematchable<TicTacToeGame> {
+    module: GameModule<TicTacToePlayer, AbstractGame<TicTacToePlayer>>
+) : AbstractGame<TicTacToePlayer>(host, module), Rematchable<TicTacToePlayer, TicTacToeGame>, AutoJoinableGame<TicTacToePlayer> {
     override val rematchThreadName: String = "tic-tac-toe-rematch"
-    val playerTypeOrder = LinkedList(PlayerType.values().toList().shuffled())
+    private val playerTypeOrder = LinkedList(PlayerType.values().toList().shuffled())
     override val playerRange: IntRange = 2 until 3
     private val game = TicTacToe(size.size)
     private val cycle = PlayerCycle()
@@ -43,6 +44,8 @@ class TicTacToeGame(
 
     override val wonPlayers: List<TicTacToePlayer>
         get() = if (::winner.isInitialized && winner is WinResult.Winner) listOf(players.first { it.type == (winner as? WinResult.Winner)?.type }) else emptyList()
+
+    override fun obtainNewPlayer(user: User): TicTacToePlayer = TicTacToePlayer(user, playerTypeOrder.poll())
 
     override suspend fun obtainNewPlayer(
         user: User,

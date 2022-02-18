@@ -17,6 +17,7 @@ import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.kord.rest.builder.message.modify.MessageModifyBuilder
+import dev.schlaubi.mikbot.game.api.AutoJoinableGame
 import dev.schlaubi.mikbot.game.api.Rematchable
 import dev.schlaubi.mikbot.game.api.SingleWinnerGame
 import dev.schlaubi.mikbot.game.api.translate
@@ -41,12 +42,16 @@ class HangmanGame(
     override val welcomeMessage: Message,
     override val thread: ThreadChannelBehavior,
     override val translationsProvider: TranslationsProvider,
-) : SingleWinnerGame<HangmanPlayer>(host, module), Rematchable<HangmanGame> {
+) : SingleWinnerGame<HangmanPlayer>(host, module.asType),
+    Rematchable<HangmanPlayer, HangmanGame>,
+    AutoJoinableGame<HangmanPlayer> {
     override val rematchThreadName: String = "googologo-rematch"
     private val wordOwner = lastWinner ?: host
     override val playerRange: IntRange = 2..Int.MAX_VALUE
     private val gameCompleter by lazy { CompletableDeferred<Unit>() }
     private var state: GameState = GameState.WaitingForWord
+
+    override fun obtainNewPlayer(user: User): HangmanPlayer = HangmanPlayer(user)
 
     override suspend fun obtainNewPlayer(
         user: User,
@@ -76,7 +81,8 @@ class HangmanGame(
 
         if (wordEvent == null) {
             thread.createMessage {
-                content = "Because ${wordOwner.user.mention} took too long this game is now over, what an egoistic idiot?"
+                content =
+                    "Because ${wordOwner.user.mention} took too long this game is now over, what an egoistic idiot?"
             }
             softEnd()
             return null

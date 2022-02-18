@@ -19,8 +19,10 @@ import dev.schlaubi.mikbot.game.api.ControlledGame
 import dev.schlaubi.mikbot.game.api.Rematchable
 import dev.schlaubi.mikbot.game.api.translate
 import dev.schlaubi.mikbot.game.uno.UnoModule
+import dev.schlaubi.mikbot.game.uno.game.player.DesktopPlayer
 import dev.schlaubi.mikbot.game.uno.game.player.DiscordUnoPlayer
-import dev.schlaubi.mikbot.game.uno.game.player.updateControls
+import dev.schlaubi.mikbot.game.uno.game.player.MobilePlayer
+import dev.schlaubi.mikbot.game.uno.game.ui.startUI
 import dev.schlaubi.mikbot.game.uno.game.ui.welcomeMessage
 import dev.schlaubi.mikbot.plugin.api.util.discordError
 import dev.schlaubi.uno.Game
@@ -37,7 +39,7 @@ class DiscordUnoGame(
     override val welcomeMessage: Message,
     override val thread: ThreadChannelBehavior,
     override val translationsProvider: TranslationsProvider,
-    private val extremeMode: Boolean,
+    val extremeMode: Boolean,
     val flashMode: Boolean,
     val allowDropIns: Boolean,
     val drawUntilPlayable: Boolean,
@@ -45,7 +47,8 @@ class DiscordUnoGame(
     val allowDrawCardStacking: Boolean,
     val allowBluffing: Boolean,
     val useSpecial7and0: Boolean
-) : AbstractGame<DiscordUnoPlayer>(host, module.asType), ControlledGame<DiscordUnoPlayer>, Rematchable<DiscordUnoPlayer, DiscordUnoGame> {
+) : AbstractGame<DiscordUnoPlayer>(host, module.asType), ControlledGame<DiscordUnoPlayer>,
+    Rematchable<DiscordUnoPlayer, DiscordUnoGame> {
     override val rematchThreadName: String = "uno-rematch"
     lateinit var game: Game<DiscordUnoPlayer>
         internal set
@@ -61,6 +64,7 @@ class DiscordUnoGame(
 
     override suspend fun removePlayer(player: DiscordUnoPlayer) = kickPlayer(player)
 
+
     override suspend fun MessageModifyBuilder.updateWelcomeMessage() {
         embeds?.clear()
         embed {
@@ -69,7 +73,11 @@ class DiscordUnoGame(
     }
 
     override fun EmbedBuilder.addWelcomeMessage() {
-        welcomeMessage(this@DiscordUnoGame)
+        if (running) {
+            welcomeMessage(this@DiscordUnoGame)
+        } else {
+            startUI(this@DiscordUnoGame)
+        }
     }
 
     override suspend fun obtainNewPlayer(
@@ -77,13 +85,16 @@ class DiscordUnoGame(
         ack: EphemeralInteractionResponseBehavior,
         loading: FollowupMessage,
         userLocale: Locale?
-    ): DiscordUnoPlayer = DiscordUnoPlayer(
-        user,
-        ack,
-        loading,
-        this,
-        userLocale
-    )
+    ): DiscordUnoPlayer {
+        // We prioritise Desktop, so we just check whether there is a desktop status is present
+        val presences = user.asMember(thread.guildId).getPresence().clientStatus
+        val isMobile = presences.desktop == null && presences.web == null
+        return if (isMobile) {
+            MobilePlayer(user, ack, loading, this, userLocale)
+        } else {
+            DesktopPlayer(user, ack, loading, this, userLocale)
+        }
+    }
 
     override suspend fun onRejoin(event: ComponentInteractionCreateEvent, player: DiscordUnoPlayer) =
         player.resendControlsInternally(
@@ -102,8 +113,8 @@ class DiscordUnoGame(
             useSpecial7and0
         )
 
-        players.forEach {
-            it.updateControls(false)
+        (players - game.getNextPlayer()).forEach {
+            it.updateControls(active = false, initial = true)
         }
 
         while (game.gameRunning) {

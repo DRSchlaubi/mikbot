@@ -9,7 +9,7 @@ import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.core.on
 import dev.schlaubi.mikbot.game.api.*
 
-internal fun <T : Player> AbstractGame<T>.interactionHandler() = kord.on<ComponentInteractionCreateEvent> {
+internal fun <T : Player> AbstractGame<T>.interactionHandler() = kord.on<ComponentInteractionCreateEvent>(this) {
     if (interaction.message?.id != welcomeMessage.id) return@on
 
     when (interaction.componentId) {

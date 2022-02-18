@@ -1,17 +1,24 @@
 package dev.schlaubi.mikbot.game.uno.game.player
 
+import com.kotlindiscord.kord.extensions.i18n.SupportedLocales
 import dev.kord.common.Locale
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.interaction.*
 import dev.kord.core.entity.interaction.FollowupMessage
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
+import dev.kord.rest.builder.message.modify.MessageModifyBuilder
+import dev.kord.rest.builder.message.modify.embed
 import dev.schlaubi.mikbot.game.api.ControlledPlayer
+import dev.schlaubi.mikbot.game.api.translateInternally
 import dev.schlaubi.mikbot.game.uno.game.DiscordUnoGame
 import dev.schlaubi.mikbot.game.uno.game.ui.translationKey
+import dev.schlaubi.mikbot.game.uno.game.ui.welcomeMessage
+import dev.schlaubi.mikbot.plugin.api.util.convertToISO
 import dev.schlaubi.mikbot.plugin.api.util.deleteAfterwards
 import dev.schlaubi.uno.Game
 import dev.schlaubi.uno.Player
 import dev.schlaubi.uno.cards.*
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
@@ -25,7 +32,7 @@ const val skipButton = "skip"
 const val allCardsButton = "request_all_cards"
 const val challengeWildCard = "challenge_wild_card"
 
-class DiscordUnoPlayer(
+abstract class DiscordUnoPlayer(
     override val user: UserBehavior,
     val response: EphemeralInteractionResponseBehavior,
     override var controls: FollowupMessage,
@@ -214,7 +221,7 @@ class DiscordUnoPlayer(
     override suspend fun resendControls(ack: EphemeralInteractionResponseBehavior) = resendControlsInternally(null)
 
     suspend fun resendControlsInternally(
-        event: ComponentInteractionCreateEvent?,
+        event: ComponentInteractionCreateEvent? = null,
         justLoading: Boolean = false
     ) {
         val ack = event?.interaction?.acknowledgeEphemeral() ?: response
@@ -222,9 +229,13 @@ class DiscordUnoPlayer(
             content = translate("uno.controls.loading")
         }
         if (!justLoading) {
-            updateControls(myTurn)
+            editControls(myTurn)
         }
     }
+
+    abstract suspend fun updateControls(active: Boolean, initial: Boolean = false)
+
+    open suspend fun MessageModifyBuilder.updateControlsMessage(initial: Boolean = false) = Unit
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -255,4 +266,55 @@ class DiscordUnoPlayer(
     }
 
     override fun toString(): String = user.toString()
+}
+
+class DesktopPlayer(
+    user: UserBehavior,
+    response: EphemeralInteractionResponseBehavior,
+    controls: FollowupMessage,
+    game: DiscordUnoGame,
+    discordLocale: Locale?
+) : DiscordUnoPlayer(user, response, controls, game, discordLocale) {
+    override suspend fun updateControls(active: Boolean, initial: Boolean) = editControls(active)
+}
+
+class MobilePlayer(
+    user: UserBehavior,
+    response: EphemeralInteractionResponseBehavior,
+    controls: FollowupMessage,
+    game: DiscordUnoGame,
+    discordLocale: Locale?
+) : DiscordUnoPlayer(user, response, controls, game, discordLocale) {
+    // Add the game message to the controls
+    override suspend fun MessageModifyBuilder.updateControlsMessage(initial: Boolean) {
+        // Only add this text, to playable messages
+        if (components?.isNotEmpty() == true && !initial) {
+            embed {
+                welcomeMessage(game)
+
+                footer {
+                    text = translate("uno.controls.mobile.notice")
+                }
+            }
+        }
+    }
+
+    override suspend fun updateControls(active: Boolean, initial: Boolean) {
+        // If it is your turn, we'll resend your controls
+        if (active) {
+            coroutineScope {
+                launch {
+                    controls.edit {
+                        content = game.translateInternally(user, "game.controls.reset")
+                        embeds = mutableListOf()
+                        components = mutableListOf()
+                    }
+                }
+                resendControlsInternally()
+            }
+        } else {
+            // if not we'll just edit
+            editControls(false, initial)
+        }
+    }
 }

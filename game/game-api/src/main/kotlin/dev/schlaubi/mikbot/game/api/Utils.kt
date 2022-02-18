@@ -49,7 +49,7 @@ suspend fun AbstractGame<*>.translate(user: UserBehavior, key: String, vararg re
 }
 
 @Suppress("UNCHECKED_CAST")
-internal suspend fun AbstractGame<*>.translateInternally(
+suspend fun AbstractGame<*>.translateInternally(
     user: UserBehavior,
     key: String,
     vararg replacements: Any?

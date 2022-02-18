@@ -76,6 +76,7 @@ class UnoModule : GameModule<DiscordUnoPlayer, DiscordUnoGame>() {
     @OptIn(PrivilegedIntent::class, KordUnsafe::class, KordExperimental::class)
     override suspend fun gameSetup() {
         intents.add(Intent.GuildMembers)
+        intents.add(Intent.GuildPresences)
 
         startGameCommand(
             "uno.game.title",

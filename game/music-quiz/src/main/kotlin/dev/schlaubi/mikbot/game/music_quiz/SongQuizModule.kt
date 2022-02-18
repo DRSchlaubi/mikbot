@@ -94,7 +94,13 @@ class SongQuizModule : GameModule<MultipleChoicePlayer, SongQuizGame>() {
                 return@prepareData null
             }
 
-            TrackContainer(playlist, this.arguments.size)
+            TrackContainer(playlist, this.arguments.size) {
+                if (it == 1) {
+                    respond {
+                        translate("commands.song_quiz.start.rate_limit")
+                    }
+                }
+            }
         },
         { trackContainer, message, thread ->
             val game = SongQuizGame(

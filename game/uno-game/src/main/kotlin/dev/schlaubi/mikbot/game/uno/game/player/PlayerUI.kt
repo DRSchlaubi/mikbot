@@ -25,7 +25,7 @@ private suspend fun DiscordUnoPlayer.cardsTitle(active: Boolean, cardSize: Int):
     return translate(key, *replacements)
 }
 
-suspend fun DiscordUnoPlayer.updateControls(active: Boolean) {
+suspend fun DiscordUnoPlayer.editControls(active: Boolean, initial: Boolean = false) {
     controls.edit {
         val availableCards = displayableCards()
         val cards = availableCards
@@ -33,12 +33,12 @@ suspend fun DiscordUnoPlayer.updateControls(active: Boolean) {
             .chunked(5) // Only 5 buttons per action row
 
         content = cardsTitle(active, availableCards.size)
-
-        addCards(cards, this@updateControls, active)
+        addCards(cards, this@editControls, active)
         addControlButtons(
-            this@updateControls, active,
+            this@editControls, active,
             availableCards.size != deck.size
         )
+        updateControlsMessage(initial)
     }
 }
 

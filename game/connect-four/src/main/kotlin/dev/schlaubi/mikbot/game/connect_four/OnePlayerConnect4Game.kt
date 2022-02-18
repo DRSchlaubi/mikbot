@@ -34,7 +34,7 @@ class OnePlayerConnect4Game(
     override val welcomeMessage: Message,
     override val translationsProvider: TranslationsProvider,
     host: UserBehavior,
-    module: GameModule<Connect4Player, out AbstractGame<Connect4Player>>
+    module: GameModule<Connect4Player, AbstractGame<Connect4Player>>
 ) :
     AbstractGame<Connect4Player>(host, module) {
     override val playerRange: IntRange = 0..Int.MAX_VALUE

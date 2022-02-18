@@ -93,8 +93,10 @@ abstract class AbstractGame<T : Player>(
     val ComponentInteraction.gamePlayer: T?
         get() = players.firstOrNull { it.user == user }
 
-    private val interactionListener: Job = interactionHandler()
-    private val threadWatcher: Job = watchThread()
+    init {
+        interactionHandler()
+        watchThread()
+    }
 
     private var silentEnd = false
 
@@ -174,18 +176,16 @@ abstract class AbstractGame<T : Player>(
                     addWelcomeMessage()
                     val supportsControlledAutoJoin =
                         (this@AbstractGame as? ControlledGame<*>)?.supportsAutoJoin == true && hostPlayer == null
-                    if ((players.isNotEmpty() || supportsControlledAutoJoin) && fields.none { it.name == "Players" }) {
-                        val normalPlayers = players.joinToString(", ") { it.user.mention }
-                        val players = if (supportsControlledAutoJoin) {
-                            normalPlayers + "(${host.mention})"
-                        } else {
-                            normalPlayers
-                        }
+                    val normalPlayers = players.map { it.user.mention }
+                    val players = if (supportsControlledAutoJoin) {
+                        normalPlayers + "(${host.mention})"
+                    } else {
+                        normalPlayers
+                    }
 
-                        field {
-                            name = "Players"
-                            value = players
-                        }
+                    field {
+                        name = "Players"
+                        value = players.joinToString(", ")
                     }
                 }
             }
@@ -285,8 +285,7 @@ abstract class AbstractGame<T : Player>(
                 archived = true
             }
         }
-        interactionListener.cancel()
-        threadWatcher.cancel()
+        cancel()
     }
 
     private suspend fun UserMessageModifyBuilder.rematchLogic() {

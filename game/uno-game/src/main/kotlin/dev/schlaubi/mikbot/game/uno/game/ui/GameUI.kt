@@ -10,13 +10,55 @@ import dev.schlaubi.uno.UnoColor
 import java.util.*
 import java.awt.Color as JColor
 
+fun EmbedBuilder.startUI(uno: DiscordUnoGame) {
+    field {
+        name = "Extreme mode"
+        value = uno.extremeMode.toString()
+    }
+
+    field {
+        name = "Flash mode"
+        value = uno.flashMode.toString()
+    }
+
+    field {
+        name = "Drop-Ins"
+        value = uno.allowDropIns.toString()
+    }
+
+    field {
+        name = "Draw until playable"
+        value = uno.drawUntilPlayable.toString()
+    }
+
+    field {
+        name = "Force play"
+        value = uno.forcePlay.toString()
+    }
+
+    field {
+        name = "Draw card stacking"
+        value = uno.allowDrawCardStacking.toString()
+    }
+
+    field {
+        name = "Bluffing"
+        value = uno.allowBluffing.toString()
+    }
+
+    field {
+        name = "0-7"
+        value = uno.useSpecial7and0.toString()
+    }
+}
+
 fun EmbedBuilder.welcomeMessage(uno: DiscordUnoGame) {
     with(uno) {
         if (players.isNotEmpty()) {
             field {
-                val playingPlayers = if (running) game.players else players
+                val playingPlayers = game.players
                 val actualPlayers =
-                    if (!flashMode && running && game.direction == Direction.COUNTER_CLOCKWISE) {
+                    if (!flashMode && game.direction == Direction.COUNTER_CLOCKWISE) {
                         playingPlayers.reversed()
                     } else {
                         playingPlayers
@@ -33,7 +75,6 @@ fun EmbedBuilder.welcomeMessage(uno: DiscordUnoGame) {
             }
         }
 
-        if (!running) return
         if (wonPlayers.isNotEmpty()) {
             field {
                 name = "Won players"

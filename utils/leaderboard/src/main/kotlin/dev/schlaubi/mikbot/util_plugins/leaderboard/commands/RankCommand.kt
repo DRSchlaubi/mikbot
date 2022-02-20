@@ -7,11 +7,8 @@ import com.kotlindiscord.kord.extensions.types.respond
 import dev.kord.rest.builder.message.create.embed
 import dev.schlaubi.mikbot.plugin.api.util.effectiveAvatar
 import dev.schlaubi.mikbot.plugin.api.util.safeGuild
-import dev.schlaubi.mikbot.util_plugins.leaderboard.LeaderBoardDatabase
-import dev.schlaubi.mikbot.util_plugins.leaderboard.calculateRank
-import dev.schlaubi.mikbot.util_plugins.leaderboard.calculateXPForNextLevel
+import dev.schlaubi.mikbot.util_plugins.leaderboard.*
 import dev.schlaubi.mikbot.util_plugins.leaderboard.core.LeaderBoardModule
-import dev.schlaubi.mikbot.util_plugins.leaderboard.findByMember
 
 class RankArguments : Arguments() {
     val target by optionalMember {
@@ -48,7 +45,7 @@ suspend fun LeaderBoardModule.rankCommand() = publicSlashCommand(::RankArguments
 
                 field {
                     name = translate("commands.rank.progress")
-                    value = formatProgress(profile.points, calculateXPForNextLevel(profile.level))
+                    value = formatProgress(profile.points - calculateXpForLevel(profile.level), calculateXPForNextLevel(profile.level))
                 }
             }
         }

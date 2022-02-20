@@ -45,7 +45,7 @@ suspend fun LeaderBoardModule.rankCommand() = publicSlashCommand(::RankArguments
 
                 field {
                     name = translate("commands.rank.progress")
-                    value = formatProgress(profile.points - calculateXpForLevel(profile.level), calculateXPForNextLevel(profile.level))
+                    value = formatProgress(profile.points - calculateXpForLevel(profile.level), calculateXPNeededForNextLevel(profile.level))
                 }
             }
         }

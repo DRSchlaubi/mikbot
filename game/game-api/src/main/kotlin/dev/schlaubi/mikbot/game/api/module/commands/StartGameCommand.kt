@@ -14,6 +14,7 @@ import dev.kord.core.event.interaction.InteractionCreateEvent
 import dev.kord.rest.builder.message.create.embed
 import dev.schlaubi.mikbot.game.api.AbstractGame
 import dev.schlaubi.mikbot.game.api.AutoJoinableGame
+import dev.schlaubi.mikbot.game.api.ControlledGame
 import dev.schlaubi.mikbot.game.api.Player
 import dev.schlaubi.mikbot.game.api.module.GameModule
 
@@ -116,8 +117,10 @@ fun <A : Arguments, G : AbstractGame<*>, Data> GameModule<*, G>.startGameCommand
 
         fun <T : Player> AutoJoinableGame<T>.addPlayer(player: User) = players.add(obtainNewPlayer(player))
 
-        if (game is AutoJoinableGame<*>) {
+        if (game is AutoJoinableGame<*> || (game as? ControlledGame<*>)?.supportsAutoJoin == true) {
             gameThread.addUser(user.id) // Add creator
+        }
+        if(game is AutoJoinableGame<*>) {
             game.addPlayer(user.asUser())
         }
         game.doUpdateWelcomeMessage()

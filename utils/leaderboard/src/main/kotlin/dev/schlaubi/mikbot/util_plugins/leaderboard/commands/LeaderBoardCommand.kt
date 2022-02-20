@@ -24,9 +24,7 @@ suspend fun LeaderBoardModule.leaderBoardCommand() = publicSlashCommand {
         } else {
             editingPaginator {
                 forFlow(user, count, leaderboard, {
-                    val name = safeGuild.getMemberOrNull(it.userId)?.let { user -> user.nickname ?: user.username }
-
-                    translate("commands.leaderboard.item", arrayOf(name, it.level))
+                    translate("commands.leaderboard.item", arrayOf("<@${it.userId}>", it.level))
                 }, { current, total -> translate("commands.leaderboard.title", arrayOf(current, total)) })
             }.send()
         }

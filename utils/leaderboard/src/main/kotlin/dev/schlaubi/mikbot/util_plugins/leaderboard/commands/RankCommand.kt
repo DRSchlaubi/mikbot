@@ -56,4 +56,10 @@ suspend fun LeaderBoardModule.rankCommand() = publicSlashCommand(::RankArguments
 }
 
 private fun formatProgress(current: Long, total: Long) = "█".repeat(((current.toDouble() / total.toDouble()) * 20).toInt())
-    .padEnd(20, '▒') + " $current/$total"
+    .padEnd(20, '▒') + " ${current.sanitizeNumber()}/${total.sanitizeNumber()}"
+
+private fun Long.sanitizeNumber(): String = when (toDouble()) {
+    in 1000.0..999999.0 -> "${div(1000.0)}k"
+    in 1000000.0..9999999.0 -> "${div(1000000.0)}m"
+    else -> toString()
+}

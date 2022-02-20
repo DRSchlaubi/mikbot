@@ -42,7 +42,7 @@ suspend fun LeaderBoardModule.leaderBoardExecutor() = event<MessageCreateEvent> 
                 }
             }
             existingUser.copy(
-                points = existingUser.points + xpGain,
+                points = 0,
                 level = existingUser.level + 1,
                 lastXpReceived = Clock.System.now()
             )

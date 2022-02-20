@@ -30,6 +30,7 @@ include(
     "utils:profiles",
     "utils:role-selector",
     "utils:botblock",
+    "utils:leaderboard",
     "votebot",
     "votebot:common",
     "votebot:chart-service-client",

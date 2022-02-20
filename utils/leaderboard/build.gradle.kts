@@ -7,6 +7,20 @@ plugins {
 group = "dev.schlaubi.mikbot"
 version = "1.0.0"
 
+dependencies {
+    optionalPlugin(projects.core.gdpr)
+    optionalPlugin(projects.utils.ktor)
+    implementation("org.litote.kmongo", "kmongo-id-serialization", "4.4.0")
+}
+
 mikbotPlugin {
-    description.set("Adds a leaderboarder")
+    description.set("Adds a leaderboard")
+}
+
+tasks {
+    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        kotlinOptions {
+            freeCompilerArgs = freeCompilerArgs + listOf("-Xopt-in=io.ktor.locations.KtorExperimentalLocationsAPI")
+        }
+    }
 }

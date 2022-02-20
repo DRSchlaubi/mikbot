@@ -3,6 +3,8 @@ package dev.schlaubi.mikbot.util_plugins.leaderboard.commands
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.mikbot.plugin.api.settings.SettingsModule
+import dev.schlaubi.mikbot.plugin.api.settings.guildAdminOnly
+import dev.schlaubi.mikbot.plugin.api.util.confirmation
 import dev.schlaubi.mikbot.plugin.api.util.safeGuild
 import dev.schlaubi.mikbot.util_plugins.leaderboard.core.importForGuild
 import mu.KotlinLogging
@@ -13,7 +15,14 @@ suspend fun SettingsModule.importMee6() = ephemeralSlashCommand {
     name = "import-mee6-leaderboard"
     description = "Tries to import the Mee6 leaderboard for this Discord"
 
+    guildAdminOnly()
+
     action {
+        val (confirmed) = confirmation {
+            content = translate("commands.import_mee6.confirm")
+        }
+        if (!confirmed) return@action
+
         try {
             importForGuild(safeGuild.id)
 

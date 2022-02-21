@@ -36,7 +36,7 @@ private const val requestStats = "request_stats"
  */
 abstract class MultipleChoiceGame<Player : MultipleChoicePlayer, Q : Question, QC : QuestionContainer<Q>>(
     host: UserBehavior,
-    module: GameModule<Player, out AbstractGame<Player>>,
+    module: GameModule<Player, AbstractGame<Player>>,
     val quizSize: Int,
     val questionContainer: QC,
 ) : AbstractGame<Player>(host, module) {

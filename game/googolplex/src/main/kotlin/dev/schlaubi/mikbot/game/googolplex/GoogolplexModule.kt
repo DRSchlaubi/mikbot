@@ -44,7 +44,7 @@ class GoogolplexModule : GameModule<GoogolplexPlayer, GoogolplexGame>() {
                     arguments.maxTries,
                     null,
                     user,
-                    this@GoogolplexModule,
+                    asType,
                     thread,
                     message,
                     translationsProvider

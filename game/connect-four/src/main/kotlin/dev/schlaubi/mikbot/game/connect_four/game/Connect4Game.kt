@@ -28,9 +28,9 @@ class Connect4Game(
     override val welcomeMessage: Message,
     override val translationsProvider: TranslationsProvider,
     host: UserBehavior,
-    module: GameModule<Connect4Player, out AbstractGame<Connect4Player>>,
+    module: GameModule<Connect4Player, AbstractGame<Connect4Player>>,
     private val lastWinner: Connect4Player? = null
-) : AbstractGame<Connect4Player>(host, module), Rematchable<Connect4Game> {
+) : AbstractGame<Connect4Player>(host, module), Rematchable<Connect4Player, Connect4Game> {
 
     override val rematchThreadName: String = "connect4-rematch"
     override val playerRange: IntRange = 2 until 3

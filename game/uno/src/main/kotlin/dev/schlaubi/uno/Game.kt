@@ -262,6 +262,14 @@ public class Game<T : Player>(
         // Play card
         if (card is ActionCard) {
             card.applyToGame(this, player)
+
+            // Check if action card, caused other player to finish
+            (players - player).forEach {
+                if (it.deck.isEmpty()) {
+                    @Suppress("UNCHECKED_CAST")
+                    forceWin(it as T)
+                }
+            }
         }
         if (card is DrawingCard) {
             if (allowDrawCardStacking && card.canStackWith(topCard)) {

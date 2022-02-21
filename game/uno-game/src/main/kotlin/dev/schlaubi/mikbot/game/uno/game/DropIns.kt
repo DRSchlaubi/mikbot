@@ -12,7 +12,6 @@ import dev.kord.core.behavior.interaction.followUpEphemeral
 import dev.kord.x.emoji.Emojis
 import dev.schlaubi.mikbot.game.uno.game.player.DiscordUnoPlayer
 import dev.schlaubi.mikbot.game.uno.game.player.translate
-import dev.schlaubi.mikbot.game.uno.game.player.updateControls
 import dev.schlaubi.mikbot.game.uno.game.ui.translationKey
 import dev.schlaubi.uno.cards.PlayedCard
 import kotlinx.coroutines.CompletableDeferred

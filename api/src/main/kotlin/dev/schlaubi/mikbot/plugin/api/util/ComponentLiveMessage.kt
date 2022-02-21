@@ -9,12 +9,14 @@ import dev.kord.core.live.AbstractLiveKordEntity
 import dev.kord.core.live.on
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.plus
 
-public fun Message.componentLive(coroutineScope: CoroutineScope = kord): ComponentLiveMessage =
+public fun Message.componentLive(coroutineScope: CoroutineScope = kord + SupervisorJob()): ComponentLiveMessage =
     ComponentLiveMessage(this, coroutineScope)
 
 @OptIn(KordPreview::class)
-public class ComponentLiveMessage(private val message: Message, coroutineScope: CoroutineScope = message.kord) :
+public class ComponentLiveMessage(private val message: Message, coroutineScope: CoroutineScope = message.kord + SupervisorJob()) :
     AbstractLiveKordEntity(message.kord, coroutineScope) {
     override val id: Snowflake
         get() = message.id

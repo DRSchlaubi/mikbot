@@ -3,13 +3,14 @@ package dev.schlaubi.mikbot.game.music_quiz.game
 import com.wrapper.spotify.model_objects.specification.Playlist
 import com.wrapper.spotify.model_objects.specification.Track
 import dev.schlaubi.mikbot.game.multiple_choice.QuestionContainer
-import dev.schlaubi.mikbot.plugin.api.util.parallelMapNotNull
 import dev.schlaubi.mikbot.plugin.api.util.poll
 import dev.schlaubi.mikmusic.player.queue.getTrack
+import kotlinx.coroutines.delay
 import java.util.*
 import kotlin.random.Random
+import kotlin.time.Duration.Companion.seconds
 
-class TrackContainer private constructor(
+class TrackContainer @PublishedApi internal constructor(
     val spotifyPlaylist: Playlist,
     private val tracks: List<Track>,
     private val artistPool: LinkedList<String>,
@@ -64,10 +65,23 @@ class TrackContainer private constructor(
     }
 
     companion object {
-        suspend operator fun invoke(playlist: Playlist, size: Int): TrackContainer {
-            val playlistTracks =
-                playlist.tracks.items.toList().shuffled().parallelMapNotNull(maxConcurrentRequests = 2) {
-                    it.track.id?.let { id -> getTrack(id) }
+        suspend inline operator fun invoke(
+            playlist: Playlist,
+            size: Int,
+            onRatelimit: (index: Int) -> Unit = {}
+        ): TrackContainer {
+            val playlistTracks = playlist.tracks.items
+                .toList()
+                .shuffled()
+                .chunked(30)
+                .flatMapIndexed { index, chunk ->
+                    if (index > 1) {
+                        onRatelimit(index)
+                        delay(1.seconds)
+                    }
+                    chunk.mapNotNull {
+                        it.track.id?.let { id -> getTrack(id) }
+                    }
                 }
             val artists = HashSet<String>(playlistTracks.size)
             val names = HashSet<String>(playlistTracks.size)

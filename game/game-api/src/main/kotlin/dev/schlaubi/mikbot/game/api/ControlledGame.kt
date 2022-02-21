@@ -26,8 +26,7 @@ private const val REQUEST_CONTROLS = "request_controls"
  *
  * @property players all players
  */
-interface ControlledGame<P : ControlledPlayer> {
-    val players: List<P>
+interface ControlledGame<P : ControlledPlayer> : Game<P> {
     val running: Boolean
     val supportsAutoJoin get() = true
 

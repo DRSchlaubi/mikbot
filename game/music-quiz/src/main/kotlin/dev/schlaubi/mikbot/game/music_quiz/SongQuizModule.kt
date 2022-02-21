@@ -12,7 +12,6 @@ import dev.schlaubi.mikbot.game.api.module.commands.startGameCommand
 import dev.schlaubi.mikbot.game.api.module.commands.stopGameCommand
 import dev.schlaubi.mikbot.game.multiple_choice.player.MultipleChoicePlayer
 import dev.schlaubi.mikbot.game.music_quiz.game.SongQuizGame
-import dev.schlaubi.mikbot.game.music_quiz.game.SongQuizPlayer
 import dev.schlaubi.mikbot.game.music_quiz.game.TrackContainer
 import dev.schlaubi.mikbot.plugin.api.util.extension
 import dev.schlaubi.mikbot.plugin.api.util.safeGuild
@@ -94,10 +93,16 @@ class SongQuizModule : GameModule<MultipleChoicePlayer, SongQuizGame>() {
                 return@prepareData null
             }
 
-            TrackContainer(playlist, this.arguments.size)
+            TrackContainer(playlist, this.arguments.size) {
+                if (it == 1) {
+                    respond {
+                        translate("commands.song_quiz.start.rate_limit")
+                    }
+                }
+            }
         },
         { trackContainer, message, thread ->
-            val game = SongQuizGame(
+            SongQuizGame(
                 user,
                 this@SongQuizModule,
                 this.arguments.size.coerceAtMost(trackContainer.spotifyPlaylist.tracks.items.size),
@@ -107,11 +112,6 @@ class SongQuizModule : GameModule<MultipleChoicePlayer, SongQuizGame>() {
                 message,
                 translationsProvider
             )
-
-            val hostPlayer = SongQuizPlayer(user)
-            game.players.add(hostPlayer)
-
-            game
         },
         { joinSameChannelCheck(bot) },
         name,

@@ -9,7 +9,7 @@ import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.core.on
 import dev.schlaubi.mikbot.game.api.*
 
-internal fun <T : Player> AbstractGame<T>.interactionHandler() = kord.on<ComponentInteractionCreateEvent> {
+internal fun <T : Player> AbstractGame<T>.interactionHandler() = kord.on<ComponentInteractionCreateEvent>(this) {
     if (interaction.message?.id != welcomeMessage.id) return@on
 
     when (interaction.componentId) {
@@ -37,6 +37,8 @@ internal fun <T : Player> AbstractGame<T>.interactionHandler() = kord.on<Compone
 
             // Add host to controlled games
             if (hostPlayer == null) {
+                // Doing it like this, prevents an auto-cast from Game<T> to Game<Nothing>
+                if ((this as? ControlledGame<*>)?.supportsAutoJoin == true) return@on
                 val ack = interaction.acknowledgeEphemeral()
                 val newPlayer = obtainNewPlayer(
                     interaction.user,

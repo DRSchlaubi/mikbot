@@ -37,10 +37,8 @@ class TicTacToeModule : GameModule<TicTacToePlayer, TicTacToeGame>() {
                 message,
                 translationsProvider,
                 user,
-                this@TicTacToeModule
-            ).apply {
-                players.add(TicTacToePlayer(user, playerTypeOrder.poll()))
-            }
+                asType
+            )
         })
         stopGameCommand()
         leaderboardCommand("tic_tac_toe.leaderboard")

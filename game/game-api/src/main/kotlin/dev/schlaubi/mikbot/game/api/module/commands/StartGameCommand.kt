@@ -120,7 +120,7 @@ fun <A : Arguments, G : AbstractGame<*>, Data> GameModule<*, G>.startGameCommand
         if (game is AutoJoinableGame<*> || (game as? ControlledGame<*>)?.supportsAutoJoin == true) {
             gameThread.addUser(user.id) // Add creator
         }
-        if(game is AutoJoinableGame<*>) {
+        if (game is AutoJoinableGame<*>) {
             game.addPlayer(user.asUser())
         }
         game.doUpdateWelcomeMessage()

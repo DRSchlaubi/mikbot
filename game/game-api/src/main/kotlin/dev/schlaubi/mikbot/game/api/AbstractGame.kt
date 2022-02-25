@@ -17,7 +17,6 @@ import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.edit
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.User
-import dev.kord.core.entity.channel.GuildChannel
 import dev.kord.core.entity.channel.TextChannel
 import dev.kord.core.entity.interaction.ComponentInteraction
 import dev.kord.core.entity.interaction.EphemeralFollowupMessage
@@ -38,7 +37,6 @@ import org.koin.core.component.KoinComponent
 import org.litote.kmongo.coroutine.CoroutineCollection
 import kotlin.coroutines.CoroutineContext
 import kotlin.time.Duration.Companion.minutes
-import java.util.Locale as JavaLocale
 
 private val LOG = KotlinLogging.logger { }
 

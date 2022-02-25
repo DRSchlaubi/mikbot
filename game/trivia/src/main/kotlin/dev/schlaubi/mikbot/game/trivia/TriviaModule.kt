@@ -66,9 +66,8 @@ class TriviaModule : GameModule<MultipleChoicePlayer, TriviaGame>() {
                     this@TriviaModule
                 ) to locale
             },
-            { (questionContainer, locale), message, thread ->
+            { (questionContainer, _), message, thread ->
                 TriviaGame(
-                    locale,
                     thread,
                     message,
                     translationsProvider,

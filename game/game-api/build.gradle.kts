@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "dev.schlaubi.mikbot"
-version = "2.0.9"
+version = "2.1.0"
 
 dependencies {
     optionalPlugin(project(":core:gdpr"))
@@ -14,4 +14,5 @@ dependencies {
 
 mikbotPlugin {
     description.set("Plugin providing core APIs for all games")
+    bundle.set("games")
 }

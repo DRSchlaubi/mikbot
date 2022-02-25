@@ -72,7 +72,7 @@ class DiscordUnoGame(
         }
     }
 
-    override fun EmbedBuilder.addWelcomeMessage() {
+    override suspend fun EmbedBuilder.addWelcomeMessage() {
         if (running) {
             welcomeMessage(this@DiscordUnoGame)
         } else {
@@ -127,7 +127,7 @@ class DiscordUnoGame(
                         currentPlayer!!.turn()
                     } catch (e: Exception) {
                         currentPlayer!!.response.followUpEphemeral {
-                            content = translate(currentPlayer!!.user, "uno.controls.failed")
+                            content = translate(currentPlayer!!, "uno.controls.failed")
                         }
                         currentPlayer!!.resendControlsInternally(null)
                         LOG.error(e) { "Error occurred whilst updating game" }

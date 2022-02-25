@@ -1,16 +1,15 @@
 package dev.schlaubi.mikbot.game.api
 
-import com.kotlindiscord.kord.extensions.i18n.SupportedLocales
-import dev.kord.core.behavior.UserBehavior
-import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
+import dev.kord.core.behavior.interaction.InteractionResponseBehavior
 import dev.kord.core.behavior.interaction.followUpEphemeral
 import dev.schlaubi.mikbot.plugin.api.util.MessageBuilder
 import dev.schlaubi.mikbot.plugin.api.util.getLocale
 import java.util.*
 
 suspend fun AbstractGame<*>.confirmation(
-    ack: EphemeralInteractionResponseBehavior,
+    ack: InteractionResponseBehavior,
     hasNoOption: Boolean = true,
+    locale: Locale? = null,
     messageBuilder: MessageBuilder
 ) =
     dev.schlaubi.mikbot.plugin.api.util.confirmation(
@@ -19,8 +18,18 @@ suspend fun AbstractGame<*>.confirmation(
         },
         hasNoOption = hasNoOption,
         messageBuilder = messageBuilder,
-        translate = translationsProvider::translate
+        translate = { key, group ->
+            translationsProvider.translate(key, locale ?: translationsProvider.defaultLocale, group)
+        }
     )
+
+suspend fun ControlledPlayer.confirmation(
+    hasNoOption: Boolean = true,
+    messageBuilder: MessageBuilder
+) = game.confirmation(ack, hasNoOption, locale, messageBuilder)
+
+suspend fun ControlledPlayer.translate(key: String, vararg replacements: Any?) =
+    game.translate(key, *replacements, discordLocale)
 
 suspend fun <T : Player> AbstractGame<T>.update(
     player: T,
@@ -37,26 +46,43 @@ suspend fun <T : Player> AbstractGame<T>.update(
  * Translates [key] for a game.
  */
 @Suppress("UNCHECKED_CAST")
-fun AbstractGame<*>.translate(key: String, vararg replacements: Any?, locale: Locale = SupportedLocales.ENGLISH) =
+suspend fun AbstractGame<*>.translate(
+    key: String,
+    vararg replacements: Any?,
+    locale: Locale? = null
+) =
     translationsProvider.translate(
-        key, locale,
+        key, locale ?: locale(),
         bundle, replacements = replacements as Array<Any?>
     )
 
-suspend fun AbstractGame<*>.translate(user: UserBehavior, key: String, vararg replacements: Any?): String {
-    val locale = module.bot.getLocale(thread.asChannel(), user.asUser())
-    return translate(key, locale = locale, replacements = replacements)
+suspend fun AbstractGame<*>.translate(user: Player, key: String, vararg replacements: Any?): String {
+    return translate(key, locale = getLocale(user), replacements = replacements)
 }
 
 @Suppress("UNCHECKED_CAST")
 suspend fun AbstractGame<*>.translateInternally(
-    user: UserBehavior,
+    user: Player,
+    key: String,
+    vararg replacements: Any?
+): String = translateInternally(
+    getLocale(user), key, *replacements
+)
+
+private suspend fun AbstractGame<*>.getLocale(user: Player) =
+    (user as? ControlledPlayer)?.locale ?: module.bot.getLocale(
+        thread.asChannel(),
+        user.user.asUser()
+    )
+
+@Suppress("UNCHECKED_CAST")
+fun AbstractGame<*>.translateInternally(
+    locale: Locale? = null,
     key: String,
     vararg replacements: Any?
 ): String {
-    val locale = module.bot.getLocale(thread.asChannel(), user.asUser())
     return translationsProvider.translate(
-        key, locale,
+        key, locale ?: translationsProvider.defaultLocale,
         "games", replacements = replacements as Array<Any?>
     )
 }

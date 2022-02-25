@@ -1,5 +1,6 @@
 package dev.schlaubi.mikbot.game.googolplex.game
 
+import dev.kord.common.Locale
 import dev.kord.common.entity.ButtonStyle
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
@@ -12,16 +13,20 @@ import dev.kord.core.entity.interaction.FollowupMessage
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.rest.builder.message.modify.MessageModifyBuilder
 import dev.kord.rest.builder.message.modify.actionRow
+import dev.schlaubi.mikbot.game.api.AbstractGame
 import dev.schlaubi.mikbot.game.api.ControlledPlayer
 import dev.schlaubi.mikbot.game.api.translate
 import dev.schlaubi.mikbot.game.google_emotes.google
 import dev.schlaubi.mikbot.plugin.api.util.componentLive
 import kotlinx.coroutines.CompletableDeferred
+import java.util.*
 
 class GoogolplexPlayer(
     override val user: UserBehavior,
     override var controls: FollowupMessage,
     override val ack: InteractionResponseBehavior,
+    override val discordLocale: Locale?,
+    override val game: AbstractGame<*>
 ) : ControlledPlayer {
 
     private var currentAwaiter: CompletableDeferred<List<ReactionEmoji>?>? = null
@@ -38,7 +43,7 @@ class GoogolplexPlayer(
         game: GoogolplexGame
     ) = awaitSequence(
         game.size,
-        game.translate(user, "googolplex.controls.request_initial", game.size),
+        game.translate(this, "googolplex.controls.request_initial", game.size),
         renderChosenButtons = true
     ) { title, chosenButtons ->
         interaction.acknowledgeEphemeralDeferredMessageUpdate()

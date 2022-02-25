@@ -81,21 +81,27 @@ internal fun <T : Player> AbstractGame<T>.interactionHandler() = kord.on<Compone
         }
         resendControlsButton -> {
             val player = interaction.gamePlayer as? ControlledPlayer ?: return@on
-            val ack = interaction.acknowledgeEphemeral()
-            val confirmed = confirmation(ack) {
-                content = translateInternally(interaction.user, "game.resend_controls.confirm")
+            val ack = interaction.acknowledgeEphemeralDeferredMessageUpdate()
+            val confirmed = player.confirmation {
+                content = translateInternally(player, "game.resend_controls.confirm")
             }.value
             player.controls.edit {
-                content = translateInternally(interaction.user, "game.controls.reset")
+                content = translateInternally(player, "game.controls.reset")
                 components = mutableListOf()
             }
             if (confirmed) {
                 thread.createMessage {
                     content =
-                        translateInternally(interaction.user, "game.resend_controls.blame", interaction.user.mention)
+                        translateInternally(
+                            null,
+                            "game.resend_controls.blame",
+                            "games",
+                            arrayOf("interaction.user.mention")
+                        )
                 }.pin()
+
+                player.resendControls(ack)
             }
-            player.resendControls(ack)
         }
         else -> onInteraction()
     }

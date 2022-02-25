@@ -17,6 +17,7 @@ import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.edit
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.User
+import dev.kord.core.entity.channel.GuildChannel
 import dev.kord.core.entity.channel.TextChannel
 import dev.kord.core.entity.interaction.ComponentInteraction
 import dev.kord.core.entity.interaction.EphemeralFollowupMessage
@@ -30,12 +31,14 @@ import dev.kord.x.emoji.Emojis
 import dev.schlaubi.mikbot.game.api.events.interactionHandler
 import dev.schlaubi.mikbot.game.api.events.watchThread
 import dev.schlaubi.mikbot.game.api.module.GameModule
+import dev.schlaubi.mikbot.plugin.api.util.suspendLazy
 import kotlinx.coroutines.*
 import mu.KotlinLogging
 import org.koin.core.component.KoinComponent
 import org.litote.kmongo.coroutine.CoroutineCollection
 import kotlin.coroutines.CoroutineContext
 import kotlin.time.Duration.Companion.minutes
+import java.util.Locale as JavaLocale
 
 private val LOG = KotlinLogging.logger { }
 
@@ -51,6 +54,7 @@ const val resendControlsButton = "resend_controls"
  * @property bundle the translation bundle name
  * @property kord the kord instance to use
  * @property translationsProvider the [TranslationsProvider] used for translations
+ * @property locale the locale the game uses
  */
 abstract class AbstractGame<T : Player>(
     val host: UserBehavior,
@@ -66,6 +70,10 @@ abstract class AbstractGame<T : Player>(
 
     abstract val playerRange: IntRange
     abstract val thread: ThreadChannelBehavior
+    val locale = suspendLazy {
+        thread.getGuild().preferredLocale
+    }
+
     abstract val welcomeMessage: Message
     abstract val wonPlayers: List<T>
     open val isEligibleForStats = true
@@ -116,7 +124,7 @@ abstract class AbstractGame<T : Player>(
     /**
      * Adds the welcome message content to this embed builder (add game state to embed).
      */
-    protected open fun EmbedBuilder.addWelcomeMessage() = Unit
+    protected open suspend fun EmbedBuilder.addWelcomeMessage() = Unit
 
     /**
      * Event handler called if [event] made [player] rejoin.
@@ -248,7 +256,7 @@ abstract class AbstractGame<T : Player>(
             playersCopy.forEach {
                 (it as ControlledPlayer).controls.edit {
                     components = mutableListOf()
-                    content = translateInternally(it.user, "game.controls.ended")
+                    content = translateInternally(it, "game.controls.ended")
                 }
             }
         }
@@ -284,8 +292,9 @@ abstract class AbstractGame<T : Player>(
                 reason = "Game ended"
                 archived = true
             }
+
+            cancel()
         }
-        cancel()
     }
 
     private suspend fun UserMessageModifyBuilder.rematchLogic() {

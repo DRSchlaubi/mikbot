@@ -16,18 +16,17 @@ import dev.kord.rest.builder.message.create.actionRow
 import dev.kord.rest.builder.message.create.embed
 import dev.schlaubi.mikbot.game.api.AutoJoinableGame
 import dev.schlaubi.mikbot.game.api.Rematchable
+import dev.schlaubi.mikbot.game.api.translate
 import dev.schlaubi.mikbot.game.multiple_choice.MultipleChoiceGame
 import dev.schlaubi.mikbot.game.multiple_choice.player.MultipleChoicePlayer
 import dev.schlaubi.mikbot.game.trivia.QuestionContainer
 import dev.schlaubi.mikbot.game.trivia.TriviaModule
 import dev.schlaubi.mikbot.game.trivia.open_trivia.Question
 import io.ktor.util.*
-import java.util.*
 
 private const val REQUEST_RAW = "request_raw"
 
 class TriviaGame(
-    private val locale: Locale,
     override val thread: ThreadChannelBehavior,
     override val welcomeMessage: Message,
     override val translationsProvider: TranslationsProvider,
@@ -45,7 +44,7 @@ class TriviaGame(
     AutoJoinableGame<MultipleChoicePlayer> {
     override val rematchThreadName: String = "trivia-rematch"
 
-    override fun EmbedBuilder.addWelcomeMessage() {
+    override suspend fun EmbedBuilder.addWelcomeMessage() {
         if (questionContainer.category != null) {
             field {
                 name = translate("trivia.question.category")
@@ -88,7 +87,7 @@ class TriviaGame(
         addQuestion(question.parent, hideCorrectAnswer)
     }
 
-    private fun EmbedBuilder.addQuestion(question: Question, hideCorrectAnswer: Boolean) {
+    private suspend fun EmbedBuilder.addQuestion(question: Question, hideCorrectAnswer: Boolean) {
         title = question.title
 
         field {
@@ -112,7 +111,7 @@ class TriviaGame(
         }
     }
 
-    override fun MessageCreateBuilder.questionUI(question: TriviaQuestion) {
+    override suspend fun MessageCreateBuilder.questionUI(question: TriviaQuestion) {
         if (question.original != null) {
             actionRow {
                 interactionButton(ButtonStyle.Primary, REQUEST_RAW) {
@@ -151,13 +150,12 @@ class TriviaGame(
             questionContainer.difficulty,
             questionContainer.category,
             questionContainer.type,
-            locale,
+            locale(),
             translationsProvider,
             module as TriviaModule
         )
 
         return TriviaGame(
-            locale,
             thread,
             welcomeMessage,
             translationsProvider,
@@ -169,6 +167,4 @@ class TriviaGame(
             players.addAll(this@TriviaGame.players)
         }
     }
-
-    private fun translate(key: String) = translationsProvider.translate(key, locale, module.bundle)
 }

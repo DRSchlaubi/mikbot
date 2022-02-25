@@ -52,7 +52,7 @@ fun EmbedBuilder.startUI(uno: DiscordUnoGame) {
     }
 }
 
-fun EmbedBuilder.welcomeMessage(uno: DiscordUnoGame) {
+suspend fun EmbedBuilder.welcomeMessage(uno: DiscordUnoGame) {
     with(uno) {
         if (players.isNotEmpty()) {
             field {

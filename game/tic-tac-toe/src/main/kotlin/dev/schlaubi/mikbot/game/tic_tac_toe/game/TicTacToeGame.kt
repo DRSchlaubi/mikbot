@@ -54,12 +54,13 @@ class TicTacToeGame(
         userLocale: Locale?
     ): TicTacToePlayer {
         val type = playerTypeOrder.poll()
+        val player = TicTacToePlayer(user, type)
         ack.edit {
             content = translate(
-                user, "tic_tac_toe.controls.joined", type
+                player, "tic_tac_toe.controls.joined", type
             )
         }
-        return TicTacToePlayer(user, type)
+        return player
     }
 
     override suspend fun onRejoin(event: ComponentInteractionCreateEvent, player: TicTacToePlayer) {

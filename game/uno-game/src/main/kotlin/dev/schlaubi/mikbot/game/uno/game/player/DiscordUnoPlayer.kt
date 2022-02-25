@@ -34,8 +34,8 @@ abstract class DiscordUnoPlayer(
     override val user: UserBehavior,
     val response: EphemeralInteractionResponseBehavior,
     override var controls: FollowupMessage,
-    val game: DiscordUnoGame,
-    val discordLocale: Locale?
+    override val game: DiscordUnoGame,
+    override val discordLocale: Locale?
 ) : Player(), GamePlayer, ControlledPlayer {
     override val ack: InteractionResponseBehavior
         get() = response
@@ -303,7 +303,7 @@ class MobilePlayer(
             coroutineScope {
                 launch {
                     controls.edit {
-                        content = game.translateInternally(user, "game.controls.reset")
+                        content = game.translateInternally(this@MobilePlayer, "game.controls.reset")
                         embeds = mutableListOf()
                         components = mutableListOf()
                     }

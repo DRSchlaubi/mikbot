@@ -1,6 +1,7 @@
 package dev.schlaubi.mikbot.game.api
 
 import com.kotlindiscord.kord.extensions.utils.getJumpUrl
+import dev.kord.common.Locale
 import dev.kord.common.entity.ButtonStyle
 import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
@@ -15,11 +16,11 @@ import dev.kord.rest.builder.message.create.actionRow
 import dev.kord.rest.builder.message.modify.MessageModifyBuilder
 import dev.kord.rest.builder.message.modify.actionRow
 import dev.schlaubi.mikbot.plugin.api.util.componentLive
+import dev.schlaubi.mikbot.plugin.api.util.convertToISO
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.time.Duration.Companion.minutes
-
-private const val REQUEST_CONTROLS = "request_controls"
+import java.util.Locale as JavaLocale
 
 /**
  * An [AbstractGame] helper for games with ephemeral controls.
@@ -51,7 +52,7 @@ interface ControlledGame<P : ControlledPlayer> : Game<P> {
                     """.trimMargin()
 
         fun ActionRowBuilder.requestButton() {
-            interactionButton(ButtonStyle.Success, REQUEST_CONTROLS) {
+            interactionButton(ButtonStyle.Success, resendControlsButton) {
                 label = "Request Controls"
             }
         }
@@ -116,6 +117,10 @@ interface ControlledGame<P : ControlledPlayer> : Game<P> {
 interface ControlledPlayer : Player {
     val ack: InteractionResponseBehavior
     val controls: FollowupMessage
+    val discordLocale: Locale?
+    val locale: JavaLocale?
+        get() = discordLocale?.convertToISO()?.asJavaLocale()
+    val game: AbstractGame<*>
 
     /**
      * Requests new controls for this placer.

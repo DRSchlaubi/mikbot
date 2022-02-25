@@ -40,7 +40,7 @@ class GoogolplexGame(
         ack: EphemeralInteractionResponseBehavior,
         loading: FollowupMessage,
         userLocale: Locale?
-    ): GoogolplexPlayer = GoogolplexPlayer(user, loading, ack)
+    ): GoogolplexPlayer = GoogolplexPlayer(user, loading, ack, userLocale, this)
 
     override suspend fun runGame() {
         val startingUser = lastWinner?.user ?: host
@@ -59,7 +59,7 @@ class GoogolplexGame(
             fun last() = existingGuesses.takeLast(25)
             val lastGuess = guessingPlayer.awaitSequence(
                 size,
-                translate(guessingPlayer.user, "googolplex.controls.request_guess", size)
+                translate(guessingPlayer, "googolplex.controls.request_guess", size)
             ) { _, current ->
                 interaction.acknowledgeEphemeralDeferredMessageUpdate()
                 updateGameStateMessage(last(), current)

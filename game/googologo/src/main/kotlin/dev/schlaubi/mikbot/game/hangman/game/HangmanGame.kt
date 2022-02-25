@@ -92,7 +92,7 @@ class HangmanGame(
         val word = wordEvent.message.content
         if (word.length !in 3..102) {
             wordEvent.message.reply {
-                content = translate(user, "hangman.game.wrong_word")
+                content = translate("hangman.game.wrong_word")
             }
 
             thread.createMessage {
@@ -106,7 +106,7 @@ class HangmanGame(
         }
 
         wordEvent.message.reply {
-            content = translate(user, "hangman.word_accepted", word, thread.mention)
+            content = translate("hangman.word_accepted", word, thread.mention)
         }
 
         return word

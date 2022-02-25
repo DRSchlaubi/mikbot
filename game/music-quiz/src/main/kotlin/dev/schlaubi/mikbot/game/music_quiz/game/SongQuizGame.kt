@@ -58,7 +58,7 @@ class SongQuizGame(
     override val playerRange: IntRange = 1..10
     private var beforePlayerState: PersistentPlayerState? = null
 
-    override fun EmbedBuilder.addWelcomeMessage() {
+    override suspend fun EmbedBuilder.addWelcomeMessage() {
         field {
             name = "Playlist"
             value = questionContainer.spotifyPlaylist.uri.spotifyUriToUrl()
@@ -73,7 +73,7 @@ class SongQuizGame(
         userLocale: Locale?
     ): SongQuizPlayer =
         SongQuizPlayer(user).also {
-            loading.edit { content = translate(user, "song_quiz.controls.joined") }
+            loading.edit { content = translate(it, "song_quiz.controls.joined") }
         }
 
     override suspend fun askQuestion(question: TrackQuestion) {
@@ -86,7 +86,7 @@ class SongQuizGame(
 
     override suspend fun onRejoin(event: ComponentInteractionCreateEvent, player: MultipleChoicePlayer) {
         event.interaction.respondEphemeral {
-            content = translate(event.interaction.user, "song_quiz.controls.rejoined")
+            content = translate(player, "song_quiz.controls.rejoined")
         }
     }
 
@@ -96,7 +96,7 @@ class SongQuizGame(
         if (voiceState?.channelId != musicPlayer.lastChannelId?.let { Snowflake(it) }) {
             ack.followUpEphemeral {
                 content = translate(
-                    player.user,
+                    player,
                     "song_quiz.controls.not_in_vc",
                     "<#${musicPlayer.lastChannelId}>"
                 )
@@ -131,7 +131,7 @@ class SongQuizGame(
         super.end()
     }
 
-    override fun MessageCreateBuilder.questionUI(question: TrackQuestion) {
+    override suspend fun MessageCreateBuilder.questionUI(question: TrackQuestion) {
         actionRow {
             interactionButton(ButtonStyle.Primary, "like") {
                 emoji = DiscordPartialEmoji(name = Emojis.heart.unicode)
@@ -174,7 +174,7 @@ class SongQuizGame(
                         emptySet()
                     )
                 MusicQuizDatabase.likedSongs.save(likedSongs.copy(songs = likedSongs.songs + question.track.toLikedSong()))
-                content = translate(interaction.user, "song_quiz.game.liked_song")
+                content = translate(interaction.gamePlayer!!, "song_quiz.game.liked_song")
             }
             return true
         }

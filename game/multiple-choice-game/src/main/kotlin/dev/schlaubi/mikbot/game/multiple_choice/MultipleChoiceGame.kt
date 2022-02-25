@@ -71,7 +71,7 @@ abstract class MultipleChoiceGame<Player : MultipleChoicePlayer, Q : Question, Q
     /**
      * Add additional features to the question ui
      */
-    open fun MessageCreateBuilder.questionUI(question: Q) = Unit
+    open suspend fun MessageCreateBuilder.questionUI(question: Q) = Unit
 
     /**
      * Handle additional interactions on questions.

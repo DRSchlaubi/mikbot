@@ -1,11 +1,6 @@
 package dev.schlaubi.mikmusic.player.queue
 
 import com.neovisionaries.i18n.CountryCode
-import com.wrapper.spotify.SpotifyApi
-import com.wrapper.spotify.model_objects.specification.Artist
-import com.wrapper.spotify.model_objects.specification.Playlist
-import com.wrapper.spotify.model_objects.specification.TrackSimplified
-import com.wrapper.spotify.requests.AbstractRequest
 import dev.schlaubi.lavakord.audio.Link
 import dev.schlaubi.lavakord.audio.player.Track
 import dev.schlaubi.lavakord.rest.TrackResponse
@@ -16,8 +11,13 @@ import kotlinx.coroutines.future.await
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import org.apache.http.client.utils.URIBuilder
+import se.michaelthelin.spotify.SpotifyApi
+import se.michaelthelin.spotify.model_objects.IPlaylistItem
+import se.michaelthelin.spotify.model_objects.specification.*
+import se.michaelthelin.spotify.model_objects.specification.Playlist
+import se.michaelthelin.spotify.requests.AbstractRequest
 import kotlin.time.Duration.Companion.seconds
-import com.wrapper.spotify.model_objects.specification.Track as SpotifyTrack
+import se.michaelthelin.spotify.model_objects.specification.Track as SpotifyTrack
 
 val PLAYLIST_PATTERN =
     "https?://.*\\.spotify\\.com/playlists?/([^?/\\s]*)".toRegex()
@@ -60,36 +60,34 @@ suspend fun findSpotifySongs(link: Link, query: String): List<Track>? {
 
 private suspend fun buildAlbum(link: Link, matchResult: MatchResult): List<Track> {
     val (albumId) = matchResult.destructured
-    val album = api().getAlbum(albumId).build().await()
+    val album = api().getAlbumsTracks(albumId).build().await()
 
-    val tracks = album.tracks.items
+    val tracks = album.items
 
-    return tracks.mapToTracks(link) { it.toNamedTrack() }
+    return tracks.mapToTracks(link) { it.toPartialSpotifyTrack() }
 }
 
 private suspend fun buildPlaylist(link: Link, matchResult: MatchResult): List<Track> {
     val (playlistId) = matchResult.destructured
-    val playlist = getPlaylist(playlistId)
+    val playlist = getPlaylistItems(playlistId)
 
-    val tracks = playlist?.tracks?.items ?: return emptyList()
+    val tracks = playlist.items ?: return emptyList()
 
     return tracks.mapToTracks(link, maxConcurrentRequests = 3) {
-        it.track.id?.let { id ->
-            val track = api().getTrack(id).build().await()
-
-            track.toNamedTrack()
-        } ?: NamedTrack(it.track.name, null)
+        it.track.toPartialSpotifyTrack()
     }
 }
 
 suspend fun getPlaylist(playlistId: String): Playlist? = api().getPlaylist(playlistId).build().await()
+suspend fun getPlaylistItems(playlistId: String): Paging<PlaylistTrack> =
+    api().getPlaylistsItems(playlistId).build().await()
 
 private data class IndexedTrack(val index: Int, val track: Track)
 
 private suspend fun <T> Array<T>.mapToTracks(
     link: Link,
     maxConcurrentRequests: Int? = null,
-    mapper: suspend (T) -> NamedTrack
+    mapper: suspend (T) -> PartialSpotifyTrack
 ): List<Track> = toList().parallelMapNotNullIndexed(maxConcurrentRequests) { index, item ->
     val found = mapper(item).findTrack(link)
     found?.let { IndexedTrack(index, it) }
@@ -113,11 +111,11 @@ suspend fun getArtist(artistId: String): Artist = api().getArtist(artistId).buil
 private suspend fun getTrack(link: Link, trackId: String): Track? {
     val track = getTrack(trackId)
 
-    return track.toNamedTrack().findTrack(link)
+    return track.toPartialSpotifyTrack().findTrack(link)
 }
 
-suspend fun NamedTrack.findTrack(link: Link): Track? =
-    link.takeFirstMatch("$name${artist?.let { "- $it" } ?: ""}")
+suspend fun PartialSpotifyTrack.findTrack(link: Link): Track? =
+    link.takeFirstMatch("$name${artists.firstOrNull()?.let { "- $it" } ?: ""}")
 
 private suspend fun Link.takeFirstMatch(query: String): Track? {
     val result = loadItem("ytsearch: $query")
@@ -127,11 +125,6 @@ private suspend fun Link.takeFirstMatch(query: String): Track? {
     }
 }
 
-fun SpotifyTrack.toNamedTrack(): NamedTrack = NamedTrack(name, artists.first().name)
-private fun TrackSimplified.toNamedTrack(): NamedTrack = NamedTrack(name, artists.first().name)
-
-data class NamedTrack(val name: String, val artist: String?)
-
 private suspend fun <T> AbstractRequest<T>.await(): T = executeAsync().await()
 
 fun String.spotifyUriToUrl(): String {
@@ -139,3 +132,17 @@ fun String.spotifyUriToUrl(): String {
 
     return "https://open.spotify.com/$type/$id"
 }
+
+data class PartialSpotifyTrack(val artists: List<String>, val previewUrl: String?, val name: String)
+
+fun IPlaylistItem.toPartialSpotifyTrack() = when (this) {
+    is SpotifyTrack -> toPartialSpotifyTrack()
+    is Episode -> PartialSpotifyTrack(emptyList(), audioPreviewUrl, name)
+    else -> error("Unknown track type: ${this::class.qualifiedName}")
+}
+
+fun SpotifyTrack.toPartialSpotifyTrack() =
+    PartialSpotifyTrack(artists.map { it.name }, previewUrl, name)
+
+fun TrackSimplified.toPartialSpotifyTrack() =
+    PartialSpotifyTrack(artists.map { it.name }, previewUrl, name)

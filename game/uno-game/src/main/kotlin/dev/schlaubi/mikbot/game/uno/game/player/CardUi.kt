@@ -1,6 +1,6 @@
 package dev.schlaubi.mikbot.game.uno.game.player
 
-import dev.kord.core.behavior.interaction.followUpEphemeral
+import dev.kord.core.behavior.interaction.response.followUpEphemeral
 import dev.schlaubi.uno.cards.Card
 import dev.schlaubi.uno.cards.PlayedCard
 

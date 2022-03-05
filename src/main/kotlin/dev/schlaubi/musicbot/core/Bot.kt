@@ -50,6 +50,11 @@ class Bot : KoinComponent {
                 add(::BotModule)
             }
 
+            plugins {
+                // The built-in Plugin system of KordEx is currently to feature-lacking to replace our own
+                enabled = false
+            }
+
             builtIns()
         }
 

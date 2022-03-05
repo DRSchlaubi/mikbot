@@ -1,7 +1,6 @@
 package dev.schlaubi.mikbot.game.music_quiz.game
 
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
-import com.wrapper.spotify.model_objects.specification.Track
 import dev.kord.common.Locale
 import dev.kord.common.annotation.KordPreview
 import dev.kord.common.entity.ButtonStyle
@@ -9,13 +8,13 @@ import dev.kord.common.entity.DiscordPartialEmoji
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
-import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
-import dev.kord.core.behavior.interaction.edit
-import dev.kord.core.behavior.interaction.followUpEphemeral
+import dev.kord.core.behavior.interaction.followup.edit
 import dev.kord.core.behavior.interaction.respondEphemeral
+import dev.kord.core.behavior.interaction.response.EphemeralInteractionResponseBehavior
+import dev.kord.core.behavior.interaction.response.followUpEphemeral
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.User
-import dev.kord.core.entity.interaction.FollowupMessage
+import dev.kord.core.entity.interaction.followup.FollowupMessage
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.kord.rest.builder.message.create.MessageCreateBuilder
@@ -36,7 +35,8 @@ import dev.schlaubi.mikmusic.player.PersistentPlayerState
 import dev.schlaubi.mikmusic.player.applyToPlayer
 import dev.schlaubi.mikmusic.player.queue.findTrack
 import dev.schlaubi.mikmusic.player.queue.spotifyUriToUrl
-import dev.schlaubi.mikmusic.player.queue.toNamedTrack
+import dev.schlaubi.mikmusic.player.queue.toPartialSpotifyTrack
+import se.michaelthelin.spotify.model_objects.specification.Track
 import dev.schlaubi.lavakord.audio.player.Track as LavalinkTrack
 
 class SongQuizGame(
@@ -154,7 +154,7 @@ class SongQuizGame(
             return previewLoadResult.track.toTrack()
         }
 
-        val youtubeTrack = track.toNamedTrack().findTrack(musicPlayer)
+        val youtubeTrack = track.toPartialSpotifyTrack().findTrack(musicPlayer)
 
         if (youtubeTrack == null) {
             thread.createMessage("There was an error whilst finding the media for the next song, so I skipped it")

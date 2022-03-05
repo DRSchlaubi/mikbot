@@ -3,7 +3,7 @@ package dev.schlaubi.mikbot.game.uno.game.player
 import dev.kord.common.entity.ButtonStyle
 import dev.kord.common.entity.DiscordPartialEmoji
 import dev.kord.common.entity.Snowflake
-import dev.kord.core.behavior.interaction.edit
+import dev.kord.core.behavior.interaction.followup.edit
 import dev.kord.rest.builder.message.modify.FollowupMessageModifyBuilder
 import dev.kord.rest.builder.message.modify.actionRow
 import dev.schlaubi.mikbot.game.uno.game.ui.buttonStyle

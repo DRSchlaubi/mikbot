@@ -1,6 +1,6 @@
 package dev.schlaubi.mikbot.game.uno.game.player
 
-import dev.kord.core.behavior.interaction.edit
+import dev.kord.core.behavior.interaction.followup.edit
 import dev.kord.rest.builder.message.create.FollowupMessageCreateBuilder
 import dev.schlaubi.mikbot.plugin.api.util.MessageBuilder
 import dev.schlaubi.mikbot.plugin.api.util.confirmation

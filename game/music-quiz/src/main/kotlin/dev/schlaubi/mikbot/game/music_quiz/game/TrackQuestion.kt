@@ -1,7 +1,7 @@
 package dev.schlaubi.mikbot.game.music_quiz.game
 
-import com.wrapper.spotify.model_objects.specification.Track
 import dev.schlaubi.mikbot.game.multiple_choice.Question
+import se.michaelthelin.spotify.model_objects.specification.Track
 
 class TrackQuestion(
     override val title: String,

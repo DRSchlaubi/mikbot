@@ -7,10 +7,10 @@ import dev.kord.common.annotation.KordUnsafe
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
 import dev.kord.core.behavior.edit
-import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
+import dev.kord.core.behavior.interaction.response.EphemeralInteractionResponseBehavior
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.User
-import dev.kord.core.entity.interaction.FollowupMessage
+import dev.kord.core.entity.interaction.followup.FollowupMessage
 import dev.schlaubi.mikbot.game.api.AbstractGame
 import dev.schlaubi.mikbot.game.api.module.GameModule
 import dev.schlaubi.mikbot.game.connect_four.game.Connect4Player

@@ -1,16 +1,16 @@
 package dev.schlaubi.mikbot.game.api.events
 
 import dev.kord.core.behavior.channel.createMessage
-import dev.kord.core.behavior.interaction.edit
-import dev.kord.core.behavior.interaction.followUp
-import dev.kord.core.behavior.interaction.followUpEphemeral
+import dev.kord.core.behavior.interaction.followup.edit
 import dev.kord.core.behavior.interaction.respondEphemeral
+import dev.kord.core.behavior.interaction.response.followUp
+import dev.kord.core.behavior.interaction.response.followUpEphemeral
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.core.on
 import dev.schlaubi.mikbot.game.api.*
 
 internal fun <T : Player> AbstractGame<T>.interactionHandler() = kord.on<ComponentInteractionCreateEvent>(this) {
-    if (interaction.message?.id != welcomeMessage.id) return@on
+    if (interaction.message.id != welcomeMessage.id) return@on
 
     when (interaction.componentId) {
         startGameButton -> {
@@ -39,7 +39,7 @@ internal fun <T : Player> AbstractGame<T>.interactionHandler() = kord.on<Compone
             if (hostPlayer == null) {
                 // Doing it like this, prevents an auto-cast from Game<T> to Game<Nothing>
                 if ((this as? ControlledGame<*>)?.supportsAutoJoin == true) return@on
-                val ack = interaction.acknowledgeEphemeral()
+                val ack = interaction.deferEphemeralMessage()
                 val newPlayer = obtainNewPlayer(
                     interaction.user,
                     ack,
@@ -49,13 +49,13 @@ internal fun <T : Player> AbstractGame<T>.interactionHandler() = kord.on<Compone
                 players.add(newPlayer)
                 doUpdateWelcomeMessage()
             } else {
-                interaction.acknowledgeEphemeralDeferredMessageUpdate()
+                interaction.deferEphemeralMessageUpdate()
             }
 
             doStart()
         }
         leaveGameButton -> {
-            interaction.acknowledgeEphemeralDeferredMessageUpdate()
+            interaction.deferEphemeralMessageUpdate()
             thread.removeUser(interaction.user.id)
         }
 
@@ -71,7 +71,7 @@ internal fun <T : Player> AbstractGame<T>.interactionHandler() = kord.on<Compone
             if (existingPlayer != null) {
                 onRejoin(this, existingPlayer)
             } else {
-                val ack = interaction.acknowledgeEphemeral()
+                val ack = interaction.deferEphemeralMessage()
                 val loading = ack.followUpEphemeral { content = "Waiting for game to start" }
                 val player = obtainNewPlayer(interaction.user, ack, loading, interaction.locale)
                 players.add(player)
@@ -81,7 +81,7 @@ internal fun <T : Player> AbstractGame<T>.interactionHandler() = kord.on<Compone
         }
         resendControlsButton -> {
             val player = interaction.gamePlayer as? ControlledPlayer ?: return@on
-            val ack = interaction.acknowledgeEphemeralDeferredMessageUpdate()
+            val ack = interaction.deferEphemeralMessageUpdate()
             val confirmed = player.confirmation {
                 content = translateInternally(player, "game.resend_controls.confirm")
             }.value

@@ -8,7 +8,7 @@ import dev.kord.common.annotation.KordUnsafe
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
 import dev.kord.core.behavior.GuildBehavior
-import dev.kord.core.behavior.interaction.followUpEphemeral
+import dev.kord.core.behavior.interaction.response.followUpEphemeral
 import dev.kord.core.event.interaction.GuildButtonInteractionCreateEvent
 import space.votebot.common.models.Poll
 import space.votebot.util.reFetch
@@ -39,12 +39,12 @@ suspend fun VoteBotModule.voteExecutor() = event<GuildButtonInteractionCreateEve
 private suspend fun EventContext<GuildButtonInteractionCreateEvent>.onVote(guild: GuildBehavior) {
     val interaction = event.interaction
 
-    val message = interaction.message ?: return
+    val message = interaction.message
     val poll = VoteBotDatabase.polls.findOneByMessage(message) ?: return
 
     val option = interaction.componentId.substringAfter("vote_").toIntOrNull() ?: return
 
-    val ack = interaction.acknowledgeEphemeralDeferredMessageUpdate()
+    val ack = interaction.deferEphemeralMessageUpdate()
 
     val userId = interaction.user.id.value
     val userVotes = poll.votes.asSequence()

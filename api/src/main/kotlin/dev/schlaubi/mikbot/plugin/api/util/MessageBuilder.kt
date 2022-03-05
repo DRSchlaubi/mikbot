@@ -2,7 +2,7 @@ package dev.schlaubi.mikbot.plugin.api.util
 
 import com.kotlindiscord.kord.extensions.commands.CommandContext
 import com.kotlindiscord.kord.extensions.types.respond
-import dev.kord.core.behavior.interaction.FollowupMessageBehavior
+import dev.kord.core.behavior.interaction.followup.FollowupMessageBehavior
 import dev.kord.rest.builder.message.create.MessageCreateBuilder
 import dev.kord.rest.builder.message.modify.MessageModifyBuilder
 

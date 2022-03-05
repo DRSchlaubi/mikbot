@@ -5,12 +5,12 @@ import dev.kord.common.Locale
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
 import dev.kord.core.behavior.edit
-import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
-import dev.kord.core.behavior.interaction.edit
+import dev.kord.core.behavior.interaction.followup.edit
+import dev.kord.core.behavior.interaction.response.EphemeralInteractionResponseBehavior
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.ReactionEmoji
 import dev.kord.core.entity.User
-import dev.kord.core.entity.interaction.FollowupMessage
+import dev.kord.core.entity.interaction.followup.FollowupMessage
 import dev.kord.rest.builder.message.modify.embed
 import dev.schlaubi.mikbot.game.api.*
 import dev.schlaubi.mikbot.game.api.module.GameModule
@@ -61,7 +61,7 @@ class GoogolplexGame(
                 size,
                 translate(guessingPlayer, "googolplex.controls.request_guess", size)
             ) { _, current ->
-                interaction.acknowledgeEphemeralDeferredMessageUpdate()
+                interaction.deferEphemeralMessageUpdate()
                 updateGameStateMessage(last(), current)
             }
             existingGuesses += lastGuess.buildGuessUI(correctSequence)

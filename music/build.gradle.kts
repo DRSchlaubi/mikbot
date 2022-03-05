@@ -7,20 +7,20 @@ plugins {
 }
 
 group = "dev.schlaubi.mikbot"
-version = "1.2.6"
+version = "1.2.7"
 
 dependencies {
     api("dev.schlaubi.lavakord", "kord", "3.5.1")
 
     // Plattform support
-    implementation("com.google.apis", "google-api-services-youtube", "v3-rev222-1.25.0")
-    api("se.michaelthelin.spotify", "spotify-web-api-java", "6.5.4")
+    implementation("com.google.apis", "google-api-services-youtube", "v3-rev20210915-1.32.1")
+    api("se.michaelthelin.spotify", "spotify-web-api-java", "7.0.0")
 
     // SponsorBlock Client
     implementation("dev.nycode", "sponsorblock-kt", "1.0-SNAPSHOT")
 
     // Scheduling
-    implementation("dev.inmo", "krontab", "0.6.5")
+    implementation("dev.inmo", "krontab", "0.7.1")
 
     // redeploy support
     optionalPlugin(project(":core:redeploy-hook"))

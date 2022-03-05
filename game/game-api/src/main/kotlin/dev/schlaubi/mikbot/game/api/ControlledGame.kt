@@ -6,11 +6,11 @@ import dev.kord.common.entity.ButtonStyle
 import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
 import dev.kord.core.behavior.edit
-import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
-import dev.kord.core.behavior.interaction.InteractionResponseBehavior
-import dev.kord.core.behavior.interaction.edit
-import dev.kord.core.behavior.interaction.followUp
-import dev.kord.core.entity.interaction.FollowupMessage
+import dev.kord.core.behavior.interaction.followup.edit
+import dev.kord.core.behavior.interaction.response.EphemeralInteractionResponseBehavior
+import dev.kord.core.behavior.interaction.response.InteractionResponseBehavior
+import dev.kord.core.behavior.interaction.response.followUp
+import dev.kord.core.entity.interaction.followup.FollowupMessage
 import dev.kord.rest.builder.component.ActionRowBuilder
 import dev.kord.rest.builder.message.create.actionRow
 import dev.kord.rest.builder.message.modify.MessageModifyBuilder
@@ -69,7 +69,7 @@ interface ControlledGame<P : ControlledPlayer> : Game<P> {
 
         message.componentLive(this).onInteraction {
 
-            val ack = interaction.acknowledgeEphemeral()
+            val ack = interaction.deferEphemeralMessage()
             val newPlayer = newGame.obtainNewPlayer(
                 interaction.user,
                 ack,

@@ -13,14 +13,13 @@ import dev.kord.core.behavior.channel.createEmbed
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
 import dev.kord.core.behavior.channel.threads.edit
 import dev.kord.core.behavior.edit
-import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
-import dev.kord.core.behavior.interaction.edit
+import dev.kord.core.behavior.interaction.followup.edit
+import dev.kord.core.behavior.interaction.response.EphemeralInteractionResponseBehavior
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.User
 import dev.kord.core.entity.channel.TextChannel
 import dev.kord.core.entity.interaction.ComponentInteraction
-import dev.kord.core.entity.interaction.EphemeralFollowupMessage
-import dev.kord.core.entity.interaction.FollowupMessage
+import dev.kord.core.entity.interaction.followup.FollowupMessage
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.kord.rest.builder.message.modify.MessageModifyBuilder
@@ -155,7 +154,7 @@ abstract class AbstractGame<T : Player>(
      * Creates a new player for [user].
      *
      * @param ack the [EphemeralInteractionResponseBehavior] for the triggering interaction
-     * @param loading the [EphemeralFollowupMessage] for the user who joined
+     * @param loading the [FollowupMessage] for the user who joined
      * @param userLocale the locale Discord included in the interaction
      */
     abstract suspend fun obtainNewPlayer(

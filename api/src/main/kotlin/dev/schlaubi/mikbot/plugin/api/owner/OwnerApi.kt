@@ -13,7 +13,7 @@ import kotlinx.coroutines.CoroutineScope
  * @see ownerOnly
  */
 @OptIn(InternalAPI::class)
-public abstract class OwnerModule : ModuleExtensionPointImpl<OwnerModule>(), CoroutineScope
+public abstract class OwnerModule @InternalAPI constructor() : ModuleExtensionPointImpl<OwnerModule>(), CoroutineScope
 
 /**
  * The Extension point for Owner module customization.

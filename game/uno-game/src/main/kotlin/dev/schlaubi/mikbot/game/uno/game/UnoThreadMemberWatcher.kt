@@ -1,6 +1,6 @@
 package dev.schlaubi.mikbot.game.uno.game
 
-import dev.kord.core.behavior.interaction.edit
+import dev.kord.core.behavior.interaction.followup.edit
 import dev.schlaubi.mikbot.game.uno.game.player.DiscordUnoPlayer
 import dev.schlaubi.mikbot.game.uno.game.player.translate
 

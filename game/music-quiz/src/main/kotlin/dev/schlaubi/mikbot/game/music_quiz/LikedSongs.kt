@@ -1,10 +1,10 @@
 package dev.schlaubi.mikbot.game.music_quiz
 
-import com.wrapper.spotify.model_objects.specification.Track
 import dev.kord.common.entity.Snowflake
 import dev.schlaubi.mikmusic.player.queue.spotifyUriToUrl
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import se.michaelthelin.spotify.model_objects.specification.Track
 
 @Serializable
 data class LikedSongs(

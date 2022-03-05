@@ -7,12 +7,12 @@ import dev.kord.core.behavior.channel.asChannelOfOrNull
 import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
 import dev.kord.core.behavior.edit
-import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
+import dev.kord.core.behavior.interaction.response.EphemeralInteractionResponseBehavior
 import dev.kord.core.behavior.reply
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.User
 import dev.kord.core.entity.channel.DmChannel
-import dev.kord.core.entity.interaction.FollowupMessage
+import dev.kord.core.entity.interaction.followup.FollowupMessage
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.rest.builder.message.EmbedBuilder
@@ -88,7 +88,6 @@ class HangmanGame(
             return null
         }
 
-        val user = wordEvent.message.author!!
         val word = wordEvent.message.content
         if (word.length !in 3..102) {
             wordEvent.message.reply {
@@ -221,7 +220,7 @@ class HangmanGame(
     }
 
     override suspend fun onRejoin(event: ComponentInteractionCreateEvent, player: HangmanPlayer) {
-        event.interaction.acknowledgeEphemeralDeferredMessageUpdate()
+        event.interaction.deferEphemeralMessageUpdate()
     }
 
     companion object {

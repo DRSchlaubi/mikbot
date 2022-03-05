@@ -15,7 +15,7 @@ import dev.schlaubi.mikbot.plugin.api.config.Config
  * @see guildAdminOnly
  */
 @OptIn(InternalAPI::class)
-public abstract class SettingsModule : ModuleExtensionPointImpl<SettingsModule>()
+public abstract class SettingsModule @InternalAPI constructor() : ModuleExtensionPointImpl<SettingsModule>()
 
 public interface SettingsExtensionPoint : ModuleExtensionPoint<SettingsModule> {
     public override suspend fun SettingsModule.apply()

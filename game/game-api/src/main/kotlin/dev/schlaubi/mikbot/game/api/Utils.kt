@@ -1,7 +1,7 @@
 package dev.schlaubi.mikbot.game.api
 
-import dev.kord.core.behavior.interaction.InteractionResponseBehavior
-import dev.kord.core.behavior.interaction.followUpEphemeral
+import dev.kord.core.behavior.interaction.response.InteractionResponseBehavior
+import dev.kord.core.behavior.interaction.response.followUpEphemeral
 import dev.schlaubi.mikbot.plugin.api.util.MessageBuilder
 import dev.schlaubi.mikbot.plugin.api.util.getLocale
 import java.util.*

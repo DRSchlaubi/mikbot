@@ -3,9 +3,9 @@ package dev.schlaubi.mikbot.game.uno.game.player
 import com.kotlindiscord.kord.extensions.ExtensibleBot
 import com.kotlindiscord.kord.extensions.utils.getKoin
 import com.kotlindiscord.kord.extensions.utils.waitFor
-import dev.kord.core.behavior.interaction.FollowupMessageBehavior
-import dev.kord.core.behavior.interaction.edit
-import dev.kord.core.behavior.interaction.followUpEphemeral
+import dev.kord.core.behavior.interaction.followup.FollowupMessageBehavior
+import dev.kord.core.behavior.interaction.followup.edit
+import dev.kord.core.behavior.interaction.response.followUpEphemeral
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.schlaubi.mikbot.plugin.api.util.MessageBuilder
 import dev.schlaubi.mikbot.plugin.api.util.convertToISO
@@ -39,10 +39,10 @@ suspend fun DiscordUnoPlayer.awaitResponse(
 suspend fun DiscordUnoPlayer.awaitResponse(message: () -> FollowupMessageBehavior): String? {
 
     val response = game.kord.waitFor<ComponentInteractionCreateEvent>(unoInteractionTimeout) {
-        interaction.message?.id == message().id && interaction.user == user
+        interaction.message.id == message().id && interaction.user == user
     } ?: return null
 
-    response.interaction.acknowledgePublicDeferredMessageUpdate()
+    response.interaction.deferPublicMessageUpdate()
 
     return response.interaction.componentId
 }

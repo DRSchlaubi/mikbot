@@ -6,9 +6,9 @@ import com.kotlindiscord.kord.extensions.components.ephemeralButton
 import com.kotlindiscord.kord.extensions.types.edit
 import dev.kord.common.entity.ButtonStyle
 import dev.kord.common.entity.DiscordPartialEmoji
-import dev.kord.core.behavior.interaction.FollowupMessageBehavior
-import dev.kord.core.behavior.interaction.edit
-import dev.kord.core.behavior.interaction.followUpEphemeral
+import dev.kord.core.behavior.interaction.followup.FollowupMessageBehavior
+import dev.kord.core.behavior.interaction.followup.edit
+import dev.kord.core.behavior.interaction.response.followUpEphemeral
 import dev.kord.x.emoji.Emojis
 import dev.schlaubi.mikbot.game.uno.game.player.DiscordUnoPlayer
 import dev.schlaubi.mikbot.game.uno.game.player.translate

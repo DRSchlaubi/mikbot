@@ -2,8 +2,12 @@ package dev.schlaubi.mikbot.game.uno.game.player
 
 import dev.kord.common.Locale
 import dev.kord.core.behavior.UserBehavior
-import dev.kord.core.behavior.interaction.*
-import dev.kord.core.entity.interaction.FollowupMessage
+import dev.kord.core.behavior.interaction.followup.edit
+import dev.kord.core.behavior.interaction.response.EphemeralInteractionResponseBehavior
+import dev.kord.core.behavior.interaction.response.InteractionResponseBehavior
+import dev.kord.core.behavior.interaction.response.followUp
+import dev.kord.core.behavior.interaction.response.followUpEphemeral
+import dev.kord.core.entity.interaction.followup.FollowupMessage
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.rest.builder.message.modify.MessageModifyBuilder
 import dev.kord.rest.builder.message.modify.embed
@@ -222,7 +226,7 @@ abstract class DiscordUnoPlayer(
         event: ComponentInteractionCreateEvent? = null,
         justLoading: Boolean = false
     ) {
-        val ack = event?.interaction?.acknowledgeEphemeral() ?: response
+        val ack = event?.interaction?.deferEphemeralMessage() ?: response
         controls = ack.followUpEphemeral {
             content = translate("uno.controls.loading")
         }

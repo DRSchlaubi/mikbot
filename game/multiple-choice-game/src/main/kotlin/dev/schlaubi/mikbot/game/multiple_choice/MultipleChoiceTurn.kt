@@ -8,7 +8,6 @@ import dev.kord.core.behavior.interaction.respondEphemeral
 import dev.kord.rest.builder.message.create.actionRow
 import dev.kord.rest.builder.message.create.embed
 import dev.kord.rest.builder.message.modify.embed
-import dev.schlaubi.mikbot.game.api.translate
 import dev.schlaubi.mikbot.game.multiple_choice.player.addStats
 import dev.schlaubi.mikbot.plugin.api.util.componentLive
 import dev.schlaubi.mikbot.plugin.api.util.getLocale
@@ -72,7 +71,7 @@ internal suspend fun <Q : Question> MultipleChoiceGame<*, Q, *>.turn(question: Q
                     }
                     return@onInteraction
                 }
-                interaction.acknowledgeEphemeralDeferredMessageUpdate()
+                interaction.deferEphemeralMessageUpdate()
                 val index = interaction.componentId.substringAfter("choose_").toInt()
                 val name = allAnswers[index]
                 val wasCorrect = name == question.correctAnswer

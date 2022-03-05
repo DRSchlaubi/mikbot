@@ -1,7 +1,7 @@
 package dev.schlaubi.mikmusic.util
 
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
-import com.google.api.client.json.jackson2.JacksonFactory
+import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.youtube.YouTube
 import com.google.api.services.youtube.YouTubeRequest
 import com.google.api.services.youtube.YouTubeRequestInitializer
@@ -16,21 +16,21 @@ import kotlinx.coroutines.withContext
 
 private val client: YouTube = YouTube.Builder(
     GoogleNetHttpTransport.newTrustedTransport(),
-    JacksonFactory.getDefaultInstance()
+    GsonFactory.getDefaultInstance()
 ) { }
-    .setApplicationName("groovybot-discord")
+    .setApplicationName("mikmusic-discord")
     .setYouTubeRequestInitializer(RequestInitializer())
     .build()
 
 private suspend fun getVideosById(videoId: String): VideoListResponse {
     return withContext(Dispatchers.IO) {
-        client.videos().list("snippet,localizations,contentDetails").setId(videoId).execute()
+        client.videos().list(listOf("snippet", "localizations", "contentDetails")).setId(listOf(videoId)).execute()
     }
 }
 
 private suspend fun getChannelsById(channelId: String): ChannelListResponse {
     return withContext(Dispatchers.IO) {
-        client.channels().list("snippet").setId(channelId).execute()
+        client.channels().list(listOf("snippet")).setId(listOf(channelId)).execute()
     }
 }
 
@@ -48,7 +48,7 @@ suspend fun getFirstChannelById(channelId: String): Channel {
 
 suspend fun searchForYouTubeMusicVideos(query: String) {
     val response = withContext(Dispatchers.IO) {
-        client.search().list("snippet").apply {
+        client.search().list(listOf("snippet")).apply {
             q = query
             videoCategoryId = "10" // Music category
         }.execute()

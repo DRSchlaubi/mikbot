@@ -1,9 +1,9 @@
 package dev.schlaubi.mikbot.game.music_quiz.game
 
-import com.wrapper.spotify.model_objects.specification.Track
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.schlaubi.mikmusic.player.queue.getArtist
 import dev.schlaubi.mikmusic.player.queue.spotifyUriToUrl
+import se.michaelthelin.spotify.model_objects.specification.Track
 
 suspend fun EmbedBuilder.addTrack(track: Track) {
     author {

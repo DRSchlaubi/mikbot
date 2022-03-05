@@ -49,7 +49,7 @@ abstract class MultipleChoiceGame<Player : MultipleChoicePlayer, Q : Question, Q
             }
 
     override suspend fun onRejoin(event: ComponentInteractionCreateEvent, player: Player) {
-        event.interaction.acknowledgeEphemeralDeferredMessageUpdate()
+        event.interaction.deferEphemeralMessageUpdate()
     }
 
     /**

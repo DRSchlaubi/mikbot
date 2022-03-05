@@ -5,8 +5,8 @@ import com.kotlindiscord.kord.extensions.checks.inChannel
 import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.extensions.event
 import dev.kord.core.behavior.channel.withTyping
-import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
-import dev.kord.core.behavior.interaction.followUpEphemeral
+import dev.kord.core.behavior.interaction.response.EphemeralInteractionResponseBehavior
+import dev.kord.core.behavior.interaction.response.followUpEphemeral
 import dev.kord.core.behavior.reply
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.core.event.message.MessageCreateEvent
@@ -39,10 +39,10 @@ class MusicInteractionModule : Extension() {
                 failIf {
                     val interaction = this.event.interaction
                     val message = interaction.message
-                    val guild = message?.getGuild()
-                    val guildSettings = guild?.let { MusicSettingsDatabase.findGuild(guild) }
+                    val guild = message.getGuild()
+                    val guildSettings = guild.let { MusicSettingsDatabase.findGuild(guild) }
 
-                    /* return */ interaction.message?.id != guildSettings?.musicChannelData?.musicChannelMessage
+                    /* return */ interaction.message.id != guildSettings.musicChannelData?.musicChannelMessage
                 }
 
                 musicControlCheck()
@@ -51,10 +51,10 @@ class MusicInteractionModule : Extension() {
 
             action {
                 val interaction = event.interaction
-                val guild = interaction.message?.getGuildOrNull()!!
+                val guild = interaction.message.getGuildOrNull()!!
                 val player = musicModule.getMusicPlayer(guild)
                 val ack =
-                    interaction.acknowledgeEphemeralDeferredMessageUpdate()
+                    interaction.deferEphemeralMessageUpdate()
 
                 suspend fun updateSchedulerOptions(
                     myProperty: KMutableProperty1<MusicPlayer, Boolean>,

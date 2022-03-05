@@ -6,11 +6,11 @@ import dev.kord.common.Locale
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
 import dev.kord.core.behavior.edit
-import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
-import dev.kord.core.behavior.interaction.edit
+import dev.kord.core.behavior.interaction.response.EphemeralInteractionResponseBehavior
+import dev.kord.core.behavior.interaction.response.followUpEphemeral
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.User
-import dev.kord.core.entity.interaction.FollowupMessage
+import dev.kord.core.entity.interaction.followup.FollowupMessage
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.rest.builder.message.modify.MessageModifyBuilder
 import dev.schlaubi.mikbot.game.api.AbstractGame
@@ -55,7 +55,7 @@ class TicTacToeGame(
     ): TicTacToePlayer {
         val type = playerTypeOrder.poll()
         val player = TicTacToePlayer(user, type)
-        ack.edit {
+        ack.followUpEphemeral {
             content = translate(
                 player, "tic_tac_toe.controls.joined", type
             )
@@ -64,7 +64,7 @@ class TicTacToeGame(
     }
 
     override suspend fun onRejoin(event: ComponentInteractionCreateEvent, player: TicTacToePlayer) {
-        event.interaction.acknowledgeEphemeralDeferredMessageUpdate()
+        event.interaction.deferEphemeralMessageUpdate()
     }
 
     override suspend fun runGame() {
@@ -77,7 +77,7 @@ class TicTacToeGame(
 
         val turn = kord.waitFor<ComponentInteractionCreateEvent>(1.minutes.inWholeMilliseconds) {
             if (interaction.message == welcomeMessage) {
-                interaction.acknowledgeEphemeralDeferredMessageUpdate()
+                interaction.deferEphemeralMessageUpdate()
                 interaction.user == nextPlayer.user
             } else {
                 false

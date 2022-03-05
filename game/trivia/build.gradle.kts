@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "dev.schlaubi.mikbot"
-version = "1.1.4"
+version = "1.1.5"
 
 dependencies {
     plugin(projects.game.gameApi)
@@ -14,6 +14,6 @@ dependencies {
     implementation("org.apache.commons", "commons-text", "1.9")
 
     // Google Translate
-    implementation(platform("com.google.cloud:libraries-bom:24.2.0"))
+    implementation(platform("com.google.cloud:libraries-bom:24.4.0"))
     implementation("com.google.cloud", "google-cloud-translate")
 }

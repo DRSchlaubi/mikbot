@@ -1,11 +1,11 @@
 package dev.schlaubi.mikbot.game.music_quiz.game
 
-import com.wrapper.spotify.model_objects.specification.Playlist
-import com.wrapper.spotify.model_objects.specification.Track
 import dev.schlaubi.mikbot.game.multiple_choice.QuestionContainer
 import dev.schlaubi.mikbot.plugin.api.util.poll
 import dev.schlaubi.mikmusic.player.queue.getTrack
 import kotlinx.coroutines.delay
+import se.michaelthelin.spotify.model_objects.specification.Playlist
+import se.michaelthelin.spotify.model_objects.specification.Track
 import java.util.*
 import kotlin.random.Random
 import kotlin.time.Duration.Companion.seconds

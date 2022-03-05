@@ -7,11 +7,11 @@ import com.kotlindiscord.kord.extensions.components.components
 import com.kotlindiscord.kord.extensions.types.respond
 import com.kotlindiscord.kord.extensions.utils.waitFor
 import dev.kord.common.entity.ButtonStyle
-import dev.kord.core.behavior.interaction.FollowupMessageBehavior
-import dev.kord.core.behavior.interaction.PublicFollowupMessageBehavior
-import dev.kord.core.behavior.interaction.edit
+import dev.kord.core.behavior.interaction.followup.FollowupMessageBehavior
+import dev.kord.core.behavior.interaction.followup.edit
 import dev.kord.core.entity.interaction.ComponentInteraction
-import dev.kord.core.entity.interaction.EphemeralFollowupMessage
+import dev.kord.core.entity.interaction.followup.EphemeralFollowupMessage
+import dev.kord.core.entity.interaction.followup.PublicFollowupMessage
 import dev.kord.core.event.interaction.InteractionCreateEvent
 import dev.kord.rest.builder.message.create.actionRow
 import kotlin.time.Duration
@@ -96,17 +96,17 @@ public suspend fun confirmation(
 
     val response = message.kord.waitFor<InteractionCreateEvent>(timeout?.inWholeMilliseconds) {
         (interaction as? ComponentInteraction)?.let {
-            it.message?.id == message.id
+            it.message.id == message.id
         } == true
     } ?: return Confirmation(false, message)
 
     when (message) {
         is EphemeralFollowupMessage -> message.edit { components = mutableListOf() }
-        is PublicFollowupMessageBehavior -> message.edit { components = mutableListOf() }
+        is PublicFollowupMessage -> message.edit { components = mutableListOf() }
     }
 
     val interaction = response.interaction as ComponentInteraction
-    interaction.acknowledgeEphemeralDeferredMessageUpdate()
+    interaction.deferEphemeralMessageUpdate()
 
     val button = interaction.componentId
 

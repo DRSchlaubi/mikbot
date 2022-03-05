@@ -39,16 +39,12 @@ dependencies {
     // Plugin system
     implementation("org.pf4j", "pf4j", "3.6.0")
     implementation("org.pf4j", "pf4j-update", "2.3.0")
-    implementation("com.google.code.gson", "gson", "2.8.9")
+    implementation("com.google.code.gson", "gson", "2.9.0")
     implementation("org.ow2.asm", "asm", "9.2") // pf4j doesn't declare a real dep on it
 
-    implementation("io.insert-koin", "koin-core", "3.1.4")
-
-    // Logging
-    implementation("ch.qos.logback", "logback-classic", "1.2.6")
+    implementation("io.insert-koin", "koin-core", "3.1.5")
 
     // Util
-    implementation("dev.schlaubi", "envconf", "1.1")
     implementation("org.jetbrains.kotlinx", "kotlinx-serialization-json", "1.3.2")
 
     implementation(project(":api"))

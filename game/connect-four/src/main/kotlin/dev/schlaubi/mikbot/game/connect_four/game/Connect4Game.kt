@@ -5,11 +5,11 @@ import com.kotlindiscord.kord.extensions.utils.waitFor
 import dev.kord.common.Locale
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
-import dev.kord.core.behavior.interaction.EphemeralInteractionResponseBehavior
-import dev.kord.core.behavior.interaction.edit
+import dev.kord.core.behavior.interaction.followup.edit
+import dev.kord.core.behavior.interaction.response.EphemeralInteractionResponseBehavior
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.User
-import dev.kord.core.entity.interaction.FollowupMessage
+import dev.kord.core.entity.interaction.followup.FollowupMessage
 import dev.kord.core.event.interaction.GuildButtonInteractionCreateEvent
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.kord.rest.builder.message.modify.MessageModifyBuilder
@@ -60,7 +60,7 @@ class Connect4Game(
 
             val component = kord.waitFor<GuildButtonInteractionCreateEvent> {
                 if (interaction.message == welcomeMessage) {
-                    interaction.acknowledgeEphemeralDeferredMessageUpdate()
+                    interaction.deferEphemeralMessageUpdate()
                     interaction.user == player.user
                 } else {
                     false

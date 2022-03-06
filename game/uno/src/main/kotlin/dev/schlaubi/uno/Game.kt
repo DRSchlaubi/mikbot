@@ -291,6 +291,7 @@ public class Game<T : Player>(
             win(player)
             player.onWin(wonPlayers.size)
         }
+        challengePossible = false
     }
 
     private fun win(player: Player) {

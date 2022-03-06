@@ -6,7 +6,6 @@ import dev.schlaubi.mikbot.plugin.api.config.Config
 import dev.schlaubi.musicbot.core.Bot
 import dev.schlaubi.musicbot.core.plugin.PluginLoader
 import org.slf4j.LoggerFactory
-import java.nio.ByteBuffer
 import kotlin.io.path.*
 
 suspend fun main() {

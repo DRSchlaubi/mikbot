@@ -151,7 +151,7 @@ class DiscordUnoGame(
 
         if (flashMode) {
             thread.createEmbed {
-                title = "Turns"
+                title = translate("uno.game.turns")
                 description =
                     players.sortedBy(DiscordUnoPlayer::turns)
                         .joinToString("\n") { "${it.user.mention} - ${it.turns}" }

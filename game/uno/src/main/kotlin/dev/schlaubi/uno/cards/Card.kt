@@ -56,7 +56,6 @@ public sealed interface DrawingCard : Card {
      * Checks whether this card can stack with [card] or not.
      */
     public fun canStackWith(card: PlayedCard): Boolean
-
 }
 
 /**

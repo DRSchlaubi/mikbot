@@ -10,44 +10,44 @@ import dev.schlaubi.uno.UnoColor
 import java.util.*
 import java.awt.Color as JColor
 
-fun EmbedBuilder.startUI(uno: DiscordUnoGame) {
+suspend fun EmbedBuilder.startUI(uno: DiscordUnoGame) {
     field {
-        name = "Extreme mode"
+        name = uno.translate("uno.game.extreme_mode")
         value = uno.extremeMode.toString()
     }
 
     field {
-        name = "Flash mode"
+        name = uno.translate("uno.game.flash_mode")
         value = uno.flashMode.toString()
     }
 
     field {
-        name = "Drop-Ins"
+        name = uno.translate("uno.game.drop_ins")
         value = uno.allowDropIns.toString()
     }
 
     field {
-        name = "Draw until playable"
+        name = uno.translate("uno.game.draw_until_playable")
         value = uno.drawUntilPlayable.toString()
     }
 
     field {
-        name = "Force play"
+        name = uno.translate("uno.game.force_play")
         value = uno.forcePlay.toString()
     }
 
     field {
-        name = "Draw card stacking"
+        name = uno.translate("uno.game.draw_card_stacking")
         value = uno.allowDrawCardStacking.toString()
     }
 
     field {
-        name = "Bluffing"
+        name = uno.translate("uno.game.bluffing")
         value = uno.allowBluffing.toString()
     }
 
     field {
-        name = "0-7"
+        name = uno.translate("uno.game.0_7")
         value = uno.useSpecial7and0.toString()
     }
 }
@@ -63,7 +63,7 @@ suspend fun EmbedBuilder.welcomeMessage(uno: DiscordUnoGame) {
                     } else {
                         playingPlayers
                     }
-                name = "Players"
+                name = uno.translate("uno.game.players")
                 value = actualPlayers.joinToString(", ") {
                     val mention = it.user.mention
                     if (running) {
@@ -77,7 +77,7 @@ suspend fun EmbedBuilder.welcomeMessage(uno: DiscordUnoGame) {
 
         if (wonPlayers.isNotEmpty()) {
             field {
-                name = "Won players"
+                name = uno.translate("uno.game.won_players")
                 value = wonPlayers.joinToString(", ") { it.user.mention }
             }
         }
@@ -88,44 +88,44 @@ suspend fun EmbedBuilder.welcomeMessage(uno: DiscordUnoGame) {
         }
 
         field {
-            name = "Last Player"
-            value = lastPlayer?.user?.mention ?: "No one"
+            name = uno.translate("uno.game.last_player")
+            value = lastPlayer?.user?.mention ?: uno.translate("uno.game.player.none")
             inline = true
         }
 
         field {
-            name = "Current Player"
+            name = uno.translate("uno.game.current_player")
             value = currentPlayer?.user?.mention.toString()
             inline = true
         }
 
         field {
-            name = "Next Player"
+            name = uno.translate("uno.game.next_player")
             value = nextPlayer.user.mention
             inline = true
         }
 
         if (game.drawCardSum >= 1) {
             field {
-                name = "Draw card sum"
+                name = uno.translate("uno.game.draw_card_sum")
                 value = game.drawCardSum.toString()
                 inline = false
             }
         }
 
         field {
-            name = "Cards played"
+            name = uno.translate("uno.game.cards_played")
             value = game.cardsPlayed.toString()
         }
 
         field {
-            name = "Top Card"
+            name = uno.translate("uno.game.top_card")
             value = translate(game.topCard.translationKey)
             inline = true
         }
 
         field {
-            name = "Direction"
+            name = uno.translate("uno.game.direction")
             value = translate("uno.direction." + game.direction.name.lowercase(Locale.ENGLISH))
             inline = true
         }

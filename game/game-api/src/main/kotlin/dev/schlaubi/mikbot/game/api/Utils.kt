@@ -6,7 +6,7 @@ import dev.schlaubi.mikbot.plugin.api.util.MessageBuilder
 import dev.schlaubi.mikbot.plugin.api.util.getLocale
 import java.util.*
 
-suspend fun AbstractGame<*>.confirmation(
+suspend fun Game<*>.confirmation(
     ack: InteractionResponseBehavior,
     hasNoOption: Boolean = true,
     locale: Locale? = null,
@@ -46,7 +46,7 @@ suspend fun <T : Player> AbstractGame<T>.update(
  * Translates [key] for a game.
  */
 @Suppress("UNCHECKED_CAST")
-suspend fun AbstractGame<*>.translate(
+suspend fun Game<*>.translate(
     key: String,
     vararg replacements: Any?,
     locale: Locale? = null
@@ -56,12 +56,12 @@ suspend fun AbstractGame<*>.translate(
         bundle, replacements = replacements as Array<Any?>
     )
 
-suspend fun AbstractGame<*>.translate(user: Player, key: String, vararg replacements: Any?): String {
+suspend fun Game<*>.translate(user: Player, key: String, vararg replacements: Any?): String {
     return translate(key, locale = getLocale(user), replacements = replacements)
 }
 
 @Suppress("UNCHECKED_CAST")
-suspend fun AbstractGame<*>.translateInternally(
+suspend fun Game<*>.translateInternally(
     user: Player,
     key: String,
     vararg replacements: Any?
@@ -69,20 +69,20 @@ suspend fun AbstractGame<*>.translateInternally(
     getLocale(user), key, *replacements
 )
 
-private suspend fun AbstractGame<*>.getLocale(user: Player) =
+private suspend fun Game<*>.getLocale(user: Player) =
     (user as? ControlledPlayer)?.locale ?: module.bot.getLocale(
         thread.asChannel(),
         user.user.asUser()
     )
 
 @Suppress("UNCHECKED_CAST")
-fun AbstractGame<*>.translateInternally(
+suspend fun Game<*>.translateInternally(
     locale: Locale? = null,
     key: String,
     vararg replacements: Any?
 ): String {
     return translationsProvider.translate(
-        key, locale ?: translationsProvider.defaultLocale,
+        key, locale ?: this.locale(),
         "games", replacements = replacements as Array<Any?>
     )
 }

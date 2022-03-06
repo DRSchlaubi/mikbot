@@ -34,11 +34,11 @@ interface ControlledGame<P : ControlledPlayer> : Game<P> {
     /**
      * Adds the resend controlls button.
      */
-    fun MessageModifyBuilder.addResendControlsButton() {
+    suspend fun MessageModifyBuilder.addResendControlsButton() {
         if (running) {
             actionRow {
                 interactionButton(ButtonStyle.Secondary, resendControlsButton) {
-                    label = "Resend Controls"
+                    label = translateInternally(key = "game.ui.resend_controls")
                 }
             }
         }

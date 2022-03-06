@@ -3,7 +3,6 @@ package dev.schlaubi.mikbot.game.api
 import com.kotlindiscord.kord.extensions.DiscordRelayedException
 import com.kotlindiscord.kord.extensions.components.components
 import com.kotlindiscord.kord.extensions.components.publicButton
-import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.kord.common.Locale
 import dev.kord.common.kLocale
@@ -11,7 +10,6 @@ import dev.kord.core.Kord
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.channel.asChannelOf
 import dev.kord.core.behavior.channel.createEmbed
-import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
 import dev.kord.core.behavior.channel.threads.edit
 import dev.kord.core.behavior.edit
 import dev.kord.core.behavior.interaction.followup.edit
@@ -47,13 +45,9 @@ const val resendControlsButton = "resend_controls"
  * Abstract implementation of a game.
  *
  * @param T the [Player] type
- * @property thread the [ThreadChannelBehavior] the game is in
  * @property welcomeMessage the [Message] at the top of the thread
  * @property wonPlayers a list of [T] with all won players
- * @property bundle the translation bundle name
  * @property kord the kord instance to use
- * @property translationsProvider the [TranslationsProvider] used for translations
- * @property locale the locale the game uses
  */
 abstract class AbstractGame<T : Player>(
     val host: UserBehavior,
@@ -68,8 +62,7 @@ abstract class AbstractGame<T : Player>(
     protected val leftPlayers = mutableListOf<T>()
 
     abstract val playerRange: IntRange
-    abstract val thread: ThreadChannelBehavior
-    val locale = suspendLazy {
+    override val locale = suspendLazy {
         thread.getGuild().preferredLocale.kLocale.convertToISO().asJavaLocale()
     }
 
@@ -78,15 +71,11 @@ abstract class AbstractGame<T : Player>(
     open val isEligibleForStats = true
     val hostPlayer: T?
         get() = players.firstOrNull { it.user == host }
-    val bundle: String
-        get() = module.bundle
     private val statsCollection: CoroutineCollection<UserGameStats> get() = module.gameStats
     val kord: Kord get() = host.kord
     private var gameJob: Job? = null
 
     val safeRange get() = if (hostPlayer == null) (playerRange.first - 1) until playerRange.last else playerRange
-
-    abstract val translationsProvider: TranslationsProvider
 
     /**
      * Whether the game is running or not.

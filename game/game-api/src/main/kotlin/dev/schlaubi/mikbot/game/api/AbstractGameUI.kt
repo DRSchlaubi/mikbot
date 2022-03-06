@@ -13,18 +13,18 @@ fun ActionRowBuilder.leaveButton(text: String) = interactionButton(ButtonStyle.D
     label = text
 }
 
-fun MessageModifyBuilder.gameUI(game: AbstractGame<*>) {
+suspend fun MessageModifyBuilder.gameUI(game: AbstractGame<*>) {
     actionRow {
         if (!game.running) {
             interactionButton(ButtonStyle.Success, joinGameButton) {
-                label = "Join Game"
+                label = game.translateInternally(key = "game.ui.join")
             }
 
             interactionButton(ButtonStyle.Primary, startGameButton) {
-                label = "Start Game"
+                label = game.translateInternally(key = "game.ui.start")
             }
         }
 
-        leaveButton("Leave Game")
+        leaveButton(game.translateInternally(key = "game.ui.leave"))
     }
 }

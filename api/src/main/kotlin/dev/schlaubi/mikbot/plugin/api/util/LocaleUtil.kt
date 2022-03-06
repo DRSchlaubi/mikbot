@@ -28,7 +28,7 @@ public suspend fun ExtensibleBot.getLocale(channel: GuildChannel, user: User): J
  * If [Locale.country] is already specified, it will just use the already specified version
  */
 public fun Locale.convertToISO(): Locale = when {
-    country != null -> this
+    !country.isNullOrBlank() -> this
     language == "cs" -> copy(country = "CZ")
     language == "da" -> copy(country = "DK")
     language == "el" -> copy(country = "GR")

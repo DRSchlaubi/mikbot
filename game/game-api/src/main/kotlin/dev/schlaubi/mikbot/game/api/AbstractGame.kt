@@ -6,6 +6,7 @@ import com.kotlindiscord.kord.extensions.components.publicButton
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.kord.common.Locale
+import dev.kord.common.kLocale
 import dev.kord.core.Kord
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.channel.asChannelOf
@@ -29,6 +30,7 @@ import dev.kord.x.emoji.Emojis
 import dev.schlaubi.mikbot.game.api.events.interactionHandler
 import dev.schlaubi.mikbot.game.api.events.watchThread
 import dev.schlaubi.mikbot.game.api.module.GameModule
+import dev.schlaubi.mikbot.plugin.api.util.convertToISO
 import dev.schlaubi.mikbot.plugin.api.util.suspendLazy
 import kotlinx.coroutines.*
 import mu.KotlinLogging
@@ -68,7 +70,7 @@ abstract class AbstractGame<T : Player>(
     abstract val playerRange: IntRange
     abstract val thread: ThreadChannelBehavior
     val locale = suspendLazy {
-        thread.getGuild().preferredLocale
+        thread.getGuild().preferredLocale.kLocale.convertToISO().asJavaLocale()
     }
 
     abstract val welcomeMessage: Message

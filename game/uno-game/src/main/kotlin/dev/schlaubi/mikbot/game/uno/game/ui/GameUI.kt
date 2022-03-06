@@ -63,7 +63,7 @@ suspend fun EmbedBuilder.welcomeMessage(uno: DiscordUnoGame) {
                     } else {
                         playingPlayers
                     }
-                name = uno.translate("uno.game.players")
+                name = translate("uno.game.players")
                 value = actualPlayers.joinToString(", ") {
                     val mention = it.user.mention
                     if (running) {
@@ -77,7 +77,7 @@ suspend fun EmbedBuilder.welcomeMessage(uno: DiscordUnoGame) {
 
         if (wonPlayers.isNotEmpty()) {
             field {
-                name = uno.translate("uno.game.won_players")
+                name = translate("uno.game.won_players")
                 value = wonPlayers.joinToString(", ") { it.user.mention }
             }
         }
@@ -88,44 +88,44 @@ suspend fun EmbedBuilder.welcomeMessage(uno: DiscordUnoGame) {
         }
 
         field {
-            name = uno.translate("uno.game.last_player")
-            value = lastPlayer?.user?.mention ?: uno.translate("uno.game.player.none")
+            name = translate("uno.game.last_player")
+            value = lastPlayer?.user?.mention ?: translate("uno.game.player.none")
             inline = true
         }
 
         field {
-            name = uno.translate("uno.game.current_player")
+            name = translate("uno.game.current_player")
             value = currentPlayer?.user?.mention.toString()
             inline = true
         }
 
         field {
-            name = uno.translate("uno.game.next_player")
+            name = translate("uno.game.next_player")
             value = nextPlayer.user.mention
             inline = true
         }
 
         if (game.drawCardSum >= 1) {
             field {
-                name = uno.translate("uno.game.draw_card_sum")
+                name = translate("uno.game.draw_card_sum")
                 value = game.drawCardSum.toString()
                 inline = false
             }
         }
 
         field {
-            name = uno.translate("uno.game.cards_played")
+            name = translate("uno.game.cards_played")
             value = game.cardsPlayed.toString()
         }
 
         field {
-            name = uno.translate("uno.game.top_card")
+            name = translate("uno.game.top_card")
             value = translate(game.topCard.translationKey)
             inline = true
         }
 
         field {
-            name = uno.translate("uno.game.direction")
+            name = translate("uno.game.direction")
             value = translate("uno.direction." + game.direction.name.lowercase(Locale.ENGLISH))
             inline = true
         }

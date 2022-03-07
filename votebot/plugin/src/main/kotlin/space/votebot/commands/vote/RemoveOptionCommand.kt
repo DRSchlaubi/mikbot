@@ -1,10 +1,11 @@
 package space.votebot.commands.vote
 
+import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.converters.impl.int
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
 import com.kotlindiscord.kord.extensions.types.respond
+import dev.schlaubi.mikbot.plugin.api.util.discordError
 import dev.schlaubi.mikbot.plugin.api.util.safeGuild
-import space.votebot.command.PollArguments
 import space.votebot.command.poll
 import space.votebot.common.models.Poll
 import space.votebot.core.VoteBotDatabase
@@ -14,7 +15,12 @@ import space.votebot.core.updateMessages
 import space.votebot.transformer.TransformerContext
 import space.votebot.transformer.transformMessage
 
-class RemoveOptionArguments : PollArguments("The poll you want to remove the option from") {
+class RemoveOptionArguments : Arguments() {
+    val poll by poll {
+        name = "poll"
+        description = "The poll you want to remove the option from"
+    }
+
     val position by int {
         name = "position"
         description = "The position at which the option should be inserted"
@@ -26,7 +32,10 @@ suspend fun VoteBotModule.removeOptionCommand() = ephemeralSlashCommand(::Remove
     description = "Adds an option to a poll"
 
     action {
-        val poll = poll()
+        val poll = arguments.poll
+        if (arguments.position > poll.options.count { it !is Poll.Option.Spacer }) {
+            discordError(translate("commands.remove_option.out_of_bounds"))
+        }
         val selectedOption = poll.sortedOptions[arguments.position - 1]
         val newOptions = poll.options.mapIndexed { index, option ->
             if (index == selectedOption.index) {

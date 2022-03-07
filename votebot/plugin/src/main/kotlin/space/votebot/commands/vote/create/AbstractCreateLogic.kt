@@ -8,6 +8,7 @@ import dev.kord.common.entity.Permissions
 import dev.kord.common.exception.RequestException
 import dev.kord.core.Kord
 import dev.kord.core.behavior.channel.asChannelOf
+import dev.kord.core.entity.channel.GuildMessageChannel
 import dev.kord.core.entity.channel.TopGuildMessageChannel
 import dev.schlaubi.mikbot.plugin.api.util.confirmation
 import dev.schlaubi.mikbot.plugin.api.util.discordError
@@ -29,9 +30,9 @@ suspend fun <A : Arguments> EphemeralSlashCommandContext<A>.createVote(
     val kord = getKoin().get<Kord>()
     val settings = optionProvider()
     val guildVoteChannel = VoteBotDatabase.guildSettings.findOneByGuild(guild!!.id)?.voteChannelId?.let {
-        kord.getChannelOf<TopGuildMessageChannel>(it)
+        kord.getChannelOf<GuildMessageChannel>(it)
     }
-    val channel = (guildVoteChannel ?: settings.channel ?: this.channel).asChannelOf<TopGuildMessageChannel>()
+    val channel = (guildVoteChannel ?: settings.channel ?: this.channel).asChannelOf<GuildMessageChannel>()
 
     checkPermissions(channel)
 

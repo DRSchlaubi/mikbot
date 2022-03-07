@@ -42,7 +42,8 @@ suspend fun DiscordUnoPlayer.awaitResponse(message: () -> FollowupMessageBehavio
         interaction.message.id == message().id && interaction.user == user
     } ?: return null
 
-    response.interaction.deferPublicMessageUpdate()
+    val ack = response.interaction.deferEphemeralMessageUpdate()
+    this.response = ack
 
     return response.interaction.componentId
 }

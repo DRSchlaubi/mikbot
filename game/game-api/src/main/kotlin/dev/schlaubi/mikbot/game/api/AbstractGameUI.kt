@@ -26,5 +26,8 @@ suspend fun MessageModifyBuilder.gameUI(game: AbstractGame<*>) {
         }
 
         leaveButton(game.translateInternally(key = "game.ui.leave"))
+        linkButton("https://discord.com/channels/${game.thread.guildId}/${game.thread.id}") {
+            label = game.translateInternally(key = "game.ui.fullscreen")
+        }
     }
 }

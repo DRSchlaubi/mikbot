@@ -29,6 +29,11 @@ public open class Player {
     /** Function called if this player was skipped. */
     public open fun onSkip(): Unit = Unit
 
+    /**
+     * Function called when the player automatically draws cards.
+     */
+    public open fun onCardsDrawn(amount: Int): Unit = Unit
+
     /** Function called when the player forgot to say uno in [game]. */
     public open fun forgotUno(game: Game<*>): Unit = Unit
 
@@ -276,6 +281,7 @@ public class Game<T : Player>(
                 drawCardSum += card.cards
             } else {
                 drawSummedCards(player)
+                player.onCardsDrawn(drawCardSum)
                 drawCardSum = card.cards
             }
         } else if (drawCardSum >= 1) {

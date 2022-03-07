@@ -36,7 +36,7 @@ const val challengeWildCard = "challenge_wild_card"
 
 abstract class DiscordUnoPlayer(
     override val user: UserBehavior,
-    val response: EphemeralInteractionResponseBehavior,
+    var response: EphemeralInteractionResponseBehavior,
     override var controls: FollowupMessage,
     override val game: DiscordUnoGame,
     override val discordLocale: Locale?
@@ -50,11 +50,23 @@ abstract class DiscordUnoPlayer(
         private set
 
     override fun onSkip() {
-        if (game.flashMode) {
-            game.launch {
+        game.launch {
+            if (game.flashMode) {
                 response.followUpEphemeral {
                     content = translate("uno.flash.skipped")
                 }
+            } else {
+                response.followUpEphemeral {
+                    content = translate("uno.controls.skipped")
+                }
+            }
+        }
+    }
+
+    override fun onCardsDrawn(amount: Int) {
+        game.launch {
+            response.followUpEphemeral {
+                content = translate("uno.controls.drawn", amount)
             }
         }
     }
@@ -100,10 +112,33 @@ abstract class DiscordUnoPlayer(
 
     suspend fun turn() {
         myTurn = true
+        // Draw card stacking logic
+        if (game.game.drawCardSum >= 1 || (!game.allowDrawCardStacking && game.game.topCard is DrawingCard)) {
+            if (game.allowDrawCardStacking && deck.any { (it as? DrawingCard)?.canStackWith(game.game.topCard) == true }) {
+                // if you can stack, ask to stack
+                val card: DrawingCard? = pickDrawingCardToStack()
+                if (card == null) {
+                    // or draw
+                    draw(game.game)
+                    onCardsDrawn(game.game.drawCardSum)
+                } else {
+                    playCard(game.game, card)
+                    return endTurn()
+                }
+            } else {
+                // if you can't stack or stacking is disabled, auto-draw
+                draw(game.game)
+                onCardsDrawn(game.game.drawCardSum)
+            }
+        }
+
         updateControls(true)
         val cantPlay by lazy { deck.none { it.canBePlayedOn(game.game.topCard) } }
         if (drawn) {
             if (cantPlay) {
+                ack.followUpEphemeral {
+                    content = translate("uno.controls.auto_skipped")
+                }
                 return endTurn() // auto-skip if drawn and can't play
             }
         } else if (game.game.drawCardSum >= 1 && cantPlay && (!game.game.canBeChallenged)) {
@@ -220,13 +255,15 @@ abstract class DiscordUnoPlayer(
         }
     }
 
-    override suspend fun resendControls(ack: EphemeralInteractionResponseBehavior) = resendControlsInternally(null)
+    override suspend fun resendControls(ack: EphemeralInteractionResponseBehavior) =
+        resendControlsInternally(null, response = ack)
 
     suspend fun resendControlsInternally(
         event: ComponentInteractionCreateEvent? = null,
-        justLoading: Boolean = false
+        justLoading: Boolean = false,
+        response: EphemeralInteractionResponseBehavior? = null
     ) {
-        val ack = event?.interaction?.deferEphemeralMessage() ?: response
+        val ack = response ?: event?.interaction?.deferEphemeralMessage() ?: this.response
         controls = ack.followUpEphemeral {
             content = translate("uno.controls.loading")
         }

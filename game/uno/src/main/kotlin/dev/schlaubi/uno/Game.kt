@@ -41,6 +41,11 @@ public open class Player {
     public open fun onWin(place: Int): Unit = Unit
 
     /**
+     * Function called when UNO bluff gets detected.
+     */
+    public open fun onUnoBluff(): Unit = Unit
+
+    /**
      * Callback when player is allowed to see [otherPlayer]'s cards.
      */
     public open fun onVisibleCards(otherPlayer: Player): Unit = Unit
@@ -280,8 +285,8 @@ public class Game<T : Player>(
             if (allowDrawCardStacking && card.canStackWith(topCard)) {
                 drawCardSum += card.cards
             } else {
-                drawSummedCards(player)
                 player.onCardsDrawn(drawCardSum)
+                drawSummedCards(player)
                 drawCardSum = card.cards
             }
         } else if (drawCardSum >= 1) {
@@ -311,6 +316,10 @@ public class Game<T : Player>(
     }
 
     internal fun drawCards(player: Player, cards: Int) {
+        if (player.saidUno) {
+            drawCards(player, 2)
+            player.onUnoBluff()
+        }
         do {
             if (extreme) {
                 repeat(drawCardSum.coerceAtLeast(cards)) { extremeDrawCards(player) }

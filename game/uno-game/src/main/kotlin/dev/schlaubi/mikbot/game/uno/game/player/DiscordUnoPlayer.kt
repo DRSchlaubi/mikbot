@@ -39,7 +39,7 @@ abstract class DiscordUnoPlayer(
     var response: EphemeralInteractionResponseBehavior,
     override var controls: FollowupMessage,
     override val game: DiscordUnoGame,
-    override val discordLocale: Locale?
+    override val discordLocale: Locale?,
 ) : Player(), GamePlayer, ControlledPlayer {
     override val ack: InteractionResponseBehavior
         get() = response
@@ -63,10 +63,20 @@ abstract class DiscordUnoPlayer(
         }
     }
 
-    override fun onCardsDrawn(amount: Int) {
+    override fun onUnoBluff() {
         game.launch {
             response.followUpEphemeral {
-                content = translate("uno.controls.drawn", amount)
+                content = translate("uno.general.said_on_as_bluff")
+            }
+        }
+    }
+
+    override fun onCardsDrawn(amount: Int) {
+        if (amount >= 1) {
+            game.launch {
+                response.followUpEphemeral {
+                    content = translate("uno.controls.drawn", amount)
+                }
             }
         }
     }
@@ -119,16 +129,14 @@ abstract class DiscordUnoPlayer(
                 val card: DrawingCard? = pickDrawingCardToStack()
                 if (card == null) {
                     // or draw
-                    draw(game.game)
-                    onCardsDrawn(game.game.drawCardSum)
+                    doDraw()
                 } else {
                     playCard(game.game, card)
                     return endTurn()
                 }
             } else {
                 // if you can't stack or stacking is disabled, auto-draw
-                draw(game.game)
-                onCardsDrawn(game.game.drawCardSum)
+                doDraw()
             }
         }
 
@@ -136,9 +144,10 @@ abstract class DiscordUnoPlayer(
         val cantPlay by lazy { deck.none { it.canBePlayedOn(game.game.topCard) } }
         if (drawn) {
             if (cantPlay) {
-                ack.followUpEphemeral {
-                    content = translate("uno.controls.auto_skipped")
-                }
+                // disabled until less-annoying solution is found
+//                ack.followUpEphemeral {
+//                    content = translate("uno.controls.auto_skipped")
+//                }
                 return endTurn() // auto-skip if drawn and can't play
             }
         } else if (game.game.drawCardSum >= 1 && cantPlay && (!game.game.canBeChallenged)) {
@@ -226,6 +235,7 @@ abstract class DiscordUnoPlayer(
 
     private fun doDraw() {
         drawn = true
+        onCardsDrawn(game.game.drawCardSum)
         draw(game.game)
     }
 
@@ -261,7 +271,7 @@ abstract class DiscordUnoPlayer(
     suspend fun resendControlsInternally(
         event: ComponentInteractionCreateEvent? = null,
         justLoading: Boolean = false,
-        response: EphemeralInteractionResponseBehavior? = null
+        response: EphemeralInteractionResponseBehavior? = null,
     ) {
         val ack = response ?: event?.interaction?.deferEphemeralMessage() ?: this.response
         controls = ack.followUpEphemeral {
@@ -312,7 +322,7 @@ class DesktopPlayer(
     response: EphemeralInteractionResponseBehavior,
     controls: FollowupMessage,
     game: DiscordUnoGame,
-    discordLocale: Locale?
+    discordLocale: Locale?,
 ) : DiscordUnoPlayer(user, response, controls, game, discordLocale) {
     override suspend fun updateControls(active: Boolean, initial: Boolean) = editControls(active)
 }
@@ -322,7 +332,7 @@ class MobilePlayer(
     response: EphemeralInteractionResponseBehavior,
     controls: FollowupMessage,
     game: DiscordUnoGame,
-    discordLocale: Locale?
+    discordLocale: Locale?,
 ) : DiscordUnoPlayer(user, response, controls, game, discordLocale) {
     // Add the game message to the controls
     override suspend fun MessageModifyBuilder.updateControlsMessage(initial: Boolean) {

@@ -8,8 +8,11 @@ import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalColor
 import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalString
 import com.kotlindiscord.kord.extensions.commands.converters.impl.string
 import com.kotlindiscord.kord.extensions.types.respond
-import dev.kord.core.behavior.channel.asChannelOf
+import dev.kord.common.entity.Permission
+import dev.kord.common.entity.Permissions
+import dev.kord.core.behavior.channel.asChannelOfOrNull
 import dev.kord.core.behavior.channel.createMessage
+import dev.kord.core.entity.channel.TopGuildMessageChannel
 import dev.kord.rest.builder.message.create.embed
 import dev.schlaubi.mikbot.plugin.api.settings.guildAdminOnly
 import dev.schlaubi.mikbot.utils.roleselector.RoleSelectionMessage
@@ -25,7 +28,24 @@ suspend fun EphemeralSlashCommand<*>.addRoleMessageCommand() = ephemeralSubComma
         val embedTitle = arguments.title
         val embedDescription = arguments.description
         val embedColor = arguments.embedColor
-        val sendingChannel = arguments.channel?.asChannelOf() ?: channel.asChannel()
+        val sendingChannel =
+            arguments.channel?.asChannelOfOrNull() ?: channel.asChannelOfOrNull<TopGuildMessageChannel>()
+
+        if (sendingChannel == null) {
+            respond {
+
+                content = translate("commands.role_selector.add_message.invalid_channel")
+            }
+            return@action
+        }
+
+        if (Permissions(Permission.SendMessages, Permission.EmbedLinks) !in
+            sendingChannel.getEffectivePermissions(sendingChannel.kord.selfId)
+        ) {
+            respond {
+                content = translate("commands.role_selector.add_message.missing_permission")
+            }
+        }
 
         val message = sendingChannel.createMessage {
             embed {

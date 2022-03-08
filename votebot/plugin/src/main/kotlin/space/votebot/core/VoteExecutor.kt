@@ -10,8 +10,14 @@ import dev.kord.core.Kord
 import dev.kord.core.behavior.GuildBehavior
 import dev.kord.core.behavior.interaction.response.followUpEphemeral
 import dev.kord.core.event.interaction.GuildButtonInteractionCreateEvent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import space.votebot.common.models.Poll
 import space.votebot.util.reFetch
+
+private val VoteExecutor = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
 suspend fun Poll.close(kord: Kord, showChart: Boolean? = null, guild: GuildBehavior) {
     with(reFetch()) {
@@ -32,7 +38,9 @@ suspend fun Poll.close(kord: Kord, showChart: Boolean? = null, guild: GuildBehav
 @OptIn(KordUnsafe::class, KordExperimental::class)
 suspend fun VoteBotModule.voteExecutor() = event<GuildButtonInteractionCreateEvent> {
     action {
-        onVote(kord.unsafe.guild(event.interaction.guildId))
+        VoteExecutor.launch {
+            onVote(kord.unsafe.guild(event.interaction.guildId))
+        }
     }
 }
 
@@ -41,10 +49,10 @@ private suspend fun EventContext<GuildButtonInteractionCreateEvent>.onVote(guild
 
     val message = interaction.message
     val poll = VoteBotDatabase.polls.findOneByMessage(message) ?: return
+    val ack = interaction.deferEphemeralMessageUpdate()
 
     val option = interaction.componentId.substringAfter("vote_").toIntOrNull() ?: return
 
-    val ack = interaction.deferEphemeralMessageUpdate()
 
     val userId = interaction.user.id.value
     val userVotes = poll.votes.asSequence()

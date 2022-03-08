@@ -15,6 +15,7 @@ import space.votebot.common.models.FinalPollSettings
 import space.votebot.common.models.Poll
 
 internal val ExpirationScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+private val expirationCache = mutableMapOf<String, Job>()
 
 suspend fun rescheduleAllPollExpires(kord: Kord) = coroutineScope {
     VoteBotDatabase.polls.find(not(Poll::settings / FinalPollSettings::deleteAfter eq null))
@@ -29,7 +30,8 @@ fun Poll.addExpirationListener(kord: Kord) {
     val duration = settings.deleteAfter ?: error("This vote does not have an expiration Date")
     val expireAt = createdAt + duration
 
-    ExpirationScope.launch {
+    expirationCache[id]?.cancel()
+    expirationCache[id] = ExpirationScope.launch {
         val timeUntilExpiry = expireAt - Clock.System.now()
         if (!timeUntilExpiry.isNegative()) {
             delay(timeUntilExpiry)

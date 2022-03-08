@@ -11,6 +11,7 @@ dependencies {
     implementation(projects.votebot.chartServiceClient)
     implementation("info.debatty", "java-string-similarity", "2.0.0")
     ksp("com.kotlindiscord.kord.extensions", "annotation-processor", "1.5.2-SNAPSHOT")
+    optionalPlugin(projects.core.gdpr)
 }
 
 mikbotPlugin {

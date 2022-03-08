@@ -7,8 +7,8 @@ import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
 import dev.kord.core.behavior.edit
 import dev.kord.core.behavior.interaction.followup.edit
-import dev.kord.core.behavior.interaction.response.EphemeralInteractionResponseBehavior
-import dev.kord.core.behavior.interaction.response.InteractionResponseBehavior
+import dev.kord.core.behavior.interaction.response.EphemeralMessageInteractionResponseBehavior
+import dev.kord.core.behavior.interaction.response.MessageInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.response.followUp
 import dev.kord.core.entity.interaction.followup.FollowupMessage
 import dev.kord.rest.builder.component.ActionRowBuilder
@@ -111,11 +111,11 @@ interface ControlledGame<P : ControlledPlayer> : Game<P> {
 /**
  * interface for a [Player] with custom controls.
  *
- * @property ack the [InteractionResponseBehavior] providing the [controls] follow-up
+ * @property ack the [MessageInteractionResponseBehavior] providing the [controls] follow-up
  * @property controls the actual controls
  */
 interface ControlledPlayer : Player {
-    val ack: InteractionResponseBehavior
+    val ack: MessageInteractionResponseBehavior
     val controls: FollowupMessage
     val discordLocale: Locale?
     val locale: JavaLocale?
@@ -125,5 +125,5 @@ interface ControlledPlayer : Player {
     /**
      * Requests new controls for this placer.
      */
-    suspend fun resendControls(ack: EphemeralInteractionResponseBehavior)
+    suspend fun resendControls(ack: EphemeralMessageInteractionResponseBehavior)
 }

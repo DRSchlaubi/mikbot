@@ -10,7 +10,7 @@ import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
 import dev.kord.core.behavior.interaction.followup.edit
 import dev.kord.core.behavior.interaction.respondEphemeral
-import dev.kord.core.behavior.interaction.response.EphemeralInteractionResponseBehavior
+import dev.kord.core.behavior.interaction.response.EphemeralMessageInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.response.followUpEphemeral
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.User
@@ -68,7 +68,7 @@ class SongQuizGame(
     override fun obtainNewPlayer(user: User): MultipleChoicePlayer = SongQuizPlayer(user)
     override suspend fun obtainNewPlayer(
         user: User,
-        ack: EphemeralInteractionResponseBehavior,
+        ack: EphemeralMessageInteractionResponseBehavior,
         loading: FollowupMessage,
         userLocale: Locale?
     ): SongQuizPlayer =
@@ -90,7 +90,7 @@ class SongQuizGame(
         }
     }
 
-    override suspend fun onJoin(ack: EphemeralInteractionResponseBehavior, player: MultipleChoicePlayer) {
+    override suspend fun onJoin(ack: EphemeralMessageInteractionResponseBehavior, player: MultipleChoicePlayer) {
         val member = player.user.asMember(thread.guild.id)
         val voiceState = member.getVoiceStateOrNull()
         if (voiceState?.channelId != musicPlayer.lastChannelId?.let { Snowflake(it) }) {

@@ -6,7 +6,7 @@ import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
 import dev.kord.core.behavior.edit
 import dev.kord.core.behavior.interaction.followup.edit
-import dev.kord.core.behavior.interaction.response.EphemeralInteractionResponseBehavior
+import dev.kord.core.behavior.interaction.response.EphemeralMessageInteractionResponseBehavior
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.ReactionEmoji
 import dev.kord.core.entity.User
@@ -37,7 +37,7 @@ class GoogolplexGame(
 
     override suspend fun obtainNewPlayer(
         user: User,
-        ack: EphemeralInteractionResponseBehavior,
+        ack: EphemeralMessageInteractionResponseBehavior,
         loading: FollowupMessage,
         userLocale: Locale?
     ): GoogolplexPlayer = GoogolplexPlayer(user, loading, ack, userLocale, this)

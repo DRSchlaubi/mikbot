@@ -4,8 +4,8 @@ import dev.kord.common.Locale
 import dev.kord.common.entity.ButtonStyle
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.interaction.followup.edit
-import dev.kord.core.behavior.interaction.response.EphemeralInteractionResponseBehavior
-import dev.kord.core.behavior.interaction.response.InteractionResponseBehavior
+import dev.kord.core.behavior.interaction.response.EphemeralMessageInteractionResponseBehavior
+import dev.kord.core.behavior.interaction.response.MessageInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.response.followUpEphemeral
 import dev.kord.core.builder.components.emoji
 import dev.kord.core.entity.ReactionEmoji
@@ -23,7 +23,7 @@ import kotlinx.coroutines.CompletableDeferred
 class GoogolplexPlayer(
     override val user: UserBehavior,
     override var controls: FollowupMessage,
-    override val ack: InteractionResponseBehavior,
+    override val ack: MessageInteractionResponseBehavior,
     override val discordLocale: Locale?,
     override val game: AbstractGame<*>
 ) : ControlledPlayer {
@@ -58,7 +58,7 @@ class GoogolplexPlayer(
         }
     }
 
-    override suspend fun resendControls(ack: EphemeralInteractionResponseBehavior) {
+    override suspend fun resendControls(ack: EphemeralMessageInteractionResponseBehavior) {
         controls = ack.followUpEphemeral {
             content = "Waiting for next game cycle ..."
         }

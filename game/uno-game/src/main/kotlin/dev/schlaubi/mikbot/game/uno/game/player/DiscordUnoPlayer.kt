@@ -3,8 +3,8 @@ package dev.schlaubi.mikbot.game.uno.game.player
 import dev.kord.common.Locale
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.interaction.followup.edit
-import dev.kord.core.behavior.interaction.response.EphemeralInteractionResponseBehavior
-import dev.kord.core.behavior.interaction.response.InteractionResponseBehavior
+import dev.kord.core.behavior.interaction.response.EphemeralMessageInteractionResponseBehavior
+import dev.kord.core.behavior.interaction.response.MessageInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.response.followUp
 import dev.kord.core.behavior.interaction.response.followUpEphemeral
 import dev.kord.core.entity.interaction.followup.FollowupMessage
@@ -36,12 +36,12 @@ const val challengeWildCard = "challenge_wild_card"
 
 abstract class DiscordUnoPlayer(
     override val user: UserBehavior,
-    var response: EphemeralInteractionResponseBehavior,
+    var response: EphemeralMessageInteractionResponseBehavior,
     override var controls: FollowupMessage,
     override val game: DiscordUnoGame,
     override val discordLocale: Locale?,
 ) : Player(), GamePlayer, ControlledPlayer {
-    override val ack: InteractionResponseBehavior
+    override val ack: MessageInteractionResponseBehavior
         get() = response
 
     private var myTurn = false
@@ -265,13 +265,13 @@ abstract class DiscordUnoPlayer(
         }
     }
 
-    override suspend fun resendControls(ack: EphemeralInteractionResponseBehavior) =
+    override suspend fun resendControls(ack: EphemeralMessageInteractionResponseBehavior) =
         resendControlsInternally(null, response = ack)
 
     suspend fun resendControlsInternally(
         event: ComponentInteractionCreateEvent? = null,
         justLoading: Boolean = false,
-        response: EphemeralInteractionResponseBehavior? = null,
+        response: EphemeralMessageInteractionResponseBehavior? = null,
     ) {
         val ack = response ?: event?.interaction?.deferEphemeralMessage() ?: this.response
         controls = ack.followUpEphemeral {
@@ -319,7 +319,7 @@ abstract class DiscordUnoPlayer(
 
 class DesktopPlayer(
     user: UserBehavior,
-    response: EphemeralInteractionResponseBehavior,
+    response: EphemeralMessageInteractionResponseBehavior,
     controls: FollowupMessage,
     game: DiscordUnoGame,
     discordLocale: Locale?,
@@ -329,7 +329,7 @@ class DesktopPlayer(
 
 class MobilePlayer(
     user: UserBehavior,
-    response: EphemeralInteractionResponseBehavior,
+    response: EphemeralMessageInteractionResponseBehavior,
     controls: FollowupMessage,
     game: DiscordUnoGame,
     discordLocale: Locale?,

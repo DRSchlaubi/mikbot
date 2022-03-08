@@ -5,7 +5,7 @@ import dev.kord.common.Locale
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.channel.createEmbed
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
-import dev.kord.core.behavior.interaction.response.EphemeralInteractionResponseBehavior
+import dev.kord.core.behavior.interaction.response.EphemeralMessageInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.response.followUpEphemeral
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.User
@@ -82,7 +82,7 @@ class DiscordUnoGame(
 
     override suspend fun obtainNewPlayer(
         user: User,
-        ack: EphemeralInteractionResponseBehavior,
+        ack: EphemeralMessageInteractionResponseBehavior,
         loading: FollowupMessage,
         userLocale: Locale?
     ): DiscordUnoPlayer {

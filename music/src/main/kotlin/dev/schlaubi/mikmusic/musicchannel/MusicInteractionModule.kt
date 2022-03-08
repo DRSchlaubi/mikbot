@@ -5,7 +5,7 @@ import com.kotlindiscord.kord.extensions.checks.inChannel
 import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.extensions.event
 import dev.kord.core.behavior.channel.withTyping
-import dev.kord.core.behavior.interaction.response.EphemeralInteractionResponseBehavior
+import dev.kord.core.behavior.interaction.response.EphemeralMessageInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.response.followUpEphemeral
 import dev.kord.core.behavior.reply
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
@@ -163,7 +163,7 @@ suspend fun Link.takeFirstMatch(musicPlayer: MusicPlayer, query: String): List<T
     }
 }
 
-private suspend fun EphemeralInteractionResponseBehavior.updateSchedulerOptions(
+private suspend fun EphemeralMessageInteractionResponseBehavior.updateSchedulerOptions(
     musicPlayer: MusicPlayer,
     translate: Translator,
     myProperty: KMutableProperty1<MusicPlayer, Boolean>,
@@ -181,7 +181,7 @@ private suspend fun EphemeralInteractionResponseBehavior.updateSchedulerOptions(
     callback = {}
 )
 
-private suspend fun EphemeralInteractionResponseBehavior.confirmation(
+private suspend fun EphemeralMessageInteractionResponseBehavior.confirmation(
     messageBuilder: MessageBuilder,
     translate: Translator
 ): Confirmation = confirmation(

@@ -1,7 +1,8 @@
 package dev.schlaubi.mikbot.plugin.api.util
 
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 
@@ -44,16 +45,13 @@ public suspend fun <T, S> Collection<T>.parallelMapIndexed(
     maxConcurrentRequests: Int? = null,
     mapper: suspend (index: Int, T) -> S
 ): List<S> {
-    val result = ArrayList<IndexedValue<S>>(size)
-
     val semaphore = maxConcurrentRequests?.let { Semaphore(it) }
 
-    coroutineScope {
-        forEachIndexed { index, item ->
-            launch {
+    val result = coroutineScope {
+        mapIndexed { index, item ->
+            async {
                 val block = suspend {
-                    val found = mapper(index, item)
-                    result.add(IndexedValue(index, found))
+                    mapper(index, item)
                 }
 
                 if (semaphore != null) {
@@ -65,7 +63,5 @@ public suspend fun <T, S> Collection<T>.parallelMapIndexed(
         }
     }
 
-    return result
-        .sortedBy(IndexedValue<S>::index)
-        .map(IndexedValue<S>::value)
+    return result.awaitAll()
 }

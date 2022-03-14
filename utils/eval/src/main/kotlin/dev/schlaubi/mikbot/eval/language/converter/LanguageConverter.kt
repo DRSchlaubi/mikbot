@@ -8,6 +8,7 @@ import com.kotlindiscord.kord.extensions.modules.annotations.converters.Converte
 import com.kotlindiscord.kord.extensions.modules.annotations.converters.ConverterType
 import com.kotlindiscord.kord.extensions.parser.StringParser
 import dev.kord.core.entity.interaction.OptionValue
+import dev.kord.core.entity.interaction.StringOptionValue
 import dev.kord.rest.builder.interaction.OptionsBuilder
 import dev.kord.rest.builder.interaction.StringChoiceBuilder
 import dev.schlaubi.mikbot.eval.language.LanguageProvider
@@ -30,7 +31,7 @@ class LanguageConverter(override var validator: Validator<LanguageProvider> = nu
         firstOrNull { it.displayName == arg || it.id == arg }
 
     override suspend fun parseOption(context: CommandContext, option: OptionValue<*>): Boolean {
-        val optionValue = (option as? OptionValue.StringOptionValue)?.value ?: return false
+        val optionValue = (option as? StringOptionValue)?.value ?: return false
         this.parsed = LanguageProvider.providers.providerByNameOrId(optionValue) ?: return false
         return true
     }

@@ -7,7 +7,7 @@ import com.kotlindiscord.kord.extensions.utils.waitForMessage
 import dev.kord.common.Color
 import dev.kord.common.annotation.KordPreview
 import dev.kord.core.behavior.channel.asChannelOf
-import dev.kord.core.behavior.interaction.edit
+import dev.kord.core.behavior.interaction.followup.edit
 import dev.kord.rest.builder.message.create.embed
 import dev.kord.rest.builder.message.modify.embed
 import dev.kord.x.emoji.Emojis

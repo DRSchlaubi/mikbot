@@ -87,7 +87,7 @@ jobs:
           path: ci-repo
       - uses: gradle/gradle-build-action@v1
         with:
-          arguments: buildRepository
+          arguments: buildDefaultResourceBundle assemblePlugin buildRepository
       - name: Commit changes
         run: |
           cd ci-repo

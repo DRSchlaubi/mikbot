@@ -1,0 +1,2281 @@
+Type-safe project accessors is an incubating feature.
+
+> Configure project :buildSrc
+WARNING: Unsupported Kotlin plugin version.
+The `embedded-kotlin` and `kotlin-dsl` plugins rely on features of Kotlin `1.5.31` that might work differently than in the requested version `1.6.10`.
+
+> Task :buildSrc:extractPrecompiledScriptPluginPlugins UP-TO-DATE
+> Task :buildSrc:generateScriptPluginAdapters UP-TO-DATE
+> Task :buildSrc:pluginDescriptors UP-TO-DATE
+> Task :buildSrc:processResources UP-TO-DATE
+> Task :buildSrc:processTestResources NO-SOURCE
+> Task :gradle-plugin:compileKotlin UP-TO-DATE
+> Task :gradle-plugin:compileJava UP-TO-DATE
+> Task :gradle-plugin:pluginDescriptors UP-TO-DATE
+> Task :gradle-plugin:processResources UP-TO-DATE
+> Task :gradle-plugin:classes UP-TO-DATE
+> Task :gradle-plugin:inspectClassesForKotlinIC UP-TO-DATE
+> Task :gradle-plugin:jar UP-TO-DATE
+> Task :buildSrc:generateExternalPluginSpecBuilders UP-TO-DATE
+> Task :buildSrc:compilePluginsBlocks UP-TO-DATE
+> Task :buildSrc:generatePrecompiledScriptPluginAccessors UP-TO-DATE
+> Task :buildSrc:compileKotlin UP-TO-DATE
+> Task :buildSrc:compileJava UP-TO-DATE
+> Task :buildSrc:compileGroovy NO-SOURCE
+> Task :buildSrc:classes UP-TO-DATE
+> Task :buildSrc:inspectClassesForKotlinIC UP-TO-DATE
+> Task :buildSrc:jar UP-TO-DATE
+> Task :buildSrc:assemble UP-TO-DATE
+> Task :buildSrc:compileTestKotlin NO-SOURCE
+> Task :buildSrc:pluginUnderTestMetadata UP-TO-DATE
+> Task :buildSrc:compileTestJava NO-SOURCE
+> Task :buildSrc:compileTestGroovy NO-SOURCE
+> Task :buildSrc:testClasses UP-TO-DATE
+> Task :buildSrc:test NO-SOURCE
+> Task :buildSrc:validatePlugins UP-TO-DATE
+> Task :buildSrc:check UP-TO-DATE
+> Task :buildSrc:build UP-TO-DATE
+
+> Configure project :votebot:common
+Kotlin Multiplatform Projects are an Alpha feature. See: https://kotlinlang.org/docs/reference/evolution/components-stability.html. To hide this message, add 'kotlin.mpp.stability.nowarn=true' to the Gradle properties.
+
+
+> Task :dependencies
+
+------------------------------------------------------------
+Root project 'mikmusic'
+------------------------------------------------------------
+
+annotationProcessor - Annotation processors and their dependencies for source set 'main'.
+No dependencies
+
+api - API dependencies for compilation 'main' (target  (jvm)). (n)
+No dependencies
+
+apiDependenciesMetadata
++--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10
+|    +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10
+|    |    +--- org.jetbrains:annotations:13.0
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.10
+|    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.10
+|         \--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10 (*)
++--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains:annotations:{strictly 13.0} -> 13.0 (c)
+\--- org.jetbrains.kotlin:kotlin-stdlib-common:{strictly 1.6.10} -> 1.6.10 (c)
+
+apiElements - API elements for main. (n)
+No dependencies
+
+apiElements-published (n)
+No dependencies
+
+archives - Configuration for archive artifacts. (n)
+No dependencies
+
+compileClasspath - Compile classpath for compilation 'main' (target  (jvm)).
++--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10
+|    +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10
+|    |    +--- org.jetbrains:annotations:13.0
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.10
+|    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.10
+|         \--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10 (*)
++--- org.pf4j:pf4j:3.6.0
+|    +--- org.slf4j:slf4j-api:1.7.25 -> 1.7.32
+|    \--- com.github.zafarkhaja:java-semver:0.9.0
++--- org.pf4j:pf4j-update:2.3.0
+|    +--- org.pf4j:pf4j:3.2.0 -> 3.6.0 (*)
+|    +--- com.google.code.gson:gson:2.2.4 -> 2.8.9
+|    \--- commons-codec:commons-codec:1.10
++--- com.google.code.gson:gson:2.8.9
++--- org.ow2.asm:asm:9.2
++--- io.insert-koin:koin-core:3.1.4
+|    \--- io.insert-koin:koin-core-jvm:3.1.4
+|         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.5.31 -> 1.6.10
+|         \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.31 -> 1.6.10 (*)
++--- ch.qos.logback:logback-classic:1.2.6
+|    +--- ch.qos.logback:logback-core:1.2.6
+|    \--- org.slf4j:slf4j-api:1.7.32
++--- dev.schlaubi:envconf:1.1
+|    \--- dev.schlaubi:envconf-jvm:1.1
+|         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.10 -> 1.6.10 (*)
+|         \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.5.10 -> 1.6.10
++--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2
+|    \--- org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.3.2
+|         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10 (*)
+|         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.10
+|         \--- org.jetbrains.kotlinx:kotlinx-serialization-core:1.3.2
+|              \--- org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.3.2
+|                   +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10 (*)
+|                   \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.10
++--- project :api
+|    +--- project :api:annotations
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    +--- com.kotlindiscord.kord.extensions:kord-extensions:1.5.2-MIKBOT
+|    |    +--- com.ibm.icu:icu4j:69.1
+|    |    +--- io.insert-koin:koin-core:3.1.4 (*)
+|    |    +--- io.insert-koin:koin-logger-slf4j:3.1.4
+|    |    |    +--- io.insert-koin:koin-core:3.1.4 (*)
+|    |    |    +--- org.slf4j:slf4j-api:1.7.25 -> 1.7.32
+|    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.31 -> 1.6.10 (*)
+|    |    +--- dev.kord:kord-core:0.8.x-SNAPSHOT
+|    |    |    +--- dev.kord:kord-common:0.8.x-SNAPSHOT
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-datetime:0.3.1
+|    |    |    |    |    \--- org.jetbrains.kotlinx:kotlinx-datetime-jvm:0.3.1
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    |    |    |         \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.5.30 -> 1.6.10
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2 (*)
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0
+|    |    |    |    |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm:1.6.0
+|    |    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0
+|    |    |    |    |         |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.0
+|    |    |    |    |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.0
+|    |    |    |    |         |         |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.0 (c)
+|    |    |    |    |         |         |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0 (c)
+|    |    |    |    |         |         |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.0 (c)
+|    |    |    |    |         |         |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-reactive:1.6.0 (c)
+|    |    |    |    |         |         |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0 (c)
+|    |    |    |    |         |         |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm:1.6.0 (c)
+|    |    |    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.0 (*)
+|    |    |    |    |         \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0 -> 1.6.10 (*)
+|    |    |    |    +--- org.jetbrains.kotlinx:atomicfu:0.17.0
+|    |    |    |    |    \--- org.jetbrains.kotlinx:atomicfu-jvm:0.17.0
+|    |    |    |    +--- io.github.microutils:kotlin-logging:2.1.21
+|    |    |    |    |    \--- io.github.microutils:kotlin-logging-jvm:2.1.21
+|    |    |    |    |         +--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |    |    +--- dev.kord:kord-rest:0.8.x-SNAPSHOT
+|    |    |    |    +--- dev.kord:kord-common:0.8.x-SNAPSHOT (*)
+|    |    |    |    +--- io.ktor:ktor-client-cio:1.6.7
+|    |    |    |    |    \--- io.ktor:ktor-client-cio-jvm:1.6.7
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         +--- io.ktor:ktor-client-core:1.6.7
+|    |    |    |    |         |    \--- io.ktor:ktor-client-core-jvm:1.6.7
+|    |    |    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         +--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         |         +--- io.ktor:ktor-http:1.6.7
+|    |    |    |    |         |         |    \--- io.ktor:ktor-http-jvm:1.6.7
+|    |    |    |    |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         |         |         +--- io.ktor:ktor-utils:1.6.7
+|    |    |    |    |         |         |         |    \--- io.ktor:ktor-utils-jvm:1.6.7
+|    |    |    |    |         |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         |         |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         |         |         |         +--- io.ktor:ktor-io:1.6.7
+|    |    |    |    |         |         |         |         |    \--- io.ktor:ktor-io-jvm:1.6.7
+|    |    |    |    |         |         |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         |         |         |         +--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         |         |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         |         |         |         |         \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         |         |         \--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         |         \--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         |         \--- io.ktor:ktor-http-cio:1.6.7
+|    |    |    |    |         |              \--- io.ktor:ktor-http-cio-jvm:1.6.7
+|    |    |    |    |         |                   +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |                   +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |                   +--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         |                   +--- io.ktor:ktor-network:1.6.7
+|    |    |    |    |         |                   |    \--- io.ktor:ktor-network-jvm:1.6.7
+|    |    |    |    |         |                   |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |                   |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |                   |         +--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         |                   |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         |                   |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         |                   |         \--- io.ktor:ktor-utils:1.6.7 (*)
+|    |    |    |    |         |                   +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         |                   +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         |                   \--- io.ktor:ktor-http:1.6.7 (*)
+|    |    |    |    |         +--- io.ktor:ktor-http-cio:1.6.7 (*)
+|    |    |    |    |         +--- io.ktor:ktor-network-tls:1.6.7
+|    |    |    |    |         |    \--- io.ktor:ktor-network-tls-jvm:1.6.7
+|    |    |    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         |         +--- io.ktor:ktor-network:1.6.7 (*)
+|    |    |    |    |         |         +--- io.ktor:ktor-utils:1.6.7 (*)
+|    |    |    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         \--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         \--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    +--- io.ktor:ktor-client-json:1.6.7
+|    |    |    |    |    \--- io.ktor:ktor-client-json-jvm:1.6.7
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         +--- io.ktor:ktor-client-core:1.6.7 (*)
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         \--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    +--- io.ktor:ktor-client-serialization:1.6.7
+|    |    |    |    |    \--- io.ktor:ktor-client-serialization-jvm:1.6.7
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         +--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         +--- io.ktor:ktor-client-core:1.6.7 (*)
+|    |    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0 -> 1.3.2 (*)
+|    |    |    |    |         \--- io.ktor:ktor-client-json:1.6.7 (*)
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |    |    +--- dev.kord:kord-gateway:0.8.x-SNAPSHOT
+|    |    |    |    +--- dev.kord:kord-common:0.8.x-SNAPSHOT (*)
+|    |    |    |    +--- io.ktor:ktor-client-json:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-client-websockets:1.6.7
+|    |    |    |    |    \--- io.ktor:ktor-client-websockets-jvm:1.6.7
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         +--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         \--- io.ktor:ktor-client-core:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-client-serialization:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-client-cio:1.6.7 (*)
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |    |    +--- dev.kord:kord-voice:0.8.x-SNAPSHOT
+|    |    |    |    +--- dev.kord:kord-common:0.8.x-SNAPSHOT (*)
+|    |    |    |    +--- dev.kord:kord-gateway:0.8.x-SNAPSHOT (*)
+|    |    |    |    +--- io.ktor:ktor-client-json:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-client-serialization:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-client-cio:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-network:1.6.7 (*)
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |    |    +--- dev.kord.cache:cache-api:{strictly [0.3.0, 0.4.0[; prefer latest.release} -> 0.3.0
+|    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.10 -> 1.6.10 (*)
+|    |    |    |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0 -> 1.6.0 (*)
+|    |    |    +--- dev.kord.cache:cache-map:{strictly [0.3.0, 0.4.0[; prefer latest.release} -> 0.3.0
+|    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.10 -> 1.6.10 (*)
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0 -> 1.6.0 (*)
+|    |    |    |    \--- dev.kord.cache:cache-api:0.3.0 (*)
+|    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |    +--- io.github.microutils:kotlin-logging:2.1.21 (*)
+|    |    +--- org.jetbrains.kotlinx:kotlinx-serialization-core:1.3.0 -> 1.3.2 (*)
+|    |    +--- io.sentry:sentry:5.5.2
+|    |    \--- com.kotlindiscord.kord.extensions:token-parser:1.5.2-MIKBOT
+|    +--- dev.kord.x:emoji:0.5.0
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.10 -> 1.6.10 (*)
+|    +--- org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.5.2 -> 1.6.0
+|    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0 (*)
+|    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.0 (*)
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0 -> 1.6.10 (*)
+|    +--- org.litote.kmongo:kmongo-coroutine-serialization:4.3.0
+|    |    +--- org.litote.kmongo:kmongo-coroutine-core:4.3.0
+|    |    |    +--- org.litote.kmongo:kmongo-async-shared:4.3.0
+|    |    |    |    +--- org.litote.kmongo:kmongo-property:4.3.0
+|    |    |    |    |    +--- org.litote.kmongo:kmongo-shared:4.3.0
+|    |    |    |    |    |    +--- org.litote.kmongo:kmongo-id:4.3.0
+|    |    |    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-reflect:1.5.30 -> 1.6.10
+|    |    |    |    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10 (*)
+|    |    |    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-reflect:1.5.30 -> 1.6.10 (*)
+|    |    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    |    |    |    +--- org.litote.kmongo:kmongo-data:4.3.0
+|    |    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    |    |    |    +--- org.litote:kreflect:1.0.0
+|    |    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.3.10 -> 1.6.10 (*)
+|    |    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-reflect:1.3.10 -> 1.6.10 (*)
+|    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    |    |    +--- org.mongodb:mongodb-driver-reactivestreams:4.3.2
+|    |    |    |    |    +--- org.mongodb:bson:4.3.2
+|    |    |    |    |    +--- org.mongodb:mongodb-driver-core:4.3.2
+|    |    |    |    |    |    \--- org.mongodb:bson:4.3.2
+|    |    |    |    |    \--- org.reactivestreams:reactive-streams:1.0.2 -> 1.0.3
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2 -> 1.6.0 (*)
+|    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-reactive:1.5.2 -> 1.6.0
+|    |    |    |    +--- org.reactivestreams:reactive-streams:1.0.3
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0 (*)
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.0 (*)
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0 -> 1.6.10 (*)
+|    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    +--- org.litote.kmongo:kmongo-serialization-mapping:4.3.0
+|    |    |    +--- org.litote.kmongo:kmongo-shared:4.3.0 (*)
+|    |    |    +--- org.litote.kmongo:kmongo-property:4.3.0 (*)
+|    |    |    +--- com.github.jershell:kbson:0.4.4
+|    |    |    +--- org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.2.2 -> 1.3.2 (*)
+|    |    |    +--- org.mongodb:bson:4.3.2
+|    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    +--- org.pf4j:pf4j:3.6.0 (*)
+|    +--- dev.schlaubi:envconf:1.1 (*)
+|    +--- ch.qos.logback:logback-classic:1.2.6 (*)
+|    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
++--- org.jetbrains.kotlin:kotlin-reflect:1.6.10 (*)
++--- io.insert-koin:koin-core:{strictly 3.1.4} -> 3.1.4 (c)
++--- ch.qos.logback:logback-classic:{strictly 1.2.6} -> 1.2.6 (c)
++--- org.jetbrains.kotlinx:kotlinx-serialization-json:{strictly 1.3.2} -> 1.3.2 (c)
++--- org.jetbrains.kotlin:kotlin-reflect:{strictly 1.6.10} -> 1.6.10 (c)
++--- com.google.code.gson:gson:{strictly 2.8.9} -> 2.8.9 (c)
++--- org.pf4j:pf4j:{strictly 3.6.0} -> 3.6.0 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.ow2.asm:asm:{strictly 9.2} -> 9.2 (c)
++--- dev.schlaubi:envconf:{strictly 1.1} -> 1.1 (c)
++--- org.pf4j:pf4j-update:{strictly 2.3.0} -> 2.3.0 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.slf4j:slf4j-api:{strictly 1.7.32} -> 1.7.32 (c)
++--- com.github.zafarkhaja:java-semver:{strictly 0.9.0} -> 0.9.0 (c)
++--- commons-codec:commons-codec:{strictly 1.10} -> 1.10 (c)
++--- io.insert-koin:koin-core-jvm:{strictly 3.1.4} -> 3.1.4 (c)
++--- ch.qos.logback:logback-core:{strictly 1.2.6} -> 1.2.6 (c)
++--- dev.schlaubi:envconf-jvm:{strictly 1.1} -> 1.1 (c)
++--- org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:{strictly 1.3.2} -> 1.3.2 (c)
++--- com.kotlindiscord.kord.extensions:kord-extensions:{strictly 1.5.2-MIKBOT} -> 1.5.2-MIKBOT (c)
++--- dev.kord.x:emoji:{strictly 0.5.0} -> 0.5.0 (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:{strictly 1.6.0} -> 1.6.0 (c)
++--- org.litote.kmongo:kmongo-coroutine-serialization:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.jetbrains:annotations:{strictly 13.0} -> 13.0 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib-common:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlinx:kotlinx-serialization-core:{strictly 1.3.2} -> 1.3.2 (c)
++--- com.ibm.icu:icu4j:{strictly 69.1} -> 69.1 (c)
++--- io.insert-koin:koin-logger-slf4j:{strictly 3.1.4} -> 3.1.4 (c)
++--- dev.kord:kord-core:{strictly 0.8.x-SNAPSHOT} -> 0.8.x-SNAPSHOT (c)
++--- io.github.microutils:kotlin-logging:{strictly 2.1.21} -> 2.1.21 (c)
++--- io.sentry:sentry:{strictly 5.5.2} -> 5.5.2 (c)
++--- com.kotlindiscord.kord.extensions:token-parser:{strictly 1.5.2-MIKBOT} -> 1.5.2-MIKBOT (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-core:{strictly 1.6.0} -> 1.6.0 (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:{strictly 1.6.0} -> 1.6.0 (c)
++--- org.litote.kmongo:kmongo-coroutine-core:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.litote.kmongo:kmongo-serialization-mapping:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:{strictly 1.3.2} -> 1.3.2 (c)
++--- dev.kord:kord-common:{strictly 0.8.x-SNAPSHOT} -> 0.8.x-SNAPSHOT (c)
++--- dev.kord:kord-rest:{strictly 0.8.x-SNAPSHOT} -> 0.8.x-SNAPSHOT (c)
++--- dev.kord:kord-gateway:{strictly 0.8.x-SNAPSHOT} -> 0.8.x-SNAPSHOT (c)
++--- dev.kord:kord-voice:{strictly 0.8.x-SNAPSHOT} -> 0.8.x-SNAPSHOT (c)
++--- dev.kord.cache:cache-api:{strictly 0.3.0} -> 0.3.0 (c)
++--- dev.kord.cache:cache-map:{strictly 0.3.0} -> 0.3.0 (c)
++--- io.github.microutils:kotlin-logging-jvm:{strictly 2.1.21} -> 2.1.21 (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:{strictly 1.6.0} -> 1.6.0 (c)
++--- org.litote.kmongo:kmongo-async-shared:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-reactive:{strictly 1.6.0} -> 1.6.0 (c)
++--- org.litote.kmongo:kmongo-shared:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.litote.kmongo:kmongo-property:{strictly 4.3.0} -> 4.3.0 (c)
++--- com.github.jershell:kbson:{strictly 0.4.4} -> 0.4.4 (c)
++--- org.mongodb:bson:{strictly 4.3.2} -> 4.3.2 (c)
++--- org.jetbrains.kotlinx:kotlinx-datetime:{strictly 0.3.1} -> 0.3.1 (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-test:{strictly 1.6.0} -> 1.6.0 (c)
++--- org.jetbrains.kotlinx:atomicfu:{strictly 0.17.0} -> 0.17.0 (c)
++--- io.ktor:ktor-client-cio:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-client-json:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-client-serialization:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-client-websockets:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-network:{strictly 1.6.7} -> 1.6.7 (c)
++--- org.reactivestreams:reactive-streams:{strictly 1.0.3} -> 1.0.3 (c)
++--- org.mongodb:mongodb-driver-reactivestreams:{strictly 4.3.2} -> 4.3.2 (c)
++--- org.litote.kmongo:kmongo-id:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.litote.kmongo:kmongo-data:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.litote:kreflect:{strictly 1.0.0} -> 1.0.0 (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm:{strictly 1.6.0} -> 1.6.0 (c)
++--- org.jetbrains.kotlinx:kotlinx-datetime-jvm:{strictly 0.3.1} -> 0.3.1 (c)
++--- org.jetbrains.kotlinx:atomicfu-jvm:{strictly 0.17.0} -> 0.17.0 (c)
++--- io.ktor:ktor-client-cio-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-client-json-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-client-serialization-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-client-websockets-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-network-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- org.mongodb:mongodb-driver-core:{strictly 4.3.2} -> 4.3.2 (c)
++--- io.ktor:ktor-client-core:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-http-cio:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-network-tls:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-utils:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-client-core-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-http-cio-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-network-tls-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-utils-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-http:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-io:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-http-jvm:{strictly 1.6.7} -> 1.6.7 (c)
+\--- io.ktor:ktor-io-jvm:{strictly 1.6.7} -> 1.6.7 (c)
+
+compileOnly - Compile only dependencies for compilation 'main' (target  (jvm)). (n)
+No dependencies
+
+compileOnlyDependenciesMetadata
+No dependencies
+
+default - Configuration for default artifacts. (n)
+No dependencies
+
+implementation - Implementation only dependencies for compilation 'main' (target  (jvm)). (n)
++--- org.pf4j:pf4j:3.6.0 (n)
++--- org.pf4j:pf4j-update:2.3.0 (n)
++--- com.google.code.gson:gson:2.8.9 (n)
++--- org.ow2.asm:asm:9.2 (n)
++--- io.insert-koin:koin-core:3.1.4 (n)
++--- ch.qos.logback:logback-classic:1.2.6 (n)
++--- dev.schlaubi:envconf:1.1 (n)
++--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2 (n)
++--- project api (n)
+\--- org.jetbrains.kotlin:kotlin-reflect:1.6.10 (n)
+
+implementationDependenciesMetadata
++--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10
+|    +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10
+|    |    +--- org.jetbrains:annotations:13.0
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.10
+|    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.10
+|         \--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10 (*)
++--- org.pf4j:pf4j:3.6.0
+|    +--- org.slf4j:slf4j-api:1.7.25 -> 1.7.32
+|    \--- com.github.zafarkhaja:java-semver:0.9.0
++--- org.pf4j:pf4j-update:2.3.0
+|    +--- org.pf4j:pf4j:3.2.0 -> 3.6.0 (*)
+|    +--- com.google.code.gson:gson:2.2.4 -> 2.8.9
+|    \--- commons-codec:commons-codec:1.10
++--- com.google.code.gson:gson:2.8.9
++--- org.ow2.asm:asm:9.2
++--- io.insert-koin:koin-core:3.1.4
+|    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.5.31 -> 1.6.10
++--- ch.qos.logback:logback-classic:1.2.6
+|    +--- ch.qos.logback:logback-core:1.2.6
+|    \--- org.slf4j:slf4j-api:1.7.32
++--- dev.schlaubi:envconf:1.1
+|    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.5.10 -> 1.6.10
++--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2
+|    +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.10
+|    \--- org.jetbrains.kotlinx:kotlinx-serialization-core:1.3.2
+|         \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.10
++--- project :api
+|    +--- project :api:annotations
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    +--- com.kotlindiscord.kord.extensions:kord-extensions:1.5.2-MIKBOT
+|    |    +--- com.ibm.icu:icu4j:69.1
+|    |    +--- io.insert-koin:koin-core:3.1.4 (*)
+|    |    +--- io.insert-koin:koin-logger-slf4j:3.1.4
+|    |    |    +--- io.insert-koin:koin-core:3.1.4 (*)
+|    |    |    +--- org.slf4j:slf4j-api:1.7.25 -> 1.7.32
+|    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.31 -> 1.6.10 (*)
+|    |    +--- dev.kord:kord-core:0.8.x-SNAPSHOT
+|    |    |    +--- dev.kord:kord-common:0.8.x-SNAPSHOT
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-datetime:0.3.1
+|    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.5.30 -> 1.6.10
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2 (*)
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0
+|    |    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0
+|    |    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    +--- org.jetbrains.kotlinx:atomicfu:0.17.0
+|    |    |    |    +--- io.github.microutils:kotlin-logging:2.1.21
+|    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |    |    +--- dev.kord:kord-rest:0.8.x-SNAPSHOT
+|    |    |    |    +--- dev.kord:kord-common:0.8.x-SNAPSHOT (*)
+|    |    |    |    +--- io.ktor:ktor-client-cio:1.6.7
+|    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |    +--- io.ktor:ktor-client-core:1.6.7
+|    |    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |    |    +--- io.ktor:ktor-http:1.6.7
+|    |    |    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |    |    |    \--- io.ktor:ktor-utils:1.6.7
+|    |    |    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |    |    |         \--- io.ktor:ktor-io:1.6.7
+|    |    |    |    |    |    |              +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |    |    |              \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |    |    \--- io.ktor:ktor-http-cio:1.6.7
+|    |    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |    |         \--- io.ktor:ktor-http:1.6.7 (*)
+|    |    |    |    |    +--- io.ktor:ktor-http-cio:1.6.7 (*)
+|    |    |    |    |    \--- io.ktor:ktor-network-tls:1.6.7
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         +--- io.ktor:ktor-network:1.6.7
+|    |    |    |    |         |    +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         |    \--- io.ktor:ktor-utils:1.6.7 (*)
+|    |    |    |    |         \--- io.ktor:ktor-utils:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-client-json:1.6.7
+|    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |    \--- io.ktor:ktor-client-core:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-client-serialization:1.6.7
+|    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |    +--- io.ktor:ktor-client-core:1.6.7 (*)
+|    |    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0 -> 1.3.2 (*)
+|    |    |    |    |    \--- io.ktor:ktor-client-json:1.6.7 (*)
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |    |    +--- dev.kord:kord-gateway:0.8.x-SNAPSHOT
+|    |    |    |    +--- dev.kord:kord-common:0.8.x-SNAPSHOT (*)
+|    |    |    |    +--- io.ktor:ktor-client-json:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-client-websockets:1.6.7
+|    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |    \--- io.ktor:ktor-client-core:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-client-serialization:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-client-cio:1.6.7 (*)
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |    |    +--- dev.kord:kord-voice:0.8.x-SNAPSHOT
+|    |    |    |    +--- dev.kord:kord-common:0.8.x-SNAPSHOT (*)
+|    |    |    |    +--- dev.kord:kord-gateway:0.8.x-SNAPSHOT (*)
+|    |    |    |    +--- io.ktor:ktor-client-json:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-client-serialization:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-client-cio:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-network:1.6.7 (*)
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |    |    +--- dev.kord.cache:cache-api:{strictly [0.3.0, 0.4.0[; prefer latest.release} -> 0.3.0
+|    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.10 -> 1.6.10 (*)
+|    |    |    |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0 -> 1.6.0 (*)
+|    |    |    +--- dev.kord.cache:cache-map:{strictly [0.3.0, 0.4.0[; prefer latest.release} -> 0.3.0
+|    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.10 -> 1.6.10 (*)
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0 -> 1.6.0 (*)
+|    |    |    |    \--- dev.kord.cache:cache-api:0.3.0 (*)
+|    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |    +--- io.github.microutils:kotlin-logging:2.1.21 (*)
+|    |    +--- org.jetbrains.kotlinx:kotlinx-serialization-core:1.3.0 -> 1.3.2 (*)
+|    |    +--- io.sentry:sentry:5.5.2
+|    |    \--- com.kotlindiscord.kord.extensions:token-parser:1.5.2-MIKBOT
+|    +--- dev.kord.x:emoji:0.5.0
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.10 -> 1.6.10 (*)
+|    +--- org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.5.2
+|    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2 -> 1.6.0 (*)
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.30 -> 1.6.10 (*)
+|    +--- org.litote.kmongo:kmongo-coroutine-serialization:4.3.0
+|    |    +--- org.litote.kmongo:kmongo-coroutine-core:4.3.0
+|    |    |    +--- org.litote.kmongo:kmongo-async-shared:4.3.0
+|    |    |    |    +--- org.litote.kmongo:kmongo-property:4.3.0
+|    |    |    |    |    +--- org.litote.kmongo:kmongo-shared:4.3.0
+|    |    |    |    |    |    +--- org.litote.kmongo:kmongo-id:4.3.0
+|    |    |    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-reflect:1.5.30 -> 1.6.10
+|    |    |    |    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10 (*)
+|    |    |    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-reflect:1.5.30 -> 1.6.10 (*)
+|    |    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    |    |    |    +--- org.litote.kmongo:kmongo-data:4.3.0
+|    |    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    |    |    |    +--- org.litote:kreflect:1.0.0
+|    |    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.3.10 -> 1.6.10 (*)
+|    |    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-reflect:1.3.10 -> 1.6.10 (*)
+|    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    |    |    +--- org.mongodb:mongodb-driver-reactivestreams:4.3.2
+|    |    |    |    |    +--- org.mongodb:bson:4.3.2
+|    |    |    |    |    +--- org.mongodb:mongodb-driver-core:4.3.2
+|    |    |    |    |    |    \--- org.mongodb:bson:4.3.2
+|    |    |    |    |    \--- org.reactivestreams:reactive-streams:1.0.2 -> 1.0.3
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2 -> 1.6.0 (*)
+|    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-reactive:1.5.2
+|    |    |    |    +--- org.reactivestreams:reactive-streams:1.0.3
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2 -> 1.6.0 (*)
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.30 -> 1.6.10 (*)
+|    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    +--- org.litote.kmongo:kmongo-serialization-mapping:4.3.0
+|    |    |    +--- org.litote.kmongo:kmongo-shared:4.3.0 (*)
+|    |    |    +--- org.litote.kmongo:kmongo-property:4.3.0 (*)
+|    |    |    +--- com.github.jershell:kbson:0.4.4
+|    |    |    +--- org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.2.2
+|    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.5.20 -> 1.6.10 (*)
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.5.20 -> 1.6.10
+|    |    |    +--- org.mongodb:bson:4.3.2
+|    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    +--- org.pf4j:pf4j:3.6.0 (*)
+|    +--- dev.schlaubi:envconf:1.1 (*)
+|    +--- ch.qos.logback:logback-classic:1.2.6 (*)
+|    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
++--- org.jetbrains.kotlin:kotlin-reflect:1.6.10 (*)
++--- io.insert-koin:koin-core:{strictly 3.1.4} -> 3.1.4 (c)
++--- ch.qos.logback:logback-classic:{strictly 1.2.6} -> 1.2.6 (c)
++--- org.jetbrains.kotlinx:kotlinx-serialization-json:{strictly 1.3.2} -> 1.3.2 (c)
++--- org.jetbrains.kotlin:kotlin-reflect:{strictly 1.6.10} -> 1.6.10 (c)
++--- com.google.code.gson:gson:{strictly 2.8.9} -> 2.8.9 (c)
++--- org.pf4j:pf4j:{strictly 3.6.0} -> 3.6.0 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.ow2.asm:asm:{strictly 9.2} -> 9.2 (c)
++--- dev.schlaubi:envconf:{strictly 1.1} -> 1.1 (c)
++--- org.pf4j:pf4j-update:{strictly 2.3.0} -> 2.3.0 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.slf4j:slf4j-api:{strictly 1.7.32} -> 1.7.32 (c)
++--- com.github.zafarkhaja:java-semver:{strictly 0.9.0} -> 0.9.0 (c)
++--- commons-codec:commons-codec:{strictly 1.10} -> 1.10 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib-common:{strictly 1.6.10} -> 1.6.10 (c)
++--- ch.qos.logback:logback-core:{strictly 1.2.6} -> 1.2.6 (c)
++--- org.jetbrains.kotlinx:kotlinx-serialization-core:{strictly 1.3.2} -> 1.3.2 (c)
++--- com.kotlindiscord.kord.extensions:kord-extensions:{strictly 1.5.2-MIKBOT} -> 1.5.2-MIKBOT (c)
++--- dev.kord.x:emoji:{strictly 0.5.0} -> 0.5.0 (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:{strictly 1.5.2} -> 1.5.2 (c)
++--- org.litote.kmongo:kmongo-coroutine-serialization:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.jetbrains:annotations:{strictly 13.0} -> 13.0 (c)
++--- com.ibm.icu:icu4j:{strictly 69.1} -> 69.1 (c)
++--- io.insert-koin:koin-logger-slf4j:{strictly 3.1.4} -> 3.1.4 (c)
++--- dev.kord:kord-core:{strictly 0.8.x-SNAPSHOT} -> 0.8.x-SNAPSHOT (c)
++--- io.github.microutils:kotlin-logging:{strictly 2.1.21} -> 2.1.21 (c)
++--- io.sentry:sentry:{strictly 5.5.2} -> 5.5.2 (c)
++--- com.kotlindiscord.kord.extensions:token-parser:{strictly 1.5.2-MIKBOT} -> 1.5.2-MIKBOT (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-core:{strictly 1.6.0} -> 1.6.0 (c)
++--- org.litote.kmongo:kmongo-coroutine-core:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.litote.kmongo:kmongo-serialization-mapping:{strictly 4.3.0} -> 4.3.0 (c)
++--- dev.kord:kord-common:{strictly 0.8.x-SNAPSHOT} -> 0.8.x-SNAPSHOT (c)
++--- dev.kord:kord-rest:{strictly 0.8.x-SNAPSHOT} -> 0.8.x-SNAPSHOT (c)
++--- dev.kord:kord-gateway:{strictly 0.8.x-SNAPSHOT} -> 0.8.x-SNAPSHOT (c)
++--- dev.kord:kord-voice:{strictly 0.8.x-SNAPSHOT} -> 0.8.x-SNAPSHOT (c)
++--- dev.kord.cache:cache-api:{strictly 0.3.0} -> 0.3.0 (c)
++--- dev.kord.cache:cache-map:{strictly 0.3.0} -> 0.3.0 (c)
++--- org.litote.kmongo:kmongo-async-shared:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-reactive:{strictly 1.5.2} -> 1.5.2 (c)
++--- org.litote.kmongo:kmongo-shared:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.litote.kmongo:kmongo-property:{strictly 4.3.0} -> 4.3.0 (c)
++--- com.github.jershell:kbson:{strictly 0.4.4} -> 0.4.4 (c)
++--- org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:{strictly 1.2.2} -> 1.2.2 (c)
++--- org.mongodb:bson:{strictly 4.3.2} -> 4.3.2 (c)
++--- org.jetbrains.kotlinx:kotlinx-datetime:{strictly 0.3.1} -> 0.3.1 (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-test:{strictly 1.6.0} -> 1.6.0 (c)
++--- org.jetbrains.kotlinx:atomicfu:{strictly 0.17.0} -> 0.17.0 (c)
++--- io.ktor:ktor-client-cio:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-client-json:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-client-serialization:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-client-websockets:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-network:{strictly 1.6.7} -> 1.6.7 (c)
++--- org.mongodb:mongodb-driver-reactivestreams:{strictly 4.3.2} -> 4.3.2 (c)
++--- org.reactivestreams:reactive-streams:{strictly 1.0.3} -> 1.0.3 (c)
++--- org.litote.kmongo:kmongo-id:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.litote.kmongo:kmongo-data:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.litote:kreflect:{strictly 1.0.0} -> 1.0.0 (c)
++--- io.ktor:ktor-client-core:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-http-cio:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-network-tls:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-utils:{strictly 1.6.7} -> 1.6.7 (c)
++--- org.mongodb:mongodb-driver-core:{strictly 4.3.2} -> 4.3.2 (c)
++--- io.ktor:ktor-http:{strictly 1.6.7} -> 1.6.7 (c)
+\--- io.ktor:ktor-io:{strictly 1.6.7} -> 1.6.7 (c)
+
+intransitiveDependenciesMetadata
+No dependencies
+
+kotlinCompilerClasspath
++--- org.jetbrains.kotlin:kotlin-compiler-embeddable:1.6.10
+|    +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10
+|    |    +--- org.jetbrains:annotations:13.0
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.10
+|    +--- org.jetbrains.kotlin:kotlin-script-runtime:1.6.10
+|    +--- org.jetbrains.kotlin:kotlin-reflect:1.6.10
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10 (*)
+|    +--- org.jetbrains.kotlin:kotlin-daemon-embeddable:1.6.10
+|    +--- org.jetbrains.intellij.deps:trove4j:1.0.20181211
+|    \--- net.java.dev.jna:jna:5.6.0
++--- org.jetbrains.kotlin:kotlin-compiler-embeddable:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlin:kotlin-script-runtime:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlin:kotlin-reflect:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlin:kotlin-daemon-embeddable:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.intellij.deps:trove4j:{strictly 1.0.20181211} -> 1.0.20181211 (c)
++--- net.java.dev.jna:jna:{strictly 5.6.0} -> 5.6.0 (c)
++--- org.jetbrains:annotations:{strictly 13.0} -> 13.0 (c)
+\--- org.jetbrains.kotlin:kotlin-stdlib-common:{strictly 1.6.10} -> 1.6.10 (c)
+
+kotlinCompilerPluginClasspath
+No dependencies
+
+kotlinCompilerPluginClasspathMain - Kotlin compiler plugins for compilation 'main' (target  (jvm))
++--- org.jetbrains.kotlin:kotlin-serialization:1.6.10
+|    \--- org.jetbrains.kotlin:kotlin-gradle-plugin-api:1.6.10
+|         +--- org.jetbrains.kotlin:kotlin-native-utils:1.6.10
+|         |    \--- org.jetbrains.kotlin:kotlin-util-io:1.6.10
+|         \--- org.jetbrains.kotlin:kotlin-project-model:1.6.10
++--- org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:1.6.10
+|    +--- org.jetbrains.kotlin:kotlin-scripting-compiler-impl-embeddable:1.6.10
+|    |    +--- org.jetbrains.kotlin:kotlin-scripting-common:1.6.10
+|    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10
+|    |    |         +--- org.jetbrains:annotations:13.0
+|    |    |         \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.10
+|    |    +--- org.jetbrains.kotlin:kotlin-scripting-jvm:1.6.10
+|    |    |    +--- org.jetbrains.kotlin:kotlin-script-runtime:1.6.10
+|    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10 (*)
+|    |    |    \--- org.jetbrains.kotlin:kotlin-scripting-common:1.6.10 (*)
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10 (*)
+|    \--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10 (*)
++--- org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlin:kotlin-serialization:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlin:kotlin-gradle-plugin-api:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlin:kotlin-scripting-compiler-impl-embeddable:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlin:kotlin-native-utils:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlin:kotlin-project-model:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlin:kotlin-scripting-common:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlin:kotlin-scripting-jvm:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains:annotations:{strictly 13.0} -> 13.0 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib-common:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlin:kotlin-util-io:{strictly 1.6.10} -> 1.6.10 (c)
+\--- org.jetbrains.kotlin:kotlin-script-runtime:{strictly 1.6.10} -> 1.6.10 (c)
+
+kotlinCompilerPluginClasspathTest - Kotlin compiler plugins for compilation 'test' (target  (jvm))
++--- org.jetbrains.kotlin:kotlin-serialization:1.6.10
+|    \--- org.jetbrains.kotlin:kotlin-gradle-plugin-api:1.6.10
+|         +--- org.jetbrains.kotlin:kotlin-native-utils:1.6.10
+|         |    \--- org.jetbrains.kotlin:kotlin-util-io:1.6.10
+|         \--- org.jetbrains.kotlin:kotlin-project-model:1.6.10
++--- org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:1.6.10
+|    +--- org.jetbrains.kotlin:kotlin-scripting-compiler-impl-embeddable:1.6.10
+|    |    +--- org.jetbrains.kotlin:kotlin-scripting-common:1.6.10
+|    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10
+|    |    |         +--- org.jetbrains:annotations:13.0
+|    |    |         \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.10
+|    |    +--- org.jetbrains.kotlin:kotlin-scripting-jvm:1.6.10
+|    |    |    +--- org.jetbrains.kotlin:kotlin-script-runtime:1.6.10
+|    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10 (*)
+|    |    |    \--- org.jetbrains.kotlin:kotlin-scripting-common:1.6.10 (*)
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10 (*)
+|    \--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10 (*)
++--- org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlin:kotlin-serialization:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlin:kotlin-gradle-plugin-api:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlin:kotlin-scripting-compiler-impl-embeddable:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlin:kotlin-native-utils:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlin:kotlin-project-model:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlin:kotlin-scripting-common:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlin:kotlin-scripting-jvm:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains:annotations:{strictly 13.0} -> 13.0 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib-common:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlin:kotlin-util-io:{strictly 1.6.10} -> 1.6.10 (c)
+\--- org.jetbrains.kotlin:kotlin-script-runtime:{strictly 1.6.10} -> 1.6.10 (c)
+
+kotlinKlibCommonizerClasspath
++--- org.jetbrains.kotlin:kotlin-klib-commonizer-embeddable:1.6.10
+|    +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10
+|    |    +--- org.jetbrains:annotations:13.0
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.10
+|    \--- org.jetbrains.kotlin:kotlin-compiler-embeddable:1.6.10
+|         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10 (*)
+|         +--- org.jetbrains.kotlin:kotlin-script-runtime:1.6.10
+|         +--- org.jetbrains.kotlin:kotlin-reflect:1.6.10
+|         |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10 (*)
+|         +--- org.jetbrains.kotlin:kotlin-daemon-embeddable:1.6.10
+|         +--- org.jetbrains.intellij.deps:trove4j:1.0.20181211
+|         \--- net.java.dev.jna:jna:5.6.0
++--- org.jetbrains.kotlin:kotlin-klib-commonizer-embeddable:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlin:kotlin-compiler-embeddable:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains:annotations:{strictly 13.0} -> 13.0 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib-common:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlin:kotlin-script-runtime:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlin:kotlin-reflect:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlin:kotlin-daemon-embeddable:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.intellij.deps:trove4j:{strictly 1.0.20181211} -> 1.0.20181211 (c)
+\--- net.java.dev.jna:jna:{strictly 5.6.0} -> 5.6.0 (c)
+
+kotlinNativeCompilerPluginClasspath
+No dependencies
+
+kotlinScriptDef - Script filename extensions discovery classpath configuration
+No dependencies
+
+kotlinScriptDefExtensions
+No dependencies
+
+ktlint - Main ktlint-gradle configuration
++--- com.pinterest:ktlint:0.42.1
+|    +--- com.pinterest.ktlint:ktlint-core:0.42.1
+|    |    +--- org.jetbrains.kotlin:kotlin-compiler-embeddable:1.5.20
+|    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.5.20
+|    |    |    |    +--- org.jetbrains:annotations:13.0
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.5.20
+|    |    |    +--- org.jetbrains.kotlin:kotlin-script-runtime:1.5.20
+|    |    |    +--- org.jetbrains.kotlin:kotlin-reflect:1.5.20
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.20 (*)
+|    |    |    +--- org.jetbrains.kotlin:kotlin-daemon-embeddable:1.5.20
+|    |    |    \--- org.jetbrains.intellij.deps:trove4j:1.0.20181211
+|    |    +--- org.ec4j.core:ec4j-core:0.3.0
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.20
+|    |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.5.20 (*)
+|    |         \--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.20
+|    |              \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.20 (*)
+|    +--- com.pinterest.ktlint:ktlint-reporter-baseline:0.42.1
+|    |    +--- com.pinterest.ktlint:ktlint-core:0.42.1 (*)
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.20 (*)
+|    +--- com.pinterest.ktlint:ktlint-reporter-checkstyle:0.42.1
+|    |    +--- com.pinterest.ktlint:ktlint-core:0.42.1 (*)
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.20 (*)
+|    +--- com.pinterest.ktlint:ktlint-reporter-json:0.42.1
+|    |    +--- com.pinterest.ktlint:ktlint-core:0.42.1 (*)
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.20 (*)
+|    +--- com.pinterest.ktlint:ktlint-reporter-html:0.42.1
+|    |    +--- com.pinterest.ktlint:ktlint-core:0.42.1 (*)
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.20 (*)
+|    +--- com.pinterest.ktlint:ktlint-reporter-plain:0.42.1
+|    |    +--- com.pinterest.ktlint:ktlint-core:0.42.1 (*)
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.20 (*)
+|    +--- com.pinterest.ktlint:ktlint-reporter-sarif:0.42.1
+|    |    +--- com.pinterest.ktlint:ktlint-core:0.42.1 (*)
+|    |    +--- io.github.detekt.sarif4k:sarif4k:0.0.1
+|    |    |    +--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0
+|    |    |    |    \--- org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.1.0
+|    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.4.30 -> 1.5.20 (*)
+|    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.4.30 -> 1.5.20
+|    |    |    |         \--- org.jetbrains.kotlinx:kotlinx-serialization-core:1.1.0
+|    |    |    |              \--- org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.1.0
+|    |    |    |                   +--- org.jetbrains.kotlin:kotlin-stdlib:1.4.30 -> 1.5.20 (*)
+|    |    |    |                   \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.4.30 -> 1.5.20
+|    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.4.31 -> 1.5.20 (*)
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.20 (*)
+|    +--- com.pinterest.ktlint:ktlint-ruleset-experimental:0.42.1
+|    |    +--- com.pinterest.ktlint:ktlint-core:0.42.1 (*)
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.20 (*)
+|    +--- com.pinterest.ktlint:ktlint-ruleset-standard:0.42.1
+|    |    +--- com.pinterest.ktlint:ktlint-core:0.42.1 (*)
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.20 (*)
+|    +--- com.pinterest.ktlint:ktlint-ruleset-test:0.42.1
+|    |    +--- com.pinterest.ktlint:ktlint-core:0.42.1 (*)
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.20 (*)
+|    +--- org.jetbrains.kotlin:kotlin-compiler-embeddable:1.5.20 (*)
+|    +--- com.github.shyiko.klob:klob:0.2.1
+|    +--- info.picocli:picocli:3.9.6
+|    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.20 (*)
++--- com.pinterest:ktlint:{strictly 0.42.1} -> 0.42.1 (c)
++--- com.pinterest.ktlint:ktlint-core:{strictly 0.42.1} -> 0.42.1 (c)
++--- com.pinterest.ktlint:ktlint-reporter-baseline:{strictly 0.42.1} -> 0.42.1 (c)
++--- com.pinterest.ktlint:ktlint-reporter-checkstyle:{strictly 0.42.1} -> 0.42.1 (c)
++--- com.pinterest.ktlint:ktlint-reporter-json:{strictly 0.42.1} -> 0.42.1 (c)
++--- com.pinterest.ktlint:ktlint-reporter-html:{strictly 0.42.1} -> 0.42.1 (c)
++--- com.pinterest.ktlint:ktlint-reporter-plain:{strictly 0.42.1} -> 0.42.1 (c)
++--- com.pinterest.ktlint:ktlint-reporter-sarif:{strictly 0.42.1} -> 0.42.1 (c)
++--- com.pinterest.ktlint:ktlint-ruleset-experimental:{strictly 0.42.1} -> 0.42.1 (c)
++--- com.pinterest.ktlint:ktlint-ruleset-standard:{strictly 0.42.1} -> 0.42.1 (c)
++--- com.pinterest.ktlint:ktlint-ruleset-test:{strictly 0.42.1} -> 0.42.1 (c)
++--- org.jetbrains.kotlin:kotlin-compiler-embeddable:{strictly 1.5.20} -> 1.5.20 (c)
++--- com.github.shyiko.klob:klob:{strictly 0.2.1} -> 0.2.1 (c)
++--- info.picocli:picocli:{strictly 3.9.6} -> 3.9.6 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:{strictly 1.5.20} -> 1.5.20 (c)
++--- org.ec4j.core:ec4j-core:{strictly 0.3.0} -> 0.3.0 (c)
++--- io.github.detekt.sarif4k:sarif4k:{strictly 0.0.1} -> 0.0.1 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib:{strictly 1.5.20} -> 1.5.20 (c)
++--- org.jetbrains.kotlin:kotlin-script-runtime:{strictly 1.5.20} -> 1.5.20 (c)
++--- org.jetbrains.kotlin:kotlin-reflect:{strictly 1.5.20} -> 1.5.20 (c)
++--- org.jetbrains.kotlin:kotlin-daemon-embeddable:{strictly 1.5.20} -> 1.5.20 (c)
++--- org.jetbrains.intellij.deps:trove4j:{strictly 1.0.20181211} -> 1.0.20181211 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:{strictly 1.5.20} -> 1.5.20 (c)
++--- org.jetbrains.kotlinx:kotlinx-serialization-json:{strictly 1.1.0} -> 1.1.0 (c)
++--- org.jetbrains:annotations:{strictly 13.0} -> 13.0 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib-common:{strictly 1.5.20} -> 1.5.20 (c)
++--- org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:{strictly 1.1.0} -> 1.1.0 (c)
++--- org.jetbrains.kotlinx:kotlinx-serialization-core:{strictly 1.1.0} -> 1.1.0 (c)
+\--- org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:{strictly 1.1.0} -> 1.1.0 (c)
+
+ktlintBaselineReporter - Provides KtLint baseline reporter required to generate baseline file
++--- com.pinterest.ktlint:ktlint-reporter-baseline:0.42.1
+|    +--- com.pinterest.ktlint:ktlint-core:0.42.1
+|    |    +--- org.jetbrains.kotlin:kotlin-compiler-embeddable:1.5.20
+|    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.5.20
+|    |    |    |    +--- org.jetbrains:annotations:13.0
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.5.20
+|    |    |    +--- org.jetbrains.kotlin:kotlin-script-runtime:1.5.20
+|    |    |    +--- org.jetbrains.kotlin:kotlin-reflect:1.5.20
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.20 (*)
+|    |    |    +--- org.jetbrains.kotlin:kotlin-daemon-embeddable:1.5.20
+|    |    |    \--- org.jetbrains.intellij.deps:trove4j:1.0.20181211
+|    |    +--- org.ec4j.core:ec4j-core:0.3.0
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.20
+|    |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.5.20 (*)
+|    |         \--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.20
+|    |              \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.20 (*)
+|    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.20 (*)
++--- com.pinterest.ktlint:ktlint-reporter-baseline:{strictly 0.42.1} -> 0.42.1 (c)
++--- com.pinterest.ktlint:ktlint-core:{strictly 0.42.1} -> 0.42.1 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:{strictly 1.5.20} -> 1.5.20 (c)
++--- org.jetbrains.kotlin:kotlin-compiler-embeddable:{strictly 1.5.20} -> 1.5.20 (c)
++--- org.ec4j.core:ec4j-core:{strictly 0.3.0} -> 0.3.0 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib:{strictly 1.5.20} -> 1.5.20 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:{strictly 1.5.20} -> 1.5.20 (c)
++--- org.jetbrains.kotlin:kotlin-script-runtime:{strictly 1.5.20} -> 1.5.20 (c)
++--- org.jetbrains.kotlin:kotlin-reflect:{strictly 1.5.20} -> 1.5.20 (c)
++--- org.jetbrains.kotlin:kotlin-daemon-embeddable:{strictly 1.5.20} -> 1.5.20 (c)
++--- org.jetbrains.intellij.deps:trove4j:{strictly 1.0.20181211} -> 1.0.20181211 (c)
++--- org.jetbrains:annotations:{strictly 13.0} -> 13.0 (c)
+\--- org.jetbrains.kotlin:kotlin-stdlib-common:{strictly 1.5.20} -> 1.5.20 (c)
+
+ktlintReporter - All ktlint custom reporters dependencies
+No dependencies
+
+ktlintRuleset - All ktlint rulesets dependencies
+No dependencies
+
+runtimeClasspath - Runtime classpath of compilation 'main' (target  (jvm)).
++--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10
+|    +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10
+|    |    +--- org.jetbrains:annotations:13.0
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.10
+|    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.10
+|         \--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10 (*)
++--- org.pf4j:pf4j:3.6.0
+|    +--- org.slf4j:slf4j-api:1.7.25 -> 1.7.32
+|    \--- com.github.zafarkhaja:java-semver:0.9.0
++--- org.pf4j:pf4j-update:2.3.0
+|    +--- org.pf4j:pf4j:3.2.0 -> 3.6.0 (*)
+|    +--- com.google.code.gson:gson:2.2.4 -> 2.8.9
+|    \--- commons-codec:commons-codec:1.10
++--- com.google.code.gson:gson:2.8.9
++--- org.ow2.asm:asm:9.2
++--- io.insert-koin:koin-core:3.1.4
+|    \--- io.insert-koin:koin-core-jvm:3.1.4
+|         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.5.31 -> 1.6.10
+|         \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.31 -> 1.6.10 (*)
++--- ch.qos.logback:logback-classic:1.2.6
+|    +--- ch.qos.logback:logback-core:1.2.6
+|    \--- org.slf4j:slf4j-api:1.7.32
++--- dev.schlaubi:envconf:1.1
+|    \--- dev.schlaubi:envconf-jvm:1.1
+|         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.10 -> 1.6.10 (*)
+|         \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.5.10 -> 1.6.10
++--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2
+|    \--- org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.3.2
+|         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10 (*)
+|         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.10
+|         \--- org.jetbrains.kotlinx:kotlinx-serialization-core:1.3.2
+|              \--- org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.3.2
+|                   +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10 (*)
+|                   \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.10
++--- project :api
+|    +--- project :api:annotations
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    +--- com.kotlindiscord.kord.extensions:kord-extensions:1.5.2-MIKBOT
+|    |    +--- commons-validator:commons-validator:1.7
+|    |    |    +--- commons-beanutils:commons-beanutils:1.9.4
+|    |    |    |    +--- commons-logging:commons-logging:1.2
+|    |    |    |    \--- commons-collections:commons-collections:3.2.2
+|    |    |    +--- commons-digester:commons-digester:2.1
+|    |    |    +--- commons-logging:commons-logging:1.2
+|    |    |    \--- commons-collections:commons-collections:3.2.2
+|    |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |    +--- com.kotlindiscord.kord.extensions:annotations:1.5.2-MIKBOT
+|    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |    +--- com.ibm.icu:icu4j:69.1
+|    |    +--- io.insert-koin:koin-core:3.1.4 (*)
+|    |    +--- io.insert-koin:koin-logger-slf4j:3.1.4
+|    |    |    +--- io.insert-koin:koin-core:3.1.4 (*)
+|    |    |    +--- org.slf4j:slf4j-api:1.7.25 -> 1.7.32
+|    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.31 -> 1.6.10 (*)
+|    |    +--- dev.kord:kord-core:0.8.x-SNAPSHOT
+|    |    |    +--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2 (*)
+|    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0
+|    |    |    |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm:1.6.0
+|    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0
+|    |    |    |         |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.0
+|    |    |    |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.0
+|    |    |    |         |         |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.0 (c)
+|    |    |    |         |         |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0 (c)
+|    |    |    |         |         |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.0 (c)
+|    |    |    |         |         |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0 (c)
+|    |    |    |         |         |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-reactive:1.6.0 (c)
+|    |    |    |         |         |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm:1.6.0 (c)
+|    |    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0 -> 1.6.10 (*)
+|    |    |    |         |         \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.0 (*)
+|    |    |    |         \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0 -> 1.6.10 (*)
+|    |    |    +--- org.jetbrains.kotlinx:atomicfu:0.17.0
+|    |    |    |    \--- org.jetbrains.kotlinx:atomicfu-jvm:0.17.0
+|    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |         \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    +--- io.github.microutils:kotlin-logging:2.1.21
+|    |    |    |    \--- io.github.microutils:kotlin-logging-jvm:2.1.21
+|    |    |    |         +--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0 -> 1.6.10 (*)
+|    |    |    |         \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    +--- dev.kord:kord-common:0.8.x-SNAPSHOT
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-datetime:0.3.1
+|    |    |    |    |    \--- org.jetbrains.kotlinx:kotlinx-datetime-jvm:0.3.1
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    |    |    |         \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.5.30 -> 1.6.10
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2 (*)
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0 (*)
+|    |    |    |    +--- org.jetbrains.kotlinx:atomicfu:0.17.0 (*)
+|    |    |    |    +--- io.github.microutils:kotlin-logging:2.1.21 (*)
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |    |    +--- dev.kord:kord-rest:0.8.x-SNAPSHOT
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2 (*)
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0 (*)
+|    |    |    |    +--- org.jetbrains.kotlinx:atomicfu:0.17.0 (*)
+|    |    |    |    +--- io.github.microutils:kotlin-logging:2.1.21 (*)
+|    |    |    |    +--- dev.kord:kord-common:0.8.x-SNAPSHOT (*)
+|    |    |    |    +--- io.ktor:ktor-client-cio:1.6.7
+|    |    |    |    |    \--- io.ktor:ktor-client-cio-jvm:1.6.7
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         +--- io.ktor:ktor-client-core:1.6.7
+|    |    |    |    |         |    \--- io.ktor:ktor-client-core-jvm:1.6.7
+|    |    |    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         +--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         |         +--- io.ktor:ktor-http:1.6.7
+|    |    |    |    |         |         |    \--- io.ktor:ktor-http-jvm:1.6.7
+|    |    |    |    |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         |         |         +--- io.ktor:ktor-utils:1.6.7
+|    |    |    |    |         |         |         |    \--- io.ktor:ktor-utils-jvm:1.6.7
+|    |    |    |    |         |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         |         |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         |         |         |         +--- io.ktor:ktor-io:1.6.7
+|    |    |    |    |         |         |         |         |    \--- io.ktor:ktor-io-jvm:1.6.7
+|    |    |    |    |         |         |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         |         |         |         +--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         |         |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         |         |         |         |         \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         |         |         \--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         |         \--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         |         \--- io.ktor:ktor-http-cio:1.6.7
+|    |    |    |    |         |              \--- io.ktor:ktor-http-cio-jvm:1.6.7
+|    |    |    |    |         |                   +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |                   +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |                   +--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         |                   +--- io.ktor:ktor-network:1.6.7
+|    |    |    |    |         |                   |    \--- io.ktor:ktor-network-jvm:1.6.7
+|    |    |    |    |         |                   |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |                   |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |                   |         +--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         |                   |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         |                   |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         |                   |         \--- io.ktor:ktor-utils:1.6.7 (*)
+|    |    |    |    |         |                   +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         |                   +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         |                   \--- io.ktor:ktor-http:1.6.7 (*)
+|    |    |    |    |         +--- io.ktor:ktor-http-cio:1.6.7 (*)
+|    |    |    |    |         +--- io.ktor:ktor-network-tls:1.6.7
+|    |    |    |    |         |    \--- io.ktor:ktor-network-tls-jvm:1.6.7
+|    |    |    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         |         +--- io.ktor:ktor-network:1.6.7 (*)
+|    |    |    |    |         |         +--- io.ktor:ktor-utils:1.6.7 (*)
+|    |    |    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         \--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         \--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    +--- io.ktor:ktor-client-json:1.6.7
+|    |    |    |    |    \--- io.ktor:ktor-client-json-jvm:1.6.7
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         +--- io.ktor:ktor-client-core:1.6.7 (*)
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         \--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    +--- io.ktor:ktor-client-serialization:1.6.7
+|    |    |    |    |    \--- io.ktor:ktor-client-serialization-jvm:1.6.7
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         +--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         +--- io.ktor:ktor-client-core:1.6.7 (*)
+|    |    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0 -> 1.3.2 (*)
+|    |    |    |    |         \--- io.ktor:ktor-client-json:1.6.7 (*)
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |    |    +--- dev.kord:kord-gateway:0.8.x-SNAPSHOT
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2 (*)
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0 (*)
+|    |    |    |    +--- org.jetbrains.kotlinx:atomicfu:0.17.0 (*)
+|    |    |    |    +--- io.github.microutils:kotlin-logging:2.1.21 (*)
+|    |    |    |    +--- dev.kord:kord-common:0.8.x-SNAPSHOT (*)
+|    |    |    |    +--- io.ktor:ktor-client-json:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-client-websockets:1.6.7
+|    |    |    |    |    \--- io.ktor:ktor-client-websockets-jvm:1.6.7
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         +--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         \--- io.ktor:ktor-client-core:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-client-serialization:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-client-cio:1.6.7 (*)
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |    |    +--- dev.kord:kord-voice:0.8.x-SNAPSHOT
+|    |    |    |    +--- dev.kord:kord-common:0.8.x-SNAPSHOT (*)
+|    |    |    |    +--- dev.kord:kord-gateway:0.8.x-SNAPSHOT (*)
+|    |    |    |    +--- io.ktor:ktor-client-json:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-client-serialization:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-client-cio:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-network:1.6.7 (*)
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |    |    +--- dev.kord.cache:cache-api:{strictly [0.3.0, 0.4.0[; prefer latest.release} -> 0.3.0
+|    |    |    |    +--- org.jetbrains.kotlinx:atomicfu-jvm:0.14.4 -> 0.17.0 (*)
+|    |    |    |    +--- io.github.microutils:kotlin-logging:2.0.3 -> 2.1.21 (*)
+|    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.10 -> 1.6.10 (*)
+|    |    |    |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0 -> 1.6.0 (*)
+|    |    |    +--- dev.kord.cache:cache-map:{strictly [0.3.0, 0.4.0[; prefer latest.release} -> 0.3.0
+|    |    |    |    +--- org.jetbrains.kotlinx:atomicfu-jvm:0.14.4 -> 0.17.0 (*)
+|    |    |    |    +--- io.github.microutils:kotlin-logging:2.0.3 -> 2.1.21 (*)
+|    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.10 -> 1.6.10 (*)
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0 -> 1.6.0 (*)
+|    |    |    |    \--- dev.kord.cache:cache-api:0.3.0 (*)
+|    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |    +--- io.github.microutils:kotlin-logging:2.1.21 (*)
+|    |    +--- org.jetbrains.kotlinx:kotlinx-serialization-core:1.3.0 -> 1.3.2 (*)
+|    |    +--- io.sentry:sentry:5.5.2
+|    |    |    \--- com.google.code.gson:gson:2.8.5 -> 2.8.9
+|    |    \--- com.kotlindiscord.kord.extensions:token-parser:1.5.2-MIKBOT
+|    |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |         \--- io.github.microutils:kotlin-logging:2.1.21 (*)
+|    +--- dev.kord.x:emoji:0.5.0
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.10 -> 1.6.10 (*)
+|    +--- org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.5.2 -> 1.6.0
+|    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0 (*)
+|    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.0 (*)
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0 -> 1.6.10 (*)
+|    +--- org.litote.kmongo:kmongo-coroutine-serialization:4.3.0
+|    |    +--- org.litote.kmongo:kmongo-coroutine-core:4.3.0
+|    |    |    +--- org.litote.kmongo:kmongo-async-shared:4.3.0
+|    |    |    |    +--- org.litote.kmongo:kmongo-property:4.3.0
+|    |    |    |    |    +--- org.litote.kmongo:kmongo-shared:4.3.0
+|    |    |    |    |    |    +--- org.litote.kmongo:kmongo-id:4.3.0
+|    |    |    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-reflect:1.5.30 -> 1.6.10
+|    |    |    |    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10 (*)
+|    |    |    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-reflect:1.5.30 -> 1.6.10 (*)
+|    |    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    |    |    |    +--- org.litote.kmongo:kmongo-data:4.3.0
+|    |    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    |    |    |    +--- org.litote:kreflect:1.0.0
+|    |    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.3.10 -> 1.6.10 (*)
+|    |    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-reflect:1.3.10 -> 1.6.10 (*)
+|    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    |    |    +--- org.mongodb:mongodb-driver-reactivestreams:4.3.2
+|    |    |    |    |    +--- org.mongodb:bson:4.3.2
+|    |    |    |    |    +--- org.mongodb:mongodb-driver-core:4.3.2
+|    |    |    |    |    |    \--- org.mongodb:bson:4.3.2
+|    |    |    |    |    +--- org.reactivestreams:reactive-streams:1.0.2 -> 1.0.3
+|    |    |    |    |    \--- io.projectreactor:reactor-core:3.2.22.RELEASE
+|    |    |    |    |         \--- org.reactivestreams:reactive-streams:1.0.2 -> 1.0.3
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2 -> 1.6.0 (*)
+|    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-reactive:1.5.2 -> 1.6.0
+|    |    |    |    +--- org.reactivestreams:reactive-streams:1.0.3
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0 (*)
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.0 (*)
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0 -> 1.6.10 (*)
+|    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    +--- org.litote.kmongo:kmongo-serialization-mapping:4.3.0
+|    |    |    +--- org.litote.kmongo:kmongo-shared:4.3.0 (*)
+|    |    |    +--- org.litote.kmongo:kmongo-property:4.3.0 (*)
+|    |    |    +--- com.github.jershell:kbson:0.4.4
+|    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.20 -> 1.6.10 (*)
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.0.1 -> 1.3.2 (*)
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.0.1 -> 1.3.2 (*)
+|    |    |    |    \--- org.mongodb:bson:4.1.0 -> 4.3.2
+|    |    |    +--- org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.2.2 -> 1.3.2 (*)
+|    |    |    +--- org.mongodb:bson:4.3.2
+|    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    +--- org.pf4j:pf4j:3.6.0 (*)
+|    +--- dev.schlaubi:envconf:1.1 (*)
+|    +--- ch.qos.logback:logback-classic:1.2.6 (*)
+|    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
++--- org.jetbrains.kotlin:kotlin-reflect:1.6.10 (*)
++--- io.insert-koin:koin-core:{strictly 3.1.4} -> 3.1.4 (c)
++--- ch.qos.logback:logback-classic:{strictly 1.2.6} -> 1.2.6 (c)
++--- org.jetbrains.kotlinx:kotlinx-serialization-json:{strictly 1.3.2} -> 1.3.2 (c)
++--- org.jetbrains.kotlin:kotlin-reflect:{strictly 1.6.10} -> 1.6.10 (c)
++--- com.google.code.gson:gson:{strictly 2.8.9} -> 2.8.9 (c)
++--- org.pf4j:pf4j:{strictly 3.6.0} -> 3.6.0 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.ow2.asm:asm:{strictly 9.2} -> 9.2 (c)
++--- dev.schlaubi:envconf:{strictly 1.1} -> 1.1 (c)
++--- org.pf4j:pf4j-update:{strictly 2.3.0} -> 2.3.0 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.slf4j:slf4j-api:{strictly 1.7.32} -> 1.7.32 (c)
++--- com.github.zafarkhaja:java-semver:{strictly 0.9.0} -> 0.9.0 (c)
++--- commons-codec:commons-codec:{strictly 1.10} -> 1.10 (c)
++--- io.insert-koin:koin-core-jvm:{strictly 3.1.4} -> 3.1.4 (c)
++--- ch.qos.logback:logback-core:{strictly 1.2.6} -> 1.2.6 (c)
++--- dev.schlaubi:envconf-jvm:{strictly 1.1} -> 1.1 (c)
++--- org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:{strictly 1.3.2} -> 1.3.2 (c)
++--- com.kotlindiscord.kord.extensions:kord-extensions:{strictly 1.5.2-MIKBOT} -> 1.5.2-MIKBOT (c)
++--- dev.kord.x:emoji:{strictly 0.5.0} -> 0.5.0 (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:{strictly 1.6.0} -> 1.6.0 (c)
++--- org.litote.kmongo:kmongo-coroutine-serialization:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.jetbrains:annotations:{strictly 13.0} -> 13.0 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib-common:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlinx:kotlinx-serialization-core:{strictly 1.3.2} -> 1.3.2 (c)
++--- commons-validator:commons-validator:{strictly 1.7} -> 1.7 (c)
++--- com.kotlindiscord.kord.extensions:annotations:{strictly 1.5.2-MIKBOT} -> 1.5.2-MIKBOT (c)
++--- com.ibm.icu:icu4j:{strictly 69.1} -> 69.1 (c)
++--- io.insert-koin:koin-logger-slf4j:{strictly 3.1.4} -> 3.1.4 (c)
++--- dev.kord:kord-core:{strictly 0.8.x-SNAPSHOT} -> 0.8.x-SNAPSHOT (c)
++--- io.github.microutils:kotlin-logging:{strictly 2.1.21} -> 2.1.21 (c)
++--- io.sentry:sentry:{strictly 5.5.2} -> 5.5.2 (c)
++--- com.kotlindiscord.kord.extensions:token-parser:{strictly 1.5.2-MIKBOT} -> 1.5.2-MIKBOT (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-core:{strictly 1.6.0} -> 1.6.0 (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:{strictly 1.6.0} -> 1.6.0 (c)
++--- org.litote.kmongo:kmongo-coroutine-core:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.litote.kmongo:kmongo-serialization-mapping:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:{strictly 1.3.2} -> 1.3.2 (c)
++--- commons-beanutils:commons-beanutils:{strictly 1.9.4} -> 1.9.4 (c)
++--- commons-digester:commons-digester:{strictly 2.1} -> 2.1 (c)
++--- commons-logging:commons-logging:{strictly 1.2} -> 1.2 (c)
++--- commons-collections:commons-collections:{strictly 3.2.2} -> 3.2.2 (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-test:{strictly 1.6.0} -> 1.6.0 (c)
++--- org.jetbrains.kotlinx:atomicfu:{strictly 0.17.0} -> 0.17.0 (c)
++--- dev.kord:kord-common:{strictly 0.8.x-SNAPSHOT} -> 0.8.x-SNAPSHOT (c)
++--- dev.kord:kord-rest:{strictly 0.8.x-SNAPSHOT} -> 0.8.x-SNAPSHOT (c)
++--- dev.kord:kord-gateway:{strictly 0.8.x-SNAPSHOT} -> 0.8.x-SNAPSHOT (c)
++--- dev.kord:kord-voice:{strictly 0.8.x-SNAPSHOT} -> 0.8.x-SNAPSHOT (c)
++--- dev.kord.cache:cache-api:{strictly 0.3.0} -> 0.3.0 (c)
++--- dev.kord.cache:cache-map:{strictly 0.3.0} -> 0.3.0 (c)
++--- io.github.microutils:kotlin-logging-jvm:{strictly 2.1.21} -> 2.1.21 (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:{strictly 1.6.0} -> 1.6.0 (c)
++--- org.litote.kmongo:kmongo-async-shared:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-reactive:{strictly 1.6.0} -> 1.6.0 (c)
++--- org.litote.kmongo:kmongo-shared:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.litote.kmongo:kmongo-property:{strictly 4.3.0} -> 4.3.0 (c)
++--- com.github.jershell:kbson:{strictly 0.4.4} -> 0.4.4 (c)
++--- org.mongodb:bson:{strictly 4.3.2} -> 4.3.2 (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm:{strictly 1.6.0} -> 1.6.0 (c)
++--- org.jetbrains.kotlinx:atomicfu-jvm:{strictly 0.17.0} -> 0.17.0 (c)
++--- org.jetbrains.kotlinx:kotlinx-datetime:{strictly 0.3.1} -> 0.3.1 (c)
++--- io.ktor:ktor-client-cio:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-client-json:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-client-serialization:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-client-websockets:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-network:{strictly 1.6.7} -> 1.6.7 (c)
++--- org.reactivestreams:reactive-streams:{strictly 1.0.3} -> 1.0.3 (c)
++--- org.mongodb:mongodb-driver-reactivestreams:{strictly 4.3.2} -> 4.3.2 (c)
++--- org.litote.kmongo:kmongo-id:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.litote.kmongo:kmongo-data:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.litote:kreflect:{strictly 1.0.0} -> 1.0.0 (c)
++--- org.jetbrains.kotlinx:kotlinx-datetime-jvm:{strictly 0.3.1} -> 0.3.1 (c)
++--- io.ktor:ktor-client-cio-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-client-json-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-client-serialization-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-client-websockets-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-network-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- org.mongodb:mongodb-driver-core:{strictly 4.3.2} -> 4.3.2 (c)
++--- io.projectreactor:reactor-core:{strictly 3.2.22.RELEASE} -> 3.2.22.RELEASE (c)
++--- io.ktor:ktor-client-core:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-http-cio:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-network-tls:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-utils:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-client-core-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-http-cio-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-network-tls-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-utils-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-http:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-io:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-http-jvm:{strictly 1.6.7} -> 1.6.7 (c)
+\--- io.ktor:ktor-io-jvm:{strictly 1.6.7} -> 1.6.7 (c)
+
+runtimeElements - Elements of runtime for main. (n)
+No dependencies
+
+runtimeElements-published (n)
+No dependencies
+
+runtimeOnly - Runtime only dependencies for compilation 'main' (target  (jvm)). (n)
+No dependencies
+
+runtimeOnlyDependenciesMetadata
+No dependencies
+
+signatures
+No dependencies
+
+sourceArtifacts (n)
+No dependencies
+
+testAnnotationProcessor - Annotation processors and their dependencies for source set 'test'.
+No dependencies
+
+testApi - API dependencies for compilation 'test' (target  (jvm)). (n)
+No dependencies
+
+testApiDependenciesMetadata
+No dependencies
+
+testCompileClasspath - Compile classpath for compilation 'test' (target  (jvm)).
++--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10
+|    +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10
+|    |    +--- org.jetbrains:annotations:13.0
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.10
+|    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.10
+|         \--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10 (*)
++--- org.pf4j:pf4j:3.6.0
+|    +--- org.slf4j:slf4j-api:1.7.25 -> 1.7.32
+|    \--- com.github.zafarkhaja:java-semver:0.9.0
++--- org.pf4j:pf4j-update:2.3.0
+|    +--- org.pf4j:pf4j:3.2.0 -> 3.6.0 (*)
+|    +--- com.google.code.gson:gson:2.2.4 -> 2.8.9
+|    \--- commons-codec:commons-codec:1.10
++--- com.google.code.gson:gson:2.8.9
++--- org.ow2.asm:asm:9.2
++--- io.insert-koin:koin-core:3.1.4
+|    \--- io.insert-koin:koin-core-jvm:3.1.4
+|         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.5.31 -> 1.6.10
+|         \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.31 -> 1.6.10 (*)
++--- ch.qos.logback:logback-classic:1.2.6
+|    +--- ch.qos.logback:logback-core:1.2.6
+|    \--- org.slf4j:slf4j-api:1.7.32
++--- dev.schlaubi:envconf:1.1
+|    \--- dev.schlaubi:envconf-jvm:1.1
+|         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.10 -> 1.6.10 (*)
+|         \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.5.10 -> 1.6.10
++--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2
+|    \--- org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.3.2
+|         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10 (*)
+|         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.10
+|         \--- org.jetbrains.kotlinx:kotlinx-serialization-core:1.3.2
+|              \--- org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.3.2
+|                   +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10 (*)
+|                   \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.10
++--- project :api
+|    +--- project :api:annotations
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    +--- com.kotlindiscord.kord.extensions:kord-extensions:1.5.2-MIKBOT
+|    |    +--- com.ibm.icu:icu4j:69.1
+|    |    +--- io.insert-koin:koin-core:3.1.4 (*)
+|    |    +--- io.insert-koin:koin-logger-slf4j:3.1.4
+|    |    |    +--- io.insert-koin:koin-core:3.1.4 (*)
+|    |    |    +--- org.slf4j:slf4j-api:1.7.25 -> 1.7.32
+|    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.31 -> 1.6.10 (*)
+|    |    +--- dev.kord:kord-core:0.8.x-SNAPSHOT
+|    |    |    +--- dev.kord:kord-common:0.8.x-SNAPSHOT
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-datetime:0.3.1
+|    |    |    |    |    \--- org.jetbrains.kotlinx:kotlinx-datetime-jvm:0.3.1
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    |    |    |         \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.5.30 -> 1.6.10
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2 (*)
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0
+|    |    |    |    |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm:1.6.0
+|    |    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0
+|    |    |    |    |         |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.0
+|    |    |    |    |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.0
+|    |    |    |    |         |         |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.0 (c)
+|    |    |    |    |         |         |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0 (c)
+|    |    |    |    |         |         |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.0 (c)
+|    |    |    |    |         |         |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-reactive:1.6.0 (c)
+|    |    |    |    |         |         |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0 (c)
+|    |    |    |    |         |         |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm:1.6.0 (c)
+|    |    |    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.0 (*)
+|    |    |    |    |         \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0 -> 1.6.10 (*)
+|    |    |    |    +--- org.jetbrains.kotlinx:atomicfu:0.17.0
+|    |    |    |    |    \--- org.jetbrains.kotlinx:atomicfu-jvm:0.17.0
+|    |    |    |    +--- io.github.microutils:kotlin-logging:2.1.21
+|    |    |    |    |    \--- io.github.microutils:kotlin-logging-jvm:2.1.21
+|    |    |    |    |         +--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |    |    +--- dev.kord:kord-rest:0.8.x-SNAPSHOT
+|    |    |    |    +--- dev.kord:kord-common:0.8.x-SNAPSHOT (*)
+|    |    |    |    +--- io.ktor:ktor-client-cio:1.6.7
+|    |    |    |    |    \--- io.ktor:ktor-client-cio-jvm:1.6.7
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         +--- io.ktor:ktor-client-core:1.6.7
+|    |    |    |    |         |    \--- io.ktor:ktor-client-core-jvm:1.6.7
+|    |    |    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         +--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         |         +--- io.ktor:ktor-http:1.6.7
+|    |    |    |    |         |         |    \--- io.ktor:ktor-http-jvm:1.6.7
+|    |    |    |    |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         |         |         +--- io.ktor:ktor-utils:1.6.7
+|    |    |    |    |         |         |         |    \--- io.ktor:ktor-utils-jvm:1.6.7
+|    |    |    |    |         |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         |         |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         |         |         |         +--- io.ktor:ktor-io:1.6.7
+|    |    |    |    |         |         |         |         |    \--- io.ktor:ktor-io-jvm:1.6.7
+|    |    |    |    |         |         |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         |         |         |         +--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         |         |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         |         |         |         |         \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         |         |         \--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         |         \--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         |         \--- io.ktor:ktor-http-cio:1.6.7
+|    |    |    |    |         |              \--- io.ktor:ktor-http-cio-jvm:1.6.7
+|    |    |    |    |         |                   +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |                   +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |                   +--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         |                   +--- io.ktor:ktor-network:1.6.7
+|    |    |    |    |         |                   |    \--- io.ktor:ktor-network-jvm:1.6.7
+|    |    |    |    |         |                   |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |                   |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |                   |         +--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         |                   |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         |                   |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         |                   |         \--- io.ktor:ktor-utils:1.6.7 (*)
+|    |    |    |    |         |                   +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         |                   +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         |                   \--- io.ktor:ktor-http:1.6.7 (*)
+|    |    |    |    |         +--- io.ktor:ktor-http-cio:1.6.7 (*)
+|    |    |    |    |         +--- io.ktor:ktor-network-tls:1.6.7
+|    |    |    |    |         |    \--- io.ktor:ktor-network-tls-jvm:1.6.7
+|    |    |    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         |         +--- io.ktor:ktor-network:1.6.7 (*)
+|    |    |    |    |         |         +--- io.ktor:ktor-utils:1.6.7 (*)
+|    |    |    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         \--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         \--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    +--- io.ktor:ktor-client-json:1.6.7
+|    |    |    |    |    \--- io.ktor:ktor-client-json-jvm:1.6.7
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         +--- io.ktor:ktor-client-core:1.6.7 (*)
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         \--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    +--- io.ktor:ktor-client-serialization:1.6.7
+|    |    |    |    |    \--- io.ktor:ktor-client-serialization-jvm:1.6.7
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         +--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         +--- io.ktor:ktor-client-core:1.6.7 (*)
+|    |    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0 -> 1.3.2 (*)
+|    |    |    |    |         \--- io.ktor:ktor-client-json:1.6.7 (*)
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |    |    +--- dev.kord:kord-gateway:0.8.x-SNAPSHOT
+|    |    |    |    +--- dev.kord:kord-common:0.8.x-SNAPSHOT (*)
+|    |    |    |    +--- io.ktor:ktor-client-json:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-client-websockets:1.6.7
+|    |    |    |    |    \--- io.ktor:ktor-client-websockets-jvm:1.6.7
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         +--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         \--- io.ktor:ktor-client-core:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-client-serialization:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-client-cio:1.6.7 (*)
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |    |    +--- dev.kord:kord-voice:0.8.x-SNAPSHOT
+|    |    |    |    +--- dev.kord:kord-common:0.8.x-SNAPSHOT (*)
+|    |    |    |    +--- dev.kord:kord-gateway:0.8.x-SNAPSHOT (*)
+|    |    |    |    +--- io.ktor:ktor-client-json:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-client-serialization:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-client-cio:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-network:1.6.7 (*)
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |    |    +--- dev.kord.cache:cache-api:{strictly [0.3.0, 0.4.0[; prefer latest.release} -> 0.3.0
+|    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.10 -> 1.6.10 (*)
+|    |    |    |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0 -> 1.6.0 (*)
+|    |    |    +--- dev.kord.cache:cache-map:{strictly [0.3.0, 0.4.0[; prefer latest.release} -> 0.3.0
+|    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.10 -> 1.6.10 (*)
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0 -> 1.6.0 (*)
+|    |    |    |    \--- dev.kord.cache:cache-api:0.3.0 (*)
+|    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |    +--- io.github.microutils:kotlin-logging:2.1.21 (*)
+|    |    +--- org.jetbrains.kotlinx:kotlinx-serialization-core:1.3.0 -> 1.3.2 (*)
+|    |    +--- io.sentry:sentry:5.5.2
+|    |    \--- com.kotlindiscord.kord.extensions:token-parser:1.5.2-MIKBOT
+|    +--- dev.kord.x:emoji:0.5.0
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.10 -> 1.6.10 (*)
+|    +--- org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.5.2 -> 1.6.0
+|    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0 (*)
+|    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.0 (*)
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0 -> 1.6.10 (*)
+|    +--- org.litote.kmongo:kmongo-coroutine-serialization:4.3.0
+|    |    +--- org.litote.kmongo:kmongo-coroutine-core:4.3.0
+|    |    |    +--- org.litote.kmongo:kmongo-async-shared:4.3.0
+|    |    |    |    +--- org.litote.kmongo:kmongo-property:4.3.0
+|    |    |    |    |    +--- org.litote.kmongo:kmongo-shared:4.3.0
+|    |    |    |    |    |    +--- org.litote.kmongo:kmongo-id:4.3.0
+|    |    |    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-reflect:1.5.30 -> 1.6.10
+|    |    |    |    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10 (*)
+|    |    |    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-reflect:1.5.30 -> 1.6.10 (*)
+|    |    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    |    |    |    +--- org.litote.kmongo:kmongo-data:4.3.0
+|    |    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    |    |    |    +--- org.litote:kreflect:1.0.0
+|    |    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.3.10 -> 1.6.10 (*)
+|    |    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-reflect:1.3.10 -> 1.6.10 (*)
+|    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    |    |    +--- org.mongodb:mongodb-driver-reactivestreams:4.3.2
+|    |    |    |    |    +--- org.mongodb:bson:4.3.2
+|    |    |    |    |    +--- org.mongodb:mongodb-driver-core:4.3.2
+|    |    |    |    |    |    \--- org.mongodb:bson:4.3.2
+|    |    |    |    |    \--- org.reactivestreams:reactive-streams:1.0.2 -> 1.0.3
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2 -> 1.6.0 (*)
+|    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-reactive:1.5.2 -> 1.6.0
+|    |    |    |    +--- org.reactivestreams:reactive-streams:1.0.3
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0 (*)
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.0 (*)
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0 -> 1.6.10 (*)
+|    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    +--- org.litote.kmongo:kmongo-serialization-mapping:4.3.0
+|    |    |    +--- org.litote.kmongo:kmongo-shared:4.3.0 (*)
+|    |    |    +--- org.litote.kmongo:kmongo-property:4.3.0 (*)
+|    |    |    +--- com.github.jershell:kbson:0.4.4
+|    |    |    +--- org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.2.2 -> 1.3.2 (*)
+|    |    |    +--- org.mongodb:bson:4.3.2
+|    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    +--- org.pf4j:pf4j:3.6.0 (*)
+|    +--- dev.schlaubi:envconf:1.1 (*)
+|    +--- ch.qos.logback:logback-classic:1.2.6 (*)
+|    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
++--- org.jetbrains.kotlin:kotlin-reflect:1.6.10 (*)
++--- io.insert-koin:koin-core:{strictly 3.1.4} -> 3.1.4 (c)
++--- ch.qos.logback:logback-classic:{strictly 1.2.6} -> 1.2.6 (c)
++--- org.jetbrains.kotlinx:kotlinx-serialization-json:{strictly 1.3.2} -> 1.3.2 (c)
++--- org.jetbrains.kotlin:kotlin-reflect:{strictly 1.6.10} -> 1.6.10 (c)
++--- com.google.code.gson:gson:{strictly 2.8.9} -> 2.8.9 (c)
++--- org.pf4j:pf4j:{strictly 3.6.0} -> 3.6.0 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.ow2.asm:asm:{strictly 9.2} -> 9.2 (c)
++--- dev.schlaubi:envconf:{strictly 1.1} -> 1.1 (c)
++--- org.pf4j:pf4j-update:{strictly 2.3.0} -> 2.3.0 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.slf4j:slf4j-api:{strictly 1.7.32} -> 1.7.32 (c)
++--- com.github.zafarkhaja:java-semver:{strictly 0.9.0} -> 0.9.0 (c)
++--- commons-codec:commons-codec:{strictly 1.10} -> 1.10 (c)
++--- io.insert-koin:koin-core-jvm:{strictly 3.1.4} -> 3.1.4 (c)
++--- ch.qos.logback:logback-core:{strictly 1.2.6} -> 1.2.6 (c)
++--- dev.schlaubi:envconf-jvm:{strictly 1.1} -> 1.1 (c)
++--- org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:{strictly 1.3.2} -> 1.3.2 (c)
++--- com.kotlindiscord.kord.extensions:kord-extensions:{strictly 1.5.2-MIKBOT} -> 1.5.2-MIKBOT (c)
++--- dev.kord.x:emoji:{strictly 0.5.0} -> 0.5.0 (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:{strictly 1.6.0} -> 1.6.0 (c)
++--- org.litote.kmongo:kmongo-coroutine-serialization:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.jetbrains:annotations:{strictly 13.0} -> 13.0 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib-common:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlinx:kotlinx-serialization-core:{strictly 1.3.2} -> 1.3.2 (c)
++--- com.ibm.icu:icu4j:{strictly 69.1} -> 69.1 (c)
++--- io.insert-koin:koin-logger-slf4j:{strictly 3.1.4} -> 3.1.4 (c)
++--- dev.kord:kord-core:{strictly 0.8.x-SNAPSHOT} -> 0.8.x-SNAPSHOT (c)
++--- io.github.microutils:kotlin-logging:{strictly 2.1.21} -> 2.1.21 (c)
++--- io.sentry:sentry:{strictly 5.5.2} -> 5.5.2 (c)
++--- com.kotlindiscord.kord.extensions:token-parser:{strictly 1.5.2-MIKBOT} -> 1.5.2-MIKBOT (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-core:{strictly 1.6.0} -> 1.6.0 (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:{strictly 1.6.0} -> 1.6.0 (c)
++--- org.litote.kmongo:kmongo-coroutine-core:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.litote.kmongo:kmongo-serialization-mapping:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:{strictly 1.3.2} -> 1.3.2 (c)
++--- dev.kord:kord-common:{strictly 0.8.x-SNAPSHOT} -> 0.8.x-SNAPSHOT (c)
++--- dev.kord:kord-rest:{strictly 0.8.x-SNAPSHOT} -> 0.8.x-SNAPSHOT (c)
++--- dev.kord:kord-gateway:{strictly 0.8.x-SNAPSHOT} -> 0.8.x-SNAPSHOT (c)
++--- dev.kord:kord-voice:{strictly 0.8.x-SNAPSHOT} -> 0.8.x-SNAPSHOT (c)
++--- dev.kord.cache:cache-api:{strictly 0.3.0} -> 0.3.0 (c)
++--- dev.kord.cache:cache-map:{strictly 0.3.0} -> 0.3.0 (c)
++--- io.github.microutils:kotlin-logging-jvm:{strictly 2.1.21} -> 2.1.21 (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:{strictly 1.6.0} -> 1.6.0 (c)
++--- org.litote.kmongo:kmongo-async-shared:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-reactive:{strictly 1.6.0} -> 1.6.0 (c)
++--- org.litote.kmongo:kmongo-shared:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.litote.kmongo:kmongo-property:{strictly 4.3.0} -> 4.3.0 (c)
++--- com.github.jershell:kbson:{strictly 0.4.4} -> 0.4.4 (c)
++--- org.mongodb:bson:{strictly 4.3.2} -> 4.3.2 (c)
++--- org.jetbrains.kotlinx:kotlinx-datetime:{strictly 0.3.1} -> 0.3.1 (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-test:{strictly 1.6.0} -> 1.6.0 (c)
++--- org.jetbrains.kotlinx:atomicfu:{strictly 0.17.0} -> 0.17.0 (c)
++--- io.ktor:ktor-client-cio:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-client-json:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-client-serialization:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-client-websockets:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-network:{strictly 1.6.7} -> 1.6.7 (c)
++--- org.reactivestreams:reactive-streams:{strictly 1.0.3} -> 1.0.3 (c)
++--- org.mongodb:mongodb-driver-reactivestreams:{strictly 4.3.2} -> 4.3.2 (c)
++--- org.litote.kmongo:kmongo-id:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.litote.kmongo:kmongo-data:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.litote:kreflect:{strictly 1.0.0} -> 1.0.0 (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm:{strictly 1.6.0} -> 1.6.0 (c)
++--- org.jetbrains.kotlinx:kotlinx-datetime-jvm:{strictly 0.3.1} -> 0.3.1 (c)
++--- org.jetbrains.kotlinx:atomicfu-jvm:{strictly 0.17.0} -> 0.17.0 (c)
++--- io.ktor:ktor-client-cio-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-client-json-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-client-serialization-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-client-websockets-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-network-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- org.mongodb:mongodb-driver-core:{strictly 4.3.2} -> 4.3.2 (c)
++--- io.ktor:ktor-client-core:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-http-cio:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-network-tls:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-utils:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-client-core-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-http-cio-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-network-tls-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-utils-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-http:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-io:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-http-jvm:{strictly 1.6.7} -> 1.6.7 (c)
+\--- io.ktor:ktor-io-jvm:{strictly 1.6.7} -> 1.6.7 (c)
+
+testCompileOnly - Compile only dependencies for compilation 'test' (target  (jvm)). (n)
+No dependencies
+
+testCompileOnlyDependenciesMetadata
+No dependencies
+
+testImplementation - Implementation only dependencies for compilation 'test' (target  (jvm)). (n)
+No dependencies
+
+testImplementationDependenciesMetadata
++--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10
+|    +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10
+|    |    +--- org.jetbrains:annotations:13.0
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.10
+|    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.10
+|         \--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10 (*)
++--- org.pf4j:pf4j:3.6.0
+|    +--- org.slf4j:slf4j-api:1.7.25 -> 1.7.32
+|    \--- com.github.zafarkhaja:java-semver:0.9.0
++--- org.pf4j:pf4j-update:2.3.0
+|    +--- org.pf4j:pf4j:3.2.0 -> 3.6.0 (*)
+|    +--- com.google.code.gson:gson:2.2.4 -> 2.8.9
+|    \--- commons-codec:commons-codec:1.10
++--- com.google.code.gson:gson:2.8.9
++--- org.ow2.asm:asm:9.2
++--- io.insert-koin:koin-core:3.1.4
+|    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.5.31 -> 1.6.10
++--- ch.qos.logback:logback-classic:1.2.6
+|    +--- ch.qos.logback:logback-core:1.2.6
+|    \--- org.slf4j:slf4j-api:1.7.32
++--- dev.schlaubi:envconf:1.1
+|    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.5.10 -> 1.6.10
++--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2
+|    +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.10
+|    \--- org.jetbrains.kotlinx:kotlinx-serialization-core:1.3.2
+|         \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.10
++--- project :api
+|    +--- project :api:annotations
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    +--- com.kotlindiscord.kord.extensions:kord-extensions:1.5.2-MIKBOT
+|    |    +--- com.ibm.icu:icu4j:69.1
+|    |    +--- io.insert-koin:koin-core:3.1.4 (*)
+|    |    +--- io.insert-koin:koin-logger-slf4j:3.1.4
+|    |    |    +--- io.insert-koin:koin-core:3.1.4 (*)
+|    |    |    +--- org.slf4j:slf4j-api:1.7.25 -> 1.7.32
+|    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.31 -> 1.6.10 (*)
+|    |    +--- dev.kord:kord-core:0.8.x-SNAPSHOT
+|    |    |    +--- dev.kord:kord-common:0.8.x-SNAPSHOT
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-datetime:0.3.1
+|    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.5.30 -> 1.6.10
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2 (*)
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0
+|    |    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0
+|    |    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    +--- org.jetbrains.kotlinx:atomicfu:0.17.0
+|    |    |    |    +--- io.github.microutils:kotlin-logging:2.1.21
+|    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |    |    +--- dev.kord:kord-rest:0.8.x-SNAPSHOT
+|    |    |    |    +--- dev.kord:kord-common:0.8.x-SNAPSHOT (*)
+|    |    |    |    +--- io.ktor:ktor-client-cio:1.6.7
+|    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |    +--- io.ktor:ktor-client-core:1.6.7
+|    |    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |    |    +--- io.ktor:ktor-http:1.6.7
+|    |    |    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |    |    |    \--- io.ktor:ktor-utils:1.6.7
+|    |    |    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |    |    |         \--- io.ktor:ktor-io:1.6.7
+|    |    |    |    |    |    |              +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |    |    |              \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |    |    \--- io.ktor:ktor-http-cio:1.6.7
+|    |    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |    |         \--- io.ktor:ktor-http:1.6.7 (*)
+|    |    |    |    |    +--- io.ktor:ktor-http-cio:1.6.7 (*)
+|    |    |    |    |    \--- io.ktor:ktor-network-tls:1.6.7
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         +--- io.ktor:ktor-network:1.6.7
+|    |    |    |    |         |    +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         |    \--- io.ktor:ktor-utils:1.6.7 (*)
+|    |    |    |    |         \--- io.ktor:ktor-utils:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-client-json:1.6.7
+|    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |    \--- io.ktor:ktor-client-core:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-client-serialization:1.6.7
+|    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |    +--- io.ktor:ktor-client-core:1.6.7 (*)
+|    |    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0 -> 1.3.2 (*)
+|    |    |    |    |    \--- io.ktor:ktor-client-json:1.6.7 (*)
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |    |    +--- dev.kord:kord-gateway:0.8.x-SNAPSHOT
+|    |    |    |    +--- dev.kord:kord-common:0.8.x-SNAPSHOT (*)
+|    |    |    |    +--- io.ktor:ktor-client-json:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-client-websockets:1.6.7
+|    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |    \--- io.ktor:ktor-client-core:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-client-serialization:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-client-cio:1.6.7 (*)
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |    |    +--- dev.kord:kord-voice:0.8.x-SNAPSHOT
+|    |    |    |    +--- dev.kord:kord-common:0.8.x-SNAPSHOT (*)
+|    |    |    |    +--- dev.kord:kord-gateway:0.8.x-SNAPSHOT (*)
+|    |    |    |    +--- io.ktor:ktor-client-json:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-client-serialization:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-client-cio:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-network:1.6.7 (*)
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |    |    +--- dev.kord.cache:cache-api:{strictly [0.3.0, 0.4.0[; prefer latest.release} -> 0.3.0
+|    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.10 -> 1.6.10 (*)
+|    |    |    |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0 -> 1.6.0 (*)
+|    |    |    +--- dev.kord.cache:cache-map:{strictly [0.3.0, 0.4.0[; prefer latest.release} -> 0.3.0
+|    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.10 -> 1.6.10 (*)
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0 -> 1.6.0 (*)
+|    |    |    |    \--- dev.kord.cache:cache-api:0.3.0 (*)
+|    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |    +--- io.github.microutils:kotlin-logging:2.1.21 (*)
+|    |    +--- org.jetbrains.kotlinx:kotlinx-serialization-core:1.3.0 -> 1.3.2 (*)
+|    |    +--- io.sentry:sentry:5.5.2
+|    |    \--- com.kotlindiscord.kord.extensions:token-parser:1.5.2-MIKBOT
+|    +--- dev.kord.x:emoji:0.5.0
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.10 -> 1.6.10 (*)
+|    +--- org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.5.2
+|    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2 -> 1.6.0 (*)
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.30 -> 1.6.10 (*)
+|    +--- org.litote.kmongo:kmongo-coroutine-serialization:4.3.0
+|    |    +--- org.litote.kmongo:kmongo-coroutine-core:4.3.0
+|    |    |    +--- org.litote.kmongo:kmongo-async-shared:4.3.0
+|    |    |    |    +--- org.litote.kmongo:kmongo-property:4.3.0
+|    |    |    |    |    +--- org.litote.kmongo:kmongo-shared:4.3.0
+|    |    |    |    |    |    +--- org.litote.kmongo:kmongo-id:4.3.0
+|    |    |    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-reflect:1.5.30 -> 1.6.10
+|    |    |    |    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10 (*)
+|    |    |    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-reflect:1.5.30 -> 1.6.10 (*)
+|    |    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    |    |    |    +--- org.litote.kmongo:kmongo-data:4.3.0
+|    |    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    |    |    |    +--- org.litote:kreflect:1.0.0
+|    |    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.3.10 -> 1.6.10 (*)
+|    |    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-reflect:1.3.10 -> 1.6.10 (*)
+|    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    |    |    +--- org.mongodb:mongodb-driver-reactivestreams:4.3.2
+|    |    |    |    |    +--- org.mongodb:bson:4.3.2
+|    |    |    |    |    +--- org.mongodb:mongodb-driver-core:4.3.2
+|    |    |    |    |    |    \--- org.mongodb:bson:4.3.2
+|    |    |    |    |    \--- org.reactivestreams:reactive-streams:1.0.2 -> 1.0.3
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2 -> 1.6.0 (*)
+|    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-reactive:1.5.2
+|    |    |    |    +--- org.reactivestreams:reactive-streams:1.0.3
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2 -> 1.6.0 (*)
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.30 -> 1.6.10 (*)
+|    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    +--- org.litote.kmongo:kmongo-serialization-mapping:4.3.0
+|    |    |    +--- org.litote.kmongo:kmongo-shared:4.3.0 (*)
+|    |    |    +--- org.litote.kmongo:kmongo-property:4.3.0 (*)
+|    |    |    +--- com.github.jershell:kbson:0.4.4
+|    |    |    +--- org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.2.2
+|    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.5.20 -> 1.6.10 (*)
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.5.20 -> 1.6.10
+|    |    |    +--- org.mongodb:bson:4.3.2
+|    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    +--- org.pf4j:pf4j:3.6.0 (*)
+|    +--- dev.schlaubi:envconf:1.1 (*)
+|    +--- ch.qos.logback:logback-classic:1.2.6 (*)
+|    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
++--- org.jetbrains.kotlin:kotlin-reflect:1.6.10 (*)
++--- io.insert-koin:koin-core:{strictly 3.1.4} -> 3.1.4 (c)
++--- ch.qos.logback:logback-classic:{strictly 1.2.6} -> 1.2.6 (c)
++--- org.jetbrains.kotlinx:kotlinx-serialization-json:{strictly 1.3.2} -> 1.3.2 (c)
++--- org.jetbrains.kotlin:kotlin-reflect:{strictly 1.6.10} -> 1.6.10 (c)
++--- com.google.code.gson:gson:{strictly 2.8.9} -> 2.8.9 (c)
++--- org.pf4j:pf4j:{strictly 3.6.0} -> 3.6.0 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.ow2.asm:asm:{strictly 9.2} -> 9.2 (c)
++--- dev.schlaubi:envconf:{strictly 1.1} -> 1.1 (c)
++--- org.pf4j:pf4j-update:{strictly 2.3.0} -> 2.3.0 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.slf4j:slf4j-api:{strictly 1.7.32} -> 1.7.32 (c)
++--- com.github.zafarkhaja:java-semver:{strictly 0.9.0} -> 0.9.0 (c)
++--- commons-codec:commons-codec:{strictly 1.10} -> 1.10 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib-common:{strictly 1.6.10} -> 1.6.10 (c)
++--- ch.qos.logback:logback-core:{strictly 1.2.6} -> 1.2.6 (c)
++--- org.jetbrains.kotlinx:kotlinx-serialization-core:{strictly 1.3.2} -> 1.3.2 (c)
++--- com.kotlindiscord.kord.extensions:kord-extensions:{strictly 1.5.2-MIKBOT} -> 1.5.2-MIKBOT (c)
++--- dev.kord.x:emoji:{strictly 0.5.0} -> 0.5.0 (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:{strictly 1.5.2} -> 1.5.2 (c)
++--- org.litote.kmongo:kmongo-coroutine-serialization:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.jetbrains:annotations:{strictly 13.0} -> 13.0 (c)
++--- com.ibm.icu:icu4j:{strictly 69.1} -> 69.1 (c)
++--- io.insert-koin:koin-logger-slf4j:{strictly 3.1.4} -> 3.1.4 (c)
++--- dev.kord:kord-core:{strictly 0.8.x-SNAPSHOT} -> 0.8.x-SNAPSHOT (c)
++--- io.github.microutils:kotlin-logging:{strictly 2.1.21} -> 2.1.21 (c)
++--- io.sentry:sentry:{strictly 5.5.2} -> 5.5.2 (c)
++--- com.kotlindiscord.kord.extensions:token-parser:{strictly 1.5.2-MIKBOT} -> 1.5.2-MIKBOT (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-core:{strictly 1.6.0} -> 1.6.0 (c)
++--- org.litote.kmongo:kmongo-coroutine-core:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.litote.kmongo:kmongo-serialization-mapping:{strictly 4.3.0} -> 4.3.0 (c)
++--- dev.kord:kord-common:{strictly 0.8.x-SNAPSHOT} -> 0.8.x-SNAPSHOT (c)
++--- dev.kord:kord-rest:{strictly 0.8.x-SNAPSHOT} -> 0.8.x-SNAPSHOT (c)
++--- dev.kord:kord-gateway:{strictly 0.8.x-SNAPSHOT} -> 0.8.x-SNAPSHOT (c)
++--- dev.kord:kord-voice:{strictly 0.8.x-SNAPSHOT} -> 0.8.x-SNAPSHOT (c)
++--- dev.kord.cache:cache-api:{strictly 0.3.0} -> 0.3.0 (c)
++--- dev.kord.cache:cache-map:{strictly 0.3.0} -> 0.3.0 (c)
++--- org.litote.kmongo:kmongo-async-shared:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-reactive:{strictly 1.5.2} -> 1.5.2 (c)
++--- org.litote.kmongo:kmongo-shared:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.litote.kmongo:kmongo-property:{strictly 4.3.0} -> 4.3.0 (c)
++--- com.github.jershell:kbson:{strictly 0.4.4} -> 0.4.4 (c)
++--- org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:{strictly 1.2.2} -> 1.2.2 (c)
++--- org.mongodb:bson:{strictly 4.3.2} -> 4.3.2 (c)
++--- org.jetbrains.kotlinx:kotlinx-datetime:{strictly 0.3.1} -> 0.3.1 (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-test:{strictly 1.6.0} -> 1.6.0 (c)
++--- org.jetbrains.kotlinx:atomicfu:{strictly 0.17.0} -> 0.17.0 (c)
++--- io.ktor:ktor-client-cio:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-client-json:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-client-serialization:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-client-websockets:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-network:{strictly 1.6.7} -> 1.6.7 (c)
++--- org.mongodb:mongodb-driver-reactivestreams:{strictly 4.3.2} -> 4.3.2 (c)
++--- org.reactivestreams:reactive-streams:{strictly 1.0.3} -> 1.0.3 (c)
++--- org.litote.kmongo:kmongo-id:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.litote.kmongo:kmongo-data:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.litote:kreflect:{strictly 1.0.0} -> 1.0.0 (c)
++--- io.ktor:ktor-client-core:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-http-cio:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-network-tls:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-utils:{strictly 1.6.7} -> 1.6.7 (c)
++--- org.mongodb:mongodb-driver-core:{strictly 4.3.2} -> 4.3.2 (c)
++--- io.ktor:ktor-http:{strictly 1.6.7} -> 1.6.7 (c)
+\--- io.ktor:ktor-io:{strictly 1.6.7} -> 1.6.7 (c)
+
+testIntransitiveDependenciesMetadata
+No dependencies
+
+testKotlinScriptDef - Script filename extensions discovery classpath configuration
+No dependencies
+
+testKotlinScriptDefExtensions
+No dependencies
+
+testRuntimeClasspath - Runtime classpath of compilation 'test' (target  (jvm)).
++--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10
+|    +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10
+|    |    +--- org.jetbrains:annotations:13.0
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.10
+|    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.10
+|         \--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10 (*)
++--- org.pf4j:pf4j:3.6.0
+|    +--- org.slf4j:slf4j-api:1.7.25 -> 1.7.32
+|    \--- com.github.zafarkhaja:java-semver:0.9.0
++--- org.pf4j:pf4j-update:2.3.0
+|    +--- org.pf4j:pf4j:3.2.0 -> 3.6.0 (*)
+|    +--- com.google.code.gson:gson:2.2.4 -> 2.8.9
+|    \--- commons-codec:commons-codec:1.10
++--- com.google.code.gson:gson:2.8.9
++--- org.ow2.asm:asm:9.2
++--- io.insert-koin:koin-core:3.1.4
+|    \--- io.insert-koin:koin-core-jvm:3.1.4
+|         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.5.31 -> 1.6.10
+|         \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.31 -> 1.6.10 (*)
++--- ch.qos.logback:logback-classic:1.2.6
+|    +--- ch.qos.logback:logback-core:1.2.6
+|    \--- org.slf4j:slf4j-api:1.7.32
++--- dev.schlaubi:envconf:1.1
+|    \--- dev.schlaubi:envconf-jvm:1.1
+|         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.10 -> 1.6.10 (*)
+|         \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.5.10 -> 1.6.10
++--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2
+|    \--- org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.3.2
+|         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10 (*)
+|         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.10
+|         \--- org.jetbrains.kotlinx:kotlinx-serialization-core:1.3.2
+|              \--- org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.3.2
+|                   +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10 (*)
+|                   \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.10
++--- project :api
+|    +--- project :api:annotations
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    +--- com.kotlindiscord.kord.extensions:kord-extensions:1.5.2-MIKBOT
+|    |    +--- commons-validator:commons-validator:1.7
+|    |    |    +--- commons-beanutils:commons-beanutils:1.9.4
+|    |    |    |    +--- commons-logging:commons-logging:1.2
+|    |    |    |    \--- commons-collections:commons-collections:3.2.2
+|    |    |    +--- commons-digester:commons-digester:2.1
+|    |    |    +--- commons-logging:commons-logging:1.2
+|    |    |    \--- commons-collections:commons-collections:3.2.2
+|    |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |    +--- com.kotlindiscord.kord.extensions:annotations:1.5.2-MIKBOT
+|    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |    +--- com.ibm.icu:icu4j:69.1
+|    |    +--- io.insert-koin:koin-core:3.1.4 (*)
+|    |    +--- io.insert-koin:koin-logger-slf4j:3.1.4
+|    |    |    +--- io.insert-koin:koin-core:3.1.4 (*)
+|    |    |    +--- org.slf4j:slf4j-api:1.7.25 -> 1.7.32
+|    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.31 -> 1.6.10 (*)
+|    |    +--- dev.kord:kord-core:0.8.x-SNAPSHOT
+|    |    |    +--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2 (*)
+|    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0
+|    |    |    |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm:1.6.0
+|    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0
+|    |    |    |         |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.0
+|    |    |    |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.0
+|    |    |    |         |         |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.0 (c)
+|    |    |    |         |         |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0 (c)
+|    |    |    |         |         |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.0 (c)
+|    |    |    |         |         |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0 (c)
+|    |    |    |         |         |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-reactive:1.6.0 (c)
+|    |    |    |         |         |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm:1.6.0 (c)
+|    |    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0 -> 1.6.10 (*)
+|    |    |    |         |         \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.0 (*)
+|    |    |    |         \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0 -> 1.6.10 (*)
+|    |    |    +--- org.jetbrains.kotlinx:atomicfu:0.17.0
+|    |    |    |    \--- org.jetbrains.kotlinx:atomicfu-jvm:0.17.0
+|    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |         \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    +--- io.github.microutils:kotlin-logging:2.1.21
+|    |    |    |    \--- io.github.microutils:kotlin-logging-jvm:2.1.21
+|    |    |    |         +--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0 -> 1.6.10 (*)
+|    |    |    |         \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    +--- dev.kord:kord-common:0.8.x-SNAPSHOT
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-datetime:0.3.1
+|    |    |    |    |    \--- org.jetbrains.kotlinx:kotlinx-datetime-jvm:0.3.1
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    |    |    |         \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.5.30 -> 1.6.10
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2 (*)
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0 (*)
+|    |    |    |    +--- org.jetbrains.kotlinx:atomicfu:0.17.0 (*)
+|    |    |    |    +--- io.github.microutils:kotlin-logging:2.1.21 (*)
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |    |    +--- dev.kord:kord-rest:0.8.x-SNAPSHOT
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2 (*)
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0 (*)
+|    |    |    |    +--- org.jetbrains.kotlinx:atomicfu:0.17.0 (*)
+|    |    |    |    +--- io.github.microutils:kotlin-logging:2.1.21 (*)
+|    |    |    |    +--- dev.kord:kord-common:0.8.x-SNAPSHOT (*)
+|    |    |    |    +--- io.ktor:ktor-client-cio:1.6.7
+|    |    |    |    |    \--- io.ktor:ktor-client-cio-jvm:1.6.7
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         +--- io.ktor:ktor-client-core:1.6.7
+|    |    |    |    |         |    \--- io.ktor:ktor-client-core-jvm:1.6.7
+|    |    |    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         +--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         |         +--- io.ktor:ktor-http:1.6.7
+|    |    |    |    |         |         |    \--- io.ktor:ktor-http-jvm:1.6.7
+|    |    |    |    |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         |         |         +--- io.ktor:ktor-utils:1.6.7
+|    |    |    |    |         |         |         |    \--- io.ktor:ktor-utils-jvm:1.6.7
+|    |    |    |    |         |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         |         |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         |         |         |         +--- io.ktor:ktor-io:1.6.7
+|    |    |    |    |         |         |         |         |    \--- io.ktor:ktor-io-jvm:1.6.7
+|    |    |    |    |         |         |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         |         |         |         +--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         |         |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         |         |         |         |         \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         |         |         \--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         |         \--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         |         \--- io.ktor:ktor-http-cio:1.6.7
+|    |    |    |    |         |              \--- io.ktor:ktor-http-cio-jvm:1.6.7
+|    |    |    |    |         |                   +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |                   +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |                   +--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         |                   +--- io.ktor:ktor-network:1.6.7
+|    |    |    |    |         |                   |    \--- io.ktor:ktor-network-jvm:1.6.7
+|    |    |    |    |         |                   |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |                   |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |                   |         +--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         |                   |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         |                   |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         |                   |         \--- io.ktor:ktor-utils:1.6.7 (*)
+|    |    |    |    |         |                   +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         |                   +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         |                   \--- io.ktor:ktor-http:1.6.7 (*)
+|    |    |    |    |         +--- io.ktor:ktor-http-cio:1.6.7 (*)
+|    |    |    |    |         +--- io.ktor:ktor-network-tls:1.6.7
+|    |    |    |    |         |    \--- io.ktor:ktor-network-tls-jvm:1.6.7
+|    |    |    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         |         +--- io.ktor:ktor-network:1.6.7 (*)
+|    |    |    |    |         |         +--- io.ktor:ktor-utils:1.6.7 (*)
+|    |    |    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         |         \--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         \--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    +--- io.ktor:ktor-client-json:1.6.7
+|    |    |    |    |    \--- io.ktor:ktor-client-json-jvm:1.6.7
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         +--- io.ktor:ktor-client-core:1.6.7 (*)
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         \--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    +--- io.ktor:ktor-client-serialization:1.6.7
+|    |    |    |    |    \--- io.ktor:ktor-client-serialization-jvm:1.6.7
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         +--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         +--- io.ktor:ktor-client-core:1.6.7 (*)
+|    |    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0 -> 1.3.2 (*)
+|    |    |    |    |         \--- io.ktor:ktor-client-json:1.6.7 (*)
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |    |    +--- dev.kord:kord-gateway:0.8.x-SNAPSHOT
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2 (*)
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0 (*)
+|    |    |    |    +--- org.jetbrains.kotlinx:atomicfu:0.17.0 (*)
+|    |    |    |    +--- io.github.microutils:kotlin-logging:2.1.21 (*)
+|    |    |    |    +--- dev.kord:kord-common:0.8.x-SNAPSHOT (*)
+|    |    |    |    +--- io.ktor:ktor-client-json:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-client-websockets:1.6.7
+|    |    |    |    |    \--- io.ktor:ktor-client-websockets-jvm:1.6.7
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0 -> 1.6.10 (*)
+|    |    |    |    |         +--- org.slf4j:slf4j-api:1.7.32
+|    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0 -> 1.6.10
+|    |    |    |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt -> 1.6.0 (*)
+|    |    |    |    |         \--- io.ktor:ktor-client-core:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-client-serialization:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-client-cio:1.6.7 (*)
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |    |    +--- dev.kord:kord-voice:0.8.x-SNAPSHOT
+|    |    |    |    +--- dev.kord:kord-common:0.8.x-SNAPSHOT (*)
+|    |    |    |    +--- dev.kord:kord-gateway:0.8.x-SNAPSHOT (*)
+|    |    |    |    +--- io.ktor:ktor-client-json:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-client-serialization:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-client-cio:1.6.7 (*)
+|    |    |    |    +--- io.ktor:ktor-network:1.6.7 (*)
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |    |    +--- dev.kord.cache:cache-api:{strictly [0.3.0, 0.4.0[; prefer latest.release} -> 0.3.0
+|    |    |    |    +--- org.jetbrains.kotlinx:atomicfu-jvm:0.14.4 -> 0.17.0 (*)
+|    |    |    |    +--- io.github.microutils:kotlin-logging:2.0.3 -> 2.1.21 (*)
+|    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.10 -> 1.6.10 (*)
+|    |    |    |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0 -> 1.6.0 (*)
+|    |    |    +--- dev.kord.cache:cache-map:{strictly [0.3.0, 0.4.0[; prefer latest.release} -> 0.3.0
+|    |    |    |    +--- org.jetbrains.kotlinx:atomicfu-jvm:0.14.4 -> 0.17.0 (*)
+|    |    |    |    +--- io.github.microutils:kotlin-logging:2.0.3 -> 2.1.21 (*)
+|    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.10 -> 1.6.10 (*)
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0 -> 1.6.0 (*)
+|    |    |    |    \--- dev.kord.cache:cache-api:0.3.0 (*)
+|    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |    +--- io.github.microutils:kotlin-logging:2.1.21 (*)
+|    |    +--- org.jetbrains.kotlinx:kotlinx-serialization-core:1.3.0 -> 1.3.2 (*)
+|    |    +--- io.sentry:sentry:5.5.2
+|    |    |    \--- com.google.code.gson:gson:2.8.5 -> 2.8.9
+|    |    \--- com.kotlindiscord.kord.extensions:token-parser:1.5.2-MIKBOT
+|    |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
+|    |         \--- io.github.microutils:kotlin-logging:2.1.21 (*)
+|    +--- dev.kord.x:emoji:0.5.0
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.10 -> 1.6.10 (*)
+|    +--- org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.5.2 -> 1.6.0
+|    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0 (*)
+|    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.0 (*)
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0 -> 1.6.10 (*)
+|    +--- org.litote.kmongo:kmongo-coroutine-serialization:4.3.0
+|    |    +--- org.litote.kmongo:kmongo-coroutine-core:4.3.0
+|    |    |    +--- org.litote.kmongo:kmongo-async-shared:4.3.0
+|    |    |    |    +--- org.litote.kmongo:kmongo-property:4.3.0
+|    |    |    |    |    +--- org.litote.kmongo:kmongo-shared:4.3.0
+|    |    |    |    |    |    +--- org.litote.kmongo:kmongo-id:4.3.0
+|    |    |    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-reflect:1.5.30 -> 1.6.10
+|    |    |    |    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10 (*)
+|    |    |    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-reflect:1.5.30 -> 1.6.10 (*)
+|    |    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    |    |    |    +--- org.litote.kmongo:kmongo-data:4.3.0
+|    |    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    |    |    |    +--- org.litote:kreflect:1.0.0
+|    |    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.3.10 -> 1.6.10 (*)
+|    |    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-reflect:1.3.10 -> 1.6.10 (*)
+|    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    |    |    +--- org.mongodb:mongodb-driver-reactivestreams:4.3.2
+|    |    |    |    |    +--- org.mongodb:bson:4.3.2
+|    |    |    |    |    +--- org.mongodb:mongodb-driver-core:4.3.2
+|    |    |    |    |    |    \--- org.mongodb:bson:4.3.2
+|    |    |    |    |    +--- org.reactivestreams:reactive-streams:1.0.2 -> 1.0.3
+|    |    |    |    |    \--- io.projectreactor:reactor-core:3.2.22.RELEASE
+|    |    |    |    |         \--- org.reactivestreams:reactive-streams:1.0.2 -> 1.0.3
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2 -> 1.6.0 (*)
+|    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-reactive:1.5.2 -> 1.6.0
+|    |    |    |    +--- org.reactivestreams:reactive-streams:1.0.3
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0 (*)
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.0 (*)
+|    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0 -> 1.6.10 (*)
+|    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    +--- org.litote.kmongo:kmongo-serialization-mapping:4.3.0
+|    |    |    +--- org.litote.kmongo:kmongo-shared:4.3.0 (*)
+|    |    |    +--- org.litote.kmongo:kmongo-property:4.3.0 (*)
+|    |    |    +--- com.github.jershell:kbson:0.4.4
+|    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.20 -> 1.6.10 (*)
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.0.1 -> 1.3.2 (*)
+|    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.0.1 -> 1.3.2 (*)
+|    |    |    |    \--- org.mongodb:bson:4.1.0 -> 4.3.2
+|    |    |    +--- org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.2.2 -> 1.3.2 (*)
+|    |    |    +--- org.mongodb:bson:4.3.2
+|    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
+|    +--- org.pf4j:pf4j:3.6.0 (*)
+|    +--- dev.schlaubi:envconf:1.1 (*)
+|    +--- ch.qos.logback:logback-classic:1.2.6 (*)
+|    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
++--- org.jetbrains.kotlin:kotlin-reflect:1.6.10 (*)
++--- io.insert-koin:koin-core:{strictly 3.1.4} -> 3.1.4 (c)
++--- ch.qos.logback:logback-classic:{strictly 1.2.6} -> 1.2.6 (c)
++--- org.jetbrains.kotlinx:kotlinx-serialization-json:{strictly 1.3.2} -> 1.3.2 (c)
++--- org.jetbrains.kotlin:kotlin-reflect:{strictly 1.6.10} -> 1.6.10 (c)
++--- com.google.code.gson:gson:{strictly 2.8.9} -> 2.8.9 (c)
++--- org.pf4j:pf4j:{strictly 3.6.0} -> 3.6.0 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.ow2.asm:asm:{strictly 9.2} -> 9.2 (c)
++--- dev.schlaubi:envconf:{strictly 1.1} -> 1.1 (c)
++--- org.pf4j:pf4j-update:{strictly 2.3.0} -> 2.3.0 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.slf4j:slf4j-api:{strictly 1.7.32} -> 1.7.32 (c)
++--- com.github.zafarkhaja:java-semver:{strictly 0.9.0} -> 0.9.0 (c)
++--- commons-codec:commons-codec:{strictly 1.10} -> 1.10 (c)
++--- io.insert-koin:koin-core-jvm:{strictly 3.1.4} -> 3.1.4 (c)
++--- ch.qos.logback:logback-core:{strictly 1.2.6} -> 1.2.6 (c)
++--- dev.schlaubi:envconf-jvm:{strictly 1.1} -> 1.1 (c)
++--- org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:{strictly 1.3.2} -> 1.3.2 (c)
++--- com.kotlindiscord.kord.extensions:kord-extensions:{strictly 1.5.2-MIKBOT} -> 1.5.2-MIKBOT (c)
++--- dev.kord.x:emoji:{strictly 0.5.0} -> 0.5.0 (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:{strictly 1.6.0} -> 1.6.0 (c)
++--- org.litote.kmongo:kmongo-coroutine-serialization:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.jetbrains:annotations:{strictly 13.0} -> 13.0 (c)
++--- org.jetbrains.kotlin:kotlin-stdlib-common:{strictly 1.6.10} -> 1.6.10 (c)
++--- org.jetbrains.kotlinx:kotlinx-serialization-core:{strictly 1.3.2} -> 1.3.2 (c)
++--- commons-validator:commons-validator:{strictly 1.7} -> 1.7 (c)
++--- com.kotlindiscord.kord.extensions:annotations:{strictly 1.5.2-MIKBOT} -> 1.5.2-MIKBOT (c)
++--- com.ibm.icu:icu4j:{strictly 69.1} -> 69.1 (c)
++--- io.insert-koin:koin-logger-slf4j:{strictly 3.1.4} -> 3.1.4 (c)
++--- dev.kord:kord-core:{strictly 0.8.x-SNAPSHOT} -> 0.8.x-SNAPSHOT (c)
++--- io.github.microutils:kotlin-logging:{strictly 2.1.21} -> 2.1.21 (c)
++--- io.sentry:sentry:{strictly 5.5.2} -> 5.5.2 (c)
++--- com.kotlindiscord.kord.extensions:token-parser:{strictly 1.5.2-MIKBOT} -> 1.5.2-MIKBOT (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-core:{strictly 1.6.0} -> 1.6.0 (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:{strictly 1.6.0} -> 1.6.0 (c)
++--- org.litote.kmongo:kmongo-coroutine-core:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.litote.kmongo:kmongo-serialization-mapping:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:{strictly 1.3.2} -> 1.3.2 (c)
++--- commons-beanutils:commons-beanutils:{strictly 1.9.4} -> 1.9.4 (c)
++--- commons-digester:commons-digester:{strictly 2.1} -> 2.1 (c)
++--- commons-logging:commons-logging:{strictly 1.2} -> 1.2 (c)
++--- commons-collections:commons-collections:{strictly 3.2.2} -> 3.2.2 (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-test:{strictly 1.6.0} -> 1.6.0 (c)
++--- org.jetbrains.kotlinx:atomicfu:{strictly 0.17.0} -> 0.17.0 (c)
++--- dev.kord:kord-common:{strictly 0.8.x-SNAPSHOT} -> 0.8.x-SNAPSHOT (c)
++--- dev.kord:kord-rest:{strictly 0.8.x-SNAPSHOT} -> 0.8.x-SNAPSHOT (c)
++--- dev.kord:kord-gateway:{strictly 0.8.x-SNAPSHOT} -> 0.8.x-SNAPSHOT (c)
++--- dev.kord:kord-voice:{strictly 0.8.x-SNAPSHOT} -> 0.8.x-SNAPSHOT (c)
++--- dev.kord.cache:cache-api:{strictly 0.3.0} -> 0.3.0 (c)
++--- dev.kord.cache:cache-map:{strictly 0.3.0} -> 0.3.0 (c)
++--- io.github.microutils:kotlin-logging-jvm:{strictly 2.1.21} -> 2.1.21 (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:{strictly 1.6.0} -> 1.6.0 (c)
++--- org.litote.kmongo:kmongo-async-shared:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-reactive:{strictly 1.6.0} -> 1.6.0 (c)
++--- org.litote.kmongo:kmongo-shared:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.litote.kmongo:kmongo-property:{strictly 4.3.0} -> 4.3.0 (c)
++--- com.github.jershell:kbson:{strictly 0.4.4} -> 0.4.4 (c)
++--- org.mongodb:bson:{strictly 4.3.2} -> 4.3.2 (c)
++--- org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm:{strictly 1.6.0} -> 1.6.0 (c)
++--- org.jetbrains.kotlinx:atomicfu-jvm:{strictly 0.17.0} -> 0.17.0 (c)
++--- org.jetbrains.kotlinx:kotlinx-datetime:{strictly 0.3.1} -> 0.3.1 (c)
++--- io.ktor:ktor-client-cio:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-client-json:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-client-serialization:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-client-websockets:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-network:{strictly 1.6.7} -> 1.6.7 (c)
++--- org.reactivestreams:reactive-streams:{strictly 1.0.3} -> 1.0.3 (c)
++--- org.mongodb:mongodb-driver-reactivestreams:{strictly 4.3.2} -> 4.3.2 (c)
++--- org.litote.kmongo:kmongo-id:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.litote.kmongo:kmongo-data:{strictly 4.3.0} -> 4.3.0 (c)
++--- org.litote:kreflect:{strictly 1.0.0} -> 1.0.0 (c)
++--- org.jetbrains.kotlinx:kotlinx-datetime-jvm:{strictly 0.3.1} -> 0.3.1 (c)
++--- io.ktor:ktor-client-cio-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-client-json-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-client-serialization-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-client-websockets-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-network-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- org.mongodb:mongodb-driver-core:{strictly 4.3.2} -> 4.3.2 (c)
++--- io.projectreactor:reactor-core:{strictly 3.2.22.RELEASE} -> 3.2.22.RELEASE (c)
++--- io.ktor:ktor-client-core:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-http-cio:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-network-tls:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-utils:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-client-core-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-http-cio-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-network-tls-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-utils-jvm:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-http:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-io:{strictly 1.6.7} -> 1.6.7 (c)
++--- io.ktor:ktor-http-jvm:{strictly 1.6.7} -> 1.6.7 (c)
+\--- io.ktor:ktor-io-jvm:{strictly 1.6.7} -> 1.6.7 (c)
+
+testRuntimeOnly - Runtime only dependencies for compilation 'test' (target  (jvm)). (n)
+No dependencies
+
+testRuntimeOnlyDependenciesMetadata
+No dependencies
+
+(c) - dependency constraint
+(*) - dependencies omitted (listed previously)
+
+(n) - Not resolved (configuration is not meant to be resolved)
+
+A web-based, searchable dependency report is available by adding the --scan option.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 8.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+See https://docs.gradle.org/7.3.3/userguide/command_line_interface.html#sec:command_line_warnings
+
+BUILD SUCCESSFUL in 2s
+20 actionable tasks: 1 executed, 19 up-to-date

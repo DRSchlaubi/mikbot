@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "dev.schlaubi.mikbot"
-version = "2.1.6"
+version = "2.1.7"
 
 dependencies {
     optionalPlugin(project(":core:gdpr"))

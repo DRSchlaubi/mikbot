@@ -86,6 +86,11 @@ public object Config : EnvironmentConfig("") {
     public val DOWNLOAD_PLUGINS: List<PluginSpec> by getEnv(emptyList()) {
         it.split(",").map { spec -> PluginSpec.parse(spec) }
     }
+
+    /**
+     * Whether the bot will try to update the plugins or not.
+     */
+    public val UPDATE_PLUGINS: Boolean by getEnv(false, String::toBooleanStrict)
 }
 
 @Suppress("unused")

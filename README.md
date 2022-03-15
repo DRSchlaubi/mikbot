@@ -32,6 +32,7 @@ MONGO_DATABASE=bot_prod
 LOG_LEVEL=DEBUG
 BOT_OWNERS=416902379598774273
 OWNER_GUILD=<>
+UPDATE_PLUGINS=false #if you want to disable the auto updater
 ```
 
 </details>

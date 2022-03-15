@@ -6,6 +6,7 @@ import org.gradle.api.Task
 import org.gradle.api.file.DuplicatesStrategy
 import org.gradle.api.plugins.ExtensionContainer
 import org.gradle.api.tasks.Copy
+import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskContainer
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.bundling.Jar
@@ -29,7 +30,15 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
         target.run {
             createPluginExtensions()
             configureTasks()
+            target.afterEvaluate {
+                (target.extensions.getByName("sourceSets") as SourceSetContainer).getByName("main")
+                    .apply {
+                        resources.srcDir(target.buildDir.resolve("generated").resolve("mikbot").resolve("main")
+                            .resolve("resources"))
+                    }
+            }
         }
+
     }
 
     private fun Project.configureTasks() {

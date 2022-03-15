@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "dev.schlaubi"
-version = "1.4.4"
+version = "1.4.5"
 
 repositories {
     mavenCentral()
@@ -15,6 +15,7 @@ repositories {
 dependencies {
     implementation("org.jetbrains.kotlinx", "kotlinx-serialization-json", "1.3.2")
     implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-core", "1.6.0")
+    compileOnly(kotlin("gradle-plugin"))
 }
 
 gradlePlugin {

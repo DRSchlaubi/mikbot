@@ -10,3 +10,7 @@ version = "1.2.8"
 dependencies {
     plugin(projects.game.gameApi)
 }
+
+mikbotPlugin {
+    bundle.set("multiple_choice")
+}

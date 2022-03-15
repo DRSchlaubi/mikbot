@@ -207,7 +207,7 @@ private suspend fun CommandContext.handleError(
     when (error.severity) {
         TrackResponse.Error.Severity.COMMON -> {
             respond {
-                content = translate("music.queue.load_failed.common", error.message)
+                content = translate("music.queue.load_failed.common", arrayOf(error.message))
             }
         }
         else -> {

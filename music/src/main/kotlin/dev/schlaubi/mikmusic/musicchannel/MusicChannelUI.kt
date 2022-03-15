@@ -1,10 +1,10 @@
 package dev.schlaubi.mikmusic.musicchannel
 
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
-import dev.kord.common.annotation.KordUnsafe
 import dev.kord.common.entity.ButtonStyle
 import dev.kord.common.entity.DiscordPartialEmoji
 import dev.kord.common.entity.Snowflake
+import dev.kord.common.kLocale
 import dev.kord.core.Kord
 import dev.kord.core.behavior.edit
 import dev.kord.core.behavior.getChannelOfOrNull
@@ -15,6 +15,7 @@ import dev.kord.rest.builder.message.modify.actionRow
 import dev.kord.rest.builder.message.modify.embed
 import dev.kord.x.emoji.DiscordEmoji
 import dev.kord.x.emoji.Emojis
+import dev.schlaubi.mikbot.plugin.api.util.convertToISO
 import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase
 import dev.schlaubi.mikmusic.player.ChapterQueuedTrack
 import dev.schlaubi.mikmusic.player.MusicPlayer
@@ -31,7 +32,6 @@ const val loop = "loop"
 const val repeatOne = "repeatOne"
 const val shuffle = "shuffle"
 
-@OptIn(KordUnsafe::class, dev.kord.common.annotation.KordExperimental::class)
 suspend fun updateMessage(
     guildId: Snowflake,
     kord: Kord,
@@ -39,7 +39,15 @@ suspend fun updateMessage(
     initialUpdate: Boolean = false,
     translationsProvider: TranslationsProvider
 ) {
-    findMessageSafe(guildId, kord)?.edit {
+    val message = findMessageSafe(guildId, kord)
+    val locale = kord.getGuild(guildId)?.preferredLocale?.kLocale?.convertToISO()?.asJavaLocale()
+        ?: translationsProvider.defaultLocale
+
+    fun translate(key: String, vararg replacements: Any?) = translationsProvider.translate(
+        key, locale, "music", replacements.toList()
+    )
+
+    message?.edit {
         if (initialUpdate) {
             // Clear initial loading text
             // This requires the content to be explicitly an empty string
@@ -54,7 +62,7 @@ suspend fun updateMessage(
 
                 if (playingQueueTrack is ChapterQueuedTrack) {
                     field {
-                        name = "Chapter"
+                        name = translate("music.music_channel.chapter")
                         value = playingQueueTrack.chapters[playingQueueTrack.chapterIndex].title
                     }
                 }
@@ -64,9 +72,9 @@ suspend fun updateMessage(
 
                 if (musicPlayer.queuedTracks.isNotEmpty()) {
                     field {
-                        name = "Next song at"
+                        name = translate("music.music_channel.next_song_at")
                         value = if (musicPlayer.player.paused) {
-                            "You will never reach the next song at this speed. (Bot is paused)"
+                            translate("music.music_channel.paused")
                         } else {
                             "<t:${nextSongAt.epochSeconds}:R>"
                         }
@@ -74,14 +82,14 @@ suspend fun updateMessage(
                 }
             }
 
-            title = "Queue"
+            title = translate("music.music_channel.queue")
             description = musicPlayer.queuedTracks.take(5).mapIndexed { index, track -> track to index }
                 .joinToString("\n") { (track, index) ->
                     (index + 1).toString() + ". " + track.track.format()
-                }.ifBlank { "No further songs in queue" }
+                }.ifBlank { translate("music.music_channel.queue.empty") }
 
             footer {
-                text = "Send a message in this channel to queue a song"
+                text = translate("music.music_channel.footer")
             }
         }
 

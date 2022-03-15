@@ -17,6 +17,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
+import java.util.*
 import kotlin.time.Duration.Companion.seconds
 
 internal suspend fun <Q : Question> MultipleChoiceGame<*, Q, *>.turn(question: Q) {
@@ -110,7 +111,7 @@ internal suspend fun <Q : Question> MultipleChoiceGame<*, Q, *>.turn(question: Q
 
 private fun MultipleChoiceGame<*, *, *>.failRemainingPlayers(
     turnStart: Instant,
-    answers: MutableMap<UserBehavior, Boolean>
+    answers: MutableMap<UserBehavior, Boolean>,
 ) {
     players.forEach {
         if (!answers.containsKey(it.user)) {
@@ -120,6 +121,14 @@ private fun MultipleChoiceGame<*, *, *>.failRemainingPlayers(
 }
 
 internal suspend fun MultipleChoiceGame<*, *, *>.translateInternally(user: UserBehavior, key: String) =
+    translateInternally(module.bot.getLocale(thread.asChannel(), user.asUser()), key)
+
+internal fun MultipleChoiceGame<*, *, *>.translateInternally(locale: Locale, key: String) =
     translationsProvider.translate(
-        key, module.bot.getLocale(thread.asChannel(), user.asUser()), "multiple_choice"
+        key, locale, "multiple_choice"
+    )
+
+internal suspend fun MultipleChoiceGame<*, *, *>.translateInternally(key: String) =
+    translationsProvider.translate(
+        key, locale(), "multiple_choice"
     )

@@ -1,7 +1,9 @@
 package dev.schlaubi.mikbot.game.api
 
 import dev.kord.core.behavior.interaction.response.MessageInteractionResponseBehavior
+import dev.kord.core.behavior.interaction.response.createEphemeralFollowup
 import dev.kord.core.behavior.interaction.response.followUpEphemeral
+import dev.kord.rest.builder.message.create.FollowupMessageCreateBuilder
 import dev.schlaubi.mikbot.plugin.api.util.MessageBuilder
 import dev.schlaubi.mikbot.plugin.api.util.getLocale
 import java.util.*
@@ -14,7 +16,9 @@ suspend fun Game<*>.confirmation(
 ) =
     dev.schlaubi.mikbot.plugin.api.util.confirmation(
         {
-            ack.followUpEphemeral { it() }
+            ack.createEphemeralFollowup {
+                it()
+            }
         },
         hasNoOption = hasNoOption,
         messageBuilder = messageBuilder,

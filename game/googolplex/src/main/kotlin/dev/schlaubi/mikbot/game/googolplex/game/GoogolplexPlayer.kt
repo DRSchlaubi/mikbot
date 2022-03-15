@@ -6,11 +6,13 @@ import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.interaction.followup.edit
 import dev.kord.core.behavior.interaction.response.EphemeralMessageInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.response.MessageInteractionResponseBehavior
+import dev.kord.core.behavior.interaction.response.createEphemeralFollowup
 import dev.kord.core.behavior.interaction.response.followUpEphemeral
 import dev.kord.core.builder.components.emoji
 import dev.kord.core.entity.ReactionEmoji
 import dev.kord.core.entity.interaction.followup.FollowupMessage
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
+import dev.kord.rest.builder.message.create.FollowupMessageCreateBuilder
 import dev.kord.rest.builder.message.modify.MessageModifyBuilder
 import dev.kord.rest.builder.message.modify.actionRow
 import dev.schlaubi.mikbot.game.api.AbstractGame
@@ -59,8 +61,9 @@ class GoogolplexPlayer(
     }
 
     override suspend fun resendControls(ack: EphemeralMessageInteractionResponseBehavior) {
-        controls = ack.followUpEphemeral {
-            content = "Waiting for next game cycle ..."
+        controls = ack.createEphemeralFollowup {
+
+            content = translate("game.controls.wait_for_cycle")
         }
         currentAwaiter?.complete(null)
     }

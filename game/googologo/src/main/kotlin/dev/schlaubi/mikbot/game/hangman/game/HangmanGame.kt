@@ -64,14 +64,7 @@ class HangmanGame(
         val wordOwner = players.first { it.user == wordOwner }
         players.remove(wordOwner)
         leftPlayers.add(wordOwner)
-        val message = thread.createMessage(
-            """${wordOwner.user.mention} you got randomly,
-                |..., I mean not really randomly, much more specifically,
-                |anyways,
-                |you were selected to chose the word, so please send me a DM with your word of choice 
-                |(unless it's longer than 102 chars) or shorter than 3 chars, then I don't want it.
-                |And yes those numbers were arbitrarily chosen""".trimMargin()
-        )
+        val message = thread.createMessage(translate("game.ui.word_selection.ask", wordOwner.user.mention))
 
         val wordEvent = kord.waitFor<MessageCreateEvent>(1.minutes.inWholeMilliseconds) {
             // Check if message is from wordOwner
@@ -81,8 +74,7 @@ class HangmanGame(
 
         if (wordEvent == null) {
             thread.createMessage {
-                content =
-                    "Because ${wordOwner.user.mention} took too long this game is now over, what an egoistic idiot?"
+                content = translate("game.ui.word_selection.timeout")
             }
             softEnd()
             return null
@@ -95,10 +87,7 @@ class HangmanGame(
             }
 
             thread.createMessage {
-                content = """${wordOwner.user.mention} is too dumb to follow simple instructions, which made us think,
-                        |they might be an Apple user, so if you know that's the case feel free to bully them, and if not
-                        |bully them anyways, because they were to stupid to follow simple instructions
-                    """.trimMargin()
+                content = translate("hangman.game.wrong_word.public")
             }
             softEnd()
             return null
@@ -124,9 +113,9 @@ class HangmanGame(
         this@HangmanGame.state = state
 
         welcomeMessage.edit {
-            embeds = mutableListOf(state.toEmbed())
+            embeds = mutableListOf(state.toEmbed(this@HangmanGame))
         }
-        thread.createMessage("You can start guessing now!")
+        thread.createMessage(translate("game.started"))
     }
 
     private suspend fun onNewGuess(event: MessageCreateEvent) = coroutineScope {
@@ -161,7 +150,7 @@ class HangmanGame(
                         state =
                             GameState.Done(leftPlayers.first { it.user == wordOwner }, guessingState.word)
                     else -> welcomeMessage.edit {
-                        embeds = mutableListOf(toEmbed())
+                        embeds = mutableListOf(toEmbed(this@HangmanGame))
                     }
                 }
             }
@@ -201,10 +190,10 @@ class HangmanGame(
 
         val word = (state as? GameState.HasWord)?.word ?: return
         if (winner!!.user == wordOwner) {
-            description = "So no one was clever enough to guess it but the Word was: `$word`"
+            description = translate("game.ui.lost", word)
         } else {
             field {
-                name = "Word"
+                name = translate("hangman.word")
                 value = word
             }
         }

@@ -4,7 +4,9 @@ import dev.kord.common.entity.ButtonStyle
 import dev.kord.common.entity.DiscordPartialEmoji
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.interaction.followup.edit
+import dev.kord.core.behavior.interaction.response.createEphemeralFollowup
 import dev.kord.core.behavior.interaction.response.followUpEphemeral
+import dev.kord.rest.builder.message.create.FollowupMessageCreateBuilder
 import dev.kord.rest.builder.message.modify.actionRow
 import dev.schlaubi.mikbot.game.uno.game.ui.buttonStyle
 import dev.schlaubi.mikbot.game.uno.game.ui.emoji
@@ -38,7 +40,8 @@ suspend fun DiscordUnoPlayer.displayableCards(): List<IndexedValue<Card>> {
         val diff = safeCards.size - cardLimit
         val brokenCards = safeCards.takeLast(diff)
         deck.removeAll(brokenCards.map { (_, card) -> card })
-        response.followUpEphemeral {
+        response.createEphemeralFollowup {
+
             content = translate("uno.controls.removed_cards", arrayOf(diff))
         }
         safeCards.dropLast(diff)

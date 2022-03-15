@@ -182,7 +182,19 @@ class PollConverter(validator: Validator<Poll> = null) : SingleConverter<Poll>(v
                 errorNoMessage(arg, context)
             }
 
-            return Poll.Message(arg.toULong(), channel.id.value, channel.guildId.value)
+            @Suppress("MagicNumber")
+            val messageId: ULong = try {
+                arg.toULong()
+            } catch (e: NumberFormatException) {
+                throw DiscordRelayedException(
+                    context.translate(
+                        "converters.message.error.invalidMessageId",
+                        replacements = arrayOf(arg)
+                    )
+                )
+            }
+
+            return Poll.Message(messageId, channel.id.value, channel.guildId.value)
         }
     }
 

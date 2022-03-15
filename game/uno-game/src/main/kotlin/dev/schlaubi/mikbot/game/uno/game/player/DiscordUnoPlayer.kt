@@ -3,12 +3,10 @@ package dev.schlaubi.mikbot.game.uno.game.player
 import dev.kord.common.Locale
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.interaction.followup.edit
-import dev.kord.core.behavior.interaction.response.EphemeralMessageInteractionResponseBehavior
-import dev.kord.core.behavior.interaction.response.MessageInteractionResponseBehavior
-import dev.kord.core.behavior.interaction.response.followUp
-import dev.kord.core.behavior.interaction.response.followUpEphemeral
+import dev.kord.core.behavior.interaction.response.*
 import dev.kord.core.entity.interaction.followup.FollowupMessage
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
+import dev.kord.rest.builder.message.create.FollowupMessageCreateBuilder
 import dev.kord.rest.builder.message.modify.MessageModifyBuilder
 import dev.kord.rest.builder.message.modify.embed
 import dev.schlaubi.mikbot.game.api.ControlledPlayer
@@ -52,7 +50,8 @@ abstract class DiscordUnoPlayer(
     override fun onSkip() {
         game.launch {
             if (game.flashMode) {
-                response.followUpEphemeral {
+                response.createEphemeralFollowup {
+
                     content = translate("uno.flash.skipped")
                 }
             } else {
@@ -65,7 +64,8 @@ abstract class DiscordUnoPlayer(
 
     override fun onUnoBluff() {
         game.launch {
-            response.followUpEphemeral {
+            response.createEphemeralFollowup {
+
                 content = translate("uno.general.said_on_as_bluff")
             }
         }
@@ -74,7 +74,8 @@ abstract class DiscordUnoPlayer(
     override fun onCardsDrawn(amount: Int) {
         if (amount >= 1) {
             game.launch {
-                response.followUpEphemeral {
+                response.createEphemeralFollowup {
+
                     content = translate("uno.controls.drawn", amount)
                 }
             }
@@ -99,7 +100,8 @@ abstract class DiscordUnoPlayer(
 
     override fun forgotUno(game: Game<*>) {
         this.game.kord.launch {
-            response.followUpEphemeral {
+            response.createEphemeralFollowup {
+
                 content = translate("uno.general.forgot_uno")
             }
         }
@@ -107,9 +109,9 @@ abstract class DiscordUnoPlayer(
 
     override fun onVisibleCards(otherPlayer: Player) {
         game.launch {
-            val cards = ack.followUpEphemeral {
-                val cards = otherPlayer.deck.map { translate(it.translationKey) }.joinToString(", ")
+            val cards = ack.createEphemeralFollowup {
 
+                val cards = otherPlayer.deck.map { translate(it.translationKey) }.joinToString(", ")
                 content = translate(
                     "uno.controls.view_cards.show",
                     (otherPlayer as DiscordUnoPlayer).user.mention, cards
@@ -201,7 +203,8 @@ abstract class DiscordUnoPlayer(
             }
             allCardsButton -> {
                 val cards = deck.map { translate(it.translationKey) }.joinToString(", ")
-                response.followUpEphemeral {
+                response.createEphemeralFollowup {
+
                     content = cards.substring(0, 2000.coerceAtMost(cards.length))
                 }
                 return true
@@ -274,7 +277,8 @@ abstract class DiscordUnoPlayer(
         response: EphemeralMessageInteractionResponseBehavior? = null,
     ) {
         val ack = response ?: event?.interaction?.deferEphemeralMessage() ?: this.response
-        controls = ack.followUpEphemeral {
+        controls = ack.createEphemeralFollowup {
+
             content = translate("uno.controls.loading")
         }
         if (!justLoading) {

@@ -1,12 +1,13 @@
 package dev.schlaubi.mikbot.game.hangman.game
 
+import dev.schlaubi.mikbot.game.api.translate
 import dev.schlaubi.mikbot.plugin.api.util.embed
 import java.util.*
 
-fun GameState.Guessing.toEmbed() = embed {
+suspend fun GameState.Guessing.toEmbed(game: HangmanGame) = embed {
     description = buildString {
 
-        append("Word: ")
+        append(game.translate("game.ui.word"))
         append("```")
         word.forEach {
             if (it.uppercaseChar() in chars || it.isWhitespace()) {
@@ -28,14 +29,14 @@ fun GameState.Guessing.toEmbed() = embed {
 
     if (wrongChars.isNotEmpty()) {
         field {
-            name = "Wrong chars"
+            name = game.translate("game.ui.wrong_characters")
             value = wrongChars.joinToString("`, `", "`", "`") { it.uppercase(Locale.ENGLISH) }
         }
     }
 
     if (blackList.isNotEmpty()) {
         field {
-            name = "Wrong words"
+            name = game.translate("game.ui.wrong_words")
             value = blackList.joinToString("`, `", "`", "`")
         }
     }

@@ -6,6 +6,7 @@ import dev.kord.core.behavior.edit
 import dev.kord.rest.builder.message.modify.actionRow
 import dev.kord.x.emoji.DiscordEmoji
 import dev.kord.x.emoji.Emojis
+import dev.schlaubi.mikbot.game.api.translate
 import dev.schlaubi.mikbot.game.connect_four.Connect4
 import dev.schlaubi.mikbot.game.connect_four.Coordinate
 import dev.schlaubi.mikbot.game.connect_four.WinResult
@@ -62,8 +63,10 @@ fun Connect4.buildGameBoard(winResult: WinResult? = null) = buildString {
 
 suspend fun Connect4Game.updateBoard(player: Connect4Player, winner: Boolean) {
     welcomeMessage.edit {
-        content = """Player: ${player.user.mention}
-            |${buildGameBoard()}
+        val board = buildGameBoard()
+        val title = translate("game.board.heading", player.user.mention)
+        content = """$title
+            |$board
         """.trimMargin()
 
         if (!winner) {

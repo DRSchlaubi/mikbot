@@ -6,10 +6,12 @@ import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.extensions.event
 import dev.kord.core.behavior.channel.withTyping
 import dev.kord.core.behavior.interaction.response.EphemeralMessageInteractionResponseBehavior
+import dev.kord.core.behavior.interaction.response.createEphemeralFollowup
 import dev.kord.core.behavior.interaction.response.followUpEphemeral
 import dev.kord.core.behavior.reply
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.core.event.message.MessageCreateEvent
+import dev.kord.rest.builder.message.create.FollowupMessageCreateBuilder
 import dev.schlaubi.lavakord.audio.Link
 import dev.schlaubi.lavakord.audio.player.Track
 import dev.schlaubi.lavakord.rest.TrackResponse
@@ -186,7 +188,9 @@ private suspend fun EphemeralMessageInteractionResponseBehavior.confirmation(
     translate: Translator
 ): Confirmation = confirmation(
     {
-        followUpEphemeral { it() }
+        createEphemeralFollowup {
+            it()
+        }
     },
     messageBuilder = messageBuilder,
     translate = translate,

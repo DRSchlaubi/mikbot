@@ -8,7 +8,9 @@ import dev.kord.common.entity.ButtonStyle
 import dev.kord.common.entity.DiscordPartialEmoji
 import dev.kord.core.behavior.interaction.followup.FollowupMessageBehavior
 import dev.kord.core.behavior.interaction.followup.edit
+import dev.kord.core.behavior.interaction.response.createEphemeralFollowup
 import dev.kord.core.behavior.interaction.response.followUpEphemeral
+import dev.kord.rest.builder.message.create.FollowupMessageCreateBuilder
 import dev.kord.x.emoji.Emojis
 import dev.schlaubi.mikbot.game.uno.game.player.DiscordUnoPlayer
 import dev.schlaubi.mikbot.game.uno.game.player.translate
@@ -89,33 +91,34 @@ private class DropInContext(val game: DiscordUnoGame, val players: List<Pair<Dis
     }
 }
 
-private suspend fun DiscordUnoPlayer.dropIn(context: DropInContext, card: PlayedCard) = response.followUpEphemeral {
-    content = translate("uno.controls.drop_in.title", translate(card.translationKey))
+private suspend fun DiscordUnoPlayer.dropIn(context: DropInContext, card: PlayedCard) =
+    response.createEphemeralFollowup {
 
-    components(timeoutDuration) {
-        val correct = Random.nextInt(0, 3)
-        repeat(4) {
-            if (correct == it) {
-                ephemeralButton {
-                    style = ButtonStyle.Primary
-                    id = "drop_in"
-                    label = translate("uno.controls.drop_in")
+        content = translate("uno.controls.drop_in.title", translate(card.translationKey))
+        components(timeoutDuration) {
+            val correct = Random.nextInt(0, 3)
+            repeat(4) {
+                if (correct == it) {
+                    ephemeralButton {
+                        style = ButtonStyle.Primary
+                        id = "drop_in"
+                        label = translate("uno.controls.drop_in")
 
-                    action {
-                        context.dropIn(this@dropIn, card)
-                        edit {
-                            components = mutableListOf()
-                            content = translate("uno.controls.drop_in.success", "uno")
+                        action {
+                            context.dropIn(this@dropIn, card)
+                            edit {
+                                components = mutableListOf()
+                                content = translate("uno.controls.drop_in.success", "uno")
+                            }
                         }
                     }
-                }
-            } else {
-                disabledButton {
-                    style = ButtonStyle.Secondary
-                    id = "dont_drop_in_$it"
-                    partialEmoji = DiscordPartialEmoji(name = Emojis.noEntrySign.unicode)
+                } else {
+                    disabledButton {
+                        style = ButtonStyle.Secondary
+                        id = "dont_drop_in_$it"
+                        partialEmoji = DiscordPartialEmoji(name = Emojis.noEntrySign.unicode)
+                    }
                 }
             }
         }
     }
-}

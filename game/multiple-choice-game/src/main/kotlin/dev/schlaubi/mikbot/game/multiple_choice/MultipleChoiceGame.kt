@@ -14,6 +14,7 @@ import dev.kord.rest.builder.message.create.actionRow
 import dev.kord.rest.builder.message.create.embed
 import dev.schlaubi.mikbot.game.api.AbstractGame
 import dev.schlaubi.mikbot.game.api.module.GameModule
+import dev.schlaubi.mikbot.game.api.translate
 import dev.schlaubi.mikbot.game.multiple_choice.player.MultipleChoicePlayer
 import dev.schlaubi.mikbot.game.multiple_choice.player.Statistics
 import dev.schlaubi.mikbot.plugin.api.util.componentLive
@@ -88,19 +89,18 @@ abstract class MultipleChoiceGame<Player : MultipleChoicePlayer, Q : Question, Q
         }
     }
 
-    @OptIn(KordPreview::class)
     private suspend fun endStats() {
         if (players.isNotEmpty() && running) {
             val message = thread.createMessage {
                 embed {
-                    title = "Game final results"
+                    title = translateInternally("game.final_results")
 
                     addGameEndEmbed(this@MultipleChoiceGame)
                 }
 
                 actionRow {
                     interactionButton(ButtonStyle.Primary, requestStats) {
-                        label = "See how bad you were"
+                        label = translateInternally("game.request_stats")
                     }
                 }
             }

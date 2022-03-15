@@ -3,10 +3,12 @@ package dev.schlaubi.mikbot.game.api.events
 import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.behavior.interaction.followup.edit
 import dev.kord.core.behavior.interaction.respondEphemeral
+import dev.kord.core.behavior.interaction.response.createEphemeralFollowup
 import dev.kord.core.behavior.interaction.response.followUp
 import dev.kord.core.behavior.interaction.response.followUpEphemeral
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.core.on
+import dev.kord.rest.builder.message.create.FollowupMessageCreateBuilder
 import dev.schlaubi.mikbot.game.api.*
 
 internal fun <T : Player> AbstractGame<T>.interactionHandler() = kord.on<ComponentInteractionCreateEvent>(this) {
@@ -72,7 +74,9 @@ internal fun <T : Player> AbstractGame<T>.interactionHandler() = kord.on<Compone
                 onRejoin(this, existingPlayer)
             } else {
                 val ack = interaction.deferEphemeralMessage()
-                val loading = ack.followUpEphemeral { content = "Waiting for game to start" }
+                val loading = ack.createEphemeralFollowup {
+                    content = "Waiting for game to start"
+                }
                 val player = obtainNewPlayer(interaction.user, ack, loading, interaction.locale)
                 players.add(player)
                 onJoin(ack, player)

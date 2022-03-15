@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "dev.schlaubi.mikbot"
-version = "1.0.14"
+version = "1.0.15"
 
 dependencies {
     plugin(projects.game.gameApi)

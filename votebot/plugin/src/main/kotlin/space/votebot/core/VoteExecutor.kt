@@ -8,8 +8,10 @@ import dev.kord.common.annotation.KordUnsafe
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
 import dev.kord.core.behavior.GuildBehavior
+import dev.kord.core.behavior.interaction.response.createEphemeralFollowup
 import dev.kord.core.behavior.interaction.response.followUpEphemeral
 import dev.kord.core.event.interaction.GuildButtonInteractionCreateEvent
+import dev.kord.rest.builder.message.create.FollowupMessageCreateBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -62,7 +64,9 @@ private suspend fun EventContext<GuildButtonInteractionCreateEvent>.onVote(guild
     val newPoll = if (userVotes > 0) {
         val settings = poll.settings
         if (settings.maxVotes == 1 && settings.maxChanges == 0) {
-            ack.followUpEphemeral { content = translate("vote.voted_already") }
+            ack.createEphemeralFollowup {
+                content = translate("vote.voted_already")
+            }
             return
         } else if (settings.maxChanges == 0) { // maxVotes > 1
             if (settings.maxVotes > userVotes) {
@@ -78,13 +82,17 @@ private suspend fun EventContext<GuildButtonInteractionCreateEvent>.onVote(guild
 
                 poll.copy(votes = poll.votes - existingVote + newVote)
             } else {
-                ack.followUpEphemeral { content = translate("vote.too_many_votes", arrayOf(settings.maxVotes)) }
+                ack.createEphemeralFollowup {
+                    content = translate("vote.too_many_votes", arrayOf(settings.maxVotes))
+                }
                 return
             }
         } else { // maxChanges >= 1
             val changes = poll.changes[userId] ?: 0
             if (changes >= settings.maxChanges) {
-                ack.followUpEphemeral { content = translate("vote.too_many_changes", arrayOf(settings.maxChanges)) }
+                ack.createEphemeralFollowup {
+                    content = translate("vote.too_many_changes", arrayOf(settings.maxChanges))
+                }
                 return
             }
             val oldVote = poll.votes.first { it.userId == userId }

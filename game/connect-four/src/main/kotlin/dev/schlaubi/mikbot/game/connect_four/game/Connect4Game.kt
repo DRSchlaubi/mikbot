@@ -16,6 +16,7 @@ import dev.kord.rest.builder.message.modify.MessageModifyBuilder
 import dev.schlaubi.mikbot.game.api.AbstractGame
 import dev.schlaubi.mikbot.game.api.Rematchable
 import dev.schlaubi.mikbot.game.api.module.GameModule
+import dev.schlaubi.mikbot.game.api.translate
 import dev.schlaubi.mikbot.game.connect_four.Connect4
 import dev.schlaubi.mikbot.game.connect_four.WinResult
 import java.util.*
@@ -78,7 +79,7 @@ class Connect4Game(
             content = if (winResult !is WinResult.Draw) {
                 buildGameBoard()
             } else {
-                "You managed to NOT win, seriously how did you manage to mess this up, this is ridiculous how bad you are"
+                translate("game.end.lost")
             }
         }
     }

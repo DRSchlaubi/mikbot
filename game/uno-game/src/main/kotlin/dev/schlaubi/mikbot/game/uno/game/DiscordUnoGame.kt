@@ -6,12 +6,14 @@ import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.channel.createEmbed
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
 import dev.kord.core.behavior.interaction.response.EphemeralMessageInteractionResponseBehavior
+import dev.kord.core.behavior.interaction.response.createEphemeralFollowup
 import dev.kord.core.behavior.interaction.response.followUpEphemeral
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.User
 import dev.kord.core.entity.interaction.followup.FollowupMessage
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.rest.builder.message.EmbedBuilder
+import dev.kord.rest.builder.message.create.FollowupMessageCreateBuilder
 import dev.kord.rest.builder.message.modify.MessageModifyBuilder
 import dev.kord.rest.builder.message.modify.embed
 import dev.schlaubi.mikbot.game.api.AbstractGame
@@ -126,7 +128,8 @@ class DiscordUnoGame(
                     try {
                         currentPlayer!!.turn()
                     } catch (e: Exception) {
-                        currentPlayer!!.response.followUpEphemeral {
+                        currentPlayer!!.response.createEphemeralFollowup {
+
                             content = translate(currentPlayer!!, "uno.controls.failed")
                         }
                         currentPlayer!!.resendControlsInternally(null)

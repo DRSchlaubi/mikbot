@@ -11,7 +11,7 @@ import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
 import dev.kord.core.behavior.interaction.followup.edit
 import dev.kord.core.behavior.interaction.respondEphemeral
 import dev.kord.core.behavior.interaction.response.EphemeralMessageInteractionResponseBehavior
-import dev.kord.core.behavior.interaction.response.followUpEphemeral
+import dev.kord.core.behavior.interaction.response.createEphemeralFollowup
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.User
 import dev.kord.core.entity.interaction.followup.FollowupMessage
@@ -60,7 +60,7 @@ class SongQuizGame(
 
     override suspend fun EmbedBuilder.addWelcomeMessage() {
         field {
-            name = "Playlist"
+            name = translate("game.ui.playlist")
             value = questionContainer.spotifyPlaylist.uri.spotifyUriToUrl()
         }
     }
@@ -94,7 +94,8 @@ class SongQuizGame(
         val member = player.user.asMember(thread.guild.id)
         val voiceState = member.getVoiceStateOrNull()
         if (voiceState?.channelId != musicPlayer.lastChannelId?.let { Snowflake(it) }) {
-            ack.followUpEphemeral {
+            ack.createEphemeralFollowup {
+
                 content = translate(
                     player,
                     "song_quiz.controls.not_in_vc",
@@ -143,7 +144,7 @@ class SongQuizGame(
         if (hideCorrectAnswer) {
             title = question.title
         } else {
-            addTrack(question.track)
+            addTrack(question.track, this@SongQuizGame)
         }
     }
 
@@ -157,10 +158,10 @@ class SongQuizGame(
         val youtubeTrack = track.toPartialSpotifyTrack().findTrack(musicPlayer)
 
         if (youtubeTrack == null) {
-            thread.createMessage("There was an error whilst finding the media for the next song, so I skipped it")
+            thread.createMessage(translate("game.skip.song_error"))
             return null
         }
-        thread.createMessage("Spotify doesn't have a preview for this song, so I looked it up on YouTube, the quality might be slightly worse")
+        thread.createMessage(translate("game.audio_playback.youtube"))
 
         return youtubeTrack
     }

@@ -7,11 +7,13 @@ import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
 import dev.kord.core.behavior.edit
 import dev.kord.core.behavior.interaction.response.EphemeralMessageInteractionResponseBehavior
+import dev.kord.core.behavior.interaction.response.createEphemeralFollowup
 import dev.kord.core.behavior.interaction.response.followUpEphemeral
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.User
 import dev.kord.core.entity.interaction.followup.FollowupMessage
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
+import dev.kord.rest.builder.message.create.FollowupMessageCreateBuilder
 import dev.kord.rest.builder.message.modify.MessageModifyBuilder
 import dev.schlaubi.mikbot.game.api.AbstractGame
 import dev.schlaubi.mikbot.game.api.AutoJoinableGame
@@ -55,7 +57,8 @@ class TicTacToeGame(
     ): TicTacToePlayer {
         val type = playerTypeOrder.poll()
         val player = TicTacToePlayer(user, type)
-        ack.followUpEphemeral {
+        ack.createEphemeralFollowup {
+
             content = translate(
                 player, "tic_tac_toe.controls.joined", type
             )

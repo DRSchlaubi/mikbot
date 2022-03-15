@@ -83,7 +83,7 @@ class GoogolplexGame(
             addResendControlsButton()
 
             val description = buildString {
-                appendLine("**Guesses:**")
+                appendLine(translate("game.io.guesses_heading"))
 
                 if (last.isNotEmpty()) {
                     last.forEach {
@@ -103,13 +103,8 @@ class GoogolplexGame(
                 this.description = description
 
                 field {
-                    name = "Legend"
-                    value = """
-                                    ${googleLogoWhite.mention} means that there is a correct item in the sequence
-                                    ${googleLogoColor.mention} means that there is a correct item in the sequence at the correct position
-                                    
-                                    ${googleLogoColor.mention} will always be after ${googleLogoWhite.mention}, so the order of the hints, doesn't necessarily reflect the order in the sequence
-                    """.trimIndent()
+                    name = translate("game.ui.legend.title")
+                    value = translate("game.ui.legend", googleLogoWhite.mention, googleLogoColor.mention)
                 }
             }
         }

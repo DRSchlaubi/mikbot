@@ -1,6 +1,9 @@
 package dev.schlaubi.mikbot.plugin.api.util
 
 public fun List<String>.splitIntoPages(pageLength: Int, separator: String = "\n"): List<String> {
+    // Split strings into sub-pages, if one string is longer than a page
+    if (any { it.length > pageLength }) return flatMap { it.chunked(pageLength) }.splitIntoPages(pageLength, separator)
+
     var currentLength = 0
     var currentList = ArrayList<String>(10)
     val paged = ArrayList<String>(size)

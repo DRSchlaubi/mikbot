@@ -11,6 +11,7 @@ com.ibm.icu:icu4j:69.1=compileClasspath,implementationDependenciesMetadata,runti
 com.kotlindiscord.kord.extensions:annotations:1.5.2-SNAPSHOT=compileClasspath,implementationDependenciesMetadata,runtimeClasspath,testCompileClasspath,testImplementationDependenciesMetadata,testRuntimeClasspath
 com.kotlindiscord.kord.extensions:kord-extensions:1.5.2-SNAPSHOT=compileClasspath,implementationDependenciesMetadata,runtimeClasspath,testCompileClasspath,testImplementationDependenciesMetadata,testRuntimeClasspath
 com.kotlindiscord.kord.extensions:token-parser:1.5.2-SNAPSHOT=compileClasspath,implementationDependenciesMetadata,runtimeClasspath,testCompileClasspath,testImplementationDependenciesMetadata,testRuntimeClasspath
+com.kotlindiscord.kord.extensions:unsafe:1.5.2-SNAPSHOT=compileClasspath,implementationDependenciesMetadata,runtimeClasspath,testCompileClasspath,testImplementationDependenciesMetadata,testRuntimeClasspath
 com.pinterest.ktlint:ktlint-core:0.42.1=ktlint,ktlintBaselineReporter
 com.pinterest.ktlint:ktlint-reporter-baseline:0.42.1=ktlint,ktlintBaselineReporter
 com.pinterest.ktlint:ktlint-reporter-checkstyle:0.42.1=ktlint

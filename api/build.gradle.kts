@@ -16,6 +16,7 @@ dependencies {
     api(project("annotations"))
     // Bot
     api("com.kotlindiscord.kord.extensions", "kord-extensions", "1.5.2-SNAPSHOT")
+    api("com.kotlindiscord.kord.extensions", "unsafe", "1.5.2-SNAPSHOT")
     api("dev.kord.x", "emoji", "0.5.0") {
         exclude("dev.kord")
     }

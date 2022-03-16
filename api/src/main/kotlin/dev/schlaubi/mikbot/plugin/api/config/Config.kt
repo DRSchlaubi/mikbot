@@ -90,7 +90,7 @@ public object Config : EnvironmentConfig("") {
     /**
      * Whether the bot will try to update the plugins or not.
      */
-    public val UPDATE_PLUGINS: Boolean by getEnv(false, String::toBooleanStrict)
+    public val UPDATE_PLUGINS: Boolean by getEnv(true, String::toBooleanStrict)
 }
 
 @Suppress("unused")

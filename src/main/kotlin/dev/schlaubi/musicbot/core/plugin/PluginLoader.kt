@@ -40,9 +40,7 @@ object PluginLoader : DefaultPluginManager(), KoinComponent {
     override fun loadPlugins() {
         super.loadPlugins()
 
-        if (Config.UPDATE_PLUGINS) {
-            checkForUpdates()
-        }
+        checkForUpdates()
         buildTranslationGraph()
     }
 

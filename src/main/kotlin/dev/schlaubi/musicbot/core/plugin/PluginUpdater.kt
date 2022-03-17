@@ -13,7 +13,9 @@ internal fun PluginLoader.checkForUpdates() {
         return
     }
 
-    updatePlugins()
+    if (Config.UPDATE_PLUGINS) {
+        updatePlugins()
+    }
 
     downloadRequestedPlugins()
 
@@ -21,10 +23,9 @@ internal fun PluginLoader.checkForUpdates() {
         val exception = it.failedException
         if (exception is DependencyResolver.DependenciesNotFoundException) {
             if (exception.dependencies.all { id ->
-                getPlugin(id) != null
-            }
+                    getPlugin(id) != null
+                }
             ) {
-
                 attemptPluginRestart(it.descriptor)
             }
         }

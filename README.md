@@ -51,6 +51,13 @@ Docker image from: https://github.com/DRSchlaubi/mikmusic/pkgs/container/mikmusi
 - Clone this repo
 - Run `docker-compose up -d`
 
+# Binary repositories
+
+The bot has two repositories for binaries the [binary-repo](https://storage.googleapis.com/mikbot-binaries) containing
+the bots binaries and the [plugin-repo](https://storage.googleapis.com/mikbot-plugins) 
+([index](https://storage.googleapis.com/mikbot-plugins/plugins.json)) normally you should not need to interact with 
+these repositories directly.
+
 # For developers
 
 JDK is required it can be obtained [here](https://adoptium.net) (Recommended for Windows but works everywhere)

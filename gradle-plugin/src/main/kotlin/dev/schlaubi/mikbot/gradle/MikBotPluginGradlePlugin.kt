@@ -30,6 +30,7 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
         target.run {
             createPluginExtensions()
             configureTasks()
+            addRepositories()
             target.afterEvaluate {
                 (target.extensions.getByName("sourceSets") as SourceSetContainer).getByName("main")
                     .apply {

@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "dev.schlaubi.mikbot"
-version = "1.1.8"
+version = "1.1.9"
 
 dependencies {
     implementation(projects.game.googleEmotes)
@@ -14,4 +14,5 @@ dependencies {
 
 mikbotPlugin {
     description.set("Hangman but with family friendly")
+    bundle.set("hangman")
 }

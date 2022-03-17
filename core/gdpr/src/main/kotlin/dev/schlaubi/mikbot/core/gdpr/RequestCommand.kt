@@ -31,7 +31,7 @@ fun GDPRModule.requestCommand() = ephemeralSubCommand {
         }
         val maxPageCount = results.maxOf { it.size }
         val pages = (0 until maxPageCount).map { page ->
-            results.map { it[page] }
+            results.mapNotNull { it.getOrNull(page) }
         }
 
         editingPaginator {

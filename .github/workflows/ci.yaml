@@ -104,7 +104,8 @@ jobs:
         with:
           arguments: generateDefaultResourceBundle assemblePlugin buildRepository
       - name: 'Upload repo changes'
-        run: cd ci-repo gsutil -m cp -R . $GOOGLE_CLOUD_BUCKET
+        working-directory: ci-repo
+        run: gsutil -m cp -R . $GOOGLE_CLOUD_BUCKET
   update_maven:
     name: Push to maven repo
     runs-on: ubuntu-20.04
@@ -157,4 +158,5 @@ jobs:
         with:
           arguments: installCi
       - name: 'Upload repo changes'
-        run: cd ci-repo && gsutil -m cp -R . $GOOGLE_CLOUD_BUCKET
+        working-directory: ci-repo
+        run: gsutil -m cp -R . $GOOGLE_CLOUD_BUCKET

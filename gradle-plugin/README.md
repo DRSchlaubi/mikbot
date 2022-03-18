@@ -202,6 +202,7 @@ Workflow:
         with:
           arguments: generateDefaultResourceBundle assemblePlugin buildRepository
       - name: 'Upload repo changes'
+        working-directory: ci-repo
         run: gsutil -m cp -R . $GOOGLE_CLOUD_BUCKET
 ```
 

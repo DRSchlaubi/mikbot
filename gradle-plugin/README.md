@@ -162,7 +162,7 @@ Workflow:
 If you want to use Git LFS, download it first [here](https://git-lfs.github.com/)
 
 1. [Create a Google Cloud Storage Bucket](https://cloud.google.com/storage/docs/creating-buckets)
-2. [Set Up Auth](https://github.com/google-github-actions/auth#setup)
+2. [Set Up Auth](https://github.com/google-github-actions/auth#authenticating-via-service-account-key-json)
 
 Workflow:
 ```yaml
@@ -186,10 +186,9 @@ Workflow:
       - name: 'Obtain GCP authentication token'
         id: 'auth'
         uses: 'google-github-actions/auth@v0'
+        uses: 'google-github-actions/auth@v0'
         with:
-          // See auth step above
-          workload_identity_provider: ''
-          service_account: ''
+          credentials_json: ${{ secrets.GCP_ACCOUNT_KEY }}
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v0'
       - name: 'Login to Google Cloud'

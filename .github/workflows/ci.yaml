@@ -90,8 +90,7 @@ jobs:
         id: 'auth'
         uses: 'google-github-actions/auth@v0'
         with:
-          workload_identity_provider: 'projects/576023676253/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions'
-          service_account: 'github-actions@mik-music.iam.gserviceaccount.com'
+          credentials_json: ${{ secrets.GCP_ACCOUNT_KEY }}
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v0'
       - name: 'Login to Google Cloud'
@@ -146,8 +145,7 @@ jobs:
         id: 'auth'
         uses: 'google-github-actions/auth@v0'
         with:
-          workload_identity_provider: 'projects/576023676253/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions'
-          service_account: 'github-actions@mik-music.iam.gserviceaccount.com'
+          credentials_json: ${{ secrets.GCP_ACCOUNT_KEY }}
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v0'
       - name: 'Login to Google Cloud'

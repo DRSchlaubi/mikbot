@@ -183,7 +183,8 @@ Workflow:
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '17'
-      - name: 'Authenticate with GCP'
+      - name: 'Obtain GCP authentication token'
+        id: 'auth'
         uses: 'google-github-actions/auth@v0'
         with:
           // See auth step above
@@ -191,6 +192,8 @@ Workflow:
           service_account: ''
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v0'
+      - name: 'Login to Google Cloud'
+        run: gcloud auth login --brief --cred-file="${{ steps.auth.outputs.credentials_file_path }}"        
       - name: 'Create working Directory'
         run: mkdir ci-repo && cd ci-repo
       - name: 'Download existing repo'

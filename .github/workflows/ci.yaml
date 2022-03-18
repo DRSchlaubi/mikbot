@@ -86,22 +86,25 @@ jobs:
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '17'
-      - name: 'Authenticate with GCP'
+      - name: 'Obtain GCP authentication token'
+        id: 'auth'
         uses: 'google-github-actions/auth@v0'
         with:
           workload_identity_provider: 'projects/576023676253/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions'
           service_account: 'github-actions@mik-music.iam.gserviceaccount.com'
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v0'
+      - name: 'Login to Google Cloud'
+        run: gcloud auth login --brief --cred-file="${{ steps.auth.outputs.credentials_file_path }}"
       - name: 'Create working Directory'
-        run: mkdir ci-repo && cd ci-repo
+        run: mkdir ci-repo
       - name: 'Download existing repo'
-        run: gsutil -m cp -R $GOOGLE_CLOUD_BUCKET/* .
+        run: gsutil -m cp -R $GOOGLE_CLOUD_BUCKET/plugins.json ./ci-repo/plugins.json
       - uses: gradle/gradle-build-action@v1
         with:
           arguments: generateDefaultResourceBundle assemblePlugin buildRepository
       - name: 'Upload repo changes'
-        run: gsutil -m cp -R . $GOOGLE_CLOUD_BUCKET
+        run: cd ci-repo gsutil -m cp -R . $GOOGLE_CLOUD_BUCKET
   update_maven:
     name: Push to maven repo
     runs-on: ubuntu-20.04
@@ -138,19 +141,20 @@ jobs:
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '17'
-      - name: 'Authenticate with GCP'
+      - name: 'Obtain GCP authentication token'
+        id: 'auth'
         uses: 'google-github-actions/auth@v0'
         with:
           workload_identity_provider: 'projects/576023676253/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions'
           service_account: 'github-actions@mik-music.iam.gserviceaccount.com'
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v0'
+      - name: 'Login to Google Cloud'
+        run: gcloud auth login --brief --cred-file="${{ steps.auth.outputs.credentials_file_path }}"
       - name: 'Create working Directory'
-        run: mkdir ci-repo && cd ci-repo
-      - name: 'Download existing repo'
-        run: gsutil -m cp -R $GOOGLE_CLOUD_BUCKET/* .
+        run: mkdir ci-repo
       - uses: gradle/gradle-build-action@v1
         with:
           arguments: installCi
       - name: 'Upload repo changes'
-        run: gsutil -m cp -R . $GOOGLE_CLOUD_BUCKET
+        run: cd ci-repo && gsutil -m cp -R . $GOOGLE_CLOUD_BUCKET

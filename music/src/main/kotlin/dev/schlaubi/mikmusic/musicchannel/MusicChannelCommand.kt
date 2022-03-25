@@ -102,9 +102,10 @@ suspend fun SettingsModule.musicChannel() {
 
                 if (confirmed) {
                     val messages = textChannel
+                        .withStrategy(EntitySupplyStrategy.rest)
                         .messages
                         .map { it.id }
-                        .toSet() + setOfNotNull(textChannel.lastMessageId)
+                        .toSet()
                     textChannel.bulkDelete(messages)
                 }
             }

@@ -114,7 +114,6 @@ class MusicInteractionModule : Extension() {
             action {
                 event.message.channel.withTyping {
                     val guild = event.getGuild()!!
-                    event.message.delete()
                     val player = musicModule.getMusicPlayer(guild)
                     val tracks = player.takeFirstMatch(
                         player,
@@ -132,6 +131,8 @@ class MusicInteractionModule : Extension() {
                             tracks = tracks.mapToQueuedTrack(event.message.author!!)
                         )
                     }
+
+                    event.message.delete("Music channel interaction")
                 }
             }
         }

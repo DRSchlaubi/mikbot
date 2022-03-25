@@ -1,3 +1,5 @@
+@file:Suppress("UnnecessaryOptInAnnotation") // Inspection is a false-positiev
+
 package dev.schlaubi.mikmusic.musicchannel
 
 import com.kotlindiscord.kord.extensions.DiscordRelayedException
@@ -15,7 +17,6 @@ import dev.kord.core.entity.channel.TextChannel
 import dev.kord.core.supplier.EntitySupplyStrategy
 import dev.schlaubi.mikbot.plugin.api.settings.SettingsModule
 import dev.schlaubi.mikbot.plugin.api.settings.guildAdminOnly
-import dev.schlaubi.mikbot.plugin.api.util.bot
 import dev.schlaubi.mikbot.plugin.api.util.confirmation
 import dev.schlaubi.mikbot.plugin.api.util.safeGuild
 import dev.schlaubi.mikmusic.core.settings.MusicChannelData
@@ -45,6 +46,7 @@ private class MusicChannelArguments : Arguments() {
                 throw DiscordRelayedException(translate("command.music_channel.channel_missing_perms"))
             }
         }
+        requiredChannelTypes.add(ChannelType.GuildText)
     }
 }
 

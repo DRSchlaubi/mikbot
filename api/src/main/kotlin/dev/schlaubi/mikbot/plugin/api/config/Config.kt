@@ -72,7 +72,7 @@ public object Config : EnvironmentConfig("") {
     /**
      * A list of plugin repositories.
      */
-    public val PLUGIN_REPOSITORIES: List<String> by getEnv(listOf("https://plugin-repository.mikbot.schlaubi.net/")) {
+    public val PLUGIN_REPOSITORIES: List<String> by getEnv(listOf("https://storage.googleapis.com/mikbot-plugins/")) {
         it.split(
             ","
         )

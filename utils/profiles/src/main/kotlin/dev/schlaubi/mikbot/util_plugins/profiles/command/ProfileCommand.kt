@@ -43,7 +43,7 @@ private class PronounArguments : Arguments() {
     val pronoun by enumChoice<Pronoun> {
         name = "pronoun"
         description = "commands.profile.pronouns.arguments.pronoun.description"
-        typeName = "Pronoun"
+        typeName = "pronoun"
     }
 }
 

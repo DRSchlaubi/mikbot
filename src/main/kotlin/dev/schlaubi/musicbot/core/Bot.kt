@@ -5,6 +5,7 @@ import com.kotlindiscord.kord.extensions.builders.ExtensibleBotBuilder
 import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.extensions.event
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
+import dev.kord.common.Locale
 import dev.kord.common.entity.PresenceStatus
 import dev.kord.core.event.gateway.DisconnectEvent
 import dev.kord.core.event.gateway.ReadyEvent
@@ -114,8 +115,10 @@ class Bot : KoinComponent {
                 translationProivder = PluginTranslationProvider {
                     defaultLocale
                 }
+
                 translationProivder
             }
+            applicationCommandLocales.add(Locale.GERMAN)
         }
 
         hooks {

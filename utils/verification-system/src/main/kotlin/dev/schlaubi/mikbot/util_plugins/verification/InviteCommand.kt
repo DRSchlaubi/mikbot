@@ -8,7 +8,7 @@ import dev.schlaubi.mikbot.util_plugins.ktor.api.buildBotUrl
 import org.litote.kmongo.newId
 
 suspend fun OwnerModule.inviteCommand() = ephemeralSlashCommand(::VerificationArguments) {
-    name = "Invite"
+    name = "invite"
     description = "Creates a bot Invite for a specific Guild"
 
     ownerOnly()

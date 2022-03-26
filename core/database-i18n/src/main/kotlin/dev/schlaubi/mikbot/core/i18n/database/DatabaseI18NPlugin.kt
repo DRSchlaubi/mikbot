@@ -12,8 +12,6 @@ class DatabaseI18NPlugin(wrapper: PluginWrapper) : Plugin(wrapper) {
         i18n {
             defaultLocale = Config.DEFAULT_LOCALE
 
-            applicationCommandLocales.add(Locale.GERMAN)
-
             localeResolver { _, _, user ->
                 user?.let {
                     LanguageDatabase.collection.findOneById(it.id)?.locale

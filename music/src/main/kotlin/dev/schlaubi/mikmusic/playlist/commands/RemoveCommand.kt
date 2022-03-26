@@ -8,13 +8,13 @@ import dev.schlaubi.mikmusic.util.format
 class PlaylistRemoveArguments : PlaylistArguments() {
     val index by int {
         name = "index"
-        description = "The index of the track to remove"
+        description = "commands.playlist.remove.arguments.index.description"
     }
 }
 
 fun PlaylistModule.removeCommand() = ephemeralSubCommand(::PlaylistRemoveArguments) {
     name = "remove"
-    description = "Removes a Track from the playlist"
+    description = "commands.playlist.remove.description"
 
     action {
         checkPermissions { playlist ->

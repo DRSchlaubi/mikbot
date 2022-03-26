@@ -7,7 +7,7 @@ import dev.schlaubi.mikmusic.player.ChapterQueuedTrack
 
 suspend fun MusicModule.nextCommand() = ephemeralControlSlashCommand {
     name = "next"
-    description = "Skips to the next chapter or song if the current song has no chapters"
+    description = "commands.next.description"
 
     check {
         anyMusicPlaying(this@nextCommand)

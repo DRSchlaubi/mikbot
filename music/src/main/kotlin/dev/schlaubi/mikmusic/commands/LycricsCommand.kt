@@ -15,13 +15,13 @@ import dev.schlaubi.mikmusic.util.searchHappiSong
 class LyricsArguments : Arguments() {
     val name by optionalString {
         name = "song_name"
-        description = "The name of the song to search for, if no one is playing"
+        description = "commands.lyrics.arguments.song_name.description"
     }
 }
 
 suspend fun MusicModule.lyricsCommand() = publicSlashCommand(::LyricsArguments) {
     name = "lyrics"
-    description = "Displays the lyrics for the current song or the specified query"
+    description = "commands.lyrics.description"
 
     check {
         musicQuizAntiCheat(this@lyricsCommand)

@@ -28,7 +28,7 @@ import kotlinx.coroutines.flow.toSet
 private class MusicChannelArguments : Arguments() {
     val channel by optionalChannel {
         name = "channel"
-        description = "Text Channel to use for Music Channel"
+        description = "commands.music_channel.arguments.channel.description"
 
         validate {
             val channel = value ?: return@validate
@@ -54,7 +54,7 @@ private class MusicChannelArguments : Arguments() {
 suspend fun SettingsModule.musicChannel() {
     ephemeralSlashCommand(::MusicChannelArguments) {
         name = "music-channel"
-        description = "Set your music channel in this guild"
+        description = "commands.music_channel.description"
 
         guildAdminOnly()
 

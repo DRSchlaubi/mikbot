@@ -13,7 +13,7 @@ import dev.schlaubi.mikmusic.player.queue.queueTracks
 class PlayArguments : QueueArguments() {
     val search by defaultingBoolean {
         name = "search"
-        description = "Shows multiple search options"
+        description = "commands.play.arguments.search.description"
         defaultValue = false
     }
 }
@@ -21,7 +21,7 @@ class PlayArguments : QueueArguments() {
 suspend fun MusicModule.playCommand() {
     ephemeralSlashCommand(::PlayArguments) {
         name = "play"
-        description = "Plays a song"
+        description = "commands.play.description"
 
         check {
             joinSameChannelCheck(bot)

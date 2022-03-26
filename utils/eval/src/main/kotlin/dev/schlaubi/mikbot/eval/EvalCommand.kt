@@ -29,14 +29,14 @@ private const val codeInputField = "code"
 class EvalArguments : Arguments() {
     val language by language {
         name = "language"
-        description = "The language of the code you want to execute."
+        description = "commands.eval.arguments.language.description"
     }
 }
 
 @OptIn(UnsafeAPI::class)
 suspend fun EvalExtension.evalCommand() = unsafeSlashCommand(::EvalArguments) {
     name = "eval"
-    description = "Execute some code."
+    description = "commands.eval.description"
     ownerOnly()
 
     initialResponse = InitialSlashCommandResponse.None

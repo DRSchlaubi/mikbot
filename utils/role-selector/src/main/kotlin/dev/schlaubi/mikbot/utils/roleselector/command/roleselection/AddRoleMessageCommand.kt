@@ -21,7 +21,7 @@ import dev.schlaubi.mikbot.utils.roleselector.util.translateString
 
 suspend fun EphemeralSlashCommand<*>.addRoleMessageCommand() = ephemeralSubCommand(::CreateRoleMessageArguments) {
     name = "create-message"
-    description = "Create a new Role Selection Message"
+    description = "commands.create_message.description"
     guildAdminOnly()
 
     action {
@@ -74,18 +74,18 @@ suspend fun EphemeralSlashCommand<*>.addRoleMessageCommand() = ephemeralSubComma
 class CreateRoleMessageArguments : Arguments() {
     val title by string {
         name = "title"
-        description = "The Title of the Message Embed"
+        description = "command.create_message.arguments.title.description"
     }
     val description by optionalString {
         name = "description"
-        description = "The description of this role selection Embed"
+        description = "command.create_message.arguments.description.description"
     }
     val embedColor by optionalColor {
         name = "color"
-        description = "The Color of the Role-Selection Embed"
+        description = "command.create_message.arguments.color.description"
     }
     val channel by optionalChannel {
         name = "channel"
-        description = "The Channel to send the message to (if not given, current channel will be used)"
+        description = "command.create_message.arguments.channel.description"
     }
 }

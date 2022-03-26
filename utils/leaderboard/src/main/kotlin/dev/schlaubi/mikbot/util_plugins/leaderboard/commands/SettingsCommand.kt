@@ -16,12 +16,12 @@ import dev.schlaubi.mikbot.util_plugins.leaderboard.LeaderBoardSettings
 class LeaderBoardSettingsArguments : Arguments() {
     val message by optionalString {
         name = "message"
-        description = "The message sent when someone levels up"
+        description = "commands.leaderboard_settings.arguments.message.description"
     }
 
     val channel by optionalChannel {
         name = "channel"
-        description = "The channel for level up messages"
+        description = "commands.leaderboard_settings.arguments.channel.description"
         requiredChannelTypes.add(ChannelType.GuildText)
     }
 }
@@ -29,7 +29,7 @@ class LeaderBoardSettingsArguments : Arguments() {
 suspend fun SettingsModule.leaderBoardCommand() =
     ephemeralSlashCommand(::LeaderBoardSettingsArguments) {
         name = "leaderboard-settings"
-        description = "Allows you to change leaderboard settings"
+        description = "commands.leaderboard_settings.description"
 
         guildAdminOnly()
 

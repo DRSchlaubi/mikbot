@@ -6,11 +6,11 @@ import dev.schlaubi.mikmusic.core.MusicModule
 suspend fun MusicModule.stopCommand() =
     ephemeralControlSlashCommand {
         name = "die"
-        description = "Stops the current song"
+        description = "commands.stop.description"
 
         action {
             musicPlayer.stop()
 
-            respond { content = "Stopped playback" }
+            respond { content = translate("commands.stop.stopped") }
         }
     }

@@ -9,7 +9,7 @@ class LoadArguments : PlaylistArguments()
 
 fun PlaylistModule.loadCommand() = ephemeralSubCommand(::LoadArguments) {
     name = "load"
-    description = "Queues a playlist"
+    description = "commands.playlist.load.description"
 
     check {
         joinSameChannelCheck(bot)

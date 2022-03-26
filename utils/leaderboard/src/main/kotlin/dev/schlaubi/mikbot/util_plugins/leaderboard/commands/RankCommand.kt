@@ -13,13 +13,13 @@ import dev.schlaubi.mikbot.util_plugins.leaderboard.core.LeaderBoardModule
 class RankArguments : Arguments() {
     val target by optionalMember {
         name = "target"
-        description = "The user you want to know the rank of"
+        description = "commands.rank.arguments.target.description"
     }
 }
 
 suspend fun LeaderBoardModule.rankCommand() = publicSlashCommand(::RankArguments) {
     name = "rank"
-    description = "Shows you the rank of a user"
+    description = "commands.rank.description"
 
     action {
         val target = (arguments.target ?: user).asMember(safeGuild.id)

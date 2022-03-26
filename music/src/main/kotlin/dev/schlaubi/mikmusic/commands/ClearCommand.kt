@@ -5,7 +5,7 @@ import dev.schlaubi.mikmusic.core.MusicModule
 
 suspend fun MusicModule.clearCommand() = ephemeralControlSlashCommand {
     name = "clear"
-    description = "Clears the queue completely"
+    description = "commands.clear.description"
 
     action {
         musicPlayer.clearQueue()

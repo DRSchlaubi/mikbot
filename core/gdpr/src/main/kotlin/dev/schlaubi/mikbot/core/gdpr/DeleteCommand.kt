@@ -5,7 +5,7 @@ import dev.schlaubi.mikbot.plugin.api.util.confirmation
 
 fun GDPRModule.deleteCommand() = ephemeralSubCommand {
     name = "delete"
-    description = "Deletes all the persistent data the bot has on you"
+    description = "commands.gdpr.delete.name"
 
     action {
         val (confirmed) = confirmation {

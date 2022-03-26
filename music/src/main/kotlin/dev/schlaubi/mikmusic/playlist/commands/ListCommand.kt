@@ -13,14 +13,14 @@ import org.litote.kmongo.or
 class PlayListListArguments : Arguments() {
     val onlyMine by defaultingBoolean {
         name = "only_mine"
-        description = "Just show my playlist"
+        description = "commands.playlist.list.arguments.only_mine.description"
         defaultValue = false
     }
 }
 
 fun PlaylistModule.listCommand() = ephemeralSubCommand(::PlayListListArguments) {
     name = "list"
-    description = "Shows all playlists, which are available to you"
+    description = "commands.playlist.list.description"
 
     action {
         val myPlaylists = Playlist::authorId eq user.id

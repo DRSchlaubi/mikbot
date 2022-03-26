@@ -10,7 +10,7 @@ import dev.schlaubi.mikmusic.util.format
 
 suspend fun MusicModule.queueCommand() = ephemeralSlashCommand {
     name = "queue"
-    description = "Shows the current queue"
+    description = "commands.queue.description"
 
     check {
         anyMusicPlaying(this@queueCommand)

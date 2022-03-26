@@ -21,7 +21,7 @@ import kotlin.time.Duration.Companion.seconds
 
 suspend fun MusicModule.fixCommand() = ephemeralControlSlashCommand {
     name = "fix"
-    description = "Troubleshoots audio playback issues"
+    description = "commands.fix.description"
 
     check {
         requireBotPermissions(Permission.ManageGuild)

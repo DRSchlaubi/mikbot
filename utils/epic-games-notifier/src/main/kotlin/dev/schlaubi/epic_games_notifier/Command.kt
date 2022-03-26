@@ -18,7 +18,7 @@ class EpicGamesNotifierSettingsExtension : SettingsExtensionPoint {
 
 suspend fun SettingsModule.notifierCommand() = ephemeralSlashCommand {
     name = "epic-games-notifier"
-    description = "Enables a Webhook for each EpicGames Store free game"
+    description = "commands.epic_games_notifier.description"
 
     check {
         hasPermission(Permission.ManageWebhooks)

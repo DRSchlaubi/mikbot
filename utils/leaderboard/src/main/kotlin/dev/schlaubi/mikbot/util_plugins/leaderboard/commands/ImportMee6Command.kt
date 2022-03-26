@@ -13,7 +13,7 @@ private val LOG = KotlinLogging.logger { }
 
 suspend fun SettingsModule.importMee6() = ephemeralSlashCommand {
     name = "import-mee6-leaderboard"
-    description = "Tries to import the Mee6 leaderboard for this Discord"
+    description = "commands.import_mee6_leaderboard.description"
 
     guildAdminOnly()
 

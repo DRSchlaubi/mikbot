@@ -9,15 +9,15 @@ import dev.schlaubi.mikmusic.player.queue.findTracks
 import dev.schlaubi.mikmusic.playlist.PlaylistDatabase
 
 class PlaylistAddArguments : PlaylistArguments(), QueueOptions {
-    override val query by autoCompletedYouTubeQuery("The query to play")
+    override val query by autoCompletedYouTubeQuery("commands.playlist.add.arguments.query.description")
     override val soundcloud by defaultingBoolean {
         name = "soundcloud"
-        description = "Searches for this item on SoundCloud instead of YouTube"
+        description = "commands.playlist.add.arguments.soundscloud.description"
         defaultValue = false
     }
     val search by defaultingBoolean {
         name = "search"
-        description = "Display multiple search results"
+        description = "commands.playlist.add.arguments.search.description"
         defaultValue = false
     }
     override val top: Boolean = false
@@ -26,7 +26,7 @@ class PlaylistAddArguments : PlaylistArguments(), QueueOptions {
 
 fun PlaylistModule.addCommand() = ephemeralSubCommand(::PlaylistAddArguments) {
     name = "add"
-    description = "Adds a new track to the Playlist"
+    description = "commands.playlist.add.description"
 
     action {
         checkPermissions { playlist ->

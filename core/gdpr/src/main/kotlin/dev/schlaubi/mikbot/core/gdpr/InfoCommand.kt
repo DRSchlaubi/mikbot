@@ -12,7 +12,7 @@ import dev.schlaubi.mikbot.plugin.api.util.splitIntoPages
 
 fun GDPRModule.infoCommand() = ephemeralSubCommand {
     name = "info"
-    description = "Shows the bots privacy policy"
+    description = "commands.gdpr.info.name"
 
     action {
         val (storedData, anonymizedData, processedData) =

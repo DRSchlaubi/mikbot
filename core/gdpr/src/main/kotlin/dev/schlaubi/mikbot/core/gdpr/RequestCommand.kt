@@ -9,7 +9,7 @@ private typealias EmbedFieldBuilder = EmbedBuilder.Field.() -> Unit
 
 fun GDPRModule.requestCommand() = ephemeralSubCommand {
     name = "request"
-    description = "Requests your persistently stored data"
+    description = "commands.gdpr.request.name"
 
     action {
         val discordUser = user.asUser()

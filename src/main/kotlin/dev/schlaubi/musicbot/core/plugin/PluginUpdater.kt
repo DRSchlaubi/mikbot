@@ -5,13 +5,18 @@ import mu.KotlinLogging
 import org.pf4j.DependencyResolver
 import org.pf4j.PluginDescriptor
 import org.pf4j.update.FileDownloader
+import org.pf4j.update.FileVerifier
 import org.pf4j.update.UpdateManager
 import org.pf4j.update.UpdateRepository
+import org.pf4j.update.verifier.BasicVerifier
 
 private val LOG = KotlinLogging.logger { }
 
 class PluginUpdater(private val pluginLoader: PluginLoader, repos: List<UpdateRepository>) :
     UpdateManager(pluginLoader, repos) {
+    override fun getFileVerifier(pluginId: String?): FileVerifier =
+        if (Config.VALIDATE_CHECKSUMS) super.getFileVerifier(pluginId) else BasicVerifier()
+
     override fun getFileDownloader(pluginId: String?): FileDownloader = KtorHttpFileDownloader
 
     internal fun checkForUpdates() {

@@ -91,6 +91,8 @@ public object Config : EnvironmentConfig("") {
      * Whether the bot will try to update the plugins or not.
      */
     public val UPDATE_PLUGINS: Boolean by getEnv(true, String::toBooleanStrict)
+
+    public val VALIDATE_CHECKSUMS: Boolean by getEnv(true, String::toBooleanStrict)
 }
 
 @Suppress("unused")

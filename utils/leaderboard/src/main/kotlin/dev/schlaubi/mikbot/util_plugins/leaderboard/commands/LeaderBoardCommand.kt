@@ -11,7 +11,7 @@ import dev.schlaubi.mikbot.util_plugins.leaderboard.countLeaderboardForGuild
 import dev.schlaubi.mikbot.util_plugins.leaderboard.leaderboardForGuild
 
 suspend fun LeaderBoardModule.leaderBoardCommand() = publicSlashCommand {
-    name = "Leaderboard"
+    name = "leaderboard"
     description = "commands.leaderboard.description"
 
     action {

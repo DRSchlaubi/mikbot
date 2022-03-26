@@ -39,24 +39,31 @@ data class Question(
 }
 
 @Serializable
-enum class Type(val translationName: String, override val readableName: String) : ChoiceEnum {
+enum class Type(val translationName: String) : ChoiceEnum {
+
     @SerialName("boolean")
-    TRUE_FALSE("true_false", "True/False"),
+    TRUE_FALSE("true_false"),
 
     @SerialName("multiple")
-    MULTIPLE_CHOICE("multiple_choice", "Multiple choice")
+    MULTIPLE_CHOICE("multiple_choice");
+
+    override val readableName: String
+        get() = "trivia.question.type.$translationName"
 }
 
 @Serializable
-enum class Difficulty(val translationName: String, override val readableName: String) : ChoiceEnum {
+enum class Difficulty(val translationName: String) : ChoiceEnum {
     @SerialName("easy")
-    EASY("easy", "Easy"),
+    EASY("easy"),
 
     @SerialName("medium")
-    MEDIUM("medium", "Medium"),
+    MEDIUM("medium"),
 
     @SerialName("hard")
-    HARD("hard", "Hard")
+    HARD("hard");
+
+    override val readableName: String
+        get() = "trivia.question.type.$translationName"
 }
 
 @Serializable(with = Category.Serializer::class)
@@ -108,7 +115,7 @@ enum class Category(val id: Int, val apiName: String, val translationName: Strin
     );
 
     override val readableName: String
-        get() = apiName
+        get() = "trivia.question.category.$translationName"
 
     companion object Serializer : KSerializer<Category> {
         override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Category", PrimitiveKind.STRING)

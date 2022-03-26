@@ -29,7 +29,7 @@ object PluginLoader : DefaultPluginManager(), KoinComponent {
             generateNonce(), URL(it)
         )
     }
-    internal val updateManager = UpdateManager(this, repos)
+    internal val updateManager = PluginUpdater(this, repos)
     private val rootTranslations = ClassLoader.getSystemClassLoader().findTranslations()
     override fun createExtensionFinder(): ExtensionFinder = DependencyCheckingExtensionFinder(this)
     val resolver: DependencyResolver get() = dependencyResolver
@@ -40,7 +40,7 @@ object PluginLoader : DefaultPluginManager(), KoinComponent {
     override fun loadPlugins() {
         super.loadPlugins()
 
-        checkForUpdates()
+        updateManager.checkForUpdates()
         buildTranslationGraph()
     }
 

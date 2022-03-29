@@ -33,7 +33,7 @@ class Bot : KoinComponent {
     private lateinit var bot: ExtensibleBot
 
     private val database: Database = DatabaseImpl()
-    lateinit var translationProivder: TranslationsProvider
+    lateinit var translationProvider: TranslationsProvider
     internal val pluginSystem: DefaultPluginSystem = DefaultPluginSystem(this)
 
     suspend fun start() {
@@ -117,11 +117,11 @@ class Bot : KoinComponent {
 
         i18n {
             translationsProvider {
-                translationProivder = PluginTranslationProvider {
+                translationProvider = PluginTranslationProvider {
                     defaultLocale
                 }
 
-                translationProivder
+                translationProvider
             }
             applicationCommandLocales.add(Locale.GERMAN)
         }

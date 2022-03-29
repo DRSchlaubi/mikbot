@@ -5,6 +5,7 @@ import com.kotlindiscord.kord.extensions.builders.ExtensibleBotBuilder
 import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.extensions.event
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
+import dev.kord.cache.api.DataEntryCache
 import dev.kord.common.Locale
 import dev.kord.common.entity.PresenceStatus
 import dev.kord.core.event.gateway.DisconnectEvent
@@ -39,6 +40,10 @@ class Bot : KoinComponent {
         bot = ExtensibleBot(Config.DISCORD_TOKEN) {
             kord {
                 eventFlow = pluginSystem.events
+
+                cache {
+                    messages { _, _ -> DataEntryCache.none() }
+                }
             }
 
             PluginLoader.botPlugins.onEach {

@@ -14,13 +14,13 @@ import dev.schlaubi.mikbot.plugin.api.config.Config
 import dev.schlaubi.mikbot.plugin.api.io.Database
 import dev.schlaubi.mikbot.plugin.api.pluginSystem
 import dev.schlaubi.mikbot.plugin.api.util.AllShardsReadyEvent
-import dev.schlaubi.mikbot.plugin.api.util.onEach
 import dev.schlaubi.musicbot.core.io.DatabaseImpl
 import dev.schlaubi.musicbot.core.plugin.DefaultPluginSystem
 import dev.schlaubi.musicbot.core.plugin.PluginLoader
 import dev.schlaubi.musicbot.core.plugin.PluginTranslationProvider
 import dev.schlaubi.musicbot.module.owner.OwnerModuleImpl
 import dev.schlaubi.musicbot.module.settings.SettingsModuleImpl
+import dev.schlaubi.stdx.core.onEach
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import mu.KotlinLogging

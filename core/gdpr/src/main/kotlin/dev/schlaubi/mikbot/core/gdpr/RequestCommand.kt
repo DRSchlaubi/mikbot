@@ -3,7 +3,7 @@ package dev.schlaubi.mikbot.core.gdpr
 import com.kotlindiscord.kord.extensions.types.editingPaginator
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.schlaubi.mikbot.plugin.api.util.effectiveAvatar
-import dev.schlaubi.mikbot.plugin.api.util.splitIntoPages
+import dev.schlaubi.stdx.core.paginate
 
 private typealias EmbedFieldBuilder = EmbedBuilder.Field.() -> Unit
 
@@ -17,7 +17,7 @@ fun GDPRModule.requestCommand() = ephemeralSubCommand {
             val data = dataPoint.requestFor(discordUser)
             if (data.isNotEmpty()) {
                 val name = translate(dataPoint.displayNameKey, dataPoint.module)
-                data.splitIntoPages(1024).map {
+                data.paginate(1024).map {
                     val builder: EmbedFieldBuilder = {
                         this.name = name
                         value = it

@@ -31,7 +31,7 @@ import dev.schlaubi.mikbot.game.api.events.interactionHandler
 import dev.schlaubi.mikbot.game.api.events.watchThread
 import dev.schlaubi.mikbot.game.api.module.GameModule
 import dev.schlaubi.mikbot.plugin.api.util.convertToISO
-import dev.schlaubi.mikbot.plugin.api.util.suspendLazy
+import dev.schlaubi.stdx.coroutines.suspendLazy
 import kotlinx.coroutines.*
 import mu.KotlinLogging
 import org.koin.core.component.KoinComponent

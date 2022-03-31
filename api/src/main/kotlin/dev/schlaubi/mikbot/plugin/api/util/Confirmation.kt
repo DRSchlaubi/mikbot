@@ -54,8 +54,8 @@ public suspend fun EphemeralSlashCommandContext<*>.confirmation(
 public suspend fun PublicSlashCommandContext<*>.confirmation(
     yesWord: String? = null,
     noWord: String? = null,
-    messageBuilder: MessageBuilder,
     timeout: Duration = 30.seconds,
+    messageBuilder: MessageBuilder,
 ): Confirmation = confirmation(yesWord, noWord, { respond { it() } }, timeout, messageBuilder)
 
 /**
@@ -71,8 +71,8 @@ public suspend fun PublicSlashCommandContext<*>.confirmation(
 public suspend fun UnsafeSlashCommandContext<*>.ephemeralConfirmation(
     yesWord: String? = null,
     noWord: String? = null,
-    messageBuilder: MessageBuilder,
     timeout: Duration = 30.seconds,
+    messageBuilder: MessageBuilder,
 ): Confirmation = unsafeConfirmation(yesWord, noWord, messageBuilder, timeout) { respondEphemeral { it() } }
 
 /**
@@ -88,8 +88,8 @@ public suspend fun UnsafeSlashCommandContext<*>.ephemeralConfirmation(
 public suspend fun UnsafeSlashCommandContext<*>.publicConfirmation(
     yesWord: String? = null,
     noWord: String? = null,
-    messageBuilder: MessageBuilder,
     timeout: Duration = 30.seconds,
+    messageBuilder: MessageBuilder,
 ): Confirmation = unsafeConfirmation(yesWord, noWord, messageBuilder, timeout) { respondPublic { it() } }
 
 @OptIn(UnsafeAPI::class)

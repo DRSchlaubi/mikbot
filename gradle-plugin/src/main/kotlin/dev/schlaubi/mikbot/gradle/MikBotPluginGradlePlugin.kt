@@ -126,11 +126,11 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
                         }
 
                         // filter out dupe dependencies
-                        configurations.getByName("runtimeClasspath").resolvedConfiguration.resolvedArtifacts.filter { dep ->
+                        configurations.getByName("runtimeClasspath").resolvedConfiguration.resolvedArtifacts.asSequence().filter { dep ->
                             (dep.moduleVersion.id.group + ":" + dep.moduleVersion.id.name) !in mainConfiguration
                         }.mapNotNull { dep ->
                             dep.file
-                        }
+                        }.toList()
                     })
                 }
 

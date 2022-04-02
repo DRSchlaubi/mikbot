@@ -126,8 +126,10 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
                         }
 
                         // filter out dupe dependencies
-                        configurations.getByName("runtimeClasspath").files.filter { file ->
-                            file.removeVersion() !in mainConfiguration
+                        configurations.getByName("runtimeClasspath").resolvedConfiguration.resolvedArtifacts.filter { dep ->
+                            (dep.moduleVersion.id.group + ":" + dep.moduleVersion.id.name) !in mainConfiguration
+                        }.mapNotNull { dep ->
+                            dep.file
                         }
                     })
                 }

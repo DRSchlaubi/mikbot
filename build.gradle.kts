@@ -1,4 +1,5 @@
 import dev.schlaubi.mikbot.gradle.removeVersion
+import org.gradle.api.internal.artifacts.PreResolvedResolvableArtifact
 import java.nio.file.Files
 
 plugins {
@@ -72,14 +73,14 @@ tasks {
     // but I tried to use JVM resources or compilation file manipulation for 3 hrs now with no luck
     task("exportDependencies") {
         doLast {
-            val files = configurations["runtimeClasspath"].files.mapNotNull {
-                it.removeVersion()
+            val deps = configurations["runtimeClasspath"].resolvedConfiguration.resolvedArtifacts.mapNotNull {
+                it.moduleVersion.id.group + ":" + it.moduleVersion.id.name
             }
 
             val kotlinFile = """
                 package dev.schlaubi.mikbot.gradle
                 
-                const val transientDependencies = "${files.joinToString("\\n")}"
+                const val transientDependencies = "${deps.joinToString("\\n")}"
             """.trimIndent()
 
             Files.writeString(

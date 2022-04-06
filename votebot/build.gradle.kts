@@ -1,5 +1,5 @@
 plugins {
-    //`mikbot-bot`
+    // `mikbot-bot`
 }
 
 val versionString = "3.7.0"

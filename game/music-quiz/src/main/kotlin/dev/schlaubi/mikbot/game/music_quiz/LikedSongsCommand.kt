@@ -13,17 +13,17 @@ import dev.schlaubi.mikmusic.util.musicModule
 class RemoveArguments : Arguments() {
     val position by int {
         name = "position"
-        description = "The position of the song to remove"
+        description = "commands.songs_likes.remove.arguments.position.description"
     }
 }
 
 suspend fun SongQuizModule.likedSongsCommand() = ephemeralSlashCommand {
     name = "song-likes"
-    description = "Allows you to view your favourite song-quiz songs"
+    description = "commands.song_likes.description"
 
     ephemeralSubCommand {
         name = "show"
-        description = "Shows all songs"
+        description = "commands.song_likes.show.description"
 
         check {
             musicQuizAntiCheat(musicModule)
@@ -51,7 +51,7 @@ suspend fun SongQuizModule.likedSongsCommand() = ephemeralSlashCommand {
 
     ephemeralSubCommand(::RemoveArguments) {
         name = "remove"
-        description = "Removes a liked song"
+        description = "commands.song_likes.remove.description"
 
         check {
             musicQuizAntiCheat(musicModule)

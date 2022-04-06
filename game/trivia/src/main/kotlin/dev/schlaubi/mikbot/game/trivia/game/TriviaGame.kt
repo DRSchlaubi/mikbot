@@ -48,7 +48,7 @@ class TriviaGame(
         if (questionContainer.category != null) {
             field {
                 name = translate("trivia.question.category")
-                value = translate("trivia.question.category." + questionContainer.category!!.translationName)
+                value = translate(questionContainer.category!!.readableName)
                 inline = true
             }
         }
@@ -56,7 +56,7 @@ class TriviaGame(
         if (questionContainer.difficulty != null) {
             field {
                 name = translate("trivia.question.difficulty")
-                value = translate("trivia.question.difficulty." + questionContainer.difficulty!!.translationName)
+                value = translate(questionContainer.difficulty!!.readableName)
                 inline = true
             }
         }
@@ -64,7 +64,7 @@ class TriviaGame(
         if (questionContainer.type != null) {
             field {
                 name = translate("trivia.question.type")
-                value = translate("trivia.question.type." + questionContainer.type!!.translationName)
+                value = translate(questionContainer.type!!.readableName)
                 inline = true
             }
         }
@@ -92,7 +92,7 @@ class TriviaGame(
 
         field {
             name = translate("trivia.question.category")
-            value = translate("trivia.question.category." + question.category.translationName)
+            value = translate(question.category.readableName)
             inline = true
         }
 

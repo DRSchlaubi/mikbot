@@ -14,6 +14,8 @@ import kotlin.io.path.createDirectories
 import kotlin.io.path.createFile
 import kotlin.io.path.exists
 
+const val mikbotBinaryUrl = "https://storage.googleapis.com/mikbot-binaries/"
+
 abstract class InstallBotTask : DefaultTask() {
     @get:Internal
     internal val testBotFolder: Path
@@ -44,7 +46,7 @@ abstract class InstallBotTask : DefaultTask() {
         logger.info("Mikbot installation not found! Downloading")
 
         val version = botVersion.orNull ?: error("Please set a bot version")
-        val url = "https://github.com/DRSchlaubi/mikbot/raw/binary-repo/$version/mikmusic-$version.tar.gz"
+        val url = "$mikbotBinaryUrl$version/mikmusic-$version.tar.gz"
         downloadBot(url)
     }
 

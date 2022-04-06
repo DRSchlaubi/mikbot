@@ -9,7 +9,7 @@ import dev.schlaubi.mikmusic.core.MusicModule
 class VolumeArguments : Arguments() {
     val volume by optionalInt {
         name = "volume"
-        description = "The desired volume"
+        description = "commands.volume.arguments.volume.description"
 
         validate {
             if (value !in 0..100) {
@@ -21,7 +21,7 @@ class VolumeArguments : Arguments() {
 
 suspend fun MusicModule.volumeCommand() = ephemeralControlSlashCommand(::VolumeArguments) {
     name = "volume"
-    description = "Changes the volume of the bot"
+    description = "commands.volume.description"
 
     action {
         val volume = arguments.volume

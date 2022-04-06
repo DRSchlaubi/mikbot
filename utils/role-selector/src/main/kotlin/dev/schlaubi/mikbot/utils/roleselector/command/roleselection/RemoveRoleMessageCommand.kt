@@ -11,7 +11,7 @@ import dev.schlaubi.mikbot.utils.roleselector.util.translateString
 
 suspend fun EphemeralSlashCommand<*>.removeRoleMessageCommand() = ephemeralSubCommand(::RemoveRoleMessageArguments) {
     name = "remove-message"
-    description = "Remove a Role Selection Message"
+    description = "commands.remove_message.description"
     guildAdminOnly()
 
     action {
@@ -33,6 +33,6 @@ suspend fun EphemeralSlashCommand<*>.removeRoleMessageCommand() = ephemeralSubCo
 class RemoveRoleMessageArguments : Arguments() {
     val message by message {
         name = "message"
-        description = "The Role-Selection Message to remove"
+        description = "commands.remove_message.arguments.message.description"
     }
 }

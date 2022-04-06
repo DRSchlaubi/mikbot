@@ -85,6 +85,7 @@ need to configure the following:
 ```kotlin
 pluginPublishing {
     // The address your repository is hosted it
+    // if you use Git LFS and GitHub Pages use https://github.com/owner/repo/raw/branch 
     repositoryUrl.set("https://plugin-repository.mikbot.schlaubi.net")
     // The directory the generated repository should be in
     targetDirectory.set(rootProject.file("ci-repo").toPath())
@@ -94,12 +95,31 @@ pluginPublishing {
 ```
 
 If there already is something in the target directory, the plugin tries to update the existing repository accordingly.
-Therefore, it makes sense to clone the existing repository first. I use [GitHub Pages](https://pages.github.com/) and
-this workflow to generate my own repository.
+Therefore, it makes sense to clone the existing repository first. I use [Google Cloud Storage](https://cloud.google.com/storage)
 
 <details>
-<summary>GitHub Actions Workflow</summary>
+<summary>GitHub Actions Workflow (Git (LFS) / GitHub Pages)</summary>
 
+If you want to use Git LFS, download it first [here](https://git-lfs.github.com/)
+
+1. Run these commands to create the required repo
+```bash
+git init
+echo "[]" > plugins.json
+# Skip this if you want to use github.io
+echo "repo.yourdomain.com" > CNAME
+## skip these two commands if you don't want to use Git LFS
+git lfs install
+git lfs track "*.tar.gz"
+git add .
+git commit -m "Initial commit"
+git checkout -b plugin-repo
+git remote add origin <repo>
+git push origin plugin-repo
+```
+2. Enable [GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site) on the new branch
+
+Workflow:
 ```yaml
   update_repository:
     name: Update repository
@@ -132,6 +152,55 @@ this workflow to generate my own repository.
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: plugin-repo # the branch GH pages is on
           directory: ci-repo # the targetDirectory specified above
+```
+
+</details>
+
+<details>
+<summary>GitHub Actions Workflow (Google Cloud Storage)</summary>
+
+If you want to use Git LFS, download it first [here](https://git-lfs.github.com/)
+
+1. [Create a Google Cloud Storage Bucket](https://cloud.google.com/storage/docs/creating-buckets)
+2. [Set Up Auth](https://github.com/google-github-actions/auth#authenticating-via-service-account-key-json)
+
+Workflow:
+```yaml
+  update_repository:
+    name: Update repository
+    runs-on: ubuntu-20.04
+    needs: [ build ]
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    # Add "id-token" with the intended permissions.
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    env:
+      GOOGLE_CLOUD_BUCKET: gs://<from steps above>
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '17'
+      - name: 'Login to GCP'
+        id: 'auth'
+        uses: 'google-github-actions/auth@v0'
+        with:
+          credentials_json: ${{ secrets.GCP_ACCOUNT_KEY }}
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v0'
+      - name: 'Create working Directory'
+        run: mkdir ci-repo && cd ci-repo
+      - name: 'Download existing repo'
+        working-directory: ci-repo
+        run: gsutil -m cp -R $GOOGLE_CLOUD_BUCKET/* .
+      - uses: gradle/gradle-build-action@v1
+        with:
+          arguments: generateDefaultResourceBundle assemblePlugin buildRepository
+      - name: 'Upload repo changes'
+        working-directory: ci-repo
+        run: gsutil -m cp -R . $GOOGLE_CLOUD_BUCKET
 ```
 
 </details>

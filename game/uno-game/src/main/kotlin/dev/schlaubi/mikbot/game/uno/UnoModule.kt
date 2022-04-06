@@ -53,6 +53,12 @@ class UnoArguments : Arguments() {
         defaultValue = true
     }
 
+    val stackAllDrawingCards by defaultingBoolean {
+        name = "stack_all_drawing_cards"
+        description = "If enabled you can stack all drawing cards"
+        defaultValue = false
+    }
+
     val enableBluffing by defaultingBoolean {
         name = "bluffing"
         description = "See /uno bluffing for more information"
@@ -91,8 +97,8 @@ class UnoModule : GameModule<DiscordUnoPlayer, DiscordUnoGame>() {
                 DiscordUnoGame(
                     user, this@UnoModule, welcomeMessage, thread, translationsProvider,
                     arguments.extreme, arguments.flash, arguments.dropIns, arguments.drawUntilPlayable,
-                    arguments.forcePlay, arguments.enableDrawCardStacking, arguments.enableBluffing,
-                    arguments.useSpecial7and0
+                    arguments.forcePlay, arguments.enableDrawCardStacking, arguments.stackAllDrawingCards,
+                    arguments.enableBluffing, arguments.useSpecial7and0
                 )
             }
         )

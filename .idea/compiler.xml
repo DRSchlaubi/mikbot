@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="17" />
+    <bytecodeTargetLevel target="18">
+      <module name="mikmusic.mikmusic-bot" target="18" />
+      <module name="mikmusic.mikmusic-bot.main" target="18" />
+      <module name="mikmusic.mikmusic-bot.test" target="18" />
+      <module name="mikmusic.votebot.main" target="18" />
+      <module name="mikmusic.votebot.test" target="18" />
+    </bytecodeTargetLevel>
   </component>
 </project>

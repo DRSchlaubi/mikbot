@@ -7,13 +7,13 @@ import dev.schlaubi.mikmusic.playlist.PlaylistDatabase
 class PlaylistRenameArguments : PlaylistArguments() {
     val newName by string {
         name = "new_name"
-        description = "The new name of the playlist"
+        description = "commands.playlist.rename.arguments.new_name.description"
     }
 }
 
 fun PlaylistModule.renameCommand() = ephemeralSubCommand(::PlaylistRenameArguments) {
     name = "rename"
-    description = "Renames a playlist"
+    description = "commands.rename.description"
 
     action {
         checkPermissions { playlist ->

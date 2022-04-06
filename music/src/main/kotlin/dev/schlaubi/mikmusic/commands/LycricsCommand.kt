@@ -6,22 +6,22 @@ import com.kotlindiscord.kord.extensions.extensions.publicSlashCommand
 import com.kotlindiscord.kord.extensions.types.editingPaginator
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.mikbot.plugin.api.util.forList
-import dev.schlaubi.mikbot.plugin.api.util.splitIntoPages
 import dev.schlaubi.mikmusic.checks.musicQuizAntiCheat
 import dev.schlaubi.mikmusic.core.MusicModule
 import dev.schlaubi.mikmusic.util.fetchLyrics
 import dev.schlaubi.mikmusic.util.searchHappiSong
+import dev.schlaubi.stdx.core.paginate
 
 class LyricsArguments : Arguments() {
     val name by optionalString {
         name = "song_name"
-        description = "The name of the song to search for, if no one is playing"
+        description = "commands.lyrics.arguments.song_name.description"
     }
 }
 
 suspend fun MusicModule.lyricsCommand() = publicSlashCommand(::LyricsArguments) {
     name = "lyrics"
-    description = "Displays the lyrics for the current song or the specified query"
+    description = "commands.lyrics.description"
 
     check {
         musicQuizAntiCheat(this@lyricsCommand)
@@ -49,7 +49,7 @@ suspend fun MusicModule.lyricsCommand() = publicSlashCommand(::LyricsArguments) 
         val lyrics = track.fetchLyrics().result!!
 
         val lines = lyrics.lyrics.lines()
-        val paged = lines.splitIntoPages(2000)
+        val paged = lines.paginate(2000)
 
         editingPaginator {
             forList(user, paged, { it }, { _, _ -> track.track }) {

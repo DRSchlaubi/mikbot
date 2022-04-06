@@ -4,7 +4,7 @@ import com.kotlindiscord.kord.extensions.extensions.publicSlashCommand
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.kord.rest.builder.message.create.embed
 import dev.schlaubi.mikbot.plugin.api.MikBotInfo
-import dev.schlaubi.mikbot.plugin.api.util.parallelMapNotNull
+import dev.schlaubi.stdx.coroutines.parallelMapNotNull
 import io.ktor.client.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*

@@ -7,11 +7,9 @@ import com.kotlindiscord.kord.extensions.extensions.event
 import dev.kord.core.behavior.channel.withTyping
 import dev.kord.core.behavior.interaction.response.EphemeralMessageInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.response.createEphemeralFollowup
-import dev.kord.core.behavior.interaction.response.followUpEphemeral
 import dev.kord.core.behavior.reply
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.core.event.message.MessageCreateEvent
-import dev.kord.rest.builder.message.create.FollowupMessageCreateBuilder
 import dev.schlaubi.lavakord.audio.Link
 import dev.schlaubi.lavakord.audio.player.Track
 import dev.schlaubi.lavakord.rest.TrackResponse
@@ -116,24 +114,25 @@ class MusicInteractionModule : Extension() {
             action {
                 event.message.channel.withTyping {
                     val guild = event.getGuild()!!
-                    event.message.delete()
                     val player = musicModule.getMusicPlayer(guild)
                     val tracks = player.takeFirstMatch(
                         player,
                         event.message.content
                     )
 
-                    player.queueTrack(
-                        force = false,
-                        onTop = false,
-                        tracks = tracks.mapToQueuedTrack(event.message.author!!)
-                    )
-
                     if (tracks.isEmpty()) {
                         event.message
                             .reply { content = translate("music.queue.no_matches", "music") }
                             .deleteAfterwards()
+                    } else {
+                        player.queueTrack(
+                            force = false,
+                            onTop = false,
+                            tracks = tracks.mapToQueuedTrack(event.message.author!!)
+                        )
                     }
+
+                    event.message.delete("Music channel interaction")
                 }
             }
         }

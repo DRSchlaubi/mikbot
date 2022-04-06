@@ -9,7 +9,7 @@ class PlaylistSongsArguments : PlaylistArguments()
 
 fun PlaylistModule.songsCommand() = ephemeralSubCommand(::PlaylistSongsArguments) {
     name = "songs"
-    description = "Shows all the songs which are in a playlist"
+    description = "commands.playlist.songs.description"
 
     action {
         val playlist = getPlaylist()

@@ -17,7 +17,7 @@ import dev.kord.rest.builder.message.EmbedBuilder
 import dev.kord.rest.request.KtorRequestException
 import dev.schlaubi.mikbot.plugin.api.util.effectiveAvatar
 import dev.schlaubi.mikbot.plugin.api.util.embed
-import dev.schlaubi.mikbot.plugin.api.util.forEachParallel
+import dev.schlaubi.stdx.coroutines.forEachParallel
 import io.ktor.utils.io.jvm.javaio.*
 import kotlinx.datetime.Clock
 import mu.KotlinLogging

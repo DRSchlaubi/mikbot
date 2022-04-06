@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "dev.schlaubi.mikbot"
-version = "1.0.6"
+version = "1.1.0"
 
 mikbotPlugin {
     description.set("Plugin adding functionality to comply with the GDPR")

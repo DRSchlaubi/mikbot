@@ -18,10 +18,9 @@ abstract class GenerateDefaultTranslationBundleTask : DefaultTask() {
 
     @TaskAction
     fun copyBundle() {
-        val sourceSets = project.extensions.getByName("sourceSets")
-                as SourceSetContainer
+        val sourceSets = project.extensions.getByName("sourceSets") as SourceSetContainer
         val from = sourceSets.getByName("main").resources
-        val to = project.buildDir.resolve("resources").resolve("main")
+        val to = project.buildDir.resolve("generated").resolve("mikbot").resolve("main").resolve("resources")
 
         val result = project.copy { spec ->
             with(spec) {

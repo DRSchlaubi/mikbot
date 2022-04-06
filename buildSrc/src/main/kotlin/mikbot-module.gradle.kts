@@ -12,8 +12,8 @@ val experimentalAnnotations =
 tasks {
     withType<KotlinCompile> {
         kotlinOptions {
-            jvmTarget = "17"
-            freeCompilerArgs = freeCompilerArgs + "-Xbackend-threads=16" + experimentalAnnotations.map { "-opt-in=$it" }
+            jvmTarget = "18"
+            freeCompilerArgs = experimentalAnnotations.map { "-opt-in=$it" }
         }
     }
     withType<Test> {
@@ -23,7 +23,7 @@ tasks {
 
 kotlin {
     jvmToolchain {
-        (this as DefaultToolchainSpec).languageVersion.set(JavaLanguageVersion.of(17))
+        (this as DefaultToolchainSpec).languageVersion.set(JavaLanguageVersion.of(18))
     }
 }
 

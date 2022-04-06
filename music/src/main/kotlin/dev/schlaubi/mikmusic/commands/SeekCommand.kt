@@ -15,7 +15,7 @@ private val seekRegex = "([0-9]+)(?::([0-9]+))?".toRegex()
 class SeekArguments : Arguments() {
     val to by string {
         name = "to"
-        description = "The position to skip to (mm:ss)"
+        description = "commands.seek.arguments.to.description"
 
         validate {
             if (!value.matches(seekRegex)) {
@@ -27,7 +27,7 @@ class SeekArguments : Arguments() {
 
 suspend fun MusicModule.seekCommand() = ephemeralSlashCommand(::SeekArguments) {
     name = "seek"
-    description = "Seeks to a specified position in the track"
+    description = "commands.seek.description"
 
     check {
         anyMusicPlaying(this@seekCommand)

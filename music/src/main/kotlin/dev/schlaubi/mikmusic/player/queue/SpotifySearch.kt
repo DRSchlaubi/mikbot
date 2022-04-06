@@ -5,8 +5,8 @@ import dev.schlaubi.lavakord.audio.Link
 import dev.schlaubi.lavakord.audio.player.Track
 import dev.schlaubi.lavakord.rest.TrackResponse
 import dev.schlaubi.lavakord.rest.loadItem
-import dev.schlaubi.mikbot.plugin.api.util.parallelMapNotNullIndexed
 import dev.schlaubi.mikmusic.core.Config
+import dev.schlaubi.stdx.coroutines.parallelMapNotNullIndexed
 import kotlinx.coroutines.future.await
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant

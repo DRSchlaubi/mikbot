@@ -1,9 +1,16 @@
 # Mik Bot
 
-A modular framework for building Discord bots in [Kotlin](https://kotlinlang.org)
-using [Kordex](https://github.com/Kord-Extensions/kord-extensions/) and [Kord](https://github.com/kordlib)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/DRSchlaubi/mikbot/CI?logo=github&style=flat-square)](https://github.com/DRSchlaubi/mikbot/actions/workflows/ci.yaml)
+[![Gradle Plugin Portal](https://img.shields.io/gradle-plugin-portal/v/dev.schlaubi.mikbot.gradle-plugin?logo=gradle&style=flat-square)](https://plugins.gradle.org/plugin/dev.schlaubi.mikbot.gradle-plugin)
+[![Latest Version](https://img.shields.io/maven-metadata/v?logo=apache%20maven&metadataUrl=https%3A%2F%2Fschlaubi.jfrog.io%2Fartifactory%2Fmikbot%2Fdev%2Fschlaubi%2Fmikbot-api%2Fmaven-metadata.xml&style=flat-square)](https://schlaubi.jfrog.io/ui/native/mikbot/dev/schlaubi/mikbot-api/)
+[![Made with Kotlin](https://img.shields.io/badge/Made%20with-Kotlin-blueviolet?style=flat-square&logo=kotlin)](https://kotlinlang.org)
 
-**If you are here for mikmusic, click [here](music) and [there](mikmusic-bot)
+A modular framework for building Discord bots in [Kotlin](https://kotlinlang.org)
+using [Kordex](https://github.com/Kord-Extensions/kord-extensions/) and [Kord](https://github.com/kordlib).
+
+**If you are here for mikmusic, click [here](music) and [there](mikmusic-bot).**
+
+**If you are here for Votebot, click [here](votebot).**
 
 # Help translating this project
 <a href="https://hosted.weblate.org/engage/mikbot/">
@@ -43,6 +50,13 @@ Docker image from: https://github.com/DRSchlaubi/mikmusic/pkgs/container/mikmusi
 
 - Clone this repo
 - Run `docker-compose up -d`
+
+# Binary repositories
+
+The bot has two repositories for binaries the [binary-repo](https://storage.googleapis.com/mikbot-binaries) containing
+the bots binaries and the [plugin-repo](https://storage.googleapis.com/mikbot-plugins) 
+([index](https://storage.googleapis.com/mikbot-plugins/plugins.json)) normally you should not need to interact with 
+these repositories directly.
 
 # For developers
 

@@ -14,7 +14,6 @@ import org.koin.core.component.KoinComponent
 import org.pf4j.*
 import org.pf4j.DependencyResolver.*
 import org.pf4j.update.DefaultUpdateRepository
-import org.pf4j.update.UpdateManager
 import org.pf4j.update.UpdateRepository
 import java.net.URL
 import java.nio.file.Path
@@ -29,7 +28,7 @@ object PluginLoader : DefaultPluginManager(), KoinComponent {
             generateNonce(), URL(it)
         )
     }
-    internal val updateManager = UpdateManager(this, repos)
+    internal val updateManager = PluginUpdater(this, repos)
     private val rootTranslations = ClassLoader.getSystemClassLoader().findTranslations()
     override fun createExtensionFinder(): ExtensionFinder = DependencyCheckingExtensionFinder(this)
     val resolver: DependencyResolver get() = dependencyResolver
@@ -40,9 +39,7 @@ object PluginLoader : DefaultPluginManager(), KoinComponent {
     override fun loadPlugins() {
         super.loadPlugins()
 
-        if (Config.UPDATE_PLUGINS) {
-            checkForUpdates()
-        }
+        updateManager.checkForUpdates()
         buildTranslationGraph()
     }
 
@@ -179,7 +176,7 @@ internal class DefaultPluginSystem(private val bot: Bot) : PluginSystem {
 
     override fun <T : ExtensionPoint> getExtensions(type: KClass<T>): List<T> = PluginLoader.getExtensions(type.java)
     override fun translate(key: String, bundleName: String, replacements: Array<Any?>): String =
-        bot.translationProivder.translate(key, bundleName, replacements)
+        bot.translationProvider.translate(key, bundleName, replacements)
 
     override suspend fun emitEvent(event: Event) = events.emit(event)
 }

@@ -8,11 +8,11 @@ import dev.schlaubi.mikbot.core.gdpr.api.AnonymizedData
 import dev.schlaubi.mikbot.core.gdpr.api.DataPoint
 import dev.schlaubi.mikbot.core.gdpr.api.PermanentlyStoredDataPoint
 import dev.schlaubi.mikbot.core.gdpr.api.ProcessedData
-import dev.schlaubi.mikbot.plugin.api.util.splitIntoPages
+import dev.schlaubi.stdx.core.paginate
 
 fun GDPRModule.infoCommand() = ephemeralSubCommand {
     name = "info"
-    description = "Shows the bots privacy policy"
+    description = "commands.gdpr.info.name"
 
     action {
         val (storedData, anonymizedData, processedData) =
@@ -41,7 +41,7 @@ fun GDPRModule.infoCommand() = ephemeralSubCommand {
 private fun EmbedBuilder.dataPoint(name: String, values: List<String>, explainer: String? = null) {
     val value = (listOfNotNull(explainer) + values)
         .map { "$it \n\n" }
-        .splitIntoPages(1024)
+        .paginate(1024)
     value.forEachIndexed { index, text ->
         if (text.isNotBlank()) {
             field {

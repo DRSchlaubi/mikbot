@@ -21,7 +21,7 @@ import dev.schlaubi.mikbot.utils.roleselector.util.updateMessage
 
 suspend fun EphemeralSlashCommand<*>.addRoleSelectionCommand() = ephemeralSubCommand(::AddRoleSelectionArguments) {
     name = "add-role"
-    description = "Adds a new Role-Selection to a Role-Selection Message"
+    description = "commands.add_role.description"
     guildAdminOnly()
 
     action {
@@ -77,18 +77,18 @@ suspend fun EphemeralSlashCommand<*>.addRoleSelectionCommand() = ephemeralSubCom
 class AddRoleSelectionArguments : Arguments() {
     val message by message {
         name = "message"
-        description = "The Role-Selection Message to add a Role-Selection to"
+        description = "commands.add_role.arguments.message.description"
     }
     val role by role {
         name = "role"
-        description = "The Role to add to the Role-Selection"
+        description = "commands.add_role.arguments.role.description"
     }
     val label by optionalString {
         name = "label"
-        description = "The String that shows in the Embed and on the Button"
+        description = "commands.add_role.arguments.label.description"
     }
     val emoji by optionalEmoji {
         name = "emoji"
-        description = "The Custom Emoji that should appear in-front the label (Put default emojis in the label)"
+        description = "commands.add_role.arguments.emoji.description"
     }
 }

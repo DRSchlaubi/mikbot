@@ -12,18 +12,18 @@ import dev.schlaubi.mikmusic.core.MusicModule
 class SingleSongMoveArguments : Arguments() {
     val song by int {
         name = "song"
-        description = "The position of the song to move"
+        description = "commands.move.arguments.song"
     }
 }
 
 class MoveArguments : Arguments() {
     val from by int {
         name = "from"
-        description = "The position of the song to move"
+        description = "commands.move.arguments.from"
     }
     val to by int {
         name = "to"
-        description = "The position to move the song to"
+        description = "commands.move.arguments.to"
     }
 }
 
@@ -62,11 +62,11 @@ suspend fun MusicModule.moveCommand() {
 
     ephemeralControlSlashCommand {
         name = "move"
-        description = "Allows you to move songs in the queue"
+        description = "commands.move.description"
 
         ephemeralSubCommand(::SingleSongMoveArguments) {
             name = "top"
-            description = "Moves a Song to the top"
+            description = "commands.move.top.description"
 
             doMove(SingleSongMoveArguments::song, { 0 }) { track ->
                 translate("commands.move.top.success", arrayOf(track.title))
@@ -75,7 +75,7 @@ suspend fun MusicModule.moveCommand() {
 
         ephemeralSubCommand(::MoveArguments) {
             name = "move"
-            description = "Moves a Song to the the specified position"
+            description = "commands.move.move.description"
 
             doMove(MoveArguments::from, MoveArguments::to) { track ->
                 translate(
@@ -90,7 +90,7 @@ suspend fun MusicModule.moveCommand() {
 
         ephemeralSubCommand(::MoveArguments) {
             name = "swap"
-            description = "Swaps the two songs at the specified positions"
+            description = "commands.move.swap.description"
 
             doMove(MoveArguments::from, MoveArguments::to, swap = true) {
                 translate(
@@ -104,16 +104,16 @@ suspend fun MusicModule.moveCommand() {
 
         ephemeralSubCommand {
             name = "last"
-            description = "Moves the last song to the top"
+            description = "commands.move.last.description"
 
             doMove({ -1 }, { 0 }, swap = true) { track ->
-            translate(
-                "commands.move.last.success",
-                arrayOf(
-                    track.title,
+                translate(
+                    "commands.move.last.success",
+                    arrayOf(
+                        track.title,
+                    )
                 )
-            )
-        }
+            }
         }
     }
 }

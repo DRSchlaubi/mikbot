@@ -4,6 +4,10 @@ import com.kotlindiscord.kord.extensions.commands.CommandContext
 import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommandContext
 import com.kotlindiscord.kord.extensions.commands.application.slash.PublicSlashCommandContext
 import com.kotlindiscord.kord.extensions.components.components
+import com.kotlindiscord.kord.extensions.modules.unsafe.annotations.UnsafeAPI
+import com.kotlindiscord.kord.extensions.modules.unsafe.contexts.UnsafeSlashCommandContext
+import com.kotlindiscord.kord.extensions.modules.unsafe.types.respondEphemeral
+import com.kotlindiscord.kord.extensions.modules.unsafe.types.respondPublic
 import com.kotlindiscord.kord.extensions.types.respond
 import com.kotlindiscord.kord.extensions.utils.waitFor
 import dev.kord.common.entity.ButtonStyle
@@ -21,7 +25,11 @@ private const val yes = "yes"
 private const val no = "no"
 
 @Suppress("DataClassCanBeRecord")
-public data class Confirmation(val value: Boolean, private val response: FollowupMessageBehavior) :
+public data class Confirmation(
+    val value: Boolean,
+    val response: FollowupMessageBehavior,
+    val interaction: ComponentInteraction?,
+) :
     FollowupMessageBehavior by response
 
 /**
@@ -36,8 +44,9 @@ public suspend fun EphemeralSlashCommandContext<*>.confirmation(
     yesWord: String? = null,
     noWord: String? = null,
     timeout: Duration = 30.seconds,
-    messageBuilder: MessageBuilder
-): Confirmation = confirmation(yesWord, noWord, { respond { it() } }, timeout, messageBuilder)
+    acknowledge: Boolean = true,
+    messageBuilder: MessageBuilder,
+): Confirmation = confirmation(yesWord, noWord, { respond { it() } }, timeout, acknowledge, messageBuilder)
 
 /**
  * Initiates a button based confirmation form for a [PublicSlashCommandContext].
@@ -50,19 +59,68 @@ public suspend fun EphemeralSlashCommandContext<*>.confirmation(
 public suspend fun PublicSlashCommandContext<*>.confirmation(
     yesWord: String? = null,
     noWord: String? = null,
-    messageBuilder: MessageBuilder,
     timeout: Duration = 30.seconds,
-): Confirmation = confirmation(yesWord, noWord, { respond { it() } }, timeout, messageBuilder)
+    acknowledge: Boolean = true,
+    messageBuilder: MessageBuilder,
+): Confirmation = confirmation(yesWord, noWord, { respond { it() } }, timeout, acknowledge, messageBuilder)
+
+/**
+ * Initiates a button based confirmation form for a [UnsafeSlashCommandContext].
+ * Sends an ephemeral message to the user.
+ *
+ * @param timeout the [Duration] after which the confirmation process should be aborted (default to false)
+ * @param messageBuilder the confirmation message builder
+ *
+ * @return whether the user confirmed the form or not
+ */
+@UnsafeAPI
+public suspend fun UnsafeSlashCommandContext<*>.ephemeralConfirmation(
+    yesWord: String? = null,
+    noWord: String? = null,
+    timeout: Duration = 30.seconds,
+    messageBuilder: MessageBuilder,
+    acknowledge: Boolean = true,
+): Confirmation =
+    unsafeConfirmation(yesWord, noWord, messageBuilder, timeout, acknowledge) { respondEphemeral { it() } }
+
+/**
+ * Initiates a button based confirmation form for a [UnsafeSlashCommandContext].
+ * Sends a public message to the user.
+ *
+ * @param timeout the [Duration] after which the confirmation process should be aborted (default to false)
+ * @param messageBuilder the confirmation message builder
+ *
+ * @return whether the user confirmed the form or not
+ */
+@UnsafeAPI
+public suspend fun UnsafeSlashCommandContext<*>.publicConfirmation(
+    yesWord: String? = null,
+    noWord: String? = null,
+    timeout: Duration = 30.seconds,
+    acknowledge: Boolean = true,
+    messageBuilder: MessageBuilder,
+): Confirmation = unsafeConfirmation(yesWord, noWord, messageBuilder, timeout, acknowledge) { respondPublic { it() } }
+
+@OptIn(UnsafeAPI::class)
+private suspend fun UnsafeSlashCommandContext<*>.unsafeConfirmation(
+    yesWord: String?,
+    noWord: String?,
+    messageBuilder: MessageBuilder,
+    timeout: Duration,
+    acknowledge: Boolean = true,
+    sendMessage: EditableMessageSender,
+): Confirmation = confirmation(yesWord, noWord, sendMessage, timeout, acknowledge, messageBuilder)
 
 private suspend fun CommandContext.confirmation(
     yesWord: String? = null,
     noWord: String? = null,
     sendMessage: EditableMessageSender,
     timeout: Duration = 30.seconds,
-    messageBuilder: MessageBuilder
+    acknowledge: Boolean = true,
+    messageBuilder: MessageBuilder,
 ): Confirmation = confirmation(sendMessage, timeout, messageBuilder, translate = { key, group ->
     translate(key, group)
-}, yesWord = yesWord, noWord = noWord)
+}, yesWord = yesWord, noWord = noWord, acknowledge = acknowledge)
 
 /**
  * Bare bone confirmation implementation.
@@ -74,7 +132,8 @@ public suspend fun confirmation(
     hasNoOption: Boolean = true,
     translate: Translator,
     yesWord: String? = null,
-    noWord: String? = null
+    noWord: String? = null,
+    acknowledge: Boolean = true,
 ): Confirmation {
     val message = sendMessage {
         messageBuilder()
@@ -98,7 +157,7 @@ public suspend fun confirmation(
         (interaction as? ComponentInteraction)?.let {
             it.message.id == message.id
         } == true
-    } ?: return Confirmation(false, message)
+    } ?: return Confirmation(false, message, null)
 
     when (message) {
         is EphemeralFollowupMessage -> message.edit { components = mutableListOf() }
@@ -106,9 +165,11 @@ public suspend fun confirmation(
     }
 
     val interaction = response.interaction as ComponentInteraction
-    interaction.deferEphemeralMessageUpdate()
+    if (acknowledge) {
+        interaction.deferEphemeralMessageUpdate()
+    }
 
     val button = interaction.componentId
 
-    return Confirmation(button == yes, message)
+    return Confirmation(button == yes, message, interaction)
 }

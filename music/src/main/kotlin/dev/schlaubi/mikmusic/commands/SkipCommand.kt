@@ -8,14 +8,14 @@ import dev.schlaubi.mikmusic.core.MusicModule
 class SkipArguments : Arguments() {
     val to by defaultingInt {
         name = "to"
-        description = "The position to skip to"
+        description = "commands.skip.arguments.to.description"
         defaultValue = 1
     }
 }
 
 suspend fun MusicModule.skipCommand() = ephemeralControlSlashCommand(::SkipArguments) {
     name = "skip"
-    description = "Skips the current track"
+    description = "commands.skip.description"
 
     action {
         if (musicPlayer.queuedTracks.isEmpty()) {

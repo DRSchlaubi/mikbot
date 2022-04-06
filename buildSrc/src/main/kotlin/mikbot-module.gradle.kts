@@ -12,7 +12,7 @@ val experimentalAnnotations =
 tasks {
     withType<KotlinCompile> {
         kotlinOptions {
-            jvmTarget = "18"
+            jvmTarget = "17"
             freeCompilerArgs = experimentalAnnotations.map { "-opt-in=$it" }
         }
     }
@@ -23,7 +23,7 @@ tasks {
 
 kotlin {
     jvmToolchain {
-        (this as DefaultToolchainSpec).languageVersion.set(JavaLanguageVersion.of(18))
+        (this as DefaultToolchainSpec).languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
 

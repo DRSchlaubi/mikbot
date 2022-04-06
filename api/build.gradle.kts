@@ -25,12 +25,7 @@ dependencies {
     api(libs.pf4j)
 
     // Util
-    api(platform("dev.schlaubi:stdx-bom:1.0.1"))
-    api("dev.schlaubi", "stdx-core")
-    api("dev.schlaubi", "stdx-coroutines")
-    api("dev.schlaubi", "stdx-envconf")
-    api("dev.schlaubi", "stdx-logging")
-
+    api(libs.stdx.full)
 
     // Logging
     api(libs.logback.classic)

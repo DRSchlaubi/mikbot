@@ -18,6 +18,7 @@ kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 kmongo-coroutine-serialization = { group = "org.litote.kmongo", name = "kmongo-coroutine-serialization", version.ref = "kmongo" }
 kmongo-id-serialization = { group = "org.litote.kmongo", name = "kmongo-id-serialization", version.ref = "kmongo" }
 pf4j = { group = "org.pf4j", name = "pf4j", version.ref = "pf4j" }
+stdx-full = {group = "dev.schlaubi", name = "stdx-full", version = "1.1.0" }
 envconf = { group = "dev.schlaubi", name = "envconf", version = "1.1" }
 logback-classic = { group = "ch.qos.logback", name = "logback-classic", version = "1.2.10" }
 commons-text = { group = "org.apache.commons", name = "commons-text", version = "1.9" }

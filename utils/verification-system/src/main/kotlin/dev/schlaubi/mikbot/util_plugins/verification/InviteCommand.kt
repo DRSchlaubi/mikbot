@@ -19,7 +19,7 @@ suspend fun OwnerModule.inviteCommand() = ephemeralSlashCommand(::VerificationAr
 
         respond {
             val url = buildBotUrl {
-                path("invitations", invite.id.toString(), "/accept")
+                path("invitations", invite.id.toString(), "accept")
             }
             content = "<$url>"
         }

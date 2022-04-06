@@ -1,10 +1,8 @@
-import dev.schlaubi.mikbot.gradle.removeVersion
-import org.gradle.api.internal.artifacts.PreResolvedResolvableArtifact
 import java.nio.file.Files
 
 plugins {
     `mikbot-module`
-    kotlin("plugin.serialization") version "1.6.10"
+    kotlin("plugin.serialization") version "1.6.20"
     application
     // This exists to add the removeVersion extension to this buildscript
     id("dev.schlaubi.mikbot.gradle-plugin") apply false
@@ -54,12 +52,6 @@ dependencies {
 
 application {
     mainClass.set("dev.schlaubi.musicbot.LauncherKt")
-}
-
-kotlin {
-    jvmToolchain {
-        (this as JavaToolchainSpec).languageVersion.set(JavaLanguageVersion.of(17))
-    }
 }
 
 tasks {

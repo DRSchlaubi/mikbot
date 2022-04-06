@@ -8,5 +8,5 @@ group = "dev.schlaubi"
 version = "1.2.0"
 
 dependencies {
-    plugin(project(":utils:ktor"))
+    plugin(projects.utils.ktor)
 }

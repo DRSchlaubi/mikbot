@@ -78,8 +78,8 @@ public suspend fun UnsafeSlashCommandContext<*>.ephemeralConfirmation(
     yesWord: String? = null,
     noWord: String? = null,
     timeout: Duration = 30.seconds,
-    messageBuilder: MessageBuilder,
     acknowledge: Boolean = true,
+    messageBuilder: MessageBuilder,
 ): Confirmation =
     unsafeConfirmation(yesWord, noWord, messageBuilder, timeout, acknowledge) { respondEphemeral { it() } }
 

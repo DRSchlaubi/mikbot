@@ -38,7 +38,7 @@ include(
     "votebot:chart-service-client",
     "votebot:plugin",
     "test-bot",
-    "mikmusic-bot",
+//    "mikmusic-bot",
 )
 
 includeBuild("gradle-plugin")

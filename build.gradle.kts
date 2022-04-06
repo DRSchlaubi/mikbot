@@ -1,9 +1,8 @@
-import dev.schlaubi.mikbot.gradle.removeVersion
 import java.nio.file.Files
 
 plugins {
     `mikbot-module`
-    kotlin("plugin.serialization") version "1.6.10"
+    kotlin("plugin.serialization") version "1.6.20"
     application
     // This exists to add the removeVersion extension to this buildscript
     id("dev.schlaubi.mikbot.gradle-plugin") apply false
@@ -55,12 +54,6 @@ application {
     mainClass.set("dev.schlaubi.musicbot.LauncherKt")
 }
 
-kotlin {
-    jvmToolchain {
-        (this as JavaToolchainSpec).languageVersion.set(JavaLanguageVersion.of(17))
-    }
-}
-
 tasks {
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions {
@@ -72,14 +65,14 @@ tasks {
     // but I tried to use JVM resources or compilation file manipulation for 3 hrs now with no luck
     task("exportDependencies") {
         doLast {
-            val files = configurations["runtimeClasspath"].files.mapNotNull {
-                it.removeVersion()
+            val deps = configurations["runtimeClasspath"].resolvedConfiguration.resolvedArtifacts.mapNotNull {
+                it.moduleVersion.id.group + ":" + it.moduleVersion.id.name
             }
 
             val kotlinFile = """
                 package dev.schlaubi.mikbot.gradle
                 
-                const val transientDependencies = "${files.joinToString("\\n")}"
+                const val transientDependencies = "${deps.joinToString("\\n")}"
             """.trimIndent()
 
             Files.writeString(

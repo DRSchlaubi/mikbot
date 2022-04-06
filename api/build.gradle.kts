@@ -15,8 +15,8 @@ dependencies {
     // Api base
     api(project("annotations"))
     // Bot
-    api("com.kotlindiscord.kord.extensions", "kord-extensions", "1.5.2-SNAPSHOT")
-    api("com.kotlindiscord.kord.extensions", "unsafe", "1.5.2-SNAPSHOT")
+    api("com.kotlindiscord.kord.extensions", "kord-extensions", "1.5.2-MIKBOT.2")
+    api("com.kotlindiscord.kord.extensions", "unsafe", "1.5.2-MIKBOT.2")
     api("dev.kord.x", "emoji", "0.5.0") {
         exclude("dev.kord")
     }
@@ -25,7 +25,12 @@ dependencies {
     api("org.pf4j", "pf4j", "3.6.0")
 
     // Util
-    api("dev.schlaubi", "envconf", "1.1")
+    api(platform("dev.schlaubi:stdx-bom:1.0.1"))
+    api("dev.schlaubi", "stdx-core")
+    api("dev.schlaubi", "stdx-coroutines")
+    api("dev.schlaubi", "stdx-envconf")
+    api("dev.schlaubi", "stdx-logging")
+
 
     // Logging
     api("ch.qos.logback", "logback-classic", "1.2.10")

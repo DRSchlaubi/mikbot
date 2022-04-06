@@ -4,7 +4,7 @@ import com.kotlindiscord.kord.extensions.types.respond
 
 fun UnoModule.bluffingCommand() = ephemeralSubCommand {
     name = "bluffing"
-    description = "Explains the bluffing option"
+    description = "commands.bluffing.description"
 
     action {
         respond {

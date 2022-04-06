@@ -17,24 +17,24 @@ import kotlinx.coroutines.flow.toList
 class RemoveSingleSongArguments : Arguments() {
     val position by int {
         name = "position"
-        description = "The position of the song to remove"
+        description = "commands.remove.arguments.position.description"
     }
 }
 
 class RemoveRangeSongArguments : Arguments() {
     val from by int {
         name = "from"
-        description = "The position of the first song to remove"
+        description = "commands.remove.arguments.from.description"
     }
     val to by int {
         name = "to"
-        description = "The position of the last song to remove"
+        description = "commands.remove.arguments.to.description"
     }
 }
 
 suspend fun MusicModule.removeCommand() = ephemeralControlSlashCommand {
     name = "remove"
-    description = "Removes songs from the queue"
+    description = "commands.remove.description"
 
     suspend fun <A : Arguments> EphemeralSlashCommand<A>.doRemove(
         remove: suspend EphemeralSlashCommandContext<A>.() -> Int
@@ -54,7 +54,7 @@ suspend fun MusicModule.removeCommand() = ephemeralControlSlashCommand {
 
     ephemeralSubCommand(::RemoveSingleSongArguments) {
         name = "song"
-        description = "Removes one song from the queue"
+        description = "commands.remove.song.description"
 
         action {
             val track = musicPlayer.removeQueueEntry(arguments.position - 1)
@@ -72,7 +72,7 @@ suspend fun MusicModule.removeCommand() = ephemeralControlSlashCommand {
 
     ephemeralSubCommand(::RemoveRangeSongArguments) {
         name = "range"
-        description = "Removes all songs from the specified range from the queue"
+        description = "commands.remove.range.description"
 
         doRemove {
             if (arguments.to < arguments.from) {
@@ -86,14 +86,14 @@ suspend fun MusicModule.removeCommand() = ephemeralControlSlashCommand {
 
     ephemeralSubCommand {
         name = "doubles"
-        description = "Removes all dupes from the queue"
+        description = "commands.remove.doubles.description"
 
         doRemove { musicPlayer.removeDoubles() }
     }
 
     ephemeralSubCommand {
         name = "cleanup"
-        description = "Removes songs from users which left the voice channel.\n"
+        description = "commands.remove.cleanup.description"
 
         doRemove {
             val channel = musicPlayer.lastChannelId!!

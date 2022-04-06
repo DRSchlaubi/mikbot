@@ -5,7 +5,7 @@ import dev.schlaubi.mikmusic.core.MusicModule
 
 suspend fun MusicModule.replayCommand() = ephemeralControlSlashCommand {
     name = "replay"
-    description = "Replays the current song"
+    description = "commands.replay.description"
 
     action {
         player.seekTo(0)

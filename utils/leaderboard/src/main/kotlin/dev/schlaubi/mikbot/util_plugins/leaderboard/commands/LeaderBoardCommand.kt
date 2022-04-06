@@ -11,8 +11,8 @@ import dev.schlaubi.mikbot.util_plugins.leaderboard.countLeaderboardForGuild
 import dev.schlaubi.mikbot.util_plugins.leaderboard.leaderboardForGuild
 
 suspend fun LeaderBoardModule.leaderBoardCommand() = publicSlashCommand {
-    name = "Leaderboard"
-    description = "Shows the current leaderboard"
+    name = "leaderboard"
+    description = "commands.leaderboard.description"
 
     action {
         val leaderboard = LeaderBoardDatabase.leaderboardEntries.leaderboardForGuild(safeGuild.id)

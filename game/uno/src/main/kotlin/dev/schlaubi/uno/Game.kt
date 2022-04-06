@@ -114,6 +114,7 @@ public open class Player {
  * @property wonPlayers [players][Player] which already finished the game
  * @property direction the [Direction] in which the game is going
  * @property allowDrawCardStacking whether to allow the "stacking" of [DrawingCards][DrawingCard] or not
+ * @property stackAllDrawingCards if enabled [DrawingCard.canStackWith] will be ignored
  * @property allowBluffing allows other players to challenge a [WildCardDraw4].
  *                  Meaning the challenged player needs to show their cards, to proof they actually have a card in the
  *                  selected color, if yes, the challenger needs to draw 6 cards, if not the challenged player needs
@@ -130,6 +131,7 @@ public class Game<T : Player>(
     flash: Boolean = false,
     private val drawUntilPlayable: Boolean = false,
     private val allowDrawCardStacking: Boolean = true,
+    private val stackAllDrawingCards: Boolean = false,
     private val allowBluffing: Boolean = false,
     private val useSpecial7And0: Boolean = false
 ) {
@@ -282,7 +284,7 @@ public class Game<T : Player>(
             }
         }
         if (card is DrawingCard) {
-            if (allowDrawCardStacking && card.canStackWith(topCard)) {
+            if (allowDrawCardStacking && (card.canStackWith(topCard) || stackAllDrawingCards)) {
                 drawCardSum += card.cards
             } else {
                 player.onCardsDrawn(drawCardSum)

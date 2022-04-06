@@ -7,7 +7,7 @@ class PlaylistDeleteArguments : PlaylistArguments()
 
 fun PlaylistModule.deleteCommand() = ephemeralSubCommand(::PlaylistDeleteArguments) {
     name = "delete"
-    description = "Deletes a playlist"
+    description = "commands.delete.description"
 
     action {
         checkPermissions { playlist ->

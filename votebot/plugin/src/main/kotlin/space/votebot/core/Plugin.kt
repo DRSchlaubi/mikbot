@@ -6,6 +6,8 @@ import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.extensions.event
 import com.kotlindiscord.kord.extensions.extensions.slashCommandCheck
 import dev.kord.core.event.gateway.ReadyEvent
+import dev.kord.gateway.Intent
+import dev.kord.gateway.PrivilegedIntent
 import dev.schlaubi.mikbot.plugin.api.Plugin
 import dev.schlaubi.mikbot.plugin.api.PluginMain
 import dev.schlaubi.mikbot.plugin.api.PluginWrapper
@@ -17,7 +19,6 @@ import kotlinx.coroutines.cancel
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.builtins.serializer
 import org.litote.kmongo.serialization.registerSerializer
-import space.votebot.command.legacyCommandParser
 import space.votebot.commands.commands
 
 @PluginMain
@@ -27,6 +28,7 @@ class VoteBotPlugin(wrapper: PluginWrapper) : Plugin(wrapper) {
         registerSerializer(ULong.serializer())
     }
 
+    @OptIn(PrivilegedIntent::class)
     override suspend fun ExtensibleBotBuilder.apply() {
         if (Config.ENVIRONMENT == Environment.PRODUCTION) {
             kord {
@@ -57,7 +59,6 @@ class VoteBotModule : Extension() {
 
         commands()
         voteExecutor()
-        legacyCommandParser()
 
         event<ReadyEvent> {
             action {

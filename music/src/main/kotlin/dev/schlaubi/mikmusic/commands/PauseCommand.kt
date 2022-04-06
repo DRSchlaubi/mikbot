@@ -5,7 +5,7 @@ import dev.schlaubi.mikmusic.core.MusicModule
 
 suspend fun MusicModule.pauseCommand() = ephemeralControlSlashCommand {
     name = "pause"
-    description = "Toggles the playback"
+    description = "commands.pause.description"
 
     action {
         musicPlayer.pause(!link.player.paused)

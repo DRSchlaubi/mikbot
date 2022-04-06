@@ -1,6 +1,7 @@
 package dev.schlaubi.mikbot.core.i18n.database
 
 import com.kotlindiscord.kord.extensions.builders.ExtensibleBotBuilder
+import dev.kord.common.Locale
 import dev.schlaubi.mikbot.plugin.api.Plugin
 import dev.schlaubi.mikbot.plugin.api.PluginMain
 import dev.schlaubi.mikbot.plugin.api.PluginWrapper

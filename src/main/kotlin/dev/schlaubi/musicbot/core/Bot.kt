@@ -5,6 +5,8 @@ import com.kotlindiscord.kord.extensions.builders.ExtensibleBotBuilder
 import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.extensions.event
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
+import dev.kord.cache.api.DataEntryCache
+import dev.kord.common.Locale
 import dev.kord.common.entity.PresenceStatus
 import dev.kord.core.event.gateway.DisconnectEvent
 import dev.kord.core.event.gateway.ReadyEvent
@@ -12,13 +14,13 @@ import dev.schlaubi.mikbot.plugin.api.config.Config
 import dev.schlaubi.mikbot.plugin.api.io.Database
 import dev.schlaubi.mikbot.plugin.api.pluginSystem
 import dev.schlaubi.mikbot.plugin.api.util.AllShardsReadyEvent
-import dev.schlaubi.mikbot.plugin.api.util.onEach
 import dev.schlaubi.musicbot.core.io.DatabaseImpl
 import dev.schlaubi.musicbot.core.plugin.DefaultPluginSystem
 import dev.schlaubi.musicbot.core.plugin.PluginLoader
 import dev.schlaubi.musicbot.core.plugin.PluginTranslationProvider
 import dev.schlaubi.musicbot.module.owner.OwnerModuleImpl
 import dev.schlaubi.musicbot.module.settings.SettingsModuleImpl
+import dev.schlaubi.stdx.core.onEach
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import mu.KotlinLogging
@@ -31,13 +33,17 @@ class Bot : KoinComponent {
     private lateinit var bot: ExtensibleBot
 
     private val database: Database = DatabaseImpl()
-    lateinit var translationProivder: TranslationsProvider
+    lateinit var translationProvider: TranslationsProvider
     internal val pluginSystem: DefaultPluginSystem = DefaultPluginSystem(this)
 
     suspend fun start() {
         bot = ExtensibleBot(Config.DISCORD_TOKEN) {
             kord {
                 eventFlow = pluginSystem.events
+
+                cache {
+                    messages { _, _ -> DataEntryCache.none() }
+                }
             }
 
             PluginLoader.botPlugins.onEach {
@@ -111,11 +117,13 @@ class Bot : KoinComponent {
 
         i18n {
             translationsProvider {
-                translationProivder = PluginTranslationProvider {
+                translationProvider = PluginTranslationProvider {
                     defaultLocale
                 }
-                translationProivder
+
+                translationProvider
             }
+            applicationCommandLocales.add(Locale.GERMAN)
         }
 
         hooks {

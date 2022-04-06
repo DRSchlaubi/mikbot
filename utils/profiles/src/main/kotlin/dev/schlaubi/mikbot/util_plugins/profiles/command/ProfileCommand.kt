@@ -35,22 +35,22 @@ import org.litote.kmongo.eq
 private class ProfileArguments : Arguments() {
     val user by optionalUser {
         name = "user"
-        description = "The user whose profile you want to see"
+        description = "command.profile.show.arguments.user.description"
     }
 }
 
 private class PronounArguments : Arguments() {
     val pronoun by enumChoice<Pronoun> {
-        name = "Pronoun"
-        description = "Choose your pronoun"
-        typeName = "Pronoun"
+        name = "pronoun"
+        description = "commands.profile.pronouns.arguments.pronoun.description"
+        typeName = "pronoun"
     }
 }
 
 private class ConnectArguments : Arguments() {
     val service by stringChoice {
         name = "social-service"
-        description = "Choose the service to connect or disconnect"
+        description = "commands.profile.social.arguments.social_service.description"
         SocialAccountConnectionType.ALL.associate { it.displayName to it.id }.forEach { (name, value) ->
             choice(name, value)
         }
@@ -60,11 +60,11 @@ private class ConnectArguments : Arguments() {
 suspend fun SettingsModule.profileCommand() {
     publicSlashCommand {
         name = "profile"
-        description = "Use the profile system"
+        description = "commands.profile.description"
 
         publicSubCommand(::ProfileArguments) {
             name = "show"
-            description = "View a users profile"
+            description = "commands.profile.show.description"
 
             action {
                 val user = (arguments.user ?: user).asUser()
@@ -76,7 +76,7 @@ suspend fun SettingsModule.profileCommand() {
 
         ephemeralSubCommand(::PronounArguments) {
             name = "pronoun"
-            description = "Manage pronouns on your profile"
+            description = "commands.profile.pronoun.description"
             action {
                 val pronoun = arguments.pronoun
                 val profile = user.id.value.toLong().findProfile()
@@ -94,7 +94,7 @@ suspend fun SettingsModule.profileCommand() {
 
         ephemeralSubCommand(::ConnectArguments) {
             name = "connect"
-            description = "Connect a social media account"
+            description = "commands.profile.connect.description"
             action {
                 respond {
                     embed {
@@ -114,7 +114,7 @@ suspend fun SettingsModule.profileCommand() {
 
         publicSubCommand(::ConnectArguments) {
             name = "disconnect"
-            description = "Disconnects a social service"
+            description = "commands.profile.disconnect.description"
 
             action {
                 val service = serviceByName(arguments.service)

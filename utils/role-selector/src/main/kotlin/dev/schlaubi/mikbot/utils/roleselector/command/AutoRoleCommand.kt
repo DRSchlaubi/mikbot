@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.toList
 
 suspend fun SettingsModule.autoRoleCommand() = ephemeralSlashCommand(::AutoRoleArguments) {
     name = "auto-role"
-    description = "Set the role to give when a User join the Guild or disable it"
+    description = "commands.auto_role.description"
     guildAdminOnly()
     requireBotPermissions(Permission.ManageRoles)
 
@@ -54,7 +54,7 @@ suspend fun SettingsModule.autoRoleCommand() = ephemeralSlashCommand(::AutoRoleA
 class AutoRoleArguments : Arguments() {
     val role by optionalRole {
         name = "role"
-        description = "The Role to give (The bot's role has to be above the role that should be given)"
+        description = "commands.auto_role.arguments.role.description"
         validate {
             val member = context.getMember() ?: return@validate
             val highestBotRole = context.getGuild()!!.selfMember().roles.toList().maxOfOrNull {

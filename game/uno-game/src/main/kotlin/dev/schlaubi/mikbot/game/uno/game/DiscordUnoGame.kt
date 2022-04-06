@@ -47,6 +47,7 @@ class DiscordUnoGame(
     val drawUntilPlayable: Boolean,
     val forcePlay: Boolean,
     val allowDrawCardStacking: Boolean,
+    val stackAllDrawingCards: Boolean,
     val allowBluffing: Boolean,
     val useSpecial7and0: Boolean
 ) : AbstractGame<DiscordUnoPlayer>(host, module.asType),
@@ -170,7 +171,7 @@ class DiscordUnoGame(
             thread,
             translationsProvider,
             extremeMode, flashMode, allowDropIns, drawUntilPlayable, forcePlay, allowDrawCardStacking,
-            allowBluffing, useSpecial7and0
+            stackAllDrawingCards, allowBluffing, useSpecial7and0
         )
         if (!askForRematch(
                 thread,

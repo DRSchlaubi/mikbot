@@ -7,7 +7,7 @@ class PlaylistToggleVisibilityCommand : PlaylistArguments()
 
 fun PlaylistModule.toggleVisibilityCommand() = ephemeralSubCommand(::PlaylistToggleVisibilityCommand) {
     name = "toggle-visibility"
-    description = "Toggles whether other users can find this playlist or not"
+    description = "commands.playlist.toggle_visibility.description"
 
     action {
         checkPermissions { playlist ->

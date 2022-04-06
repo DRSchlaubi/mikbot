@@ -15,16 +15,16 @@ import org.litote.kmongo.newId
 class PlaylistSaveArguments : Arguments(), QueueOptions {
     val name by string {
         name = "name"
-        description = "The name of the playlist"
+        description = "commands.playlist.save.arguments.name.description"
     }
     val public by defaultingBoolean {
         name = "public"
-        description = "Whether this playlist is supposed to be public or not"
+        description = "commands.playlist.save.arguments.public.description"
         defaultValue = false
     }
     val importFrom by optionalString {
         name = "import_from"
-        description = "Link to a Track source (YouTube Video/Playlist, Spotify Song/Playlist/Album) to import"
+        description = "commands.playlist.save.arguments.import_from.description"
     }
     override val query: String
         get() = importFrom ?: error("Cannot find tracks if importFrom is not specified")

@@ -14,9 +14,9 @@ fun Arguments.autoCompletedYouTubeQuery(description: String): SingleConverter<St
     this.description = description
 
     autoComplete {
-        val input = focusedOption.value?.toString()
+        val input = focusedOption.value
 
-        if (!input.isNullOrBlank()) {
+        if (input.isNotBlank()) {
             val youtubeResult = requestYouTubeAutoComplete(input)
             suggestString {
                 youtubeResult.take(25).forEach { choice(it, it) }

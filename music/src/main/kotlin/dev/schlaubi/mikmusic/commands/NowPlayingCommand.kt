@@ -13,7 +13,7 @@ import dev.schlaubi.mikmusic.util.addSong
 class NowPlayingArguments : Arguments() {
     val index by optionalInt {
         name = "position"
-        description = "The number of the song in the queue to display the info for"
+        description = "commands.now_playing.arguments.position.description"
     }
 }
 
@@ -21,7 +21,7 @@ private val regex = """\.[0-9]*""".toRegex()
 
 suspend fun MusicModule.nowPlayingCommand() = publicSlashCommand(::NowPlayingArguments) {
     name = "now-playing"
-    description = "Displays information about the currently playing track"
+    description = "commands.now_playing.description"
 
     check {
         anyMusicPlaying(this@nowPlayingCommand)

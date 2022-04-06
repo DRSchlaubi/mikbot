@@ -8,7 +8,7 @@ import dev.schlaubi.mikbot.util_plugins.ktor.api.buildBotUrl
 import org.litote.kmongo.newId
 
 suspend fun OwnerModule.inviteCommand() = ephemeralSlashCommand(::VerificationArguments) {
-    name = "Invite"
+    name = "invite"
     description = "Creates a bot Invite for a specific Guild"
 
     ownerOnly()
@@ -19,7 +19,7 @@ suspend fun OwnerModule.inviteCommand() = ephemeralSlashCommand(::VerificationAr
 
         respond {
             val url = buildBotUrl {
-                path("invitations", invite.id.toString(), "/accept")
+                path("invitations", invite.id.toString(), "accept")
             }
             content = "<$url>"
         }

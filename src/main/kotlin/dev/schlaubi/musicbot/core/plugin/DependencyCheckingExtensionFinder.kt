@@ -12,14 +12,13 @@ private val LOG = KotlinLogging.logger { }
  *
  * This assumes that one extension only extends one [ExtensionPoint] by skipping all dependencies throwing [NoClassDefFoundErrors][NoClassDefFoundError] during class loading.
  */
-@OptIn(ExperimentalStdlibApi::class)
 class DependencyCheckingExtensionFinder(pluginManager: PluginManager) : LegacyExtensionFinder(pluginManager) {
     override fun <T : Any> find(type: Class<T>, pluginId: String?): List<ExtensionWrapper<T>> {
         val kType = type.kotlin
         LOG.debug {
             "Finding extensions of extension point '${kType.qualifiedName}' for plugin '$pluginId'"
         }
-        val result = buildList<ExtensionWrapper<T>> {
+        val result = buildList {
             // classpath's extensions <=> pluginId = null
             val classNames = findClassNames(pluginId)
             if (classNames.isNullOrEmpty()) {

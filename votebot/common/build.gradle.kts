@@ -9,7 +9,7 @@ kotlin {
     jvm {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "18"
+                jvmTarget = "17"
             }
         }
     }

@@ -45,7 +45,7 @@ jobs:
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
-          args: 'New build scan: ${{ steps.gradle.outputs.build-scan-url }} https://github.com/DRSchlaubi/mikbot/actions/runs/${{ env.GITHUB_RUN_ID }}'
+          args: 'New build scan: ${{ steps.gradle.outputs.build-scan-url }} https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
   push:
     name: Push
     runs-on: ubuntu-20.04

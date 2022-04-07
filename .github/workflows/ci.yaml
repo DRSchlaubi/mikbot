@@ -37,9 +37,15 @@ jobs:
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '17'
-      - uses: gradle/gradle-build-action@v1
+      - uses: gradle/gradle-build-action@v2
+        id: gradle
         with:
-          arguments: classes ktlintCheck
+          arguments: build --scan
+      - uses: Ilshidur/action-discord@0.3.2
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        with:
+          args: 'New build scan: ${{ steps.gradle.outputs.build-scan-url }}\nRun: https://github.com/DRSchlaubi/mikbot/actions/runs/${{ env.GITHUB_RUN_ID }}'
   push:
     name: Push
     runs-on: ubuntu-20.04

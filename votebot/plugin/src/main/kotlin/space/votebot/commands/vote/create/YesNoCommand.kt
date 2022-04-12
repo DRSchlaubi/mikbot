@@ -1,5 +1,6 @@
 package space.votebot.commands.vote.create
 
+import com.kotlindiscord.kord.extensions.checks.isNotInThread
 import com.kotlindiscord.kord.extensions.commands.converters.impl.defaultingString
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
 import com.kotlindiscord.kord.extensions.types.respond
@@ -33,6 +34,10 @@ class YesNoArguments : AbstractPollSettingsArguments(), CreateSettings {
 suspend fun VoteBotModule.yesNowCommand() = ephemeralSlashCommand(::YesNoArguments) {
     name = "yes-no"
     description = "Allows you asking a simple yes no question"
+
+    check {
+        isNotInThread()
+    }
 
     action {
         createVote()

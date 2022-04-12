@@ -26,6 +26,7 @@ import dev.kord.rest.builder.interaction.OptionsBuilder
 import dev.kord.rest.builder.interaction.StringChoiceBuilder
 import dev.schlaubi.mikbot.plugin.api.util.discordError
 import dev.schlaubi.mikbot.plugin.api.util.safeInput
+import dev.schlaubi.stdx.core.limit
 import info.debatty.java.stringsimilarity.Levenshtein
 import mu.KotlinLogging
 import org.litote.kmongo.eq
@@ -104,7 +105,7 @@ class PollConverter(validator: Validator<Poll> = null) : SingleConverter<Poll>(v
             suggestString {
                 possible.subList(0, 25.coerceAtMost(possible.size)).forEach {
                     if (it.messages.isNotEmpty()) {
-                        choice(it.title, it.messages.first().jumpUrl)
+                        choice(it.title.limit(100), it.messages.first().jumpUrl)
                     } else {
                         VoteBotDatabase.polls.deleteOne(it.id)
                     }

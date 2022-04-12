@@ -45,7 +45,7 @@ suspend fun Poll.addMessage(
     channel: MessageChannelBehavior,
     guild: GuildBehavior,
     addButtons: Boolean,
-    addToDatabase: Boolean
+    addToDatabase: Boolean,
 ): Message {
     val message = channel.createMessage {
         embeds.add(toEmbed(channel.kord, guild, false))
@@ -66,7 +66,7 @@ suspend fun Poll.updateMessages(
     guild: GuildBehavior,
     removeButtons: Boolean = false,
     highlightWinner: Boolean = false,
-    showChart: Boolean? = null
+    showChart: Boolean? = null,
 ) {
     val pieChart = if (highlightWinner && showChart ?: settings.showChartAfterClose && votes.isNotEmpty()) {
         pieChartService
@@ -122,7 +122,7 @@ suspend fun Poll.toEmbed(
     kord: Kord,
     guild: GuildBehavior,
     highlightWinner: Boolean = false,
-    overwriteHideResults: Boolean = false
+    overwriteHideResults: Boolean = false,
 ): EmbedBuilder = embed {
     title = transformMessage(this@toEmbed.title, TransformerContext(guild, kord, false))
 
@@ -145,7 +145,7 @@ suspend fun Poll.toEmbed(
                 val blocksForOption = (votePercentage * blockBarLength).toInt()
 
                 " ${option.positionedIndex + 1} | ${
-                block.repeat(blocksForOption).padEnd(blockBarLength)
+                    block.repeat(blocksForOption).padEnd(blockBarLength)
                 } | (${percentage.format(votePercentage)})"
             }
         """```$resultsText```"""
@@ -171,9 +171,9 @@ suspend fun Poll.toEmbed(
 
     if (highlightWinner) {
         val options = sumUp().groupBy { it.amount }
-        val maxVotes = options.keys.maxOrNull()!!
+        val maxVotes = options.keys.maxOrNull()
 
-        val winners = options[maxVotes]!!
+        val winners = maxVotes?.let { options[it] } ?: emptyList()
 
         field {
             name = if (winners.size > 1) "Winners" else "Winner"

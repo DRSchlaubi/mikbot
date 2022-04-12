@@ -1,5 +1,6 @@
 package space.votebot.commands.vote.create
 
+import com.kotlindiscord.kord.extensions.checks.isNotInThread
 import com.kotlindiscord.kord.extensions.commands.converters.impl.string
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
 import com.kotlindiscord.kord.extensions.types.respond
@@ -32,6 +33,10 @@ class CreateOptions : AbstractPollSettingsArguments(), CreateSettings {
 suspend fun VoteBotModule.createCommand() = ephemeralSlashCommand(::CreateOptions) {
     name = "create-vote"
     description = "Creates a new vote"
+
+    check {
+        isNotInThread()
+    }
 
     action {
         createVote()

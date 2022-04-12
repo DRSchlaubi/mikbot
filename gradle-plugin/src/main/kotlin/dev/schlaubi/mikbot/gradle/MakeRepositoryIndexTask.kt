@@ -1,13 +1,9 @@
 package dev.schlaubi.mikbot.gradle
 
 import org.gradle.api.DefaultTask
-import org.gradle.api.provider.Property
-import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.gradle.jvm.tasks.Jar
 import java.nio.file.Files
-import java.nio.file.Path
 import java.util.*
 
 abstract class MakeRepositoryIndexTask : DefaultTask() {

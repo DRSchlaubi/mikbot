@@ -4,12 +4,12 @@ plugins {
 }
 
 group = "dev.schlaubi.mikbot"
-version = "1.1.0"
+version = "2.0.0"
 
 dependencies {
-    implementation("org.mozilla", "rhino", "1.7.14")
+    implementation(libs.rhino)
     implementation(projects.utils.hasteClient)
-    ksp("com.kotlindiscord.kord.extensions", "annotation-processor", "1.5.2-RC1")
+    ksp(libs.kordex.processor)
 }
 
 mikbotPlugin {

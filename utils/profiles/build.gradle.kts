@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "dev.schlaubi.mikbot"
-version = "1.2.1"
+version = "2.0.0"
 
 repositories {
     maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
@@ -14,11 +14,10 @@ repositories {
 dependencies {
     plugin(projects.utils.ktor)
     optionalPlugin(projects.core.gdpr)
-    implementation(platform("dev.nycode.github:bom:1.0.0-SNAPSHOT"))
-    implementation("dev.nycode.github", "repositories") {
+    implementation(libs.github.repositories) {
         exclude("org.slf4j", "slf4j-api")
     }
-    implementation("io.ktor", "ktor-client-serialization")
+    implementation(libs.ktor.client.serialization)
 }
 
 mikbotPlugin {

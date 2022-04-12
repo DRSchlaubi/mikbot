@@ -9,8 +9,8 @@ plugins {
 dependencies {
     implementation(projects.votebot.common)
     implementation(projects.votebot.chartServiceClient)
-    implementation("info.debatty", "java-string-similarity", "2.0.0")
-    ksp("com.kotlindiscord.kord.extensions", "annotation-processor", "1.5.2-SNAPSHOT")
+    implementation(libs.java.string.similarity)
+    ksp(libs.kordex.processor)
     optionalPlugin(projects.core.gdpr)
 }
 

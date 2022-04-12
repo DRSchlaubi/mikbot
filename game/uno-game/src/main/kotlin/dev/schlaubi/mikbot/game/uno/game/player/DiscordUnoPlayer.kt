@@ -122,7 +122,7 @@ abstract class DiscordUnoPlayer(
         }
     }
 
-    suspend fun turn() {
+    suspend fun turn(secondRun: Boolean = false) {
         myTurn = true
         // Draw card stacking logic
         if (game.game.drawCardSum >= 1 || (!game.allowDrawCardStacking && game.game.topCard is DrawingCard)) {
@@ -142,7 +142,7 @@ abstract class DiscordUnoPlayer(
             }
         }
 
-        updateControls(true)
+        updateControls(game.lastPlayer != this && !secondRun) // Don't update if it wasn't another players turn
         val cantPlay by lazy { deck.none { it.canBePlayedOn(game.game.topCard) } }
         if (drawn) {
             if (cantPlay) {
@@ -154,7 +154,7 @@ abstract class DiscordUnoPlayer(
             }
         } else if (game.game.drawCardSum >= 1 && cantPlay && (!game.game.canBeChallenged)) {
             doDraw() // auto draw if there is no other option
-            return turn()
+            return turn(secondRun = true)
         }
 
         val cardName = awaitResponse { controls }
@@ -171,7 +171,7 @@ abstract class DiscordUnoPlayer(
                     return
                 }
                 // if the action calls for a new turn repeat
-                return turn()
+                return turn(secondRun = true)
             }
         } else {
             aiPlay()

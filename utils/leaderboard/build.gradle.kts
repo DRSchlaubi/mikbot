@@ -5,12 +5,12 @@ plugins {
 }
 
 group = "dev.schlaubi.mikbot"
-version = "1.3.0"
+version = "2.0.0"
 
 dependencies {
     optionalPlugin(projects.core.gdpr)
     optionalPlugin(projects.utils.ktor)
-    implementation("org.litote.kmongo", "kmongo-id-serialization", "4.5.0")
+    implementation(libs.kmongo.id.serialization)
 }
 
 mikbotPlugin {

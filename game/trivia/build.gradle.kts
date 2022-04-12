@@ -5,15 +5,15 @@ plugins {
 }
 
 group = "dev.schlaubi.mikbot"
-version = "1.3.0"
+version = "2.0.0"
 
 dependencies {
     plugin(projects.game.gameApi)
     plugin(projects.game.multipleChoiceGame)
     optionalPlugin(projects.core.gdpr)
-    implementation("org.apache.commons", "commons-text", "1.9")
+    implementation(libs.commons.text)
 
     // Google Translate
-    implementation(platform("com.google.cloud:libraries-bom:24.4.0"))
-    implementation("com.google.cloud", "google-cloud-translate")
+    implementation(platform(libs.google.cloud.bom))
+    implementation(libs.google.cloud.translate)
 }

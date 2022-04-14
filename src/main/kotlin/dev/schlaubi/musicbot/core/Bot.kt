@@ -42,6 +42,8 @@ class Bot : KoinComponent {
             kord {
                 eventFlow = pluginSystem.events
 
+                stackTraceRecovery = true
+
                 cache {
                     messages { _, _ -> DataEntryCache.none() }
                 }
@@ -134,8 +136,9 @@ class Bot : KoinComponent {
         }
 
         // Disable all mentions in error responses
-        errorResponse { _, _ ->
+        errorResponse { message, _ ->
             allowedMentions()
+            content = message
         }
     }
 

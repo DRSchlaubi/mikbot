@@ -22,7 +22,7 @@ class QuestionContainer(
     val difficulty: Difficulty?,
     val category: Category?,
     val type: Type?,
-    private val questions: List<TriviaQuestion>
+    private val questions: List<TriviaQuestion>,
 ) : GameQuestionContainer<TriviaQuestion> {
     override fun iterator(): Iterator<TriviaQuestion> = questions.iterator()
 
@@ -34,7 +34,7 @@ class QuestionContainer(
             type: Type?,
             locale: Locale?,
             translationsProvider: TranslationsProvider,
-            module: TriviaModule
+            module: TriviaModule,
         ): QuestionContainer {
             val easterEgg = Random.nextInt(1, 100) == 50
             val questionSize = if (easterEgg) size - 1 else size
@@ -45,6 +45,8 @@ class QuestionContainer(
             } else {
                 questions
             }
+
+            if (questions.isEmpty()) throw IllegalArgumentException("Missing questions")
 
             return QuestionContainer(
                 size,
@@ -60,7 +62,7 @@ class QuestionContainer(
 private suspend fun List<Question>.translateIfNeeded(
     guildLocale: Locale?,
     translationsProvider: TranslationsProvider,
-    module: TriviaModule
+    module: TriviaModule,
 ): List<TriviaQuestion> {
     if (guildLocale == null || guildLocale.language == "en") return map { TriviaQuestion(it, null) }
 

@@ -5,8 +5,6 @@
       <module name="mikmusic.mikmusic-bot" target="18" />
       <module name="mikmusic.mikmusic-bot.main" target="18" />
       <module name="mikmusic.mikmusic-bot.test" target="18" />
-      <module name="mikmusic.votebot.main" target="18" />
-      <module name="mikmusic.votebot.test" target="18" />
     </bytecodeTargetLevel>
   </component>
 </project>

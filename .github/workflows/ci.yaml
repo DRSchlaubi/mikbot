@@ -94,10 +94,13 @@ jobs:
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v0'
       - name: 'Create working Directory'
-        run: mkdir ci-repo
+        run: mkdir ci-repo ci-repo-old
       - name: 'Download existing repo'
-        working-directory: ci-repo
+        working-directory: ci-repo-old
         run: gsutil -m cp -R $GOOGLE_CLOUD_BUCKET/* .
+      - name: 'Copy index'
+        working-directory: ci-repo-old
+        run: cp plugins.json ../ci-repo
       - uses: gradle/gradle-build-action@v1
         with:
           arguments: generateDefaultResourceBundle assemblePlugin buildRepository

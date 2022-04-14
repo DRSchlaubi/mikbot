@@ -2,6 +2,7 @@ package dev.schlaubi.mikbot.game.api
 
 import com.kotlindiscord.kord.extensions.utils.getJumpUrl
 import dev.kord.common.Locale
+import dev.kord.common.annotation.KordUnsafe
 import dev.kord.common.entity.ButtonStyle
 import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
@@ -9,6 +10,7 @@ import dev.kord.core.behavior.edit
 import dev.kord.core.behavior.interaction.followup.edit
 import dev.kord.core.behavior.interaction.response.EphemeralMessageInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.response.MessageInteractionResponseBehavior
+import dev.kord.core.behavior.interaction.response.createEphemeralFollowup
 import dev.kord.core.behavior.interaction.response.followUp
 import dev.kord.core.entity.interaction.followup.FollowupMessage
 import dev.kord.rest.builder.component.ActionRowBuilder
@@ -44,6 +46,7 @@ interface ControlledGame<P : ControlledPlayer> : Game<P> {
         }
     }
 
+    @OptIn(KordUnsafe::class)
     suspend fun AbstractGame<P>.askForRematch(newThread: ThreadChannelBehavior, newGame: AbstractGame<P>): Boolean {
         val waitingPlayers = players.map { it.user }.toMutableList()
 
@@ -68,12 +71,11 @@ interface ControlledGame<P : ControlledPlayer> : Game<P> {
         val completer = CompletableDeferred<Unit>()
 
         message.componentLive(this).onInteraction {
-
-            val ack = interaction.deferEphemeralMessage()
+            val ack = interaction.deferEphemeralResponseUnsafe()
             val newPlayer = newGame.obtainNewPlayer(
                 interaction.user,
                 ack,
-                ack.followUp { content = "Loading ..." },
+                ack.createEphemeralFollowup { content = "Loading ..." },
                 interaction.locale
             )
             newGame.players.add(newPlayer)

@@ -14,6 +14,12 @@ abstract class BuildRepositoryExtension {
     abstract val targetDirectory: Property<Path>
 
     /**
+     * Directory representing the current repository content (defaults to [targetDirectory]).
+     */
+    @get:InputDirectory
+    abstract val currentRepository: Property<Path>
+
+    /**
      * The URL were the repository is hosted (used for URLs in plugins.json).
      */
     @get:Input

@@ -1,12 +1,15 @@
 package dev.schlaubi.mikbot.game.uno.game.player
 
 import dev.kord.common.Locale
+import dev.kord.common.annotation.KordUnsafe
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.interaction.followup.edit
-import dev.kord.core.behavior.interaction.response.*
+import dev.kord.core.behavior.interaction.response.EphemeralMessageInteractionResponseBehavior
+import dev.kord.core.behavior.interaction.response.MessageInteractionResponseBehavior
+import dev.kord.core.behavior.interaction.response.createEphemeralFollowup
+import dev.kord.core.behavior.interaction.response.createPublicFollowup
 import dev.kord.core.entity.interaction.followup.FollowupMessage
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
-import dev.kord.rest.builder.message.create.FollowupMessageCreateBuilder
 import dev.kord.rest.builder.message.modify.MessageModifyBuilder
 import dev.kord.rest.builder.message.modify.embed
 import dev.schlaubi.mikbot.game.api.ControlledPlayer
@@ -51,11 +54,10 @@ abstract class DiscordUnoPlayer(
         game.launch {
             if (game.flashMode) {
                 response.createEphemeralFollowup {
-
                     content = translate("uno.flash.skipped")
                 }
             } else {
-                response.followUpEphemeral {
+                response.createEphemeralFollowup {
                     content = translate("uno.controls.skipped")
                 }
             }
@@ -271,12 +273,13 @@ abstract class DiscordUnoPlayer(
     override suspend fun resendControls(ack: EphemeralMessageInteractionResponseBehavior) =
         resendControlsInternally(null, response = ack)
 
+    @OptIn(KordUnsafe::class)
     suspend fun resendControlsInternally(
         event: ComponentInteractionCreateEvent? = null,
         justLoading: Boolean = false,
         response: EphemeralMessageInteractionResponseBehavior? = null,
     ) {
-        val ack = response ?: event?.interaction?.deferEphemeralMessage() ?: this.response
+        val ack = response ?: event?.interaction?.deferEphemeralResponseUnsafe() ?: this.response
         controls = ack.createEphemeralFollowup {
 
             content = translate("uno.controls.loading")
@@ -312,7 +315,8 @@ abstract class DiscordUnoPlayer(
     override fun onSlapEnd() {
         game.launch {
             updateControls(false)
-            response.followUp {
+            response.createPublicFollowup {
+
                 translate("game.slap_session.lost")
             }
         }

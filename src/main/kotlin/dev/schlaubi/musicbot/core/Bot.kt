@@ -10,6 +10,7 @@ import dev.kord.common.Locale
 import dev.kord.common.entity.PresenceStatus
 import dev.kord.core.event.gateway.DisconnectEvent
 import dev.kord.core.event.gateway.ReadyEvent
+import dev.kord.rest.builder.message.create.allowedMentions
 import dev.schlaubi.mikbot.plugin.api.config.Config
 import dev.schlaubi.mikbot.plugin.api.io.Database
 import dev.schlaubi.mikbot.plugin.api.pluginSystem
@@ -40,6 +41,8 @@ class Bot : KoinComponent {
         bot = ExtensibleBot(Config.DISCORD_TOKEN) {
             kord {
                 eventFlow = pluginSystem.events
+
+                stackTraceRecovery = true
 
                 cache {
                     messages { _, _ -> DataEntryCache.none() }
@@ -131,6 +134,12 @@ class Bot : KoinComponent {
                 registerKoinModules()
             }
         }
+
+        // Disable all mentions in error responses
+        errorResponse { message, _ ->
+            allowedMentions()
+            content = message
+        }
     }
 
     private fun registerKoinModules() {
@@ -169,7 +178,7 @@ private class BotModule : Extension() {
                 loggedInShards -= event.shard
                 LOG.warn {
                     "Shard got disconnected ${event.shard} ${event::class.simpleName}," +
-                        " Awaiting login from: ${kord.resources.shards.indices - loggedInShards.toSet()}"
+                            " Awaiting login from: ${kord.resources.shards.indices - loggedInShards.toSet()}"
                 }
             }
         }

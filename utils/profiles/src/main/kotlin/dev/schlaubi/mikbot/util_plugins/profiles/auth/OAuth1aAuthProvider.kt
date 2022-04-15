@@ -20,7 +20,8 @@ var HttpRequestBuilder.oAuthTokenSecret: String
     set(value) = attributes.put(OAuthTokenSecretAttributeKey, value)
 
 private class OAuth1aAuthProvider(private val host: String, private val consumerSecret: String) : AuthProvider {
-    @Suppress("OverridingDeprecatedMember")
+    @Suppress("DeprecatedCallableAddReplaceWith")
+    @Deprecated("Please use sendWithoutRequest function instead")
     override val sendWithoutRequest: Boolean
         get() = error("Deprecated")
 

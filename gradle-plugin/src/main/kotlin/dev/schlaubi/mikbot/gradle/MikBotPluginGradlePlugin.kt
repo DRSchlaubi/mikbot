@@ -127,9 +127,10 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
                         }
 
                         // filter out dupe dependencies
-                        configurations.getByName("runtimeClasspath").resolvedConfiguration.resolvedArtifacts.asSequence().filter { dep ->
-                            (dep.moduleVersion.id.group + ":" + dep.moduleVersion.id.name) !in mainConfiguration
-                        }.mapNotNull { dep ->
+                        configurations.getByName("runtimeClasspath").resolvedConfiguration.resolvedArtifacts.asSequence()
+                            .filter { dep ->
+                                (dep.moduleVersion.id.group + ":" + dep.moduleVersion.id.name) !in mainConfiguration
+                            }.mapNotNull { dep ->
                             dep.file
                         }.toList()
                     })
@@ -171,7 +172,10 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
                 into(extension.targetDirectory.get().resolve("${project.pluginId}/$version"))
 
                 eachFile {
-                    if (it.relativePath.getFile(destinationDir).exists()) {
+                    if (it.relativePath
+                            .getFile(extension.currentRepository.orNull?.toFile() ?: destinationDir)
+                            .exists()
+                    ) {
                         it.exclude() // exclude existing files, so checksums don't change
                     }
                 }
@@ -179,7 +183,7 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
 
             val repo = register("buildRepository") {
                 group = "publishing"
-                it.dependsOn(copyFilesIntoRepo,)
+                it.dependsOn(copyFilesIntoRepo)
             }
 
             afterEvaluate {

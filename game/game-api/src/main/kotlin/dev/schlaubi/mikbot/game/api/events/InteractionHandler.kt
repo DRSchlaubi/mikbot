@@ -1,16 +1,15 @@
 package dev.schlaubi.mikbot.game.api.events
 
+import dev.kord.common.annotation.KordUnsafe
 import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.behavior.interaction.followup.edit
 import dev.kord.core.behavior.interaction.respondEphemeral
 import dev.kord.core.behavior.interaction.response.createEphemeralFollowup
-import dev.kord.core.behavior.interaction.response.followUp
-import dev.kord.core.behavior.interaction.response.followUpEphemeral
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.core.on
-import dev.kord.rest.builder.message.create.FollowupMessageCreateBuilder
 import dev.schlaubi.mikbot.game.api.*
 
+@OptIn(KordUnsafe::class)
 internal fun <T : Player> AbstractGame<T>.interactionHandler() = kord.on<ComponentInteractionCreateEvent>(this) {
     if (interaction.message.id != welcomeMessage.id) return@on
 
@@ -41,11 +40,11 @@ internal fun <T : Player> AbstractGame<T>.interactionHandler() = kord.on<Compone
             if (hostPlayer == null) {
                 // Doing it like this, prevents an auto-cast from Game<T> to Game<Nothing>
                 if ((this as? ControlledGame<*>)?.supportsAutoJoin == true) return@on
-                val ack = interaction.deferEphemeralMessage()
+                val ack = interaction.deferEphemeralResponseUnsafe()
                 val newPlayer = obtainNewPlayer(
                     interaction.user,
                     ack,
-                    ack.followUp { content = "Loading ..." },
+                    ack.createEphemeralFollowup { content = "Loading ..." },
                     interaction.locale
                 )
                 players.add(newPlayer)
@@ -73,7 +72,7 @@ internal fun <T : Player> AbstractGame<T>.interactionHandler() = kord.on<Compone
             if (existingPlayer != null) {
                 onRejoin(this, existingPlayer)
             } else {
-                val ack = interaction.deferEphemeralMessage()
+                val ack = interaction.deferEphemeralResponseUnsafe()
                 val loading = ack.createEphemeralFollowup {
                     content = "Waiting for game to start"
                 }

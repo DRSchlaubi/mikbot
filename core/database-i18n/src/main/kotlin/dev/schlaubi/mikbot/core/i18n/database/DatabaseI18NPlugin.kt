@@ -1,7 +1,6 @@
 package dev.schlaubi.mikbot.core.i18n.database
 
 import com.kotlindiscord.kord.extensions.builders.ExtensibleBotBuilder
-import dev.kord.common.Locale
 import dev.schlaubi.mikbot.plugin.api.Plugin
 import dev.schlaubi.mikbot.plugin.api.PluginMain
 import dev.schlaubi.mikbot.plugin.api.PluginWrapper
@@ -12,7 +11,8 @@ class DatabaseI18NPlugin(wrapper: PluginWrapper) : Plugin(wrapper) {
         i18n {
             defaultLocale = Config.DEFAULT_LOCALE
 
-            localeResolver { _, _, user ->
+            interactionUserLocaleResolver()
+            localeResolver { _, _, user, _ ->
                 user?.let {
                     LanguageDatabase.collection.findOneById(it.id)?.locale
                 }

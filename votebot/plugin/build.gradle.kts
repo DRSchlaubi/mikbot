@@ -16,6 +16,7 @@ dependencies {
 
 mikbotPlugin {
     description.set("Plugin adding VoteBot functionality")
+    bundle.set("votebot")
     pluginId.set("votebot")
 }
 

@@ -3,6 +3,7 @@ package space.votebot.commands.vote.create
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalChannel
 import com.kotlindiscord.kord.extensions.commands.converters.impl.string
+import dev.kord.common.entity.ChannelType
 import dev.kord.core.behavior.channel.asChannelOfOrNull
 import dev.kord.core.entity.channel.Channel
 import dev.kord.core.entity.channel.TopGuildMessageChannel
@@ -19,11 +20,7 @@ interface CreateSettings {
         name = "channel"
         description = "The channel to send the poll in"
 
-        validate {
-            if (value != null && value?.asChannelOfOrNull<TopGuildMessageChannel>() == null) {
-                discordError(translate("commands.create.invalid_channel"))
-            }
-        }
+        requiredChannelTypes.add(ChannelType.GuildText)
     }
 
     fun Arguments.voteTitle() = string {

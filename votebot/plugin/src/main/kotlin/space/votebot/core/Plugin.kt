@@ -34,7 +34,7 @@ class VoteBotPlugin(wrapper: PluginWrapper) : Plugin(wrapper) {
             kord {
                 httpClient = HttpClient(CIO) {
                     engine {
-                        threadsCount = 12
+                        threadsCount = 13
                     }
                 }
             }

@@ -7,6 +7,7 @@ of the bot, unlike the [core](../core) module.
 
 # Modules
 
+- [epic-games-notifier](epic-games-notifier) - Adds a webhook that notifies users about every free games on [epicgames.com}(https://epicgames.com)
 - [botblock](botblock) - Plugin posting bot stats to botlists using [Botblock.org](https://botblock.org)
 - [eval](eval) - Plugin allowing bot owners to run Kotlin Code
 - [ktor](ktor) - An API to have a webserver in multiple plugins on the same port powered by [Ktor](https://ktor.io)

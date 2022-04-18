@@ -24,7 +24,9 @@ class MusicPlugin(wrapper: PluginWrapper) : Plugin(wrapper) {
         add(::LavalinkManager)
         add(::MusicModule)
         add(::PlaylistModule)
-        add(::MusicInteractionModule)
+        if (Config.ENABLE_MUSIC_CHANNEL_FEATURE) {
+            add(::MusicInteractionModule)
+        }
     }
 
     override fun CoroutineScope.atLaunch(bot: ExtensibleBot) {

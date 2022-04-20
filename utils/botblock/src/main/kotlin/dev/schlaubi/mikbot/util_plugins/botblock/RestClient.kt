@@ -2,18 +2,18 @@ package dev.schlaubi.mikbot.util_plugins.botblock
 
 import dev.kord.core.Kord
 import io.ktor.client.*
-import io.ktor.client.features.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.json.serializer.*
+import io.ktor.client.plugins.*
+import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.flow.toList
 import kotlinx.serialization.json.*
 import kotlin.time.Duration.Companion.minutes
 
 private val client = HttpClient {
-    install(JsonFeature) {
-        serializer = KotlinxSerializer()
+    install(ContentNegotiation) {
+        json()
     }
 
     install(HttpTimeout) {
@@ -27,7 +27,7 @@ data class UpdateServerCountRequest(
     val serverCount: Long,
     val botId: String,
     val shards: List<Long>,
-    val tokens: Map<String, String>
+    val tokens: Map<String, String>,
 ) {
     fun toJsonElement(): JsonElement = buildJsonObject {
         put("server_count", serverCount)
@@ -38,20 +38,22 @@ data class UpdateServerCountRequest(
     }
 }
 
-suspend fun Kord.postStats(tokens: Map<String, String>) = client.post<Unit>("https://botblock.org/api/count") {
-    val allGuilds = guilds.toList()
+suspend fun Kord.postStats(tokens: Map<String, String>) {
+    client.post("https://botblock.org/api/count") {
+        val allGuilds = guilds.toList()
 
-    val byShard = allGuilds
-        .groupBy { it.gateway }
-        .map { (_, value) -> value.size.toLong() }
+        val byShard = allGuilds
+            .groupBy { it.gateway }
+            .map { (_, value) -> value.size.toLong() }
 
-    contentType(
-        ContentType.Application.Json
-    )
-    body = UpdateServerCountRequest(
-        allGuilds.size.toLong(),
-        selfId.toString(),
-        byShard,
-        tokens
-    ).toJsonElement()
+        contentType(
+            ContentType.Application.Json
+        )
+        setBody(UpdateServerCountRequest(
+            allGuilds.size.toLong(),
+            selfId.toString(),
+            byShard,
+            tokens
+        ).toJsonElement())
+    }
 }

@@ -22,52 +22,51 @@ import org.litote.kmongo.coroutine.CoroutineCollection
 class UnoArguments : Arguments() {
     val extreme by defaultingBoolean {
         name = "extreme"
-        description = "Extreme mode (65% of the times, you draw 0 cards, but you can draw up to 6 cards at once)"
+        description = "commands.start.arguments.extreme.description"
         defaultValue = false
     }
     val flash by defaultingBoolean {
         name = "flash"
-        description = "Flash mode (Player order is completely random)"
+        description = "commands.start.arguments.flash.description"
         defaultValue = false
     }
     val dropIns by defaultingBoolean {
         name = "drop_ins"
-        description = "Enable or disable drop-ins (Default: disabled)"
+        description = "commands.start.arguments.drop_ins.description"
         defaultValue = false
     }
     val drawUntilPlayable by defaultingBoolean {
         name = "draw_until_playable"
-        description = "forces players to draw until they have at least one playable card"
+        description = "commands.start.arguments.draw_until_playable.description"
         defaultValue = false
     }
     val forcePlay by defaultingBoolean {
         name = "force_play"
-        description = "Force a player to play card after drawing, if possible"
+        description = "commands.start.arguments.force_play.description"
         defaultValue = false
     }
 
     val enableDrawCardStacking by defaultingBoolean {
         name = "card_stacking"
-        description =
-            "Allows to conter drawing cards by placing another drawing card on top (defaults to true)"
+        description = "commands.start.arguments.card_stacking.description"
         defaultValue = true
     }
 
     val stackAllDrawingCards by defaultingBoolean {
         name = "stack_all_drawing_cards"
-        description = "If enabled you can stack all drawing cards"
+        description = "commands.start.arguments.stack_all_drawing_cards.description"
         defaultValue = false
     }
 
     val enableBluffing by defaultingBoolean {
         name = "bluffing"
-        description = "See /uno bluffing for more information"
+        description = "commands.start.arguments.bluffing.description"
         defaultValue = false
     }
 
     val useSpecial7and0 by defaultingBoolean {
         name = "0-7"
-        description = "7 = Switch cards with specific player, 0 = rotate cardds"
+        description = "commands.start.arguments.seven_and_zero.description"
         defaultValue = false
     }
 }
@@ -79,7 +78,7 @@ class UnoModule : GameModule<DiscordUnoPlayer, DiscordUnoGame>() {
 
     override val gameStats: CoroutineCollection<UserGameStats> = database.getCollection("uno_stats")
 
-    @OptIn(PrivilegedIntent::class, KordUnsafe::class, KordExperimental::class)
+    @OptIn(PrivilegedIntent::class)
     override suspend fun gameSetup() {
         intents.add(Intent.GuildMembers)
         intents.add(Intent.GuildPresences)

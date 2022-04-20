@@ -8,23 +8,24 @@ import dev.schlaubi.mikbot.util_plugins.profiles.ProfileConfig
 import dev.schlaubi.mikbot.util_plugins.profiles.ProfileDatabase
 import dev.schlaubi.mikbot.util_plugins.profiles.discord.DiscordOAuthUserResponse
 import dev.schlaubi.mikbot.util_plugins.profiles.social.type.SocialAccountConnectionType
-import io.ktor.application.*
-import io.ktor.auth.*
 import io.ktor.client.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.json.serializer.*
+import io.ktor.client.call.*
 import io.ktor.client.request.*
-import io.ktor.features.*
 import io.ktor.http.*
-import io.ktor.request.*
-import io.ktor.response.*
-import io.ktor.routing.*
-import io.ktor.sessions.*
+import io.ktor.serialization.kotlinx.json.*
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.server.plugins.statuspages.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import io.ktor.server.sessions.*
 import org.koin.core.component.KoinComponent
 import org.litote.kmongo.and
 import org.litote.kmongo.eq
 import org.litote.kmongo.newId
 import org.pf4j.Extension
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation as ClientContentNegotiation
 import kotlinx.serialization.json.Json as KotlinxJson
 
 data class ServiceSession(val name: String)
@@ -35,12 +36,12 @@ data class DiscordSession(val id: Long)
 class SocialAccountVerificationServer : KtorExtensionPoint, KoinComponent {
 
     private val httpClient = HttpClient {
-        install(JsonFeature) {
-            serializer = KotlinxSerializer(
-                KotlinxJson {
-                    ignoreUnknownKeys = true
-                }
-            )
+        install(ClientContentNegotiation) {
+            val json = KotlinxJson {
+                ignoreUnknownKeys = true
+            }
+
+            json(json)
         }
     }
 
@@ -96,11 +97,10 @@ class SocialAccountVerificationServer : KtorExtensionPoint, KoinComponent {
                 }
             }
         }
-        install(CallLogging)
         routing {
             route("/profiles") {
                 route("social") {
-                    intercept(ApplicationCallPipeline.Features) {
+                    intercept(ApplicationCallPipeline.Plugins) {
                         val url = Url(call.request.uri).encodedPath
                         if ("profiles/social/connect" in url) {
                             val serviceName =
@@ -162,9 +162,9 @@ class SocialAccountVerificationServer : KtorExtensionPoint, KoinComponent {
                                 call.principal<OAuthAccessTokenResponse.OAuth2>()
                                     ?: error("Discord OAuth principal not found")
                             val service = serviceByName(call.sessions.get<ServiceSession>()!!.name)
-                            val (user) = httpClient.get<DiscordOAuthUserResponse>("https://discord.com/api/oauth2/@me") {
+                            val (user) = httpClient.get("https://discord.com/api/oauth2/@me") {
                                 header(HttpHeaders.Authorization, "Bearer ${principal.accessToken}")
-                            }
+                            }.body<DiscordOAuthUserResponse>()
                             call.sessions.set(DiscordSession(user.id.toLong()))
                             val url = buildBotUrl {
                                 path("profiles", "social", "connect", service.id)
@@ -180,9 +180,9 @@ class SocialAccountVerificationServer : KtorExtensionPoint, KoinComponent {
         }
     }
 
-    override fun StatusPages.Configuration.apply() {
-        exception<InvalidServiceException> {
-            call.respond(HttpStatusCode.BadRequest, it.message ?: "don't buy apple products.")
+    override fun StatusPagesConfig.apply() {
+        exception<InvalidServiceException> { call, e ->
+            call.respond(HttpStatusCode.BadRequest, e.message ?: "don't buy apple products.")
         }
     }
 }

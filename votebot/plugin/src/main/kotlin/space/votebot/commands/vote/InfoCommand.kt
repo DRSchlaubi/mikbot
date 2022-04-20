@@ -6,10 +6,11 @@ import dev.kord.rest.builder.message.create.embed
 import dev.schlaubi.mikbot.plugin.api.MikBotInfo
 import dev.schlaubi.stdx.coroutines.parallelMapNotNull
 import io.ktor.client.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.json.serializer.*
+import io.ktor.client.call.*
+import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import io.ktor.serialization.kotlinx.json.*
 import io.ktor.util.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -29,8 +30,8 @@ private val json = Json {
 }
 
 private val client = HttpClient {
-    install(JsonFeature) {
-        serializer = KotlinxSerializer(json)
+    install(ContentNegotiation) {
+        json(json)
     }
 }
 
@@ -42,14 +43,13 @@ private data class GitHubUser(
     @SerialName("html_url") val htmlUrl: String,
     val name: String?,
     val id: Long,
-    val login: String
+    val login: String,
 )
 
-@OptIn(InternalAPI::class)
 private suspend fun findContributors() = repositories.parallelMapNotNull { repository ->
-    client.get<List<GitHubContributor>>("https://api.github.com/repos/") {
+    client.get("https://api.github.com/repos/") {
         url {
-            encodedPath += "$repository/contributors"
+            appendPathSegments(repository, "contributors")
         }
 
         if (VoteBotConfig.GITHUB_TOKEN != null) {
@@ -57,11 +57,11 @@ private suspend fun findContributors() = repositories.parallelMapNotNull { repos
                 .encodeBase64()
             header(HttpHeaders.Authorization, "Basic $token")
         }
-    }
+    }.body<List<GitHubContributor>>()
 }
     .flatten()
     .parallelMapNotNull { (id, url) ->
-        gitHubUserCache[id] ?: client.get<GitHubUser>(url).also {
+        gitHubUserCache[id] ?: client.get(url).body<GitHubUser>().also {
             gitHubUserCache[id] = it
         }
     }

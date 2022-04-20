@@ -1,4 +1,6 @@
 package dev.schlaubi.mikbot.haste
 
-@kotlinx.serialization.Serializable
+import kotlinx.serialization.Serializable
+
+@Serializable
 internal data class HasteResponse(val key: String)

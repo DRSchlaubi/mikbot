@@ -57,7 +57,30 @@ data class MutableFilters(
     override val distortion: Filters.Distortion? = null,
     override val lowPass: Filters.LowPass? = null,
     override val rotation: Filters.Rotation? = null
-) : Filters
+) : Filters {
+    override fun unsetChannelMix() = Unit
+
+
+    override fun unsetDistortion() = Unit
+
+
+    override fun unsetKaraoke() = Unit
+
+
+    override fun unsetLowPass() = Unit
+
+
+    override fun unsetRotation() = Unit
+
+
+    override fun unsetTimescale() = Unit
+
+
+    override fun unsetTremolo() = Unit
+
+
+    override fun unsetVibrato() = Unit
+}
 
 @Serializable
 data class SerializableFilters(

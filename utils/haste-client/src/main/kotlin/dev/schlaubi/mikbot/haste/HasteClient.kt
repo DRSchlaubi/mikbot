@@ -1,10 +1,12 @@
 package dev.schlaubi.mikbot.haste
 
 import io.ktor.client.*
+import io.ktor.client.call.*
 import io.ktor.client.engine.okhttp.*
-import io.ktor.client.features.json.*
+import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import io.ktor.serialization.kotlinx.json.*
 
 /**
  * Client for interacting with a [hastebin](https://github.com/toptal/haste-server) compatible server.
@@ -14,7 +16,9 @@ import io.ktor.http.*
 public class HasteClient(private val url: String) {
 
     private val httpClient: HttpClient = HttpClient(OkHttp) {
-        install(JsonFeature)
+        install(ContentNegotiation) {
+            json()
+        }
     }
 
     /**
@@ -24,10 +28,10 @@ public class HasteClient(private val url: String) {
      * @return the created haste.
      */
     public suspend fun createHaste(content: String): Haste {
-        val (key) = httpClient.post<HasteResponse>(URLBuilder(url).pathComponents("documents").build()) {
-            body = content
-        }
-        val hasteUrl = URLBuilder(url).pathComponents(key).buildString()
+        val (key) = httpClient.post(URLBuilder(url).pathComponents("documents").build()) {
+            setBody(content)
+        }.body<HasteResponse>()
+        val hasteUrl = URLBuilder(url).appendPathSegments(key).buildString()
         return Haste(key, hasteUrl, this)
     }
 
@@ -38,6 +42,6 @@ public class HasteClient(private val url: String) {
      * @return the haste's content
      */
     public suspend fun getHasteContent(key: String): String {
-        return httpClient.get(URLBuilder(url).pathComponents("raw", key).build())
+        return httpClient.get(URLBuilder(url).appendPathSegments("raw", key).build()).body()
     }
 }

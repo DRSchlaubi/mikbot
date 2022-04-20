@@ -1,6 +1,7 @@
 package dev.schlaubi.musicbot.core.plugin
 
 import io.ktor.client.*
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +26,7 @@ object KtorHttpFileDownloader : FileDownloader {
             encodedPath = encodedPath.replace("//", "/")
         }.build()
 
-        val bytes = client.get<ByteArray>(url)
+        val bytes = client.get(url).body<ByteArray>()
 
         val downloadedFile = destination / url.encodedPath.substringAfterLast('/')
 

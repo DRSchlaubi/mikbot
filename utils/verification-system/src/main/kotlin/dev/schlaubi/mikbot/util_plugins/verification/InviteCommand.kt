@@ -5,6 +5,7 @@ import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.mikbot.plugin.api.owner.OwnerModule
 import dev.schlaubi.mikbot.plugin.api.owner.ownerOnly
 import dev.schlaubi.mikbot.util_plugins.ktor.api.buildBotUrl
+import io.ktor.http.*
 import org.litote.kmongo.newId
 
 suspend fun OwnerModule.inviteCommand() = ephemeralSlashCommand(::VerificationArguments) {

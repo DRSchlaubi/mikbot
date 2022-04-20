@@ -7,11 +7,13 @@ import dev.schlaubi.mikbot.plugin.api.util.effectiveAvatar
 import dev.schlaubi.mikbot.util_plugins.ktor.api.KtorExtensionPoint
 import dev.schlaubi.mikbot.util_plugins.leaderboard.LeaderBoardDatabase
 import dev.schlaubi.mikbot.util_plugins.leaderboard.leaderboardForGuild
-import io.ktor.application.*
+import io.ktor.server.application.*
 import io.ktor.http.*
-import io.ktor.locations.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.resources.*
+import io.ktor.server.resources.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import io.ktor.server.routing.get
 import kotlinx.coroutines.flow.toList
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
@@ -20,7 +22,8 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.pf4j.Extension
 
-@Location("/leaderboard/{guildId}")
+@Serializable
+@Resource("/leaderboard/{guildId}")
 data class LeaderBoard(val guildId: Long)
 
 @Extension

@@ -1,21 +1,23 @@
-@file:OptIn(KtorExperimentalLocationsAPI::class)
-
 package dev.schlaubi.epic_games_notifier
 
 import dev.kord.core.Kord
 import dev.schlaubi.mikbot.util_plugins.ktor.api.KtorExtensionPoint
-import io.ktor.application.*
-import io.ktor.locations.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.resources.*
+import io.ktor.server.application.*
+import io.ktor.server.resources.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import kotlinx.serialization.Serializable
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.litote.kmongo.newId
 import org.pf4j.Extension
 
-@Location("/webhooks")
+@Serializable
+@Resource("/webhooks")
 class WebhookRoute {
-    @Location("/thanks")
+    @Serializable
+    @Resource("/thanks")
     data class Thanks(val code: String, val guild_id: String, val parent: WebhookRoute)
 }
 

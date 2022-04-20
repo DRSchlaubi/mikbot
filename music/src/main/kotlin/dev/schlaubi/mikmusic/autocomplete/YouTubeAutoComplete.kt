@@ -2,6 +2,7 @@ package dev.schlaubi.mikmusic.autocomplete
 
 import io.ktor.client.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
 import mu.KotlinLogging
 
@@ -14,12 +15,12 @@ private val client = HttpClient()
 private val LOG = KotlinLogging.logger { }
 
 internal suspend fun requestYouTubeAutoComplete(query: String): List<String> {
-    val response = client.get<String>(youtubeEndpoint) {
+    val response = client.get(youtubeEndpoint) {
         url {
             parameter("q", query)
             parameter("cp", 10) // search in music category
         }
-    }
+    }.bodyAsText()
 
     LOG.debug { "Got response from YouTube: $response" }
 

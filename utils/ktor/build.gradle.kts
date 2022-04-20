@@ -5,13 +5,15 @@ plugins {
 }
 
 group = "dev.schlaubi"
-version = "2.0.1"
+version = "2.1.0"
 
 dependencies {
     // Verification Server
     api(libs.ktor.server.netty)
-    api(libs.ktor.locations)
-    api(libs.ktor.serialization)
+    api(libs.ktor.server.resources)
+    api(libs.ktor.server.status.pages)
+    api(libs.ktor.server.content.negotiation)
+    api(libs.ktor.serialization.kotlinx.json)
 }
 
 tasks {

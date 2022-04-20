@@ -4,9 +4,10 @@ import dev.kord.common.entity.Snowflake
 import dev.schlaubi.mikbot.util_plugins.leaderboard.LeaderBoardDatabase
 import dev.schlaubi.mikbot.util_plugins.leaderboard.LeaderBoardEntry
 import io.ktor.client.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.json.serializer.*
+import io.ktor.client.call.*
+import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
+import io.ktor.serialization.kotlinx.json.*
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -14,18 +15,18 @@ import org.litote.kmongo.eq
 import org.litote.kmongo.newId
 
 private val client = HttpClient {
-    install(JsonFeature) {
+    install(ContentNegotiation) {
         val json = kotlinx.serialization.json.Json {
             ignoreUnknownKeys = true
         }
 
-        serializer = KotlinxSerializer(json)
+        json(json)
     }
 }
 
 suspend fun importForGuild(guildId: Snowflake) {
     val items =
-        client.get<Mee6LeaderBoard>("https://mee6.xyz/api/plugins/levels/leaderboard/$guildId?limit=999&page=0")
+        client.get("https://mee6.xyz/api/plugins/levels/leaderboard/$guildId?limit=999&page=0").body<Mee6LeaderBoard>()
 
     LeaderBoardDatabase.leaderboardEntries.deleteMany(LeaderBoardEntry::guildId eq guildId)
     val entries = items.players.map {

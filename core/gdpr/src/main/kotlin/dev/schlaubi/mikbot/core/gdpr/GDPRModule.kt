@@ -32,7 +32,7 @@ class GDPRModule : SubCommandModule() {
     suspend fun ActionRowBuilder.clickCommandButton(name: String, label: String) {
         // https://github.com/discord/discord-api-docs/discussions/3347#discussioncomment-1162191
         return
-        val command = kord.globalCommands.first { it.name == name }
+        val command = kord.getGlobalApplicationCommands().first { it.name == name }
 
         val url = "discord://commands/${kord.resources.applicationId}/${command.id}"
 

@@ -12,10 +12,7 @@ import dev.kord.core.entity.Message
 import dev.kord.core.entity.User
 import dev.kord.core.event.interaction.InteractionCreateEvent
 import dev.kord.rest.builder.message.create.embed
-import dev.schlaubi.mikbot.game.api.AbstractGame
-import dev.schlaubi.mikbot.game.api.AutoJoinableGame
-import dev.schlaubi.mikbot.game.api.ControlledGame
-import dev.schlaubi.mikbot.game.api.Player
+import dev.schlaubi.mikbot.game.api.*
 import dev.schlaubi.mikbot.game.api.module.GameModule
 
 /**
@@ -32,7 +29,7 @@ fun <G : AbstractGame<*>> GameModule<*, G>.startGameCommand(
     makeNewGame: suspend PublicSlashCommandContext<Arguments>.(gameMessage: Message, gameThread: ThreadChannelBehavior) -> G?,
     additionalChecks: suspend CheckContext<InteractionCreateEvent>.() -> Unit = {},
     name: String = "start",
-    description: String = "Starts a new match"
+    description: String = "commands.start.description",
 ) = startGameCommand(
     gameTitleKey,
     threadName,
@@ -58,7 +55,7 @@ fun <A : Arguments, G : AbstractGame<*>> GameModule<*, G>.startGameCommand(
     makeNewGame: suspend PublicSlashCommandContext<A>.(gameMessage: Message, gameThread: ThreadChannelBehavior) -> G?,
     additionalChecks: suspend CheckContext<InteractionCreateEvent>.() -> Unit = {},
     name: String = "start",
-    description: String = "Starts a new match"
+    description: String = "commands.start.description",
 ) = startGameCommand(
     gameTitleKey,
     threadName,
@@ -87,7 +84,7 @@ fun <A : Arguments, G : AbstractGame<*>, Data> GameModule<*, G>.startGameCommand
     makeNewGame: suspend PublicSlashCommandContext<A>.(data: Data, gameMessage: Message, gameThread: ThreadChannelBehavior) -> G?,
     additionalChecks: suspend CheckContext<InteractionCreateEvent>.() -> Unit = {},
     name: String = "start",
-    description: String = "Starts a new match"
+    description: String = "commands.start.description"
 ) = publicSubCommand(arguments) {
     this.name = name
     this.description = description

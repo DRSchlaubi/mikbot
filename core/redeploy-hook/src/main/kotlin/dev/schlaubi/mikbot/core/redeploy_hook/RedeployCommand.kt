@@ -10,6 +10,7 @@ import dev.schlaubi.mikbot.plugin.api.owner.ownerOnly
 import dev.schlaubi.mikbot.plugin.api.pluginSystem
 import io.ktor.client.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
 
 private val client = HttpClient()
 
@@ -25,9 +26,9 @@ suspend fun OwnerModule.redeployCommand() = ephemeralSlashCommand {
         }
 
         val host = Config.REDEPLOY_HOST ?: return@action notAvailable()
-        val response = client.get<String>(host) {
+        val response = client.get(host) {
             header("Redeploy-Token", Config.REDEPLOY_TOKEN)
-        }
+        }.bodyAsText()
 
         if (response == "Hook rules were not satisfied.") {
             return@action notAvailable()

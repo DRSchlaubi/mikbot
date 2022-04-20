@@ -3,9 +3,10 @@ package dev.schlaubi.mikbot.util_plugins.profiles.social.type
 import dev.schlaubi.mikbot.util_plugins.profiles.ProfileConfig
 import dev.schlaubi.mikbot.util_plugins.profiles.serialization.SocialAccountConnectionTypeSerializer
 import dev.schlaubi.mikbot.util_plugins.profiles.social.User
-import io.ktor.auth.*
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import io.ktor.server.auth.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -27,12 +28,12 @@ object Instagram : SocialAccountConnectionType.OAuth2() {
     )
 
     override suspend fun retrieveUserFromOAuth2Token(token: OAuthAccessTokenResponse.OAuth2): User {
-        return httpClient.get<InstagramUser>("https://graph.instagram.com/v12.0/me") {
+        return httpClient.get("https://graph.instagram.com/v12.0/me") {
             url {
                 parameter("access_token", token.accessToken)
                 parameter("fields", "id,username")
             }
-        }
+        }.body<InstagramUser>()
     }
 
     override suspend fun retrieveUserFromId(platformId: String): User =

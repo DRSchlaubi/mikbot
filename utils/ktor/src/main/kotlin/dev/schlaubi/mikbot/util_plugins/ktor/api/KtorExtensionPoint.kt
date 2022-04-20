@@ -1,7 +1,7 @@
 package dev.schlaubi.mikbot.util_plugins.ktor.api
 
-import io.ktor.application.*
-import io.ktor.features.*
+import io.ktor.server.application.*
+import io.ktor.server.plugins.statuspages.*
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.JsonBuilder
 import kotlinx.serialization.modules.EmptySerializersModule
@@ -20,7 +20,7 @@ interface KtorExtensionPoint : ExtensionPoint {
     /**
      * Customizes the Ktor's StatusPages feature
      */
-    fun StatusPages.Configuration.apply() {}
+    fun StatusPagesConfig.apply() {}
 
     /**
      * Provides the serializers module for this extenion.

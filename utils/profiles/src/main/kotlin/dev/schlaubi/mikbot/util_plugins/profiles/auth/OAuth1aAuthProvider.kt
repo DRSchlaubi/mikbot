@@ -1,6 +1,6 @@
 package dev.schlaubi.mikbot.util_plugins.profiles.auth
 
-import io.ktor.client.features.auth.*
+import io.ktor.client.plugins.auth.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -37,9 +37,8 @@ private class OAuth1aAuthProvider(private val host: String, private val consumer
 
     override fun isApplicable(auth: HttpAuthHeader): Boolean = false
 
-    @OptIn(InternalAPI::class)
-    override suspend fun addRequestHeaders(request: HttpRequestBuilder) {
-        val headerRaw = request.headers[HttpHeaders.Authorization] ?: return
+    override suspend fun addRequestHeaders(request: HttpRequestBuilder, authHeader: HttpAuthHeader?) {
+        val headerRaw = authHeader?.render() ?: return
         val header = parseAuthorizationHeader(headerRaw) as? HttpAuthHeader.Parameterized ?: return
         val headerParameters = header.parameters.associate { it.name to it.value }
         val requestParameters = request.url.parameters.entries().associate { (key, value) -> key to value.first() }

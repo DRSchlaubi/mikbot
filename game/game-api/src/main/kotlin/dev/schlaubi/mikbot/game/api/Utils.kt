@@ -1,5 +1,6 @@
 package dev.schlaubi.mikbot.game.api
 
+import com.kotlindiscord.kord.extensions.commands.Command
 import dev.kord.core.behavior.interaction.response.MessageInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.response.createEphemeralFollowup
 import dev.kord.core.behavior.interaction.response.followUpEphemeral
@@ -89,4 +90,8 @@ suspend fun Game<*>.translateInternally(
         key, locale ?: this.locale(),
         "games", replacements = replacements as Array<Any?>
     )
+}
+
+internal fun Command.setGameApiBundle() {
+    bundle = "games"
 }

@@ -24,7 +24,7 @@ import org.litote.kmongo.coroutine.CoroutineCollection
 open class SongQuizSizeArguments : Arguments() {
     val size by defaultingInt {
         name = "size"
-        description = "How many songs of the playlist the game should ask"
+        description = "commands.start.arguments.size.description"
         defaultValue = 25
     }
 }
@@ -32,7 +32,7 @@ open class SongQuizSizeArguments : Arguments() {
 open class SongQuizPlaylistArguments : SongQuizSizeArguments() {
     val playlist by string {
         name = "playlist"
-        description = " The URL to the spotify playlist you want to quiz about"
+        description = "commands.start.arguments.playlist.description"
     }
 
     init {

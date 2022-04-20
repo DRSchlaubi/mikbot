@@ -25,6 +25,7 @@ import dev.schlaubi.mikbot.util_plugins.profiles.social.BasicUser
 import dev.schlaubi.mikbot.util_plugins.profiles.social.SocialAccountConnection
 import dev.schlaubi.mikbot.util_plugins.profiles.social.serviceByName
 import dev.schlaubi.mikbot.util_plugins.profiles.social.type.SocialAccountConnectionType
+import io.ktor.http.*
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.map

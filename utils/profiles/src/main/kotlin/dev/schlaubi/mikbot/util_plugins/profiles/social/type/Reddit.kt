@@ -3,9 +3,10 @@ package dev.schlaubi.mikbot.util_plugins.profiles.social.type
 import dev.schlaubi.mikbot.util_plugins.profiles.ProfileConfig
 import dev.schlaubi.mikbot.util_plugins.profiles.serialization.SocialAccountConnectionTypeSerializer
 import dev.schlaubi.mikbot.util_plugins.profiles.social.User
-import io.ktor.auth.*
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import io.ktor.server.auth.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -28,9 +29,9 @@ object Reddit : SocialAccountConnectionType.OAuth2() {
     )
 
     override suspend fun retrieveUserFromOAuth2Token(token: OAuthAccessTokenResponse.OAuth2): User {
-        return httpClient.get<RedditUser>("https://oauth.reddit.com/api/v1/me") {
+        return httpClient.get("https://oauth.reddit.com/api/v1/me") {
             token.addToRequest(this)
-        }
+        }.body<RedditUser>()
     }
 
     override suspend fun retrieveUserFromId(platformId: String): User =

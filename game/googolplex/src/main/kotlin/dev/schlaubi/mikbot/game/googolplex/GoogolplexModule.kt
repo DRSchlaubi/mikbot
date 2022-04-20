@@ -15,14 +15,14 @@ import org.litote.kmongo.coroutine.CoroutineCollection
 class StartGameArguments : Arguments() {
     val size by defaultingInt {
         name = "length"
-        description = "The length of the sequence to guess"
+        description = "commands.start.arguments.length.description"
 
         defaultValue = 4
     }
 
     val maxTries by defaultingInt {
         name = "max-tries"
-        description = "The amount of tries, the guesser has"
+        description = "commands.start.arguments.max_tries.description"
 
         defaultValue = 10
     }

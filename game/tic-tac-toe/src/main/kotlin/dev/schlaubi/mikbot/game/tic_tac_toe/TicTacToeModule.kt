@@ -16,7 +16,7 @@ import org.litote.kmongo.coroutine.CoroutineCollection
 class StartGameArguments : Arguments() {
     val gameSize by defaultingEnumChoice<GameSize> {
         name = "size"
-        description = "How large the game board is (note that a 4x4 game also requires 4 and not 3 items in a row)"
+        description = "commands.start.arguments.size.description"
 
         defaultValue = GameSize.`3_BY_3`
         typeName = "GameSize"

@@ -4,33 +4,37 @@ import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
 import dev.schlaubi.mikbot.util_plugins.ktor.api.KtorExtensionPoint
 import dev.schlaubi.mikbot.util_plugins.ktor.api.buildBotUrl
-import io.ktor.application.*
+import dev.schlaubi.stdx.logging.debugInlined
 import io.ktor.client.*
-import io.ktor.client.features.*
+import io.ktor.client.plugins.*
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import io.ktor.locations.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.resources.*
+import io.ktor.server.application.*
+import io.ktor.server.resources.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import io.ktor.util.*
-import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.Serializable
 import mu.KotlinLogging
 import org.bson.types.ObjectId
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.pf4j.Extension
 import kotlin.collections.set
+import dev.kord.rest.route.Route.Companion as DiscordRoute
 
-@Location("/invitations")
+@Serializable
+@Resource("/invitations")
 class Invitations {
 
-    @Location("/{id}")
-
+    @Serializable
+    @Resource("/{id}")
     data class Specific(val id: String, val invitations: Invitations) {
-        @Location("/accept")
-
+        @Serializable
+        @Resource("/accept")
         data class Accept(val specific: Specific)
     }
 }
@@ -40,7 +44,8 @@ private val httpClient = HttpClient()
 private val LOG = KotlinLogging.logger { }
 private fun notConfigured(): Nothing = error("Please set all verify env vars")
 
-@Location("/thanks")
+@Serializable
+@Resource("/thanks")
 data class Thanks(
     val state: String,
     val code: String
@@ -76,7 +81,7 @@ class VerificationServer : KtorExtensionPoint, KoinComponent {
                 val invitation = states[state] ?: notFound()
                 VerificationDatabase.invites.deleteOneById(invitation.id)
 
-                val response = httpClient.post<HttpResponse>(dev.kord.rest.route.Route.baseUrl) {
+                val response = httpClient.post(DiscordRoute.baseUrl) {
                     expectSuccess = false // handler is underneath request
 
                     url {
@@ -95,9 +100,9 @@ class VerificationServer : KtorExtensionPoint, KoinComponent {
                 }
                 if (response.status.value in 200..299) {
                     call.respond("Thanks for using our bot, and please don't buy Apple products!!")
-                    LOG.debug { "API responded ${runBlocking { response.readText() }}" }
+                    LOG.debugInlined { "API responded ${response.bodyAsText()}" }
                 } else {
-                    call.respond("An error occurred: " + response.readText())
+                    call.respond("An error occurred: " + response.bodyAsText())
                 }
             }
         }
@@ -109,7 +114,6 @@ private class NotFoundException : RuntimeException()
 private val redirectUri = buildBotUrl { path("thanks") }.toString()
 private fun notFound(): Nothing = throw NotFoundException()
 
-@OptIn(InternalAPI::class)
 private fun Kord.generateInviteForGuild(guildId: Snowflake, state: String) =
     URLBuilder("https://discord.com/oauth2/authorize").apply {
         parameters.apply {

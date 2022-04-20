@@ -6,9 +6,10 @@ import dev.schlaubi.mikbot.util_plugins.profiles.ProfileConfig
 import dev.schlaubi.mikbot.util_plugins.profiles.serialization.SocialAccountConnectionTypeSerializer
 import dev.schlaubi.mikbot.util_plugins.profiles.social.BasicUser
 import dev.schlaubi.mikbot.util_plugins.profiles.social.User
-import io.ktor.auth.*
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import io.ktor.server.auth.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -38,18 +39,18 @@ object GitHub : SocialAccountConnectionType.OAuth2() {
             url {
                 path("repos", "DRSchlaubi", "mikbot", "contributors")
             }
-        }
+        }.body()
     }
 
     override suspend fun retrieveUserFromOAuth2Token(token: OAuthAccessTokenResponse.OAuth2): User {
         val user: SimpleUser = httpClient.get("https://api.github.com/user") {
             header(HttpHeaders.Authorization, "Bearer ${token.accessToken}")
-        }
+        }.body()
         return BasicUser(user.id.toString(), user.htmlUrl, user.login)
     }
 
     override suspend fun retrieveUserFromId(platformId: String): User {
-        val user: SimpleUser = httpClient.get("https://api.github.com/user/$platformId")
+        val user: SimpleUser = httpClient.get("https://api.github.com/user/$platformId").body()
         return BasicUser(user.id.toString(), user.htmlUrl, user.login)
     }
 

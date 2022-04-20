@@ -5,10 +5,11 @@ import dev.schlaubi.mikbot.util_plugins.profiles.serialization.SocialAccountConn
 import dev.schlaubi.mikbot.util_plugins.profiles.social.TwitterData
 import dev.schlaubi.mikbot.util_plugins.profiles.social.TwitterUser
 import dev.schlaubi.mikbot.util_plugins.profiles.social.User
-import io.ktor.auth.*
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.content.*
 import io.ktor.http.*
+import io.ktor.server.auth.*
 import io.ktor.util.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -43,12 +44,12 @@ object TwitterOAuth2 : SocialAccountConnectionType.OAuth2() {
     )
 
     override suspend fun retrieveUserFromOAuth2Token(token: OAuthAccessTokenResponse.OAuth2): User {
-        return httpClient.get<TwitterData<TwitterUser>>(TwitterUser.requestUserEndpoint) {
+        return httpClient.get(TwitterUser.requestUserEndpoint) {
             token.addToRequest(this)
             url {
                 encodedPath += "me"
             }
-        }.data
+        }.body<TwitterData<TwitterUser>>().data
     }
 
     override val id: String = "twitter"

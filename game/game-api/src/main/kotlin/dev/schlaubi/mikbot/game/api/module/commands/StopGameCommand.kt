@@ -3,14 +3,16 @@ package dev.schlaubi.mikbot.game.api.module.commands
 import com.kotlindiscord.kord.extensions.checks.isInThread
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.mikbot.game.api.module.GameModule
+import dev.schlaubi.mikbot.game.api.setGameApiBundle
 import dev.schlaubi.mikbot.plugin.api.util.ifPassing
 
 /**
  * Adds a /stop command to this [GameModule].
  */
 fun GameModule<*, *>.stopGameCommand() = ephemeralSubCommand {
+    setGameApiBundle()
     name = "stop"
-    description = "Stops a Game (in this Thread)"
+    description = "commands.stop.description"
 
     check {
         isInThread()

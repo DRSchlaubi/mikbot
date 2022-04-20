@@ -20,7 +20,7 @@ private const val bundle = "connect_four"
 class Connect4Arguments : Arguments() {
     val height by defaultingInt {
         name = "height"
-        description = "The height of the connect4 field"
+        description = "commands.starts.arguments.height.description"
         defaultValue = 6
 
         validate {
@@ -34,7 +34,7 @@ class Connect4Arguments : Arguments() {
 
     val width by defaultingInt {
         name = "width"
-        description = "The width of the connect4 field"
+        description = "commands.starts.arguments.width.description"
         validate {
             if (value > 9) {
                 discordError(translate("commands.start.too_high_width", bundle))
@@ -47,7 +47,7 @@ class Connect4Arguments : Arguments() {
 
     val connect by defaultingInt {
         name = "connect"
-        description = "How many fields are needed to connect in order to win (4)"
+        description = "commands.starts.arguments.connect.description"
         defaultValue = 4
     }
 }

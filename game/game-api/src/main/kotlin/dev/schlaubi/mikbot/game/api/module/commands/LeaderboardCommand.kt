@@ -6,6 +6,7 @@ import dev.kord.common.annotation.KordUnsafe
 import dev.schlaubi.mikbot.game.api.GameStats
 import dev.schlaubi.mikbot.game.api.UserGameStats
 import dev.schlaubi.mikbot.game.api.module.GameModule
+import dev.schlaubi.mikbot.game.api.setGameApiBundle
 import dev.schlaubi.mikbot.plugin.api.util.forFlow
 import dev.schlaubi.mikbot.plugin.api.util.safeGuild
 import org.litote.kmongo.descending
@@ -19,8 +20,9 @@ import org.litote.kmongo.div
 fun GameModule<*, *>.leaderboardCommand(
     leaderboardTitleKey: String
 ) = publicSubCommand {
+    setGameApiBundle()
     name = "leaderboard"
-    description = "Displays the best players"
+    description = "commands.stop.description"
 
     action {
         val count = gameStats.countDocuments()

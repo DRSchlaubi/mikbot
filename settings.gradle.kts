@@ -32,6 +32,7 @@ include(
     "utils:botblock",
     "utils:eval",
     "utils:haste-client",
+    "utils:sponsorblock-kt",
     "utils:leaderboard",
     "votebot",
     "votebot:common",

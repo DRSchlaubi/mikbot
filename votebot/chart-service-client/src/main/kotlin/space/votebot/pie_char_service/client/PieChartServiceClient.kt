@@ -1,10 +1,11 @@
 package space.votebot.pie_char_service.client
 
 import io.ktor.client.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.json.serializer.*
+import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
+import io.ktor.serialization.kotlinx.json.*
 import io.ktor.utils.io.*
 import java.nio.channels.ReadableByteChannel
 
@@ -13,8 +14,8 @@ import java.nio.channels.ReadableByteChannel
  */
 public class PieChartServiceClient(private val url: Url) {
     private val client = HttpClient {
-        install(JsonFeature) {
-            serializer = KotlinxSerializer()
+        install(ContentNegotiation) {
+            json()
         }
     }
 
@@ -29,6 +30,6 @@ public class PieChartServiceClient(private val url: Url) {
         }
 
         contentType(ContentType.Application.Json)
-        body = request
-    }
+        setBody(request)
+    }.bodyAsChannel()
 }

@@ -9,6 +9,7 @@ import dev.kord.rest.builder.message.create.embed
 import dev.schlaubi.mikbot.game.api.GameStats
 import dev.schlaubi.mikbot.game.api.UserGameStats
 import dev.schlaubi.mikbot.game.api.module.GameModule
+import dev.schlaubi.mikbot.game.api.setGameApiBundle
 import dev.schlaubi.mikbot.plugin.api.util.effectiveAvatar
 import org.litote.kmongo.div
 import org.litote.kmongo.gt
@@ -16,15 +17,15 @@ import org.litote.kmongo.gt
 class UnoProfileArguments : Arguments() {
     val target by optionalUser {
         name = "user"
-        description = "The user you want to see the profile of"
+        description = "commands.profile.arguments.user.description"
     }
 }
 
 /**
  * Adds a /profile command to this [profileCommand].
  */
-@OptIn(KordUnsafe::class, KordExperimental::class)
 suspend fun GameModule<*, *>.profileCommand() = publicSubCommand(::UnoProfileArguments) {
+    setGameApiBundle()
     name = "profile"
     description = "Shows a users profile"
 

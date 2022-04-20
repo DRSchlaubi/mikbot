@@ -2,11 +2,12 @@ package dev.schlaubi.mikmusic.util
 
 import dev.schlaubi.mikmusic.core.Config
 import io.ktor.client.*
-import io.ktor.client.features.*
-import io.ktor.client.features.json.JsonFeature
-import io.ktor.client.features.json.serializer.*
+import io.ktor.client.call.*
+import io.ktor.client.plugins.*
+import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -14,12 +15,12 @@ import kotlinx.serialization.json.Json
 private val happiUrl = Url("https://api.happi.dev/v1")
 
 private val client = HttpClient {
-    install(JsonFeature) {
+    install(ContentNegotiation) {
         val json = Json {
             ignoreUnknownKeys = true
         }
 
-        serializer = KotlinxSerializer(json)
+        json(json)
     }
 
     defaultRequest {
@@ -30,7 +31,7 @@ private val client = HttpClient {
 /**
  * Finds [limit] songs matching [name].
  *
- * @param artist limit the search results by the artist name
+ * @param name limit the search results by the artist name
  * @param onlyLyrics only find songs with lyrics
  *
  * @see HappiResult
@@ -50,7 +51,7 @@ suspend fun searchHappiSong(
     parameter("q", name)
     parameter("limit", limit)
     parameter("lyrics", onlyLyrics)
-}
+}.body()
 
 /**
  * Finds the [HappiLyrics] by the specified identifiers.
@@ -74,7 +75,7 @@ suspend fun fetchHappiLyrics(
             "lyrics"
         )
     }
-}
+}.body()
 
 /**
  * Finds the [HappiLyrics] for this [HappiTrack].

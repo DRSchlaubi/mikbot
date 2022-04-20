@@ -59,7 +59,7 @@ private suspend inline fun <T : Event> CheckContext<T>.abstractMusicCheck(
     }
 
     val member = memberFor(event) ?: (event as? ComponentInteractionCreateEvent)?.let {
-        it.interaction.message?.getGuild()?.id?.let { snow ->
+        it.interaction.message.getGuild().id.let { snow ->
             it.interaction.user.asMember(
                 snow
             )

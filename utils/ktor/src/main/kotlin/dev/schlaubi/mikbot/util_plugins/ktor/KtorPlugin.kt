@@ -1,17 +1,20 @@
 package dev.schlaubi.mikbot.util_plugins.ktor
 
 import dev.schlaubi.mikbot.plugin.api.*
+import dev.schlaubi.mikbot.plugin.api.Plugin
 import dev.schlaubi.mikbot.util_plugins.ktor.api.Config
 import dev.schlaubi.mikbot.util_plugins.ktor.api.KtorExtensionPoint
-import io.ktor.application.*
-import io.ktor.features.*
 import io.ktor.http.*
-import io.ktor.locations.*
-import io.ktor.response.*
-import io.ktor.routing.*
-import io.ktor.serialization.*
+import io.ktor.serialization.kotlinx.json.*
+import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import io.ktor.server.plugins.*
+import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.server.plugins.statuspages.*
+import io.ktor.server.resources.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import kotlinx.coroutines.*
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -41,10 +44,12 @@ class KtorPlugin(wrapper: PluginWrapper) : Plugin(wrapper), CoroutineScope {
     override fun start() {
         launch {
             embeddedServer(Netty, port = Config.WEB_SERVER_PORT, host = Config.WEB_SERVER_HOST) {
-                install(Locations)
+                install(Resources)
 
                 install(StatusPages) {
-                    exception<NotFoundException> { call.respond(HttpStatusCode.NotFound) }
+                    exception<NotFoundException> { call, _ ->
+                        call.respond(HttpStatusCode.NotFound)
+                    }
                     extensions.forEach {
                         with(it) {
                             apply()

@@ -6,13 +6,13 @@ import dev.schlaubi.mikbot.util_plugins.profiles.ProfileConfig
 import dev.schlaubi.mikbot.util_plugins.profiles.auth.oauth1a
 import dev.schlaubi.mikbot.util_plugins.profiles.serialization.SocialAccountConnectionTypeSerializer
 import dev.schlaubi.mikbot.util_plugins.profiles.social.User
-import io.ktor.auth.*
 import io.ktor.client.*
-import io.ktor.client.features.auth.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.json.serializer.*
+import io.ktor.client.plugins.auth.*
+import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import io.ktor.serialization.kotlinx.json.*
+import io.ktor.server.auth.*
 import kotlinx.serialization.Serializable
 import mu.KotlinLogging
 
@@ -74,11 +74,11 @@ sealed class SocialAccountConnectionType : ChoiceEnum {
         }
 
         val httpClient = HttpClient {
-            install(JsonFeature) {
-                serializer = KotlinxSerializer(json)
+            install(ContentNegotiation) {
+                json(json)
             }
 
-            Auth {
+            install(Auth) {
                 try {
                     oauth1a("api.twitter.com", ProfileConfig.TWITTER_CONSUMER_SECRET)
                 } catch (ignored: IllegalStateException) {

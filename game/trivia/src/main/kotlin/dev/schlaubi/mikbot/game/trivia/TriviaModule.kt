@@ -1,10 +1,8 @@
 package dev.schlaubi.mikbot.game.trivia
 
-import com.kotlindiscord.kord.extensions.checks.hasRole
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.application.slash.converters.impl.optionalEnumChoice
 import com.kotlindiscord.kord.extensions.commands.converters.impl.defaultingInt
-import com.kotlindiscord.kord.extensions.extensions.chatCommand
 import dev.schlaubi.mikbot.game.api.UserGameStats
 import dev.schlaubi.mikbot.game.api.module.GameModule
 import dev.schlaubi.mikbot.game.api.module.commands.leaderboardCommand
@@ -23,26 +21,26 @@ import org.litote.kmongo.coroutine.CoroutineCollection
 class StartTriviaArguments : Arguments() {
     val amount by defaultingInt {
         name = "amount"
-        description = "Amount of questions"
+        description = "commands.start.arguments.amount.description"
 
         defaultValue = 10
     }
 
     val category by optionalEnumChoice<Category> {
         name = "category"
-        description = "Only play questions from a specific category"
+        description = "commands.start.arguments.category.description"
         typeName = "Category"
     }
 
     val difficulty by optionalEnumChoice<Difficulty> {
         name = "difficulty"
-        description = "Only play questions of a specific difficulty"
+        description = "commands.start.arguments.difficulty.description"
         typeName = "Difficulty"
     }
 
     val type by optionalEnumChoice<Type> {
         name = "type"
-        description = "Only play questions of a specific type"
+        description = "commands.start.arguments.type.description"
         typeName = "Type"
     }
 }

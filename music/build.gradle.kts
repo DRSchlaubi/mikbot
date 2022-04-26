@@ -1,13 +1,12 @@
 plugins {
     `mikbot-plugin`
-    groovy
     `mikbot-module`
     `mikbot-publishing`
     kotlin("plugin.serialization")
 }
 
 group = "dev.schlaubi.mikbot"
-version = "2.0.4"
+version = "2.0.5"
 
 dependencies {
     api(libs.lavakord.kord)
@@ -17,7 +16,7 @@ dependencies {
     api(libs.spotify)
 
     // SponsorBlock Client
-    implementation(libs.sponsorblock)
+    implementation(projects.utils.sponsorblockKt)
 
     // Scheduling
     implementation(libs.krontab)

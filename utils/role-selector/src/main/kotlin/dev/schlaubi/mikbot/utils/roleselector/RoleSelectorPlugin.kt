@@ -8,7 +8,8 @@ import dev.schlaubi.mikbot.plugin.api.settings.SettingsExtensionPoint
 import dev.schlaubi.mikbot.plugin.api.settings.SettingsModule
 import dev.schlaubi.mikbot.utils.roleselector.command.autoRoleCommand
 import dev.schlaubi.mikbot.utils.roleselector.command.roleselection.createRoleMessageCommand
-import dev.schlaubi.mikbot.utils.roleselector.listener.guildMemeberAddListener
+import dev.schlaubi.mikbot.utils.roleselector.listener.guildMemberAddListener
+import dev.schlaubi.mikbot.utils.roleselector.listener.guildMemberUpdateListener
 import dev.schlaubi.mikbot.utils.roleselector.listener.interactionCreateListener
 import org.pf4j.Extension
 import com.kotlindiscord.kord.extensions.extensions.Extension as KordExtension
@@ -32,7 +33,8 @@ class RoleSelectorModule : KordExtension() {
     override val name: String = "role selector event handler"
 
     override suspend fun setup() {
-        guildMemeberAddListener()
+        guildMemberAddListener()
+        guildMemberUpdateListener()
         interactionCreateListener()
     }
 }

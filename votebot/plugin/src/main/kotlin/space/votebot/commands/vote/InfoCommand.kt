@@ -47,7 +47,7 @@ private data class GitHubUser(
 )
 
 private suspend fun findContributors() = repositories.parallelMapNotNull { repository ->
-    client.get("https://api.github.com/repos/") {
+    client.get("https://api.github.com/repos") {
         url {
             appendPathSegments(repository, "contributors")
         }

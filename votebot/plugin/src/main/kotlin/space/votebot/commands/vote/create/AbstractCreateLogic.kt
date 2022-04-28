@@ -82,11 +82,6 @@ suspend fun <A : Arguments> EphemeralSlashCommandContext<A>.createVote(
         Clock.System.now(),
         finalSettings
     )
-    if (channel.id == this.channel.id) {
-        if (Permissions(Permission.EmbedLinks, Permission.SendMessages) !in channel.asChannelOf<TopGuildMessageChannel>().getEffectivePermissions(kord.selfId)) {
-            return
-        }
-    }
     val message = try {
         poll.addMessage(channel, addButtons = true, addToDatabase = false, guild = guild!!)
     } catch (e: RequestException) {

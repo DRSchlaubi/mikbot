@@ -3,13 +3,10 @@ package space.votebot.commands.vote.create
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommandContext
 import com.kotlindiscord.kord.extensions.types.respond
-import dev.kord.common.entity.Permission
-import dev.kord.common.entity.Permissions
 import dev.kord.common.exception.RequestException
 import dev.kord.core.Kord
 import dev.kord.core.behavior.channel.asChannelOf
 import dev.kord.core.entity.channel.GuildMessageChannel
-import dev.kord.core.entity.channel.TopGuildMessageChannel
 import dev.schlaubi.mikbot.plugin.api.util.confirmation
 import dev.schlaubi.mikbot.plugin.api.util.discordError
 import dev.schlaubi.mikbot.plugin.api.util.safeGuild

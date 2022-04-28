@@ -93,7 +93,9 @@ suspend fun Poll.updateMessages(
                     makeButtons(kord, guild).toMutableList()
                 }
             }
-        } catch (ignored: KtorRequestException) {
+        // yeah yeah I KNOW catching Exception is bad, but it isn't raly a huge problem here,
+        // since handling for all exception will remain the same
+        } catch (ignored: Exception) {
             LOG.debug(ignored) { "An error occurred whilst updating a poll message" }
             failedMessages += message
         }

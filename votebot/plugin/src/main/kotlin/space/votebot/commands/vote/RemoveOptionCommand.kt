@@ -13,7 +13,7 @@ import space.votebot.core.VoteBotModule
 import space.votebot.core.recalculateEmojis
 import space.votebot.core.updateMessages
 import space.votebot.transformer.TransformerContext
-import space.votebot.transformer.transformMessage
+import space.votebot.transformer.transformMessageSafe
 
 class RemoveOptionArguments : Arguments() {
     val poll by poll {
@@ -55,7 +55,7 @@ suspend fun VoteBotModule.removeOptionCommand() = ephemeralSlashCommand(::Remove
             content = translate(
                 "commands.remove_option.success",
                 arrayOf(
-                    transformMessage(
+                    transformMessageSafe(
                         selectedOption.option,
                         TransformerContext(guild!!, this@removeOptionCommand.kord, true)
                     )

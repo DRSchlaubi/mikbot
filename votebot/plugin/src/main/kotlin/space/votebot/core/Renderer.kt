@@ -14,7 +14,6 @@ import dev.kord.core.entity.Message
 import dev.kord.rest.builder.component.ActionRowBuilder
 import dev.kord.rest.builder.component.MessageComponentBuilder
 import dev.kord.rest.builder.message.EmbedBuilder
-import dev.kord.rest.request.KtorRequestException
 import dev.schlaubi.mikbot.plugin.api.util.effectiveAvatar
 import dev.schlaubi.mikbot.plugin.api.util.embed
 import dev.schlaubi.stdx.coroutines.forEachParallel
@@ -27,7 +26,7 @@ import space.votebot.pie_char_service.client.PieChartCreateRequest
 import space.votebot.pie_char_service.client.PieChartServiceClient
 import space.votebot.pie_char_service.client.Vote
 import space.votebot.transformer.TransformerContext
-import space.votebot.transformer.transformMessage
+import space.votebot.transformer.transformMessageSafe
 import space.votebot.util.toBehavior
 import space.votebot.util.toPollMessage
 import java.text.DecimalFormat
@@ -113,7 +112,7 @@ private suspend fun Poll.makeButtons(kord: Kord, guild: GuildBehavior): List<Mes
             ActionRowBuilder().apply {
                 options.forEach { (_, index, option, emoji) ->
                     interactionButton(ButtonStyle.Primary, "vote_$index") {
-                        label = transformMessage(option, TransformerContext(guild, kord, false))
+                        label = transformMessageSafe(option, TransformerContext(guild, kord, false))
                         this.emoji = emoji?.toDiscordPartialEmoji()
                     }
                 }
@@ -126,7 +125,7 @@ suspend fun Poll.toEmbed(
     highlightWinner: Boolean = false,
     overwriteHideResults: Boolean = false,
 ): EmbedBuilder = embed {
-    title = transformMessage(this@toEmbed.title, TransformerContext(guild, kord, false))
+    title = transformMessageSafe(this@toEmbed.title, TransformerContext(guild, kord, false))
 
     author {
         val user = kord.getUser(Snowflake(authorId))
@@ -137,7 +136,7 @@ suspend fun Poll.toEmbed(
     val names = sortedOptions
         .map { (index, _, value, emoji) ->
             val prefix = emoji?.toDiscordPartialEmoji()?.mention ?: "${index + 1}"
-            "$prefix. ${transformMessage(value, TransformerContext(guild, kord, true))}"
+            "$prefix. ${transformMessageSafe(value, TransformerContext(guild, kord, true))}"
         }.joinToString(separator = "\n")
 
     val totalVotes = votes.sumOf { it.amount }
@@ -180,7 +179,7 @@ suspend fun Poll.toEmbed(
         field {
             name = if (winners.size > 1) "Winners" else "Winner"
             value = if (winners.isEmpty()) "No one voted" else winners.map {
-                transformMessage(
+                transformMessageSafe(
                     it.option.option,
                     TransformerContext(guild, kord, false)
                 )
@@ -213,7 +212,7 @@ private suspend fun Poll.toPieChartCreateRequest(kord: Kord, guild: GuildBehavio
         votes.map { (option, count) ->
             Vote(
                 count,
-                transformMessage(option.option, TransformerContext(guild, kord, false))
+                transformMessageSafe(option.option, TransformerContext(guild, kord, false))
             )
         }
     )

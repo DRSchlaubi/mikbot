@@ -21,9 +21,13 @@ private val transformers: List<MessageTransformer> =
 /**
  * Transforms the message using the transformer pipeline.
  */
-suspend fun transformMessage(message: String, context: TransformerContext): String {
+suspend fun transformMessageSafe(message: String, context: TransformerContext): String {
     return transformers.fold(message) { acc, transformer ->
-        transformer.transform(acc, context)
+        try {
+            transformer.transform(acc, context)
+        } catch (e: Exception) {
+            acc
+        }
     }
 }
 

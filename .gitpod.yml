@@ -3,11 +3,10 @@ ports:
 - port: 8080
   visibility: public
 
-# Download dependencies and populate build cache
 tasks:
-  - init: sdk install java 18.0.1-tem
-    command: ./gradlew compileKotlin
-  - init: docker-compose -f dev.docker-compose.yml up -d
+  - before: sdk env install # install needed toolchain and enable it
+    init: ./gradlew classes testClasses # populate build and dependency cache
+  - command: docker-compose -f dev.docker-compose.yml up -d # start dev environment
 
 jetbrains:
   intellij:

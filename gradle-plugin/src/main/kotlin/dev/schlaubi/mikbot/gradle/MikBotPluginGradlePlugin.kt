@@ -10,6 +10,7 @@ import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskContainer
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.bundling.Jar
+import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.io.path.name
 
@@ -131,8 +132,8 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
                             .filter { dep ->
                                 (dep.moduleVersion.id.group + ":" + dep.moduleVersion.id.name) !in mainConfiguration
                             }.mapNotNull { dep ->
-                            dep.file
-                        }.toList()
+                                dep.file
+                            }.toList()
                     })
                 }
 
@@ -172,10 +173,13 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
                 into(extension.targetDirectory.get().resolve("${project.pluginId}/$version"))
 
                 eachFile {
-                    if (it.relativePath
-                            .getFile(extension.currentRepository.orNull?.toFile() ?: destinationDir)
-                            .exists()
-                    ) {
+                    val parent = extension.currentRepository.getOrElse(extension.targetDirectory.get())
+                    val destinationPath = destinationDir.toPath()
+                    val probableExistingFile =
+                        parent.resolve(destinationPath.subpath(destinationPath.nameCount - 2, destinationPath.nameCount))
+                            .resolve(assemblePluginTask.get().archiveFileName.get())
+
+                    if (Files.exists(probableExistingFile)) {
                         it.exclude() // exclude existing files, so checksums don't change
                     }
                 }

@@ -99,11 +99,10 @@ jobs:
         working-directory: ci-repo-old
         run: gsutil -m cp -R $GOOGLE_CLOUD_BUCKET/* .
       - name: 'Copy index'
-        working-directory: ci-repo-old
-        run: cp plugins.json ../ci-repo
+        run: cp ci-repo-old/plugins.json ci-repo
       - uses: gradle/gradle-build-action@v1
         with:
-          arguments: generateDefaultResourceBundle assemblePlugin buildRepository
+          arguments: buildRepository
       - name: 'Upload repo changes'
         working-directory: ci-repo
         run: gsutil -m cp -R . $GOOGLE_CLOUD_BUCKET

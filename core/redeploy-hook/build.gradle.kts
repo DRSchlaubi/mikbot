@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "dev.schlaubi.mikbot"
-version = "2.0.2"
+version = "2.1.0"
 
 mikbotPlugin {
     description.set("Plugin adding a /redeploy command, backed by a webhook")

@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "dev.schlaubi"
-version = "2.1.0"
+version = "2.2.0"
 
 dependencies {
     // Verification Server

@@ -1,0 +1,20 @@
+# Default Ktor plugin port
+ports:
+- port: 8080
+  visibility: public
+
+# Download dependencies and populate build cache
+tasks:
+  - init: sdk install java 18.0.1-tem
+    command: ./gradlew compileKotlin
+  - init: docker-compose -f dev.docker-compose.yml up -d
+
+jetbrains:
+  intellij:
+    # enable pre-indexing
+    prebuilds:
+      version: stable
+    # Plugins recommended for use with the project
+    plugins:
+      - me.schlaubi.gradleupdater
+      - com.intellij.grazie.pro

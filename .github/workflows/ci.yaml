@@ -36,7 +36,7 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '17'
+          java-version: '18'
       - uses: gradle/gradle-build-action@v1
         with:
           arguments: classes ktlintCheck
@@ -50,7 +50,7 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '17'
+          java-version: '18'
       - uses: gradle/gradle-build-action@v1
         with:
           arguments: :installDist
@@ -85,7 +85,7 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '17'
+          java-version: '18'
       - name: 'Login to GCP'
         id: 'auth'
         uses: 'google-github-actions/auth@v0'
@@ -116,7 +116,7 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '17'
+          java-version: '18'
       - uses: gradle/gradle-build-action@v1
         env:
           JFROG_USER: ${{ secrets.JFROG_USER }}
@@ -141,7 +141,7 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '17'
+          java-version: '18'
       - name: 'Login to GCP'
         id: 'auth'
         uses: 'google-github-actions/auth@v0'

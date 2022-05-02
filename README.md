@@ -5,6 +5,8 @@
 [![Latest Version](https://img.shields.io/maven-metadata/v?logo=apache%20maven&metadataUrl=https%3A%2F%2Fschlaubi.jfrog.io%2Fartifactory%2Fmikbot%2Fdev%2Fschlaubi%2Fmikbot-api%2Fmaven-metadata.xml&style=flat-square)](https://schlaubi.jfrog.io/ui/native/mikbot/dev/schlaubi/mikbot-api/)
 [![Made with Kotlin](https://img.shields.io/badge/Made%20with-Kotlin-blueviolet?style=flat-square&logo=kotlin)](https://kotlinlang.org)
 
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/DRSchlaubi/mikbot)
+
 A modular framework for building Discord bots in [Kotlin](https://kotlinlang.org)
 using [Kordex](https://github.com/Kord-Extensions/kord-extensions/) and [Kord](https://github.com/kordlib).
 

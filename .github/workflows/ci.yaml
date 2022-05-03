@@ -37,7 +37,7 @@ jobs:
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '18'
-      - uses: gradle/gradle-build-action@v1
+      - uses: gradle/gradle-build-action@v2
         with:
           arguments: classes ktlintCheck
   push:
@@ -51,7 +51,7 @@ jobs:
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '18'
-      - uses: gradle/gradle-build-action@v1
+      - uses: gradle/gradle-build-action@v2
         with:
           arguments: :installDist
       - name: Set up QEMU
@@ -100,7 +100,7 @@ jobs:
         run: gsutil -m cp -R $GOOGLE_CLOUD_BUCKET/* .
       - name: 'Copy index'
         run: cp ci-repo-old/plugins.json ci-repo
-      - uses: gradle/gradle-build-action@v1
+      - uses: gradle/gradle-build-action@v2
         with:
           arguments: buildRepository
       - name: 'Upload repo changes'
@@ -117,7 +117,7 @@ jobs:
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '18'
-      - uses: gradle/gradle-build-action@v1
+      - uses: gradle/gradle-build-action@v2
         env:
           JFROG_USER: ${{ secrets.JFROG_USER }}
           JFROG_PASSWORD: ${{ secrets.JFROG_KEY }}
@@ -151,7 +151,7 @@ jobs:
         uses: 'google-github-actions/setup-gcloud@v0'
       - name: 'Create working Directory'
         run: mkdir ci-repo
-      - uses: gradle/gradle-build-action@v1
+      - uses: gradle/gradle-build-action@v2
         with:
           arguments: installCi
       - name: 'Upload repo changes'

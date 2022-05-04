@@ -5,6 +5,7 @@
 - [Requirements](#requirements)
 - [Creating a docker-compose file](#creating-a-docker-compose-file)
 - [Creating and Configuring .env file](#create-and-configure-env-file)
+- [Launching the Bot](#launching-the-bot)
 - [Optional Steps](#optional-steps)
   - [Setting an Activity](#setting-an-activity)
   - [Setting up Mikmusic](#setting-up-mikmusic)
@@ -81,6 +82,26 @@ LOG_LEVEL=DEBUG # You can also set this to INFO, for example
 # TEST_GUILD=<> # Put the ID Discord Server or Test Server here
 BOT_OWNERS=<> # Put your Discord ID here
 OWNER_GUILD=<> # Put the ID of your Discord Server or Test Server here
+```
+
+## Launching the Bot
+
+After you configured the Bot to your wanting run this command to start the bot
+
+```bash
+docker-compose up -d
+```
+
+To attach to the log output run 
+
+```bash
+docker-compose up
+```
+
+To stop the bot use 
+
+```bash
+docker-compose down
 ```
 
 # Optional Steps

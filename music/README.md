@@ -2,6 +2,7 @@
 
 Plugin providing full music functionality for the bot
 
+
 # Platform Support
 
 - All native Lavaplayer platforms
@@ -58,6 +59,8 @@ DOWNLOAD_PLUGINS=redeploy-hook,gdpr,database-i18n,game-animator,music,game-api,m
 For additional configuration please check [redeploy-hook](../core/redeploy-hook) and [verification-system](../utils/verification-system)
 
 # Setup
+For a full Setup guide, if you don't know how to set up mikbot take a look at [this](../SETUP.md) and view the "Setting up Mikmusic" section of the document under the Optional Steps
+
 Using this plugin requires additional first-time setup
 
 Run this commands before running `docker-compose up -d`

@@ -21,6 +21,8 @@ using [Kordex](https://github.com/Kord-Extensions/kord-extensions/) and [Kord](h
 
 ## Deployment
 
+For a full explanation on how to deploy the bot yourself take a look at [this](./SETUP.md)
+
 ### Requirements
 
 - [Sentry](https://sentry.io) (Optional)

@@ -149,6 +149,8 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
     private fun Project.createPluginExtensions() {
         extensions.create<PluginExtension>(pluginExtensionName)
 
+        val mikbotConfiguration = configurations.create("mikbot")
+
         val pluginConfiguration = configurations.create("plugin")
         val optionalPluginConfiguration = configurations.create("optionalPlugin")
 
@@ -158,6 +160,7 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
         compileOnly.apply {
             extendsFrom(pluginConfiguration)
             extendsFrom(optionalPluginConfiguration)
+            extendsFrom(mikbotConfiguration)
         }
     }
 

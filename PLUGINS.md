@@ -9,24 +9,21 @@ If you want to make a plugin you should really use [Gradle](https://gradle.org) 
 build.gradle.kts
 ```kotlin
 plugins {
-    id("com.google.devtools.ksp") version "1.6.10-1.0.21" // used for plugin-processor
-    kotlin("jvm") version "1.6.0"
-    id("dev.schlaubi.mikbot.gradle-plugin") version "1.4.1"
+    id("com.google.devtools.ksp") version "1.6.21-1.0.5" // used for plugin-processor
+    kotlin("jvm") version "1.6.21"
+    id("dev.schlaubi.mikbot.gradle-plugin") version "2.2.0"
 }
 
 repositories {
     mavenCentral()
-    maven("https://schlaubi.jfrog.io/artifactory/mikbot/")
-    maven("https://schlaubi.jfrog.io/artifactory/envconf/")
-    maven("https://maven.kotlindiscord.com/repository/maven-public/")
 }
 
 dependencies {
     // this one is included in the bot itself, therefore we make it compileOnly
     // Or use: 'kotlin.stdlib.default.dependency=false' in gradle.properties
     compileOnly(kotlin("stdlib-jdk8"))
-    compileOnly("dev.schlaubi", "mikbot-api", "2.2.0-SNAPSHOT")
-    ksp("dev.schlaubi", "mikbot-plugin-processor", "1.1.0")
+    mikbot("dev.schlaubi", "mikbot-api", "3.0.0-SNAPSHOT")
+    ksp("dev.schlaubi", "mikbot-plugin-processor", "2.2.0")
 }
 
 mikbotPlugin {
@@ -41,7 +38,7 @@ And then you can run `./gradlew assemblePlugin` to get your plugin.zip file.
 <details>
 <summary>In case of <b>File not found</b> exception</summary>
 
-Set `ksp("dev.schlaubi", "plugin-processor", "2.0.1")` to `implementation("dev.schlaubi", "plugin-processor", "2.0.1")` and reload your dependencies. Then change it back again. _(Workaround)_
+Set `ksp("dev.schlaubi", "plugin-processor", "2.2.0")` to `implementation("dev.schlaubi", "plugin-processor", "2.2.0")` and reload your dependencies. Then change it back again. _(Workaround)_
     
 </details>
 Alternatively to generating a zip file, you can also use shadowJar, but make sure to add the manifest is added.

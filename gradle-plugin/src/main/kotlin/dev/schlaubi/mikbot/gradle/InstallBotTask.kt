@@ -4,6 +4,7 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Internal
+import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 import java.net.URL
 import java.nio.channels.Channels
@@ -19,11 +20,12 @@ const val mikbotBinaryUrl = "https://storage.googleapis.com/mikbot-binaries/"
 abstract class InstallBotTask : DefaultTask() {
     @get:Internal
     internal val testBotFolder: Path
-        get() = project.buildDir.resolve("test-bot").resolve(botVersion.get()).toPath()
+        get() = project.buildDir.resolve("test-bot").resolve(botVersionFromProject()).toPath()
     private val botArchive: Path
         get() = testBotFolder.resolve("bot.tar.gz")
 
     @get:Input
+    @get:Optional
     abstract val botVersion: Property<String>
 
     @TaskAction
@@ -45,7 +47,7 @@ abstract class InstallBotTask : DefaultTask() {
         }
         logger.info("Mikbot installation not found! Downloading")
 
-        val version = botVersion.orNull ?: error("Please set a bot version")
+        val version = botVersionFromProject()
         val url = "$mikbotBinaryUrl$version/mikmusic-$version.tar.gz"
         downloadBot(url)
     }
@@ -72,5 +74,10 @@ abstract class InstallBotTask : DefaultTask() {
         val readChannel = Channels.newChannel(website.openStream())
         val writeChannel = FileChannel.open(botArchive, StandardOpenOption.WRITE)
         writeChannel.transferFrom(readChannel, 0, Long.MAX_VALUE)
+    }
+
+    internal fun botVersionFromProject(): String {
+        return botVersion.orNull ?: project.extractMikBotVersionFromProjectApiDependency()
+        ?: error("Unable to detect version. Fix your dependency or set it manually.")
     }
 }

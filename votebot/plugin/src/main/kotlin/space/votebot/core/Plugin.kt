@@ -1,12 +1,9 @@
 package space.votebot.core
 
 import com.kotlindiscord.kord.extensions.builders.ExtensibleBotBuilder
-import com.kotlindiscord.kord.extensions.checks.anyGuild
 import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.extensions.event
-import com.kotlindiscord.kord.extensions.extensions.slashCommandCheck
 import dev.kord.core.event.gateway.ReadyEvent
-import dev.kord.gateway.Intent
 import dev.kord.gateway.PrivilegedIntent
 import dev.schlaubi.mikbot.plugin.api.Plugin
 import dev.schlaubi.mikbot.plugin.api.PluginMain
@@ -53,10 +50,9 @@ class VoteBotPlugin(wrapper: PluginWrapper) : Plugin(wrapper) {
 class VoteBotModule : Extension() {
     override val name: String = "votebot"
     override val bundle: String = "votebot"
+    override val allowApplicationCommandInDMs: Boolean = false
 
     override suspend fun setup() {
-        slashCommandCheck { anyGuild() }
-
         commands()
         voteExecutor()
 

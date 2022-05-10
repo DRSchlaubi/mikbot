@@ -1,10 +1,8 @@
 package dev.schlaubi.mikbot.game.api.module
 
-import com.kotlindiscord.kord.extensions.checks.anyGuild
 import com.kotlindiscord.kord.extensions.checks.types.CheckContext
 import com.kotlindiscord.kord.extensions.commands.CommandContext
 import com.kotlindiscord.kord.extensions.commands.application.ApplicationCommandContext
-import com.kotlindiscord.kord.extensions.extensions.slashCommandCheck
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
 import dev.kord.core.entity.channel.TextChannel
@@ -36,6 +34,8 @@ abstract class GameModule<P : Player, G : AbstractGame<P>> : SubCommandModule() 
     override val commandName: String
         get() = name
 
+    final override val allowApplicationCommandInDMs: Boolean = false
+
     /**
      * The [BotUser] property for the games stats.
      */
@@ -50,7 +50,6 @@ abstract class GameModule<P : Player, G : AbstractGame<P>> : SubCommandModule() 
     @OptIn(PrivilegedIntent::class)
     final override suspend fun overrideSetup() {
         intents.add(Intent.GuildMembers)
-        slashCommandCheck { anyGuild() }
         gameSetup()
     }
 

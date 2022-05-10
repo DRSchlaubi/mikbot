@@ -1,7 +1,6 @@
 package dev.schlaubi.mikmusic.core
 
 import com.kotlindiscord.kord.extensions.annotations.ExtensionDSL
-import com.kotlindiscord.kord.extensions.checks.anyGuild
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.CommandContext
 import com.kotlindiscord.kord.extensions.commands.application.ApplicationCommand
@@ -10,7 +9,6 @@ import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSla
 import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
 import com.kotlindiscord.kord.extensions.extensions.event
-import com.kotlindiscord.kord.extensions.extensions.slashCommandCheck
 import com.kotlindiscord.kord.extensions.types.edit
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.GuildBehavior
@@ -39,6 +37,7 @@ class MusicModule : Extension() {
     private val musicPlayers: MutableMap<Snowflake, MusicPlayer> = mutableMapOf()
     override val name: String = "music"
     override val bundle: String = "music"
+    override val allowApplicationCommandInDMs: Boolean = false
 
     val database: Database by inject()
     private val playerStates = database.getCollection<PersistentPlayerState>("player_states")
@@ -61,10 +60,6 @@ class MusicModule : Extension() {
     }
 
     override suspend fun setup() {
-        slashCommandCheck {
-            anyGuild() // Disable this commands in DMs
-        }
-
         commands()
         playMessageAction()
 

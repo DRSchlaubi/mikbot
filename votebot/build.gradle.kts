@@ -2,7 +2,7 @@ plugins {
     `mikbot-bot`
 }
 
-val versionString = "3.11.0"
+val versionString = "3.12.0"
 
 version = versionString
 

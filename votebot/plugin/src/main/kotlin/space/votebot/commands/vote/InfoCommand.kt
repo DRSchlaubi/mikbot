@@ -69,7 +69,7 @@ private suspend fun findContributors() = repositories.parallelMapNotNull { repos
 
 suspend fun VoteBotModule.infoCommand() = publicSlashCommand {
     name = "info"
-    description = "Displays generic information about this bot"
+    description = "commands.info.description"
 
     action {
         respond {

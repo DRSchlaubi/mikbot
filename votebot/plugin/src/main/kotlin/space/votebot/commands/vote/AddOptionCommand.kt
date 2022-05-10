@@ -17,22 +17,22 @@ import space.votebot.core.updateMessages
 class AddOptionArguments : Arguments() {
     val poll by poll {
         name = "poll"
-        description = "The poll you want to add the argument to"
+        description = "commands.add_option.arguments.poll.description"
     }
 
     val option by string {
         name = "option"
-        description = "The option you want to add"
+        description = "commands.add_option.arguments.option.description"
     }
     val position by optionalInt {
         name = "position"
-        description = "The position at which the option should be inserted"
+        description = "commands.add_option.arguments.position.description"
     }
 }
 
 suspend fun VoteBotModule.addOptionCommand() = ephemeralSlashCommand(::AddOptionArguments) {
     name = "add-option"
-    description = "Adds an option to a poll"
+    description = "commands.add_option.description"
 
     action {
         val poll = arguments.poll

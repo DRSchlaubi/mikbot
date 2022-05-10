@@ -12,20 +12,20 @@ import space.votebot.core.VoteBotDatabase
 import space.votebot.models.UserSettings
 
 class DefaultOptionsArgument : Arguments(), PollSettingsArguments {
-    override val maxVotes by maxVotes("How many times a user is allowed to vote")
-    override val maxChanges by maxChanges("How many times a user is allowed to change their vote")
-    override val deleteAfterPeriod by voteDuration("Amount of time after which a poll should expire")
-    override val showChartAfterClose: Boolean? by showChart("Whether to show a chart after a poll finished or not")
-    override val hideResults: Boolean? by hideResults("Whether to show results only to people who voted or not")
-    override val publicResults: Boolean? by publicResults("Whether to share who voted for what with the author or not")
-    private val emojiModeOption by emojiMode("How to use emojis in polls")
+    override val maxVotes by maxVotes("commands.default_options.max_votes.description")
+    override val maxChanges by maxChanges("commands.default_options.max_changes.description")
+    override val deleteAfterPeriod by voteDuration("commands.default_options.delete_after_period.description")
+    override val showChartAfterClose: Boolean? by showChart("commands.default_options.show_chart_after_close.description")
+    override val hideResults: Boolean? by hideResults("commands.default_options.hide_results.description")
+    override val publicResults: Boolean? by publicResults("commands.default_options.public_results.description")
+    private val emojiModeOption by emojiMode("commands.default_options.emoji_mode.description")
     override val emojiMode: PollSettings.EmojiMode?
         get() = emojiModeOption?.mode
 }
 
 suspend fun SettingsModule.defaultOptionsCommand() = ephemeralSlashCommand(::DefaultOptionsArgument) {
     name = "default-options"
-    description = "Allows you to set the default options, used when creating a vote"
+    description = "commands.default_options.description"
 
     action {
         val currentSettings = VoteBotDatabase.userSettings.findOneById(user.id)?.settings

@@ -11,17 +11,17 @@ import space.votebot.core.close
 class CloseArguments : Arguments() {
     val poll by poll {
         name = "poll"
-        description = "The Message Link to the poll you want to close"
+        description = "commands.close.arguments.poll.description"
     }
     val showChart by optionalBoolean {
         name = "show-chart"
-        description = "Whether to show a pie chart or a Discord message"
+        description = "commands.close.arguments.show_chart.description"
     }
 }
 
 suspend fun VoteBotModule.closeCommand() = ephemeralSlashCommand(::CloseArguments) {
     name = "close"
-    description = "Closes a poll"
+    description = "commands.close.description"
 
     action {
         arguments.poll.close(channel.kord, arguments.showChart, guild!!)

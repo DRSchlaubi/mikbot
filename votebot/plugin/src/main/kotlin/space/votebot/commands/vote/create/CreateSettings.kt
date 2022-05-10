@@ -4,10 +4,7 @@ import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalChannel
 import com.kotlindiscord.kord.extensions.commands.converters.impl.string
 import dev.kord.common.entity.ChannelType
-import dev.kord.core.behavior.channel.asChannelOfOrNull
 import dev.kord.core.entity.channel.Channel
-import dev.kord.core.entity.channel.TopGuildMessageChannel
-import dev.schlaubi.mikbot.plugin.api.util.discordError
 import space.votebot.common.models.PollSettings
 
 interface CreateSettings {
@@ -18,13 +15,13 @@ interface CreateSettings {
 
     fun Arguments.voteChannel() = optionalChannel {
         name = "channel"
-        description = "The channel to send the poll in"
+        description = "generic.create_arguments.channel"
 
         requiredChannelTypes.add(ChannelType.GuildText)
     }
 
     fun Arguments.voteTitle() = string {
         name = "title"
-        description = "The title of the vote"
+        description = "generic.create_arguments.title"
     }
 }

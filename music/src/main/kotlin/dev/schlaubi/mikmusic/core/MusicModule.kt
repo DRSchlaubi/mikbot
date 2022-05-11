@@ -55,7 +55,7 @@ class MusicModule : Extension() {
         return musicPlayers.computeIfAbsent(guild.id) {
             val link = lavalink.getLink(guild)
 
-            MusicPlayer(link, guild, database)
+            MusicPlayer(link, guild)
         }
     }
 

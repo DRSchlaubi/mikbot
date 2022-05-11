@@ -3,8 +3,8 @@ package dev.schlaubi.mikmusic.autocomplete
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.converters.SingleConverter
 import com.kotlindiscord.kord.extensions.commands.converters.impl.string
-import com.kotlindiscord.kord.extensions.utils.focusedOption
 import dev.kord.core.behavior.interaction.suggestString
+import dev.schlaubi.mikmusic.innerttube.requestYouTubeAutoComplete
 
 /**
  * Creates a `query` argument with [description] supporting YouTube Auto-complete.

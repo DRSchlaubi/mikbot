@@ -1,5 +1,6 @@
 package dev.schlaubi.mikmusic.innerttube
 
+import dev.kord.common.Locale
 import dev.schlaubi.mikmusic.player.Chapter
 import kotlin.math.pow
 import kotlin.time.Duration
@@ -7,8 +8,8 @@ import kotlin.time.Duration.Companion.seconds
 
 private const val timeSeparator = ':'
 
-suspend fun requestYouTubeAutoComplete(query: String): List<String> {
-    val response = InnerTubeClient.requestMusicAutoComplete(query)
+suspend fun requestYouTubeAutoComplete(query: String, locale: Locale): List<String> {
+    val response = InnerTubeClient.requestMusicAutoComplete(query, locale)
 
     return response.first().searchSuggestionsSectionRenderer.map {
         it.searchSuggestionRenderer.suggestion.joinRuns()

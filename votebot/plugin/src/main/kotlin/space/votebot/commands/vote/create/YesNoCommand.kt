@@ -14,12 +14,12 @@ class YesNoArguments : AbstractPollSettingsArguments(), CreateSettings {
     override val channel: Channel? by voteChannel()
     private val yesWord by defaultingString {
         name = "yes-word"
-        description = "The word you want for the 'Yes' option"
+        description = "commands.yes_no.arguments.yes_word.description"
         defaultValue = "Yes"
     }
     private val noWord by defaultingString {
         name = "no-word"
-        description = "The word you want for the 'Yes' option"
+        description = "commands.yes_no.arguments.no_word.description"
         defaultValue = "No"
     }
     override val answers: List<String> by lazy { listOf(yesWord, noWord) }
@@ -33,7 +33,7 @@ class YesNoArguments : AbstractPollSettingsArguments(), CreateSettings {
 
 suspend fun VoteBotModule.yesNowCommand() = ephemeralSlashCommand(::YesNoArguments) {
     name = "yes-no"
-    description = "Allows you asking a simple yes no question"
+    description = "commands.yes_no.description"
 
     check {
         isNotInThread()

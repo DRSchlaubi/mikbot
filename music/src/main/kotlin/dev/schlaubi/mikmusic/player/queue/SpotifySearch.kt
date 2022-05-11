@@ -114,8 +114,10 @@ private suspend fun getTrack(link: Link, trackId: String): Track? {
     return track.toPartialSpotifyTrack().findTrack(link)
 }
 
-suspend fun PartialSpotifyTrack.findTrack(link: Link): Track? =
-    link.takeFirstMatch("$name${artists.firstOrNull()?.let { "- $it" } ?: ""}")
+suspend fun PartialSpotifyTrack.findTrack(link: Link): Track? {
+    val query = isrc ?: "$name${artists.firstOrNull()?.let { "- $it" } ?: ""}"
+    return link.takeFirstMatch(query)
+}
 
 private suspend fun Link.takeFirstMatch(query: String): Track? {
     val result = loadItem("ytsearch: $query")
@@ -133,16 +135,16 @@ fun String.spotifyUriToUrl(): String {
     return "https://open.spotify.com/$type/$id"
 }
 
-data class PartialSpotifyTrack(val artists: List<String>, val previewUrl: String?, val name: String)
+data class PartialSpotifyTrack(val artists: List<String>, val previewUrl: String?, val name: String, val isrc: String?)
 
 fun IPlaylistItem.toPartialSpotifyTrack() = when (this) {
     is SpotifyTrack -> toPartialSpotifyTrack()
-    is Episode -> PartialSpotifyTrack(emptyList(), audioPreviewUrl, name)
+    is Episode -> PartialSpotifyTrack(emptyList(), audioPreviewUrl, name, null)
     else -> error("Unknown track type: ${this::class.qualifiedName}")
 }
 
 fun SpotifyTrack.toPartialSpotifyTrack() =
-    PartialSpotifyTrack(artists.map { it.name }, previewUrl, name)
+    PartialSpotifyTrack(artists.map { it.name }, previewUrl, name, externalIds.externalIds["isrc"])
 
 fun TrackSimplified.toPartialSpotifyTrack() =
-    PartialSpotifyTrack(artists.map { it.name }, previewUrl, name)
+    PartialSpotifyTrack(artists.map { it.name }, previewUrl, name, null)

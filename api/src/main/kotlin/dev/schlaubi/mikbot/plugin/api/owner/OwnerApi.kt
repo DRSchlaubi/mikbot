@@ -1,6 +1,7 @@
 package dev.schlaubi.mikbot.plugin.api.owner
 
 import com.kotlindiscord.kord.extensions.commands.application.slash.SlashCommand
+import dev.kord.common.entity.Permission
 import dev.schlaubi.mikbot.plugin.api.InternalAPI
 import dev.schlaubi.mikbot.plugin.api.ModuleExtensionPoint
 import dev.schlaubi.mikbot.plugin.api.ModuleExtensionPointImpl
@@ -26,12 +27,9 @@ public interface OwnerExtensionPoint : ModuleExtensionPoint<OwnerModule> {
 }
 
 /**
- * Configures this command, to be only usable by [Config.BOT_OWNERS].
+ * Configures this command, to only be usable by administrators of [Config.OWNER_GUILD].
  */
 public fun SlashCommand<*, *>.ownerOnly() {
-    allowByDefault = false
-    if (Config.OWNER_GUILD != null) {
-        guildId = Config.OWNER_GUILD!!
-    }
-    Config.BOT_OWNERS.forEach(::allowUser)
+    guildId = Config.OWNER_GUILD ?: error("Cannot register owner command without OWNER_GUILD value")
+    requirePermission(Permission.Administrator)
 }

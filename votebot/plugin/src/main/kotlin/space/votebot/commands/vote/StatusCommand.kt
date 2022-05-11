@@ -12,19 +12,19 @@ import space.votebot.core.toEmbed
 class StatusArguments : Arguments() {
     val poll by poll {
         name = "poll"
-        description = "The Message Link to the poll you want to see the status of"
+        description = "commands.status.arguments.poll.description"
     }
 
     val liveMessage by defaultingBoolean {
         name = "live"
-        description = "Whether you want this to be a message, also accepting votes or not"
+        description = "commands.status.arguments.live.description"
         defaultValue = false
     }
 }
 
 suspend fun VoteBotModule.statusCommand() = ephemeralSlashCommand(::StatusArguments) {
     name = "status"
-    description = "Displays the status of a Poll"
+    description = "commands.status.description"
 
     action {
         val poll = arguments.poll

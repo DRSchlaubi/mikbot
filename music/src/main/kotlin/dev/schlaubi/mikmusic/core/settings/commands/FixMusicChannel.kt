@@ -1,6 +1,5 @@
 package dev.schlaubi.mikmusic.core.settings.commands
 
-import com.kotlindiscord.kord.extensions.checks.anyGuild
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.mikbot.plugin.api.settings.SettingsModule
@@ -11,10 +10,8 @@ import dev.schlaubi.mikmusic.util.musicModule
 suspend fun SettingsModule.fixMusicChannel() = ephemeralSlashCommand {
     name = "fix-music-channel"
     description = "Force-updates the music channel status"
+    allowInDms = false
 
-    check {
-        anyGuild()
-    }
 
     action {
         val guildSettings = MusicSettingsDatabase.findGuild(safeGuild)

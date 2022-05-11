@@ -13,12 +13,12 @@ import dev.schlaubi.lavakord.audio.on
 import dev.schlaubi.lavakord.audio.player.Filters
 import dev.schlaubi.lavakord.audio.player.Track
 import dev.schlaubi.lavakord.audio.player.applyFilters
-import dev.schlaubi.mikbot.plugin.api.io.Database
 import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase
+import dev.schlaubi.mikmusic.innerttube.requestVideoChaptersById
 import dev.schlaubi.mikmusic.musicchannel.updateMessage
 import dev.schlaubi.mikmusic.sponsorblock.checkAndSkipSponsorBlockSegments
 import dev.schlaubi.mikmusic.sponsorblock.deleteSponsorBlockCache
-import dev.schlaubi.mikmusic.util.findOnYoutube
+import dev.schlaubi.mikmusic.util.youtubeId
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -30,7 +30,7 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
-class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, private val database: Database) :
+class MusicPlayer(internal val link: Link, private val guild: GuildBehavior) :
     Link by link, KoinComponent {
     private var queue = LinkedList<QueuedTrack>()
     val queuedTracks get() = queue.toList()
@@ -205,10 +205,9 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior, pri
         applySponsorBlock(event)
 
         guild.kord.launch {
-            val youtubeTrack = event.track.findOnYoutube() ?: return@launch
-            val description = youtubeTrack.snippet.description
-            val chapters = description.parseChapters()
-            if (chapters != null) {
+            val youtubeId = event.track.youtubeId ?: return@launch
+            val chapters = requestVideoChaptersById(youtubeId)
+            if (chapters.isNotEmpty()) {
                 val queuedBy = playingTrack?.queuedBy ?: Snowflake(0)
                 playingTrack = ChapterQueuedTrack(event.track, queuedBy, chapters)
                 updateMusicChannelMessage()

@@ -17,7 +17,7 @@ class CreateOptions : AbstractPollSettingsArguments(), CreateSettings {
 
     private val answersOptions by string {
         name = "answers"
-        description = "A pipe (|) seperated list of available options"
+        description = "commands.create.arguments.answers.descriptions"
     }
     override val title: String by voteTitle()
 
@@ -32,7 +32,7 @@ class CreateOptions : AbstractPollSettingsArguments(), CreateSettings {
 
 suspend fun VoteBotModule.createCommand() = ephemeralSlashCommand(::CreateOptions) {
     name = "create-vote"
-    description = "Creates a new vote"
+    description = "commands.create.descriptions"
 
     check {
         isNotInThread()

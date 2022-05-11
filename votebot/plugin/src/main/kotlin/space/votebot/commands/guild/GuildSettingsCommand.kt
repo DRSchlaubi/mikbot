@@ -19,18 +19,18 @@ import space.votebot.util.checkPermissions
 class SetVoteChannelArguments : Arguments() {
     val channel by channel {
         name = "channel"
-        description = "The channel you want to set as the guild vote channel."
+        description = "commands.settings.set_vote_channel.arguments.channel.description"
     }
 }
 
 suspend fun SettingsModule.addGuildSettingsCommand() = ephemeralSlashCommand {
     name = "settings"
-    description = "Manages settings for your guild"
+    description = "commands.settings.description"
     guildAdminOnly()
 
     ephemeralSubCommand(::SetVoteChannelArguments) {
         name = "set-vote-channel"
-        description = "Sets the guild's vote channel"
+        description = "commands.settings.set_vote_channel.description"
 
         action {
             val channel = arguments.channel.asChannelOfOrNull<TopGuildMessageChannel>()
@@ -48,7 +48,7 @@ suspend fun SettingsModule.addGuildSettingsCommand() = ephemeralSlashCommand {
 
     ephemeralSubCommand {
         name = "remove-vote-channel"
-        description = "Removes the guild's vote channel"
+        description = "commands.settings.remove_vote_channel.description"
 
         action {
             val guildSettings =

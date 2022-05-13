@@ -7,12 +7,14 @@ import com.kotlindiscord.kord.extensions.commands.converters.impl.message
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.mikbot.plugin.api.settings.guildAdminOnly
 import dev.schlaubi.mikbot.utils.roleselector.RoleSelectorDatabase
+import dev.schlaubi.mikbot.utils.roleselector.util.setTranslationKey
 import dev.schlaubi.mikbot.utils.roleselector.util.translateString
 
 suspend fun EphemeralSlashCommand<*>.removeRoleMessageCommand() = ephemeralSubCommand(::RemoveRoleMessageArguments) {
     name = "remove-message"
     description = "commands.remove_message.description"
     guildAdminOnly()
+    setTranslationKey()
 
     action {
         val message = arguments.message

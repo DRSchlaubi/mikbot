@@ -17,12 +17,14 @@ import dev.kord.rest.builder.message.create.embed
 import dev.schlaubi.mikbot.plugin.api.settings.guildAdminOnly
 import dev.schlaubi.mikbot.utils.roleselector.RoleSelectionMessage
 import dev.schlaubi.mikbot.utils.roleselector.RoleSelectorDatabase
+import dev.schlaubi.mikbot.utils.roleselector.util.setTranslationKey
 import dev.schlaubi.mikbot.utils.roleselector.util.translateString
 
 suspend fun EphemeralSlashCommand<*>.addRoleMessageCommand() = ephemeralSubCommand(::CreateRoleMessageArguments) {
     name = "create-message"
     description = "commands.create_message.description"
     guildAdminOnly()
+    setTranslationKey()
 
     action {
         val embedTitle = arguments.title

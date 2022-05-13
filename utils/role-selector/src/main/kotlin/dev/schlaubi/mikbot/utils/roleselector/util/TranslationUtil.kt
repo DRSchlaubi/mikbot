@@ -1,5 +1,6 @@
 package dev.schlaubi.mikbot.utils.roleselector.util
 
+import com.kotlindiscord.kord.extensions.commands.application.ApplicationCommand
 import dev.schlaubi.mikbot.plugin.api.util.translateGlobally
 import org.koin.core.component.KoinComponent
 
@@ -10,3 +11,7 @@ suspend fun KoinComponent.translateString(key: String, vararg arguments: Any?) =
         bundleName = "roleselector",
         replacements = arguments as Array<Any?>
     )
+
+internal fun ApplicationCommand<*>.setTranslationKey() {
+    bundle = "roleSelector"
+}

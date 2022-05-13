@@ -3,7 +3,6 @@ package dev.schlaubi.epic_games_notifier
 import com.kotlindiscord.kord.extensions.builders.ExtensibleBotBuilder
 import com.kotlindiscord.kord.extensions.extensions.Extension
 import dev.kord.common.entity.Snowflake
-import dev.kord.common.exception.RequestException
 import dev.kord.core.Kord
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.schlaubi.mikbot.plugin.api.Plugin
@@ -53,7 +52,7 @@ class EpicGamesNotifierModule : Extension(), CoroutineScope {
                             .toList(),
                         gameIds
                     )
-                } catch (e: RequestException) {
+                } catch (e: Exception) { // ContextException is private :(
                     failedWebhooks += it.id
                 }
             }.launchIn(this)

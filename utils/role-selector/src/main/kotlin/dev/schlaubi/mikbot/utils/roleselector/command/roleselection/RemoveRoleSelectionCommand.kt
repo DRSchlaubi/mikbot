@@ -11,6 +11,7 @@ import dev.kord.rest.builder.message.create.allowedMentions
 import dev.schlaubi.mikbot.plugin.api.settings.guildAdminOnly
 import dev.schlaubi.mikbot.utils.roleselector.RoleSelectionMessage
 import dev.schlaubi.mikbot.utils.roleselector.RoleSelectorDatabase
+import dev.schlaubi.mikbot.utils.roleselector.util.setTranslationKey
 import dev.schlaubi.mikbot.utils.roleselector.util.translateString
 import dev.schlaubi.mikbot.utils.roleselector.util.updateMessage
 
@@ -18,6 +19,7 @@ suspend fun EphemeralSlashCommand<*>.removeRoleSelectionCommand() = ephemeralSub
     name = "remove-role"
     description = "commands.remove_role.description"
     guildAdminOnly()
+    setTranslationKey()
 
     action {
         val message = arguments.message

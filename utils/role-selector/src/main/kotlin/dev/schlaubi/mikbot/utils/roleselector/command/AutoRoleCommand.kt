@@ -14,6 +14,7 @@ import dev.schlaubi.mikbot.plugin.api.settings.guildAdminOnly
 import dev.schlaubi.mikbot.plugin.api.util.safeGuild
 import dev.schlaubi.mikbot.utils.roleselector.AutoRole
 import dev.schlaubi.mikbot.utils.roleselector.RoleSelectorDatabase
+import dev.schlaubi.mikbot.utils.roleselector.util.setTranslationKey
 import dev.schlaubi.mikbot.utils.roleselector.util.translateString
 import kotlinx.coroutines.flow.toList
 
@@ -22,6 +23,7 @@ suspend fun SettingsModule.autoRoleCommand() = ephemeralSlashCommand(::AutoRoleA
     description = "commands.auto_role.description"
     guildAdminOnly()
     requireBotPermissions(Permission.ManageRoles)
+    setTranslationKey()
 
     action {
         if (arguments.role == null) {

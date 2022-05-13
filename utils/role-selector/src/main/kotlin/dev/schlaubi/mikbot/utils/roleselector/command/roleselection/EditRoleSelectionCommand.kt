@@ -1,12 +1,7 @@
 package dev.schlaubi.mikbot.utils.roleselector.command.roleselection
 
-import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommand
 import com.kotlindiscord.kord.extensions.commands.application.slash.ephemeralSubCommand
-import com.kotlindiscord.kord.extensions.commands.converters.impl.message
-import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalEmoji
-import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalString
-import com.kotlindiscord.kord.extensions.commands.converters.impl.role
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.kord.common.entity.DiscordPartialEmoji
 import dev.kord.common.entity.optional.optional
@@ -14,6 +9,7 @@ import dev.schlaubi.mikbot.plugin.api.settings.guildAdminOnly
 import dev.schlaubi.mikbot.utils.roleselector.RoleSelectionMessage
 import dev.schlaubi.mikbot.utils.roleselector.RoleSelectorDatabase
 import dev.schlaubi.mikbot.utils.roleselector.util.replace
+import dev.schlaubi.mikbot.utils.roleselector.util.setTranslationKey
 import dev.schlaubi.mikbot.utils.roleselector.util.translateString
 import dev.schlaubi.mikbot.utils.roleselector.util.updateMessage
 
@@ -21,6 +17,7 @@ suspend fun EphemeralSlashCommand<*>.editRoleSelectionCommand() = ephemeralSubCo
     name = "edit-role"
     description = "commands.edit_role.description"
     guildAdminOnly()
+    setTranslationKey()
 
     action {
         val message = arguments.message

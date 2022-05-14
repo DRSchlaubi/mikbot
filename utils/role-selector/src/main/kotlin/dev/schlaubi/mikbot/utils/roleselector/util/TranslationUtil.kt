@@ -13,5 +13,5 @@ suspend fun KoinComponent.translateString(key: String, vararg arguments: Any?) =
     )
 
 internal fun ApplicationCommand<*>.setTranslationKey() {
-    bundle = "roleSelector"
+    bundle = "roleselector"
 }

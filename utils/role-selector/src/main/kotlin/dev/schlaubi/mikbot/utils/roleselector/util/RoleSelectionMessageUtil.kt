@@ -12,7 +12,12 @@ suspend fun updateMessage(message: Message, roleSelectionMessage: RoleSelectionM
         embed {
             title = roleSelectionMessage.title
             val embedDescription =
-                StringBuilder(roleSelectionMessage.description).appendLine().appendLine()
+                StringBuilder(roleSelectionMessage.description ?: "").apply {
+                    if(isNotEmpty()) {
+                        appendLine()
+                        appendLine()
+                    }
+                }
             roleSelectionMessage.roleSelections.forEach {
                 it.emoji?.let { emoji ->
                     embedDescription.append("<${emoji.name}:${emoji.id}> ")

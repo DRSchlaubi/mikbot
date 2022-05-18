@@ -10,7 +10,6 @@ import io.ktor.server.routing.*
 import kotlinx.serialization.Serializable
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import org.litote.kmongo.newId
 import org.pf4j.Extension
 
 @Serializable
@@ -29,7 +28,7 @@ class EpicGamesNotifierWebhookExtension : KtorExtensionPoint, KoinComponent {
         routing {
             get<WebhookRoute.Thanks> { (code) ->
                 val webhook = HttpRequests.discordAuthorize(code)
-                val obj = Webhook(newId(), emptyList(), webhook)
+                val obj = Webhook(webhook.id, emptyList(), webhook.token)
                 WebhookDatabase.webhooks.insertOne(obj)
 
                 val freeGames = HttpRequests.fetchFreeGames()

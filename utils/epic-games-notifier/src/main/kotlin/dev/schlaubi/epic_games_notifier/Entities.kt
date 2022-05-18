@@ -1,5 +1,6 @@
 package dev.schlaubi.epic_games_notifier
 
+import dev.kord.common.entity.Snowflake
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -69,4 +70,4 @@ data class PromotionalOffer(
 data class DiscordOauthResponse(val webhook: DiscordWebhook)
 
 @Serializable
-data class DiscordWebhook(val url: String)
+data class DiscordWebhook(val token: String, val id: Snowflake)

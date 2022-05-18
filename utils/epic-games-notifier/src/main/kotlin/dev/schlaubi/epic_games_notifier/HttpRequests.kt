@@ -40,7 +40,7 @@ object HttpRequests {
         }
     }
 
-    suspend fun discordAuthorize(code: String): String {
+    suspend fun discordAuthorize(code: String): DiscordWebhook {
         val response = client.post(Route.baseUrl) {
 
             url {
@@ -58,6 +58,6 @@ object HttpRequests {
             setBody(FormDataContent(data))
         }.body<DiscordOauthResponse>()
 
-        return response.webhook.url
+        return response.webhook
     }
 }

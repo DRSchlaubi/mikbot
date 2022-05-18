@@ -11,7 +11,6 @@ import dev.schlaubi.mikbot.plugin.api.PluginWrapper
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.litote.kmongo.Id
 import org.litote.kmongo.`in`
 import kotlin.coroutines.CoroutineContext
 import kotlin.time.Duration.Companion.hours
@@ -36,7 +35,7 @@ class EpicGamesNotifierModule : Extension(), CoroutineScope {
     private suspend fun checkForGames() {
         val games = HttpRequests.fetchFreeGames().map { it to it.id }
         val gameIds = games.map { (_, id) -> id }
-        val failedWebhooks = mutableListOf<Id<Webhook>>()
+        val failedWebhooks = mutableListOf<Snowflake>()
 
         WebhookDatabase.webhooks.find()
             .toFlow()
@@ -72,17 +71,8 @@ class EpicGamesNotifierPlugin(wrapper: PluginWrapper) : Plugin(wrapper) {
     }
 }
 
-private data class WebhookInfo(val id: Snowflake, val token: String)
-
-private fun parseUrl(url: String): WebhookInfo {
-    val (id, token) = url.substringAfter("/api/webhooks/").split('/')
-
-    return WebhookInfo(Snowflake(id), token)
-}
-
 suspend fun Webhook.sendGames(kord: Kord, games: List<EmbedBuilder>, gameIds: List<String>) {
     if (games.isEmpty()) return
-    val (id, token) = parseUrl(url)
 
     kord.rest.webhook.executeWebhook(id, token) {
         embeds.addAll(games)

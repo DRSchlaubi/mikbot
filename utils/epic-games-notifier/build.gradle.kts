@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "dev.schlaubi"
-version = "2.2.1"
+version = "3.0.0"
 
 dependencies {
     plugin(projects.utils.ktor)

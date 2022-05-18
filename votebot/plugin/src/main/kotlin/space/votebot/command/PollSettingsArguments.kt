@@ -24,7 +24,7 @@ interface PollSettingsArguments : PollSettings {
 
         validate {
             if (value != null && value!!.toDuration() < 1.minutes) {
-                discordError(translate("vote.create.too_short"))
+                discordError(translate("vote.create.too_short", "votebot"))
             }
         }
     }

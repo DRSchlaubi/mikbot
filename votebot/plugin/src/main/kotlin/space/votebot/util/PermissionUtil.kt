@@ -12,7 +12,8 @@ import dev.schlaubi.mikbot.plugin.api.util.discordError
 
 suspend fun <A : Arguments> EphemeralSlashCommandContext<A>.checkPermissions(channel: GuildMessageChannel) {
     val selfPermissions = channel.getEffectivePermissions(channel.kord.selfId)
-    val requiredPermissions = Permissions(Permission.SendMessages, Permission.EmbedLinks, Permission.ViewChannel)
+    val requiredPermissions =
+        Permissions(Permission.SendMessages, Permission.EmbedLinks, Permission.AttachFiles, Permission.ViewChannel)
     if (requiredPermissions !in selfPermissions) {
         discordError(translate("vote.create.missing_permissions.bot", arrayOf(channel.mention)))
     }

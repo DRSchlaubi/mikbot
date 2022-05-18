@@ -4,19 +4,23 @@ import com.kotlindiscord.kord.extensions.time.TimestampType
 import com.kotlindiscord.kord.extensions.time.toDiscord
 import dev.kord.common.entity.ButtonStyle
 import dev.kord.common.entity.DiscordPartialEmoji
+import dev.kord.common.entity.Permission
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
 import dev.kord.core.behavior.GuildBehavior
 import dev.kord.core.behavior.channel.MessageChannelBehavior
+import dev.kord.core.behavior.channel.asChannelOf
 import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.behavior.edit
 import dev.kord.core.entity.Message
+import dev.kord.core.entity.channel.TopGuildMessageChannel
 import dev.kord.rest.builder.component.ActionRowBuilder
 import dev.kord.rest.builder.component.MessageComponentBuilder
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.schlaubi.mikbot.plugin.api.util.effectiveAvatar
 import dev.schlaubi.mikbot.plugin.api.util.embed
 import dev.schlaubi.stdx.coroutines.forEachParallel
+import dev.schlaubi.stdx.coroutines.localSuspendLazy
 import io.ktor.utils.io.jvm.javaio.*
 import kotlinx.datetime.Clock
 import mu.KotlinLogging
@@ -79,21 +83,30 @@ suspend fun Poll.updateMessages(
 
     messages.forEachParallel { message ->
         try {
-            message.toBehavior(kord).edit {
+            val messageBehavior = message.toBehavior(kord)
+            val permissions  = localSuspendLazy {
+                messageBehavior.channel.asChannelOf<TopGuildMessageChannel>().getEffectivePermissions(kord.selfId)
+            }
+            messageBehavior.edit {
                 if (pieChart != null) {
-                    addFile("chart.png", pieChart)
+                    if (Permission.AttachFiles in permissions()) {
+                        addFile("chart.png", pieChart)
+                    } else {
+                        content = "Could not create pie chart due to missing permissions"
+                    }
                 } else {
                     content = ""
-                    embeds = mutableListOf(toEmbed(kord, guild, highlightWinner))
                 }
+
+                embeds = mutableListOf(toEmbed(kord, guild, highlightWinner))
                 components = if (removeButtons) {
                     mutableListOf()
                 } else {
                     makeButtons(kord, guild).toMutableList()
                 }
             }
-        // yeah yeah I KNOW catching Exception is bad, but it isn't raly a huge problem here,
-        // since handling for all exception will remain the same
+            // yeah yeah I KNOW catching Exception is bad, but it isn't raly a huge problem here,
+            // since handling for all exception will remain the same
         } catch (ignored: Exception) {
             LOG.debug(ignored) { "An error occurred whilst updating a poll message" }
             failedMessages += message

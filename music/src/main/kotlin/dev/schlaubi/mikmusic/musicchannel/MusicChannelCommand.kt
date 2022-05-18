@@ -8,6 +8,7 @@ import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalChanne
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
 import com.kotlindiscord.kord.extensions.types.edit
 import com.kotlindiscord.kord.extensions.types.respond
+import dev.kord.common.annotation.KordExperimental
 import dev.kord.common.annotation.KordUnsafe
 import dev.kord.common.entity.ChannelType
 import dev.kord.common.entity.Permission
@@ -50,7 +51,7 @@ private class MusicChannelArguments : Arguments() {
     }
 }
 
-@OptIn(KordUnsafe::class)
+@OptIn(KordUnsafe::class, KordExperimental::class)
 suspend fun SettingsModule.musicChannel() {
     ephemeralSlashCommand(::MusicChannelArguments) {
         name = "music-channel"

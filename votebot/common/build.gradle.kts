@@ -13,10 +13,10 @@ kotlin {
             }
         }
     }
-    js(IR) {
-        nodejs()
-        browser()
-    }
+//    js(IR) {
+//        nodejs()
+//        browser()
+//    }
 
     sourceSets {
         all {

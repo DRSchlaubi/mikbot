@@ -28,7 +28,7 @@ public class HasteClient(private val url: String) {
      * @return the created haste.
      */
     public suspend fun createHaste(content: String): Haste {
-        val (key) = httpClient.post(URLBuilder(url).pathComponents("documents").build()) {
+        val (key) = httpClient.post(URLBuilder(url).appendPathSegments("documents").build()) {
             setBody(content)
         }.body<HasteResponse>()
         val hasteUrl = URLBuilder(url).appendPathSegments(key).buildString()

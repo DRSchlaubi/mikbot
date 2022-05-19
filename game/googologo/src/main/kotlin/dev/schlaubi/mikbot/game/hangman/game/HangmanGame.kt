@@ -165,13 +165,16 @@ class HangmanGame(
     private fun softEnd() = kord.launch { doEnd() }
 
     override suspend fun runGame() = coroutineScope {
-        welcomeMessage.edit { components = mutableListOf() }
-        val word = retrieveWord() ?: return@coroutineScope
-        startGame(this, word)
+        val job = launch {
+            welcomeMessage.edit { components = mutableListOf() }
+            val word = retrieveWord() ?: return@launch
+            startGame(this, word)
+        }
+        
         if (state is GameState.Guessing) {
             // wait for game to finish
             gameCompleter.await()
-            cancel() // kill orphan coroutines, after game ended
+            job.cancel() // kill orphan coroutines, after game ended
         }
     }
 

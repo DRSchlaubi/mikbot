@@ -57,7 +57,7 @@ class HangmanGame(
         user: User,
         ack: EphemeralMessageInteractionResponseBehavior,
         loading: FollowupMessage,
-        userLocale: dev.kord.common.Locale?
+        userLocale: dev.kord.common.Locale?,
     ): HangmanPlayer = HangmanPlayer(user)
 
     private suspend fun retrieveWord(): String? {
@@ -156,8 +156,11 @@ class HangmanGame(
             }
 
             state.takeIfIsInstance<GameState.Done> {
-                gameCompleter.complete(Unit)
-                this@HangmanGame.winner = winner
+                this@HangmanGame.launch {
+                    state.close()
+                    this@HangmanGame.winner = winner
+                    gameCompleter.complete(Unit)
+                }
             }
         }
     }
@@ -165,16 +168,14 @@ class HangmanGame(
     private fun softEnd() = kord.launch { doEnd() }
 
     override suspend fun runGame() = coroutineScope {
-        val job = launch {
-            welcomeMessage.edit { components = mutableListOf() }
-            val word = retrieveWord() ?: return@launch
-            startGame(this, word)
-        }
-        
+        welcomeMessage.edit { components = mutableListOf() }
+        val word = retrieveWord() ?: return@coroutineScope
+        startGame(this@HangmanGame, word)
+
         if (state is GameState.Guessing) {
             // wait for game to finish
             gameCompleter.await()
-            job.cancel() // kill orphan coroutines, after game ended
+            cancel() // kill orphans
         }
     }
 
@@ -235,7 +236,7 @@ sealed interface GameState {
         override val word: String,
         val chars: Set<Char> = emptySet(),
         val blackList: Set<String> = emptySet(),
-        val mutex: Mutex = Mutex()
+        val mutex: Mutex = Mutex(),
     ) : GameState, HasWord {
         val wrongChars: Set<Char> = chars.filter { it !in word.uppercase(Locale.ENGLISH) }.toSet()
         override suspend fun close() {

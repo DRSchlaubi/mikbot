@@ -1,6 +1,7 @@
 package dev.schlaubi.mikbot.game.hangman
 
 import dev.kord.gateway.Intent
+import dev.kord.gateway.PrivilegedIntent
 import dev.schlaubi.mikbot.game.api.UserGameStats
 import dev.schlaubi.mikbot.game.api.module.GameModule
 import dev.schlaubi.mikbot.game.api.module.commands.leaderboardCommand
@@ -16,8 +17,10 @@ class HangmanModule : GameModule<HangmanPlayer, HangmanGame>() {
     override val bundle: String = "hangman"
     override val gameStats: CoroutineCollection<UserGameStats> = HangmanDatabase.stats
 
+    @OptIn(PrivilegedIntent::class)
     override suspend fun gameSetup() {
         intents.add(Intent.GuildMessages)
+        intents.add(Intent.MessageContent)
 
         startGameCommand(
             "hangman.game.title",

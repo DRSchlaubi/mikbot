@@ -91,15 +91,15 @@ abstract class AbstractGame<T : Player>(
     val ComponentInteraction.gamePlayer: T?
         get() = players.firstOrNull { it.user == user }
 
-    init {
-        interactionHandler()
-        watchThread()
-    }
-
     private var silentEnd = false
 
     val UserBehavior.gamePlayer: T
         get() = players.first { it.user.id == id }
+
+    init {
+        interactionHandler()
+        watchThread()
+    }
 
     /**
      * Require the game to be started to do this.

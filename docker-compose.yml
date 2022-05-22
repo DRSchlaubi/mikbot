@@ -9,7 +9,7 @@ services:
     volumes:
       - mongo-data:/data/db
   bot:
-    image: ghcr.io/drschlaubi/mikmusic/bot:latest
+    image: ghcr.io/drschlaubi/mikmusic/bot:latest # or your own distro, see PLUGINS.md for more
     env_file:
       - .env
     depends_on:

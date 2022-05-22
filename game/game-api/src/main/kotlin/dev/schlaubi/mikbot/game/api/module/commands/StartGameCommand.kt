@@ -16,7 +16,7 @@ import dev.schlaubi.mikbot.game.api.*
 import dev.schlaubi.mikbot.game.api.module.GameModule
 
 /**
- * Adds a /profile command to this [profileCommand].
+ * Adds a /start command to this game.
  *
  * @param gameTitleKey the translation key for the embed title
  * @param threadName the thread name of the game thread
@@ -41,7 +41,7 @@ fun <G : AbstractGame<*>> GameModule<*, G>.startGameCommand(
 )
 
 /**
- * Adds a /profile command to this [profileCommand].
+ * Adds a /start command to this game.
  *
  * @param gameTitleKey the translation key for the embed title
  * @param threadName the thread name of the game thread
@@ -68,7 +68,7 @@ fun <A : Arguments, G : AbstractGame<*>> GameModule<*, G>.startGameCommand(
 )
 
 /**
- * Adds a /profile command to this [profileCommand].
+ * Adds a /start command to this game.
  *
  * @param gameTitleKey the translation key for the embed title
  * @param threadName the thread name of the game thread

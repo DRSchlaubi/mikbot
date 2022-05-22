@@ -173,11 +173,7 @@ class DiscordUnoGame(
             extremeMode, flashMode, allowDropIns, drawUntilPlayable, forcePlay, allowDrawCardStacking,
             stackAllDrawingCards, allowBluffing, useSpecial7and0
         )
-        if (!askForRematch(
-                thread,
-                game
-            )
-        ) {
+        if (!askForRematch(thread, game)) {
             discordError("Game could not restart")
         }
 

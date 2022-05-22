@@ -50,14 +50,14 @@ public object Config : EnvironmentConfig("") {
     /**
      * The [Mongo connection String](https://docs.mongodb.com/manual/reference/connection-string/) used for the bots Database features.
      */
-    public val MONGO_URL: String by environment
+    public val MONGO_URL: String? by environment.optional()
 
     /**
      * The database to use.
      *
      * **This has to be specified, even if there is a database in [MONGO_URL]**
      */
-    public val MONGO_DATABASE: String by environment
+    public val MONGO_DATABASE: String? by environment.optional()
 
     /**
      * The path to the plugins folder.

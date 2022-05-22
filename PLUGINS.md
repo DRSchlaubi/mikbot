@@ -22,7 +22,7 @@ dependencies {
     // this one is included in the bot itself, therefore we make it compileOnly
     // Or use: 'kotlin.stdlib.default.dependency=false' in gradle.properties
     compileOnly(kotlin("stdlib-jdk8"))
-    mikbot("dev.schlaubi", "mikbot-api", "3.0.0-SNAPSHOT")
+    mikbot("dev.schlaubi", "mikbot-api", "3.2.0-SNAPSHOT")
     ksp("dev.schlaubi", "mikbot-plugin-processor", "2.2.0")
 }
 

@@ -6,14 +6,25 @@ import org.litote.kmongo.coroutine.CoroutineDatabase
 import org.litote.kmongo.coroutine.coroutine
 import org.litote.kmongo.reactivestreams.KMongo
 import org.litote.kmongo.serialization.registerSerializer
-import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalTime::class)
 class DatabaseImpl : Database {
+
+    private var internalDatabase: CoroutineDatabase? = null
+
     init {
-        registerSerializer(DurationSerializer)
+        val url = Config.MONGO_URL
+        val database = Config.MONGO_DATABASE
+
+        if (url != null && database != null) {
+            registerSerializer(DurationSerializer)
+            val client = KMongo.createClient(url).coroutine
+
+            internalDatabase = client.getDatabase(database)
+        }
     }
 
-    private val client = KMongo.createClient(Config.MONGO_URL).coroutine
-    override val database: CoroutineDatabase = client.getDatabase(Config.MONGO_DATABASE)
+
+    override val database: CoroutineDatabase
+        get() = internalDatabase
+            ?: error("Database connection is not ready on this instance, please define MONGO_URL and MONGO_DATABASE")
 }

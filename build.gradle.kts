@@ -51,6 +51,11 @@ application {
 }
 
 tasks {
+
+    startScripts {
+        classpath = files("lib/*", "plugins/*")
+    }
+
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions {
             freeCompilerArgs = freeCompilerArgs + listOf("-Xopt-in=dev.schlaubi.mikbot.plugin.api.InternalAPI")

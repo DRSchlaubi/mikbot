@@ -36,6 +36,16 @@ object PluginLoader : DefaultPluginManager(), KoinComponent {
 
     override fun getPluginDescriptorFinder(): PluginDescriptorFinder = MikBotPluginDescriptionFinder()
 
+    override fun createPluginsRoot(): List<Path> {
+        // Load bundled plugins
+        val bundledPlugins = ClassLoader.getSystemResource("plugins")
+        return if (bundledPlugins != null) {
+            super.createPluginsRoot() + Path(bundledPlugins.path)
+        } else {
+            super.createPluginsRoot()
+        }
+    }
+
     override fun loadPlugins() {
         super.loadPlugins()
 
@@ -43,7 +53,6 @@ object PluginLoader : DefaultPluginManager(), KoinComponent {
         buildTranslationGraph()
     }
 
-    @OptIn(ExperimentalStdlibApi::class)
     private fun buildTranslationGraph() {
         pluginBundles = buildMap {
             plugins.values.forEach { plugin ->
@@ -111,7 +120,7 @@ object PluginLoader : DefaultPluginManager(), KoinComponent {
     }
 
     private fun List<PluginWrapper>.failPlugins(
-        exception: Throwable
+        exception: Throwable,
     ) {
         forEach {
             it.failedException = exception
@@ -121,7 +130,7 @@ object PluginLoader : DefaultPluginManager(), KoinComponent {
 
     private fun List<PluginWrapper>.findPluginsDependingOn(
         dependencies: List<String>,
-        overrideOptional: Boolean = false
+        overrideOptional: Boolean = false,
     ) = filter {
         it.descriptor.dependencies.any { dependency ->
             (!dependency.isOptional && !overrideOptional) && dependency.pluginId in dependencies

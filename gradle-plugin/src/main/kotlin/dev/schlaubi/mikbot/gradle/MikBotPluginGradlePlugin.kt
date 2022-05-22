@@ -35,8 +35,10 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
             target.afterEvaluate {
                 (target.extensions.getByName("sourceSets") as SourceSetContainer).getByName("main")
                     .apply {
-                        resources.srcDir(target.buildDir.resolve("generated").resolve("mikbot").resolve("main")
-                            .resolve("resources"))
+                        resources.srcDir(
+                            target.buildDir.resolve("generated").resolve("mikbot").resolve("main")
+                                .resolve("resources")
+                        )
                     }
             }
         }
@@ -49,13 +51,14 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
         val jar = tasks.findByName("jar") as Jar? ?: pluginNotAppliedError("Kotlin")
         jar.dependsOn(patchPropertiesTask)
         val assemblePlugin = createAssemblePluginTask(jar)
+        val installBotTask = tasks.create("installBot", InstallBotTask::class.java)
+        createAssembleBotTask(assemblePlugin, installBotTask)
         createPublishingTasks(assemblePlugin)
-        createTestBotTasks(assemblePlugin)
+        createTestBotTasks(assemblePlugin, installBotTask)
     }
 
-    private fun Project.createTestBotTasks(assemblePlugin: TaskProvider<Jar>) {
+    private fun Project.createTestBotTasks(assemblePlugin: TaskProvider<Jar>, installBotTask: InstallBotTask) {
         tasks.run {
-            val installBotTask = create("installBot", InstallBotTask::class.java)
             val installPlugins = task<InstallPluginsToTestBotTask>("installPluginsToTestBot") {
                 dependsOn(assemblePlugin)
 
@@ -89,6 +92,32 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
                 }
             }
         }
+
+    private fun Project.createAssembleBotTask(assemblePlugin: TaskProvider<Jar>, installBotTask: InstallBotTask) {
+        tasks.run {
+            task<Jar>("assembleBot") {
+                group = "mikbot"
+
+                destinationDirectory.set(buildDir.resolve("bot"))
+                archiveBaseName.set("bot-${project.name}")
+                archiveExtension.set("zip")
+
+                into("") {
+                    // make this lazy, so it doesn't throw at initialization
+                    val provider = provider {
+//                        installBotTask.testBotFolder.resolve("mikmusic-${extractMikBotVersionFromProjectApiDependency()}")
+                        project.rootProject.buildDir.resolve("install").resolve("mikmusic")
+                    }
+                    it.from(provider)
+                }
+                into("plugins") {
+                    val task = assemblePlugin.get()
+                    it.from(task.archiveFile)
+                }
+            }
+        }
+    }
+
 
     // Taken from: https://github.com/twatzl/pf4j-kotlin-demo/blob/master/plugins/build.gradle.kts#L20-L35
     // Funfact: because the kotlin dsl is missing we only have groovy api
@@ -179,7 +208,12 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
                     val parent = extension.currentRepository.getOrElse(extension.targetDirectory.get())
                     val destinationPath = destinationDir.toPath()
                     val probableExistingFile =
-                        parent.resolve(destinationPath.subpath(destinationPath.nameCount - 2, destinationPath.nameCount))
+                        parent.resolve(
+                            destinationPath.subpath(
+                                destinationPath.nameCount - 2,
+                                destinationPath.nameCount
+                            )
+                        )
                             .resolve(assemblePluginTask.get().archiveFileName.get())
 
                     if (Files.exists(probableExistingFile)) {

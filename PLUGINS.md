@@ -10,7 +10,7 @@ know these things stop reading now before complaining about these things not get
 - [How to make a plugin](#how-to-write-a-plugin)
 - [How to assemble a plugin](#how-to-assemble-the-plugin)
 - [How to run the bot](#how-to-run-the-bot)
-- [How to dockerize the bot)(#how-to-dockerize-the-bot)
+- [How to dockerize the bot](#how-to-dockerize-the-bot)
 - [What are Extension Points](#what-are-extension-points)
 - [The mikbot-api](#the-mikbot-api)
   - [The database api](#the-database-api)

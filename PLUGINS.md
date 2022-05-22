@@ -135,7 +135,7 @@ RUN gradle --no-daemon assembleBot
 
 RUN ls /usr/app
 
-FROM ibm-semeru-runtimes:open-17-jre-focal
+FROM ibm-semeru-runtimes:open-18-jre-focal
 
 WORKDIR /usr/app
 COPY --from=builder /usr/app/build/bot .

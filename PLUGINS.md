@@ -1,7 +1,7 @@
 # Plugins guide
 
-**This document neither explains [Kotlin](https://kotlinlang.org/docs/home.html)
-, [Kord](https://github.com/kordlib/kord/wiki), nor [Kord-Extensions](https://kordex.kotlindiscord.com/), if you don't
+**This document neither explains [Kotlin](https://kotlinlang.org/docs/home.html),
+[Kord](https://github.com/kordlib/kord/wiki), nor [Kord-Extensions](https://kordex.kotlindiscord.com/), if you don't
 know these things stop reading now before complaining about these things not getting explained**
 
 # Index

@@ -52,9 +52,9 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
         jar.dependsOn(patchPropertiesTask)
         val assemblePlugin = createAssemblePluginTask(jar)
         val installBotTask = tasks.create("installBot", InstallBotTask::class.java)
-        createAssembleBotTask(assemblePlugin, installBotTask)
         createPublishingTasks(assemblePlugin)
         createTestBotTasks(assemblePlugin, installBotTask)
+        createAssembleBotTask(assemblePlugin, installBotTask)
     }
 
     private fun Project.createTestBotTasks(assemblePlugin: TaskProvider<Jar>, installBotTask: InstallBotTask) {
@@ -95,7 +95,9 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
 
     private fun Project.createAssembleBotTask(assemblePlugin: TaskProvider<Jar>, installBotTask: InstallBotTask) {
         tasks.run {
-            task<Jar>("assembleBot") {
+            register<Jar>("assembleBot") {
+                dependsOn(assemblePlugin, installBotTask)
+
                 group = "mikbot"
 
                 destinationDirectory.set(buildDir.resolve("bot"))
@@ -105,8 +107,7 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
                 into("") {
                     // make this lazy, so it doesn't throw at initialization
                     val provider = provider {
-//                        installBotTask.testBotFolder.resolve("mikmusic-${extractMikBotVersionFromProjectApiDependency()}")
-                        project.rootProject.buildDir.resolve("install").resolve("mikmusic")
+                        installBotTask.testBotFolder.resolve("mikmusic-${extractMikBotVersionFromProjectApiDependency()}")
                     }
                     it.from(provider)
                 }

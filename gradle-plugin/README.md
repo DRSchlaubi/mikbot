@@ -234,7 +234,7 @@ use [Docker](../README.md#starting-the-bot)
 **Environment Variables:** If you want to set environment variables please create a file named `.test-env` in the
 project root and list all variables in a `KEY=VALUE` format
 
-Therefore, please add the following to your Gradle buildscript
+Therefore, please add the following to your Gradle buildscript or set a `mikbot` dependency to let the plugin infer the version
 
 ```kotlin
 tasks {

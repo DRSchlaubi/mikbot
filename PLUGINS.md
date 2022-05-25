@@ -131,9 +131,7 @@ If you want to dockerize a bot with bundled plugins, you can use this `Dockerfil
 FROM gradle:jdk18 as builder
 WORKDIR /usr/app
 COPY . .
-RUN gradle --no-daemon assembleBot
-
-RUN ls /usr/app
+RUN gradle --no-daemon installBotArchive
 
 FROM ibm-semeru-runtimes:open-18-jre-focal
 

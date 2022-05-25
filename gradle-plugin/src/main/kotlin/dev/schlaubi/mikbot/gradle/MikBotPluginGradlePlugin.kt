@@ -95,7 +95,7 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
 
     private fun Project.createAssembleBotTask(assemblePlugin: TaskProvider<Jar>, installBotTask: InstallBotTask) {
         tasks.run {
-            register<Jar>("assembleBot") {
+            val assembleBot = register<Jar>("assembleBot") {
                 dependsOn(assemblePlugin, installBotTask)
 
                 group = "mikbot"
@@ -115,6 +115,13 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
                     val task = assemblePlugin.get()
                     it.from(task.archiveFile)
                 }
+            }
+
+            register<Copy>("installBotArchive") {
+                dependsOn(assembleBot)
+
+                from(zipTree(assembleBot.get().archiveFile))
+                into(buildDir.resolve("installBot"))
             }
         }
     }

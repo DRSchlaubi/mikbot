@@ -27,7 +27,7 @@ fun Game.toEmbed(): EmbedBuilder = embed {
             .toMessageFormat(DiscordTimestampStyle.LongDate)
     }
 
-    image = (keyImages.firstOrNull { it.type == "OfferImageWide" } ?: keyImages.first()).url
+    image = (keyImages.firstOrNull { it.type == "OfferImageWide" } ?: keyImages.first()).url.encodeURLQueryComponent()
     val thumbnail = keyImages.firstOrNull { it.type == "Thumbnail" }?.url
     if (thumbnail != null) {
         thumbnail {

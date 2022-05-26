@@ -62,7 +62,7 @@ the bots binaries and the [plugin-repo](https://storage.googleapis.com/mikbot-pl
 ([index](https://storage.googleapis.com/mikbot-plugins/plugins.json)) normally you should not need to interact with 
 these repositories directly.
 
-# For developers
+# For bot developers
 
 JDK is required it can be obtained [here](https://adoptium.net) (Recommended for Windows but works everywhere)
 and [here](https://sdkman.io/) (Recommended for Linux/Mac)
@@ -72,3 +72,7 @@ Also set a `TEST_GUILD` environment variable, for local commands
 
 If you are making any changes to the bots official plugins (aka the plugins in this repo),
 please run the `rebuild-plugin-dependency-list.sh` script first, otherwise your plugins won't be loaded properly
+  
+# For plugin developers
+
+You can find a detailed guide on how to write plugins [here](PLUGINS.md)

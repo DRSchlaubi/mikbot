@@ -4,11 +4,17 @@ import dev.kord.common.DiscordTimestampStyle
 import dev.kord.common.toMessageFormat
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.schlaubi.mikbot.plugin.api.util.embed
+import io.ktor.http.*
+import io.ktor.server.util.*
 
 fun Game.toEmbed(): EmbedBuilder = embed {
     title = this@toEmbed.title
     description = this@toEmbed.description
-    url = "https://www.epicgames.com/store/${Config.COUNTRY_CODE.lowercase()}/p/$urlSlug"
+    url = if (offerType == "BUNDLE") {
+        "https://www.epicgames.com/store/${Config.COUNTRY_CODE.lowercase()}/bundles/$productSlug"
+    } else {
+        "https://www.epicgames.com/store/${Config.COUNTRY_CODE.lowercase()}/p/$urlSlug"
+    }
 
     field {
         name = "Original Price"
@@ -25,7 +31,7 @@ fun Game.toEmbed(): EmbedBuilder = embed {
     val thumbnail = keyImages.firstOrNull { it.type == "Thumbnail" }?.url
     if (thumbnail != null) {
         thumbnail {
-            url = thumbnail
+            url = thumbnail.encodeURLQueryComponent()
         }
     }
 }

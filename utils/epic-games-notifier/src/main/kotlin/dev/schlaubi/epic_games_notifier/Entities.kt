@@ -22,6 +22,7 @@ data class Game(
     val title: String,
     val id: String,
     val description: String,
+    val offerType: String,
     val status: String,
     val keyImages: List<KeyImage>,
     val seller: Seller,

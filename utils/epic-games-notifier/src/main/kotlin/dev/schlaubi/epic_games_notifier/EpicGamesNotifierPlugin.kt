@@ -11,12 +11,15 @@ import dev.schlaubi.mikbot.plugin.api.PluginWrapper
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import mu.KotlinLogging
 import org.litote.kmongo.`in`
 import kotlin.coroutines.CoroutineContext
 import kotlin.time.Duration.Companion.hours
 
 private const val googleLogo =
     "https://lh3.googleusercontent.com/COxitqgJr1sJnIDe8-jiKhxDx1FrYbtRHKJ9z_hELisAlapwE9LUPh6fcXIfb5vwpbMl4xl9H9TRFPc5NOO8Sb3VSgIBrfRYvW6cUA"
+
+private val LOG = KotlinLogging.logger { }
 
 class EpicGamesNotifierModule : Extension(), CoroutineScope {
     override val name: String = "epic-games-notifier"
@@ -53,6 +56,7 @@ class EpicGamesNotifierModule : Extension(), CoroutineScope {
                     )
                 } catch (e: Exception) { // ContextException is private :(
                     failedWebhooks += it.id
+                    LOG.warn(e) { "Could not call webhook ${it.id}" }
                 }
             }.launchIn(this)
 

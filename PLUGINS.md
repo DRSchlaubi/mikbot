@@ -19,17 +19,16 @@ know these things stop reading now before complaining about these things not get
   - [Predefined modules](#predefined-modules)
   - [Documentation](#documentation)
 - [Featured plugins](#featured-plugins)
-  - [GDPR](#gdprcoregdpr)
-  - [ktor](#ktorutilsktor)
+  - [GDPR](#gdpr)
+  - [ktor](#ktor)
 
 # What is a plugin
 
 To Mikbot a plugin is essentially a single file changing KordEx configurations, everything else is KordEx and therefor
-not
-explained here.
+not explained here.
 
 Kord-Extensions already provides "plugins", but KordEx calls them Extensions, a Mikbot plugin is simply one or more
-KordEx extensions + optional additional KordEx configuration housed in a zip file, therefore the plugin interface also
+KordEx extensions + optional additional KordEx configuration housed in a zip file, therefor the plugin interface also
 has only 2 main functions
 
 - `ExtensibleBotBuilder.ExtensionsBuilder.addExtensions()` which is to add Extensions
@@ -40,7 +39,7 @@ And since you probably ignored the big warning at the top, you can read more abo
 
 # How to write a plugin
 
-If you want to make a plugin you should really use [Gradle](https://gradle.org) using Maven, or no build tool at all
+If you want to make a plugin you should really use [Gradle](https://gradle.org), using Maven, or no build tool at all
 is possible, but all official tooling is only provided for Gradle.
 
 
@@ -110,6 +109,7 @@ Set `ksp("dev.schlaubi", "plugin-processor", "2.2.0")` to `implementation("dev.s
 and reload your dependencies. Then change it back again. _(Workaround)_
 
 </details>
+
 Alternatively to generating a zip file, you can also use shadowJar, but make sure to add the manifest is added.
 For more information about Packaging read [the packaging documentation](https://pf4j.org/doc/packaging.html) and [the plugins documentation](https://pf4j.org/doc/plugins.html)
 
@@ -165,8 +165,8 @@ Then another plugin can implement this data point like this
 **Implementations of ExtensionPoints are called Extensions, but have nothing to do with KordExteensions Extensions,
 which are the extensions added in the plugin main**
 
-@Extension
 ```kotlin
+@Extension
 class Connect4GDPRExtensionPoint : GDPRExtensionPoint {
     override fun provideDataPoints(): List<DataPoint> = listOf(Connect4StatsDataPoint, Connect4ProcessDataPoint)
 }
@@ -217,6 +217,7 @@ class YourPluginSettingsExtension : SettingsExtensionPoint {
 ```
 
 For the OwnerModule use the `OwnerExtensionPoint`
+For the SettingsModule use the `SettingsExtensionPoint`
 
 Both modules also have permission helpers
 - `SlashCommand<*, *>.ownerOnly()` - registers the command on `OWNER_GUILD` and requires the Permission `ADMINISTRATOR`
@@ -231,12 +232,16 @@ There is currently no hosted documentation for all the utility classes, but they
 
 ## [GDPR](core/gdpr)
 Plugin adding functionality to comply with the [GDPR](https://gdpr.eu/)
+
 Dependency: `plugin("dev.schlaubi", "mikbot-gdpr", "<version>")`
+
 Docs: [README.md](core/gdpr/README.md)
 
 ## [ktor](utils/ktor)
 An API to have a webserver in multiple plugins on the same port powered by [Ktor](https://ktor.io)
+
 Dependency: `plugin("dev.schlaubi", "mikbot-ktor", "<version>")`
+
 Docs: [README.md](utils/ktor/README.md)
 
 # What's next

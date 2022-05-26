@@ -24,4 +24,5 @@ class MyGDPRExtension : GDPRExtensionPoint {
 For an example data point, you can check
 the [database-i18n plugin](https://github.com/DRSchlaubi/mikmusic/blob/3dc82da7ef5dca15c6e75268cae2935cad52f3f7/core/database-i18n/src/main/kotlin/dev/schlaubi/mikbot/core/i18n/database/gdpr/GDPR.kt#L17-L26)
 
-You can also refer to the [gdpr plugin documentation](https://mikbot.schlau.bi/core/gdpr) to learn more about data points and their different types
+You can also refer to the [DataPoint.kt file](https://github.com/DRSchlaubi/mikbot/blob/main/core/gdpr/src/main/kotlin/dev/schlaubi/mikbot/core/gdpr/api/DataPoint.kt)
+to learn more about data points and their different types

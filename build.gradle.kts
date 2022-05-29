@@ -53,7 +53,7 @@ application {
 tasks {
 
     startScripts {
-        classpath = files("lib/*", "plugins/*")
+        classpath = files("lib/*", "bundled-plugins/*")
     }
 
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {

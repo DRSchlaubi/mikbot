@@ -111,7 +111,7 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
                     }
                     it.from(provider)
                 }
-                into("plugins") {
+                into("bundled-plugins") {
                     val task = assemblePlugin.get()
                     it.from(task.archiveFile)
                 }

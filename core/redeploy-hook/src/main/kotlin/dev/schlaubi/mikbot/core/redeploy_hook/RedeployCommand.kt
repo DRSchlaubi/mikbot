@@ -11,18 +11,26 @@ import dev.schlaubi.mikbot.plugin.api.pluginSystem
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 private val client = HttpClient()
 
 suspend fun OwnerModule.redeployCommand() = ephemeralSlashCommand {
     name = "redeploy"
     description = "redeploys the bot"
+    bundle = "owners"
 
     ownerOnly()
 
     action {
-        pluginSystem.getExtensions<RedeployExtensionPoint>().forEach {
-            it.beforeRedeploy()
+        coroutineScope {
+            pluginSystem.getExtensions<RedeployExtensionPoint>().forEach {
+                @Suppress("ConvertLambdaToReference")
+                launch {
+                    it.beforeRedeploy()
+                }
+            }
         }
 
         val host = Config.REDEPLOY_HOST ?: return@action notAvailable()

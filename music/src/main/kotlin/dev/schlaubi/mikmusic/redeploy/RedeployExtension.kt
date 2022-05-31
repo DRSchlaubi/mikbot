@@ -11,7 +11,7 @@ import org.pf4j.Extension
 class RedeployExtension : RedeployExtensionPoint, KoinComponent {
     val bot by inject<ExtensibleBot>()
     override suspend fun beforeRedeploy() {
-        val musicModule = bot.findExtension<MusicModule>()!!
+        val musicModule = bot.findExtension<MusicModule>() ?: return
 
         musicModule.savePlayerStates()
         musicModule.disconnect()

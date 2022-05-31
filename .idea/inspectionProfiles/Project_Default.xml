@@ -2,7 +2,6 @@
   <profile version="1.0">
     <option name="myName" value="Project Default" />
     <inspection_tool class="AddOperatorModifier" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
-    <inspection_tool class="AddVarianceModifier" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="ConvertLambdaToReference" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ConvertPairConstructorToToFunction" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="DataClassCanBeRecord" enabled="false" level="WARNING" enabled_by_default="false" />

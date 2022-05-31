@@ -3,6 +3,7 @@ package dev.schlaubi.mikmusic.core.audio
 import com.kotlindiscord.kord.extensions.extensions.Extension
 import dev.kord.core.behavior.GuildBehavior
 import dev.schlaubi.lavakord.LavaKord
+import dev.schlaubi.lavakord.audio.Node
 import dev.schlaubi.lavakord.kord.getLink
 import dev.schlaubi.lavakord.kord.lavakord
 import dev.schlaubi.mikbot.plugin.api.io.Database
@@ -29,6 +30,6 @@ class LavalinkManager : Extension() {
     fun getLink(guild: GuildBehavior) = lavalink.getLink(guild.id)
 
     override suspend fun unload() {
-        lavalink.nodes.forEach { it.close() }
+        lavalink.nodes.forEach(Node::close)
     }
 }

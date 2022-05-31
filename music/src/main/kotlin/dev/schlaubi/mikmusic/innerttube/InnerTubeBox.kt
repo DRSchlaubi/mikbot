@@ -3,7 +3,7 @@ package dev.schlaubi.mikmusic.innerttube
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class InnerTubeBox<T>(val contents: List<T>) : List<T> by contents
+data class InnerTubeBox<T>(val contents: List<T> = emptyList()) : List<T> by contents
 
 
 @Serializable

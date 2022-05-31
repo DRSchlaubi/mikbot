@@ -6,7 +6,7 @@ import dev.schlaubi.mikmusic.core.settings.SchedulerSettings
 import kotlinx.coroutines.delay
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Duration.Companion.milliseconds
 
 @Serializable
 data class PersistentPlayerState(
@@ -36,7 +36,7 @@ data class PersistentPlayerState(
         if (currentTrack != null) {
             musicPlayer.playingTrack = currentTrack
             musicPlayer.queueTrack(force = true, onTop = false, tracks = listOf(currentTrack))
-            delay(300.seconds) // eave Lavalink some time to process
+            delay(300.milliseconds) // eave Lavalink some time to process
             musicPlayer.player.seekTo(position)
         }
         musicPlayer.queueTrack(force = false, onTop = false, tracks = queue)

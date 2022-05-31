@@ -1,4 +1,4 @@
-# music
+# music (formerly mikmusic)
 
 Plugin providing full music functionality for the bot
 
@@ -18,9 +18,9 @@ Plugin providing full music functionality for the bot
 - Bot internal playlist system (Supports import from other sources, just
   do `/playlist add name: <name> query: <existing yt/spotify playlist>`)
 - i18n
-- Ability to skip thorugh [YouTube Chapters](https://support.google.com/youtube/answer/9884579?hl=en) with `/next`
-- Song guizes (Inpired by the [AirConsole](https://www.airconsole.com)
-  game [MusicGuess](https://www.airconsole.com/play/battle-games/musicguess))
+- Ability to skip through [YouTube Chapters](https://support.google.com/youtube/answer/9884579?hl=en) with `/next`
+- Song guizes (Inspired by the [AirConsole](https://www.airconsole.com)
+  game [MusicGuess](https://www.airconsole.com/play/battle-games/musicguess)) (now housed [here](../game/music-quiz))
 
 ### Requirements
 
@@ -73,3 +73,7 @@ use bot_prod
 db.createCollection("lavalink_servers")
 db.lavalink_servers.insertOne({"url": "wss://...", "password": "<password>"})
 ``` 
+
+# Redeploy
+
+This plugin supports a /redeploy command restarting player sessions after updating (click [here](../core/redeploy-hook) for more)

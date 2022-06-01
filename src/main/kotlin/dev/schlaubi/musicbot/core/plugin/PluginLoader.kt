@@ -38,9 +38,9 @@ object PluginLoader : DefaultPluginManager(), KoinComponent {
 
     override fun createPluginsRoot(): List<Path> {
         // Load bundled plugins
-        val bundledPlugins = ClassLoader.getSystemResource("lib/bundled-plugins")
+        val bundledPlugins = ClassLoader.getSystemResource("bundled-plugins")
         return if (bundledPlugins != null) {
-            super.createPluginsRoot() + Path(bundledPlugins.path)
+            listOf(*super.createPluginsRoot().toTypedArray(), Path.of(bundledPlugins.toURI()))
         } else {
             super.createPluginsRoot()
         }

@@ -52,7 +52,7 @@ application {
 
 tasks {
     startScripts {
-        classpath = files("lib/*")
+        classpath = DummyFileCollection(listOf("lib/*", "lib/."))
     }
 
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {

@@ -144,7 +144,11 @@ abstract class DiscordUnoPlayer(
             }
         }
 
-        updateControls(game.lastPlayer != this && !secondRun) // Don't update if it wasn't another players turn
+        val topCard = game.game.topCard
+        val isSkippingCard = topCard is SkipCard || topCard is ReverseCard
+
+        // Don't update if it wasn't another players turn
+        updateControls((game.lastPlayer != this && !secondRun) || isSkippingCard)
         val cantPlay by lazy { deck.none { it.canBePlayedOn(game.game.topCard) } }
         if (drawn) {
             if (cantPlay) {

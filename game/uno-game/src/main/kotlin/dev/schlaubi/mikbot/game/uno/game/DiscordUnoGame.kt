@@ -130,7 +130,6 @@ class DiscordUnoGame(
                         currentPlayer!!.turn()
                     } catch (e: Exception) {
                         currentPlayer!!.response.createEphemeralFollowup {
-
                             content = translate(currentPlayer!!, "uno.controls.failed")
                         }
                         currentPlayer!!.resendControlsInternally(null)

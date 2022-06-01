@@ -30,6 +30,9 @@ abstract class InstallBotTask : DefaultTask() {
 
     @TaskAction
     fun runTask() {
+        if (botVersion.isPresent && botVersion.get() != botVersionFromProject()) {
+            logger.warn("Install task botVersion differs from dependency, please use either the mikbot() dependency or the installTask bot version")
+        }
         if (!project.gradle.startParameter.isRerunTasks && testBotFolder.exists()) {
             // did work is the most stupid name ever
             // it actually means whether the task did some work

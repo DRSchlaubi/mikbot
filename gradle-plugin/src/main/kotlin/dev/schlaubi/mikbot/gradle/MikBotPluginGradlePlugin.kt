@@ -107,7 +107,8 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
                 into("") {
                     // make this lazy, so it doesn't throw at initialization
                     val provider = provider {
-                        installBotTask.testBotFolder.resolve("mikmusic-${extractMikBotVersionFromProjectApiDependency()}")
+                        val version = installBotTask.botVersionFromProject()
+                        installBotTask.testBotFolder.resolve("mikmusic-$version")
                     }
                     it.from(provider)
                 }

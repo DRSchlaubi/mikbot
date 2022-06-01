@@ -7,6 +7,7 @@ plugins {
 }
 
 dependencies {
+    mikbot("dev.schlaubi", "mikbot-api", "3.2.0-SNAPSHOT")
     implementation(projects.votebot.common)
     implementation(projects.votebot.chartServiceClient)
     implementation(libs.java.string.similarity)

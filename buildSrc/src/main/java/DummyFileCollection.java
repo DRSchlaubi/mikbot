@@ -23,7 +23,7 @@ public record DummyFileCollection(List<String> literalFiles) implements FileColl
     public File getSingleFile() throws IllegalStateException {
         if (literalFiles.size() != 1) {
             throw new IllegalStateException("Found more than 1 file");
-        } else  {
+        } else {
             return new DummyFile(literalFiles.get(0));
         }
     }

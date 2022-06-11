@@ -8,6 +8,7 @@ import com.google.devtools.ksp.processing.SymbolProcessorEnvironment
 import com.google.devtools.ksp.symbol.FileLocation
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSClassDeclaration
+import com.google.devtools.ksp.symbol.KSName
 import dev.schlaubi.mikbot.plugin.api.PluginMain
 import org.pf4j.Extension
 import java.util.*
@@ -35,9 +36,9 @@ class PluginProcessor(private val environment: SymbolProcessorEnvironment) : Sym
         )
 
         val names = symbols.filterIsInstance<KSClassDeclaration>()
-            .map { it.qualifiedName }
+            .map(KSClassDeclaration::qualifiedName)
             .filterNotNull()
-            .map { it.asString() }
+            .map(KSName::asString)
 
         val file = environment.codeGenerator.createNewFile(Dependencies.ALL_FILES, "META-INF", "extensions", "idx")
         environment.codeGenerator.associate(

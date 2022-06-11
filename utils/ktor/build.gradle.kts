@@ -14,6 +14,7 @@ dependencies {
     api(libs.ktor.server.status.pages)
     api(libs.ktor.server.content.negotiation)
     api(libs.ktor.serialization.kotlinx.json)
+    api(libs.ktor.server.html.builder)
 }
 
 tasks {

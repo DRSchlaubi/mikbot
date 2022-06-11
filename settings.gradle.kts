@@ -35,6 +35,7 @@ include(
     "game:googolplex",
     "game:connect-four",
     "utils",
+    "utils:birthdays",
     "utils:ktor",
     "utils:verification-system",
     "utils:epic-games-notifier",

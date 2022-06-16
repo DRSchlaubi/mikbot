@@ -13,14 +13,14 @@ know these things stop reading now before complaining about these things not get
 - [How to dockerize the bot](#how-to-dockerize-the-bot)
 - [What are Extension Points](#what-are-extension-points)
 - [The mikbot-api](#the-mikbot-api)
-  - [The database api](#the-database-api)
-  - [The config api](#the-config-api)
-  - [The all shards ready event](#the-all-shards-ready-event)
-  - [Predefined modules](#predefined-modules)
-  - [Documentation](#documentation)
+    - [The database api](#the-database-api)
+    - [The config api](#the-config-api)
+    - [The all shards ready event](#the-all-shards-ready-event)
+    - [Predefined modules](#predefined-modules)
+    - [Documentation](#documentation)
 - [Featured plugins](#featured-plugins)
-  - [GDPR](#gdpr)
-  - [ktor](#ktor)
+    - [GDPR](#gdpr)
+    - [ktor](#ktor)
 
 # What is a plugin
 
@@ -98,8 +98,17 @@ class MyCoolPlugin(wrapper: PluginWrapper) : Plugin(wrapper) {
 You have 3 ways of building/distributing your plugin
 
 - The `assemblePlugin` task: Can be used to generate a single plugin.zip file (Found in `build/plugin`)
-- The `assembleBot` task: Can be used to generate your own distribution of the bot bundeling the plugin (Found
+- The `assembleBot` task: Can be used to generate your own distribution of the bot bundling the plugin (Found
   in `build/bot`)
+    - You can also specify other bundled plugins like this
+  ```kotlin
+  tasks {
+    assembleBot {
+        repositories.add("myrepo.com")
+        bundledPlugins.add("ktor@1.0.0")
+    }
+  }
+  ```
 - Plugin publishing: You can read more about that [here](gradle-plugin/README.md#publishing)
 
 <details>
@@ -111,17 +120,19 @@ and reload your dependencies. Then change it back again. _(Workaround)_
 </details>
 
 Alternatively to generating a zip file, you can also use shadowJar, but make sure to add the manifest is added.
-For more information about Packaging read [the packaging documentation](https://pf4j.org/doc/packaging.html) and [the plugins documentation](https://pf4j.org/doc/plugins.html)
+For more information about Packaging read [the packaging documentation](https://pf4j.org/doc/packaging.html)
+and [the plugins documentation](https://pf4j.org/doc/plugins.html)
 
 # How to run the bot
 
 There are two ways to run the bot
+
 - Running it from a distribution
-  - [either your own](#how-to-assemble-the-plugin)
-  - [docker](https://github.com/DRSchlaubi/mikbot/pkgs/container/mikmusic%2Fbot)
-  - [binary](https://storage.googleapis.com/mikbot-binaries)
+    - [either your own](#how-to-assemble-the-plugin)
+    - [docker](https://github.com/DRSchlaubi/mikbot/pkgs/container/mikmusic%2Fbot)
+    - [binary](https://storage.googleapis.com/mikbot-binaries)
 - Running through Gradle
-  - You can read more about that [here](gradle-plugin/README.md#run-the-bot)
+    - You can read more about that [here](gradle-plugin/README.md#run-the-bot)
 
 # How to dockerize the bot
 
@@ -173,11 +184,13 @@ class Connect4GDPRExtensionPoint : GDPRExtensionPoint {
 ```
 
 The GDPR plugin can then access the data points like this
+
 ```kotlin
 pluginSystem.getExtensions<GDPRExtensionPoint>().flatMap { it.provideDataPoints() } 
 ```
 
 # The mikbot-api
+
 The mikbot api itself provides some utilities itself in extension to kordex
 
 ## The database API
@@ -203,7 +216,8 @@ The bot has an AllShardsReadyEvent which is fired once all shards fired a ReadyE
 
 ## Predefined modules
 
-The bot also has a Settings and Owner module, so you can group all related commands into a single KordExtensions Extension.
+The bot also has a Settings and Owner module, so you can group all related commands into a single KordExtensions
+Extension.
 
 You can add commands to these extensions like this
 
@@ -220,6 +234,7 @@ For the OwnerModule use the `OwnerExtensionPoint`
 For the SettingsModule use the `SettingsExtensionPoint`
 
 Both modules also have permission helpers
+
 - `SlashCommand<*, *>.ownerOnly()` - registers the command on `OWNER_GUILD` and requires the Permission `ADMINISTRATOR`
 - `SlashCommand<*, *>.guildAdminOnly()` - disables the command in dms and requires `MANAGE_SERVER`
 
@@ -231,6 +246,7 @@ There is currently no hosted documentation for all the utility classes, but they
 # Featured plugins
 
 ## [GDPR](core/gdpr)
+
 Plugin adding functionality to comply with the [GDPR](https://gdpr.eu/)
 
 Dependency: `plugin("dev.schlaubi", "mikbot-gdpr", "<version>")`
@@ -238,6 +254,7 @@ Dependency: `plugin("dev.schlaubi", "mikbot-gdpr", "<version>")`
 Docs: [README.md](core/gdpr/README.md)
 
 ## [ktor](utils/ktor)
+
 An API to have a webserver in multiple plugins on the same port powered by [Ktor](https://ktor.io)
 
 Dependency: `plugin("dev.schlaubi", "mikbot-ktor", "<version>")`
@@ -245,6 +262,7 @@ Dependency: `plugin("dev.schlaubi", "mikbot-ktor", "<version>")`
 Docs: [README.md](utils/ktor/README.md)
 
 # What's next
+
 - Read the [Setup Guide](SETUP.md) to learn how to operate the bot runtime
 - Read the [Game API guide](game/game-api/GUIDE.md) to learn how to make a game
 

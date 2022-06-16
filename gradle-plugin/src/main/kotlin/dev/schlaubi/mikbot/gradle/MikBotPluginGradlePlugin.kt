@@ -10,6 +10,7 @@ import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskContainer
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.bundling.Jar
+import org.gradle.api.tasks.bundling.Zip
 import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.io.path.name
@@ -57,7 +58,7 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
         createAssembleBotTask(assemblePlugin, installBotTask)
     }
 
-    private fun Project.createTestBotTasks(assemblePlugin: TaskProvider<Jar>, installBotTask: InstallBotTask) {
+    private fun Project.createTestBotTasks(assemblePlugin: TaskProvider<Zip>, installBotTask: InstallBotTask) {
         tasks.run {
             val installPlugins = task<InstallPluginsToTestBotTask>("installPluginsToTestBot") {
                 dependsOn(assemblePlugin)
@@ -93,29 +94,15 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
             }
         }
 
-    private fun Project.createAssembleBotTask(assemblePlugin: TaskProvider<Jar>, installBotTask: InstallBotTask) {
+    private fun Project.createAssembleBotTask(assemblePlugin: TaskProvider<Zip>, installBotTask: InstallBotTask) {
         tasks.run {
-            val assembleBot = register<Jar>("assembleBot") {
+            val assembleBot = register<AssembleBotTask>("assembleBot") {
                 dependsOn(assemblePlugin, installBotTask)
-
-                group = "mikbot"
-
-                destinationDirectory.set(buildDir.resolve("bot"))
-                archiveBaseName.set("bot-${project.name}")
-                archiveExtension.set("zip")
-
-                into("") {
-                    // make this lazy, so it doesn't throw at initialization
-                    val provider = provider {
-                        val version = installBotTask.botVersionFromProject()
-                        installBotTask.testBotFolder.resolve("mikmusic-$version")
-                    }
-                    it.from(provider)
-                }
-                into("lib/bundled-plugins") {
-                    val task = assemblePlugin.get()
-                    it.from(task.archiveFile)
-                }
+                this.assemblePlugin.set(assemblePlugin)
+                this.installBotTask.set(installBotTask)
+            }
+            afterEvaluate {
+                assembleBot.get().config()
             }
 
             register<Copy>("installBotArchive") {
@@ -135,7 +122,7 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
     // which took me 4 hrs to figure out
     private fun Project.createAssemblePluginTask(jarTask: Jar) =
         tasks.run {
-            register<Jar>("assemblePlugin") {
+            register<Zip>("assemblePlugin") {
                 group = "build"
                 dependsOn(jarTask)
 
@@ -202,7 +189,7 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
         }
     }
 
-    private fun Project.createPublishingTasks(assemblePluginTask: TaskProvider<Jar>) {
+    private fun Project.createPublishingTasks(assemblePluginTask: TaskProvider<Zip>) {
         val extension = project.extensions.create(pluginPublishingExtensionName, BuildRepositoryExtension::class.java)
         tasks.apply {
             val copyFilesIntoRepo = register<Copy>("copyFilesIntoRepo") {

@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("com.gradle.plugin-publish") version "0.20.0"
     `java-gradle-plugin`
-    kotlin("jvm") version "1.6.21"
+    kotlin("jvm") version "1.7.0"
     kotlin("plugin.serialization") version "1.6.21"
 }
 

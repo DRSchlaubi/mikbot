@@ -2,7 +2,7 @@ package dev.schlaubi.mikbot.gradle
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
-import org.gradle.jvm.tasks.Jar
+import org.gradle.api.tasks.bundling.Zip
 import java.nio.file.Files
 import java.util.*
 
@@ -22,7 +22,7 @@ abstract class MakeRepositoryIndexTask : DefaultTask() {
             emptyList()
         }
 
-        val pluginTask = project.tasks.getByName("assemblePlugin") as Jar
+        val pluginTask = project.tasks.getByName("assemblePlugin") as Zip
 
         val extension = project.mikbotPluginExtension
         val newPlugins = plugins.addPlugins(

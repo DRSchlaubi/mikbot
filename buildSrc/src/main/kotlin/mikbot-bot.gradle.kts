@@ -40,7 +40,7 @@ tasks {
         outputs.dir(pluginsDirectory)
 
         plugins().forEach {
-            val task = project(it).tasks.getByName("assemblePlugin") as Jar
+            val task = project(it).tasks.getByName("assemblePlugin") as Zip
 
             dependsOn(task)
 

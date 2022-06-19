@@ -1,14 +1,14 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("com.gradle.plugin-publish") version "0.20.0"
+    id("com.gradle.plugin-publish") version "1.0.0-rc-3"
     `java-gradle-plugin`
-    kotlin("jvm") version "1.6.21"
-    kotlin("plugin.serialization") version "1.6.21"
+    kotlin("jvm") version "1.7.0"
+    kotlin("plugin.serialization") version "1.7.0"
 }
 
 group = "dev.schlaubi"
-version = "2.4.1"
+version = "2.5.0"
 
 repositories {
     mavenCentral()
@@ -29,26 +29,12 @@ gradlePlugin {
     }
 }
 
+
 pluginBundle {
     website = "https://github.com/DRSchlaubi/mikbot/tree/main/gradle-plugin"
     vcsUrl = "https://github.com/DRSchlaubi/mikbot"
 
     description = "Utility plugin to build Mikbot and PF4J plugins"
-
-    (plugins) {
-        "mikbot-plugin-gradle-plugin" {
-            displayName = "Mikbot Gradle plugin"
-            description = this@pluginBundle.description
-            tags = listOf("kotlin", "discord", "plugins")
-            version = project.version.toString()
-        }
-    }
-
-    mavenCoordinates {
-        groupId = "dev.schlaubi"
-        artifactId = "mikbot-gradle-plugin"
-        version = project.version.toString()
-    }
 }
 
 tasks {

@@ -59,7 +59,7 @@ class Connect4Game(
             val player = playerCycle.next()
             updateBoard(player, false)
 
-            val component = kord.waitFor<GuildButtonInteractionCreateEvent> {
+            val component = kord.waitFor<GuildButtonInteractionCreateEvent>(timeout = null as Long?) {
                 if (interaction.message == welcomeMessage) {
                     interaction.deferEphemeralMessageUpdate()
                     interaction.user == player.user
@@ -76,7 +76,7 @@ class Connect4Game(
 
     override suspend fun EmbedBuilder.endEmbed(messageModifyBuilder: MessageModifyBuilder) {
         messageModifyBuilder.apply {
-            content = if (winResult !is WinResult.Draw) {
+            content = if (winResult !== WinResult.Draw) {
                 buildGameBoard()
             } else {
                 translate("game.end.lost")

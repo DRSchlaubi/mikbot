@@ -160,7 +160,7 @@ class TriviaGame(
             welcomeMessage,
             translationsProvider,
             host,
-            module,
+            module as TriviaModule,
             quizSize,
             newQuestionContainer
         ).apply {

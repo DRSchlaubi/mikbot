@@ -131,7 +131,7 @@ Workflow:
       - uses: actions/setup-java@v2
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '18'
       - run: rm -rf .git/ # delete .git here to ignore the parent git repo and only care about plugin-repo
       - uses: actions/checkout@v2
         with:
@@ -182,7 +182,7 @@ Workflow:
       - uses: actions/setup-java@v2
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '17'
+          java-version: '18'
       - name: 'Login to GCP'
         id: 'auth'
         uses: 'google-github-actions/auth@v0'

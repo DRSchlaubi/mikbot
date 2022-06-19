@@ -73,7 +73,7 @@ suspend fun MusicModule.fixCommand() = ephemeralControlSlashCommand {
             val interaction = event.interaction
             val user = event.interaction.user
 
-            val event = channel.kord.waitFor<GuildComponentInteractionCreateEvent> {
+            val event = channel.kord.waitFor<GuildComponentInteractionCreateEvent>(timeout = null as Long?) {
                 this.interaction.message.interaction?.id == interaction.id && this.interaction.user == user
             }
 

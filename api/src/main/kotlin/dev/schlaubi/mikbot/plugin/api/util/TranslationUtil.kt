@@ -18,7 +18,7 @@ public suspend fun KoinComponent.translateGlobally(key: String, bundleName: Stri
             this.translate(key, bundleName, replacements)
         }
         is EventContext<*> -> this.translate(key, bundleName, replacements)
-        is ExtensibleBot -> pluginSystem.translate(key, bundleName, replacements)
+        is ExtensibleBot -> pluginSystem.translate(key, bundleName, replacements = replacements)
         else -> error("Please only call this on Instances of ExtensibleBot, CommandContext and EventContext<*>")
     }
 }

@@ -31,13 +31,19 @@ public interface PluginSystem {
     /**
      * Translates [key] from [bundleName] with [replacements].
      */
-    public fun translate(key: String, bundleName: String, replacements: Array<Any?>): String
+    public fun translate(
+        key: String,
+        bundleName: String,
+        locale: String? = null,
+        replacements: Array<Any?> = emptyArray(),
+    ): String
 
     /**
      * Emits [event] on [Kord.events].
      */
     public suspend fun emitEvent(event: Event)
 }
+
 /**
  * Retrieves all extensions of the [extension point][T].
  */

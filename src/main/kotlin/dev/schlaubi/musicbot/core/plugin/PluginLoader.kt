@@ -184,8 +184,9 @@ internal class DefaultPluginSystem(private val bot: Bot) : PluginSystem {
     internal val events = MutableSharedFlow<Event>()
 
     override fun <T : ExtensionPoint> getExtensions(type: KClass<T>): List<T> = PluginLoader.getExtensions(type.java)
-    override fun translate(key: String, bundleName: String, replacements: Array<Any?>): String =
-        bot.translationProvider.translate(key, bundleName, replacements)
+
+    override fun translate(key: String, bundleName: String, locale: String?, replacements: Array<Any?>): String =
+        bot.translationProvider.translate(key, bundleName, locale, replacements)
 
     override suspend fun emitEvent(event: Event) = events.emit(event)
 }
@@ -193,12 +194,12 @@ internal class DefaultPluginSystem(private val bot: Bot) : PluginSystem {
 private fun ClassLoader.findTranslations(): Sequence<String> {
     val resourcePath = getResource("translations")?.file?.ensurePath()
 
-    val path = resourcePath?.let { path -> Path(path) }
+    val path = resourcePath?.let(::Path)
     if (path != null && path.isDirectory()) {
         return path.listDirectoryEntries()
             .asSequence()
             .filter { it.isDirectory() }
-            .map { it.name }
+            .map(Path::name)
     }
 
     return emptySequence()

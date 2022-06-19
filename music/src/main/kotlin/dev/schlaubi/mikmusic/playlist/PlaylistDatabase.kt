@@ -1,10 +1,10 @@
 package dev.schlaubi.mikmusic.playlist
 
+import com.kotlindiscord.kord.extensions.koin.KordExKoinComponent
 import dev.schlaubi.mikbot.plugin.api.io.getCollection
 import dev.schlaubi.mikbot.plugin.api.util.database
-import org.koin.core.component.KoinComponent
 
-object PlaylistDatabase : KoinComponent {
+object PlaylistDatabase : KordExKoinComponent {
     val collection = database.getCollection<Playlist>("playlists")
 
     suspend fun updatePlaylistUsages(playlist: Playlist) {

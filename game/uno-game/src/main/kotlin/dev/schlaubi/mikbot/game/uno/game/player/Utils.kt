@@ -6,9 +6,7 @@ import com.kotlindiscord.kord.extensions.utils.waitFor
 import dev.kord.core.behavior.interaction.followup.FollowupMessageBehavior
 import dev.kord.core.behavior.interaction.followup.edit
 import dev.kord.core.behavior.interaction.response.createEphemeralFollowup
-import dev.kord.core.behavior.interaction.response.followUpEphemeral
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
-import dev.kord.rest.builder.message.create.FollowupMessageCreateBuilder
 import dev.schlaubi.mikbot.plugin.api.util.MessageBuilder
 import dev.schlaubi.mikbot.plugin.api.util.convertToISO
 import dev.schlaubi.mikbot.plugin.api.util.getLocale

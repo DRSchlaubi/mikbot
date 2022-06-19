@@ -199,7 +199,7 @@ The bot has a Connection to [MongoDB](https://mongodb.org) using [KMongo](https:
 credentials are present, you can use these like this
 
 ```kotlin
-object PluginDatabase : KoinComponent {
+object PluginDatabase : KordExKoinComponent {
     val stats = database.getCollection<PluginStats>("plugin_stats")
 }
 ```

@@ -3,8 +3,7 @@ package dev.nycode.sponsorblock.request
 import dev.nycode.sponsorblock.model.ActionType
 import dev.nycode.sponsorblock.model.Category
 import dev.nycode.sponsorblock.model.Service
-import io.ktor.client.request.HttpRequestBuilder
-import io.ktor.client.request.parameter
+import io.ktor.client.request.*
 
 public class GetSkipSegementsRequestBuilder(
     public var categories: List<Category> = listOf(),

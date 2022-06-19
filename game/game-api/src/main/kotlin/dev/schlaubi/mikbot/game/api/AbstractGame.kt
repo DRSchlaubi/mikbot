@@ -3,6 +3,7 @@ package dev.schlaubi.mikbot.game.api
 import com.kotlindiscord.kord.extensions.DiscordRelayedException
 import com.kotlindiscord.kord.extensions.components.components
 import com.kotlindiscord.kord.extensions.components.publicButton
+import com.kotlindiscord.kord.extensions.koin.KordExKoinComponent
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.kord.common.Locale
 import dev.kord.common.entity.ButtonStyle
@@ -34,7 +35,6 @@ import dev.schlaubi.mikbot.plugin.api.util.convertToISO
 import dev.schlaubi.stdx.coroutines.suspendLazy
 import kotlinx.coroutines.*
 import mu.KotlinLogging
-import org.koin.core.component.KoinComponent
 import org.litote.kmongo.coroutine.CoroutineCollection
 import kotlin.coroutines.CoroutineContext
 import kotlin.time.Duration.Companion.minutes
@@ -54,7 +54,7 @@ const val resendControlsButton = "resend_controls"
 abstract class AbstractGame<T : Player>(
     val host: UserBehavior,
     override val module: GameModule<T, AbstractGame<T>>
-) : KoinComponent, CoroutineScope, Game<T> {
+) : KordExKoinComponent, CoroutineScope, Game<T> {
     override val players: MutableList<T> = mutableListOf()
 
     override val coroutineContext: CoroutineContext =

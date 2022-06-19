@@ -5,7 +5,7 @@ import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
 import dev.schlaubi.mikbot.game.api.module.GameModule
 import dev.schlaubi.stdx.coroutines.SuspendLazy
 import kotlinx.coroutines.CoroutineScope
-import java.util.Locale
+import java.util.*
 
 /**
  * Representation of a game.

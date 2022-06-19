@@ -1,5 +1,6 @@
 package dev.schlaubi.mikbot.utils.roleselector
 
+import com.kotlindiscord.kord.extensions.koin.KordExKoinComponent
 import dev.kord.common.Color
 import dev.kord.common.entity.DiscordPartialEmoji
 import dev.kord.common.entity.Snowflake
@@ -7,9 +8,8 @@ import dev.schlaubi.mikbot.plugin.api.io.getCollection
 import dev.schlaubi.mikbot.plugin.api.util.database
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.koin.core.component.KoinComponent
 
-object RoleSelectorDatabase : KoinComponent {
+object RoleSelectorDatabase : KordExKoinComponent {
     val autoRoleCollection = database.getCollection<AutoRole>("autoroles")
     val roleSelectionCollection = database.getCollection<RoleSelectionMessage>("role_selections")
 }

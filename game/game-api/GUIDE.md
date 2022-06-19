@@ -208,7 +208,7 @@ class HangmanGame(
 After writing your game logic you can a database to store your stats
 
 ```kotlin
-object HangmanDatabase : KoinComponent {
+object HangmanDatabase : KordExKoinComponent {
     val stats = database.getCollection<UserGameStats>("hangman_stats")
 }
 ```

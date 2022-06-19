@@ -3,7 +3,7 @@ package dev.schlaubi.uno.cards
 import dev.schlaubi.uno.Game
 import dev.schlaubi.uno.Player
 import dev.schlaubi.uno.UnoColor
-import kotlinx.coroutines.*
+import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine

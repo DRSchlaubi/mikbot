@@ -9,9 +9,7 @@ import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
 import dev.kord.core.behavior.GuildBehavior
 import dev.kord.core.behavior.interaction.response.createEphemeralFollowup
-import dev.kord.core.behavior.interaction.response.followUpEphemeral
 import dev.kord.core.event.interaction.GuildButtonInteractionCreateEvent
-import dev.kord.rest.builder.message.create.FollowupMessageCreateBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

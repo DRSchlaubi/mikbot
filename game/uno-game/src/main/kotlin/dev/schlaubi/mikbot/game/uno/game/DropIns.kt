@@ -9,8 +9,6 @@ import dev.kord.common.entity.DiscordPartialEmoji
 import dev.kord.core.behavior.interaction.followup.FollowupMessageBehavior
 import dev.kord.core.behavior.interaction.followup.edit
 import dev.kord.core.behavior.interaction.response.createEphemeralFollowup
-import dev.kord.core.behavior.interaction.response.followUpEphemeral
-import dev.kord.rest.builder.message.create.FollowupMessageCreateBuilder
 import dev.kord.x.emoji.Emojis
 import dev.schlaubi.mikbot.game.uno.game.player.DiscordUnoPlayer
 import dev.schlaubi.mikbot.game.uno.game.player.translate

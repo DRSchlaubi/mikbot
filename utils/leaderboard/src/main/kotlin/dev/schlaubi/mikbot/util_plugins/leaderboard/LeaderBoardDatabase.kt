@@ -1,5 +1,6 @@
 package dev.schlaubi.mikbot.util_plugins.leaderboard
 
+import com.kotlindiscord.kord.extensions.koin.KordExKoinComponent
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.MemberBehavior
 import dev.schlaubi.mikbot.plugin.api.io.getCollection
@@ -8,11 +9,10 @@ import kotlinx.datetime.Instant
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.koin.core.component.KoinComponent
 import org.litote.kmongo.*
 import org.litote.kmongo.coroutine.CoroutineCollection
 
-object LeaderBoardDatabase : KoinComponent {
+object LeaderBoardDatabase : KordExKoinComponent {
     val leaderboardEntries = database.getCollection<LeaderBoardEntry>("leaderboards")
     val settings = database.getCollection<LeaderBoardSettings>("leaderboard_settings")
 }

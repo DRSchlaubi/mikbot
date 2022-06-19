@@ -3,8 +3,6 @@ package dev.schlaubi.mikbot.game.api.module.commands
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalUser
 import com.kotlindiscord.kord.extensions.types.respond
-import dev.kord.common.annotation.KordExperimental
-import dev.kord.common.annotation.KordUnsafe
 import dev.kord.rest.builder.message.create.embed
 import dev.schlaubi.mikbot.game.api.GameStats
 import dev.schlaubi.mikbot.game.api.UserGameStats

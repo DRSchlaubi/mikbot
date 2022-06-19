@@ -3,8 +3,8 @@ package dev.schlaubi.mikbot.plugin.api.util
 import com.kotlindiscord.kord.extensions.ExtensibleBot
 import com.kotlindiscord.kord.extensions.commands.CommandContext
 import com.kotlindiscord.kord.extensions.events.EventContext
+import com.kotlindiscord.kord.extensions.koin.KordExKoinComponent
 import dev.schlaubi.mikbot.plugin.api.pluginSystem
-import org.koin.core.component.KoinComponent
 
 /**
  * Translates this  [key] from [bundleName] with [replacements].
@@ -12,7 +12,7 @@ import org.koin.core.component.KoinComponent
  * Only call this on [EventContext], [ExtensibleBot] or [CommandContext]
  */
 // Oh, for god's sake, why is this the one time I want union types
-public suspend fun KoinComponent.translateGlobally(key: String, bundleName: String, replacements: Array<Any?>): String {
+public suspend fun KordExKoinComponent.translateGlobally(key: String, bundleName: String, replacements: Array<Any?>): String {
     return when (this) {
         is CommandContext -> {
             this.translate(key, bundleName, replacements)

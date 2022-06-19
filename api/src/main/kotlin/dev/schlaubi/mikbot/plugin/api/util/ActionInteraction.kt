@@ -1,6 +1,8 @@
 package dev.schlaubi.mikbot.plugin.api.util
 
-import dev.kord.core.behavior.interaction.*
+import dev.kord.core.behavior.interaction.ActionInteractionBehavior
+import dev.kord.core.behavior.interaction.respondEphemeral
+import dev.kord.core.behavior.interaction.respondPublic
 import dev.kord.core.behavior.interaction.response.EphemeralMessageInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.response.PublicMessageInteractionResponseBehavior
 import dev.kord.core.entity.interaction.Interaction

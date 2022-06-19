@@ -1,5 +1,4 @@
 import dev.schlaubi.mikbot.gradle.GenerateDefaultTranslationBundleTask
-import dev.schlaubi.mikbot.gradle.MakeRepositoryIndexTask
 import java.util.*
 
 plugins {

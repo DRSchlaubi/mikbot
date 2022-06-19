@@ -1,8 +1,7 @@
 package dev.nycode.sponsorblock.request
 
 import dev.nycode.sponsorblock.model.Category
-import io.ktor.client.request.HttpRequestBuilder
-import io.ktor.client.request.parameter
+import io.ktor.client.request.*
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 

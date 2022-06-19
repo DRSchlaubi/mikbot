@@ -3,7 +3,6 @@ import org.gradle.api.Task;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.FileSystemLocation;
 import org.gradle.api.file.FileTree;
-import org.gradle.api.internal.file.FileCollectionBackedFileTree;
 import org.gradle.api.provider.Provider;
 import org.gradle.api.specs.Spec;
 import org.gradle.api.tasks.TaskDependency;
@@ -14,8 +13,6 @@ import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.Spliterator;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public record DummyFileCollection(List<String> literalFiles) implements FileCollection {

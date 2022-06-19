@@ -7,10 +7,7 @@ import dev.nycode.sponsorblock.request.CreateSegmentsRequestBuilder
 import dev.nycode.sponsorblock.request.GetSkipSegementsRequestBuilder
 import dev.nycode.sponsorblock.request.NormalVoteRequestBuilder
 import io.ktor.client.request.*
-import io.ktor.http.ContentType
-import io.ktor.http.HttpMethod
-import io.ktor.http.contentType
-import kotlin.jvm.JvmInline
+import io.ktor.http.*
 import kotlin.time.Duration
 
 @JvmInline

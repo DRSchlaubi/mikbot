@@ -1,18 +1,18 @@
 package space.votebot.core
 
+import com.kotlindiscord.kord.extensions.koin.KordExKoinComponent
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.entity.Message
 import dev.schlaubi.mikbot.plugin.api.io.getCollection
 import dev.schlaubi.mikbot.plugin.api.util.database
 import org.bson.Document
-import org.koin.core.component.KoinComponent
 import org.litote.kmongo.coroutine.CoroutineCollection
 import space.votebot.common.models.Poll
 import space.votebot.models.GuildSettings
 import space.votebot.models.UserSettings
 import space.votebot.util.toPollMessage
 
-object VoteBotDatabase : KoinComponent {
+object VoteBotDatabase : KordExKoinComponent {
     val polls = database.getCollection<Poll>("polls")
     val userSettings = database
         .getCollection<UserSettings>("user_settings")

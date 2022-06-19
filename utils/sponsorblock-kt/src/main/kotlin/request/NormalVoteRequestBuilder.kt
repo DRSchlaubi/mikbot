@@ -1,8 +1,7 @@
 package dev.nycode.sponsorblock.request
 
 import dev.nycode.sponsorblock.model.VoteType
-import io.ktor.client.request.HttpRequestBuilder
-import io.ktor.client.request.parameter
+import io.ktor.client.request.*
 
 public class NormalVoteRequestBuilder(
     public val uuid: String,

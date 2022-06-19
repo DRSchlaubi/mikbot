@@ -5,6 +5,8 @@ import com.kotlindiscord.kord.extensions.builders.ExtensibleBotBuilder
 import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.extensions.event
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
+import com.kotlindiscord.kord.extensions.koin.KordExKoinComponent
+import com.kotlindiscord.kord.extensions.utils.loadModule
 import dev.kord.cache.api.DataEntryCache
 import dev.kord.common.Locale
 import dev.kord.common.entity.PresenceStatus
@@ -25,12 +27,10 @@ import dev.schlaubi.stdx.core.onEach
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import mu.KotlinLogging
-import org.koin.core.component.KoinComponent
-import org.koin.dsl.module
 
 private val LOG = KotlinLogging.logger { }
 
-class Bot : KoinComponent {
+class Bot : KordExKoinComponent {
     private lateinit var bot: ExtensibleBot
 
     private val database: Database = DatabaseImpl()
@@ -130,8 +130,8 @@ class Bot : KoinComponent {
         }
 
         hooks {
-            afterKoinSetup {
-                registerKoinModules()
+            beforeKoinSetup {
+                loadModule { single { database } }
             }
         }
 
@@ -140,14 +140,6 @@ class Bot : KoinComponent {
             allowedMentions()
             content = message
         }
-    }
-
-    private fun registerKoinModules() {
-        getKoin().loadModules(
-            listOf(
-                module { single { database } }
-            )
-        )
     }
 }
 

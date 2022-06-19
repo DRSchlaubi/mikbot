@@ -5,7 +5,6 @@ import dev.kord.common.toMessageFormat
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.schlaubi.mikbot.plugin.api.util.embed
 import io.ktor.http.*
-import io.ktor.server.util.*
 
 fun Game.toEmbed(): EmbedBuilder = embed {
     title = this@toEmbed.title

@@ -1,12 +1,12 @@
 package dev.schlaubi.mikmusic.core.settings
 
+import com.kotlindiscord.kord.extensions.koin.KordExKoinComponent
 import dev.kord.core.behavior.GuildBehavior
 import dev.kord.core.behavior.UserBehavior
 import dev.schlaubi.mikbot.plugin.api.io.getCollection
 import dev.schlaubi.mikbot.plugin.api.util.database
-import org.koin.core.component.KoinComponent
 
-object MusicSettingsDatabase : KoinComponent {
+object MusicSettingsDatabase : KordExKoinComponent {
     val user = database.getCollection<UserSettings>("user_settings")
     val guild = database.getCollection<GuildSettings>("guild_settings")
 

@@ -1,9 +1,9 @@
 package dev.schlaubi.mikbot.gradle
 
-import java.nio.file.Path
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionAware
 import org.gradle.api.provider.Property
+import java.nio.file.Path
 
 internal const val pluginExtensionName = "mikbotPlugin"
 
@@ -49,7 +49,7 @@ abstract class PluginExtension {
      */
     abstract val pluginMainFileLocation: Property<Path>
 
-    /** 
+    /**
      * The optional override for the projects resources bundle folder.
      */
     abstract val bundle: Property<String>

@@ -9,7 +9,6 @@ import com.kotlindiscord.kord.extensions.commands.converters.builders.ConverterB
 import com.kotlindiscord.kord.extensions.modules.annotations.converters.Converter
 import com.kotlindiscord.kord.extensions.modules.annotations.converters.ConverterType
 import com.kotlindiscord.kord.extensions.parser.StringParser
-import com.kotlindiscord.kord.extensions.utils.focusedOption
 import com.kotlindiscord.kord.extensions.utils.hasPermission
 import com.mongodb.client.model.Filters.and
 import dev.kord.common.entity.Permission

@@ -16,7 +16,7 @@ repositories {
 
 dependencies {
     implementation("org.jetbrains.kotlinx", "kotlinx-serialization-json", "1.3.3")
-    implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-jdk8", "1.6.2")
+    implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-jdk8", "1.6.3")
     compileOnly(kotlin("gradle-plugin"))
 }
 

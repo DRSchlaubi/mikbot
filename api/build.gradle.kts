@@ -15,7 +15,7 @@ dependencies {
     // Api base
     api(projects.api.annotations)
     // Bot
-    api("dev.kord", "kord-core", "hotfix-login-SNAPSHOT") {
+    api("dev.kord", "kord-core", "0.7.4") {
         version {
             strictly("hotfix-login-SNAPSHOT")
         }

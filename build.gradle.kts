@@ -31,6 +31,7 @@ subprojects {
 }
 
 dependencies {
+
     // Plugin system
     implementation("org.pf4j", "pf4j", "3.6.0")
     implementation("org.pf4j", "pf4j-update", "2.3.0")

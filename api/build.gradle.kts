@@ -15,11 +15,6 @@ dependencies {
     // Api base
     api(projects.api.annotations)
     // Bot
-    api("dev.kord", "kord-core", "hotfix-login-SNAPSHOT") {
-        version {
-            strictly("hotfix-login-SNAPSHOT")
-        }
-    }
     api(libs.kordex)
     api(libs.kordex.unsafe)
     api(libs.kordx.emoji) {

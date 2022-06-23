@@ -1,6 +1,7 @@
 package dev.schlaubi.mikmusic.player
 
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
+import com.kotlindiscord.kord.extensions.koin.KordExKoinComponent
 import dev.inmo.krontab.buildSchedule
 import dev.inmo.krontab.doInfinity
 import dev.kord.common.entity.Snowflake
@@ -22,7 +23,6 @@ import dev.schlaubi.mikmusic.util.youtubeId
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.util.*
 import kotlin.random.Random
@@ -31,7 +31,7 @@ import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
 class MusicPlayer(internal val link: Link, private val guild: GuildBehavior) :
-    Link by link, KoinComponent {
+    Link by link, KordExKoinComponent {
     private var queue = LinkedList<QueuedTrack>()
     val queuedTracks get() = queue.toList()
     var filters: SerializableFilters? = null

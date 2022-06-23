@@ -1,5 +1,6 @@
 package dev.schlaubi.mikbot.util_plugins.leaderboard.api
 
+import com.kotlindiscord.kord.extensions.koin.KordExKoinComponent
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
 import dev.kord.core.entity.Member
@@ -19,7 +20,6 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.litote.kmongo.eq
 import org.pf4j.Extension
@@ -39,7 +39,7 @@ class LeaderBoard {
 }
 
 @Extension
-class KtorServer : KtorExtensionPoint, KoinComponent {
+class KtorServer : KtorExtensionPoint, KordExKoinComponent {
     val kord by inject<Kord>()
 
     override fun Application.apply() {

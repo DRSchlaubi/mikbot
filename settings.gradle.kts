@@ -55,6 +55,7 @@ include(
 )
 
 includeBuild("gradle-plugin")
+includeBuild("../Lavalink.kt")
 
 if (System.getenv("GRADLE_BUILDCACHE_URL") != null) {
     buildCache {

@@ -1,5 +1,6 @@
 package dev.schlaubi.mikbot.util_plugins.verification
 
+import com.kotlindiscord.kord.extensions.koin.KordExKoinComponent
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
 import dev.schlaubi.mikbot.util_plugins.ktor.api.KtorExtensionPoint
@@ -20,7 +21,6 @@ import io.ktor.util.*
 import kotlinx.serialization.Serializable
 import mu.KotlinLogging
 import org.bson.types.ObjectId
-import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.pf4j.Extension
 import kotlin.collections.set
@@ -52,7 +52,7 @@ data class Thanks(
 )
 
 @Extension
-class VerificationServer : KtorExtensionPoint, KoinComponent {
+class VerificationServer : KtorExtensionPoint, KordExKoinComponent {
     private val verifyClientId = Config.DISCORD_CLIENT_ID ?: notConfigured()
     private val verifyClientSecret = Config.DISCORD_CLIENT_SECRET ?: notConfigured()
     private val kord: Kord by inject()

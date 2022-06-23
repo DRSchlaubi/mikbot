@@ -1,5 +1,6 @@
 package dev.schlaubi.epic_games_notifier
 
+import com.kotlindiscord.kord.extensions.koin.KordExKoinComponent
 import dev.kord.core.Kord
 import dev.schlaubi.mikbot.util_plugins.ktor.api.KtorExtensionPoint
 import io.ktor.resources.*
@@ -8,7 +9,6 @@ import io.ktor.server.resources.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.Serializable
-import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.pf4j.Extension
 
@@ -21,7 +21,7 @@ class WebhookRoute {
 }
 
 @Extension
-class EpicGamesNotifierWebhookExtension : KtorExtensionPoint, KoinComponent {
+class EpicGamesNotifierWebhookExtension : KtorExtensionPoint, KordExKoinComponent {
     private val kord by inject<Kord>()
 
     override fun Application.apply() {
@@ -32,8 +32,8 @@ class EpicGamesNotifierWebhookExtension : KtorExtensionPoint, KoinComponent {
                 WebhookDatabase.webhooks.insertOne(obj)
 
                 val freeGames = HttpRequests.fetchFreeGames()
-                val games = freeGames.map { it.toEmbed() }
-                val gameIds = freeGames.map { it.id }
+                val games = freeGames.map(Game::toEmbed)
+                val gameIds = freeGames.map(Game::id)
 
                 obj.sendGames(kord, games, gameIds)
 

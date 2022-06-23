@@ -1,5 +1,6 @@
 package dev.schlaubi.musicbot.core.plugin
 
+import com.kotlindiscord.kord.extensions.koin.KordExKoinComponent
 import dev.kord.core.event.Event
 import dev.schlaubi.mikbot.plugin.api.Plugin
 import dev.schlaubi.mikbot.plugin.api.PluginSystem
@@ -10,7 +11,6 @@ import dev.schlaubi.musicbot.core.Bot
 import io.ktor.util.*
 import kotlinx.coroutines.flow.MutableSharedFlow
 import mu.KotlinLogging
-import org.koin.core.component.KoinComponent
 import org.pf4j.*
 import org.pf4j.DependencyResolver.*
 import org.pf4j.update.DefaultUpdateRepository
@@ -22,7 +22,7 @@ import kotlin.reflect.KClass
 
 private val LOG = KotlinLogging.logger { }
 
-object PluginLoader : DefaultPluginManager(), KoinComponent {
+object PluginLoader : DefaultPluginManager(), KordExKoinComponent {
     internal val repos: List<UpdateRepository> = Config.PLUGIN_REPOSITORIES.map {
         DefaultUpdateRepository(
             generateNonce(), URL(it)

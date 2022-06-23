@@ -1,5 +1,6 @@
 package dev.schlaubi.mikbot.util_plugins.profiles.social
 
+import com.kotlindiscord.kord.extensions.koin.KordExKoinComponent
 import dev.schlaubi.mikbot.util_plugins.ktor.api.KtorExtensionPoint
 import dev.schlaubi.mikbot.util_plugins.ktor.api.buildBotUrl
 import dev.schlaubi.mikbot.util_plugins.profiles.InvalidServiceException
@@ -20,7 +21,6 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
-import org.koin.core.component.KoinComponent
 import org.litote.kmongo.and
 import org.litote.kmongo.eq
 import org.litote.kmongo.newId
@@ -33,7 +33,7 @@ data class DiscordSession(val id: Long)
 
 @Suppress("EXPERIMENTAL_API_USAGE_FUTURE_ERROR")
 @Extension
-class SocialAccountVerificationServer : KtorExtensionPoint, KoinComponent {
+class SocialAccountVerificationServer : KtorExtensionPoint, KordExKoinComponent {
 
     private val httpClient = HttpClient {
         install(ClientContentNegotiation) {

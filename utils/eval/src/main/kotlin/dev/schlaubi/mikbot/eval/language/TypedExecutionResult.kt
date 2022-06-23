@@ -1,19 +1,17 @@
 package dev.schlaubi.mikbot.eval.language
 
+import com.kotlindiscord.kord.extensions.koin.KordExKoinComponent
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.schlaubi.mikbot.eval.secrets.SecretExtensionPoint
 import dev.schlaubi.mikbot.haste.HasteClient
 import dev.schlaubi.mikbot.plugin.api.getExtensions
 import dev.schlaubi.mikbot.plugin.api.pluginSystem
-import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-private val extensions by lazy {
-    pluginSystem.getExtensions<SecretExtensionPoint>()
-}
+private val extensions by lazy<List<SecretExtensionPoint>>(pluginSystem::getExtensions)
 
 sealed class TypedExecutionResult : ExecutionResult() {
-    class Success(result: Any, val type: String) : TypedExecutionResult(), KoinComponent {
+    class Success(result: Any, val type: String) : TypedExecutionResult(), KordExKoinComponent {
         override val wasSuccessful: Boolean = true
 
         private val hasteClient by inject<HasteClient>()

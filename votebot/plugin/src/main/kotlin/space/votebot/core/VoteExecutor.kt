@@ -27,7 +27,7 @@ suspend fun Poll.close(kord: Kord, showChart: Boolean? = null, guild: GuildBehav
 
         if (settings.publicResults) {
             kord.getUser(Snowflake(authorId))?.dm {
-                content = "This message contains the requested vote statistic for your poll: $id"
+                content = "This message contains the requested vote statistic for your poll: $title ($id)"
 
                 addFile("votes.csv", generateCSVFile(kord))
             }
@@ -57,7 +57,7 @@ private suspend fun EventContext<GuildButtonInteractionCreateEvent>.onVote(guild
     val userId = interaction.user.id.value
     val userVotes = poll.votes.asSequence()
         .filter { it.userId == userId }
-        .sumOf { it.amount }
+        .sumOf(Poll.Vote::amount)
 
     val newPoll = if (userVotes > 0) {
         val settings = poll.settings

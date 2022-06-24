@@ -42,5 +42,5 @@ ktor-server-sessions = { group = "io.ktor", name = "ktor-server-sessions", versi
 ktor-server-core = { group = "io.ktor", name = "ktor-server-core-jvm", version.ref = "ktor" }
 ktor-server-html-builder = { group = "io.ktor", name = "ktor-server-html-builder", version.ref = "ktor" }
 github-repositories = { group = "dev.nycode.github", name = "repositories", version = "1.0.0-SNAPSHOT" }
-kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version = "0.3.3" }
+kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version = "0.4.0" }
 java-string-similarity = { group = "info.debatty", name = "java-string-similarity", version = "2.0.0" }

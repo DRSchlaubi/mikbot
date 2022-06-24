@@ -160,10 +160,9 @@ suspend fun checkOtherSchedulerOptions(
         if (!confirmed) {
             edit { content = translate("music.general.aborted", translatorGroup) }
             return
-        } else {
-            properties.forEach {
-                it.set(musicPlayer, false)
-            }
+        }
+        properties.forEach {
+            it.set(musicPlayer, false)
         }
     }
 

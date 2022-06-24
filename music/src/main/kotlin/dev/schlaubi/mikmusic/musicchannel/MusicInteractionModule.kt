@@ -15,7 +15,6 @@ import dev.schlaubi.lavakord.audio.player.Track
 import dev.schlaubi.lavakord.rest.TrackResponse
 import dev.schlaubi.lavakord.rest.loadItem
 import dev.schlaubi.lavakord.rest.mapToTrack
-import dev.schlaubi.mikbot.plugin.api.io.Database
 import dev.schlaubi.mikbot.plugin.api.util.*
 import dev.schlaubi.mikmusic.checks.joinSameChannelCheck
 import dev.schlaubi.mikmusic.checks.musicControlCheck
@@ -25,12 +24,10 @@ import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase
 import dev.schlaubi.mikmusic.player.MusicPlayer
 import dev.schlaubi.mikmusic.player.queue.findSpotifySongs
 import dev.schlaubi.mikmusic.util.mapToQueuedTrack
-import org.koin.core.component.inject
 import kotlin.reflect.KMutableProperty1
 
 class MusicInteractionModule : Extension() {
     override val name = "music interaction handler"
-    val database: Database by inject()
     val musicModule: MusicModule by extension()
 
     override suspend fun setup() {
@@ -62,7 +59,7 @@ class MusicInteractionModule : Extension() {
                 ) {
                     ack.updateSchedulerOptions(
                         player,
-                        { key, group -> translate(key, group) },
+                        ::translate,
                         myProperty, *properties
                     )
                 }

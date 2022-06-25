@@ -22,8 +22,8 @@ mikbotPlugin {
 }
 
 template {
-    files.add("VoteBotInfo.java")
-    tokens.put("VERSION", project.version)
+    packageName.set("space.votebot")
+    className.set("VoteBotInfo")
 }
 
 sourceSets {

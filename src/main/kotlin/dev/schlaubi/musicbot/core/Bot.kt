@@ -13,6 +13,7 @@ import dev.kord.common.entity.PresenceStatus
 import dev.kord.core.event.gateway.DisconnectEvent
 import dev.kord.core.event.gateway.ReadyEvent
 import dev.kord.rest.builder.message.create.allowedMentions
+import dev.schlaubi.mikbot.plugin.api.MikBotInfo
 import dev.schlaubi.mikbot.plugin.api.config.Config
 import dev.schlaubi.mikbot.plugin.api.io.Database
 import dev.schlaubi.mikbot.plugin.api.pluginSystem
@@ -171,6 +172,16 @@ private class BotModule : Extension() {
                 LOG.warn {
                     "Shard got disconnected ${event.shard} ${event::class.simpleName}," +
                             " Awaiting login from: ${kord.resources.shards.indices - loggedInShards.toSet()}"
+                }
+            }
+        }
+
+        event<AllShardsReadyEvent> {
+            action {
+                if (PluginLoader.plugins.none { it.pluginId == "game-animator" }) {
+                    kord.editPresence {
+                        playing("Mikbot v${MikBotInfo.VERSION}@${MikBotInfo.BRANCH} (${MikBotInfo.COMMIT})")
+                    }
                 }
             }
         }

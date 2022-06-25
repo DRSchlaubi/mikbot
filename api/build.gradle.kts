@@ -32,6 +32,6 @@ dependencies {
 }
 
 template {
-    files.add("MikBotInfo.java")
-    tokens.put("VERSION", project.version)
+    className.set("MikBotInfo")
+    packageName.set("dev.schlaubi.mikbot.plugin.api")
 }

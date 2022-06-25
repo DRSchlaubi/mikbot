@@ -17,6 +17,7 @@ dependencies {
     implementation("dev.schlaubi", "gradle-plugin", "1.0.0")
     implementation("com.google.devtools.ksp", "com.google.devtools.ksp.gradle.plugin", "1.7.0-1.0.6")
     implementation("org.jlleitschuh.gradle", "ktlint-gradle", "10.3.0")
+    implementation("com.github.gmazzo", "gradle-buildconfig-plugin", "3.1.0")
     implementation(gradleApi())
     implementation(localGroovy())
 }

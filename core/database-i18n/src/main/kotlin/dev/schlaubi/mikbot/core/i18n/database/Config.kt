@@ -5,5 +5,4 @@ import dev.schlaubi.mikbot.plugin.api.EnvironmentConfig
 import java.util.*
 
 object Config : EnvironmentConfig("") {
-    val DEFAULT_LOCALE by getEnv(SupportedLocales.ENGLISH) { Locale.forLanguageTag(it) }
 }

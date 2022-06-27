@@ -1,10 +1,12 @@
 package dev.schlaubi.mikbot.plugin.api.config
 
 import ch.qos.logback.classic.Level
+import com.kotlindiscord.kord.extensions.i18n.SupportedLocales
 import dev.kord.common.entity.Snowflake
 import dev.schlaubi.envconf.EnvironmentVariable
 import dev.schlaubi.envconf.getEnv
 import java.nio.file.Path
+import java.util.*
 import kotlin.io.path.Path
 import dev.schlaubi.envconf.Config as EnvironmentConfig
 
@@ -16,12 +18,12 @@ public object Config : EnvironmentConfig("") {
     /**
      * The guild used for owner module commands.
      */
-    public val OWNER_GUILD: Snowflake? by getEnv { Snowflake(it) }.optional()
+    public val OWNER_GUILD: Snowflake? by getEnv(transform = ::Snowflake).optional()
 
     /**
      * A list of bot owners.
      */
-    public val BOT_OWNERS: List<Snowflake> by getEnv(emptyList()) { it.split(",").map { id -> Snowflake(id) } }
+    public val BOT_OWNERS: List<Snowflake> by getEnv(emptyList()) { it.split(",").map(::Snowflake) }
 
     /**
      * The Environment the bot runs in
@@ -62,12 +64,12 @@ public object Config : EnvironmentConfig("") {
     /**
      * The path to the plugins folder.
      */
-    public val PLUGIN_PATH: Path by getEnv(Path("plugins")) { Path(it) }
+    public val PLUGIN_PATH: Path by getEnv(Path("plugins"), ::Path)
 
     /**
      * If you set this variable, all commands will be only registered for this guild, only use this in testing.
      */
-    public val TEST_GUILD: Snowflake? by getEnv { Snowflake(it) }.optional()
+    public val TEST_GUILD: Snowflake? by getEnv(transform = ::Snowflake).optional()
 
     /**
      * A list of plugin repositories.
@@ -84,7 +86,7 @@ public object Config : EnvironmentConfig("") {
      * **This doesn't download depnendency plugins**
      */
     public val DOWNLOAD_PLUGINS: List<PluginSpec> by getEnv(emptyList()) {
-        it.split(",").map { spec -> PluginSpec.parse(spec) }
+        it.split(",").map(PluginSpec.Companion::parse)
     }
 
     /**
@@ -93,6 +95,11 @@ public object Config : EnvironmentConfig("") {
     public val UPDATE_PLUGINS: Boolean by getEnv(true, String::toBooleanStrict)
 
     public val VALIDATE_CHECKSUMS: Boolean by getEnv(true, String::toBooleanStrict)
+
+    /**
+     * Default locale for translations.
+     */
+    public val DEFAULT_LOCALE: Locale by getEnv(SupportedLocales.ENGLISH, Locale::forLanguageTag)
 }
 
 @Suppress("unused")

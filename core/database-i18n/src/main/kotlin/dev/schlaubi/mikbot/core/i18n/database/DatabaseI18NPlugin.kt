@@ -9,9 +9,6 @@ import dev.schlaubi.mikbot.plugin.api.PluginWrapper
 class DatabaseI18NPlugin(wrapper: PluginWrapper) : Plugin(wrapper) {
     override suspend fun ExtensibleBotBuilder.apply() {
         i18n {
-            defaultLocale = Config.DEFAULT_LOCALE
-
-            interactionUserLocaleResolver()
             localeResolver { _, _, user, _ ->
                 user?.let {
                     LanguageDatabase.collection.findOneById(it.id)?.locale

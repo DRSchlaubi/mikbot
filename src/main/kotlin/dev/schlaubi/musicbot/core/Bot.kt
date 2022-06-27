@@ -114,12 +114,11 @@ class Bot : KordExKoinComponent {
             enabled = true
 
             register = true
-            Config.TEST_GUILD?.let {
-                defaultGuild(it)
-            }
+            Config.TEST_GUILD?.let(::defaultGuild)
         }
 
         i18n {
+            interactionUserLocaleResolver()
             translationsProvider {
                 translationProvider = PluginTranslationProvider {
                     defaultLocale

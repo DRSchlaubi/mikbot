@@ -26,7 +26,7 @@ class DependencyCheckingExtensionFinder(pluginManager: PluginManager) : LegacyEx
             }
             if (pluginId != null) {
                 val pluginWrapper = pluginManager.getPlugin(pluginId)
-                if (PluginState.STARTED != pluginWrapper.pluginState) {
+                if (PluginState.STARTED != pluginWrapper.pluginState && PluginState.RESOLVED != pluginWrapper.pluginState) {
                     return@buildList
                 }
                 LOG.trace { "Checking extensions from plugin '$pluginId'" }
@@ -41,7 +41,7 @@ class DependencyCheckingExtensionFinder(pluginManager: PluginManager) : LegacyEx
                         classLoader.loadClass(className).kotlin
                     } catch (e: NoClassDefFoundError) {
                         LOG.warn { "Could not load extension $className, because a missing plugin dependency" }
-                        LOG.debug { e.stackTraceToString() }
+                        LOG.debug(e::stackTraceToString)
                         return@forEach
                     }
                     LOG.debug { "Checking extension type '$className'" }

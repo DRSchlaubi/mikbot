@@ -9,5 +9,5 @@ interface GameAnimatorExtensionPoint : ExtensionPoint {
     /**
      * Replace variables in a game before sending it to Discord.
      */
-    fun String.replaceVariables(): String
+    suspend fun String.replaceVariables(): String
 }

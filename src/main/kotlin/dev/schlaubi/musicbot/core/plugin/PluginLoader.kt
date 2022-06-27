@@ -185,8 +185,13 @@ internal class DefaultPluginSystem(private val bot: Bot) : PluginSystem {
 
     override fun <T : ExtensionPoint> getExtensions(type: KClass<T>): List<T> = PluginLoader.getExtensions(type.java)
 
-    override fun translate(key: String, bundleName: String, locale: String?, replacements: Array<Any?>): String =
-        bot.translationProvider.translate(key, bundleName, locale, replacements)
+    override fun translate(key: String, bundleName: String, locale: String?, replacements: Array<Any?>): String {
+        return if(locale == null) {
+            bot.translationProvider.translate(key, bundleName, replacements)
+        } else {
+            bot.translationProvider.translate(key, locale, bundleName, replacements)
+        }
+    }
 
     override suspend fun emitEvent(event: Event) = events.emit(event)
 }

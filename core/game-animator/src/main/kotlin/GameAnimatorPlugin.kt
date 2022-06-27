@@ -6,9 +6,8 @@ import com.kotlindiscord.kord.extensions.extensions.event
 import dev.kord.common.entity.ActivityType
 import dev.kord.common.entity.PresenceStatus
 import dev.kord.core.Kord
-import dev.schlaubi.mikbot.plugin.api.Plugin
-import dev.schlaubi.mikbot.plugin.api.PluginMain
-import dev.schlaubi.mikbot.plugin.api.PluginWrapper
+import dev.schlaubi.mikbot.core.game_animator.api.GameAnimatorExtensionPoint
+import dev.schlaubi.mikbot.plugin.api.*
 import dev.schlaubi.mikbot.plugin.api.util.AllShardsReadyEvent
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ObsoleteCoroutinesApi
@@ -27,7 +26,7 @@ class GameAnimatorPlugin(wrapper: PluginWrapper) : Plugin(wrapper) {
         add(::GameAnimator)
     }
 
-    private inner class GameAnimator : Extension() {
+    private class GameAnimator : Extension() {
         override val name: String = "GameAnimator"
 
         @OptIn(ObsoleteCoroutinesApi::class)
@@ -64,16 +63,22 @@ class GameAnimatorPlugin(wrapper: PluginWrapper) : Plugin(wrapper) {
 }
 
 data class Game(val type: ActivityType, val status: PresenceStatus, val text: String) {
+    val extensions = pluginSystem.getExtensions<GameAnimatorExtensionPoint>()
+
     suspend fun apply(kord: Kord) {
         kord.editPresence {
             status = this@Game.status
 
+            val formattedText = extensions.fold(text) { text, extension ->
+                with(extension) { text.replaceVariables() }
+            }
+
             when (type) {
-                ActivityType.Game -> playing(text)
-                ActivityType.Streaming -> streaming(text, "https://twitch.tv/schlauhibi")
-                ActivityType.Listening -> listening(text)
-                ActivityType.Watching -> watching(text)
-                ActivityType.Competing -> competing(text)
+                ActivityType.Game -> playing(formattedText)
+                ActivityType.Streaming -> streaming(formattedText, "https://twitch.tv/schlauhibi")
+                ActivityType.Listening -> listening(formattedText)
+                ActivityType.Watching -> watching(formattedText)
+                ActivityType.Competing -> competing(formattedText)
                 else -> error("Could not change game to $this")
             }
         }
@@ -88,26 +93,31 @@ data class Game(val type: ActivityType, val status: PresenceStatus, val text: St
                     PresenceStatus.Online,
                     game.replaceFirst("p: ".toRegex(), "")
                 )
+
                 'l' -> Game(
                     ActivityType.Listening,
                     PresenceStatus.Online,
                     game.replaceFirst("l: ".toRegex(), "")
                 )
+
                 's' -> Game(
                     ActivityType.Streaming,
                     PresenceStatus.Online,
                     game.replaceFirst("s: ".toRegex(), "")
                 )
+
                 'w' -> Game(
                     ActivityType.Watching,
                     PresenceStatus.Online,
                     game.replaceFirst("w: ".toRegex(), "")
                 )
+
                 'c' -> Game(
                     ActivityType.Competing,
                     PresenceStatus.Online,
                     game.replaceFirst("c: ".toRegex(), "")
                 )
+
                 else -> error("Invalid game: $this")
             }
         }

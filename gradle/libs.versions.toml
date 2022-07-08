@@ -1,10 +1,10 @@
 [versions]
-kordex = "1.5.4.2-MIKBOT-SNAPSHOT"
+kordex = "1.5.5.1-MIKBOT-SNAPSHOT"
 kmongo = "4.6.1"
-pf4j = "3.6.0"
+pf4j = "3.7.0"
 coroutines = "1.6.3"
 serialization = "1.3.3"
-ktor = "2.0.2"
+ktor = "2.0.3"
 
 [libraries]
 kordex = { group = "com.kotlindiscord.kord.extensions", name = "kord-extensions", version.ref = "kordex" }
@@ -28,7 +28,7 @@ google-apis-youtube = { group = "com.google.apis", name = "google-api-services-y
 lavakord-kord = { group = "dev.schlaubi.lavakord", name = "kord", version = "3.6.3" }
 spotify = { group = "se.michaelthelin.spotify", name = "spotify-web-api-java", version = "7.1.0" }
 krontab = { group = "dev.inmo", name = "krontab", version = "0.7.3" }
-ksp-api = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version = "1.7.0-1.0.6" }
+ksp-api = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version = "1.7.10-1.0.6" }
 rhino = { group = "org.mozilla", name = "rhino", version = "1.7.14" }
 ktor-client-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }

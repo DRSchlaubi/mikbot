@@ -174,10 +174,6 @@ private class MikBotPluginDescriptionFinder : PluginDescriptorFinder {
 
 private class MikBotPluginManifestDescriptionFinder : ManifestPluginDescriptorFinder() {
     override fun isApplicable(pluginPath: Path): Boolean = pluginPath.exists() && pluginPath.isDirectory()
-
-    override fun getManifestPath(pluginPath: Path): Path {
-        return pluginPath / "classes" / "META-INF" / "MANIFEST.MF"
-    }
 }
 
 internal class DefaultPluginSystem(private val bot: Bot) : PluginSystem {

@@ -1,5 +1,5 @@
 [versions]
-kordex = "1.5.5.1-MIKBOT-SNAPSHOT"
+kordex = "1.5.5.2-MIKBOT-SNAPSHOT"
 kmongo = "4.6.1"
 pf4j = "3.7.0"
 coroutines = "1.6.3"

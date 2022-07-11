@@ -36,6 +36,7 @@ pluginBundle {
     vcsUrl = "https://github.com/DRSchlaubi/mikbot"
 
     description = "Utility plugin to build Mikbot and PF4J plugins"
+    tags = listOf("mikbot", "pf4j", "plugins", "kotlin")
 }
 
 tasks {

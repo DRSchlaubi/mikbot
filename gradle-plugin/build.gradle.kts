@@ -25,6 +25,7 @@ gradlePlugin {
         create("mikbot-plugin-gradle-plugin") {
             id = "dev.schlaubi.mikbot.gradle-plugin"
             implementationClass = "dev.schlaubi.mikbot.gradle.MikBotPluginGradlePlugin"
+            displayName = "Mikbot Gradle Plugin"
         }
     }
 }

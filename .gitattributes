@@ -1,0 +1,7 @@
+* text eol=lf
+#
+# The above will handle all files NOT found below
+# https://help.github.com/articles/dealing-with-line-endings/
+# https://github.com/Danimoth/gitattributes
+# These are explicitly windows files and should use crlf
+*.bat           text eol=crlf

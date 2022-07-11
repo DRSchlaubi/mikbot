@@ -26,13 +26,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       # Cache Gradle cache
-      - name: Setup Gradle Dependencies Cache
-        uses: actions/cache@v3.0.4
+      - uses: actions/cache@v3
         with:
           path: |
             ~/.gradle/caches
-            .gradle
-          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
@@ -40,7 +41,7 @@ jobs:
       - uses: gradle/gradle-build-action@v2
         id: gradle
         with:
-          arguments: build --scan
+          arguments: build --scan --no-daemon --build-cache
       - uses: Ilshidur/action-discord@0.3.2
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
@@ -59,7 +60,7 @@ jobs:
           java-version: '18'
       - uses: gradle/gradle-build-action@v2
         with:
-          arguments: :installDist
+          arguments: :installDist --no-daemon --build-cache
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
@@ -108,7 +109,7 @@ jobs:
         run: cp ci-repo-old/plugins.json ci-repo
       - uses: gradle/gradle-build-action@v2
         with:
-          arguments: buildRepository
+          arguments: buildRepository --no-daemon --build-cache
       - name: 'Upload repo changes'
         working-directory: ci-repo
         run: gsutil -m cp -R . $GOOGLE_CLOUD_BUCKET
@@ -130,7 +131,7 @@ jobs:
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
           SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
         with:
-          arguments: publish
+          arguments: publish --no-daemon --build-cache
   update_binary:
     name: Push binary to binary repo
     runs-on: ubuntu-20.04
@@ -159,7 +160,7 @@ jobs:
         run: mkdir ci-repo
       - uses: gradle/gradle-build-action@v2
         with:
-          arguments: installCi
+          arguments: installCi --no-daemon --build-cache
       - name: 'Upload repo changes'
         working-directory: ci-repo
         run: gsutil -m cp -R . $GOOGLE_CLOUD_BUCKET

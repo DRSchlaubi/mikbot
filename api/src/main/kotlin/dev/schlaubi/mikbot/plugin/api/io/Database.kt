@@ -1,5 +1,7 @@
 package dev.schlaubi.mikbot.plugin.api.io
 
+import dev.schlaubi.mikbot.plugin.api.util.IKnowWhatIAmDoing
+import org.litote.kmongo.coroutine.CoroutineClient
 import org.litote.kmongo.coroutine.CoroutineCollection
 import org.litote.kmongo.coroutine.CoroutineDatabase
 
@@ -9,6 +11,13 @@ import org.litote.kmongo.coroutine.CoroutineDatabase
  * @see getCollection
  */
 public interface Database {
+
+    /**
+     * The [CoroutineClient] used for the bot.
+     */
+    @IKnowWhatIAmDoing
+    public val client: CoroutineClient
+
     /**
      * The [CoroutineDatabase] used for all bot collections.
      */

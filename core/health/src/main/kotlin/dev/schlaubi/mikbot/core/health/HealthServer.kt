@@ -16,24 +16,24 @@ import org.pf4j.Extension
 @Extension
 class HealthServer : KtorExtensionPoint, KordExKoinComponent {
     private val checks by inject<List<HealthCheck>>()
-    private val logger = KotlinLogging.logger {}
 
     override fun Application.apply() {
         routing {
             get<HealthRoutes.Health> {
                 var success = true
-                for (check in checks) {
-                    logger.debug { "Running health check ${check::class.qualifiedName}" }
-                    if (!check.checkHealth()) {
-                        success = false
-                    }
-                }
-                if (!success) {
-                    call.respond(HttpStatusCode.InternalServerError)
-                } else {
+                if (checks.all { it.isSuccessful() }) {
                     call.respond(HttpStatusCode.OK)
+                } else {
+                    call.respond(HttpStatusCode.InternalServerError)
                 }
             }
         }
     }
+}
+
+private val logger = KotlinLogging.logger {}
+
+private suspend inline fun HealthCheck.isSuccessful(): Boolean {
+    logger.debug { "Running health check ${this::class.qualifiedName}" }
+    return checkHealth()
 }

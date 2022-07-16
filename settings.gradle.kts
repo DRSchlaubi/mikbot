@@ -21,6 +21,7 @@ include(
     "core:database-i18n",
     "core:game-animator",
     "core:gdpr",
+    "core:health",
     "core:redeploy-hook",
     "music",
     "game:google-emotes",

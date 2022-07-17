@@ -21,7 +21,7 @@ import java.util.*
 import kotlin.time.Duration.Companion.seconds
 
 internal suspend fun <Q : Question> MultipleChoiceGame<*, Q, *>.turn(question: Q) {
-    val allAnswers = question.allAnswers.filter { it.isNotBlank() }
+    val allAnswers = question.allAnswers.filter(String::isNotBlank)
 
     val turnStart = Clock.System.now()
     val message = thread.createMessage {
@@ -83,13 +83,6 @@ internal suspend fun <Q : Question> MultipleChoiceGame<*, Q, *>.turn(question: Q
 
                 if (answers.size == players.size) {
                     endTurn()
-                } else {
-                    message.edit {
-                        embed {
-                            addPlayers(answers)
-                            addQuestion(question, true)
-                        }
-                    }
                 }
             }
         }

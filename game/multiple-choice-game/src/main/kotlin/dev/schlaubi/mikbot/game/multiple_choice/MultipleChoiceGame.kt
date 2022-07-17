@@ -80,7 +80,6 @@ abstract class MultipleChoiceGame<Player : MultipleChoicePlayer, Q : Question, Q
      */
     open suspend fun ComponentInteractionCreateEvent.handle(question: Q): Boolean = false
 
-    @OptIn(KordPreview::class)
     override suspend fun end() {
         doUpdateWelcomeMessage()
         launch {

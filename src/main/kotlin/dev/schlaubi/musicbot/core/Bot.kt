@@ -15,6 +15,7 @@ import dev.kord.core.event.gateway.ReadyEvent
 import dev.kord.rest.builder.message.create.allowedMentions
 import dev.schlaubi.mikbot.plugin.api.MikBotInfo
 import dev.schlaubi.mikbot.plugin.api.config.Config
+import dev.schlaubi.mikbot.plugin.api.getExtensions
 import dev.schlaubi.mikbot.plugin.api.io.Database
 import dev.schlaubi.mikbot.plugin.api.pluginSystem
 import dev.schlaubi.mikbot.plugin.api.util.AllShardsReadyEvent
@@ -22,6 +23,7 @@ import dev.schlaubi.musicbot.core.io.DatabaseImpl
 import dev.schlaubi.musicbot.core.plugin.DefaultPluginSystem
 import dev.schlaubi.musicbot.core.plugin.PluginLoader
 import dev.schlaubi.musicbot.core.plugin.PluginTranslationProvider
+import dev.schlaubi.musicbot.core.sentry.SentryExtensionPoint
 import dev.schlaubi.musicbot.module.owner.OwnerModuleImpl
 import dev.schlaubi.musicbot.module.settings.SettingsModuleImpl
 import dev.schlaubi.stdx.core.onEach
@@ -87,16 +89,31 @@ class Bot : KordExKoinComponent {
                 enable = Config.ENVIRONMENT.useSentry
                 pingInReply = false
 
+                val sentryExtensions = pluginSystem.getExtensions<SentryExtensionPoint>()
                 setupCallback = {
-                    setup(
-                        dsn = Config.SENTRY_TOKEN,
-                        beforeSend = { event, _ ->
-                            event?.apply {
-                                // Remove user from event
-                                user = null
+                    init {
+                        dsn = Config.SENTRY_TOKEN
+                        for (extension in sentryExtensions) {
+                            with(extension) {
+                                setup()
                             }
                         }
-                    )
+                        setBeforeSend { event, hint ->
+                            event.apply {
+                                user = null
+                                for (extension in sentryExtensions) {
+                                    extension.beforeSend(this, hint)
+                                }
+                            }
+                        }
+                        setBeforeBreadcrumb { breadcrumb, hint ->
+                            breadcrumb.apply {
+                                for (extension in sentryExtensions) {
+                                    extension.beforeBreadcrumb(breadcrumb, hint)
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

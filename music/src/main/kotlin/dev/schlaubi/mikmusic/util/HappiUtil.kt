@@ -102,7 +102,6 @@ data class HappiResult<T>(
 )
 
 @Serializable
-
 data class HappiTrack(
     val track: String,
     @SerialName("id_track")
@@ -116,11 +115,10 @@ data class HappiTrack(
 )
 
 @Serializable
-
 data class HappiLyrics(
     val lyrics: String,
     @SerialName("copyright_label")
-    val copyrightLabel: String,
+    val copyrightLabel: String?,
     @SerialName("copyright_notice")
     val copyrightNotice: String
 )

@@ -54,7 +54,7 @@ suspend fun MusicModule.lyricsCommand() = publicSlashCommand(::LyricsArguments) 
         editingPaginator {
             forList(user, paged, { it }, { _, _ -> track.track }) {
                 footer {
-                    text = "© ${lyrics.copyrightLabel} | ${lyrics.copyrightNotice}"
+                    text = "© ${lyrics.copyrightLabel ?: ""} | ${lyrics.copyrightNotice}"
                 }
             }
         }.send()

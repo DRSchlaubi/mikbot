@@ -1,6 +1,5 @@
 package dev.schlaubi.mikbot.game.multiple_choice
 
-import dev.kord.common.annotation.KordPreview
 import dev.kord.common.entity.ButtonStyle
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.UserBehavior
@@ -14,6 +13,8 @@ import dev.kord.rest.builder.message.create.actionRow
 import dev.kord.rest.builder.message.create.embed
 import dev.schlaubi.mikbot.game.api.AbstractGame
 import dev.schlaubi.mikbot.game.api.module.GameModule
+import dev.schlaubi.mikbot.game.multiple_choice.mechanics.DefaultGameMechanics
+import dev.schlaubi.mikbot.game.multiple_choice.mechanics.GameMechanics
 import dev.schlaubi.mikbot.game.multiple_choice.player.MultipleChoicePlayer
 import dev.schlaubi.mikbot.game.multiple_choice.player.Statistics
 import dev.schlaubi.mikbot.plugin.api.util.componentLive
@@ -39,13 +40,14 @@ abstract class MultipleChoiceGame<Player : MultipleChoicePlayer, Q : Question, Q
     module: GameModule<Player, AbstractGame<Player>>,
     val quizSize: Int,
     val questionContainer: QC,
+    internal val mechanics: GameMechanics<Player> = DefaultGameMechanics()
 ) : AbstractGame<Player>(host, module) {
     override val playerRange: IntRange = 1..10
     internal val gameStats = mutableMapOf<Snowflake, Statistics>()
     override val wonPlayers: List<Player>
         get() =
-            players.sortedByDescending {
-                gameStats[it.user.id] ?: Statistics(0, emptyList(), quizSize)
+            with(mechanics.pointsDistributor) {
+                players.sortByRank()
             }
 
     override suspend fun onRejoin(event: ComponentInteractionCreateEvent, player: Player) {

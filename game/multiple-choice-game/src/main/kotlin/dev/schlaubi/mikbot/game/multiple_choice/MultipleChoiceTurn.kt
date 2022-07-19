@@ -5,9 +5,12 @@ import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.behavior.edit
 import dev.kord.core.behavior.interaction.respondEphemeral
+import dev.kord.rest.builder.message.EmbedBuilder
 import dev.kord.rest.builder.message.create.actionRow
 import dev.kord.rest.builder.message.create.embed
 import dev.kord.rest.builder.message.modify.embed
+import dev.schlaubi.mikbot.game.multiple_choice.mechanics.GameMechanics
+import dev.schlaubi.mikbot.game.multiple_choice.player.MultipleChoicePlayer
 import dev.schlaubi.mikbot.game.multiple_choice.player.addStats
 import dev.schlaubi.mikbot.plugin.api.util.componentLive
 import dev.schlaubi.mikbot.plugin.api.util.getLocale
@@ -19,8 +22,9 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import java.util.*
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.TimeSource
 
-internal suspend fun <Q : Question> MultipleChoiceGame<*, Q, *>.turn(question: Q) {
+internal suspend fun <Player : MultipleChoicePlayer, Q : Question> MultipleChoiceGame<Player, Q, *>.turn(question: Q) {
     val allAnswers = question.allAnswers.filter(String::isNotBlank)
 
     val turnStart = Clock.System.now()
@@ -28,6 +32,9 @@ internal suspend fun <Q : Question> MultipleChoiceGame<*, Q, *>.turn(question: Q
         embed {
             addQuestion(question, true)
         }
+    }
+    val uiMessage = thread.createMessage {
+        content = EmbedBuilder.ZERO_WIDTH_SPACE
         actionRow {
             allAnswers.forEachIndexed { index, name ->
                 interactionButton(ButtonStyle.Secondary, "choose_$index") {
@@ -38,21 +45,26 @@ internal suspend fun <Q : Question> MultipleChoiceGame<*, Q, *>.turn(question: Q
         questionUI(question)
     }
 
-    val answers = mutableMapOf<UserBehavior, Boolean>()
+    val answers = mutableMapOf<UserBehavior, AnswerPair>()
 
     // coroutineScope suspends until all child coroutines are dead
     // That way we can cancel all children at once
+    val start = TimeSource.Monotonic.markNow()
     coroutineScope {
-        var job: Job? = null
-        fun endTurn() {
-            job!!.cancel()
-        }
+        lateinit var job: Job
+        fun endTurn() = job.cancel()
 
         job = launch {
-            val liveMessage = message.componentLive()
+            val liveMessage = uiMessage.componentLive()
             launch { // this blocks this scope until we cancel it
                 delay(30.seconds)
                 endTurn()
+            }
+
+            if (mechanics.showAnswersAfter != GameMechanics.NO_HINTS) {
+                launch {
+                    delay(mechanics.showAnswersAfter)
+                }
             }
 
             liveMessage.onInteraction {
@@ -76,13 +88,25 @@ internal suspend fun <Q : Question> MultipleChoiceGame<*, Q, *>.turn(question: Q
                 val index = interaction.componentId.substringAfter("choose_").toInt()
                 val name = allAnswers[index]
                 val wasCorrect = name == question.correctAnswer
-                answers[user] = wasCorrect
+                if (wasCorrect) {
+                    mechanics.pointsDistributor.awardPoints(player)
+                } else {
+                    mechanics.pointsDistributor.removePoints(player)
+                }
+                answers[user] = AnswerPair(index, wasCorrect)
                 if (wasCorrect) {
                     addStats(user.id, turnStart, true)
                 }
 
                 if (answers.size == players.size) {
                     endTurn()
+                } else if (mechanics.showAnswersAfter != GameMechanics.NO_HINTS && start.elapsedNow() > mechanics.showAnswersAfter) {
+                    message.edit {
+                        embed {
+                            addQuestion(question, false)
+                            addPlayers(answers, true)
+                        }
+                    }
                 }
             }
         }
@@ -92,22 +116,23 @@ internal suspend fun <Q : Question> MultipleChoiceGame<*, Q, *>.turn(question: Q
     failRemainingPlayers(turnStart, answers)
 
     message.edit {
-        components = mutableListOf()
         embed {
             addQuestion(question, false)
             addPlayers(answers)
         }
     }
+    uiMessage.delete()
 
     delay(3.seconds)
 }
 
-private fun MultipleChoiceGame<*, *, *>.failRemainingPlayers(
+private fun <Player : MultipleChoicePlayer> MultipleChoiceGame<Player, *, *>.failRemainingPlayers(
     turnStart: Instant,
-    answers: MutableMap<UserBehavior, Boolean>,
+    answers: MutableMap<UserBehavior, AnswerPair>,
 ) {
     players.forEach {
         if (!answers.containsKey(it.user)) {
+            mechanics.pointsDistributor.removePoints(it.user.gamePlayer)
             addStats(it.user.id, turnStart, false)
         }
     }

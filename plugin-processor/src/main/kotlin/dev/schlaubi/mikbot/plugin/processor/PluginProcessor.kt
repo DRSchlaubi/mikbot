@@ -59,12 +59,12 @@ class PluginProcessor(private val environment: SymbolProcessorEnvironment) : Sym
         )
         val symbols = symbolsSequence.take(2).toList()
         if (symbols.isEmpty()) {
-            environment.logger.warn("No @PluginMain found in this module: $symbols")
+            environment.logger.warn("No @PluginMain found in this module: ${resolver.getNewFiles().toList()}")
             return false
         }
         require(symbols.size == 1) {
             "Multiple plugin main files found in the same module: ${
-            symbolsSequence.joinToString(",") { (it.location as FileLocation).filePath }
+                symbolsSequence.joinToString(",") { (it.location as FileLocation).filePath }
             }"
         }
 

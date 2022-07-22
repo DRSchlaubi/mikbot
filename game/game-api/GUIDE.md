@@ -6,6 +6,9 @@
 - [Dependencies](#dependencies)
 - [Concepts](#concepts)
 - [Multiple choice game](#multiple-choice-game)
+    - [Modify the game mechanics](#modify-the-game-mechanics)
+        - [Show other users answers](#show-other-users-answers)
+        - [Manipulate points distribution](#manipulate-points-distribution)
 - [Hangman (example game)](#hangman-example-game)
 - [Auto-joinable game](#auto-joinable-games)
 - [Making your game re-matchable](#making-your-game-re-matchable)
@@ -134,6 +137,27 @@ class Game(
 ```
 
 Now read the [game module section](#game-module)
+
+## Modify the game mechanics
+
+Per default users get awarded 1 point per correct answer and are ranked per average response time.
+You can find that
+implementation [here](https://github.com/DRSchlaubi/mikbot/blob/main/game/multiple-choice-game/src/main/kotlin/dev/schlaubi/mikbot/game/multiple_choice/mechanics/DefaultGameMechanics.kt)
+
+You can modify these mechanics by implementing
+the [GameMechanics interface](https://github.com/DRSchlaubi/mikbot/blob/main/game/multiple-choice-game/src/main/kotlin/dev/schlaubi/mikbot/game/multiple_choice/mechanics/GameMechanics.kt)
+
+### Show other users answers
+
+If you want to show other users answers (but not their correctness), you can overwrite the `showAnswersAfter` property
+and set it to a `Duration` like 30.minutes
+
+### Manipulate points distribution
+
+If you want to distribute points differently, you can implement
+the [PointsDistributor interface](https://github.com/DRSchlaubi/mikbot/blob/main/game/multiple-choice-game/src/main/kotlin/dev/schlaubi/mikbot/game/multiple_choice/mechanics/GameMechanics.kt#L44-L63)
+or use
+the [StreakBasedGameMechanics](https://github.com/DRSchlaubi/mikbot/blob/main/game/multiple-choice-game/src/main/kotlin/dev/schlaubi/mikbot/game/multiple_choice/mechanics/StreakBasedGameMechanics.kt)
 
 # Hangman (example game)
 

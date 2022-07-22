@@ -92,7 +92,7 @@ fun <A : Arguments, G : AbstractGame<*>, Data> GameModule<*, G>.startGameCommand
     check {
         isNotInThread()
         // Required for pin()
-        requireBotPermissions(Permission.ManageMessages, Permission.ManageThreads)
+        requireBotPermissions(Permission.ManageMessages, Permission.ManageThreads, Permission.CreatePublicThreads)
         additionalChecks()
     }
 

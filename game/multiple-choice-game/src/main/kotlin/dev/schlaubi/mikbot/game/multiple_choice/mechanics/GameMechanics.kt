@@ -1,5 +1,7 @@
 package dev.schlaubi.mikbot.game.multiple_choice.mechanics
 
+import dev.kord.core.behavior.UserBehavior
+import dev.schlaubi.mikbot.game.multiple_choice.AnswerContext
 import dev.schlaubi.mikbot.game.multiple_choice.MultipleChoiceGame
 import dev.schlaubi.mikbot.game.multiple_choice.player.MultipleChoicePlayer
 import kotlin.time.Duration
@@ -45,19 +47,36 @@ private class GameMechanicsImpl<Player : MultipleChoicePlayer>(
  * Interface for point distribution after a multiple-choice turn.
  */
 interface PointsDistributor<Player : MultipleChoicePlayer> {
-    /**
-     * Awards points after a player answered correctly.
-     * This should also store a possible streak (All answers are correct until [removePoinst] is called
-     */
-    fun awardPoints(player: Player)
 
     /**
-     * Removes points after a player answered incoreectly
+     * Retrieves the points for [player].
      */
-    fun removePoints(player : Player)
+    fun retrievePointsForPlayer(player: Player): Int
+
+    /**
+     * Awards points after a player answered correctly.
+     * This should also store a possible streak (All answers are correct until [removePoints] is called
+     *
+     * @return the points that have been awarded
+     */
+    fun awardPoints(player: Player, timeSinceAnswer: Duration): Int
+
+    /**
+     * Removes points after a player answered incorrectly
+     *
+     * @return the amount of points that have been removed
+     */
+    fun removePoints(player : Player): Int
 
     /**
      * How to rank [players][Player] at the end of a round.
      */
     fun List<Player>.sortByRank(): List<Player>
+
+    /**
+     * Optionally sends a message to [user] for the points rewarded for [answer].
+     *
+     * @see AnswerContext.response
+     */
+    suspend fun sendPointMessage(user: UserBehavior, answer: AnswerContext) = Unit
 }

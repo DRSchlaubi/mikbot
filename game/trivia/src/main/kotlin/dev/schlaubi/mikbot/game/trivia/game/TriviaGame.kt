@@ -18,6 +18,8 @@ import dev.schlaubi.mikbot.game.api.AutoJoinableGame
 import dev.schlaubi.mikbot.game.api.Rematchable
 import dev.schlaubi.mikbot.game.api.translate
 import dev.schlaubi.mikbot.game.multiple_choice.MultipleChoiceGame
+import dev.schlaubi.mikbot.game.multiple_choice.mechanics.DefaultGameMechanics
+import dev.schlaubi.mikbot.game.multiple_choice.mechanics.DefaultStreakGameMechanics
 import dev.schlaubi.mikbot.game.multiple_choice.player.MultipleChoicePlayer
 import dev.schlaubi.mikbot.game.trivia.QuestionContainer
 import dev.schlaubi.mikbot.game.trivia.TriviaModule
@@ -33,14 +35,14 @@ class TriviaGame(
     host: UserBehavior,
     module: TriviaModule,
     quizSize: Int,
-    questionContainer: QuestionContainer
+    questionContainer: QuestionContainer,
 ) : MultipleChoiceGame<MultipleChoicePlayer, TriviaQuestion, QuestionContainer>(
     host,
     module.asType,
     quizSize,
-    questionContainer
-),
-    Rematchable<MultipleChoicePlayer, TriviaGame>,
+    questionContainer,
+    DefaultStreakGameMechanics()
+), Rematchable<MultipleChoicePlayer, TriviaGame>,
     AutoJoinableGame<MultipleChoicePlayer> {
     override val rematchThreadName: String = "trivia-rematch"
 
@@ -80,7 +82,7 @@ class TriviaGame(
         user: User,
         ack: EphemeralMessageInteractionResponseBehavior,
         loading: FollowupMessage,
-        userLocale: dev.kord.common.Locale?
+        userLocale: dev.kord.common.Locale?,
     ): MultipleChoicePlayer = MultipleChoicePlayer(user)
 
     override suspend fun EmbedBuilder.addQuestion(question: TriviaQuestion, hideCorrectAnswer: Boolean) {

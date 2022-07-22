@@ -40,7 +40,7 @@ abstract class MultipleChoiceGame<Player : MultipleChoicePlayer, Q : Question, Q
     module: GameModule<Player, AbstractGame<Player>>,
     val quizSize: Int,
     val questionContainer: QC,
-    internal val mechanics: GameMechanics<Player> = DefaultGameMechanics()
+    internal val mechanics: GameMechanics<Player> = DefaultGameMechanics(),
 ) : AbstractGame<Player>(host, module) {
     override val playerRange: IntRange = 1..10
     internal val gameStats = mutableMapOf<Snowflake, Statistics>()
@@ -106,14 +106,15 @@ abstract class MultipleChoiceGame<Player : MultipleChoicePlayer, Q : Question, Q
             }
             val live = message.componentLive()
             live.onInteraction {
+                val event = this
                 val user = interaction.user
                 val winner = wonPlayers.firstOrNull()?.user
                 val statistics = gameStats[interaction.user.id]
                 interaction.respondEphemeral {
                     if (statistics == null) {
-                        content = translateInternally(user, "multiple_choice.game.not_in_game")
+                        content = translateInternally(event, "multiple_choice.game.not_in_game")
                     } else if (user.id == winner?.id) {
-                        content = translateInternally(user, "multiple_choice.game.won")
+                        content = translateInternally(event, "multiple_choice.game.won")
                     } else {
                         embed {
                             addUserStats(
@@ -121,7 +122,8 @@ abstract class MultipleChoiceGame<Player : MultipleChoicePlayer, Q : Question, Q
                                 gameStats[user.id] ?: Statistics(
                                     0,
                                     emptyList(), quizSize
-                                )
+                                ),
+                                mechanics.pointsDistributor.retrievePointsForPlayer(user.gamePlayer)
                             )
                         }
                     }

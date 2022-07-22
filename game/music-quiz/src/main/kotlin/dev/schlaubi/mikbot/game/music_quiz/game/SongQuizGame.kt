@@ -2,7 +2,6 @@ package dev.schlaubi.mikbot.game.music_quiz.game
 
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
 import dev.kord.common.Locale
-import dev.kord.common.annotation.KordPreview
 import dev.kord.common.entity.ButtonStyle
 import dev.kord.common.entity.DiscordPartialEmoji
 import dev.kord.common.entity.Snowflake
@@ -25,6 +24,8 @@ import dev.schlaubi.lavakord.rest.loadItem
 import dev.schlaubi.mikbot.game.api.AutoJoinableGame
 import dev.schlaubi.mikbot.game.api.translate
 import dev.schlaubi.mikbot.game.multiple_choice.MultipleChoiceGame
+import dev.schlaubi.mikbot.game.multiple_choice.mechanics.DefaultGameMechanics
+import dev.schlaubi.mikbot.game.multiple_choice.mechanics.DefaultStreakGameMechanics
 import dev.schlaubi.mikbot.game.multiple_choice.player.MultipleChoicePlayer
 import dev.schlaubi.mikbot.game.music_quiz.LikedSongs
 import dev.schlaubi.mikbot.game.music_quiz.MusicQuizDatabase
@@ -52,7 +53,8 @@ class SongQuizGame(
     host,
     module.asType,
     quizSize,
-    trackContainer
+    trackContainer,
+    DefaultStreakGameMechanics()
 ),
     AutoJoinableGame<MultipleChoicePlayer> {
     override val playerRange: IntRange = 1..10
@@ -93,7 +95,7 @@ class SongQuizGame(
     override suspend fun onJoin(ack: EphemeralMessageInteractionResponseBehavior, player: MultipleChoicePlayer) {
         val member = player.user.asMember(thread.guild.id)
         val voiceState = member.getVoiceStateOrNull()
-        if (voiceState?.channelId != musicPlayer.lastChannelId?.let { Snowflake(it) }) {
+        if (voiceState?.channelId != musicPlayer.lastChannelId?.let(::Snowflake)) {
             ack.createEphemeralFollowup {
 
                 content = translate(
@@ -117,7 +119,6 @@ class SongQuizGame(
         super.runGame()
     }
 
-    @OptIn(KordPreview::class)
     override suspend fun end() {
         musicPlayer.updateMusicChannelState(false)
         if (!running) return

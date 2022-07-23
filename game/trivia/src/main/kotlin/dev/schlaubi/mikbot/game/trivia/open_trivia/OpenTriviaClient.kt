@@ -47,8 +47,8 @@ suspend fun requestAPIQuestions(
         path("api.php")
         parameter("amount", amount)
         parameter("category", category?.id)
-        parameter("difficulty", difficulty?.let { Json.encodeToString(it) })
-        parameter("type", type?.let { Json.encodeToString(it) })
+        parameter("difficulty", difficulty?.let(Json.Default::encodeToString))
+        parameter("type", type?.let(Json.Default::encodeToString))
         parameter("token", sessionToken)
     }
 }.body<OpenTriviaResponse>()
@@ -72,7 +72,7 @@ suspend fun requestQuestions(
         it.copy(
             title = StringEscapeUtils.unescapeHtml4(it.title),
             correctAnswer = StringEscapeUtils.unescapeHtml4(it.correctAnswer),
-            incorrectAnswers = it.incorrectAnswers.map { answer -> StringEscapeUtils.unescapeHtml4(answer) },
+            incorrectAnswers = it.incorrectAnswers.map(StringEscapeUtils::unescapeHtml4),
         )
     }
 }

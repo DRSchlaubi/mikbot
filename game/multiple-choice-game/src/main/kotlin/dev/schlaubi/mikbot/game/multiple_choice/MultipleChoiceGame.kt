@@ -21,6 +21,7 @@ import dev.schlaubi.mikbot.plugin.api.util.componentLive
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.*
 import kotlin.time.Duration.Companion.minutes
 
 private const val requestStats = "request_stats"
@@ -123,7 +124,9 @@ abstract class MultipleChoiceGame<Player : MultipleChoicePlayer, Q : Question, Q
                                     0,
                                     emptyList(), quizSize
                                 ),
-                                mechanics.pointsDistributor.retrievePointsForPlayer(user.gamePlayer)
+                                mechanics.pointsDistributor.retrievePointsForPlayer(user.gamePlayer),
+                                interaction.locale?.asJavaLocale() ?: Locale.ENGLISH,
+                                this@MultipleChoiceGame
                             )
                         }
                     }

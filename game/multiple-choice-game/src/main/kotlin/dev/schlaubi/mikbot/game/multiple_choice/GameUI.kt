@@ -10,6 +10,7 @@ import dev.schlaubi.mikbot.game.api.module.commands.formatPercentage
 import dev.schlaubi.mikbot.game.multiple_choice.player.MultipleChoicePlayer
 import dev.schlaubi.mikbot.game.multiple_choice.player.Statistics
 import dev.schlaubi.mikbot.plugin.api.util.effectiveAvatar
+import java.util.*
 
 /**
  * Context of a submitted answer.
@@ -57,7 +58,13 @@ internal fun EmbedBuilder.addPlayers(players: Map<UserBehavior, AnswerContext>, 
     }
 }
 
-internal suspend fun EmbedBuilder.addUserStats(userBehavior: UserBehavior, stats: Statistics, points: Int) {
+internal suspend fun EmbedBuilder.addUserStats(
+    userBehavior: UserBehavior,
+    stats: Statistics,
+    points: Int,
+    locale: Locale,
+    game: MultipleChoiceGame<*, *, *>,
+) {
     author {
         val user = userBehavior.asUser()
         name = user.username
@@ -65,19 +72,19 @@ internal suspend fun EmbedBuilder.addUserStats(userBehavior: UserBehavior, stats
     }
 
     field {
-        name = "Correct answers"
-        value =
-            "${stats.points}/${stats.gameSize} (${(stats.points.toDouble() / stats.gameSize.toDouble()).formatPercentage()})"
+        name = game.translateInternally(locale, "stats.correct_answers.title")
+        val percentage = (stats.points.toDouble() / stats.gameSize.toDouble()).formatPercentage()
+        value = game.translateInternally(locale, "stats.correct_answers.value", stats.points, stats.gameSize, percentage)
     }
 
     field {
-        name = "Total points"
-        value = points.toString()
+        name = game.translateInternally(locale, "stats.total_points.title")
+        value = game.translateInternally(locale, "stats.value", points)
     }
 
     field {
-        name = "Average response time"
-        value = stats.average.toString()
+        name = game.translateInternally(locale, "stats.average_response_time.title")
+        value = game.translateInternally(locale, "stats.value", points)
     }
 
 }
@@ -88,6 +95,8 @@ internal suspend fun <P : MultipleChoicePlayer> EmbedBuilder.addGameEndEmbed(gam
     addUserStats(
         user,
         game.gameStats[user.id] ?: Statistics(0, emptyList(), game.quizSize),
-        game.mechanics.pointsDistributor.retrievePointsForPlayer(player)
+        game.mechanics.pointsDistributor.retrievePointsForPlayer(player),
+        game.locale(),
+        game
     )
 }

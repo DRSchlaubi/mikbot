@@ -31,9 +31,7 @@ object Translator {
             parent = LocationName.format(Config.GOOGLE_TRANSLATE_PROJECT_ID, Config.GOOGLE_TRANSLATE_LOCATION)
             mimeType = "text/plain"
             targetLanguageCode = toLocale.toLanguageTag()
-            text.forEach {
-                addContents(it)
-            }
+            text.forEach(::addContents)
         }.build()
 
         return client.translateTextCallable().futureCall(request).await().translationsList.map { it.translatedText }
@@ -53,9 +51,7 @@ object Translator {
                 else -> error("Invalid boolean: $text")
             }
 
-        val allStrings = questions.map {
-            it.title
-        }
+        val allStrings = questions.map(Question::title)
 
         val translatedStrings = translate(allStrings, toLocale)
 

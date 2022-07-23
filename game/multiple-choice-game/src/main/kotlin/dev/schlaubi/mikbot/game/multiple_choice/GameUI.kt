@@ -84,7 +84,7 @@ internal suspend fun EmbedBuilder.addUserStats(
 
     field {
         name = game.translateInternally(locale, "stats.average_response_time.title")
-        value = game.translateInternally(locale, "stats.value", points)
+        value = game.translateInternally(locale, "stats.value", stats.average)
     }
 
 }

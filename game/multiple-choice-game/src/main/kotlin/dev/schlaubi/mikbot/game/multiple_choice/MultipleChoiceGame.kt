@@ -18,6 +18,7 @@ import dev.schlaubi.mikbot.game.multiple_choice.mechanics.GameMechanics
 import dev.schlaubi.mikbot.game.multiple_choice.player.MultipleChoicePlayer
 import dev.schlaubi.mikbot.game.multiple_choice.player.Statistics
 import dev.schlaubi.mikbot.plugin.api.util.componentLive
+import dev.schlaubi.mikbot.plugin.api.util.convertToISO
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -129,7 +130,7 @@ abstract class MultipleChoiceGame<Player : MultipleChoicePlayer, Q : Question, Q
                                     emptyList(), quizSize
                                 ),
                                 mechanics.pointsDistributor.retrievePointsForPlayer(user.gamePlayer),
-                                interaction.locale?.asJavaLocale() ?: Locale.ENGLISH,
+                                interaction.locale?.convertToISO()?.asJavaLocale() ?: Locale.ENGLISH,
                                 this@MultipleChoiceGame
                             )
                         }

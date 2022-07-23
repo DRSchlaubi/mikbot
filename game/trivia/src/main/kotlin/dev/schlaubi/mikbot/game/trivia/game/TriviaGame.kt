@@ -18,13 +18,14 @@ import dev.schlaubi.mikbot.game.api.AutoJoinableGame
 import dev.schlaubi.mikbot.game.api.Rematchable
 import dev.schlaubi.mikbot.game.api.translate
 import dev.schlaubi.mikbot.game.multiple_choice.MultipleChoiceGame
-import dev.schlaubi.mikbot.game.multiple_choice.mechanics.DefaultGameMechanics
 import dev.schlaubi.mikbot.game.multiple_choice.mechanics.DefaultStreakGameMechanics
 import dev.schlaubi.mikbot.game.multiple_choice.player.MultipleChoicePlayer
 import dev.schlaubi.mikbot.game.trivia.QuestionContainer
 import dev.schlaubi.mikbot.game.trivia.TriviaModule
 import dev.schlaubi.mikbot.game.trivia.open_trivia.Question
 import io.ktor.util.*
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 private const val REQUEST_RAW = "request_raw"
 
@@ -44,6 +45,7 @@ class TriviaGame(
     DefaultStreakGameMechanics()
 ), Rematchable<MultipleChoicePlayer, TriviaGame>,
     AutoJoinableGame<MultipleChoicePlayer> {
+    override val answerDelay: Duration = 1.seconds
     override val rematchThreadName: String = "trivia-rematch"
 
     override suspend fun EmbedBuilder.addWelcomeMessage() {

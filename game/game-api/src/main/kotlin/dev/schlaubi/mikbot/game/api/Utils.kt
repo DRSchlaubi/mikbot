@@ -59,9 +59,8 @@ suspend fun Game<*>.translate(
         bundle, replacements = replacements as Array<Any?>
     )
 
-suspend fun Game<*>.translate(user: Player, key: String, vararg replacements: Any?): String {
-    return translate(key, locale = getLocale(user), replacements = replacements)
-}
+suspend fun Game<*>.translate(user: Player, key: String, vararg replacements: Any?): String =
+    translate(key, locale = getLocale(user), replacements = replacements)
 
 @Suppress("UNCHECKED_CAST")
 suspend fun Game<*>.translateInternally(

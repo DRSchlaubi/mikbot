@@ -15,6 +15,7 @@ import dev.schlaubi.mikbot.game.multiple_choice.mechanics.GameMechanics
 import dev.schlaubi.mikbot.game.multiple_choice.player.MultipleChoicePlayer
 import dev.schlaubi.mikbot.game.multiple_choice.player.addStats
 import dev.schlaubi.mikbot.plugin.api.util.componentLive
+import dev.schlaubi.mikbot.plugin.api.util.convertToISO
 import dev.schlaubi.mikbot.plugin.api.util.getLocale
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
@@ -35,6 +36,7 @@ internal suspend fun <Player : MultipleChoicePlayer, Q : Question> MultipleChoic
             addQuestion(question, true)
         }
     }
+    delay(answerDelay)
     val uiMessage = thread.createMessage {
         content = EmbedBuilder.ZERO_WIDTH_SPACE
         actionRow {
@@ -170,7 +172,7 @@ internal suspend fun MultipleChoiceGame<*, *, *>.translateInternally(
     vararg parameters: Any?,
 ): String {
     val locale =
-        event.interaction.locale?.asJavaLocale() ?: return translateInternally(event.interaction.user, key, *parameters)
+        event.interaction.locale?.convertToISO()?.asJavaLocale() ?: return translateInternally(event.interaction.user, key, *parameters)
 
     return translateInternally(locale, key, *parameters)
 }

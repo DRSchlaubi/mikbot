@@ -22,6 +22,8 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 
 private const val requestStats = "request_stats"
@@ -35,6 +37,7 @@ private const val requestStats = "request_stats"
  * @param Player the [MultipleChoicePlayer] implementation used
  * @param Q the [Question] implementation used
  * @param QC the [QuestionContainer] implementaiton used
+ * @property answerDelay delay [Duration] before answers are accepted
  */
 abstract class MultipleChoiceGame<Player : MultipleChoicePlayer, Q : Question, QC : QuestionContainer<Q>>(
     host: UserBehavior,
@@ -44,6 +47,7 @@ abstract class MultipleChoiceGame<Player : MultipleChoicePlayer, Q : Question, Q
     internal val mechanics: GameMechanics<Player> = DefaultGameMechanics(),
 ) : AbstractGame<Player>(host, module) {
     override val playerRange: IntRange = 1..10
+    open val answerDelay: Duration = 0.milliseconds
     internal val gameStats = mutableMapOf<Snowflake, Statistics>()
     override val wonPlayers: List<Player>
         get() =

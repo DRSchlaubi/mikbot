@@ -39,9 +39,13 @@ data class AnswerContext(
         }
 }
 
-internal fun EmbedBuilder.addPlayers(players: Map<UserBehavior, AnswerContext>, showCorrect: Boolean = true) {
+internal suspend fun EmbedBuilder.addPlayers(
+    players: Map<UserBehavior, AnswerContext>,
+    showCorrect: Boolean = true,
+    game: MultipleChoiceGame<*, *, *>,
+) {
     field {
-        name = "Answers"
+        name = game.translateInternally("ui.answers")
         value = if (players.isNotEmpty()) {
             players.map { (player, answer) ->
                 val checkEmoji: Any = when {
@@ -74,7 +78,8 @@ internal suspend fun EmbedBuilder.addUserStats(
     field {
         name = game.translateInternally(locale, "stats.correct_answers.title")
         val percentage = (stats.points.toDouble() / stats.gameSize.toDouble()).formatPercentage()
-        value = game.translateInternally(locale, "stats.correct_answers.value", stats.points, stats.gameSize, percentage)
+        value =
+            game.translateInternally(locale, "stats.correct_answers.value", stats.points, stats.gameSize, percentage)
     }
 
     field {

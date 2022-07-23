@@ -58,6 +58,7 @@ class SongQuizGame(
 ),
     AutoJoinableGame<MultipleChoicePlayer> {
     override val playerRange: IntRange = 1..10
+    private var started = false
     private var beforePlayerState: PersistentPlayerState? = null
 
     override suspend fun EmbedBuilder.addWelcomeMessage() {
@@ -111,6 +112,7 @@ class SongQuizGame(
         if (musicPlayer.playingTrack != null) {
             beforePlayerState = musicPlayer.toState()
         }
+        started = true
 
         musicPlayer.updateMusicChannelState(true)
         doUpdateWelcomeMessage()
@@ -121,7 +123,7 @@ class SongQuizGame(
 
     override suspend fun end() {
         musicPlayer.updateMusicChannelState(false)
-        if (!running) return
+        if (!started) return
         val state = beforePlayerState
         if (state == null) {
             musicPlayer.disconnectAudio()

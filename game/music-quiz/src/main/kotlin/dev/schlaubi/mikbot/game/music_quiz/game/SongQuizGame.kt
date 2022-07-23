@@ -6,6 +6,7 @@ import dev.kord.common.entity.ButtonStyle
 import dev.kord.common.entity.DiscordPartialEmoji
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.UserBehavior
+import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
 import dev.kord.core.behavior.interaction.followup.edit
 import dev.kord.core.behavior.interaction.respondEphemeral
@@ -19,6 +20,7 @@ import dev.kord.rest.builder.message.EmbedBuilder
 import dev.kord.rest.builder.message.create.MessageCreateBuilder
 import dev.kord.rest.builder.message.create.actionRow
 import dev.kord.x.emoji.Emojis
+import dev.schlaubi.lavakord.kord.connectAudio
 import dev.schlaubi.lavakord.rest.TrackResponse
 import dev.schlaubi.lavakord.rest.loadItem
 import dev.schlaubi.mikbot.game.api.AutoJoinableGame
@@ -96,9 +98,8 @@ class SongQuizGame(
     override suspend fun onJoin(ack: EphemeralMessageInteractionResponseBehavior, player: MultipleChoicePlayer) {
         val member = player.user.asMember(thread.guild.id)
         val voiceState = member.getVoiceStateOrNull()
-        if (voiceState?.channelId != musicPlayer.lastChannelId?.let(::Snowflake)) {
+        if (musicPlayer.lastChannelId != null && voiceState?.channelId != musicPlayer.lastChannelId?.let(::Snowflake)) {
             ack.createEphemeralFollowup {
-
                 content = translate(
                     player,
                     "song_quiz.controls.not_in_vc",
@@ -111,6 +112,16 @@ class SongQuizGame(
     override suspend fun runGame() {
         if (musicPlayer.playingTrack != null) {
             beforePlayerState = musicPlayer.toState()
+        }
+        if (musicPlayer.lastChannelId == null) {
+            val channel = host.asMember(thread.guildId).getVoiceStateOrNull()?.channelId
+            if (channel == null) {
+                thread.createMessage {
+                    content = translate("music_quiz.start.no_vc")
+                }
+                return
+            }
+            musicPlayer.connectAudio(channel)
         }
         started = true
 

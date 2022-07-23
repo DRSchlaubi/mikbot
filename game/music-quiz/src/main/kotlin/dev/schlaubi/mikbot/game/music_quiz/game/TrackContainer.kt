@@ -100,7 +100,12 @@ class TrackContainer @PublishedApi internal constructor(
 }
 
 private fun TrackContainer.decideTurnParameters(track: Track): GuessContext {
-    return when (GuessingMode.values().random()) {
+    val mode = if(artistCount < 4) {
+        if (Random.nextInt(1, 100) == 50) GuessingMode.ARTIST else GuessingMode.NAME
+    } else {
+        GuessingMode.values().random()
+    }
+    return when (mode) {
         GuessingMode.NAME -> GuessContext(
             pollSongNames(track.name),
             track.name,

@@ -121,7 +121,7 @@ internal suspend fun <Player : MultipleChoicePlayer, Q : Question> MultipleChoic
     message.edit {
         embed {
             addQuestion(question, false)
-            addPlayers(answers)
+            addPlayers(answers, game = this@turn)
         }
     }
     answers.forEach { (user, answer) ->
@@ -142,7 +142,7 @@ private suspend fun <Q : Question> MultipleChoiceGame<*, Q, *>.editMessage(
     message.edit {
         embed {
             addQuestion(question, true)
-            addPlayers(answers, false)
+            addPlayers(answers, false, game = this@editMessage)
         }
     }
 }
@@ -172,7 +172,11 @@ internal suspend fun MultipleChoiceGame<*, *, *>.translateInternally(
     vararg parameters: Any?,
 ): String {
     val locale =
-        event.interaction.locale?.convertToISO()?.asJavaLocale() ?: return translateInternally(event.interaction.user, key, *parameters)
+        event.interaction.locale?.convertToISO()?.asJavaLocale() ?: return translateInternally(
+            event.interaction.user,
+            key,
+            *parameters
+        )
 
     return translateInternally(locale, key, *parameters)
 }

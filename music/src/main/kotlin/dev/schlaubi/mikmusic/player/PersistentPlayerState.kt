@@ -36,7 +36,7 @@ data class PersistentPlayerState(
         if (currentTrack != null) {
             musicPlayer.playingTrack = currentTrack
             musicPlayer.queueTrack(force = true, onTop = false, tracks = listOf(currentTrack))
-            delay(300.milliseconds) // eave Lavalink some time to process
+            delay(500.milliseconds) // eave Lavalink some time to process
             musicPlayer.player.seekTo(position)
         }
         musicPlayer.queueTrack(force = false, onTop = false, tracks = queue)

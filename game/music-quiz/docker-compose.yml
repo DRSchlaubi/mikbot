@@ -1,0 +1,6 @@
+version: "3"
+services:
+  color_service:
+    image: ghcr.io/nycodeghg/image-color-service:0.1.1
+    ports:
+      - 9090:8080

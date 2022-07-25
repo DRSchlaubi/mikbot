@@ -29,6 +29,7 @@ mikbotPlugin {
 }
 
 pluginPublishing {
+    enabled.set(true)
     repositoryUrl.set("https://storage.googleapis.com/mikbot-plugins")
     targetDirectory.set(rootProject.file("ci-repo").toPath())
     currentRepository.set(rootProject.file("ci-repo-old").toPath())

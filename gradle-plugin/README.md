@@ -57,7 +57,7 @@ class PluginExtension {
      */
     val pluginMainFileLocation: Path
 
-    /** 
+    /**
      * The optional override for the projects resources bundle folder.
      */
     abstract val bundle: String
@@ -84,8 +84,10 @@ need to configure the following:
 
 ```kotlin
 pluginPublishing {
+    // Enable publishing
+    enabled.set(true)
     // The address your repository is hosted it
-    // if you use Git LFS and GitHub Pages use https://github.com/owner/repo/raw/branch 
+    // if you use Git LFS and GitHub Pages use https://github.com/owner/repo/raw/branch
     repositoryUrl.set("https://plugin-repository.mikbot.schlaubi.net")
     // The directory the generated repository should be in
     targetDirectory.set(rootProject.file("ci-repo").toPath())

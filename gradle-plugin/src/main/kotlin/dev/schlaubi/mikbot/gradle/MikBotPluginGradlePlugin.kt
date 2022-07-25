@@ -191,39 +191,42 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
 
     private fun Project.createPublishingTasks(assemblePluginTask: TaskProvider<Zip>) {
         val extension = project.extensions.create(pluginPublishingExtensionName, BuildRepositoryExtension::class.java)
-        tasks.apply {
-            val copyFilesIntoRepo = register<Copy>("copyFilesIntoRepo") {
-                group = "publishing"
+        afterEvaluate {
+            if (!extension.enabled.get()) {
+                return@afterEvaluate
+            }
+            tasks.apply {
+                val copyFilesIntoRepo = register<Copy>("copyFilesIntoRepo") {
+                    group = "publishing"
 
-                from(assemblePluginTask)
-                include("*.zip")
-                // providing version manually, as of weird evaluation errors
-                into(extension.targetDirectory.get().resolve("${project.pluginId}/$version"))
+                    from(assemblePluginTask)
+                    include("*.zip")
+                    // providing version manually, as of weird evaluation errors
+                    into(extension.targetDirectory.get().resolve("${project.pluginId}/$version"))
 
-                eachFile {
-                    val parent = extension.currentRepository.getOrElse(extension.targetDirectory.get())
-                    val destinationPath = destinationDir.toPath()
-                    val probableExistingFile =
-                        parent.resolve(
-                            destinationPath.subpath(
-                                destinationPath.nameCount - 2,
-                                destinationPath.nameCount
+                    eachFile {
+                        val parent = extension.currentRepository.getOrElse(extension.targetDirectory.get())
+                        val destinationPath = destinationDir.toPath()
+                        val probableExistingFile =
+                            parent.resolve(
+                                destinationPath.subpath(
+                                    destinationPath.nameCount - 2,
+                                    destinationPath.nameCount
+                                )
                             )
-                        )
-                            .resolve(assemblePluginTask.get().archiveFileName.get())
+                                .resolve(assemblePluginTask.get().archiveFileName.get())
 
-                    if (Files.exists(probableExistingFile)) {
-                        it.exclude() // exclude existing files, so checksums don't change
+                        if (Files.exists(probableExistingFile)) {
+                            it.exclude() // exclude existing files, so checksums don't change
+                        }
                     }
                 }
-            }
 
-            val repo = register("buildRepository") {
-                group = "publishing"
-                it.dependsOn(copyFilesIntoRepo)
-            }
+                val repo = register("buildRepository") {
+                    group = "publishing"
+                    it.dependsOn(copyFilesIntoRepo)
+                }
 
-            afterEvaluate {
                 val makeIndex = register<MakeRepositoryIndexTask>("makeRepositoryIndex") {
                     group = "publishing"
                     dependsOn(assemblePluginTask)

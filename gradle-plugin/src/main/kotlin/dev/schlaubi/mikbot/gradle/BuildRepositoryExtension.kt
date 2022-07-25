@@ -1,3 +1,5 @@
+@file:Suppress("LeakingThis")
+
 package dev.schlaubi.mikbot.gradle
 
 import org.gradle.api.plugins.ExtensionAware
@@ -7,6 +9,13 @@ import org.gradle.api.tasks.InputDirectory
 import java.nio.file.Path
 
 abstract class BuildRepositoryExtension {
+
+    /**
+     * If publishing should be enabled.
+     */
+    @get:Input
+    abstract val enabled: Property<Boolean>
+
     /**
      * The directory to save the repository to.
      */
@@ -30,6 +39,10 @@ abstract class BuildRepositoryExtension {
      */
     @get:Input
     abstract val projectUrl: Property<String>
+
+    init {
+        enabled.convention(false) // Disable publishing by default
+    }
 }
 
 internal const val pluginPublishingExtensionName = "pluginPublishing"

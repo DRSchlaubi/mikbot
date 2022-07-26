@@ -198,7 +198,10 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
                 from(assemblePluginTask)
                 include("*.zip")
                 // providing version manually, as of weird evaluation errors
-                into(extension.targetDirectory.get().resolve("${project.pluginId}/$version"))
+                into(
+                    extension.targetDirectory.getOrElse(project.file("ci-repo").toPath())
+                        .resolve("${project.pluginId}/$version")
+                )
 
                 eachFile {
                     val parent = extension.currentRepository.getOrElse(extension.targetDirectory.get())

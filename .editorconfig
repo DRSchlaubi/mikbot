@@ -12,6 +12,3 @@ trim_trailing_whitespace = true
 
 [{*.yaml,*.yml}]
 indent_size = 2
-
-[*.properties]
-charset = "utf-8"

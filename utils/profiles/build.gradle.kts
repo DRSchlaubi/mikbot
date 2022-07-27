@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "dev.schlaubi.mikbot"
-version = "2.4.2"
+version = "2.5.0"
 
 repositories {
     maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
@@ -19,8 +19,12 @@ dependencies {
     }
     implementation(libs.ktor.client.content.negotiation)
     implementation(libs.ktor.serialization.kotlinx.json)
-    implementation(libs.ktor.server.sessions)
-    implementation(libs.ktor.server.auth)
+    implementation(libs.ktor.server.sessions) {
+        exclude("io.ktor", "ktor-server-core")
+    }
+    implementation(libs.ktor.server.auth) {
+        exclude("io.ktor", "ktor-server-core")
+    }
 }
 
 mikbotPlugin {

@@ -40,25 +40,27 @@ class EpicGamesNotifierModule : Extension(), CoroutineScope {
         val gameIds = games.map { (_, id) -> id }
         val failedWebhooks = mutableListOf<Snowflake>()
 
-        WebhookDatabase.webhooks.find()
-            .toFlow()
-            .onEach {
-                try {
-                    it.sendGames(
-                        kord,
-                        games
-                            .asSequence()
-                            .filter { (_, id) -> id !in it.sentPromotions }
-                            .filterNot { (game) -> game.urlSlug.endsWith("mysterygame") }
-                            .map { (game) -> game.toEmbed() }
-                            .toList(),
-                        gameIds
-                    )
-                } catch (e: Exception) { // ContextException is private :(
-                    failedWebhooks += it.id
-                    LOG.warn(e) { "Could not call webhook ${it.id}" }
-                }
-            }.launchIn(this)
+        coroutineScope {
+            WebhookDatabase.webhooks.find()
+                .toFlow()
+                .onEach {
+                    try {
+                        it.sendGames(
+                            kord,
+                            games
+                                .asSequence()
+                                .filter { (_, id) -> id !in it.sentPromotions }
+                                .filterNot { (game) -> game.urlSlug.endsWith("mysterygame") }
+                                .map { (game) -> game.toEmbed() }
+                                .toList(),
+                            gameIds
+                        )
+                    } catch (e: Exception) { // ContextException is private :(
+                        failedWebhooks += it.id
+                        LOG.warn(e) { "Could not call webhook ${it.id}" }
+                    }
+                }.launchIn(this)
+        }
 
         WebhookDatabase.webhooks.deleteMany(Webhook::id `in` failedWebhooks)
     }

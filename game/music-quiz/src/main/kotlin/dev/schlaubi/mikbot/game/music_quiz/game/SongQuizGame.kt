@@ -26,7 +26,6 @@ import dev.schlaubi.lavakord.rest.loadItem
 import dev.schlaubi.mikbot.game.api.AutoJoinableGame
 import dev.schlaubi.mikbot.game.api.translate
 import dev.schlaubi.mikbot.game.multiple_choice.MultipleChoiceGame
-import dev.schlaubi.mikbot.game.multiple_choice.mechanics.DefaultGameMechanics
 import dev.schlaubi.mikbot.game.multiple_choice.mechanics.DefaultStreakGameMechanics
 import dev.schlaubi.mikbot.game.multiple_choice.player.MultipleChoicePlayer
 import dev.schlaubi.mikbot.game.music_quiz.LikedSongs
@@ -39,6 +38,7 @@ import dev.schlaubi.mikmusic.player.applyToPlayer
 import dev.schlaubi.mikmusic.player.queue.findTrack
 import dev.schlaubi.mikmusic.player.queue.spotifyUriToUrl
 import dev.schlaubi.mikmusic.player.queue.toPartialSpotifyTrack
+import kotlinx.coroutines.launch
 import se.michaelthelin.spotify.model_objects.specification.Track
 import dev.schlaubi.lavakord.audio.player.Track as LavalinkTrack
 
@@ -50,15 +50,14 @@ class SongQuizGame(
     trackContainer: TrackContainer,
     override val thread: ThreadChannelBehavior,
     override val welcomeMessage: Message,
-    override val translationsProvider: TranslationsProvider
+    override val translationsProvider: TranslationsProvider,
 ) : MultipleChoiceGame<MultipleChoicePlayer, TrackQuestion, TrackContainer>(
     host,
     module.asType,
     quizSize,
     trackContainer,
     DefaultStreakGameMechanics()
-),
-    AutoJoinableGame<MultipleChoicePlayer> {
+), AutoJoinableGame<MultipleChoicePlayer> {
     override val playerRange: IntRange = 1..10
     private var started = false
     private var beforePlayerState: PersistentPlayerState? = null
@@ -75,7 +74,7 @@ class SongQuizGame(
         user: User,
         ack: EphemeralMessageInteractionResponseBehavior,
         loading: FollowupMessage,
-        userLocale: Locale?
+        userLocale: Locale?,
     ): SongQuizPlayer =
         SongQuizPlayer(user).also {
             loading.edit { content = translate(it, "song_quiz.controls.joined") }
@@ -140,8 +139,10 @@ class SongQuizGame(
             musicPlayer.disconnectAudio()
         } else {
             // restore player state from before the quiz
-            state.schedulerOptions.applyToPlayer(musicPlayer)
-            state.applyToPlayer(musicPlayer)
+            launch {
+                state.schedulerOptions.applyToPlayer(musicPlayer)
+                state.applyToPlayer(musicPlayer)
+            }
         }
         super.end()
     }

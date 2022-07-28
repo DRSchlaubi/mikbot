@@ -135,6 +135,8 @@ abstract class AbstractGame<T : Player>(
         removePlayer(player)
         if (running && players.isEmpty()) {
             doEnd()
+        } else {
+            doUpdateWelcomeMessage()
         }
     }
 

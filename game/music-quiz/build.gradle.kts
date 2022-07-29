@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     `mikbot-plugin`
     `mikbot-module`
@@ -5,13 +7,21 @@ plugins {
 }
 
 group = "dev.schlaubi.mikbot"
-version = "2.4.1"
+version = "2.5.0"
 
 dependencies {
     plugin(projects.game.gameApi)
     plugin(projects.music)
     plugin(projects.game.multipleChoiceGame)
     optionalPlugin(projects.core.gdpr)
+}
+
+tasks {
+    withType<KotlinCompile> {
+        kotlinOptions {
+            freeCompilerArgs = freeCompilerArgs + listOf("-Xcontext-receivers")
+        }
+    }
 }
 
 mikbotPlugin {

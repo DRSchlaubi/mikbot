@@ -201,7 +201,6 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior) :
         this.filters = SerializableFilters(filters)
     }
 
-    @Suppress("UNUSED_PARAMETER")
     private suspend fun onTrackStart(event: TrackStartEvent) {
         leaveTimeout?.cancel()
         updateMusicChannelMessage()
@@ -270,7 +269,7 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior) :
             // Drop every track, but the skip to track and then start the next track
             queue = LinkedList(queue.drop(to - 1))
         }
-        if (queue.isNotEmpty()) {
+        if (canSkip) {
             startNextSong()
             updateMusicChannelMessage()
         } else {

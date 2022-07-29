@@ -8,13 +8,23 @@ import dev.schlaubi.mikbot.plugin.api.util.Translator
 import dev.schlaubi.mikmusic.innerttube.InnerTubeClient
 import dev.schlaubi.mikmusic.innerttube.PlaylistPanelVideoRendererContent
 import dev.schlaubi.mikmusic.innerttube.Text
+import dev.schlaubi.mikmusic.util.LinkedListSerializer
 import dev.schlaubi.mikmusic.util.youtubeId
+import kotlinx.serialization.Serializable
 import java.util.*
 
-data class AutoPlayContext(val playlist: String?, val params: String?, val songs: LinkedList<Track> = LinkedList()) {
+@Serializable
+data class AutoPlayContext(
+    val playlist: String?,
+    val params: String?,
+    @Serializable(with = LinkedListSerializer::class) val songs: LinkedList<Track> = LinkedList(),
+) {
     val initialSize = songs.size
+
+    @Serializable
     data class Track(val name: String, val artists: List<String>, val id: String)
 }
+
 
 suspend fun MusicPlayer.resetAutoPlay() {
     val state = autoPlay ?: return

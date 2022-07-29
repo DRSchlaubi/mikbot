@@ -18,7 +18,8 @@ data class PersistentPlayerState(
     val filters: SerializableFilters?,
     val schedulerOptions: SchedulerSettings,
     val paused: Boolean,
-    val position: Long
+    val position: Long,
+    val autoPlayContext: AutoPlayContext?
 ) {
     constructor(musicPlayer: MusicPlayer) : this(
         Snowflake(musicPlayer.guildId),
@@ -28,7 +29,8 @@ data class PersistentPlayerState(
         musicPlayer.filters,
         SchedulerSettings(musicPlayer.loopQueue, musicPlayer.repeat, musicPlayer.shuffle),
         musicPlayer.player.paused,
-        musicPlayer.player.position
+        musicPlayer.player.position,
+        musicPlayer.autoPlay
     )
 
     suspend fun applyToPlayer(musicPlayer: MusicPlayer) {
@@ -39,6 +41,7 @@ data class PersistentPlayerState(
             delay(500.milliseconds) // eave Lavalink some time to process
             musicPlayer.player.seekTo(position)
         }
+        musicPlayer.autoPlay = autoPlayContext
         musicPlayer.queueTrack(force = false, onTop = false, tracks = queue)
         if (paused) {
             musicPlayer.player.pause()

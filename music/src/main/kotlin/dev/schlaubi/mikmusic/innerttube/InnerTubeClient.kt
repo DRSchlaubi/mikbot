@@ -12,16 +12,21 @@ import kotlinx.serialization.json.Json
 
 private val youtubeMusic = Url("https://music.youtube.com")
 private val youtube = Url("https://www.youtube.com")
+const val radioParam = "wAEB" // youtube sends this parameter starting a song radio
 
 
 private val webContext = InnerTubeContext(InnerTubeContext.Client("WEB", "2.20220502.01.00"))
 
 private fun musicContext(locale: Locale): InnerTubeContext {
     val isoLocale = locale.convertToISO()
-    return InnerTubeContext(InnerTubeContext.Client("WEB_REMIX",
-        "1.20220502.01.00",
-        isoLocale.language,
-        isoLocale.country!!))
+    return InnerTubeContext(
+        InnerTubeContext.Client(
+            "WEB_REMIX",
+            "1.20220502.01.00",
+            isoLocale.language,
+            isoLocale.country!!
+        )
+    )
 }
 
 
@@ -37,14 +42,39 @@ object InnerTubeClient {
         }
     }
 
+    suspend fun requestNextSongs(
+        songId: String,
+        playlistId: String? = null,
+        params: String? = null,
+    ): NextSongsResponse =
+        requestNextSongs(
+            AutoPlayRequest(
+                songId,
+                playlistId = playlistId,
+                params = params,
+                context = musicContext(Locale.ENGLISH_UNITED_STATES)
+            )
+        )
+
+    suspend fun requestNextSongs(request: AutoPlayRequest): NextSongsResponse =
+        makeRequest(
+            youtubeMusic,
+            "next",
+            body = request
+        ) {
+            header(HttpHeaders.Referrer, youtubeMusic)
+        }
+
     suspend fun requestMusicAutoComplete(
         input: String,
         locale: Locale,
     ): InnerTubeBox<SearchSuggestionsSectionRendererContent> =
-        makeRequest(youtubeMusic,
+        makeRequest(
+            youtubeMusic,
             "music",
             "get_search_suggestions",
-            body = MusicSearchRequest(musicContext(locale), input)) {
+            body = MusicSearchRequest(musicContext(locale), input)
+        ) {
             val localeString = if (locale.country != null) {
                 "${locale.language}-${locale.country},${locale.language}"
             } else {
@@ -62,7 +92,7 @@ object InnerTubeClient {
         domain: Url,
         vararg endpoint: String,
         body: B? = null,
-        block: HttpRequestBuilder.() -> Unit = {}
+        block: HttpRequestBuilder.() -> Unit = {},
     ): R =
         client.post(domain) {
             url {

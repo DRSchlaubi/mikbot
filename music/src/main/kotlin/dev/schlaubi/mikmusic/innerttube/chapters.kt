@@ -34,7 +34,7 @@ data class MacroMarkersListItemRenderer(
 )
 
 @Serializable
-data class TextBlock(val simpleText: String) {
+data class TextBlock(val simpleText: String): CharSequence by simpleText {
     override fun toString(): String = simpleText
 }
 

@@ -34,6 +34,8 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior) :
     Link by link, KordExKoinComponent {
     private var queue = LinkedList<QueuedTrack>()
     val queuedTracks get() = queue.toList()
+    val canSkip: Boolean
+        get() = queuedTracks.isNotEmpty() || !autoPlay?.songs.isNullOrEmpty()
     var filters: SerializableFilters? = null
     var playingTrack: QueuedTrack? = null
     var disableMusicChannel: Boolean = false
@@ -43,6 +45,7 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior) :
     private var sponsorBlockJob: Job? = null
     private var chapterUpdater: Job? = null
     private var leaveTimeout: Job? = null
+    internal var autoPlay: AutoPlayContext? = null
 
     init {
         guild.kord.launch {
@@ -228,11 +231,16 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior) :
     private suspend fun onTrackEnd(event: TrackEndEvent) {
         event.track.deleteSponsorBlockCache()
         if ((!repeat && !loopQueue && queue.isEmpty()) && event.reason != TrackEndEvent.EndReason.REPLACED) {
-            leaveTimeout = lavakord.launch {
-                delay(MusicSettingsDatabase.findGuild(guild).leaveTimeout)
-                stop()
+            val autoPlayTrack = findNextAutoPlayedSong(event.track)
+            if (autoPlayTrack != null) {
+                queue.add(SimpleQueuedTrack(autoPlayTrack, guild.kord.selfId))
+            } else {
+                leaveTimeout = lavakord.launch {
+                    delay(MusicSettingsDatabase.findGuild(guild).leaveTimeout)
+                    stop()
+                }
+                return
             }
-            return
         }
 
         // In order to loop the queueTracks we just add every track back to the queueTracks
@@ -262,8 +270,12 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior) :
             // Drop every track, but the skip to track and then start the next track
             queue = LinkedList(queue.drop(to - 1))
         }
-        startNextSong()
-        updateMusicChannelMessage()
+        if (queue.isNotEmpty()) {
+            startNextSong()
+            updateMusicChannelMessage()
+        } else {
+            stop()
+        }
     }
 
     suspend fun skipChapter() {
@@ -301,6 +313,7 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior) :
 
                 /* return */queue.removeAt(index)
             }
+
             else -> queue.poll()
         }
 
@@ -327,6 +340,7 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior) :
         player.stopTrack()
         link.disconnectAudio()
         clearQueue()
+        autoPlay = null
         playingTrack = null
         updateMusicChannelMessage()
     }

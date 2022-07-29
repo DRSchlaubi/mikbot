@@ -18,7 +18,7 @@ suspend fun MusicModule.skipCommand() = ephemeralControlSlashCommand(::SkipArgum
     description = "commands.skip.description"
 
     action {
-        if (musicPlayer.queuedTracks.isEmpty()) {
+        if (!musicPlayer.canSkip) {
             respond { content = translate("commands.skip.empty") }
             return@action
         }

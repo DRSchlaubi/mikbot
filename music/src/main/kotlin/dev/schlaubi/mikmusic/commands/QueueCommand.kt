@@ -6,6 +6,7 @@ import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.mikbot.plugin.api.util.forList
 import dev.schlaubi.mikmusic.checks.anyMusicPlaying
 import dev.schlaubi.mikmusic.core.MusicModule
+import dev.schlaubi.mikmusic.player.addAutoPlaySongs
 import dev.schlaubi.mikmusic.util.format
 
 suspend fun MusicModule.queueCommand() = ephemeralSlashCommand {
@@ -28,6 +29,7 @@ suspend fun MusicModule.queueCommand() = ephemeralSlashCommand {
                     content = translate("commands.queue.no_songs")
                 }
             }
+            return@action
         }
 
         editingPaginator {
@@ -48,6 +50,8 @@ suspend fun MusicModule.queueCommand() = ephemeralSlashCommand {
                         value = if (musicPlayer.shuffle) "\uD83D\uDD00" else "\uD83D\uDD01"
                     }
                 }
+
+                musicPlayer.addAutoPlaySongs(::translate)
             }
         }.send()
     }

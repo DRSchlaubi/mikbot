@@ -1,0 +1,20 @@
+###
+
+POST https://music.youtube.com/youtubei/v1/next
+Content-Type: application/json
+Referer: https://music.youtube.com/
+
+{
+    "videoId": "GfCy_1xKFdU",
+    "playlistId": "RDAMVMGfCy_1xKFdU",
+    "params": "8gEAmgMDCNgE",
+    "context": {
+        "client": {
+            "clientName": "WEB_REMIX",
+            "clientVersion": "1.20220725.01.00"
+        }
+    }
+}
+
+###
+

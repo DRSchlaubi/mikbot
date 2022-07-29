@@ -22,7 +22,9 @@ import dev.schlaubi.mikmusic.core.MusicModule
 import dev.schlaubi.mikmusic.core.checkOtherSchedulerOptions
 import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase
 import dev.schlaubi.mikmusic.player.MusicPlayer
+import dev.schlaubi.mikmusic.player.enableAutoPlay
 import dev.schlaubi.mikmusic.player.queue.findSpotifySongs
+import dev.schlaubi.mikmusic.player.resetAutoPlay
 import dev.schlaubi.mikmusic.util.mapToQueuedTrack
 import kotlin.reflect.KMutableProperty1
 
@@ -81,6 +83,14 @@ class MusicInteractionModule : Extension() {
                         MusicPlayer::shuffle,
                         MusicPlayer::loopQueue, MusicPlayer::repeat
                     )
+                    autoPlay -> {
+                        if (player.autoPlay == null) {
+                            player.enableAutoPlay()
+                        } else {
+                            player.resetAutoPlay()
+                        }
+                        player.updateMusicChannelMessage()
+                    }
                 }
 
                 return@action

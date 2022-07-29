@@ -19,6 +19,7 @@ import dev.schlaubi.mikbot.plugin.api.util.convertToISO
 import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase
 import dev.schlaubi.mikmusic.player.ChapterQueuedTrack
 import dev.schlaubi.mikmusic.player.MusicPlayer
+import dev.schlaubi.mikmusic.player.addAutoPlaySongs
 import dev.schlaubi.mikmusic.util.addSong
 import dev.schlaubi.mikmusic.util.format
 import kotlinx.datetime.Clock
@@ -27,6 +28,7 @@ import kotlin.time.Duration.Companion.milliseconds
 const val playPause = "playPause"
 const val stop = "stop"
 const val skip = "skip"
+const val autoPlay = "auto_play"
 const val skipChapter = "skip_chapter"
 const val loop = "loop"
 const val repeatOne = "repeatOne"
@@ -37,7 +39,7 @@ suspend fun updateMessage(
     kord: Kord,
     musicPlayer: MusicPlayer,
     initialUpdate: Boolean = false,
-    translationsProvider: TranslationsProvider
+    translationsProvider: TranslationsProvider,
 ) {
     val message = findMessageSafe(guildId, kord)
     val locale = kord.getGuild(guildId)?.preferredLocale?.kLocale?.convertToISO()?.asJavaLocale()
@@ -58,7 +60,7 @@ suspend fun updateMessage(
         embed {
             val playingTrack = playingQueueTrack?.track
             if (playingTrack != null) {
-                addSong({ key, group -> translationsProvider.translate(key, bundleName = group) }, playingTrack)
+                addSong(::translate, playingTrack)
 
                 if (playingQueueTrack is ChapterQueuedTrack) {
                     field {
@@ -88,6 +90,8 @@ suspend fun updateMessage(
                     (index + 1).toString() + ". " + track.track.format()
                 }.ifBlank { translate("music.music_channel.queue.empty") }
 
+            musicPlayer.addAutoPlaySongs(::translate)
+
             footer {
                 text = translate("music.music_channel.footer")
             }
@@ -107,7 +111,7 @@ suspend fun updateMessage(
                 skip,
                 Emojis.nextTrack,
                 // You cannot skip, if there is no next item in the queue
-                additionalCondition = musicPlayer.queuedTracks.isNotEmpty()
+                additionalCondition = musicPlayer.canSkip
             )
             if (playingQueueTrack is ChapterQueuedTrack) {
                 musicButton(
@@ -117,6 +121,12 @@ suspend fun updateMessage(
                     additionalCondition = !playingQueueTrack.isOnLast
                 )
             }
+            musicButton(
+                musicPlayer,
+                autoPlay,
+                Emojis.blueCar,
+                enabled = musicPlayer.autoPlay != null
+            )
         }
         actionRow {
             musicButton(
@@ -162,7 +172,7 @@ private fun ActionRowBuilder.musicButton(
     buttonStyle: ButtonStyle = ButtonStyle.Primary,
     additionalCondition: Boolean = true,
     enabled: Boolean = false,
-    enabledStyle: ButtonStyle = ButtonStyle.Success
+    enabledStyle: ButtonStyle = ButtonStyle.Success,
 ) {
     val playingCondition = musicPlayer.playingTrack != null
 

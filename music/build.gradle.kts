@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     `mikbot-plugin`
     `mikbot-module`
@@ -26,6 +28,14 @@ dependencies {
 
     // GDPR support
     optionalPlugin(projects.core.gdpr)
+}
+
+tasks {
+    withType<KotlinCompile> {
+        kotlinOptions {
+            freeCompilerArgs = freeCompilerArgs + "-Xcontext-receivers"
+        }
+    }
 }
 
 mikbotPlugin {

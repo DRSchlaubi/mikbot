@@ -28,15 +28,6 @@ suspend fun MusicModule.playCommand() {
         }
 
         action {
-            val voiceState = user.asMember(guild!!.id).getVoiceState()
-
-            val channelId = voiceState.channelId!!
-            link.connectAudio(channelId)
-
-            safeGuild.getMember(this@playCommand.kord.selfId).edit {
-                deafened = true
-            }
-
             queueTracks(musicPlayer, arguments.search)
         }
     }

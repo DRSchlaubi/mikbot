@@ -47,6 +47,8 @@ include(
     "utils:haste-client",
     "utils:sponsorblock-kt",
     "utils:leaderboard",
+    "utils:image-color-client",
+    "utils:image-color-client-kord",
     "votebot",
     "votebot:common",
     "votebot:chart-service-client",

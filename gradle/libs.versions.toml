@@ -5,8 +5,10 @@ pf4j = "3.7.0"
 coroutines = "1.6.3"
 serialization = "1.3.3"
 ktor = "2.0.3"
+kord = "0.8.x-SNAPSHOT"
 
 [libraries]
+kord-core = { group = "dev.kord", name = "kord-core", version.ref = "kord" }
 kordex = { group = "com.kotlindiscord.kord.extensions", name = "kord-extensions", version.ref = "kordex" }
 kordex-unsafe = { group = "com.kotlindiscord.kord.extensions", name = "unsafe", version.ref = "kordex" }
 kordex-processor = { group = "com.kotlindiscord.kord.extensions", name = "annotation-processor", version.ref = "kordex" }

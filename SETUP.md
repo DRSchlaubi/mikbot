@@ -76,7 +76,7 @@ nano .env
 paste the following into the file and change the values to your needs (read the comments)
 
 ```env
-ENVIRONMENT=PRODUCTION # Change this to DEVELOPMENT while you try out the bot, in PRODUCTION mode commands will take up to 1 hour to show up due to a limitation from discord 
+ENVIRONMENT=PRODUCTION # Change this to DEVELOPMENT while you try out the bot, in PRODUCTION mode commands will take up to 1 hour to show up due to a limitation from discord
 
 SENTRY_TOKEN=<> # You can obtain a token from https://sentry.io/
 DISCORD_TOKEN=<> # Put your discord token from https://discord.com/developers/applications
@@ -140,7 +140,7 @@ seperated by a `,`: `game-animator`
 Then add the following
 
 ```env
-GAMES=<> # Put your activities here 
+GAMES=<> # Put your activities here
 ```
 
 You can find the supported values for
@@ -166,4 +166,5 @@ SPOTIFY_CLIENT_SECRET=<>
 SPOTIFY_CLIENT_ID=<>
 
 HAPPI_KEY=<token from happi.dev for lyrics>
+IMAGE_COLOR_SERVICE_URL=<image color service url>
 ```

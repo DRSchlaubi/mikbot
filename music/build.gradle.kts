@@ -28,6 +28,10 @@ dependencies {
 
     // GDPR support
     optionalPlugin(projects.core.gdpr)
+
+    // Image Color Client
+    api(projects.utils.imageColorClient)
+    api(projects.utils.imageColorClientKord)
 }
 
 tasks {

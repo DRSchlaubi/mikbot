@@ -1,9 +1,14 @@
 package dev.schlaubi.mikmusic.util
 
 import com.kotlindiscord.kord.extensions.commands.CommandContext
+import com.kotlindiscord.kord.extensions.koin.KordExContext
+import dev.kord.common.Color
 import dev.kord.rest.builder.message.EmbedBuilder
+import dev.nycode.imagecolor.ImageColorClient
 import dev.schlaubi.lavakord.audio.player.Track
 import dev.schlaubi.mikbot.plugin.api.util.Translator
+
+private val imageColorClient by KordExContext.get().inject<ImageColorClient>()
 
 /**
  * This function fetches all required information for [track] and adds it to `this` [EmbedBuilder].
@@ -35,6 +40,10 @@ suspend fun EmbedBuilder.addSong(translate: Translator, track: Track) {
         val channel = getFirstChannelById(info.channelId).snippet
         thumbnail {
             url = info.thumbnails.high.url
+        }
+
+        imageColorClient.fetchImageColorOrNull(info.thumbnails.high.url)?.let { imageColor ->
+            color = Color(imageColor)
         }
 
         author {

@@ -1,6 +1,6 @@
 [versions]
 kordex = "1.5.5.3-MIKBOT-SNAPSHOT"
-kmongo = "4.6.1"
+kmongo = "4.7.0"
 pf4j = "3.7.0"
 coroutines = "1.6.4"
 serialization = "1.3.3"

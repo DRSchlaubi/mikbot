@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "dev.schlaubi.mikbot"
-version = "2.2.1"
+version = "2.3.0"
 
 dependencies {
     implementation(libs.rhino)

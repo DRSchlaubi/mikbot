@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "dev.schlaubi.mikbot"
-version = "1.0.0"
+version = "1.1.0"
 
 dependencies {
     plugin(projects.utils.ktor)

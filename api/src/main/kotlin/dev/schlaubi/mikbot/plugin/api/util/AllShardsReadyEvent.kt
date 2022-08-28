@@ -1,14 +1,15 @@
 package dev.schlaubi.mikbot.plugin.api.util
 
+import dev.kord.common.annotation.KordPreview
 import dev.kord.core.Kord
 import dev.kord.core.event.Event
-import kotlin.coroutines.CoroutineContext
 
 /**
  * Event fired when all shards are first connected to Discord.
  */
-public class AllShardsReadyEvent(
+@OptIn(KordPreview::class)
+public class AllShardsReadyEvent constructor(
     override val kord: Kord,
     override val shard: Int,
-    override val coroutineContext: CoroutineContext
+    override val customContext: Any? = null,
 ) : Event

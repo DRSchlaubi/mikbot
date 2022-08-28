@@ -176,7 +176,7 @@ private class BotModule : Extension() {
                     kord.editPresence {
                         status = PresenceStatus.Online
                     }
-                    pluginSystem.emitEvent(AllShardsReadyEvent(kord, -1, event.coroutineContext))
+                    pluginSystem.emitEvent(AllShardsReadyEvent(kord, -1, event.customContext))
                 }
                 LOG.info { "Logged in with shard ${event.shard}, Remaining $remaining" }
             }

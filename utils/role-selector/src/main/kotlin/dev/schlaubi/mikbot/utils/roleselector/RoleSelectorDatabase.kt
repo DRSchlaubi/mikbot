@@ -20,10 +20,12 @@ data class AutoRole(@SerialName("_id") val guildId: Snowflake, val roleId: Snowf
 @Serializable
 data class RoleSelectionMessage(
     @SerialName("_id") val messageId: Snowflake,
+    val guildId: Snowflake? = null,
     val title: String,
     val description: String?,
     val embedColor: Color?,
-    val roleSelections: List<RoleSelectionButton>
+    val roleSelections: List<RoleSelectionButton>,
+    val multiple: Boolean = true
 )
 
 @Serializable

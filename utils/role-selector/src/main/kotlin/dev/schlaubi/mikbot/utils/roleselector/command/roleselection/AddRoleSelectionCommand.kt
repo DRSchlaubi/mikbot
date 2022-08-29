@@ -9,16 +9,13 @@ import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalString
 import com.kotlindiscord.kord.extensions.commands.converters.impl.role
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.kord.common.entity.AllowedMentionType
-import dev.kord.common.entity.DiscordPartialEmoji
-import dev.kord.common.entity.optional.optional
 import dev.kord.rest.builder.message.create.allowedMentions
 import dev.schlaubi.mikbot.plugin.api.settings.guildAdminOnly
+import dev.schlaubi.mikbot.plugin.api.util.safeGuild
 import dev.schlaubi.mikbot.utils.roleselector.RoleSelectionButton
 import dev.schlaubi.mikbot.utils.roleselector.RoleSelectionMessage
 import dev.schlaubi.mikbot.utils.roleselector.RoleSelectorDatabase
-import dev.schlaubi.mikbot.utils.roleselector.util.setTranslationKey
-import dev.schlaubi.mikbot.utils.roleselector.util.translateString
-import dev.schlaubi.mikbot.utils.roleselector.util.updateMessage
+import dev.schlaubi.mikbot.utils.roleselector.util.*
 
 suspend fun EphemeralSlashCommand<*>.addRoleSelectionCommand() = ephemeralSubCommand(::AddRoleSelectionArguments) {
     name = "add-role"
@@ -30,13 +27,21 @@ suspend fun EphemeralSlashCommand<*>.addRoleSelectionCommand() = ephemeralSubCom
         val message = arguments.message
         val role = arguments.role
         val label = arguments.label ?: role.name
-        val emoji = arguments.emoji
+        val emojiArg = arguments.emoji
 
-        val oldRoleSelectionMessage = RoleSelectorDatabase.roleSelectionCollection.findOneById(message.id)!!
+        val oldRoleSelectionMessage = RoleSelectorDatabase.roleSelectionCollection.findOneById(message.id)
+
+        if (oldRoleSelectionMessage == null) {
+            respond {
+                content = translateString("commands.error.not_a_role_selection_message")
+            }
+            return@action
+        }
 
         if (!oldRoleSelectionMessage.roleSelections.any { it.roleId == role.id }) {
             val newRoleSelectionMessage = RoleSelectionMessage(
                 message.id,
+                safeGuild.id,
                 oldRoleSelectionMessage.title,
                 oldRoleSelectionMessage.description,
                 oldRoleSelectionMessage.embedColor,
@@ -44,11 +49,7 @@ suspend fun EphemeralSlashCommand<*>.addRoleSelectionCommand() = ephemeralSubCom
                     RoleSelectionButton(
                         role.id.value.toString(),
                         label,
-                        if (emoji != null) DiscordPartialEmoji(
-                            id = emoji.id,
-                            name = emoji.name,
-                            animated = emoji.isAnimated.optional()
-                        ) else null,
+                        emojiArg.toPartialEmoji(),
                         role.id
                     )
                 )
@@ -80,6 +81,7 @@ class AddRoleSelectionArguments : Arguments() {
     val message by message {
         name = "message"
         description = "commands.add_role.arguments.message.description"
+        autoCompleteRoleSelectionMessage()
     }
     val role by role {
         name = "role"

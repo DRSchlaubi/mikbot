@@ -7,6 +7,7 @@ import com.kotlindiscord.kord.extensions.commands.converters.impl.message
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.mikbot.plugin.api.settings.guildAdminOnly
 import dev.schlaubi.mikbot.utils.roleselector.RoleSelectorDatabase
+import dev.schlaubi.mikbot.utils.roleselector.util.autoCompleteRoleSelectionMessage
 import dev.schlaubi.mikbot.utils.roleselector.util.setTranslationKey
 import dev.schlaubi.mikbot.utils.roleselector.util.translateString
 
@@ -36,5 +37,6 @@ class RemoveRoleMessageArguments : Arguments() {
     val message by message {
         name = "message"
         description = "commands.remove_message.arguments.message.description"
+        autoCompleteRoleSelectionMessage()
     }
 }

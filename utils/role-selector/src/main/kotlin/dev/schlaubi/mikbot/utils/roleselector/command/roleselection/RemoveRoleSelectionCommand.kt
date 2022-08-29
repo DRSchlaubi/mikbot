@@ -9,8 +9,10 @@ import com.kotlindiscord.kord.extensions.types.respond
 import dev.kord.common.entity.AllowedMentionType
 import dev.kord.rest.builder.message.create.allowedMentions
 import dev.schlaubi.mikbot.plugin.api.settings.guildAdminOnly
+import dev.schlaubi.mikbot.plugin.api.util.safeGuild
 import dev.schlaubi.mikbot.utils.roleselector.RoleSelectionMessage
 import dev.schlaubi.mikbot.utils.roleselector.RoleSelectorDatabase
+import dev.schlaubi.mikbot.utils.roleselector.util.autoCompleteRoleSelectionMessage
 import dev.schlaubi.mikbot.utils.roleselector.util.setTranslationKey
 import dev.schlaubi.mikbot.utils.roleselector.util.translateString
 import dev.schlaubi.mikbot.utils.roleselector.util.updateMessage
@@ -32,12 +34,11 @@ suspend fun EphemeralSlashCommand<*>.removeRoleSelectionCommand() = ephemeralSub
 
                 val newRoleSelectionMessage = RoleSelectionMessage(
                     message.id,
+                    safeGuild.id,
                     roleSelection.title,
                     roleSelection.description,
                     roleSelection.embedColor,
-                    roleSelection.roleSelections.minus(
-                        roleSelectionButton
-                    )
+                    roleSelection.roleSelections - roleSelectionButton,
                 )
 
                 RoleSelectorDatabase.roleSelectionCollection.save(newRoleSelectionMessage)
@@ -70,6 +71,7 @@ class RemoveRoleSelectionArguments : Arguments() {
     val message by message {
         name = "message"
         description = "commands.remove_role.arguments.message.description"
+        autoCompleteRoleSelectionMessage()
     }
     val role by role {
         name = "role"

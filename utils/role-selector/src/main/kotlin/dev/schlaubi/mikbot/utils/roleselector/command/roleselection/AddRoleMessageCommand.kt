@@ -3,10 +3,7 @@ package dev.schlaubi.mikbot.utils.roleselector.command.roleselection
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommand
 import com.kotlindiscord.kord.extensions.commands.application.slash.ephemeralSubCommand
-import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalChannel
-import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalColor
-import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalString
-import com.kotlindiscord.kord.extensions.commands.converters.impl.string
+import com.kotlindiscord.kord.extensions.commands.converters.impl.*
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.kord.common.entity.Permission
 import dev.kord.common.entity.Permissions
@@ -15,6 +12,7 @@ import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.entity.channel.TopGuildMessageChannel
 import dev.kord.rest.builder.message.create.embed
 import dev.schlaubi.mikbot.plugin.api.settings.guildAdminOnly
+import dev.schlaubi.mikbot.plugin.api.util.safeGuild
 import dev.schlaubi.mikbot.utils.roleselector.RoleSelectionMessage
 import dev.schlaubi.mikbot.utils.roleselector.RoleSelectorDatabase
 import dev.schlaubi.mikbot.utils.roleselector.util.setTranslationKey
@@ -32,10 +30,10 @@ suspend fun EphemeralSlashCommand<*>.addRoleMessageCommand() = ephemeralSubComma
         val embedColor = arguments.embedColor
         val sendingChannel =
             arguments.channel?.asChannelOfOrNull() ?: channel.asChannelOfOrNull<TopGuildMessageChannel>()
+        val multiple = arguments.multiple ?: true
 
         if (sendingChannel == null) {
             respond {
-
                 content = translate("commands.role_selector.add_message.invalid_channel")
             }
             return@action
@@ -60,10 +58,12 @@ suspend fun EphemeralSlashCommand<*>.addRoleMessageCommand() = ephemeralSubComma
         RoleSelectorDatabase.roleSelectionCollection.save(
             RoleSelectionMessage(
                 message.id,
+                safeGuild.id,
                 embedTitle,
                 embedDescription,
                 embedColor,
-                emptyList()
+                emptyList(),
+                multiple
             )
         )
 
@@ -89,5 +89,9 @@ class CreateRoleMessageArguments : Arguments() {
     val channel by optionalChannel {
         name = "channel"
         description = "command.create_message.arguments.channel.description"
+    }
+    val multiple by optionalBoolean {
+        name = "multiple"
+        description = "commands.add_role.arguments.multiple.description"
     }
 }

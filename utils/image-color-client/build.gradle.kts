@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "dev.nycode"
-version = "1.0.0"
+version = "1.1.0"
 
 dependencies {
     implementation(libs.ktor.client.okhttp)

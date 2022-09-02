@@ -12,7 +12,7 @@ import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)
 object DurationSerializer : KSerializer<Duration> {
-    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Duration", PrimitiveKind.LONG)
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("MikBotDuration", PrimitiveKind.LONG)
 
     override fun deserialize(decoder: Decoder): Duration = decoder.decodeLong().milliseconds
 

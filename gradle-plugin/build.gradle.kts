@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "dev.schlaubi"
-version = "2.5.1"
+version = "2.6.0"
 
 repositories {
     mavenCentral()

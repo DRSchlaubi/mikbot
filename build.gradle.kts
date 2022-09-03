@@ -14,12 +14,13 @@ version = Project.version + "-SNAPSHOT"
 
 allprojects {
     repositories {
+        mavenLocal()
         mavenCentral()
         maven("https://maven.kotlindiscord.com/repository/maven-public/")
         maven("https://schlaubi.jfrog.io/artifactory/mikbot/")
         maven("https://schlaubi.jfrog.io/artifactory/envconf/")
         maven("https://schlaubi.jfrog.io/artifactory/lavakord/")
-        maven("https://nycode.jfrog.io/artifactory/snapshots/")
+//        maven("https://nycode.jfrog.io/artifactory/snapshots/")
         maven("https://oss.sonatype.org/content/repositories/snapshots")
     }
 }
@@ -72,7 +73,7 @@ tasks {
 
             val kotlinFile = """
                 package dev.schlaubi.mikbot.gradle
-                
+
                 const val transientDependencies = "${deps.joinToString("\\n")}"
             """.trimIndent()
 

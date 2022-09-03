@@ -10,5 +10,9 @@ services:
       - mongo-data:/data/db
     ports:
       - "27017:27017"
+  image_color_service:
+    image: ghcr.io/mikbot/image-color-service
+    ports:
+      - "4567:8080"
 volumes:
   mongo-data: { }

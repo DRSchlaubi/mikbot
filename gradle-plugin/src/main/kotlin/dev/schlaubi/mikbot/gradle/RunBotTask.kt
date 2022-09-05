@@ -32,12 +32,15 @@ abstract class RunBotTask : JavaExec() {
         if (envFile.notExists() || envFile.isDirectory()) {
             return
         }
-        envFile.readLines().forEach {
-            if (it.isNotBlank()) {
+        envFile.readLines()
+            .asSequence()
+            .filter(String::isNotBlank)
+            .map(String::trimStart)
+            .filterNot { it.startsWith('#') }
+            .forEach {
                 val (key, value) = it.split('=')
                 environment[key] = value.trimEnd()
             }
-        }
     }
 
     private fun configureClasspath() {

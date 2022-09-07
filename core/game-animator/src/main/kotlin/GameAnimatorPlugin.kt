@@ -75,7 +75,7 @@ data class Game(val type: ActivityType, val status: PresenceStatus, val text: St
 
             when (type) {
                 ActivityType.Game -> playing(formattedText)
-                ActivityType.Streaming -> streaming(formattedText, "https://twitch.tv/schlauhibi")
+                ActivityType.Streaming -> streaming(formattedText, Config.STREAM_URL)
                 ActivityType.Listening -> listening(formattedText)
                 ActivityType.Watching -> watching(formattedText)
                 ActivityType.Competing -> competing(formattedText)

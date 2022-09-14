@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "dev.schlaubi"
-version = "2.5.0"
+version = "2.6.0"
 
 mikbotPlugin {
     description.set("Plugin adding support to post server counts to server lists using botblock")

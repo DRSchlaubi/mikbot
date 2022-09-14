@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Bump Versions" type="KotlinStandaloneScriptRunConfigurationType">
+    <module name="mikbot" />
+    <shortenClasspath name="NONE" />
+    <option name="WORKING_DIRECTORY" value="$ProjectFileDir$" />
+    <option name="filePath" value="$PROJECT_DIR$/scripts/bump_versions.main.kts" />
+    <method v="2">
+      <option name="Make" enabled="false" />
+    </method>
+  </configuration>
+</component>

@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "dev.schlaubi.mikbot"
-version = "2.9.0"
+version = "2.10.0"
 
 dependencies {
     api(libs.lavakord.kord)

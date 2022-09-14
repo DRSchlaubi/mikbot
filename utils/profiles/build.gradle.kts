@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "dev.schlaubi.mikbot"
-version = "2.7.0"
+version = "2.8.0"
 
 repositories {
     maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")

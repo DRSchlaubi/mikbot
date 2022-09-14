@@ -33,6 +33,8 @@ jobs:
         with:
           arguments: build --scan --no-daemon --build-cache
       - uses: Ilshidur/action-discord@0.3.2
+        continue-on-error: true
+        if: ${{ github.event_name != 'pull_request' }}
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:

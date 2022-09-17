@@ -72,9 +72,11 @@ suspend fun Poll.updateMessages(
     showChart: Boolean? = null,
 ) {
     val pieChart = if (highlightWinner && showChart ?: settings.showChartAfterClose && votes.isNotEmpty()) {
-        pieChartService
-            .createPieChart(toPieChartCreateRequest(kord, guild))
-            .toInputStream()
+        runCatching {
+            pieChartService
+                .createPieChart(toPieChartCreateRequest(kord, guild))
+                .toInputStream()
+        }.getOrNull()
     } else {
         null
     }
@@ -169,7 +171,7 @@ suspend fun Poll.toEmbed(
 
     description = """
         $names
-        
+
         $results
     """.trimIndent()
 

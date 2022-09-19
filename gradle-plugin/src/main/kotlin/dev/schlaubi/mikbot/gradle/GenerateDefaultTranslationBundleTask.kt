@@ -15,6 +15,9 @@ abstract class GenerateDefaultTranslationBundleTask : DefaultTask() {
     @get:Input
     abstract val bundles: ListProperty<String>
 
+    init {
+        outputs.dir("translations")
+    }
 
     @TaskAction
     fun copyBundle() {

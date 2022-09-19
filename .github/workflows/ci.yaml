@@ -68,6 +68,13 @@ jobs:
                   --tag  ghcr.io/drschlaubi/mikmusic/bot:latest \
                   --file ./Dockerfile \
                   --output type=image,push=true .
+      - name: Push Votebot Image
+        run: |
+          docker buildx build \
+                  --tag  ghcr.io/drschlaubi/mikmusic/votebot:"$GITHUB_SHA" \
+                  --tag  ghcr.io/drschlaubi/mikmusic/votebot:latest \
+                  --file ./votebot/Dockerfile \
+                  --output type=image,push=true .
   update_repository:
     name: Update repository
     runs-on: ubuntu-20.04

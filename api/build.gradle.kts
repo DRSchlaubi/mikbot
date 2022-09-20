@@ -12,6 +12,12 @@ kotlin {
 }
 
 dependencies {
+    // Version override
+    implementation("dev.kord", "kord-core") {
+        version {
+            strictly("feature-login-rate-limiting-SNAPSHOT")
+        }
+    }
     // Api base
     api(projects.api.annotations)
     // Bot

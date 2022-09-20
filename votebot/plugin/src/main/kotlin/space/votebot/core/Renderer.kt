@@ -21,10 +21,12 @@ import dev.schlaubi.mikbot.plugin.api.util.effectiveAvatar
 import dev.schlaubi.mikbot.plugin.api.util.embed
 import dev.schlaubi.stdx.coroutines.forEachParallel
 import dev.schlaubi.stdx.coroutines.localSuspendLazy
+import io.ktor.client.request.forms.*
 import io.ktor.utils.io.jvm.javaio.*
 import kotlinx.datetime.Clock
 import mu.KotlinLogging
 import space.votebot.common.models.Poll
+import space.votebot.common.models.VoteOption
 import space.votebot.common.models.sumUp
 import space.votebot.pie_char_service.client.PieChartCreateRequest
 import space.votebot.pie_char_service.client.PieChartServiceClient
@@ -92,7 +94,7 @@ suspend fun Poll.updateMessages(
             messageBehavior.edit {
                 if (pieChart != null) {
                     if (Permission.AttachFiles in permissions()) {
-                        addFile("chart.png", pieChart)
+                        addFile("chart.png", ChannelProvider(block = pieChart::toByteReadChannel))
                     } else {
                         content = "Could not create pie chart due to missing permissions"
                     }
@@ -154,7 +156,7 @@ suspend fun Poll.toEmbed(
             "$prefix. ${transformMessageSafe(value, TransformerContext(guild, kord, true))}"
         }.joinToString(separator = "\n")
 
-    val totalVotes = votes.sumOf { it.amount }
+    val totalVotes = votes.sumOf(Poll.Vote::amount)
     val results = if (!settings.hideResults || highlightWinner || overwriteHideResults) {
         val resultsText = sumUp()
             .joinToString(separator = "\n") { (option, _, votePercentage) ->
@@ -186,7 +188,7 @@ suspend fun Poll.toEmbed(
     }
 
     if (highlightWinner) {
-        val options = sumUp().groupBy { it.amount }
+        val options = sumUp().groupBy(VoteOption::amount)
         val maxVotes = options.keys.maxOrNull()
 
         val winners = maxVotes?.let { options[it] } ?: emptyList()

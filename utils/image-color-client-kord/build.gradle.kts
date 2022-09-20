@@ -8,7 +8,7 @@ version = "1.1.0"
 
 dependencies {
     api(projects.utils.imageColorClient)
-    api(libs.kord.core)
+    api(libs.kord.rest)
 }
 
 kotlin {

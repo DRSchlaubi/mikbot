@@ -10,6 +10,8 @@ import dev.kord.core.Kord
 import dev.kord.core.behavior.GuildBehavior
 import dev.kord.core.behavior.interaction.response.createEphemeralFollowup
 import dev.kord.core.event.interaction.GuildButtonInteractionCreateEvent
+import io.ktor.client.request.forms.*
+import io.ktor.utils.io.jvm.javaio.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -29,7 +31,7 @@ suspend fun Poll.close(kord: Kord, showChart: Boolean? = null, guild: GuildBehav
             kord.getUser(Snowflake(authorId))?.dm {
                 content = "This message contains the requested vote statistic for your poll: $title ($id)"
 
-                addFile("votes.csv", generateCSVFile(kord))
+                addFile("votes.csv", ChannelProvider(block = generateCSVFile(kord)::toByteReadChannel))
             }
         }
     }

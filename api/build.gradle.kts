@@ -15,7 +15,7 @@ dependencies {
     // Version override
     implementation("dev.kord", "kord-core") {
         version {
-            strictly("feature-login-rate-limiting-SNAPSHOT")
+            strictly("feature-login-rate-limiting-20220922.144254-7")
         }
     }
     // Api base

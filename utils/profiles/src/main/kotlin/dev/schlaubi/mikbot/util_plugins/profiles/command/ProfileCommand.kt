@@ -62,6 +62,7 @@ suspend fun SettingsModule.profileCommand() {
     publicSlashCommand {
         name = "profile"
         description = "commands.profile.description"
+        bundle = "profiles"
 
         publicSubCommand(::ProfileArguments) {
             name = "show"
@@ -164,7 +165,7 @@ private suspend fun User.renderProfile(translateWrapper: suspend (String, String
                     "$emoji | **$translation**"
                 }
             }
-            
+
             **${translate("profiles.profile.connected_accounts")}:**
             ${
             connections.joinToString(separator = "\n") { (connection, user) ->
@@ -173,7 +174,7 @@ private suspend fun User.renderProfile(translateWrapper: suspend (String, String
                 "**•** :x: **${translate("profiles.profile.no_connected_accounts")}**"
             }
             }
-        
+
         **${translate("profiles.profile.pronouns")}:**
         ${
             profile.await().pronouns.map { translate(it.displayName) to it.url }
@@ -183,7 +184,7 @@ private suspend fun User.renderProfile(translateWrapper: suspend (String, String
                     "**•** :x: ${translate("profiles.profile.no_pronouns")}\n${translate("profiles.profile.ask_for_pronouns")}"
                 }
             }
-        
+
         ${
             translate(
                 "profiles.profile.creation_date",

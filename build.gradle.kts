@@ -39,7 +39,7 @@ dependencies {
     implementation("com.google.code.gson", "gson", "2.9.1")
     implementation("org.ow2.asm", "asm", "9.3") // pf4j doesn't declare a real dep on it
 
-    implementation("io.insert-koin", "koin-core", "3.2.0")
+    implementation("io.insert-koin", "koin-core", "3.2.2")
 
     // Util
     implementation("org.jetbrains.kotlinx", "kotlinx-serialization-json", "1.4.0")

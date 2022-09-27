@@ -4,11 +4,9 @@ import dev.schlaubi.mikbot.plugin.api.config.Config
 import mu.KotlinLogging
 import org.pf4j.DependencyResolver
 import org.pf4j.PluginDescriptor
-import org.pf4j.update.FileDownloader
-import org.pf4j.update.FileVerifier
-import org.pf4j.update.UpdateManager
-import org.pf4j.update.UpdateRepository
+import org.pf4j.update.*
 import org.pf4j.update.verifier.BasicVerifier
+import kotlin.io.path.absolutePathString
 
 private val LOG = KotlinLogging.logger { }
 
@@ -71,10 +69,13 @@ class PluginUpdater(private val pluginLoader: PluginLoader, repos: List<UpdateRe
                 LOG.debug { "Found update for plugin '${plugin.id}'" }
                 val lastRelease = getLastPluginRelease(plugin.id)
                 // Don't update plugins which a specific version requested
-                if (Config.DOWNLOAD_PLUGINS.firstOrNull { it.id == plugin.id }?.version?.equals(lastRelease.version) == false)
+                if (Config.DOWNLOAD_PLUGINS.firstOrNull { it.id == plugin.id }?.version?.equals(lastRelease.version) == false) {
                     continue
+                }
                 val lastVersion = lastRelease.version
-                val installedVersion = pluginLoader.getPlugin(plugin.id).descriptor.version
+                val installedPlugin = pluginLoader.getPlugin(plugin.id)
+                if (BUNDLED_PLUGINS in installedPlugin.pluginPath.absolutePathString()) continue
+                val installedVersion = installedPlugin.descriptor.version
 
                 LOG.debug { "Update plugin '${plugin.id}' from version $installedVersion to version $lastVersion" }
                 val updated = updatePlugin(plugin.id, lastVersion)
@@ -94,7 +95,7 @@ class PluginUpdater(private val pluginLoader: PluginLoader, repos: List<UpdateRe
             val installedPlugins = pluginLoader.plugins.map { it.pluginId }
             val requestedPlugins = Config.DOWNLOAD_PLUGINS
             val availablePlugins = availablePlugins
-                .associateBy { it.id }
+                .associateBy(PluginInfo::id)
 
             if (requestedPlugins.isNotEmpty()) {
                 LOG.info { "Attempting to download the following plugins: $requestedPlugins" }

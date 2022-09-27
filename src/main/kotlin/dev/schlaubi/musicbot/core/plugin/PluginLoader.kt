@@ -22,6 +22,8 @@ import kotlin.reflect.KClass
 
 private val LOG = KotlinLogging.logger { }
 
+public const val BUNDLED_PLUGINS = "bundled-plugins"
+
 object PluginLoader : DefaultPluginManager(), KordExKoinComponent {
     internal val repos: List<UpdateRepository> = Config.PLUGIN_REPOSITORIES.map {
         DefaultUpdateRepository(
@@ -38,7 +40,7 @@ object PluginLoader : DefaultPluginManager(), KordExKoinComponent {
 
     override fun createPluginsRoot(): List<Path> {
         // Load bundled plugins
-        val bundledPlugins = ClassLoader.getSystemResource("bundled-plugins")
+        val bundledPlugins = ClassLoader.getSystemResource(BUNDLED_PLUGINS)
         return if (bundledPlugins != null) {
             listOf(*super.createPluginsRoot().toTypedArray(), Path.of(bundledPlugins.toURI()))
         } else {

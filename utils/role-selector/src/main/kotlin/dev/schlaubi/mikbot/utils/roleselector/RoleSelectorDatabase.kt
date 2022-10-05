@@ -25,7 +25,8 @@ data class RoleSelectionMessage(
     val description: String?,
     val embedColor: Color?,
     val roleSelections: List<RoleSelectionButton>,
-    val multiple: Boolean = true
+    val multiple: Boolean = true,
+    val showSelections: Boolean = true,
 )
 
 @Serializable

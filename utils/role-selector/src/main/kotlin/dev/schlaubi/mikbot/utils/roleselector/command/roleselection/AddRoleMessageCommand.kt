@@ -3,7 +3,11 @@ package dev.schlaubi.mikbot.utils.roleselector.command.roleselection
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommand
 import com.kotlindiscord.kord.extensions.commands.application.slash.ephemeralSubCommand
-import com.kotlindiscord.kord.extensions.commands.converters.impl.*
+import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalBoolean
+import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalChannel
+import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalColor
+import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalString
+import com.kotlindiscord.kord.extensions.commands.converters.impl.string
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.kord.common.entity.Permission
 import dev.kord.common.entity.Permissions
@@ -31,6 +35,7 @@ suspend fun EphemeralSlashCommand<*>.addRoleMessageCommand() = ephemeralSubComma
         val sendingChannel =
             arguments.channel?.asChannelOfOrNull() ?: channel.asChannelOfOrNull<TopGuildMessageChannel>()
         val multiple = arguments.multiple ?: true
+        val showSelections = arguments.showSelections ?: true
 
         if (sendingChannel == null) {
             respond {
@@ -63,7 +68,8 @@ suspend fun EphemeralSlashCommand<*>.addRoleMessageCommand() = ephemeralSubComma
                 embedDescription,
                 embedColor,
                 emptyList(),
-                multiple
+                multiple,
+                showSelections
             )
         )
 
@@ -76,22 +82,26 @@ suspend fun EphemeralSlashCommand<*>.addRoleMessageCommand() = ephemeralSubComma
 class CreateRoleMessageArguments : Arguments() {
     val title by string {
         name = "title"
-        description = "command.create_message.arguments.title.description"
+        description = "commands.create_message.arguments.title.description"
     }
     val description by optionalString {
         name = "description"
-        description = "command.create_message.arguments.description.description"
+        description = "commands.create_message.arguments.description.description"
     }
     val embedColor by optionalColor {
         name = "color"
-        description = "command.create_message.arguments.color.description"
+        description = "commands.create_message.arguments.color.description"
     }
     val channel by optionalChannel {
         name = "channel"
-        description = "command.create_message.arguments.channel.description"
+        description = "commands.create_message.arguments.channel.description"
     }
     val multiple by optionalBoolean {
         name = "multiple"
-        description = "commands.add_role.arguments.multiple.description"
+        description = "commands.create_message.arguments.multiple.description"
+    }
+    val showSelections by optionalBoolean {
+        name = "show-selections"
+        description = "commands.create_message.arguments.show-selections.description"
     }
 }

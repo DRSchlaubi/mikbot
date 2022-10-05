@@ -5,9 +5,12 @@ import com.kotlindiscord.kord.extensions.commands.application.slash.ephemeralSub
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.mikbot.plugin.api.settings.guildAdminOnly
 import dev.schlaubi.mikbot.plugin.api.util.safeGuild
-import dev.schlaubi.mikbot.utils.roleselector.RoleSelectionMessage
 import dev.schlaubi.mikbot.utils.roleselector.RoleSelectorDatabase
-import dev.schlaubi.mikbot.utils.roleselector.util.*
+import dev.schlaubi.mikbot.utils.roleselector.util.replace
+import dev.schlaubi.mikbot.utils.roleselector.util.setTranslationKey
+import dev.schlaubi.mikbot.utils.roleselector.util.toPartialEmoji
+import dev.schlaubi.mikbot.utils.roleselector.util.translateString
+import dev.schlaubi.mikbot.utils.roleselector.util.updateMessage
 
 suspend fun EphemeralSlashCommand<*>.editRoleSelectionCommand() = ephemeralSubCommand(::AddRoleSelectionArguments) {
     name = "edit-role"
@@ -38,14 +41,12 @@ suspend fun EphemeralSlashCommand<*>.editRoleSelectionCommand() = ephemeralSubCo
         }
 
         if (oldRoleSelectionMessage.roleSelections.any { it.roleId == role.id }) {
-            val oldRoleSelectionButton = oldRoleSelectionMessage.roleSelections.find { it.roleId == role.id } ?: return@action
-            val newRoleSelectionMessage = RoleSelectionMessage(
-                message.id,
-                safeGuild.id,
-                oldRoleSelectionMessage.title,
-                oldRoleSelectionMessage.description,
-                oldRoleSelectionMessage.embedColor,
-                oldRoleSelectionMessage.roleSelections.replace(
+            val oldRoleSelectionButton =
+                oldRoleSelectionMessage.roleSelections.find { it.roleId == role.id } ?: return@action
+            val newRoleSelectionMessage = oldRoleSelectionMessage.copy(
+                messageId = message.id,
+                guildId = safeGuild.id,
+                roleSelections = oldRoleSelectionMessage.roleSelections.replace(
                     oldRoleSelectionButton,
                     oldRoleSelectionButton.copy(
                         buttonId = oldRoleSelectionButton.buttonId,

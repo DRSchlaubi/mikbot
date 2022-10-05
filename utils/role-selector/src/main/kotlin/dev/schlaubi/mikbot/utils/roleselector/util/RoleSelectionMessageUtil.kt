@@ -20,16 +20,18 @@ suspend fun updateMessage(message: Message, roleSelectionMessage: RoleSelectionM
             title = roleSelectionMessage.title
             val embedDescription =
                 StringBuilder(roleSelectionMessage.description ?: "").apply {
-                    if(isNotEmpty()) {
+                    if (isNotEmpty() && roleSelectionMessage.showSelections) {
                         appendLine()
                         appendLine()
                     }
                 }
-            roleSelectionMessage.roleSelections.forEach {
-                it.emoji?.let { (id, name, animated) ->
-                    embedDescription.append("<${if (animated.orElse(false)) "a" else ""}:${name}:${id}> ")
+            if (roleSelectionMessage.showSelections) {
+                roleSelectionMessage.roleSelections.forEach {
+                    it.emoji?.let { (id, name, animated) ->
+                        embedDescription.append("<${if (animated.orElse(false)) "a" else ""}:${name}:${id}> ")
+                    }
+                    embedDescription.append(it.label).appendLine().appendLine()
                 }
-                embedDescription.append(it.label).appendLine().appendLine()
             }
             description = embedDescription.toString()
             color = roleSelectionMessage.embedColor

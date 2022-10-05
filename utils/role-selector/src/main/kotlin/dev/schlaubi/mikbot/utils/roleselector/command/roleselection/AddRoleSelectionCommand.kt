@@ -13,9 +13,12 @@ import dev.kord.rest.builder.message.create.allowedMentions
 import dev.schlaubi.mikbot.plugin.api.settings.guildAdminOnly
 import dev.schlaubi.mikbot.plugin.api.util.safeGuild
 import dev.schlaubi.mikbot.utils.roleselector.RoleSelectionButton
-import dev.schlaubi.mikbot.utils.roleselector.RoleSelectionMessage
 import dev.schlaubi.mikbot.utils.roleselector.RoleSelectorDatabase
-import dev.schlaubi.mikbot.utils.roleselector.util.*
+import dev.schlaubi.mikbot.utils.roleselector.util.autoCompleteRoleSelectionMessage
+import dev.schlaubi.mikbot.utils.roleselector.util.setTranslationKey
+import dev.schlaubi.mikbot.utils.roleselector.util.toPartialEmoji
+import dev.schlaubi.mikbot.utils.roleselector.util.translateString
+import dev.schlaubi.mikbot.utils.roleselector.util.updateMessage
 
 suspend fun EphemeralSlashCommand<*>.addRoleSelectionCommand() = ephemeralSubCommand(::AddRoleSelectionArguments) {
     name = "add-role"
@@ -39,13 +42,10 @@ suspend fun EphemeralSlashCommand<*>.addRoleSelectionCommand() = ephemeralSubCom
         }
 
         if (!oldRoleSelectionMessage.roleSelections.any { it.roleId == role.id }) {
-            val newRoleSelectionMessage = RoleSelectionMessage(
-                message.id,
-                safeGuild.id,
-                oldRoleSelectionMessage.title,
-                oldRoleSelectionMessage.description,
-                oldRoleSelectionMessage.embedColor,
-                oldRoleSelectionMessage.roleSelections.plus(
+            val newRoleSelectionMessage = oldRoleSelectionMessage.copy(
+                messageId = message.id,
+                guildId = safeGuild.id,
+                roleSelections = oldRoleSelectionMessage.roleSelections.plus(
                     RoleSelectionButton(
                         role.id.value.toString(),
                         label,
@@ -68,7 +68,11 @@ suspend fun EphemeralSlashCommand<*>.addRoleSelectionCommand() = ephemeralSubCom
         } else {
             val alreadyAssignedLabel = oldRoleSelectionMessage.roleSelections.find { it.roleId == role.id }?.label
             respond {
-                content = translateString("commands.role_selection.message.role-already-added", role.mention, alreadyAssignedLabel)
+                content = translateString(
+                    "commands.role_selection.message.role-already-added",
+                    role.mention,
+                    alreadyAssignedLabel
+                )
                 allowedMentions {
                     +AllowedMentionType.UserMentions
                 }

@@ -14,6 +14,7 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.resources.*
 import io.ktor.server.application.*
+import io.ktor.server.plugins.*
 import io.ktor.server.resources.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -108,8 +109,6 @@ class VerificationServer : KtorExtensionPoint, KordExKoinComponent {
         }
     }
 }
-
-private class NotFoundException : RuntimeException()
 
 private val redirectUri = buildBotUrl { path("thanks") }.toString()
 private fun notFound(): Nothing = throw NotFoundException()

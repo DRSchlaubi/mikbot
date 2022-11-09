@@ -1,6 +1,6 @@
 [versions]
 kordex = "1.5.5-SNAPSHOT"
-kmongo = "4.7.0"
+kmongo = "4.7.2"
 pf4j = "3.7.0"
 coroutines = "1.6.4"
 serialization = "1.4.0"

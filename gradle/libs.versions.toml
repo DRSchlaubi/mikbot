@@ -28,7 +28,7 @@ google-cloud-bom = { group = "com.google.cloud", name = "libraries-bom", version
 google-cloud-translate = { group = "com.google.cloud", name = "google-cloud-translate" }
 google-apis-youtube = { group = "com.google.apis", name = "google-api-services-youtube", version = "v3-rev20220926-2.0.0" }
 lavakord-kord = { group = "dev.schlaubi.lavakord", name = "kord", version = "3.7.0" }
-spotify = { group = "se.michaelthelin.spotify", name = "spotify-web-api-java", version = "7.2.0" }
+spotify = { group = "se.michaelthelin.spotify", name = "spotify-web-api-java", version = "7.2.2" }
 krontab = { group = "dev.inmo", name = "krontab", version = "0.8.0" }
 ksp-api = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version = "1.7.10-1.0.6" }
 rhino = { group = "org.mozilla", name = "rhino", version = "1.7.14" }

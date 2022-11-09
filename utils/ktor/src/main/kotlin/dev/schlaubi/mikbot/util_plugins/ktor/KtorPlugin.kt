@@ -24,9 +24,8 @@ import kotlin.coroutines.CoroutineContext
 
 private val extensions = pluginSystem.getExtensions<KtorExtensionPoint>()
 
-@OptIn(ExperimentalSerializationApi::class)
 private val json = Json {
-    serializersModule = extensions.fold(EmptySerializersModule) { prev, now ->
+    serializersModule = extensions.fold(EmptySerializersModule()) { prev, now ->
         prev + now.provideSerializersModule()
     }
 

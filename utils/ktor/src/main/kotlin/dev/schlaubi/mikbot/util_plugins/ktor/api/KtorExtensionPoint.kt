@@ -25,8 +25,7 @@ interface KtorExtensionPoint : ExtensionPoint {
     /**
      * Provides the serializers module for this extenion.
      */
-    @OptIn(ExperimentalSerializationApi::class)
-    fun provideSerializersModule(): SerializersModule = EmptySerializersModule
+    fun provideSerializersModule(): SerializersModule = EmptySerializersModule()
 
     /**
      * Add extension specific [JsonBuilder] options.

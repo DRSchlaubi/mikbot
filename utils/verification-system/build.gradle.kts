@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "dev.schlaubi.mikbot"
-version = "2.8.0"
+version = "2.9.0"
 
 dependencies {
     plugin(projects.utils.ktor)
@@ -13,12 +13,4 @@ dependencies {
 
 mikbotPlugin {
     description.set("Plugin requiring each invite of the bot to be manually confirmed by an owner")
-}
-
-tasks {
-    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions {
-            freeCompilerArgs = freeCompilerArgs + listOf("-Xopt-in=io.ktor.locations.KtorExperimentalLocationsAPI")
-        }
-    }
 }

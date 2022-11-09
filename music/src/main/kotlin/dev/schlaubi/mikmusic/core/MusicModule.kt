@@ -123,7 +123,7 @@ class MusicModule : Extension() {
         val players = playerStates.find().toList()
         players.forEach {
             launch {
-                val guild = kord.getGuild(it.guildId) ?: return@launch
+                val guild = kord.getGuildOrNull(it.guildId) ?: return@launch
                 val channelId = it.channelId
                 val player = getMusicPlayer(guild)
                 it.schedulerOptions.applyToPlayer(player)

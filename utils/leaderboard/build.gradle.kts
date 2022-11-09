@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "dev.schlaubi.mikbot"
-version = "2.9.0"
+version = "2.10.0"
 
 dependencies {
     optionalPlugin(projects.core.gdpr)
@@ -17,10 +17,3 @@ mikbotPlugin {
     description.set("Adds a leaderboard")
 }
 
-tasks {
-    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions {
-            freeCompilerArgs = freeCompilerArgs + listOf("-Xopt-in=io.ktor.locations.KtorExperimentalLocationsAPI")
-        }
-    }
-}

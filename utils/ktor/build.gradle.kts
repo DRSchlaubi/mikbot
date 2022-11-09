@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "dev.schlaubi"
-version = "2.7.0"
+version = "2.8.0"
 
 dependencies {
     // Verification Server
@@ -20,7 +20,7 @@ dependencies {
 tasks {
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions {
-            freeCompilerArgs = freeCompilerArgs + listOf("-Xopt-in=dev.schlaubi.mikbot.plugin.api.InternalAPI")
+            freeCompilerArgs = freeCompilerArgs + listOf("-opt-in=dev.schlaubi.mikbot.plugin.api.InternalAPI")
         }
     }
 }

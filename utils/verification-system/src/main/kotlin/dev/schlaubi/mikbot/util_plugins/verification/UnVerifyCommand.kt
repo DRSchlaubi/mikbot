@@ -23,7 +23,7 @@ suspend fun OwnerModule.unVerifyCommand() =
         ownerOnly()
 
         action {
-            val guild = runCatching { this@ephemeralSlashCommand.kord.getGuild(arguments.guildId) }.getOrNull()
+            val guild = runCatching { this@ephemeralSlashCommand.kord.getGuildOrNull(arguments.guildId) }.getOrNull()
 
             if (guild == null) {
                 respond {

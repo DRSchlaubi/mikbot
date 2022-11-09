@@ -44,7 +44,7 @@ suspend fun updateMessage(
     translationsProvider: TranslationsProvider,
 ) {
     val message = findMessageSafe(guildId, kord)
-    val locale = kord.getGuild(guildId)?.preferredLocale?.kLocale?.convertToISO()?.asJavaLocale()
+    val locale = kord.getGuildOrNull(guildId)?.preferredLocale?.kLocale?.convertToISO()?.asJavaLocale()
         ?: translationsProvider.defaultLocale
 
     fun translate(key: String, vararg replacements: Any?) = translationsProvider.translate(
@@ -157,7 +157,7 @@ suspend fun findMessageSafe(guildId: Snowflake, kord: Kord): Message? {
     val guildSettings = MusicSettingsDatabase.guild.findOneById(guildId)
     val (channelId, messageId) = guildSettings?.musicChannelData ?: return null
 
-    val message = kord.getGuild(guildId)?.getChannelOfOrNull<TextChannel>(channelId)?.getMessageOrNull(messageId)
+    val message = kord.getGuildOrNull(guildId)?.getChannelOfOrNull<TextChannel>(channelId)?.getMessageOrNull(messageId)
 
     // if the message is not found, disable the feature
     if (message == null) {

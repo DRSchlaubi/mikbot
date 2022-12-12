@@ -98,7 +98,7 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCP_ACCOUNT_KEY }}
       - name: 'Set up Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v0'
+        uses: 'google-github-actions/setup-gcloud@v1'
       - name: 'Create working Directory'
         run: mkdir ci-repo ci-repo-old
       - name: 'Download existing repo'
@@ -154,7 +154,7 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCP_ACCOUNT_KEY }}
       - name: 'Set up Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v0'
+        uses: 'google-github-actions/setup-gcloud@v1'
       - name: 'Create working Directory'
         run: mkdir ci-repo
       - uses: gradle/gradle-build-action@v2

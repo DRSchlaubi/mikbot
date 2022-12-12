@@ -42,7 +42,7 @@ dependencies {
     implementation("io.insert-koin", "koin-core", "3.2.0")
 
     // Util
-    implementation("org.jetbrains.kotlinx", "kotlinx-serialization-json", "1.4.0")
+    implementation("org.jetbrains.kotlinx", "kotlinx-serialization-json", "1.4.1")
 
     implementation(project(":api"))
     implementation(kotlin("reflect"))

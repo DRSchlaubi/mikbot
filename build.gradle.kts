@@ -2,7 +2,7 @@ import java.nio.file.Files
 
 plugins {
     `mikbot-module`
-    kotlin("plugin.serialization") version "1.7.10"
+    kotlin("plugin.serialization") version "1.7.22"
     application
     // This exists to add the removeVersion extension to this buildscript
     id("dev.schlaubi.mikbot.gradle-plugin") apply false
@@ -36,13 +36,13 @@ dependencies {
     // Plugin system
     implementation("org.pf4j", "pf4j", "3.7.0")
     implementation("org.pf4j", "pf4j-update", "2.3.0")
-    implementation("com.google.code.gson", "gson", "2.9.1")
+    implementation("com.google.code.gson", "gson", "2.10")
     implementation("org.ow2.asm", "asm", "9.3") // pf4j doesn't declare a real dep on it
 
-    implementation("io.insert-koin", "koin-core", "3.2.0")
+    implementation("io.insert-koin", "koin-core", "3.2.2")
 
     // Util
-    implementation("org.jetbrains.kotlinx", "kotlinx-serialization-json", "1.4.0")
+    implementation("org.jetbrains.kotlinx", "kotlinx-serialization-json", "1.4.1")
 
     implementation(project(":api"))
     implementation(kotlin("reflect"))

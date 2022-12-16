@@ -3,19 +3,19 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("com.gradle.plugin-publish") version "1.0.0-rc-3"
     `java-gradle-plugin`
-    kotlin("jvm") version "1.7.10"
-    kotlin("plugin.serialization") version "1.7.10"
+    kotlin("jvm") version "1.7.22"
+    kotlin("plugin.serialization") version "1.7.22"
 }
 
 group = "dev.schlaubi"
-version = "2.6.3"
+version = "2.6.4"
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlinx", "kotlinx-serialization-json", "1.4.0")
+    implementation("org.jetbrains.kotlinx", "kotlinx-serialization-json", "1.4.1")
     implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-jdk8", "1.6.4")
     compileOnly(kotlin("gradle-plugin"))
 }

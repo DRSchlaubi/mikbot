@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "dev.schlaubi.mikbot"
-version = "3.5.0"
+version = "3.6.0"
 
 mikbotPlugin {
     description.set("Give Roles on a specific Event")

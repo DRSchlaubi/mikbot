@@ -174,9 +174,6 @@ public class Game<T : Player>(
         // Hand out each player's initial cards
         players.forEach {
             it.deck = ArrayList(7)
-            UnoColor.values().forEach {color ->
-                it.deck.add(SkipCard(color))
-            }
             handOutCards(it, 7)
         }
 
@@ -477,7 +474,6 @@ public fun getDefaultUnoDeck(extreme: Boolean, flash: Boolean, useSpecial7And0: 
  *
  * Reference: https://www.unorules.org/how-many-cards-in-uno/
  */
-@OptIn(ExperimentalStdlibApi::class)
 public val defaultUnoDeck: List<Card> =
     buildList(108) {
         UnoColor.values().forEach { color ->

@@ -2,6 +2,7 @@ package dev.schlaubi.mikbot.game.uno.game
 
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
 import dev.kord.common.Locale
+import dev.kord.common.entity.PresenceStatus
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.channel.createEmbed
 import dev.kord.core.behavior.channel.threads.ThreadChannelBehavior
@@ -47,7 +48,7 @@ class DiscordUnoGame(
     val allowDrawCardStacking: Boolean,
     val stackAllDrawingCards: Boolean,
     val allowBluffing: Boolean,
-    val useSpecial7and0: Boolean
+    val useSpecial7and0: Boolean,
 ) : AbstractGame<DiscordUnoPlayer>(host, module.asType),
     ControlledGame<DiscordUnoPlayer>,
     Rematchable<DiscordUnoPlayer, DiscordUnoGame> {
@@ -85,11 +86,13 @@ class DiscordUnoGame(
         user: User,
         ack: EphemeralMessageInteractionResponseBehavior,
         loading: FollowupMessage,
-        userLocale: Locale?
+        userLocale: Locale?,
     ): DiscordUnoPlayer {
         // We prioritise Desktop, so we just check whether there is a desktop status is present
-        val presences = user.asMember(thread.guildId).getPresence().clientStatus
-        val isMobile = presences.desktop == null && presences.web == null
+        val presence = user.asMember(thread.guildId).getPresence()
+        val presences = presence.clientStatus
+        val isMobile = presence.status != PresenceStatus.Offline && // if a user is offline, we don't know its platform
+            presences.desktop == null && presences.web == null
         return if (isMobile) {
             MobilePlayer(user, ack, loading, this, userLocale)
         } else {

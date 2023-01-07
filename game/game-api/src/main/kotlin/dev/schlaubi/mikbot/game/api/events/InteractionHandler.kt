@@ -98,7 +98,7 @@ internal fun <T : Player> AbstractGame<T>.interactionHandler() = kord.on<Compone
                         translateInternally(
                             null,
                             "game.resend_controls.blame",
-                            "games",
+                            player.user.mention,
                             arrayOf("interaction.user.mention")
                         )
                 }.pin()

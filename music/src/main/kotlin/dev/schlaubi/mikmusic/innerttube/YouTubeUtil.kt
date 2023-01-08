@@ -11,8 +11,8 @@ private const val timeSeparator = ':'
 suspend fun requestYouTubeAutoComplete(query: String, locale: Locale): List<String> {
     val response = InnerTubeClient.requestMusicAutoComplete(query, locale)
 
-    return response.firstOrNull()?.searchSuggestionsSectionRenderer?.map {
-        it.searchSuggestionRenderer.suggestion.joinRuns()
+    return response.firstOrNull()?.searchSuggestionsSectionRenderer?.mapNotNull {
+        it.searchSuggestionRenderer?.suggestion?.joinRuns()
     } ?: emptyList()
 }
 

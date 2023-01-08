@@ -9,7 +9,7 @@ data class SearchSuggestionsSectionRendererContent(
 
 @Serializable
 data class SearchSuggestionsRendererContent(
-    val searchSuggestionRenderer: SearchSuggestionsRenderer,
+    val searchSuggestionRenderer: SearchSuggestionsRenderer? = null,
 )
 
 @Serializable

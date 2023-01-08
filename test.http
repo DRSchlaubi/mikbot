@@ -18,3 +18,16 @@ Referer: https://music.youtube.com/
 
 ###
 
+POST https://music.youtube.com/youtubei/v1/music/get_search_suggestions
+Content-Type: application/json
+Referer: https://music.youtube.com/
+
+{
+    "input": "Never Gonna Give You Up",
+    "context": {
+        "client": {
+            "clientName": "WEB_REMIX",
+            "clientVersion": "1.20220502.01.00"
+        }
+    }
+}

@@ -12,7 +12,7 @@ import kotlinx.serialization.json.Json
 
 private val youtubeMusic = Url("https://music.youtube.com")
 private val youtube = Url("https://www.youtube.com")
-const val radioParam = "wAEB" // youtube sends this parameter starting a song radio
+const val radioParam = "wAEB" // YouTube sends this parameter starting a song radio
 
 
 private val webContext = InnerTubeContext(InnerTubeContext.Client("WEB", "2.20220502.01.00"))

@@ -25,6 +25,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import java.util.*
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.TimeMark
 import kotlin.time.TimeSource
 
 internal suspend fun <Player : MultipleChoicePlayer, Q : Question> MultipleChoiceGame<Player, Q, *>.turn(question: Q) {
@@ -54,6 +55,7 @@ internal suspend fun <Player : MultipleChoicePlayer, Q : Question> MultipleChoic
     // coroutineScope suspends until all child coroutines are dead
     // That way we can cancel all children at once
     val start = TimeSource.Monotonic.markNow()
+    var firstAnswer: TimeMark? = null
     coroutineScope {
         lateinit var job: Job
         fun endTurn() = job.cancel()
@@ -65,16 +67,16 @@ internal suspend fun <Player : MultipleChoicePlayer, Q : Question> MultipleChoic
                 endTurn()
             }
 
-            if (mechanics.showAnswersAfter != GameMechanics.NO_HINTS) {
-                launch {
-                    delay(mechanics.showAnswersAfter)
-                    if (answers.isNotEmpty()) {
-                        editMessage(message, question, answers)
+            liveMessage.onInteraction {
+                firstAnswer = firstAnswer ?: TimeSource.Monotonic.markNow()
+                if (mechanics.showAnswersAfter != GameMechanics.NO_HINTS) {
+                    launch {
+                        delay(mechanics.showAnswersAfter)
+                        if (answers.isNotEmpty()) {
+                            editMessage(message, question, answers)
+                        }
                     }
                 }
-            }
-
-            liveMessage.onInteraction {
                 val event = this
                 if (handle(question)) return@onInteraction // custom event handler
 
@@ -108,7 +110,11 @@ internal suspend fun <Player : MultipleChoicePlayer, Q : Question> MultipleChoic
 
                 if (answers.size == players.size) {
                     endTurn()
-                } else if (mechanics.showAnswersAfter != GameMechanics.NO_HINTS && start.elapsedNow() > mechanics.showAnswersAfter) {
+                } else if (mechanics.showAnswersAfter != GameMechanics.NO_HINTS &&
+                    ((firstAnswer?.elapsedNow() ?: 0.seconds) > mechanics.showAnswersAfter ||
+                        answers.size >= (players.size / 2).coerceAtLeast(2)
+                        )
+                ) {
                     editMessage(message, question, answers)
                 }
             }

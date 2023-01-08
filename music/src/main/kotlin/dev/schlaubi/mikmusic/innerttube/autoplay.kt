@@ -53,15 +53,15 @@ data class MusicQueueRenderer(
 }
 
 @Serializable
-data class PlaylistPanelRenderer(
-    val title: String,
-    val contents: List<PlaylistPanelVideoRendererContent>,
-)
+data class PlaylistPanelRenderer(val contents: List<PlaylistPanelVideoRendererContent>)
 
 @Serializable
 data class PlaylistPanelVideoRendererContent(
-    val playlistPanelVideoRenderer: PlaylistPanelVideoRenderer,
+    val playlistPanelVideoWrapperRenderer: PlaylistPanelVideoWrapperRenderer? = null
 )
+
+@Serializable
+data class PlaylistPanelVideoWrapperRenderer(val primaryRenderer: PlaylistPanelVideoRenderer)
 
 @Serializable
 data class PlaylistPanelVideoRenderer(
@@ -70,8 +70,7 @@ data class PlaylistPanelVideoRenderer(
     val navigationEndpoints: NavigationEndpoints? = null,
     val videoId: String,
     @SerialName("longBylineText")
-    val longByLineText: Runs<Text>? = null,
-    val playlistSetVideoId: String,
+    val longByLineText: Runs<Text>? = null
 ) {
     @Serializable
     data class NavigationEndpoints(

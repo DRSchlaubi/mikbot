@@ -6,7 +6,6 @@ import dev.schlaubi.lavakord.rest.TrackResponse
 import dev.schlaubi.lavakord.rest.loadItem
 import dev.schlaubi.mikbot.plugin.api.util.Translator
 import dev.schlaubi.mikmusic.innerttube.InnerTubeClient
-import dev.schlaubi.mikmusic.innerttube.PlaylistPanelVideoRendererContent
 import dev.schlaubi.mikmusic.innerttube.Text
 import dev.schlaubi.mikmusic.util.LinkedListSerializer
 import dev.schlaubi.mikmusic.util.youtubeId
@@ -54,7 +53,7 @@ private suspend fun MusicPlayer.fetchAutoPlay(songId: String, playlistId: String
         .content
         .playlistPanelRenderer
         .contents
-        .map(PlaylistPanelVideoRendererContent::playlistPanelVideoRenderer)
+        .mapNotNull { it.playlistPanelVideoWrapperRenderer?.primaryRenderer }
     val newPlayListId = songRenderers.firstOrNull()?.navigationEndpoints?.watchEndpoint?.playlistId
     val songs = songRenderers
         .drop(1) // First song is requested song
@@ -68,7 +67,7 @@ private suspend fun MusicPlayer.fetchAutoPlay(songId: String, playlistId: String
 }
 
 context(EmbedBuilder)
-    suspend fun MusicPlayer.addAutoPlaySongs(translate: Translator) {
+suspend fun MusicPlayer.addAutoPlaySongs(translate: Translator) {
     val songs = autoPlay?.songs?.take(5)
     if (!songs.isNullOrEmpty()) {
         field {
@@ -97,7 +96,7 @@ suspend fun MusicPlayer.findNextAutoPlayedSong(lastSong: Track?): Track? {
 }
 
 context(MusicPlayer)
-    private suspend fun AutoPlayContext.Track.fetchTrack(): Track? {
+private suspend fun AutoPlayContext.Track.fetchTrack(): Track? {
     val response = link.loadItem("https://www.youtube.com/watch?v=$id")
     return if (response.loadType == TrackResponse.LoadType.TRACK_LOADED) {
         response.track.toTrack()

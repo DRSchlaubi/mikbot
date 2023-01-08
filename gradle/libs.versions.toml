@@ -33,6 +33,7 @@ krontab = { group = "dev.inmo", name = "krontab", version = "0.8.2" }
 ksp-api = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version = "1.7.22-1.0.8" }
 rhino = { group = "org.mozilla", name = "rhino", version = "1.7.14" }
 ktor-client-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }
+ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-server-content-negotiation = { group = "io.ktor", name = "ktor-server-content-negotiation", version.ref = "ktor" }

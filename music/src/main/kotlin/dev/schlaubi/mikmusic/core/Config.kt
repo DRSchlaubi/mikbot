@@ -8,5 +8,5 @@ object Config : EnvironmentConfig("") {
     val YOUTUBE_API_KEY by environment
     val SPOTIFY_CLIENT_ID by getEnv("")
     val SPOTIFY_CLIENT_SECRET by getEnv("")
-    val IMAGE_COLOR_SERVICE_URL by environment
+    val IMAGE_COLOR_SERVICE_URL by environment.optional()
 }

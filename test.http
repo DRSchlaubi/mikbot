@@ -31,3 +31,27 @@ Referer: https://music.youtube.com/
         }
     }
 }
+
+###
+
+POST https://music.youtube.com/youtubei/v1/next?key=AIzaSyC9XL3ZjWddXya6X74dJoCTL-WEYFDNX30&prettyPrint=false
+origin: https://music.youtube.com
+Content-Type: application/json
+
+{
+    "videoId": "Yx6GdcG5XdM",
+    "playlistId": "RDAMVMYx6GdcG5XdM",
+    "params": "8gEAmgMDCNgE",
+    "context": {
+        "client": {
+            "hl": "de",
+            "gl": "DE",
+            "clientName": "WEB_REMIX",
+            "clientVersion": "1.20230102.01.00"
+        }
+    }
+}
+
+###
+
+

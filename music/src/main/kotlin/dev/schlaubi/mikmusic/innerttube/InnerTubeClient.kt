@@ -5,10 +5,12 @@ import dev.schlaubi.mikbot.plugin.api.util.convertToISO
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.logging.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
+import mu.KotlinLogging
 
 private val youtubeMusic = Url("https://music.youtube.com")
 private val youtube = Url("https://www.youtube.com")
@@ -22,13 +24,14 @@ private fun musicContext(locale: Locale): InnerTubeContext {
     return InnerTubeContext(
         InnerTubeContext.Client(
             "WEB_REMIX",
-            "1.20220502.01.00",
+            "1.20230102.01.00",
             isoLocale.language,
             isoLocale.country!!
         )
     )
 }
 
+private val LOG = KotlinLogging.logger { }
 
 object InnerTubeClient {
     private val client = HttpClient {
@@ -39,6 +42,14 @@ object InnerTubeClient {
             }
 
             json(json)
+        }
+
+        install(Logging) {
+            logger = object : Logger {
+                override fun log(message: String) = LOG.debug(message)
+            }
+
+            level = if (LOG.isDebugEnabled) LogLevel.ALL else LogLevel.NONE
         }
     }
 

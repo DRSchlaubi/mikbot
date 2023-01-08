@@ -1,7 +1,6 @@
 package dev.schlaubi.mikmusic.musicchannel
 
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
-import com.kotlindiscord.kord.extensions.koin.KordExContext
 import dev.kord.common.entity.ButtonStyle
 import dev.kord.common.entity.DiscordPartialEmoji
 import dev.kord.common.entity.Snowflake
@@ -16,7 +15,6 @@ import dev.kord.rest.builder.message.modify.actionRow
 import dev.kord.rest.builder.message.modify.embed
 import dev.kord.x.emoji.DiscordEmoji
 import dev.kord.x.emoji.Emojis
-import dev.nycode.imagecolor.ImageColorClient
 import dev.schlaubi.mikbot.plugin.api.util.convertToISO
 import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase
 import dev.schlaubi.mikmusic.player.ChapterQueuedTrack
@@ -123,12 +121,13 @@ suspend fun updateMessage(
                     additionalCondition = !playingQueueTrack.isOnLast
                 )
             }
-            musicButton(
-                musicPlayer,
-                autoPlay,
-                Emojis.blueCar,
-                enabled = musicPlayer.autoPlay != null
-            )
+            // Disabled due to YouTube changing the underlying API
+//            musicButton(
+//                musicPlayer,
+//                autoPlay,
+//                Emojis.blueCar,
+//                enabled = musicPlayer.autoPlay != null
+//            )
         }
         actionRow {
             musicButton(

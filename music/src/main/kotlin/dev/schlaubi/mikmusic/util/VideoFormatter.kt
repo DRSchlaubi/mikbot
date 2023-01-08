@@ -7,6 +7,7 @@ import dev.kord.rest.builder.message.EmbedBuilder
 import dev.nycode.imagecolor.ImageColorClient
 import dev.schlaubi.lavakord.audio.player.Track
 import dev.schlaubi.mikbot.plugin.api.util.Translator
+import dev.schlaubi.mikmusic.core.Config
 
 private val imageColorClient by KordExContext.get().inject<ImageColorClient>()
 
@@ -42,8 +43,10 @@ suspend fun EmbedBuilder.addSong(translate: Translator, track: Track) {
             url = info.thumbnails.high.url
         }
 
-        imageColorClient.fetchImageColorOrNull(info.thumbnails.high.url)?.let { imageColor ->
-            color = Color(imageColor)
+        if (Config.IMAGE_COLOR_SERVICE_URL != null) {
+            imageColorClient.fetchImageColorOrNull(info.thumbnails.high.url)?.let { imageColor ->
+                color = Color(imageColor)
+            }
         }
 
         author {

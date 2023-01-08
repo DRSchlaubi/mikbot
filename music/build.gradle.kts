@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "dev.schlaubi.mikbot"
-version = "2.13.0"
+version = "2.14.0"
 
 dependencies {
     api(libs.lavakord.kord)
@@ -32,6 +32,8 @@ dependencies {
     // Image Color Client
     api(projects.utils.imageColorClient)
     api(projects.utils.imageColorClientKord)
+
+    implementation(libs.ktor.client.logging)
 }
 
 tasks {

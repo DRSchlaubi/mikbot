@@ -40,8 +40,11 @@ class MusicPlugin(wrapper: PluginWrapper) : Plugin(wrapper) {
     override suspend fun ExtensibleBotBuilder.apply() {
         hooks {
             beforeKoinSetup {
-                loadModule {
-                    single { ImageColorClient(Config.IMAGE_COLOR_SERVICE_URL) }
+                val imageColorServiceUrl = Config.IMAGE_COLOR_SERVICE_URL
+                if (imageColorServiceUrl != null) {
+                    loadModule {
+                        single { ImageColorClient(imageColorServiceUrl) }
+                    }
                 }
             }
         }

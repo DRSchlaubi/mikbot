@@ -88,7 +88,7 @@ data class PlaylistPanelVideoRenderer(
 }
 
 @Serializable
-data class Text(val text: String) : CharSequence by text {
+data class Text(val text: String) {
     override fun toString(): String = text
 }
 

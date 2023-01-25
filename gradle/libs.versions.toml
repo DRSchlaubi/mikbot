@@ -26,7 +26,7 @@ logback-classic = { group = "ch.qos.logback", name = "logback-classic", version 
 commons-text = { group = "org.apache.commons", name = "commons-text", version = "1.10.0" }
 google-cloud-bom = { group = "com.google.cloud", name = "libraries-bom", version = "26.1.4" }
 google-cloud-translate = { group = "com.google.cloud", name = "google-cloud-translate" }
-google-apis-youtube = { group = "com.google.apis", name = "google-api-services-youtube", version = "v3-rev20220926-2.0.0" }
+google-apis-youtube = { group = "com.google.apis", name = "google-api-services-youtube", version = "v3-rev20230123-2.0.0" }
 lavakord-kord = { group = "dev.schlaubi.lavakord", name = "kord", version = "3.7.0" }
 spotify = { group = "se.michaelthelin.spotify", name = "spotify-web-api-java", version = "7.2.2" }
 krontab = { group = "dev.inmo", name = "krontab", version = "0.8.2" }

@@ -34,7 +34,7 @@ subprojects {
 dependencies {
 
     // Plugin system
-    implementation("org.pf4j", "pf4j", "3.7.0")
+    implementation("org.pf4j", "pf4j", "3.9.0")
     implementation("org.pf4j", "pf4j-update", "2.3.0")
     implementation("com.google.code.gson", "gson", "2.10")
     implementation("org.ow2.asm", "asm", "9.3") // pf4j doesn't declare a real dep on it

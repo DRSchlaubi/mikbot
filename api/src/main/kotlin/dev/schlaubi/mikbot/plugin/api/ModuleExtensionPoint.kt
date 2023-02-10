@@ -15,7 +15,7 @@ public interface ModuleExtensionPoint<T : Extension> : ExtensionPoint {
 }
 
 @InternalAPI
-public abstract class ModuleExtensionPointImpl<T : Extension> : Extension() {
+public abstract class ModuleExtensionPointImpl<T : Extension>(private val pluginSystem: PluginSystem) : Extension() {
     protected abstract val extensionClazz: KClass<out ModuleExtensionPoint<T>>
 
     @Suppress("UNCHECKED_CAST", "RedundantModalityModifier")

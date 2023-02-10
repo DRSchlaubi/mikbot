@@ -3,36 +3,42 @@ package dev.schlaubi.mikbot.plugin.api
 import com.kotlindiscord.kord.extensions.ExtensibleBot
 import com.kotlindiscord.kord.extensions.builders.ExtensibleBotBuilder
 import com.kotlindiscord.kord.extensions.extensions.Extension
-import com.kotlindiscord.kord.extensions.koin.KordExKoinComponent
+import dev.schlaubi.mikbot.plugin.api.io.Database
 import kotlinx.coroutines.CoroutineScope
-import org.pf4j.Plugin as PF4JPlugin
 import org.pf4j.PluginWrapper as PF4JPluginWrapper
 
 /**
  * Plugin wrapper alias.
  */
+@Deprecated("Replaced by PluginContext", ReplaceWith("PluginContext", "dev.schlaubi.mikbot.plugin.api.PluginContext"))
 public typealias PluginWrapper = PF4JPluginWrapper
 
+public interface PluginContext {
+    public val pluginSystem: PluginSystem
+    public val database: Database
+    public val pluginWrapper: PF4JPluginWrapper
+}
+
 /**
- * Main class of a plugin.
+ * Basic plugin methods.
  *
- * @see PluginMain
+ * **This is only used because of Java compatibility, please only extend [Plugin]**
  */
-public abstract class Plugin(wrapper: PluginWrapper) : PF4JPlugin(wrapper), KordExKoinComponent {
+public interface PluginInterface {
     /**
      * Add additional [ExtensibleBot] settings.
      *
      * **Do not add [Extensions][Extension] in here, use [addExtensions] instead.**
      */
-    public open suspend fun ExtensibleBotBuilder.apply(): Unit = Unit
+    public suspend fun ExtensibleBotBuilder.apply(): Unit = Unit
 
     /**
      * Add new extensions.
      */
-    public open fun ExtensibleBotBuilder.ExtensionsBuilder.addExtensions(): Unit = Unit
+    public fun ExtensibleBotBuilder.ExtensionsBuilder.addExtensions(): Unit = Unit
 
     /**
      * This is being executed directly after the bot got started.
      */
-    public open fun CoroutineScope.atLaunch(bot: ExtensibleBot): Unit = Unit
+    public fun CoroutineScope.atLaunch(bot: ExtensibleBot): Unit = Unit
 }

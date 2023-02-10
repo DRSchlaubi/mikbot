@@ -4,7 +4,6 @@ import ch.qos.logback.classic.Logger
 import dev.schlaubi.mikbot.plugin.api._pluginSystem
 import dev.schlaubi.mikbot.plugin.api.config.Config
 import dev.schlaubi.musicbot.core.Bot
-import dev.schlaubi.musicbot.core.plugin.PluginLoader
 import org.slf4j.LoggerFactory
 import kotlin.io.path.absolutePathString
 import kotlin.io.path.createDirectories
@@ -27,8 +26,8 @@ private fun loadPlugins(bot: Bot) {
     }
 
     _pluginSystem = bot.pluginSystem
-    PluginLoader.loadPlugins()
-    PluginLoader.startPlugins()
+    bot.pluginLoader.loadPlugins()
+    bot.pluginLoader.startPlugins()
 }
 
 private fun initializeLogging() {

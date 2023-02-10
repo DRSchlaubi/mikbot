@@ -1,4 +1,4 @@
 object Project {
     // Mikbot version (not core plugins)
-    const val version = "3.16.0"
+    const val version = "3.17.0"
 }

@@ -22,9 +22,12 @@ import kotlin.reflect.KClass
 
 private val LOG = KotlinLogging.logger { }
 
-public const val BUNDLED_PLUGINS = "bundled-plugins"
+const val BUNDLED_PLUGINS = "bundled-plugins"
 
-object PluginLoader : DefaultPluginManager(), KordExKoinComponent {
+// Due to some weird JVM issues, I cannot put this in a constructor parameter
+internal lateinit var _pluginFactory: PluginFactory
+
+class PluginLoader : DefaultPluginManager(), KordExKoinComponent {
     internal val repos: List<UpdateRepository> = Config.PLUGIN_REPOSITORIES.map {
         DefaultUpdateRepository(
             generateNonce(), URL(it)
@@ -37,6 +40,7 @@ object PluginLoader : DefaultPluginManager(), KordExKoinComponent {
     private lateinit var pluginBundles: Map<String, String>
 
     override fun getPluginDescriptorFinder(): PluginDescriptorFinder = MikBotPluginDescriptionFinder()
+    override fun createPluginFactory(): PluginFactory = _pluginFactory
 
     override fun createPluginsRoot(): List<Path> {
         // Load bundled plugins
@@ -181,10 +185,10 @@ private class MikBotPluginManifestDescriptionFinder : ManifestPluginDescriptorFi
 internal class DefaultPluginSystem(private val bot: Bot) : PluginSystem {
     internal val events = MutableSharedFlow<Event>()
 
-    override fun <T : ExtensionPoint> getExtensions(type: KClass<T>): List<T> = PluginLoader.getExtensions(type.java)
+    override fun <T : ExtensionPoint> getExtensions(type: KClass<T>): List<T> = bot.pluginLoader.getExtensions(type.java)
 
     override fun translate(key: String, bundleName: String, locale: String?, replacements: Array<Any?>): String {
-        return if(locale == null) {
+        return if (locale == null) {
             bot.translationProvider.translate(key, bundleName, replacements)
         } else {
             bot.translationProvider.translate(key, locale, bundleName, replacements)

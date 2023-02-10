@@ -15,7 +15,7 @@ dependencies {
 
 tasks {
     val generateDefaultResourceBundle = task<GenerateDefaultTranslationBundleTask>("generateDefaultResourceBundle") {
-        defaultLocale.set(Locale("en", "GB"))
+        defaultLocale.set(Locale.forLanguageTag("en-GB"))
     }
 
     assemblePlugin {

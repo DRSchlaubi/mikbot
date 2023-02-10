@@ -17,12 +17,9 @@ import dev.schlaubi.mikbot.plugin.api.MikBotInfo
 import dev.schlaubi.mikbot.plugin.api.config.Config
 import dev.schlaubi.mikbot.plugin.api.getExtensions
 import dev.schlaubi.mikbot.plugin.api.io.Database
-import dev.schlaubi.mikbot.plugin.api.pluginSystem
 import dev.schlaubi.mikbot.plugin.api.util.AllShardsReadyEvent
 import dev.schlaubi.musicbot.core.io.DatabaseImpl
-import dev.schlaubi.musicbot.core.plugin.DefaultPluginSystem
-import dev.schlaubi.musicbot.core.plugin.PluginLoader
-import dev.schlaubi.musicbot.core.plugin.PluginTranslationProvider
+import dev.schlaubi.musicbot.core.plugin.*
 import dev.schlaubi.musicbot.core.sentry.SentryExtensionPoint
 import dev.schlaubi.musicbot.module.owner.OwnerModuleImpl
 import dev.schlaubi.musicbot.module.settings.SettingsModuleImpl
@@ -34,10 +31,14 @@ import mu.KotlinLogging
 private val LOG = KotlinLogging.logger { }
 
 class Bot : KordExKoinComponent {
+    init {
+        _pluginFactory = MikbotPluginFactory(this)
+    }
     private lateinit var bot: ExtensibleBot
 
     private val database: Database = DatabaseImpl()
     lateinit var translationProvider: TranslationsProvider
+    internal val pluginLoader = PluginLoader()
     internal val pluginSystem: DefaultPluginSystem = DefaultPluginSystem(this)
 
     suspend fun start() {
@@ -52,14 +53,14 @@ class Bot : KordExKoinComponent {
                 }
             }
 
-            PluginLoader.botPlugins.onEach {
+            pluginLoader.botPlugins.onEach {
                 apply()
             }
             extensions {
-                PluginLoader.botPlugins.onEach {
+                pluginLoader.botPlugins.onEach {
                     addExtensions()
                 }
-                add(::BotModule)
+                add { BotModule(this@Bot) }
             }
 
             plugins {
@@ -74,7 +75,7 @@ class Bot : KordExKoinComponent {
             launch {
                 bot.start()
             }
-            PluginLoader.botPlugins.onEach {
+            pluginLoader.botPlugins.onEach {
                 atLaunch(bot)
             }
         }
@@ -82,8 +83,8 @@ class Bot : KordExKoinComponent {
 
     private suspend fun ExtensibleBotBuilder.builtIns() {
         extensions {
-            add(::SettingsModuleImpl)
-            add(::OwnerModuleImpl)
+            add { SettingsModuleImpl(pluginSystem) }
+            add { OwnerModuleImpl(pluginSystem) }
 
             sentry {
                 enable = Config.ENVIRONMENT.useSentry
@@ -137,7 +138,7 @@ class Bot : KordExKoinComponent {
         i18n {
             interactionUserLocaleResolver()
             translationsProvider {
-                translationProvider = PluginTranslationProvider {
+                translationProvider = PluginTranslationProvider(pluginLoader) {
                     defaultLocale
                 }
 
@@ -160,7 +161,7 @@ class Bot : KordExKoinComponent {
     }
 }
 
-private class BotModule : Extension() {
+private class BotModule(private val mikbot: Bot) : Extension() {
     override val name: String = "bot"
     private var loggedIn = false
 
@@ -176,7 +177,7 @@ private class BotModule : Extension() {
                     kord.editPresence {
                         status = PresenceStatus.Online
                     }
-                    pluginSystem.emitEvent(AllShardsReadyEvent(kord, -1, event.customContext))
+                    mikbot.pluginSystem.emitEvent(AllShardsReadyEvent(kord, -1, event.customContext))
                 }
                 LOG.info { "Logged in with shard ${event.shard}, Remaining $remaining" }
             }
@@ -187,14 +188,14 @@ private class BotModule : Extension() {
                 loggedInShards -= event.shard
                 LOG.warn {
                     "Shard got disconnected ${event.shard} ${event::class.simpleName}," +
-                            " Awaiting login from: ${kord.resources.shards.indices - loggedInShards.toSet()}"
+                        " Awaiting login from: ${kord.resources.shards.indices - loggedInShards.toSet()}"
                 }
             }
         }
 
         event<AllShardsReadyEvent> {
             action {
-                if (PluginLoader.plugins.none { it.pluginId == "game-animator" }) {
+                if (mikbot.pluginLoader.plugins.none { it.pluginId == "game-animator" }) {
                     kord.editPresence {
                         playing("Mikbot v${MikBotInfo.VERSION}@${MikBotInfo.BRANCH} (${MikBotInfo.COMMIT})")
                     }

@@ -5,6 +5,7 @@ import dev.kord.common.entity.Permission
 import dev.schlaubi.mikbot.plugin.api.InternalAPI
 import dev.schlaubi.mikbot.plugin.api.ModuleExtensionPoint
 import dev.schlaubi.mikbot.plugin.api.ModuleExtensionPointImpl
+import dev.schlaubi.mikbot.plugin.api.PluginSystem
 import dev.schlaubi.mikbot.plugin.api.config.Config
 import kotlinx.coroutines.CoroutineScope
 
@@ -14,7 +15,8 @@ import kotlinx.coroutines.CoroutineScope
  * @see ownerOnly
  */
 @OptIn(InternalAPI::class)
-public abstract class OwnerModule @InternalAPI constructor() : ModuleExtensionPointImpl<OwnerModule>(), CoroutineScope
+public abstract class OwnerModule @InternalAPI constructor(pluginSystem: PluginSystem) :
+    ModuleExtensionPointImpl<OwnerModule>(pluginSystem), CoroutineScope
 
 /**
  * The Extension point for Owner module customization.

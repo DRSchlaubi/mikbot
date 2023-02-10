@@ -2,6 +2,7 @@ plugins {
     `mikbot-module`
     `mikbot-publishing`
     `mikbot-template`
+    java
 }
 
 group = "dev.schlaubi.mikbot"

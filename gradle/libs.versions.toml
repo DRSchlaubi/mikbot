@@ -1,10 +1,10 @@
 [versions]
 kordex = "1.5.5-SNAPSHOT"
 kmongo = "4.8.0"
-pf4j = "3.8.0"
+pf4j = "3.9.0"
 coroutines = "1.6.4"
 serialization = "1.4.1"
-ktor = "2.2.1"
+ktor = "2.2.3"
 kord = "0.8.0-M17"
 
 [libraries]
@@ -21,16 +21,15 @@ kmongo-coroutine-serialization = { group = "org.litote.kmongo", name = "kmongo-c
 kmongo-id-serialization = { group = "org.litote.kmongo", name = "kmongo-id-serialization", version.ref = "kmongo" }
 pf4j = { group = "org.pf4j", name = "pf4j", version.ref = "pf4j" }
 stdx-full = {group = "dev.schlaubi", name = "stdx-full", version = "1.2.1" }
-envconf = { group = "dev.schlaubi", name = "envconf", version = "1.1" }
 logback-classic = { group = "ch.qos.logback", name = "logback-classic", version = "1.4.5" }
 commons-text = { group = "org.apache.commons", name = "commons-text", version = "1.10.0" }
-google-cloud-bom = { group = "com.google.cloud", name = "libraries-bom", version = "26.1.4" }
+google-cloud-bom = { group = "com.google.cloud", name = "libraries-bom", version = "26.6.0" }
 google-cloud-translate = { group = "com.google.cloud", name = "google-cloud-translate" }
-google-apis-youtube = { group = "com.google.apis", name = "google-api-services-youtube", version = "v3-rev20220926-2.0.0" }
-lavakord-kord = { group = "dev.schlaubi.lavakord", name = "kord", version = "3.7.0" }
-spotify = { group = "se.michaelthelin.spotify", name = "spotify-web-api-java", version = "7.2.2" }
-krontab = { group = "dev.inmo", name = "krontab", version = "0.8.2" }
-ksp-api = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version = "1.8.0-1.0.8" }
+google-apis-youtube = { group = "com.google.apis", name = "google-api-services-youtube", version = "v3-rev20230123-2.0.0" }
+lavakord-kord = { group = "dev.schlaubi.lavakord", name = "kord", version = "3.8.0" }
+spotify = { group = "se.michaelthelin.spotify", name = "spotify-web-api-java", version = "7.3.0" }
+krontab = { group = "dev.inmo", name = "krontab", version = "0.8.5" }
+ksp-api = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version = "1.8.10-1.0.9" }
 rhino = { group = "org.mozilla", name = "rhino", version = "1.7.14" }
 ktor-client-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }
 ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor" }

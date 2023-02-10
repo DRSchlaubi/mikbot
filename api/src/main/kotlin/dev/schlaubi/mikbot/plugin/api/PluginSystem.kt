@@ -15,6 +15,7 @@ public lateinit var _pluginSystem: PluginSystem
  * Global instance for [PluginSystem].
  */
 @OptIn(InternalAPI::class)
+@Deprecated("Replaced by PluginContext", ReplaceWith("PluginContext.pluginSystem"))
 public val pluginSystem: PluginSystem get() = _pluginSystem
 
 /**

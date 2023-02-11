@@ -1,5 +1,6 @@
 package dev.schlaubi.votebot.api.authentication
 
+import io.jsonwebtoken.JwtException
 import io.ktor.client.plugins.*
 import io.ktor.http.auth.*
 import io.ktor.server.application.*
@@ -54,7 +55,7 @@ class VoteBotAuthenticationProvider(config: Config) : AuthenticationProvider(con
 
         val parsedJwt = try {
             TokenUtil.validateToken(token)
-        } catch (e: ResponseException) {
+        } catch (e: Exception) {
             context.error("INVALID_TOKEN", AuthenticationFailedCause.InvalidCredentials)
             return
         }

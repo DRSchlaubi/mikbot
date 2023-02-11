@@ -34,6 +34,7 @@ class Bot : KordExKoinComponent {
     init {
         _pluginFactory = MikbotPluginFactory(this)
     }
+
     private lateinit var bot: ExtensibleBot
 
     internal val database: Database = DatabaseImpl()
@@ -54,11 +55,19 @@ class Bot : KordExKoinComponent {
             }
 
             pluginLoader.botPlugins.onEach {
-                apply()
+                try {
+                    apply()
+                } catch (e: AbstractMethodError) {
+                    // due to kotlin compiler issues, we cannot
+                }
             }
             extensions {
                 pluginLoader.botPlugins.onEach {
-                    addExtensions()
+                    try {
+                        addExtensions()
+                    } catch (e: AbstractMethodError) {
+                        // due to kotlin compiler issues, we cannot
+                    }
                 }
                 add { BotModule(this@Bot) }
             }
@@ -76,7 +85,11 @@ class Bot : KordExKoinComponent {
                 bot.start()
             }
             pluginLoader.botPlugins.onEach {
-                atLaunch(bot)
+                try {
+                    atLaunch(bot)
+                } catch (e: AbstractMethodError) {
+                    // due to kotlin compiler issues, we cannot
+                }
             }
         }
     }

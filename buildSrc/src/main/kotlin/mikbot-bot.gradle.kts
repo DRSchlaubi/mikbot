@@ -12,7 +12,7 @@ application {
 }
 
 dependencies {
-    if(name != "test-bot") {
+    if (name != "test-bot") {
         implementation(project(":test-bot"))
     }
 }
@@ -28,6 +28,7 @@ tasks {
     } else {
         emptyList()
     }
+
     val pluginsDirectory = buildDir.resolve("installed-plugins")
 
     val deleteObsoletePlugins = register<Delete>("deleteObsoletePlugins") {

@@ -7,7 +7,7 @@ plugins {
 }
 
 dependencies {
-    implementation(projects.votebot.common)
+    api(projects.votebot.common)
     implementation(projects.votebot.chartServiceClient)
     implementation(libs.java.string.similarity)
     ksp(libs.kordex.processor)

@@ -5,19 +5,8 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import space.votebot.common.models.Poll.*
 
-/**
- * Representation of a poll.
- *
- * @property guildId the id of the Guild the poll is on
- * @property authorId the id of the author of the poll.
- * @property title the title of the poll
- * @property options the [options][Option] which are available
- * @property changes the amount of changes per user
- * @property votes a list of [votes][Vote] made by users
- * @property messages a list of [messages][Message] displaying the vote status
- * @property createdAt the [Instant] at which the poll was created
- * @property settings the settings for this poll
- */
+
+
 @Serializable
 public data class Poll(
     @SerialName("_id")
@@ -133,20 +122,21 @@ public data class Poll(
  * @property amount how many people voted for this option
  * @property percentage the percentage of this option
  */
+@Serializable
 public data class VoteOption(val option: RenderableOption, val amount: Int, val percentage: Double)
 
 /**
  * Sums all votes into a list of [vote options][VoteOption].
  */
 public fun Poll.sumUp(): List<VoteOption> {
-    val totalVotes = votes.sumOf { it.amount }
+    val totalVotes = votes.sumOf(Vote::amount)
     return sortedOptions
         .map { renderableOption ->
             val (_, index, _) = renderableOption
             val votes = votes
                 .asSequence()
                 .filter { it.forOption == index }
-                .sumOf { it.amount }
+                .sumOf(Vote::amount)
 
             VoteOption(renderableOption, votes, votes.toDouble() / totalVotes.coerceAtLeast(1))
         }

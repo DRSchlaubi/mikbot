@@ -2,3 +2,4 @@
 :core:gdpr
 :core:database-i18n
 :votebot:plugin
+:votebot:api

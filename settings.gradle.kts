@@ -51,6 +51,7 @@ include(
     "votebot:common",
     "votebot:chart-service-client",
     "votebot:plugin",
+    "votebot:api",
     "test-bot",
 //    "mikmusic-bot",
 )

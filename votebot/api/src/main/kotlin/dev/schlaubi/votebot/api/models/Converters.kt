@@ -12,7 +12,7 @@ fun Guild.toServer(polls: List<PartialAPIPoll>) =
     Server(id.toString(), name, polls.size, data.icon, polls = polls)
 
 fun User.toDiscordUser() = DiscordUser(
-    id.toString(), username, null, discriminator, data.avatar, discriminator
+    id.toString(), username, null, discriminator, data.avatar
 )
 
 fun Poll.toPartialAPIPoll(user: DiscordUser?) = PartialAPIPoll(

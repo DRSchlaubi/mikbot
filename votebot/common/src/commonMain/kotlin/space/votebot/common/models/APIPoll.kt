@@ -19,5 +19,6 @@ public data class PartialAPIPoll(
     val id: String,
     val guildId: String,
     val author: DiscordUser?,
-    val voteCount: Int
+    val voteCount: Int,
+    val title: String
 )

@@ -16,7 +16,7 @@ fun User.toDiscordUser() = DiscordUser(
 )
 
 fun Poll.toPartialAPIPoll(user: DiscordUser?) = PartialAPIPoll(
-    id, guildId.toString(), user, votes.sumOf(Poll.Vote::amount)
+    id, guildId.toString(), user, votes.sumOf(Poll.Vote::amount), title
 )
 
 fun Poll.toAPIPoll(author: DiscordUser?) = APIPoll(

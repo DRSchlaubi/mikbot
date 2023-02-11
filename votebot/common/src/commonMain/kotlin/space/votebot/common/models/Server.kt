@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 public data class Server(
-    val id: ULong,
+    val id: String,
     val name: String,
     val pollCount: Int,
     val icon: String?,
@@ -12,5 +12,5 @@ public data class Server(
     val polls: List<PartialAPIPoll>? = null
 )
 
-private fun cdnUrl(id: ULong, hash: String) =
+private fun cdnUrl(id: String, hash: String) =
     "https://cdn.discordapp.com/icons/$id/$hash.${if (hash.startsWith("a_")) "gif" else "png"}"

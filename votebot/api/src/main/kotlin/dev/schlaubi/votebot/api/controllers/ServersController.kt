@@ -24,7 +24,7 @@ fun Route.servers() {
             it.toServer(voteCount)
         }
 
-        val botGuilds = kord.guilds.map { it.id.value }.toList()
+        val botGuilds = kord.guilds.map { it.id.toString() }.toList()
         val apiBotGuilds = guilds.filter { it.id in botGuilds }
 
         context.respond(apiBotGuilds)

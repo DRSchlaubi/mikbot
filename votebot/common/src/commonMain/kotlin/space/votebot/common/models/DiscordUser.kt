@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 public data class DiscordUser(
-    val id: ULong,
+    val id: String,
     val username: String,
     @SerialName("display_name")
     val displayName: String?,
@@ -14,7 +14,7 @@ public data class DiscordUser(
     val avatarUrl: String = cdnUrl(id, avatar, discriminator),
 )
 
-private fun cdnUrl(id: ULong, hash: String?, discriminator: String) = if (hash == null) {
+private fun cdnUrl(id: String, hash: String?, discriminator: String) = if (hash == null) {
     "https://cdn.discordapp.com/embed/avatars/$discriminator.png"
 } else {
     "https://cdn.discordapp.com/avatars/$id/$hash.${if (hash.startsWith("a_")) "gif" else "png"}"

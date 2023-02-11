@@ -17,5 +17,5 @@ public data class DiscordUser(
 private fun cdnUrl(id: ULong, hash: String?, discriminator: String) = if (hash == null) {
     "https://cdn.discordapp.com/embed/avatars/$discriminator.png"
 } else {
-    "https://cdn.discordapp.com/avatars/$id/$hash.${if (hash.startsWith("a_")) ".gif" else ".png"}"
+    "https://cdn.discordapp.com/avatars/$id/$hash.${if (hash.startsWith("a_")) "gif" else "png"}"
 }

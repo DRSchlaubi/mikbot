@@ -13,4 +13,4 @@ public data class Server(
 )
 
 private fun cdnUrl(id: ULong, hash: String) =
-    "https://cdn.discordapp.com/icons/$id/$hash.${if (hash.startsWith("a_")) ".gif" else ".png"}"
+    "https://cdn.discordapp.com/icons/$id/$hash.${if (hash.startsWith("a_")) "gif" else "png"}"

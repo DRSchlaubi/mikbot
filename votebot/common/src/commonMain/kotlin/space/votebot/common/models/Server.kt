@@ -8,7 +8,7 @@ public data class Server(
     val name: String,
     val pollCount: Int,
     val icon: String?,
-    val url: String? = icon?.let { cdnUrl(id, it) },
+    val iconUrl: String? = icon?.let { cdnUrl(id, it) },
     val polls: List<PartialAPIPoll>? = null
 )
 

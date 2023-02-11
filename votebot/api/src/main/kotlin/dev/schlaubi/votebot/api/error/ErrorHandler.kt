@@ -2,7 +2,6 @@ package dev.schlaubi.votebot.api.error
 
 import dev.schlaubi.votebot.api.authentication.AuthenticationException
 import io.ktor.http.*
-import io.ktor.serialization.*
 import io.ktor.server.application.*
 import io.ktor.server.plugins.*
 import io.ktor.server.plugins.statuspages.*
@@ -26,7 +25,7 @@ fun StatusPagesConfig.installErrorHandler() {
         call.respondError(HttpStatusCode.BadRequest, cause.message)
     }
 
-    exception<JsonConvertException> { call: ApplicationCall, cause ->
+    exception<ContentTransformationException> { call: ApplicationCall, cause ->
         call.respondError(HttpStatusCode.BadRequest, cause.cause?.message ?: cause.message)
     }
 }

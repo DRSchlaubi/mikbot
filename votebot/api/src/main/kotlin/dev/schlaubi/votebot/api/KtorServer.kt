@@ -14,6 +14,7 @@ import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.plugins.statuspages.*
+import kotlinx.serialization.json.JsonBuilder
 import org.koin.core.component.inject
 import org.pf4j.Extension
 
@@ -29,6 +30,9 @@ class KtorServer : KtorExtensionPoint, KordExKoinComponent {
         installDiscordAuth()
 
         mainController()
+    }
+    override fun JsonBuilder.apply() {
+        encodeDefaults = true
     }
 
     override fun StatusPagesConfig.apply() = installErrorHandler()

@@ -14,7 +14,7 @@ jobs:
       - name: 'Checkout Repository'
         uses: actions/checkout@v3
       - name: Gradle Dependency Submission
-        uses: mikepenz/gradle-dependency-submission@0.8.4
+        uses: mikepenz/gradle-dependency-submission@v0.8.4
         with:
           gradle-project-path: .
           gradle-build-module: |-

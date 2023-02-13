@@ -1,0 +1,58 @@
+name: build
+on:
+  push:
+    branches:
+      - main # run the action on your projects default branch
+
+jobs:
+  build:
+    name: Dependencies
+    runs-on: ubuntu-latest
+    permissions: # The Dependency Submission API requires write permission
+      contents: write
+    steps:
+      - name: 'Checkout Repository'
+        uses: actions/checkout@v3
+    - name: Gradle Dependency Submission
+      uses: mikepenz/gradle-dependency-submission@{latest}
+      with:
+        gradle-project-path: .
+        gradle-build-module: |-
+          api
+          api:annotations
+          plugin-processor
+          core:database-i18n
+          core:game-animator
+          core:gdpr
+          core:health
+          core:redeploy-hook
+          music
+          game:google-emotes
+          game:game-api
+          game:multiple-choice-game
+          game:uno
+          game:uno-game
+          game:music-quiz
+          game:googologo
+          game:trivia
+          game:tic-tac-toe
+          game:googolplex
+          game:connect-four
+          utils:birthdays
+          utils:ktor
+          utils:verification-system
+          utils:epic-games-notifier
+          utils:profiles
+          utils:role-selector
+          utils:botblock
+          utils:eval
+          utils:haste-client
+          utils:sponsorblock-kt
+          utils:leaderboard
+          utils:image-color-client
+          utils:image-color-client-kord
+          votebot
+          votebot:common
+          votebot:chart-service-client
+          votebot:plugin
+          test-bot

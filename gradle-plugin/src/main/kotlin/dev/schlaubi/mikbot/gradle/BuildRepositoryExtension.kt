@@ -1,6 +1,5 @@
 package dev.schlaubi.mikbot.gradle
 
-import org.gradle.api.plugins.ExtensionAware
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
@@ -32,8 +31,4 @@ abstract class BuildRepositoryExtension {
     abstract val projectUrl: Property<String>
 }
 
-internal const val pluginPublishingExtensionName = "pluginPublishing"
 
-// This is just there for usage in the Plugin, users of the plugin should use Gradle's generated accessors
-internal val ExtensionAware.pluginPublishingExtension: BuildRepositoryExtension
-    get() = extensions.findByName(pluginPublishingExtensionName) as BuildRepositoryExtension

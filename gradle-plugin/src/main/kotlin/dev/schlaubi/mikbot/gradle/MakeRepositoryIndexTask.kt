@@ -1,5 +1,8 @@
 package dev.schlaubi.mikbot.gradle
 
+import dev.schlaubi.mikbot.gradle.extension.mikbotPluginExtension
+import dev.schlaubi.mikbot.gradle.extension.pluginId
+import dev.schlaubi.mikbot.gradle.extension.pluginPublishingExtension
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.bundling.Zip

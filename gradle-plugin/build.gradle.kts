@@ -1,23 +1,28 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("com.gradle.plugin-publish") version "1.0.0-rc-3"
+    alias(libs.plugins.gradle.publish)
     `java-gradle-plugin`
-    kotlin("jvm") version "1.7.22"
-    kotlin("plugin.serialization") version "1.7.22"
+    alias(libs.plugins.kotlinx.jvm)
+    alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.buildconfig)
 }
 
 group = "dev.schlaubi"
-version = "2.6.4"
+version = libs.versions.api
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlinx", "kotlinx-serialization-json", "1.4.1")
-    implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-jdk8", "1.6.4")
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlinx.coroutines.jdk8)
     compileOnly(kotlin("gradle-plugin"))
+}
+
+kotlin {
+    jvmToolchain(19)
 }
 
 gradlePlugin {
@@ -42,7 +47,17 @@ pluginBundle {
 tasks {
     withType<KotlinCompile> {
         kotlinOptions {
-            freeCompilerArgs = listOf("-opt-in=kotlin.RequiresOptIn")
+            freeCompilerArgs = listOf("-Xcontext-receivers")
         }
     }
 }
+
+afterEvaluate {
+    buildConfig {
+        packageName("dev.schlaubi.mikbot.gradle")
+        className("MikBotPluginInfo")
+        buildConfigField("String", "VERSION", "\"${libs.versions.api}\"")
+        buildConfigField("boolean", "IS_MIKBOT", "true")
+    }
+}
+

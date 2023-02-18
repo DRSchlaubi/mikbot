@@ -1,5 +1,8 @@
 package dev.schlaubi.mikbot.gradle;
 
+import dev.schlaubi.mikbot.gradle.extension.ExtensionKt;
+import dev.schlaubi.mikbot.gradle.extension.ExtensionsKt;
+import dev.schlaubi.mikbot.gradle.extension.PluginExtension;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.InputDirectory;
@@ -22,7 +25,7 @@ public abstract class PatchPropertiesTask extends DefaultTask {
         var properties = new Properties();
 
         var extension = ((PluginExtension) getProject().getExtensions()
-                .getByName(ExtensionKt.pluginExtensionName));
+                .getByName(ExtensionsKt.pluginExtensionName));
 
         var file = getPropertiesDirectory().get().resolve("plugin.properties");
         if (!Files.exists(file)) {

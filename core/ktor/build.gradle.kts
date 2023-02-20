@@ -1,5 +1,5 @@
 plugins {
-    `mikbot-plugin`
+    id("dev.schlaubi.mikbot.gradle-plugin")
     `mikbot-module`
     `mikbot-publishing`
 }

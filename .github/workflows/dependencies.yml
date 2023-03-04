@@ -18,7 +18,7 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '18'        
       - name: Gradle Dependency Submission
-        uses: mikepenz/gradle-dependency-submission@v0.8.4
+        uses: mikepenz/gradle-dependency-submission@v0.8.5
         with:
           gradle-project-path: .
           gradle-build-module: |-

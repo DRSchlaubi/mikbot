@@ -14,7 +14,7 @@ on:
       - synchronize
 
 env:
-  IS_CI: true
+  BUILD_PLUGIN_CI: true
 
 jobs:
   gradleValidation:

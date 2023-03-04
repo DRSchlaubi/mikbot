@@ -32,7 +32,7 @@ gradlePlugin {
             implementationClass = "dev.schlaubi.mikbot.gradle.MikBotPluginGradlePlugin"
             displayName = "Mikbot Gradle Plugin"
             description = "Utility plugin to build Mikbot and PF4J plugins"
-            tags.set(listOf("mikbot", "pf4j", "plugins", "kotlin"))
+            tags.set(setOf("mikbot", "pf4j", "plugins", "kotlin"))
         }
     }
 
@@ -54,7 +54,7 @@ afterEvaluate {
         packageName("dev.schlaubi.mikbot.gradle")
         className("MikBotPluginInfo")
         buildConfigField("String", "VERSION", "\"${libs.versions.api}\"")
-        buildConfigField("boolean", "IS_MIKBOT", (System.getenv("IS_CI")?.toBoolean() == true).toString())
+        buildConfigField("boolean", "IS_MIKBOT", (System.getenv("BUILD_PLUGIN_CI")?.toBoolean() != true).toString())
     }
 }
 

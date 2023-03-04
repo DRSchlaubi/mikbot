@@ -13,23 +13,25 @@ rootProject.name = "mikmusic"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-include(
-    "api",
-    "api:annotations",
-    "plugin-processor",
-    "runtime",
-    "core:database-i18n",
-    "core:game-animator",
-    "core:gdpr",
-    "core:health",
-    "core:redeploy-hook",
-    "core:ktor",
-    "music",
-    "clients:haste-client",
-    "clients:sponsorblock-kt",
-    "clients:image-color-client",
-    "clients:image-color-client-kord"
-)
+if (System.getenv("BUILD_PLUGIN_CI")?.toBoolean() != true) {
+    include(
+        "api",
+        "api:annotations",
+        "plugin-processor",
+        "runtime",
+        "core:database-i18n",
+        "core:game-animator",
+        "core:gdpr",
+        "core:health",
+        "core:redeploy-hook",
+        "core:ktor",
+        "music",
+        "clients:haste-client",
+        "clients:sponsorblock-kt",
+        "clients:image-color-client",
+        "clients:image-color-client-kord"
+    )
+}
 
 includeBuild("gradle-plugin")
 

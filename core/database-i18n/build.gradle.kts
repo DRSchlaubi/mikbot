@@ -1,7 +1,8 @@
 plugins {
-    `mikbot-plugin`
-    `mikbot-module`
-    kotlin("plugin.serialization")
+    org.jetbrains.kotlin.jvm
+    alias(libs.plugins.kotlinx.serialization)
+    com.google.devtools.ksp
+    dev.schlaubi.mikbot.`gradle-plugin`
 }
 
 group = "dev.schlaubi.mikbot"

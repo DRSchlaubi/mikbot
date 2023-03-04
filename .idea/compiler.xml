@@ -5,6 +5,10 @@
       <module name="mikmusic.mikmusic-bot" target="18" />
       <module name="mikmusic.mikmusic-bot.main" target="18" />
       <module name="mikmusic.mikmusic-bot.test" target="18" />
+      <module name="mikmusic.votebot" target="19" />
+      <module name="mikmusic.votebot.common" target="19" />
+      <module name="mikmusic.votebot.main" target="19" />
+      <module name="mikmusic.votebot.test" target="19" />
     </bytecodeTargetLevel>
   </component>
 </project>

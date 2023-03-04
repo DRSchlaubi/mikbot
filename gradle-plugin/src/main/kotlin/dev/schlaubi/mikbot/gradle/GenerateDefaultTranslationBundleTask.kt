@@ -1,5 +1,6 @@
 package dev.schlaubi.mikbot.gradle
 
+import dev.schlaubi.mikbot.gradle.extension.bundle
 import org.gradle.api.DefaultTask
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property

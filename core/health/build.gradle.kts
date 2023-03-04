@@ -1,15 +1,15 @@
 plugins {
-    `mikbot-plugin`
-    `mikbot-module`
-    `mikbot-publishing`
-    kotlin("plugin.serialization")
+    org.jetbrains.kotlin.jvm
+    alias(libs.plugins.kotlinx.serialization)
+    com.google.devtools.ksp
+    dev.schlaubi.mikbot.`gradle-plugin`
 }
 
 group = "dev.schlaubi.mikbot"
 version = "1.7.0"
 
 dependencies {
-    plugin(projects.utils.ktor)
+    plugin(projects.core.ktor)
 }
 
 mikbotPlugin {

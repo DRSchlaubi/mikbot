@@ -1,10 +1,10 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    `mikbot-plugin`
-    `mikbot-module`
-    `mikbot-publishing`
-    kotlin("plugin.serialization")
+    org.jetbrains.kotlin.jvm
+    alias(libs.plugins.kotlinx.serialization)
+    com.google.devtools.ksp
+    dev.schlaubi.mikbot.`gradle-plugin`
 }
 
 group = "dev.schlaubi.mikbot"
@@ -18,7 +18,7 @@ dependencies {
     api(libs.spotify)
 
     // SponsorBlock Client
-    implementation(projects.utils.sponsorblockKt)
+    implementation(projects.clients.sponsorblockKt)
 
     // Scheduling
     implementation(libs.krontab)
@@ -30,8 +30,8 @@ dependencies {
     optionalPlugin(projects.core.gdpr)
 
     // Image Color Client
-    api(projects.utils.imageColorClient)
-    api(projects.utils.imageColorClientKord)
+    api(projects.clients.imageColorClient)
+    api(projects.clients.imageColorClientKord)
 
     implementation(libs.ktor.client.logging)
 }

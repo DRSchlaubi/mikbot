@@ -59,14 +59,6 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    // this one is included in the bot itself, therefore we make it compileOnly
-    // Or use: 'kotlin.stdlib.default.dependency=false' in gradle.properties
-    compileOnly(kotlin("stdlib-jdk8"))
-    mikbot("dev.schlaubi", "mikbot-api", "3.2.0-SNAPSHOT")
-    ksp("dev.schlaubi", "mikbot-plugin-processor", "2.2.0")
-}
-
 mikbotPlugin {
     description.set("This is a cool plugin!")
     provider.set("Schlaubi")
@@ -186,7 +178,7 @@ class Connect4GDPRExtensionPoint : GDPRExtensionPoint {
 The GDPR plugin can then access the data points like this
 
 ```kotlin
-pluginSystem.getExtensions<GDPRExtensionPoint>().flatMap { it.provideDataPoints() } 
+pluginSystem.getExtensions<GDPRExtensionPoint>().flatMap { it.provideDataPoints() }
 ```
 
 # The mikbot-api

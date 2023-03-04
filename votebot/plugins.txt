@@ -1,4 +1,0 @@
-# Plugins used in the official public VoteBot instance
-:core:gdpr
-:core:database-i18n
-:votebot:plugin

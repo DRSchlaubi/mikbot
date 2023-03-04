@@ -34,6 +34,7 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
     private fun Project.configureTasks() {
         val (assemblePlugin, installBotTask) = tasks.createAssembleTasks()
         createTestBotTasks(assemblePlugin, installBotTask)
+        createPublishingTasks(assemblePlugin)
     }
 
     private fun Project.createTestBotTasks(assemblePlugin: TaskProvider<Zip>, installBotTask: InstallBotTask) {

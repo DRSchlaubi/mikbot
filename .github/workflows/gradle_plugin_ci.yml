@@ -34,7 +34,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: 18
+          java-version: 19
       - name: Test with Gradle
         run: ./gradlew classes
       - name: Login to Gradle Plugin Portal

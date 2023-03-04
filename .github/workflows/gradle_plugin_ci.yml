@@ -13,6 +13,9 @@ on:
       - opened
       - synchronize
 
+env:
+  IS_CI: true
+
 jobs:
   gradleValidation:
     name: Gradle Wrapper

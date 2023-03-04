@@ -1,6 +1,6 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-@Suppress("DSL_SCOPE_VIOLATION")
-plugins {
+
+@Suppress("DSL_SCOPE_VIOLATION") plugins {
     alias(libs.plugins.gradle.publish)
     `java-gradle-plugin`
     alias(libs.plugins.kotlinx.jvm)
@@ -54,7 +54,7 @@ afterEvaluate {
         packageName("dev.schlaubi.mikbot.gradle")
         className("MikBotPluginInfo")
         buildConfigField("String", "VERSION", "\"${libs.versions.api}\"")
-        buildConfigField("boolean", "IS_MIKBOT", "true")
+        buildConfigField("boolean", "IS_MIKBOT", (System.getenv("IS_CI")?.toBoolean() == true).toString())
     }
 }
 

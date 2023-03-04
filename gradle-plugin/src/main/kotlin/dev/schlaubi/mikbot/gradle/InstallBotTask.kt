@@ -79,8 +79,6 @@ abstract class InstallBotTask : DefaultTask() {
         writeChannel.transferFrom(readChannel, 0, Long.MAX_VALUE)
     }
 
-    internal fun botVersionFromProject(): String {
-        return botVersion.orNull ?: project.extractMikBotVersionFromProjectApiDependency()
-        ?: error("Unable to detect version. Fix your dependency or set it manually.")
-    }
+    internal fun botVersionFromProject(): String =
+        botVersion.orNull ?: project.extractMikBotVersionFromProjectApiDependency()
 }

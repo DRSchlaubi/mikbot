@@ -1,5 +1,5 @@
 plugins {
-    org.jetbrains.kotlin.jvm
+    `mikbot-module`
     alias(libs.plugins.kotlinx.serialization)
     com.google.devtools.ksp
     dev.schlaubi.mikbot.`gradle-plugin`

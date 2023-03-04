@@ -1,5 +1,5 @@
 plugins {
-    org.jetbrains.kotlin.jvm
+    `mikbot-module`
     com.google.devtools.ksp
     dev.schlaubi.mikbot.`gradle-plugin`
 }

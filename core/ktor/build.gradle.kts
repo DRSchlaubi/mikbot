@@ -1,7 +1,8 @@
 plugins {
-    id("dev.schlaubi.mikbot.gradle-plugin")
     `mikbot-module`
     `mikbot-publishing`
+    com.google.devtools.ksp
+    dev.schlaubi.mikbot.`gradle-plugin`
 }
 
 group = "dev.schlaubi"

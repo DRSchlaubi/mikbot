@@ -9,7 +9,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 }
 
 group = "dev.schlaubi"
-version = libs.versions.api
+version = libs.versions.api.get()
 
 repositories {
     mavenCentral()

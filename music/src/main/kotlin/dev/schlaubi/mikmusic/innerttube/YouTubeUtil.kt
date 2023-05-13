@@ -17,7 +17,7 @@ suspend fun requestYouTubeAutoComplete(query: String, locale: Locale): List<Stri
 }
 
 suspend fun requestVideoRendererById(id: String): VideoRenderer? {
-    val response = InnerTubeClient.requestVideoSearch(id)
+    val response = InnerTubeClient.requestVideoSearch("https://youtu.be/$id")
 
     return response
         .contents

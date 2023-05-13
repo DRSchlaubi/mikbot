@@ -94,7 +94,7 @@ private interface RecoveryStep {
     val MusicPlayer.applicable: Boolean
         get() = true
 
-    suspend fun EphemeralSlashCommandContext<*>.apply(musicPlayer: MusicPlayer)
+    suspend fun EphemeralSlashCommandContext<*, *>.apply(musicPlayer: MusicPlayer)
 
     companion object {
         val steps = listOf(
@@ -109,7 +109,7 @@ private object ReJoinVoiceChannel : RecoveryStep {
     override val MusicPlayer.applicable: Boolean
         get() = link.lastChannelId == null || link.state == Link.State.NOT_CONNECTED
 
-    override suspend fun EphemeralSlashCommandContext<*>.apply(musicPlayer: MusicPlayer) {
+    override suspend fun EphemeralSlashCommandContext<*, *>.apply(musicPlayer: MusicPlayer) {
         musicPlayer.connectAudio(member!!.getVoiceState().channelId!!)
     }
 }
@@ -120,7 +120,7 @@ private object UnPausePlayback : RecoveryStep {
     override val MusicPlayer.applicable: Boolean
         get() = link.player.paused
 
-    override suspend fun EphemeralSlashCommandContext<*>.apply(musicPlayer: MusicPlayer) {
+    override suspend fun EphemeralSlashCommandContext<*, *>.apply(musicPlayer: MusicPlayer) {
         musicPlayer.pause(false)
     }
 }
@@ -129,7 +129,7 @@ private object RestartPlayback : RecoveryStep {
 
     override val nameKey: String = "commands.fix.step.restart_playback"
 
-    override suspend fun EphemeralSlashCommandContext<*>.apply(musicPlayer: MusicPlayer) {
+    override suspend fun EphemeralSlashCommandContext<*, *>.apply(musicPlayer: MusicPlayer) {
         musicPlayer.player.pause(true)
         delay(500.milliseconds)
         musicPlayer.player.pause(false)
@@ -140,7 +140,7 @@ private object ReEstablishVoiceConnection : RecoveryStep {
 
     override val nameKey: String = "commands.fix.step.re_establish_voice_connection"
 
-    override suspend fun EphemeralSlashCommandContext<*>.apply(musicPlayer: MusicPlayer) {
+    override suspend fun EphemeralSlashCommandContext<*, *>.apply(musicPlayer: MusicPlayer) {
         val state = musicPlayer.toState()
         val channelId = musicPlayer.link.lastChannelId!!
 
@@ -154,7 +154,7 @@ private object ReEstablishVoiceConnection : RecoveryStep {
 private object SwitchVoiceServers : RecoveryStep {
     override val nameKey: String = "commands.fix.step.switch_voice_server"
 
-    override suspend fun EphemeralSlashCommandContext<*>.apply(musicPlayer: MusicPlayer) {
+    override suspend fun EphemeralSlashCommandContext<*, *>.apply(musicPlayer: MusicPlayer) {
         val channel = musicPlayer.getChannel()!!
         val currentRegion = channel.rtcRegion
 
@@ -180,7 +180,7 @@ object SkipTrack : RecoveryStep {
 
     override val nameKey: String = "commands.fix.step.skip_track"
 
-    override suspend fun EphemeralSlashCommandContext<*>.apply(musicPlayer: MusicPlayer) {
+    override suspend fun EphemeralSlashCommandContext<*, *>.apply(musicPlayer: MusicPlayer) {
         musicPlayer.skip()
     }
 }

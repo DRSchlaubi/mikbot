@@ -1,6 +1,7 @@
 package dev.schlaubi.mikmusic.player.queue
 
-import dev.schlaubi.lavakord.rest.TrackResponse
+import dev.schlaubi.lavakord.Exception
 
-class FriendlyException(severity: TrackResponse.Error.Severity, message: String) :
+
+class FriendlyException(severity: Exception.Severity, message: String) :
     RuntimeException("$severity: $message")

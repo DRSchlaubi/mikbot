@@ -8,7 +8,7 @@ import com.kotlindiscord.kord.extensions.utils.waitForResponse
 import dev.kord.common.entity.Permission
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.entity.channel.GuildChannel
-import dev.schlaubi.lavakord.rest.TrackResponse
+import dev.schlaubi.lavakord.rest.models.TrackResponse
 import dev.schlaubi.lavakord.rest.mapToTrack
 import dev.schlaubi.mikbot.plugin.api.util.EditableMessageSender
 import dev.schlaubi.mikbot.plugin.api.util.forList

@@ -3,7 +3,7 @@ package dev.schlaubi.mikmusic.player.queue
 import com.neovisionaries.i18n.CountryCode
 import dev.schlaubi.lavakord.audio.Link
 import dev.schlaubi.lavakord.audio.player.Track
-import dev.schlaubi.lavakord.rest.TrackResponse
+import dev.schlaubi.lavakord.rest.models.TrackResponse
 import dev.schlaubi.lavakord.rest.loadItem
 import dev.schlaubi.mikmusic.core.Config
 import dev.schlaubi.stdx.coroutines.parallelMapNotNullIndexed

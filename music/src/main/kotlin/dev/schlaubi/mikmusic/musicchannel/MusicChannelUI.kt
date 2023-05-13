@@ -4,7 +4,7 @@ import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
 import dev.kord.common.entity.ButtonStyle
 import dev.kord.common.entity.DiscordPartialEmoji
 import dev.kord.common.entity.Snowflake
-import dev.kord.common.kLocale
+import dev.kord.common.asJavaLocale
 import dev.kord.core.Kord
 import dev.kord.core.behavior.edit
 import dev.kord.core.behavior.getChannelOfOrNull
@@ -42,7 +42,7 @@ suspend fun updateMessage(
     translationsProvider: TranslationsProvider,
 ) {
     val message = findMessageSafe(guildId, kord)
-    val locale = kord.getGuildOrNull(guildId)?.preferredLocale?.kLocale?.convertToISO()?.asJavaLocale()
+    val locale = kord.getGuildOrNull(guildId)?.preferredLocale?.convertToISO()?.asJavaLocale()
         ?: translationsProvider.defaultLocale
 
     fun translate(key: String, vararg replacements: Any?) = translationsProvider.translate(

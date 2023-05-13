@@ -12,9 +12,9 @@ import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.schlaubi.lavakord.audio.Link
 import dev.schlaubi.lavakord.audio.player.Track
-import dev.schlaubi.lavakord.rest.TrackResponse
 import dev.schlaubi.lavakord.rest.loadItem
 import dev.schlaubi.lavakord.rest.mapToTrack
+import dev.schlaubi.lavakord.rest.models.TrackResponse
 import dev.schlaubi.mikbot.plugin.api.util.*
 import dev.schlaubi.mikmusic.checks.joinSameChannelCheck
 import dev.schlaubi.mikmusic.checks.musicControlCheck
@@ -120,7 +120,7 @@ class MusicInteractionModule : Extension() {
 
             action {
                 event.message.channel.withTyping {
-                    val guild = event.getGuild()!!
+                    val guild = event.getGuildOrNull() ?: error("Could not find guild")
                     val player = musicModule.getMusicPlayer(guild)
                     val tracks = player.takeFirstMatch(
                         player,

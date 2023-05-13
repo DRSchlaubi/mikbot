@@ -55,19 +55,11 @@ class Bot : KordExKoinComponent {
             }
 
             pluginLoader.botPlugins.onEach {
-                try {
-                    apply()
-                } catch (e: AbstractMethodError) {
-                    // due to kotlin compiler issues, we cannot
-                }
+                apply()
             }
             extensions {
                 pluginLoader.botPlugins.onEach {
-                    try {
-                        addExtensions()
-                    } catch (e: AbstractMethodError) {
-                        // due to kotlin compiler issues, we cannot
-                    }
+                    addExtensions()
                 }
                 add { BotModule(this@Bot) }
             }
@@ -85,11 +77,7 @@ class Bot : KordExKoinComponent {
                 bot.start()
             }
             pluginLoader.botPlugins.onEach {
-                try {
-                    atLaunch(bot)
-                } catch (e: AbstractMethodError) {
-                    // due to kotlin compiler issues, we cannot
-                }
+                atLaunch(bot)
             }
         }
     }

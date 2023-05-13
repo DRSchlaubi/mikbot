@@ -116,7 +116,8 @@ private fun TaskContainer.createAssemblePluginTask(jarTask: Jar) =
                     // filter out dupe dependencies
                     configurations.getByName("runtimeClasspath").resolvedConfiguration.resolvedArtifacts.asSequence()
                         .filter { dep ->
-                            (dep.moduleVersion.id.group + ":" + dep.moduleVersion.id.name) !in mainConfiguration
+                            val idWithoutPlatform = dep.moduleVersion.id.name.substringBefore("-jvm")
+                            (dep.moduleVersion.id.group + ":" + idWithoutPlatform) !in mainConfiguration
                         }.mapNotNull { dep ->
                             dep.file
                         }.toList()

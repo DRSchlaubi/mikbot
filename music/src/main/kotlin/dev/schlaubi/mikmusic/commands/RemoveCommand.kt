@@ -36,8 +36,8 @@ suspend fun MusicModule.removeCommand() = ephemeralControlSlashCommand {
     name = "remove"
     description = "commands.remove.description"
 
-    suspend fun <A : Arguments> EphemeralSlashCommand<A>.doRemove(
-        remove: suspend EphemeralSlashCommandContext<A>.() -> Int
+    suspend fun <A : Arguments> EphemeralSlashCommand<A, *>.doRemove(
+        remove: suspend EphemeralSlashCommandContext<A, *>.() -> Int
     ) =
         action {
             val removed = remove()

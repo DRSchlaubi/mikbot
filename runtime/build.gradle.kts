@@ -15,14 +15,12 @@ version = Project.version + "-SNAPSHOT"
 
 allprojects {
     repositories {
-        mavenLocal()
         mavenCentral()
         maven("https://maven.kotlindiscord.com/repository/maven-public/")
         maven("https://schlaubi.jfrog.io/artifactory/mikbot/")
         maven("https://schlaubi.jfrog.io/artifactory/envconf/")
         maven("https://schlaubi.jfrog.io/artifactory/lavakord/")
-//        maven("https://nycode.jfrog.io/artifactory/snapshots/")
-        maven("https://oss.sonatype.org/content/repositories/snapshots")
+        maven("https://s01.oss.sonatype.org/content/repositories/snapshots")
     }
 }
 
@@ -69,7 +67,8 @@ tasks {
     task("exportDependencies") {
         doLast {
             val deps = configurations["runtimeClasspath"].resolvedConfiguration.resolvedArtifacts.mapNotNull {
-                it.moduleVersion.id.group + ":" + it.moduleVersion.id.name
+                val idWithoutPlatform = it.moduleVersion.id.name.substringBefore("-jvm")
+                it.moduleVersion.id.group + ":" + idWithoutPlatform
             }
 
             val kotlinFile = """
@@ -79,7 +78,8 @@ tasks {
             """.trimIndent()
 
             Files.writeString(
-                file("gradle-plugin/src/main/kotlin/dev/schlaubi/mikbot/gradle/TransientDependencies.kt").toPath(),
+                rootProject.file("gradle-plugin/src/main/kotlin/dev/schlaubi/mikbot/gradle/TransientDependencies.kt")
+                    .toPath(),
                 kotlinFile
             )
         }
@@ -95,6 +95,25 @@ tasks {
         from(distTar)
         include("*.tar.gz")
         into("ci-repo/$version")
+    }
+
+    val installPlugins = task<Copy>("installPlugins") {
+        (project.file("plugins.txt")
+            .takeIf { it.exists() } ?: return@task)
+            .readLines()
+            .asSequence()
+            .filterNot { it.isBlank() || it.startsWith('#') }
+            .map {
+                findProject(it) ?: error("Project '$it' not found, make sure to reference it from the root project")
+            }
+            .forEach {
+                from(it.tasks["assemblePlugin"] ?: error("Project $path does not have a plugin task"))
+            }
+        into(rootProject.file("plugins"))
+    }
+
+    classes {
+        dependsOn(installPlugins)
     }
 }
 

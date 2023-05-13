@@ -2,8 +2,8 @@ package dev.schlaubi.mikmusic.player
 
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.schlaubi.lavakord.audio.player.Track
-import dev.schlaubi.lavakord.rest.TrackResponse
 import dev.schlaubi.lavakord.rest.loadItem
+import dev.schlaubi.lavakord.rest.models.TrackResponse
 import dev.schlaubi.mikbot.plugin.api.util.Translator
 import dev.schlaubi.mikmusic.innerttube.InnerTubeClient
 import dev.schlaubi.mikmusic.innerttube.Text

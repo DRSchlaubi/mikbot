@@ -19,6 +19,10 @@ fun Project.addRepositories() {
     }
     repositories.maven {
         it.name = "Sonatype Snapshots"
+        it.url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots")
+    }
+    repositories.maven {
+        it.name = "Sonatype Snapshots"
         it.url = uri("https://oss.sonatype.org/content/repositories/snapshots")
     }
 }

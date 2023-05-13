@@ -4,7 +4,7 @@ import com.kotlindiscord.kord.extensions.commands.CommandContext
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.schlaubi.lavakord.audio.Link
 import dev.schlaubi.lavakord.audio.player.Track
-import dev.schlaubi.lavakord.rest.TrackResponse
+import dev.schlaubi.lavakord.rest.models.TrackResponse
 import dev.schlaubi.mikmusic.util.addSong
 import kotlin.time.ExperimentalTime
 

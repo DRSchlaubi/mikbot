@@ -24,8 +24,8 @@ class SchedulerSettingsArguments : Arguments() {
 }
 
 suspend fun SettingsModule.optionsCommand() {
-    suspend fun <T> EphemeralSlashCommandContext<SchedulerSettingsArguments>.doUpdate(
-        findObject: suspend (EphemeralSlashCommandContext<SchedulerSettingsArguments>) -> T,
+    suspend fun <T> EphemeralSlashCommandContext<SchedulerSettingsArguments, *>.doUpdate(
+        findObject: suspend (EphemeralSlashCommandContext<SchedulerSettingsArguments, *>) -> T,
         mapObject: (T) -> SchedulerSettings?,
         save: suspend T.(SchedulerSettings?) -> Unit,
     ) {

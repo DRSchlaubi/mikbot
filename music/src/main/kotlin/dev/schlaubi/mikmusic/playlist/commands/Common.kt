@@ -40,7 +40,7 @@ abstract class PlaylistArguments : Arguments() {
         )
 }
 
-suspend fun EphemeralSlashCommandContext<out PlaylistArguments>.getPlaylist() =
+suspend fun EphemeralSlashCommandContext<out PlaylistArguments, *>.getPlaylist() =
     arguments.getPlaylistOrNull(user, arguments.name) ?: error("Could not load playlist")
 
 class PlaylistModule : SubCommandModule() {
@@ -66,7 +66,7 @@ class PlaylistModule : SubCommandModule() {
     }
 }
 
-suspend inline fun EphemeralSlashCommandContext<*>.checkName(name: String, public: Boolean, callback: () -> Unit) {
+suspend inline fun EphemeralSlashCommandContext<*, *>.checkName(name: String, public: Boolean, callback: () -> Unit) {
     val nameBson = Playlist::name eq name
     val findBson = if (public) {
         and(nameBson, Playlist::public eq true)
@@ -84,7 +84,7 @@ suspend inline fun EphemeralSlashCommandContext<*>.checkName(name: String, publi
     callback()
 }
 
-suspend inline fun EphemeralSlashCommandContext<out PlaylistArguments>.checkPermissions(callback: (Playlist) -> Unit) {
+suspend inline fun EphemeralSlashCommandContext<out PlaylistArguments, *>.checkPermissions(callback: (Playlist) -> Unit) {
     val playlist = getPlaylist()
     if (playlist.authorId != user.id) {
         respond {

@@ -207,11 +207,11 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior) :
         applySponsorBlock(event)
 
         guild.kord.launch {
-            val youtubeId = event.track.youtubeId ?: return@launch
+            val youtubeId = event.getTrack().youtubeId ?: return@launch
             val chapters = requestVideoChaptersById(youtubeId)
             if (chapters.isNotEmpty()) {
                 val queuedBy = playingTrack?.queuedBy ?: Snowflake(0)
-                playingTrack = ChapterQueuedTrack(event.track, queuedBy, chapters)
+                playingTrack = ChapterQueuedTrack(event.getTrack(), queuedBy, chapters)
                 updateMusicChannelMessage()
                 restartChapterUpdater()
             }
@@ -223,14 +223,14 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior) :
             return
         }
         guild.kord.launch {
-            event.track.checkAndSkipSponsorBlockSegments(player)
+            event.getTrack().checkAndSkipSponsorBlockSegments(player)
         }
     }
 
     private suspend fun onTrackEnd(event: TrackEndEvent) {
-        event.track.deleteSponsorBlockCache()
+        event.getTrack().deleteSponsorBlockCache()
         if ((!repeat && !loopQueue && queue.isEmpty()) && event.reason != TrackEndEvent.EndReason.REPLACED) {
-            val autoPlayTrack = findNextAutoPlayedSong(event.track)
+            val autoPlayTrack = findNextAutoPlayedSong(event.getTrack())
             if (autoPlayTrack != null) {
                 queue.add(SimpleQueuedTrack(autoPlayTrack, guild.kord.selfId))
             } else {
@@ -248,7 +248,7 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior) :
         }
 
         if (event.reason.mayStartNext) {
-            startNextSong(event.track)
+            startNextSong(event.getTrack())
         }
 
         if (repeat) {

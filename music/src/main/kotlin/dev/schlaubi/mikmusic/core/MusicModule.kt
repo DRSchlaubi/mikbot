@@ -70,7 +70,7 @@ class MusicModule : Extension() {
         }
     }
 
-    suspend fun EphemeralSlashCommandContext<*>.checkOtherSchedulerOptions(
+    suspend fun EphemeralSlashCommandContext<*, *>.checkOtherSchedulerOptions(
         myProperty: KMutableProperty1<MusicPlayer, Boolean>,
         vararg properties: KMutableProperty1<MusicPlayer, Boolean>,
         callback: suspend (newValue: Boolean) -> Unit
@@ -87,13 +87,13 @@ class MusicModule : Extension() {
     @ExtensionDSL
     suspend fun <T : Arguments> Extension.ephemeralControlSlashCommand(
         arguments: () -> T,
-        body: suspend EphemeralSlashCommand<T>.() -> Unit,
-    ): EphemeralSlashCommand<T> = musicApplicationCommand({ ephemeralSlashCommand(arguments, it) }, body)
+        body: suspend EphemeralSlashCommand<T, *>.() -> Unit,
+    ): EphemeralSlashCommand<T, *> = musicApplicationCommand({ ephemeralSlashCommand(arguments, it) }, body)
 
     @ExtensionDSL
     suspend fun Extension.ephemeralControlSlashCommand(
-        body: suspend EphemeralSlashCommand<Arguments>.() -> Unit,
-    ): EphemeralSlashCommand<Arguments> = musicApplicationCommand({ ephemeralSlashCommand(it) }, body)
+        body: suspend EphemeralSlashCommand<Arguments, *>.() -> Unit,
+    ): EphemeralSlashCommand<Arguments, *> = musicApplicationCommand({ ephemeralSlashCommand(it) }, body)
 
     private suspend fun <E : InteractionCreateEvent, T : ApplicationCommand<E>> Extension.musicApplicationCommand(
         create: suspend Extension.(suspend T.() -> Unit) -> T,

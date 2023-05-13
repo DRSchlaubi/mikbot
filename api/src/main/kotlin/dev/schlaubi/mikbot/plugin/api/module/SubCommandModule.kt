@@ -25,23 +25,23 @@ public abstract class SubCommandModule : Extension() {
 
     public fun <T : Arguments> ephemeralSubCommand(
         argumentBody: (() -> T),
-        body: suspend EphemeralSlashCommand<T>.() -> Unit
+        body: suspend EphemeralSlashCommand<T, *>.() -> Unit
     ) {
         ephemeralSubCommandBodies.add(EphemeralCommandPair(argumentBody, body))
     }
 
-    public fun ephemeralSubCommand(body: suspend EphemeralSlashCommand<Arguments>.() -> Unit) {
+    public fun ephemeralSubCommand(body: suspend EphemeralSlashCommand<Arguments, *>.() -> Unit) {
         ephemeralSubCommandBodies.add(EphemeralCommandPair(null, body))
     }
 
     public fun <T : Arguments> publicSubCommand(
         argumentBody: (() -> T),
-        body: suspend PublicSlashCommand<T>.() -> Unit
+        body: suspend PublicSlashCommand<T, *>.() -> Unit
     ) {
         publicSubCommandBodies.add(PublicCommandPair(argumentBody, body))
     }
 
-    public fun publicSubCommand(body: suspend PublicSlashCommand<Arguments>.() -> Unit) {
+    public fun publicSubCommand(body: suspend PublicSlashCommand<Arguments, *>.() -> Unit) {
         publicSubCommandBodies.add(PublicCommandPair(null, body))
     }
 
@@ -76,13 +76,13 @@ public abstract class SubCommandModule : Extension() {
  */
 public class EphemeralCommandPair<T : Arguments>(
     private val argumentBody: (() -> T)?,
-    private val commandBody: suspend EphemeralSlashCommand<T>.() -> Unit
+    private val commandBody: suspend EphemeralSlashCommand<T, *>.() -> Unit
 ) {
-    public suspend fun SlashCommand<*, *>.add() {
+    public suspend fun SlashCommand<*, *, *>.add() {
         if (argumentBody == null) {
             ephemeralSubCommand {
                 @Suppress("UNCHECKED_CAST")
-                commandBody(this as EphemeralSlashCommand<T>)
+                commandBody(this as EphemeralSlashCommand<T, *>)
             }
         } else {
             ephemeralSubCommand(argumentBody) {
@@ -101,13 +101,13 @@ public class EphemeralCommandPair<T : Arguments>(
  */
 public class PublicCommandPair<T : Arguments>(
     private val argumentBody: (() -> T)?,
-    private val commandBody: suspend PublicSlashCommand<T>.() -> Unit
+    private val commandBody: suspend PublicSlashCommand<T, *>.() -> Unit
 ) {
-    public suspend fun SlashCommand<*, *>.add() {
+    public suspend fun SlashCommand<*, *, *>.add() {
         if (argumentBody == null) {
             publicSubCommand {
                 @Suppress("UNCHECKED_CAST")
-                commandBody(this as PublicSlashCommand<T>)
+                commandBody(this as PublicSlashCommand<T, *>)
             }
         } else {
             publicSubCommand(argumentBody) {

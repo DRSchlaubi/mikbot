@@ -18,6 +18,7 @@ public class SponsorBlockClient(
     @PublishedApi
     internal val httpClient: HttpClient = HttpClient {
         httpClientBuilder()
+        expectSuccess = true
         val json = Json {
             ignoreUnknownKeys = true
         }

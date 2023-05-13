@@ -28,11 +28,11 @@ class MoveArguments : Arguments() {
 }
 
 suspend fun MusicModule.moveCommand() {
-    suspend fun <T : Arguments> EphemeralSlashCommand<T>.doMove(
+    suspend fun <T : Arguments> EphemeralSlashCommand<T, *>.doMove(
         from: T.() -> Int,
         to: T.() -> Int,
         swap: Boolean = false,
-        successMessageBuilder: suspend EphemeralSlashCommandContext<T>.(track: Track) -> String
+        successMessageBuilder: suspend EphemeralSlashCommandContext<T, *>.(track: Track) -> String
     ) = action {
         @Suppress("UNCHECKED_CAST")
         val safeArguments = kotlin.runCatching { arguments }.getOrElse { Arguments() as T }

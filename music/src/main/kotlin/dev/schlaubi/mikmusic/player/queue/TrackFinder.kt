@@ -7,10 +7,11 @@ import com.kotlindiscord.kord.extensions.commands.converters.impl.defaultingBool
 import com.kotlindiscord.kord.extensions.types.editingPaginator
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.kord.rest.builder.message.create.embed
+import dev.schlaubi.lavakord.Exception
 import dev.schlaubi.lavakord.audio.player.Track
-import dev.schlaubi.lavakord.rest.TrackResponse
 import dev.schlaubi.lavakord.rest.loadItem
 import dev.schlaubi.lavakord.rest.mapToTrack
+import dev.schlaubi.lavakord.rest.models.TrackResponse
 import dev.schlaubi.mikbot.plugin.api.util.EditableMessageSender
 import dev.schlaubi.mikmusic.autocomplete.autoCompletedYouTubeQuery
 import dev.schlaubi.mikmusic.player.MusicPlayer
@@ -48,7 +49,7 @@ abstract class QueueArguments : Arguments(), QueueOptions {
     }
 }
 
-suspend fun <T : QueueArguments> EphemeralSlashCommandContext<T>.queueTracks(
+suspend fun <T : QueueArguments> EphemeralSlashCommandContext<T, *>.queueTracks(
     musicPlayer: MusicPlayer,
     search: Boolean
 ) {
@@ -63,7 +64,7 @@ suspend fun <T : QueueArguments> EphemeralSlashCommandContext<T>.queueTracks(
     }
 }
 
-suspend fun <T> EphemeralSlashCommandContext<T>.findTracks(
+suspend fun <T> EphemeralSlashCommandContext<T, *>.findTracks(
     musicPlayer: MusicPlayer,
     search: Boolean
 ): QueueSearchResult?
@@ -205,7 +206,7 @@ private suspend fun CommandContext.handleError(
 ) {
     val error = result.getException()
     when (error.severity) {
-        TrackResponse.Error.Severity.COMMON -> {
+        Exception.Severity.COMMON -> {
             respond {
                 content = translate("music.queue.load_failed.common", arrayOf(error.message))
             }

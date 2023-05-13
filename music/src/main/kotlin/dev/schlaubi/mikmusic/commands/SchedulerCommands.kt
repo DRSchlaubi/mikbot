@@ -7,7 +7,7 @@ import dev.schlaubi.mikmusic.player.MusicPlayer
 import kotlin.reflect.KMutableProperty1
 
 suspend fun MusicModule.schedulerCommands() {
-    suspend fun EphemeralSlashCommandContext<*>.schedulerOption(
+    suspend fun EphemeralSlashCommandContext<*, *>.schedulerOption(
         myProperty: KMutableProperty1<MusicPlayer, Boolean>,
         vararg properties: KMutableProperty1<MusicPlayer, Boolean>,
         enabled: String,

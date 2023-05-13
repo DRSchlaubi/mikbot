@@ -20,7 +20,7 @@ public interface SettingsExtensionPoint : ModuleExtensionPoint<SettingsModule> {
     public override suspend fun SettingsModule.apply()
 }
 
-public fun SlashCommand<*, *>.guildAdminOnly() {
+public fun SlashCommand<*, *, *>.guildAdminOnly() {
     requirePermission(Permission.ManageGuild)
     allowInDms = false
 }

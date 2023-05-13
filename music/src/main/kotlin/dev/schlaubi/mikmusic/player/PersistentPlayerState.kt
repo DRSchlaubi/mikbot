@@ -55,7 +55,7 @@ data class MutableFilters(
     override val tremolo: Filters.Tremolo? = null,
     override val vibrato: Filters.Vibrato? = null,
     override var volume: Float? = null,
-    override val bands: MutableList<Band> = mutableListOf(),
+    override val equalizers: MutableList<Equalizer> = mutableListOf(),
     override val channelMix: Filters.ChannelMix? = null,
     override val distortion: Filters.Distortion? = null,
     override val lowPass: Filters.LowPass? = null,

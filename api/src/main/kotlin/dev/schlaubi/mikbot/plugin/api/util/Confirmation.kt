@@ -40,7 +40,7 @@ public data class Confirmation(
  *
  * @return whether the user confirmed the form or not
  */
-public suspend fun EphemeralSlashCommandContext<*>.confirmation(
+public suspend fun EphemeralSlashCommandContext<*, *>.confirmation(
     yesWord: String? = null,
     noWord: String? = null,
     timeout: Duration = 30.seconds,
@@ -56,7 +56,7 @@ public suspend fun EphemeralSlashCommandContext<*>.confirmation(
  *
  * @return whether the user confirmed the form or not
  */
-public suspend fun PublicSlashCommandContext<*>.confirmation(
+public suspend fun PublicSlashCommandContext<*, *>.confirmation(
     yesWord: String? = null,
     noWord: String? = null,
     timeout: Duration = 30.seconds,
@@ -74,7 +74,7 @@ public suspend fun PublicSlashCommandContext<*>.confirmation(
  * @return whether the user confirmed the form or not
  */
 @UnsafeAPI
-public suspend fun UnsafeSlashCommandContext<*>.ephemeralConfirmation(
+public suspend fun UnsafeSlashCommandContext<*, *>.ephemeralConfirmation(
     yesWord: String? = null,
     noWord: String? = null,
     timeout: Duration = 30.seconds,
@@ -93,7 +93,7 @@ public suspend fun UnsafeSlashCommandContext<*>.ephemeralConfirmation(
  * @return whether the user confirmed the form or not
  */
 @UnsafeAPI
-public suspend fun UnsafeSlashCommandContext<*>.publicConfirmation(
+public suspend fun UnsafeSlashCommandContext<*, *>.publicConfirmation(
     yesWord: String? = null,
     noWord: String? = null,
     timeout: Duration = 30.seconds,
@@ -102,7 +102,7 @@ public suspend fun UnsafeSlashCommandContext<*>.publicConfirmation(
 ): Confirmation = unsafeConfirmation(yesWord, noWord, messageBuilder, timeout, acknowledge) { respondPublic { it() } }
 
 @OptIn(UnsafeAPI::class)
-private suspend fun UnsafeSlashCommandContext<*>.unsafeConfirmation(
+private suspend fun UnsafeSlashCommandContext<*, *>.unsafeConfirmation(
     yesWord: String?,
     noWord: String?,
     messageBuilder: MessageBuilder,

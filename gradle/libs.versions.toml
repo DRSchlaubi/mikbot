@@ -1,20 +1,21 @@
 [versions]
-kotlin = "1.8.10"
-kordex = "1.5.5-SNAPSHOT"
-kmongo = "4.8.0"
-coroutines = "1.6.4"
-serialization = "1.4.1"
-ktor = "2.2.3"
-kord = "0.8.0-M17"
+kotlin = "1.8.21"
+kordex = "1.5.7-SNAPSHOT"
+kmongo = "4.9.0"
+coroutines = "1.7.1"
+serialization = "1.5.1"
+ktor = "2.3.0"
+kord = "0.9.0"
 jjwt = "0.11.5"
 api = "3.17.1"
+ksp = "1.8.21-1.0.11"
 
 [libraries]
 kord-rest = { group = "dev.kord", name = "kord-rest", version.ref = "kord" }
 kordex = { group = "com.kotlindiscord.kord.extensions", name = "kord-extensions", version.ref = "kordex" }
 kordex-unsafe = { group = "com.kotlindiscord.kord.extensions", name = "unsafe", version.ref = "kordex" }
 kordex-processor = { group = "com.kotlindiscord.kord.extensions", name = "annotation-processor", version.ref = "kordex" }
-kordx-emoji = { group = "dev.kord.x", name = "emoji", version = "0.5.0" }
+kordx-emoji = { group = "dev.kord.x", name = "kordx.emoji", version = "feature-mpp-SNAPSHOT" }
 kotlinx-coroutines-jdk8 = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-jdk8", version.ref = "coroutines" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
@@ -27,10 +28,10 @@ commons-text = { group = "org.apache.commons", name = "commons-text", version = 
 google-cloud-bom = { group = "com.google.cloud", name = "libraries-bom", version = "26.6.0" }
 google-cloud-translate = { group = "com.google.cloud", name = "google-cloud-translate" }
 google-apis-youtube = { group = "com.google.apis", name = "google-api-services-youtube", version = "v3-rev20230123-2.0.0" }
-lavakord-kord = { group = "dev.schlaubi.lavakord", name = "kord", version = "3.8.0" }
-spotify = { group = "se.michaelthelin.spotify", name = "spotify-web-api-java", version = "7.3.0" }
+lavakord-kord = { group = "dev.schlaubi.lavakord", name = "kord", version = "4.0.1" }
+spotify = { group = "se.michaelthelin.spotify", name = "spotify-web-api-java", version = "8.0.0" }
 krontab = { group = "dev.inmo", name = "krontab", version = "0.8.5" }
-ksp-api = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version = "1.8.10-1.0.9" }
+ksp-api = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version.ref = "ksp" }
 rhino = { group = "org.mozilla", name = "rhino", version = "1.7.14" }
 ktor-client-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }
 ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor" }
@@ -70,4 +71,4 @@ kotlinx-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 gradle-publish = { id = "com.gradle.plugin-publish", version = "1.0.0-rc-3" }
 buildconfig = { id = "com.github.gmazzo.buildconfig", version = "3.1.0" }
 mikbot = { id = "dev.schlaubi.mikbot.gradle-plugin", version = "1.0.0" }
-ksp = { id = "com.google.devtools.ksp", version = "1.0.9-1.8.10" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

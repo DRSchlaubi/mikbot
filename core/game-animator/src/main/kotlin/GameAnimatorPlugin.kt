@@ -1,13 +1,13 @@
 package dev.schlaubi.mikbot.core.game_animator
 
 import com.kotlindiscord.kord.extensions.builders.ExtensibleBotBuilder
-import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.extensions.event
 import dev.kord.common.entity.ActivityType
 import dev.kord.common.entity.PresenceStatus
 import dev.kord.core.Kord
 import dev.schlaubi.mikbot.core.game_animator.api.GameAnimatorExtensionPoint
 import dev.schlaubi.mikbot.plugin.api.*
+import dev.schlaubi.mikbot.plugin.api.module.MikBotModule
 import dev.schlaubi.mikbot.plugin.api.util.AllShardsReadyEvent
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ObsoleteCoroutinesApi
@@ -20,17 +20,18 @@ import kotlin.time.Duration.Companion.seconds
 private val LOG = KotlinLogging.logger { }
 
 @PluginMain
-class GameAnimatorPlugin(wrapper: PluginWrapper) : Plugin(wrapper) {
+class GameAnimatorPlugin(wrapper: PluginContext) : Plugin(wrapper) {
 
     override fun ExtensibleBotBuilder.ExtensionsBuilder.addExtensions() {
         add(::GameAnimator)
     }
 
-    private class GameAnimator : Extension() {
+    private class GameAnimator(context: PluginContext) : MikBotModule(context) {
         override val name: String = "GameAnimator"
 
         @OptIn(ObsoleteCoroutinesApi::class)
         private val ticker = ticker(30.seconds.inWholeMilliseconds, 0)
+        private val extensions = pluginSystem.getExtensions<GameAnimatorExtensionPoint>()
         private val games: List<Game> = Config.GAMES
         private lateinit var runner: Job
 
@@ -47,7 +48,7 @@ class GameAnimatorPlugin(wrapper: PluginWrapper) : Plugin(wrapper) {
                 launch {
                     if (games.isNotEmpty()) {
                         for (unit in ticker) {
-                            games.random().apply(kord)
+                            games.random().apply(extensions, kord)
                         }
                     } else {
                         LOG.warn { "No games set, please set the GAMES env variable" }
@@ -63,9 +64,7 @@ class GameAnimatorPlugin(wrapper: PluginWrapper) : Plugin(wrapper) {
 }
 
 data class Game(val type: ActivityType, val status: PresenceStatus, val text: String) {
-    val extensions = pluginSystem.getExtensions<GameAnimatorExtensionPoint>()
-
-    suspend fun apply(kord: Kord) {
+    suspend fun apply(extensions: List<GameAnimatorExtensionPoint>, kord: Kord) {
         kord.editPresence {
             status = this@Game.status
 

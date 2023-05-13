@@ -7,7 +7,6 @@ import dev.schlaubi.mikbot.core.redeploy_hook.api.RedeployExtensionPoint
 import dev.schlaubi.mikbot.plugin.api.getExtensions
 import dev.schlaubi.mikbot.plugin.api.owner.OwnerModule
 import dev.schlaubi.mikbot.plugin.api.owner.ownerOnly
-import dev.schlaubi.mikbot.plugin.api.pluginSystem
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
@@ -25,7 +24,7 @@ suspend fun OwnerModule.redeployCommand() = ephemeralSlashCommand {
 
     action {
         coroutineScope {
-            pluginSystem.getExtensions<RedeployExtensionPoint>().forEach {
+            context.pluginSystem.getExtensions<RedeployExtensionPoint>().forEach {
                 @Suppress("ConvertLambdaToReference")
                 launch {
                     it.beforeRedeploy()

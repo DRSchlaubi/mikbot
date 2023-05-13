@@ -2,6 +2,7 @@ package dev.schlaubi.mikbot.plugin.api
 
 import dev.kord.core.Kord
 import dev.kord.core.event.Event
+import dev.schlaubi.mikbot.plugin.api.module.MikBotModule
 import org.pf4j.ExtensionPoint
 import kotlin.reflect.KClass
 
@@ -13,6 +14,8 @@ public lateinit var _pluginSystem: PluginSystem
 
 /**
  * Global instance for [PluginSystem].
+ *
+ * @see MikBotModule
  */
 @OptIn(InternalAPI::class)
 @Deprecated("Replaced by PluginContext", ReplaceWith("PluginContext.pluginSystem"))

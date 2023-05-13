@@ -4,6 +4,7 @@ import com.kotlindiscord.kord.extensions.ExtensibleBot
 import com.kotlindiscord.kord.extensions.builders.ExtensibleBotBuilder
 import com.kotlindiscord.kord.extensions.extensions.Extension
 import dev.schlaubi.mikbot.plugin.api.io.Database
+import dev.schlaubi.mikbot.plugin.api.module.MikBotModule
 import kotlinx.coroutines.CoroutineScope
 import org.pf4j.Plugin
 import org.pf4j.PluginWrapper
@@ -89,4 +90,12 @@ public abstract class Plugin : Plugin {
      * This is being executed directly after the bot got started.
      */
     public open fun CoroutineScope.atLaunch(bot: ExtensibleBot): Unit = Unit
+
+    /**
+     * Convenience method to use [PluginContext] in modules.
+     *
+     * @see MikBotModule
+     */
+    public fun <T : MikBotModule> ExtensibleBotBuilder.ExtensionsBuilder.add(builder: (PluginContext) -> T): Unit =
+        add { builder(context ?: error("Please upgrade this plugin to the new context")) }
 }

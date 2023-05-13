@@ -4,6 +4,7 @@ import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.application.slash.*
 import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
+import dev.schlaubi.mikbot.plugin.api.PluginContext
 
 /**
  * Builder lambda for slash command groups.
@@ -13,7 +14,7 @@ public typealias GroupBuilder = suspend SlashGroup.() -> Unit
 /**
  * Bot [Extension] which registers all commands als subCommands.
  */
-public abstract class SubCommandModule : Extension() {
+public abstract class SubCommandModule(context: PluginContext) : MikBotModule(context) {
     private val ephemeralSubCommandBodies = mutableListOf<EphemeralCommandPair<*>>()
     private val publicSubCommandBodies = mutableListOf<PublicCommandPair<*>>()
     private val groupBodies = mutableListOf<GroupPair>()
@@ -25,7 +26,7 @@ public abstract class SubCommandModule : Extension() {
 
     public fun <T : Arguments> ephemeralSubCommand(
         argumentBody: (() -> T),
-        body: suspend EphemeralSlashCommand<T, *>.() -> Unit
+        body: suspend EphemeralSlashCommand<T, *>.() -> Unit,
     ) {
         ephemeralSubCommandBodies.add(EphemeralCommandPair(argumentBody, body))
     }
@@ -36,7 +37,7 @@ public abstract class SubCommandModule : Extension() {
 
     public fun <T : Arguments> publicSubCommand(
         argumentBody: (() -> T),
-        body: suspend PublicSlashCommand<T, *>.() -> Unit
+        body: suspend PublicSlashCommand<T, *>.() -> Unit,
     ) {
         publicSubCommandBodies.add(PublicCommandPair(argumentBody, body))
     }
@@ -76,7 +77,7 @@ public abstract class SubCommandModule : Extension() {
  */
 public class EphemeralCommandPair<T : Arguments>(
     private val argumentBody: (() -> T)?,
-    private val commandBody: suspend EphemeralSlashCommand<T, *>.() -> Unit
+    private val commandBody: suspend EphemeralSlashCommand<T, *>.() -> Unit,
 ) {
     public suspend fun SlashCommand<*, *, *>.add() {
         if (argumentBody == null) {
@@ -101,7 +102,7 @@ public class EphemeralCommandPair<T : Arguments>(
  */
 public class PublicCommandPair<T : Arguments>(
     private val argumentBody: (() -> T)?,
-    private val commandBody: suspend PublicSlashCommand<T, *>.() -> Unit
+    private val commandBody: suspend PublicSlashCommand<T, *>.() -> Unit,
 ) {
     public suspend fun SlashCommand<*, *, *>.add() {
         if (argumentBody == null) {

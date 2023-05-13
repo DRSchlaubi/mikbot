@@ -53,7 +53,7 @@ afterEvaluate {
     buildConfig {
         packageName("dev.schlaubi.mikbot.gradle")
         className("MikBotPluginInfo")
-        buildConfigField("String", "VERSION", "\"${libs.versions.api}\"")
+        buildConfigField("String", "VERSION", "\"${libs.versions.api.get()}\"")
         buildConfigField("boolean", "IS_MIKBOT", (System.getenv("BUILD_PLUGIN_CI")?.toBoolean() != true).toString())
     }
 }

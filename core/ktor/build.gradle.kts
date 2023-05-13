@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "dev.schlaubi"
-version = "2.10.0"
+version = mikbotVersion
 
 dependencies {
     // Verification Server

@@ -2,10 +2,7 @@ package dev.schlaubi.mikbot.plugin.api.owner
 
 import com.kotlindiscord.kord.extensions.commands.application.slash.SlashCommand
 import dev.kord.common.entity.Permission
-import dev.schlaubi.mikbot.plugin.api.InternalAPI
-import dev.schlaubi.mikbot.plugin.api.ModuleExtensionPoint
-import dev.schlaubi.mikbot.plugin.api.ModuleExtensionPointImpl
-import dev.schlaubi.mikbot.plugin.api.PluginSystem
+import dev.schlaubi.mikbot.plugin.api.*
 import dev.schlaubi.mikbot.plugin.api.config.Config
 import kotlinx.coroutines.CoroutineScope
 
@@ -15,8 +12,8 @@ import kotlinx.coroutines.CoroutineScope
  * @see ownerOnly
  */
 @OptIn(InternalAPI::class)
-public abstract class OwnerModule @InternalAPI constructor(pluginSystem: PluginSystem) :
-    ModuleExtensionPointImpl<OwnerModule>(pluginSystem), CoroutineScope
+public abstract class OwnerModule @InternalAPI constructor(context: PluginContext) :
+    ModuleExtensionPointImpl<OwnerModule>(context), CoroutineScope
 
 /**
  * The Extension point for Owner module customization.

@@ -7,8 +7,8 @@ import dev.schlaubi.mikbot.plugin.api.*
 import mu.KotlinLogging
 
 @PluginMain
-class HealthPlugin(wrapper: PluginWrapper) : Plugin(wrapper) {
-    private val healthChecks by lazy<List<HealthCheck>>(pluginSystem::getExtensions)
+class HealthPlugin(context: PluginContext) : Plugin(context) {
+    private val healthChecks by lazy<List<HealthCheck>>(context.pluginSystem::getExtensions)
     private val logger = KotlinLogging.logger(log)
     override fun start() {
         logger.info { "Registered ${healthChecks.size} health checks available at /healthz" }

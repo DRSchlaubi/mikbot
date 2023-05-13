@@ -5,8 +5,8 @@ import com.kotlindiscord.kord.extensions.builders.ExtensibleBotBuilder
 import com.kotlindiscord.kord.extensions.utils.loadModule
 import dev.nycode.imagecolor.ImageColorClient
 import dev.schlaubi.mikbot.plugin.api.Plugin
+import dev.schlaubi.mikbot.plugin.api.PluginContext
 import dev.schlaubi.mikbot.plugin.api.PluginMain
-import dev.schlaubi.mikbot.plugin.api.PluginWrapper
 import dev.schlaubi.mikmusic.core.audio.LavalinkManager
 import dev.schlaubi.mikmusic.musicchannel.MusicInteractionModule
 import dev.schlaubi.mikmusic.playlist.TrackListSerializer
@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import org.litote.kmongo.serialization.registerSerializer
 
 @PluginMain
-class MusicPlugin(wrapper: PluginWrapper) : Plugin(wrapper) {
+class MusicPlugin(wrapper: PluginContext) : Plugin(wrapper) {
     override fun start() {
         registerSerializer(TrackSerializer)
         registerSerializer(TrackListSerializer)

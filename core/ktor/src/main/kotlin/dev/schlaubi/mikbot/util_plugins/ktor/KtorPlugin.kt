@@ -22,24 +22,25 @@ import kotlinx.serialization.modules.EmptySerializersModule
 import kotlinx.serialization.modules.plus
 import kotlin.coroutines.CoroutineContext
 
-private val extensions = pluginSystem.getExtensions<KtorExtensionPoint>()
-
-private val json = Json {
-    serializersModule = extensions.fold(EmptySerializersModule()) { prev, now ->
-        prev + now.provideSerializersModule()
-    }
-
-    extensions.forEach {
-        with(it) {
-            apply()
-        }
-    }
-}
-
 @PluginMain
-class KtorPlugin(wrapper: PluginWrapper) : Plugin(wrapper), CoroutineScope {
+class KtorPlugin(context: PluginContext) : Plugin(context), CoroutineScope {
     override val coroutineContext: CoroutineContext = Dispatchers.IO + SupervisorJob()
 
+    private val extensions = context.pluginSystem.getExtensions<KtorExtensionPoint>()
+
+    private val json = Json {
+        serializersModule = extensions.fold(EmptySerializersModule()) { prev, now ->
+            prev + now.provideSerializersModule()
+        }
+
+        extensions.forEach {
+            with(it) {
+                apply()
+            }
+        }
+    }
+
+    @Suppress("ExtractKtorModule")
     override fun start() {
         launch {
             embeddedServer(Netty, port = Config.WEB_SERVER_PORT, host = Config.WEB_SERVER_HOST) {

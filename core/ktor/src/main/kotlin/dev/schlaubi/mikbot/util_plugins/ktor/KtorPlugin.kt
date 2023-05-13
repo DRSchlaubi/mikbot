@@ -1,7 +1,9 @@
 package dev.schlaubi.mikbot.util_plugins.ktor
 
-import dev.schlaubi.mikbot.plugin.api.*
 import dev.schlaubi.mikbot.plugin.api.Plugin
+import dev.schlaubi.mikbot.plugin.api.PluginContext
+import dev.schlaubi.mikbot.plugin.api.PluginMain
+import dev.schlaubi.mikbot.plugin.api.getExtensions
 import dev.schlaubi.mikbot.util_plugins.ktor.api.Config
 import dev.schlaubi.mikbot.util_plugins.ktor.api.KtorExtensionPoint
 import io.ktor.http.*
@@ -16,7 +18,6 @@ import io.ktor.server.resources.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.coroutines.*
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.EmptySerializersModule
 import kotlinx.serialization.modules.plus

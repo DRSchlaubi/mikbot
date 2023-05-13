@@ -2,7 +2,7 @@ package dev.schlaubi.musicbot.module.owner
 
 import com.kotlindiscord.kord.extensions.extensions.slashCommandCheck
 import dev.schlaubi.mikbot.plugin.api.ModuleExtensionPoint
-import dev.schlaubi.mikbot.plugin.api.PluginSystem
+import dev.schlaubi.mikbot.plugin.api.PluginContext
 import dev.schlaubi.mikbot.plugin.api.config.Config
 import dev.schlaubi.mikbot.plugin.api.io.Database
 import dev.schlaubi.mikbot.plugin.api.owner.OwnerExtensionPoint
@@ -14,7 +14,7 @@ import org.koin.core.component.inject
 import kotlin.coroutines.CoroutineContext
 import kotlin.reflect.KClass
 
-class OwnerModuleImpl(pluginSystem: PluginSystem) : OwnerModule(pluginSystem) {
+class OwnerModuleImpl(pluginSystem: PluginContext) : OwnerModule(pluginSystem) {
     override val name: String = "owner"
     override val bundle: String = "owner"
     val database: Database by inject()

@@ -17,8 +17,10 @@ import dev.kord.core.event.interaction.InteractionCreateEvent
 import dev.schlaubi.lavakord.audio.Link
 import dev.schlaubi.lavakord.audio.player.Player
 import dev.schlaubi.lavakord.kord.connectAudio
+import dev.schlaubi.mikbot.plugin.api.PluginContext
 import dev.schlaubi.mikbot.plugin.api.io.Database
 import dev.schlaubi.mikbot.plugin.api.io.getCollection
+import dev.schlaubi.mikbot.plugin.api.module.MikBotModule
 import dev.schlaubi.mikbot.plugin.api.util.*
 import dev.schlaubi.mikmusic.checks.musicControlCheck
 import dev.schlaubi.mikmusic.commands.commands
@@ -32,7 +34,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 import kotlin.reflect.KMutableProperty1
 
-class MusicModule : Extension() {
+class MusicModule(context: PluginContext) : MikBotModule(context) {
     private val lavalink: LavalinkManager by extension()
     private val musicPlayers: MutableMap<Snowflake, MusicPlayer> = mutableMapOf()
     override val name: String = "music"

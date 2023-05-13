@@ -7,6 +7,7 @@ import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSla
 import com.kotlindiscord.kord.extensions.commands.converters.impl.string
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.kord.core.behavior.UserBehavior
+import dev.schlaubi.mikbot.plugin.api.PluginContext
 import dev.schlaubi.mikbot.plugin.api.module.SubCommandModule
 import dev.schlaubi.mikbot.plugin.api.util.extension
 import dev.schlaubi.mikmusic.core.MusicModule
@@ -43,7 +44,7 @@ abstract class PlaylistArguments : Arguments() {
 suspend fun EphemeralSlashCommandContext<out PlaylistArguments, *>.getPlaylist() =
     arguments.getPlaylistOrNull(user, arguments.name) ?: error("Could not load playlist")
 
-class PlaylistModule : SubCommandModule() {
+class PlaylistModule(context: PluginContext) : SubCommandModule(context) {
 
     override val bundle: String = "music"
     override val name: String = "playlist"

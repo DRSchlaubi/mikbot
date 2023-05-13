@@ -14,6 +14,8 @@ import dev.kord.core.event.gateway.DisconnectEvent
 import dev.kord.core.event.gateway.ReadyEvent
 import dev.kord.rest.builder.message.create.allowedMentions
 import dev.schlaubi.mikbot.plugin.api.MikBotInfo
+import dev.schlaubi.mikbot.plugin.api.PluginContext
+import dev.schlaubi.mikbot.plugin.api.PluginSystem
 import dev.schlaubi.mikbot.plugin.api.config.Config
 import dev.schlaubi.mikbot.plugin.api.getExtensions
 import dev.schlaubi.mikbot.plugin.api.io.Database
@@ -27,25 +29,28 @@ import dev.schlaubi.stdx.core.onEach
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import mu.KotlinLogging
+import org.pf4j.PluginWrapper
 
 private val LOG = KotlinLogging.logger { }
 
-class Bot : KordExKoinComponent {
+class Bot : KordExKoinComponent, PluginContext {
     init {
         _pluginFactory = MikbotPluginFactory(this)
     }
 
     private lateinit var bot: ExtensibleBot
 
-    internal val database: Database = DatabaseImpl()
+    override val database: Database = DatabaseImpl()
     lateinit var translationProvider: TranslationsProvider
     internal val pluginLoader = PluginLoader()
-    internal val pluginSystem: DefaultPluginSystem = DefaultPluginSystem(this)
+    override val pluginSystem: PluginSystem = DefaultPluginSystem(this)
+    override val pluginWrapper: PluginWrapper
+        get() = error("Unsupported by bot context")
 
     suspend fun start() {
         bot = ExtensibleBot(Config.DISCORD_TOKEN) {
             kord {
-                eventFlow = pluginSystem.events
+                eventFlow = (pluginSystem as DefaultPluginSystem).events
 
                 stackTraceRecovery = true
 
@@ -84,8 +89,8 @@ class Bot : KordExKoinComponent {
 
     private suspend fun ExtensibleBotBuilder.builtIns() {
         extensions {
-            add { SettingsModuleImpl(pluginSystem) }
-            add { OwnerModuleImpl(pluginSystem) }
+            add { SettingsModuleImpl(this@Bot) }
+            add { OwnerModuleImpl(this@Bot) }
 
             sentry {
                 enable = Config.ENVIRONMENT.useSentry

@@ -3,7 +3,6 @@ package dev.schlaubi.musicbot.core.plugin
 import com.kotlindiscord.kord.extensions.koin.KordExKoinComponent
 import dev.kord.core.event.Event
 import dev.schlaubi.mikbot.plugin.api.Plugin
-import dev.schlaubi.mikbot.plugin.api.PluginContext
 import dev.schlaubi.mikbot.plugin.api.PluginSystem
 import dev.schlaubi.mikbot.plugin.api.config.Config
 import dev.schlaubi.mikbot.plugin.api.util.ensurePath
@@ -125,7 +124,7 @@ class PluginLoader : DefaultPluginManager(), KordExKoinComponent {
         }
     }
 
-    private fun List<PluginContext>.failPlugins(
+    private fun List<PluginWrapper>.failPlugins(
         exception: Throwable,
     ) {
         forEach {
@@ -134,7 +133,7 @@ class PluginLoader : DefaultPluginManager(), KordExKoinComponent {
         }
     }
 
-    private fun List<PluginContext>.findPluginsDependingOn(
+    private fun List<PluginWrapper>.findPluginsDependingOn(
         dependencies: List<String>,
         overrideOptional: Boolean = false,
     ) = filter {
@@ -143,7 +142,7 @@ class PluginLoader : DefaultPluginManager(), KordExKoinComponent {
         }
     }
 
-    fun getPluginForBundle(bundle: String): PluginContext? {
+    fun getPluginForBundle(bundle: String): PluginWrapper? {
         val sanitizedName = bundle.substringAfter("translations.").substringBefore(".")
         val pluginName = pluginBundles[sanitizedName] ?: return null
 

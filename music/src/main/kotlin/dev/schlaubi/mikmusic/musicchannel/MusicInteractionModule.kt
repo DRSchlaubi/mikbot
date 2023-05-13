@@ -2,7 +2,6 @@ package dev.schlaubi.mikmusic.musicchannel
 
 import com.kotlindiscord.kord.extensions.checks.guildFor
 import com.kotlindiscord.kord.extensions.checks.inChannel
-import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.extensions.event
 import dev.kord.core.behavior.channel.withTyping
 import dev.kord.core.behavior.interaction.response.EphemeralMessageInteractionResponseBehavior
@@ -15,6 +14,8 @@ import dev.schlaubi.lavakord.audio.player.Track
 import dev.schlaubi.lavakord.rest.loadItem
 import dev.schlaubi.lavakord.rest.mapToTrack
 import dev.schlaubi.lavakord.rest.models.TrackResponse
+import dev.schlaubi.mikbot.plugin.api.PluginContext
+import dev.schlaubi.mikbot.plugin.api.module.MikBotModule
 import dev.schlaubi.mikbot.plugin.api.util.*
 import dev.schlaubi.mikmusic.checks.joinSameChannelCheck
 import dev.schlaubi.mikmusic.checks.musicControlCheck
@@ -28,7 +29,7 @@ import dev.schlaubi.mikmusic.player.resetAutoPlay
 import dev.schlaubi.mikmusic.util.mapToQueuedTrack
 import kotlin.reflect.KMutableProperty1
 
-class MusicInteractionModule : Extension() {
+class MusicInteractionModule(context: PluginContext) : MikBotModule(context) {
     override val name = "music interaction handler"
     val musicModule: MusicModule by extension()
 

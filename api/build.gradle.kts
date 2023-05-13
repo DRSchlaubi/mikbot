@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     `mikbot-module`
     `mikbot-publishing`
@@ -37,12 +35,4 @@ dependencies {
 template {
     className.set("MikBotInfo")
     packageName.set("dev.schlaubi.mikbot.plugin.api")
-}
-
-tasks {
-    withType<KotlinCompile> {
-        kotlinOptions {
-            freeCompilerArgs = freeCompilerArgs + listOf("-Xjvm-default all")
-        }
-    }
 }

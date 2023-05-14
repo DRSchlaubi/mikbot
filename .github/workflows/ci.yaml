@@ -11,10 +11,11 @@ on:
 
 jobs:
   mikbot:
-    uses: mikbot/mikbot-workflow/.github/workflows/mikbot-workflow.yml@v1.0.8
+    uses: mikbot/mikbot-workflow/.github/workflows/mikbot-workflow.yml@v1.1.0
     with:
       run-maven-publish: true
       update-binary-repository: true
+      docker-name: "ghcr.io/drschlaubi/mikmusic/bot"
     secrets:
       GCP_ACCOUNT_KEY: ${{ secrets.GCP_ACCOUNT_KEY }}
       JFROG_USER: ${{ secrets.JFROG_USER }}
@@ -24,39 +25,3 @@ jobs:
       BUILDCACHE_USER: $ {{ secrets.BUILDCACHE_USER }}
       BUILDCACHE_PASSWORD: $ {{ secrets.BUILDCACHE_PASSWORD }}
       DISCORD_WEBHOOK: $ {{ secrets.DISCORD_WEBHOOK }}
-  push:
-    name: Push
-    runs-on: ubuntu-20.04
-    needs: [ build ]
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '19'
-      - uses: gradle/gradle-build-action@v2
-        with:
-          arguments: :installDist --no-daemon --build-cache
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - name: Login
-        env:
-          GITHUB_TOKEN: ${{ secrets.DOCKER_TOKEN }}
-        run: docker login ghcr.io --username DRSchlaubi --password "$GITHUB_TOKEN"
-      - name: Push Image
-        run: |
-          docker buildx build \
-                  --tag  ghcr.io/drschlaubi/mikmusic/bot:"$GITHUB_SHA" \
-                  --tag  ghcr.io/drschlaubi/mikmusic/bot:latest \
-                  --file ./Dockerfile \
-                  --output type=image,push=true .
-      - name: Push Votebot Image
-        run: |
-          docker buildx build \
-                  --tag  ghcr.io/drschlaubi/mikmusic/votebot:"$GITHUB_SHA" \
-                  --tag  ghcr.io/drschlaubi/mikmusic/votebot:latest \
-                  --file ./votebot/Dockerfile \
-                  --output type=image,push=true .

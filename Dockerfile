@@ -1,4 +1,4 @@
-FROM ibm-semeru-runtimes:open-18-jre-focal
+FROM eclipse-temurin:20-jre-alpine
 
 WORKDIR /usr/app
 COPY build/install/mikmusic ./

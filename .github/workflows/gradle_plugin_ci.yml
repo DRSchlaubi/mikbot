@@ -37,9 +37,9 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: 19
+          java-version: 20
       - name: Test with Gradle
-        run: ./gradlew classes
+        run: ./gradlew gradle-plugin:classes
       - name: Login to Gradle Plugin Portal
         if: "github.event_name == 'push'"
         env:

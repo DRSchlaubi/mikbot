@@ -11,7 +11,7 @@ on:
 
 jobs:
   mikbot:
-    uses: mikbot/mikbot-workflow/.github/workflows/mikbot-workflow.yml@v1.1.3
+    uses: mikbot/mikbot-workflow/.github/workflows/mikbot-workflow.yml@v1.1.4
     with:
       run-maven-publish: true
       update-binary-repository: true

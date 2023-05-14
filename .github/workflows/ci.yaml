@@ -9,14 +9,9 @@ on:
       - opened
       - synchronize
 
-permissions:
-  packages: write
-  contents: read
-  id-token: write
-
 jobs:
   mikbot:
-    uses: mikbot/mikbot-workflow/.github/workflows/mikbot-workflow.yml@v1.1.6
+    uses: mikbot/mikbot-workflow/.github/workflows/mikbot-workflow.yml@v1.1.7
     with:
       run-maven-publish: true
       update-binary-repository: true

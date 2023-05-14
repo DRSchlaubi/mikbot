@@ -19,3 +19,9 @@ pluginPublishing {
     currentRepository.set(rootProject.file("ci-repo-old").toPath())
     projectUrl.set("https://github.com/DRSchlaubi/mikbot")
 }
+
+tasks {
+    task("buildDockerImage") {
+        dependsOn(":runtime:installDist")
+    }
+}

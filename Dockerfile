@@ -1,8 +1,8 @@
 FROM eclipse-temurin:20-jre-alpine
 
 WORKDIR /usr/app
-COPY build/install/mikmusic ./
+COPY runtime/build/install/runtime ./
 
 LABEL org.opencontainers.image.source = "https://github.com/DRSchlaubi/mikbot"
 
-ENTRYPOINT ["bin/mikmusic"]
+ENTRYPOINT ["bin/runtime"]

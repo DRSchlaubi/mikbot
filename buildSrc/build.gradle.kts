@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     groovy
@@ -11,10 +12,10 @@ repositories {
 }
 
 dependencies {
-    implementation(kotlin("gradle-plugin-api", "1.8.10"))
-    implementation(kotlin("gradle-plugin", "1.8.10"))
+    implementation(kotlin("gradle-plugin-api", libs.versions.kotlin.get()))
+    implementation(kotlin("gradle-plugin", libs.versions.kotlin.get()))
     implementation("dev.schlaubi", "gradle-plugin", "1.0.0")
-    implementation("com.google.devtools.ksp", "com.google.devtools.ksp.gradle.plugin", "1.8.10-1.0.9")
+    implementation("com.google.devtools.ksp", "com.google.devtools.ksp.gradle.plugin", libs.versions.ksp.get())
     implementation("org.jlleitschuh.gradle", "ktlint-gradle", "11.1.0")
     implementation("com.github.gmazzo", "gradle-buildconfig-plugin", "3.1.0")
     implementation(gradleApi())
@@ -23,8 +24,12 @@ dependencies {
 
 tasks {
     withType<KotlinCompile> {
-        kotlinOptions {
-            languageVersion = "1.5" // gradle is slow at updating kotlin
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_19
         }
     }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_19
 }

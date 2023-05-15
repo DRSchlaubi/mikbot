@@ -57,6 +57,3 @@ afterEvaluate {
         buildConfigField("boolean", "IS_MIKBOT", (System.getenv("BUILD_PLUGIN_CI")?.toBoolean() != true).toString())
     }
 }
-
-#citrigger
-

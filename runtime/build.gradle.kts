@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 import java.nio.file.Files
 
 plugins {
@@ -48,7 +49,8 @@ dependencies {
 }
 
 application {
-    mainClass.set("dev.schlaubi.musicbot.LauncherKt")
+    mainClass = "dev.schlaubi.musicbot.LauncherKt"
+    applicationName = "mikmusic"
 }
 
 tasks {
@@ -87,6 +89,7 @@ tasks {
 
     distTar {
         compression = Compression.GZIP
+        archivesName = "bot"
         archiveExtension.set("tar.gz")
     }
 

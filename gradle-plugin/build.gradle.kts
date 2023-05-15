@@ -32,12 +32,12 @@ gradlePlugin {
             implementationClass = "dev.schlaubi.mikbot.gradle.MikBotPluginGradlePlugin"
             displayName = "Mikbot Gradle Plugin"
             description = "Utility plugin to build Mikbot and PF4J plugins"
-            tags.set(setOf("mikbot", "pf4j", "plugins", "kotlin"))
+            tags = setOf("mikbot", "pf4j", "plugins", "kotlin")
         }
     }
 
-    website.set("https://github.com/DRSchlaubi/mikbot/tree/main/gradle-plugin")
-    vcsUrl.set("https://github.com/DRSchlaubi/mikbot")
+    website = "https://github.com/DRSchlaubi/mikbot/tree/main/gradle-plugin"
+    vcsUrl = "https://github.com/DRSchlaubi/mikbot"
 
 }
 

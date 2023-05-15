@@ -24,7 +24,7 @@ jobs:
       JFROG_PASSWORD: ${{ secrets.JFROG_KEY}}
       SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
       SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
-      BUILDCACHE_USER: $ {{ secrets.BUILDCACHE_USER }}
-      BUILDCACHE_PASSWORD: $ {{ secrets.BUILDCACHE_PASSWORD }}
-      DISCORD_WEBHOOK: $ {{ secrets.DISCORD_WEBHOOK }}
-      DOCKER_TOKEN: $ {{ secrets.GITHUB_TOKEN }}
+      BUILDCACHE_USER: ${{ secrets.BUILDCACHE_USER }}
+      BUILDCACHE_PASSWORD: ${{ secrets.BUILDCACHE_PASSWORD }}
+      DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+      DOCKER_TOKEN: ${{ secrets.GITHUB_TOKEN }}

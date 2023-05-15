@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "dev.schlaubi"
-version = "2.3.0"
+version = libs.versions.api.get()
 
 dependencies {
     implementation(libs.ksp.api)

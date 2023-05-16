@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "dev.schlaubi"
-version = Project.version
+version = libs.versions.api.get()
 
 allprojects {
     repositories {
@@ -38,11 +38,11 @@ dependencies {
     implementation(libs.pf4j.update)
     implementation(libs.gson)
     implementation(libs.asm) // pf4j doesn't declare a real dep on it
-
     implementation(libs.koin)
 
     // Util
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.ktor.client.core)
 
     implementation(projects.api)
     implementation(kotlin("reflect"))

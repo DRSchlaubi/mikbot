@@ -182,13 +182,19 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior) :
         return removes
     }
 
-    suspend fun queueTrack(force: Boolean, onTop: Boolean, tracks: Collection<QueuedTrack>) {
+    suspend fun queueTrack(
+        force: Boolean,
+        onTop: Boolean,
+        tracks: Collection<QueuedTrack>,
+        position: Duration? = null
+    ) {
         val isFirst = nextSongIsFirst
+        require(isFirst || position == null) { "Can only specify position if nextSong is first" }
         val startIndex = if ((onTop || force) && queue.isNotEmpty()) 0 else queue.size
         queue.addAll(startIndex, tracks)
 
         if (force || isFirst) {
-            startNextSong(force = force)
+            startNextSong(force = force, position = position)
             waitForPlayerUpdate()
         }
 
@@ -304,7 +310,7 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior) :
         }
     }
 
-    private suspend fun startNextSong(lastSong: Track? = null, force: Boolean = false) {
+    private suspend fun startNextSong(lastSong: Track? = null, force: Boolean = false, position: Duration? = null) {
         val nextTrack = when {
             lastSong != null && repeat -> playingTrack!!
             !force && (shuffle || (loopQueue && queue.isEmpty())) -> {
@@ -317,7 +323,9 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior) :
         }
 
         playingTrack = nextTrack
-        link.player.playTrack(nextTrack.track)
+        link.player.playTrack(nextTrack.track) {
+            this.position = position
+        }
     }
 
     fun toState(): PersistentPlayerState = PersistentPlayerState(this)

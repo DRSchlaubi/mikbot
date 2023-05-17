@@ -3,10 +3,9 @@ package dev.schlaubi.mikmusic.player
 import dev.kord.common.entity.Snowflake
 import dev.schlaubi.lavakord.audio.player.*
 import dev.schlaubi.mikmusic.core.settings.SchedulerSettings
-import kotlinx.coroutines.delay
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration
 
 @Serializable
 data class PersistentPlayerState(
@@ -18,7 +17,7 @@ data class PersistentPlayerState(
     val filters: SerializableFilters?,
     val schedulerOptions: SchedulerSettings,
     val paused: Boolean,
-    val position: Long,
+    val position: Duration,
     val autoPlayContext: AutoPlayContext?
 ) {
     constructor(musicPlayer: MusicPlayer) : this(
@@ -29,7 +28,7 @@ data class PersistentPlayerState(
         musicPlayer.filters,
         SchedulerSettings(musicPlayer.loopQueue, musicPlayer.repeat, musicPlayer.shuffle),
         musicPlayer.player.paused,
-        musicPlayer.player.position,
+        musicPlayer.player.positionDuration,
         musicPlayer.autoPlay
     )
 
@@ -37,9 +36,7 @@ data class PersistentPlayerState(
         filters?.applyToPlayer(musicPlayer.player)
         if (currentTrack != null) {
             musicPlayer.playingTrack = currentTrack
-            musicPlayer.queueTrack(force = true, onTop = false, tracks = listOf(currentTrack))
-            delay(500.milliseconds) // eave Lavalink some time to process
-            musicPlayer.player.seekTo(position)
+            musicPlayer.queueTrack(force = true, onTop = false, tracks = listOf(currentTrack), position = position)
         }
         musicPlayer.autoPlay = autoPlayContext
         musicPlayer.queueTrack(force = false, onTop = false, tracks = queue)

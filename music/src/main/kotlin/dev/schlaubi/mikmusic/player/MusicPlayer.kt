@@ -319,7 +319,7 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior) :
                 /* return */queue.removeAt(index)
             }
 
-            else -> queue.poll()
+            else -> queue.poll() ?: return
         }
 
         playingTrack = nextTrack

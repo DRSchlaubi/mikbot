@@ -76,6 +76,6 @@ signing {
     val signingPassword = System.getenv("SIGNING_KEY_PASSWORD")?.toString()
     if (signingKey != null && signingPassword != null) {
         useInMemoryPgpKeys(String(Base64.getDecoder().decode(signingKey)), signingPassword)
+        sign(publishing.publications["maven"])
     }
-    sign(publishing.publications["maven"])
 }

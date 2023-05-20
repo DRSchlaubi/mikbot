@@ -7,6 +7,7 @@ import dev.inmo.krontab.doInfinity
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.GuildBehavior
 import dev.kord.core.entity.channel.VoiceChannel
+import dev.schlaubi.lavakord.UnsafeRestApi
 import dev.schlaubi.lavakord.audio.Link
 import dev.schlaubi.lavakord.audio.TrackEndEvent
 import dev.schlaubi.lavakord.audio.TrackStartEvent
@@ -14,6 +15,8 @@ import dev.schlaubi.lavakord.audio.on
 import dev.schlaubi.lavakord.audio.player.Filters
 import dev.schlaubi.lavakord.audio.player.Track
 import dev.schlaubi.lavakord.audio.player.applyFilters
+import dev.schlaubi.lavakord.rest.models.UpdatePlayerRequest
+import dev.schlaubi.lavakord.rest.updatePlayer
 import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase
 import dev.schlaubi.mikmusic.innerttube.requestVideoChaptersById
 import dev.schlaubi.mikmusic.musicchannel.updateMessage
@@ -30,6 +33,9 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
+private data class SavedTrack(val track: Track, val position: Duration)
+
+@OptIn(UnsafeRestApi::class)
 class MusicPlayer(internal val link: Link, private val guild: GuildBehavior) :
     Link by link, KordExKoinComponent {
     private var queue = LinkedList<QueuedTrack>()
@@ -46,6 +52,8 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior) :
     private var chapterUpdater: Job? = null
     private var leaveTimeout: Job? = null
     internal var autoPlay: AutoPlayContext? = null
+    private var savedTrack: SavedTrack? = null
+    private var dontQueue = false
 
     init {
         guild.kord.launch {
@@ -193,12 +201,29 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior) :
         val startIndex = if ((onTop || force) && queue.isNotEmpty()) 0 else queue.size
         queue.addAll(startIndex, tracks)
 
-        if (force || isFirst) {
+        if ((force || isFirst) && !dontQueue) {
             startNextSong(force = force, position = position)
             waitForPlayerUpdate()
         }
 
         updateMusicChannelMessage()
+    }
+
+    suspend fun injectTrack(identifier: String) {
+        dontQueue = true
+        if (playingTrack != null) {
+            val currentTrack = playingTrack
+            val currentPosition = player.positionDuration
+
+            savedTrack = SavedTrack(currentTrack!!.track, currentPosition)
+        }
+        link.node.updatePlayer(
+            guildId,
+            noReplace = false,
+            UpdatePlayerRequest(
+                identifier = identifier
+            )
+        )
     }
 
     suspend fun applyFilters(builder: Filters.() -> Unit) {
@@ -234,6 +259,18 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior) :
     }
 
     private suspend fun onTrackEnd(event: TrackEndEvent) {
+        println("Track end: $event")
+        println(dontQueue)
+        println(savedTrack)
+        dontQueue = event.reason != TrackEndEvent.EndReason.REPLACED
+        if (savedTrack != null && event.reason != TrackEndEvent.EndReason.REPLACED) {
+            val track = savedTrack ?: return
+            savedTrack = null
+            player.playTrack(track.track) {
+                position = track.position
+            }
+            return
+        }
         event.getTrack().deleteSponsorBlockCache()
         if ((!repeat && !loopQueue && queue.isEmpty()) && event.reason != TrackEndEvent.EndReason.REPLACED) {
             val autoPlayTrack = findNextAutoPlayedSong(event.getTrack())

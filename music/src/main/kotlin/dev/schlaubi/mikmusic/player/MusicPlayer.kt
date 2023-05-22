@@ -259,10 +259,9 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior) :
     }
 
     private suspend fun onTrackEnd(event: TrackEndEvent) {
-        println("Track end: $event")
-        println(dontQueue)
-        println(savedTrack)
-        dontQueue = event.reason != TrackEndEvent.EndReason.REPLACED
+        if (dontQueue) {
+            dontQueue = event.reason != TrackEndEvent.EndReason.REPLACED
+        }
         if (savedTrack != null && event.reason != TrackEndEvent.EndReason.REPLACED) {
             val track = savedTrack ?: return
             savedTrack = null

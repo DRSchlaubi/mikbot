@@ -61,7 +61,7 @@ jjwt-jackson = { group = "io.jsonwebtoken", name = "jjwt-jackson", version.ref =
 
 koin = { group = "io.insert-koin", name = "koin-core", version = "3.2.2" }
 
-asm = { group = "org.ow2.asm", name = "asm", version = "9.3" }
+asm = { group = "org.ow2.asm", name = "asm", version = "9.5" }
 
 [bundles]
 jjwt = ["jjwt-api", "jjwt-jackson"]

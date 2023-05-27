@@ -209,9 +209,9 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior) :
         updateMusicChannelMessage()
     }
 
-    suspend fun injectTrack(identifier: String) {
+    suspend fun injectTrack(identifier: String, noReplace: Boolean = false) {
         dontQueue = true
-        if (playingTrack != null) {
+        if (playingTrack != null && !noReplace) {
             val currentTrack = playingTrack
             val currentPosition = player.positionDuration
 

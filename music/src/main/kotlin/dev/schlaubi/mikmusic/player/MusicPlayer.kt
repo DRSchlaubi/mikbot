@@ -307,9 +307,17 @@ class MusicPlayer(internal val link: Link, private val guild: GuildBehavior) :
     }
 
     suspend fun skip(to: Int = 1) {
+        val maybeSavedTrack = savedTrack
         if (to > 1) {
             // Drop every track, but the skip to track and then start the next track
             queue = LinkedList(queue.drop(to - 1))
+        } else if (maybeSavedTrack != null) {
+            dontQueue = false
+            savedTrack = null
+            player.playTrack(maybeSavedTrack.track) {
+                position = maybeSavedTrack.position
+            }
+            return
         }
         if (canSkip) {
             startNextSong()

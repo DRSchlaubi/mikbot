@@ -59,7 +59,7 @@ gson = { group = "com.google.code.gson", name = "gson", version = "2.10" }
 jjwt-api = { group = "io.jsonwebtoken", name = "jjwt-impl", version.ref = "jjwt" }
 jjwt-jackson = { group = "io.jsonwebtoken", name = "jjwt-jackson", version.ref = "jjwt" }
 
-koin = { group = "io.insert-koin", name = "koin-core", version = "3.2.2" }
+koin = { group = "io.insert-koin", name = "koin-core", version = "3.4.2" }
 
 asm = { group = "org.ow2.asm", name = "asm", version = "9.3" }
 

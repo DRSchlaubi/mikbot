@@ -4,6 +4,7 @@ plugins {
     `maven-publish`
     signing
     java
+    com.google.cloud.artifactregistry.`gradle-plugin`
 }
 
 val sourcesJar by tasks.creating(Jar::class) {
@@ -60,10 +61,14 @@ publishing {
             }
 
             repositories {
-                maven("https://schlaubi.jfrog.io/artifactory/mikbot/") {
+                maven("artifactregistry://europe-west3-maven.pkg.dev/mik-music/mikbot") {
                     credentials {
-                        username = System.getenv("JFROG_USER")
-                        password = System.getenv("JFROG_PASSWORD")
+                        username = "_json_key_base64"
+                        password = System.getenv("GOOGLE_KEY")
+                    }
+
+                    authentication {
+                        create<BasicAuthentication>("basic")
                     }
                 }
             }

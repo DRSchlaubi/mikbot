@@ -18,6 +18,7 @@ dependencies {
     implementation("com.google.devtools.ksp", "com.google.devtools.ksp.gradle.plugin", libs.versions.ksp.get())
     implementation("org.jlleitschuh.gradle", "ktlint-gradle", "11.1.0")
     implementation("com.github.gmazzo", "gradle-buildconfig-plugin", "3.1.0")
+    implementation("gradle.plugin.com.google.cloud.artifactregistry", "artifactregistry-gradle-plugin", "2.2.1")
     implementation(gradleApi())
     implementation(localGroovy())
 }

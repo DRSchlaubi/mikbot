@@ -7,11 +7,7 @@ fun Project.addRepositories() {
     repositories.mavenCentral()
     repositories.maven {
         it.name = "Mikbot"
-        it.url = uri("https://schlaubi.jfrog.io/artifactory/mikbot/")
-    }
-    repositories.maven {
-        it.name = "Envconf"
-        it.url = uri("https://schlaubi.jfrog.io/artifactory/envconf/")
+        it.url = uri("https://europe-west3-maven.pkg.dev/mik-music/mikbot")
     }
     repositories.maven {
         it.name = "Kotlin Discord"

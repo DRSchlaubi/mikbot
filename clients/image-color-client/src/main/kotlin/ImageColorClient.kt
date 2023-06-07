@@ -60,7 +60,7 @@ public enum class ImageFormat(public val contentType: ContentType) {
     PNG("image" / "png"),
     GIF("image" / "gif"),
     WEBP("image" / "webp"),
-    TIFF("image" / "tiff"),
+    TIFF("image" / "tiff")
 }
 
 private infix operator fun String.div(subtype: String): ContentType = ContentType(this, subtype)

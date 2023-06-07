@@ -86,5 +86,10 @@
       <option name="name" value="Gradle Central Plugin Repository" />
       <option name="url" value="https://plugins.gradle.org/m2" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="Mikbot" />
+      <option name="name" value="Mikbot" />
+      <option name="url" value="https://europe-west3-maven.pkg.dev/mik-music/mikbot" />
+    </remote-repository>
   </component>
 </project>

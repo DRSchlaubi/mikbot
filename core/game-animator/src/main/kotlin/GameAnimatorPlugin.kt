@@ -1,3 +1,4 @@
+/* ktlint-disable package-name */
 package dev.schlaubi.mikbot.core.game_animator
 
 import com.kotlindiscord.kord.extensions.builders.ExtensibleBotBuilder
@@ -85,7 +86,6 @@ data class Game(val type: ActivityType, val status: PresenceStatus, val text: St
 
     companion object {
         fun parse(game: String): Game {
-
             return when (game.firstOrNull()) {
                 'p' -> Game(
                     ActivityType.Game,

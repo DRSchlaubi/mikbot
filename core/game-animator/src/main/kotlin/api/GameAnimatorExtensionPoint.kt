@@ -1,3 +1,4 @@
+/* ktlint-disable package-name */
 package dev.schlaubi.mikbot.core.game_animator.api
 
 import org.pf4j.ExtensionPoint

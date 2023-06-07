@@ -54,7 +54,7 @@ java-string-similarity = { group = "info.debatty", name = "java-string-similarit
 pf4j = { group = "org.pf4j", name = "pf4j", version = "3.9.0" }
 pf4j-update = { group = "org.pf4j", name = "pf4j-update", version = "2.3.0" }
 
-gson = { group = "com.google.code.gson", name = "gson", version = "2.10" }
+gson = { group = "com.google.code.gson", name = "gson", version = "2.10.1" }
 
 jjwt-api = { group = "io.jsonwebtoken", name = "jjwt-impl", version.ref = "jjwt" }
 jjwt-jackson = { group = "io.jsonwebtoken", name = "jjwt-jackson", version.ref = "jjwt" }

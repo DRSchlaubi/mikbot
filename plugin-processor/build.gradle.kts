@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "dev.schlaubi"
-version = libs.versions.api.get()
+version = mikbotVersion
 
 dependencies {
     implementation(libs.ksp.api)

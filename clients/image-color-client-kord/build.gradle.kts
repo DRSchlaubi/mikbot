@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "dev.nycode"
-version = "1.1.0"
+version = mikbotVersion
 
 dependencies {
     api(projects.clients.imageColorClient)

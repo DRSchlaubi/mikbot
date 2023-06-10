@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.kotlinx.serialization)
 }
 
+version = mikbotVersion
+
 dependencies {
     implementation(libs.ktor.client.okhttp)
     implementation(libs.ktor.client.content.negotiation)

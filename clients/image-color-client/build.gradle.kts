@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "dev.nycode"
-version = "1.1.0"
+version = mikbotVersion
 
 dependencies {
     implementation(libs.ktor.client.okhttp)

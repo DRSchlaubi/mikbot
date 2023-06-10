@@ -7,7 +7,6 @@ plugins {
     application
     // This exists to add the removeVersion extension to this buildscript
     id("dev.schlaubi.mikbot.gradle-plugin") apply false
-    `mikbot-publishing`
     `mikbot-template`
 }
 

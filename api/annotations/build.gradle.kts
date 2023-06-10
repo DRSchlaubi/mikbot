@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "dev.schlaubi"
-version = Project.version
+version = mikbotVersion
 
 kotlin {
     explicitApi()

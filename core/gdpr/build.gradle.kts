@@ -1,5 +1,6 @@
 plugins {
     `mikbot-module`
+    `mikbot-publishing`
     com.google.devtools.ksp
     dev.schlaubi.mikbot.`gradle-plugin`
 }

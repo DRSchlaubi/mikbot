@@ -9,4 +9,4 @@ object Project {
 
 val Project.mikbotVersion: String
     get() = extensions.getByType<VersionCatalogsExtension>().named("libs").findVersion("api")
-        .get().requiredVersion
+        .get().requiredVersion + "-SNAPSHOT"

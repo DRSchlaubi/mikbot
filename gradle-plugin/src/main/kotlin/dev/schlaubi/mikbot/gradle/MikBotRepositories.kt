@@ -37,4 +37,7 @@ fun Project.addDependencies() {
 }
 
 private fun DependencyHandler.mikbot(module: String): Any =
-    if (MikBotPluginInfo.IS_MIKBOT) project(mapOf("path" to ":$module")) else "dev.schlaubi:mikbot-$module:${MikBotPluginInfo.VERSION}"
+    if (MikBotPluginInfo.IS_MIKBOT) project(mapOf("path" to ":$module")) else "dev.schlaubi:mikbot-$module:${MikBotPluginInfo.snapshotVersion}"
+
+private val MikBotPluginInfo.snapshotVersion
+    get() = "$VERSION-SNAPSHOT"

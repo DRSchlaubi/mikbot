@@ -6,6 +6,7 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.bundling.Zip
+import org.gradle.kotlin.dsl.register
 import java.nio.file.Files
 
 internal fun Project.createPublishingTasks(assemblePluginTask: TaskProvider<Zip>) {
@@ -34,24 +35,24 @@ internal fun Project.createPublishingTasks(assemblePluginTask: TaskProvider<Zip>
                         .resolve(assemblePluginTask.get().archiveFileName.get())
 
                 if (Files.exists(probableExistingFile)) {
-                    it.exclude() // exclude existing files, so checksums don't change
+                    exclude() // exclude existing files, so checksums don't change
                 }
             }
         }
 
         val repo = register("buildRepository") {
             group = "publishing"
-            it.dependsOn(copyFilesIntoRepo)
+            dependsOn(copyFilesIntoRepo)
         }
 
         afterEvaluate {
-            val makeIndex = register<MakeRepositoryIndexTask>("makeRepositoryIndex") {
+            val makeIndex = register<MakeRepositoryIndexTask>(/* name = */ "makeRepositoryIndex") {
                 group = "publishing"
                 dependsOn(assemblePluginTask)
             }
 
             repo.configure {
-                it.dependsOn(makeIndex)
+                dependsOn(makeIndex)
             }
         }
     }

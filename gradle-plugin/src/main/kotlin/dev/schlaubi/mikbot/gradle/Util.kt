@@ -3,14 +3,11 @@ package dev.schlaubi.mikbot.gradle
 import dev.schlaubi.mikbot.gradle.extension.PluginExtension
 import dev.schlaubi.mikbot.gradle.extension.pluginExtensionName
 import dev.schlaubi.mikbot.gradle.extension.pluginId
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.gradle.api.Project
-import org.gradle.api.Task
 import org.gradle.api.artifacts.Dependency
 import org.gradle.api.artifacts.ProjectDependency
-import org.gradle.api.tasks.TaskContainer
 import java.nio.file.Files
 import java.nio.file.Path
 import java.security.MessageDigest
@@ -78,12 +75,10 @@ internal fun Dependency.toDependencyString(optional: Boolean = false): String {
 @Suppress("unused")
 fun Project.usePF4J() {
     extensions.configure<PluginExtension>(pluginExtensionName) {
-        with(it) {
-            ignoreDependencies.set(true)
-            pluginMainFileLocation.set(
-                buildDir.resolve("resources").resolve("main").resolve("plugin.properties").toPath()
-            )
-        }
+        ignoreDependencies.set(true)
+        pluginMainFileLocation.set(
+            buildDir.resolve("resources").resolve("main").resolve("plugin.properties").toPath()
+        )
     }
 }
 
@@ -94,16 +89,6 @@ fun ByteArray.sha512Checksum(): String {
     val hashBytes = digest.digest(this)
     return hashBytes.fold("") { str, it -> str + "%02x".format(it) }
 }
-
-internal inline fun <reified T : Task> TaskContainer.task(name: String, crossinline block: T.() -> Unit) =
-    create(name, T::class.java) {
-        it.block()
-    }
-
-internal inline fun <reified T : Task> TaskContainer.register(name: String, crossinline block: T.() -> Unit) =
-    register(name, T::class.java) {
-        it.block()
-    }
 
 internal fun pluginNotAppliedError(name: String): Nothing =
     error("Please make sure the $name plugin is applied before the mikbot plugin")

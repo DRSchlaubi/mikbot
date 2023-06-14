@@ -6,6 +6,7 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
+import java.net.URI
 import java.net.URL
 import java.nio.channels.Channels
 import java.nio.channels.FileChannel
@@ -57,14 +58,12 @@ abstract class InstallBotTask : DefaultTask() {
 
     private fun extractBot() {
         project.copy {
-            with(it) {
-                from(project.tarTree(botArchive.toAbsolutePath()))
-                into(testBotFolder)
-            }
+            from(project.tarTree(botArchive.toAbsolutePath()))
+            into(testBotFolder)
         }
 
         project.delete {
-            it.delete(botArchive.toAbsolutePath())
+            delete(botArchive.toAbsolutePath())
         }
     }
 
@@ -73,7 +72,7 @@ abstract class InstallBotTask : DefaultTask() {
         if (!botArchive.exists()) {
             botArchive.createFile()
         }
-        val website = URL(url)
+        val website = URI(url).toURL()
         val readChannel = Channels.newChannel(website.openStream())
         val writeChannel = FileChannel.open(botArchive, StandardOpenOption.WRITE)
         writeChannel.transferFrom(readChannel, 0, Long.MAX_VALUE)

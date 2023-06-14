@@ -73,18 +73,18 @@ abstract class AssembleBotTask : Zip() {
                 val version = installBotTask.get().botVersionFromProject()
                 installBotTask.get().testBotFolder.resolve("mikmusic-$version")
             }
-            it.from(provider)
+            from(provider)
         }
         val installedPluginsName = "lib/bundled-plugins"
         into(installedPluginsName) {
             val provider = assemblePlugin.flatMap { task -> task.archiveFile }
-            it.from(provider)
+            from(provider)
         }
         into(installedPluginsName) {
             pluginSpecs.get().forEach { (id, version) ->
                 val fullPath = project.pluginCache.resolve(id).resolve(version)
-                it.from(fullPath)
-                it.include("*.zip")
+                from(fullPath)
+                include("*.zip")
             }
         }
     }

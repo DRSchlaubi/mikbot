@@ -26,8 +26,7 @@ abstract class GenerateDefaultTranslationBundleTask : DefaultTask() {
         val from = sourceSets.getByName("main").resources
         val to = project.buildDir.resolve("generated").resolve("mikbot").resolve("main").resolve("resources")
 
-        val result = project.copy { spec ->
-            with(spec) {
+        val result = project.copy {
                 val locale = defaultLocale.orNull?.resourceBundleKey
                     ?: error("Please specify a default locale")
                 from(from)
@@ -38,7 +37,6 @@ abstract class GenerateDefaultTranslationBundleTask : DefaultTask() {
                     include("translations/${project.bundle}/$name")
                     rename(name, "${it}.properties")
                 }
-            }
         }
         didWork = result.didWork
     }

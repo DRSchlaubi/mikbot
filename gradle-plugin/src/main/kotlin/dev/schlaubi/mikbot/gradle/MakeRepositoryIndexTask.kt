@@ -36,7 +36,7 @@ abstract class MakeRepositoryIndexTask : DefaultTask() {
                 publishingExtension.projectUrl.get(),
                 listOf(
                     PluginRelease(
-                        project.version as String,
+                        (project.version as String).substringBefore("-SNAPSHOT"),
                         Date(),
                         extension.requires.getOrElse(project.project(":").version as String),
                         publishingExtension.repositoryUrl.get() + "/" + project.pluginFilePath,

@@ -22,22 +22,27 @@ internal val Project.pluginPublishingExtension: BuildRepositoryExtension
 
 fun Project.createExtensions() {
     extensions.create<PluginExtension>(pluginExtensionName).apply {
-        val base = rootProject.findExtension<PluginExtension>(pluginExtensionName) ?: return@apply
-        pluginId.convention(base.pluginId.orNull)
-        requires.convention(base.requires.orNull)
-        description.convention(base.description.orNull)
-        provider.convention(base.provider.orNull)
-        license.convention(base.license.orNull)
-        ignoreDependencies.convention(base.ignoreDependencies.orNull)
-        pluginMainFileLocation.convention(base.pluginMainFileLocation.orNull)
-        bundle.convention(base.bundle.orNull)
+        if (parent != null) {
+            val base = rootProject.findExtension<PluginExtension>(pluginExtensionName) ?: return@apply
+            pluginId.convention(base.pluginId.orNull)
+            requires.convention(base.requires.orNull)
+            description.convention(base.description.orNull)
+            provider.convention(base.provider.orNull)
+            license.convention(base.license.orNull)
+            ignoreDependencies.convention(base.ignoreDependencies.orNull)
+            pluginMainFileLocation.convention(base.pluginMainFileLocation.orNull)
+            bundle.convention(base.bundle.orNull)
+        }
     }
     extensions.create<BuildRepositoryExtension>(pluginPublishingExtensionName).apply {
-        val base = rootProject.findExtension<BuildRepositoryExtension>(pluginPublishingExtensionName) ?: return@apply
-        targetDirectory.convention(base.targetDirectory)
-        currentRepository.convention(base.currentRepository)
-        repositoryUrl.convention(base.repositoryUrl)
-        projectUrl.convention(base.projectUrl)
+        if (parent != null) {
+            val base =
+                rootProject.findExtension<BuildRepositoryExtension>(pluginPublishingExtensionName) ?: return@apply
+            targetDirectory.convention(base.targetDirectory)
+            currentRepository.convention(base.currentRepository)
+            repositoryUrl.convention(base.repositoryUrl)
+            projectUrl.convention(base.projectUrl)
+        }
     }
 }
 

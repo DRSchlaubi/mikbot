@@ -60,13 +60,14 @@ internal fun Project.buildDependenciesString(): String {
 }
 
 internal fun Dependency.toDependencyString(optional: Boolean = false): String {
+    val safeVersion =  version.toString().substringBefore("-SNAPSHOT")
     val name = if (this is ProjectDependency) {
         dependencyProject.pluginId
     } else {
         name.substringAfter("mikbot-")
     }
 
-    return "$name${if (optional) "?" else ""}@>=$version"
+    return "$name${if (optional) "?" else ""}@>=$safeVersion"
 }
 
 /**

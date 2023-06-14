@@ -1,3 +1,4 @@
+@file:Suppress("INVISIBLE_MEMBER", "INVISIBLE_REFERENCE")
 import dev.schlaubi.mikbot.gradle.addRepositories
 
 plugins {

@@ -1,14 +1,14 @@
 [versions]
-kotlin = "1.8.21"
-kordex = "1.5.7-SNAPSHOT"
+kotlin = "1.8.22"
+kordex = "1.5.8-SNAPSHOT"
 kmongo = "4.9.0"
 coroutines = "1.7.1"
 serialization = "1.5.1"
-ktor = "2.3.0"
-kord = "0.9.0"
+ktor = "2.3.1"
+kord = "0.10.0-SNAPSHOT"
 jjwt = "0.11.5"
-api = "3.19.7"
-ksp = "1.8.21-1.0.11"
+api = "3.19.8"
+ksp = "1.8.22-1.0.11"
 
 [libraries]
 kord-rest = { group = "dev.kord", name = "kord-rest", version.ref = "kord" }

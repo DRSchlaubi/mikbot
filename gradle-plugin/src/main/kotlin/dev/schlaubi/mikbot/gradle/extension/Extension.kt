@@ -45,6 +45,12 @@ abstract class PluginExtension {
      * The optional override for the projects resources bundle folder.
      */
     abstract val bundle: Property<String>
+
+    /**
+     * Whether to apply the processor to process KordEx converter processors:
+     * See documentation [here](https://github.com/Kord-Extensions/kord-extensions/tree/root/annotations/src/main/kotlin/com/kotlindiscord/kord/extensions/modules/annotations/converters)
+     */
+    abstract val enableKordexProcessor: Property<Boolean>
 }
 
 internal val Project.pluginId: String

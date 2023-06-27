@@ -54,6 +54,7 @@ afterEvaluate {
         packageName("dev.schlaubi.mikbot.gradle")
         className("MikBotPluginInfo")
         buildConfigField("String", "VERSION", "\"${libs.versions.api.get()}\"")
+        buildConfigField("String", "KORDEX_VERSION", "\"${libs.versions.kordex.get()}\"")
         buildConfigField("boolean", "IS_MIKBOT", (System.getenv("BUILD_PLUGIN_CI")?.toBoolean() != true).toString())
     }
 }

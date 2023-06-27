@@ -1,5 +1,6 @@
 package dev.schlaubi.mikbot.gradle
 
+import dev.schlaubi.mikbot.gradle.extension.mikbotPluginExtension
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Dependency
 import org.gradle.api.artifacts.MinimalExternalModuleDependency
@@ -35,6 +36,17 @@ internal fun Project.addDependencies() {
         add("compileOnly", mikbot("api"))
         if (configurations.findByName("ksp") != null) {
             add("ksp", mikbot("plugin-processor"))
+            val optionalKordExDependency = mikbotPluginExtension.enableKordexProcessor.map {
+                if (it) {
+                    create("com.kotlindiscord.kord.extensions:annotation-processor:${MikBotPluginInfo.KORDEX_VERSION}")
+                } else {
+                    val emptyDependency = project.fileTree("empty") {
+                        include { false }
+                    }
+                    create(emptyDependency)
+                }
+            }
+            add("ksp", optionalKordExDependency)
         } else {
             logger.warn("Could not add KSP processor automatically, because KSP plugin is not installed!")
         }

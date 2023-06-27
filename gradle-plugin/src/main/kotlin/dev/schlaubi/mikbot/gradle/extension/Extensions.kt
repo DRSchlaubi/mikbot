@@ -7,7 +7,6 @@ import org.gradle.api.plugins.ExtensionContainer
 
 const val pluginExtensionName = "mikbotPlugin"
 
-@Suppress("ConstPropertyName")
 private const val pluginPublishingExtensionName = "pluginPublishing"
 
 // This is just there for usage in the Plugin, users of the plugin should use Gradle's generated
@@ -24,14 +23,15 @@ fun Project.createExtensions() {
     extensions.create<PluginExtension>(pluginExtensionName).apply {
         if (parent != null) {
             val base = rootProject.findExtension<PluginExtension>(pluginExtensionName) ?: return@apply
-            pluginId.convention(base.pluginId.orNull)
-            requires.convention(base.requires.orNull)
-            description.convention(base.description.orNull)
-            provider.convention(base.provider.orNull)
-            license.convention(base.license.orNull)
-            ignoreDependencies.convention(base.ignoreDependencies.orNull)
-            pluginMainFileLocation.convention(base.pluginMainFileLocation.orNull)
-            bundle.convention(base.bundle.orNull)
+            pluginId.convention(base.pluginId)
+            requires.convention(base.requires)
+            description.convention(base.description)
+            provider.convention(base.provider)
+            license.convention(base.license)
+            ignoreDependencies.convention(base.ignoreDependencies)
+            pluginMainFileLocation.convention(base.pluginMainFileLocation)
+            bundle.convention(base.bundle)
+            enableKordexProcessor.convention(base.enableKordexProcessor.convention(false))
         }
     }
     extensions.create<BuildRepositoryExtension>(pluginPublishingExtensionName).apply {

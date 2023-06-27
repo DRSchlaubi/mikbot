@@ -1,11 +1,13 @@
 package dev.schlaubi.mikbot.gradle
 
 import dev.schlaubi.mikbot.gradle.extension.createExtensions
+import dev.schlaubi.mikbot.gradle.extension.mikbotPluginExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.bundling.Zip
+import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.task
 
 @Suppress("unused")
@@ -19,6 +21,7 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
                 configureTasks()
                 addRepositories()
                 addDependencies()
+                configureSourceSets()
                 target.afterEvaluate {
                     (target.extensions.getByName("sourceSets") as SourceSetContainer).getByName("main")
                         .apply {
@@ -36,6 +39,25 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
         val (assemblePlugin, installBotTask) = tasks.createAssembleTasks()
         createTestBotTasks(assemblePlugin, installBotTask)
         createPublishingTasks(assemblePlugin)
+    }
+
+    private fun Project.configureSourceSets() {
+        configure<SourceSetContainer> {
+            named("main") {
+                java {
+                    val optionalKspSourceSet = mikbotPluginExtension.enableKordexProcessor.map {
+                        if(it) {
+                            file("$buildDir/generated/ksp/main/kotlin/")
+                        } else {
+                            fileTree("never_exists") {
+                                include { false } // include none
+                            }
+                        }
+                    }
+                    srcDir(optionalKspSourceSet)
+                }
+            }
+        }
     }
 
     private fun Project.createTestBotTasks(assemblePlugin: TaskProvider<Zip>, installBotTask: InstallBotTask) {

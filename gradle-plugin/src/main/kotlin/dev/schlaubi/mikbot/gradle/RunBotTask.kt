@@ -4,6 +4,7 @@ import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.JavaExec
 import org.gradle.api.tasks.TaskAction
+ import org.gradle.kotlin.dsl.*
 import kotlin.io.path.isDirectory
 import kotlin.io.path.listDirectoryEntries
 import kotlin.io.path.notExists
@@ -14,7 +15,7 @@ abstract class RunBotTask : JavaExec() {
     internal abstract val installTask: Property<InstallBotTask>
 
     init {
-        mainClass.set("dev.schlaubi.musicbot.LauncherKt")
+        mainClass = "dev.schlaubi.musicbot.LauncherKt"
         outputs.upToDateWhen { false } // always start the bot
     }
 

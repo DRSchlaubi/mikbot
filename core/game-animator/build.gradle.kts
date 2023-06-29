@@ -9,5 +9,5 @@ group = "dev.schlaubi.mikbot"
 version = mikbotVersion
 
 mikbotPlugin {
-    description.set("Plugin changing the bots presence every 30 seconds")
+    description = "Plugin changing the bots presence every 30 seconds"
 }

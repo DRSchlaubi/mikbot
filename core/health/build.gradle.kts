@@ -13,5 +13,5 @@ dependencies {
 }
 
 mikbotPlugin {
-    description.set("Plugin providing an /healthz endpoint used for health checking.")
+    description = "Plugin providing an /healthz endpoint used for health checking."
 }

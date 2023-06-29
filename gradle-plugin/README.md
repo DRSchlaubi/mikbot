@@ -8,7 +8,7 @@ This is a Gradle plugin making the development of Mikbot and [PF4J](https://pf4j
 
 ```kotlin
 mikbotPlugin {
-    description.set("Description")
+    description = "Description"
 }
 
 // For more configuration look at this extension class
@@ -57,7 +57,7 @@ class PluginExtension {
      */
     val pluginMainFileLocation: Path
 
-    /** 
+    /**
      * The optional override for the projects resources bundle folder.
      */
     abstract val bundle: String
@@ -85,12 +85,12 @@ need to configure the following:
 ```kotlin
 pluginPublishing {
     // The address your repository is hosted it
-    // if you use Git LFS and GitHub Pages use https://github.com/owner/repo/raw/branch 
-    repositoryUrl.set("https://plugin-repository.mikbot.schlaubi.net")
+    // if you use Git LFS and GitHub Pages use https://github.com/owner/repo/raw/branch
+    repositoryUrl = "https://plugin-repository.mikbot.schlaubi.net"
     // The directory the generated repository should be in
-    targetDirectory.set(rootProject.file("ci-repo").toPath())
+    targetDirectory = rootProject.file("ci-repo").toPath()
     // The URL of the project
-    projectUrl.set("https://github.com/DRSchlaubi/mikbot")
+    projectUrl = "https://github.com/DRSchlaubi/mikbot"
 }
 ```
 
@@ -220,7 +220,7 @@ If you want to use a specific resource bundle as a fallback you can generate a f
 
 ```kotlin
 task<GenerateDefaultTranslationBundleTask>("generateDefaultResourceBundle") {
-    defaultLocale.set(Locale("en", "GB"))
+    defaultLocale = Locale("en", "GB")
 }
 ```
 
@@ -239,7 +239,7 @@ Therefore, please add the following to your Gradle buildscript or set a `mikbot`
 ```kotlin
 tasks {
     installBot {
-        botVersion.set("2.0.1-SNAPSHOT")
+        botVersion = "2.0.1-SNAPSHOT"
     }
 }
 ```
@@ -261,10 +261,9 @@ Manually
 ```kotlin
 mikBotPlugin {
     // Disables dependency optimization for Mikbot
-    ignoreDependencies.set(true)
+    ignoreDependencies = true
     // Path to this plugins main file (this will get patched, so using a build location makes sense)
-    pluginMainFileLocation.set(
+    pluginMainFileLocation =
         buildDir.resolve("resources/main/plugin.properties").toPath()
-    )
 }
 ```

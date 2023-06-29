@@ -13,5 +13,5 @@ dependencies {
 }
 
 mikbotPlugin {
-    description.set("Implementation of the bots i18n-system backed by a database")
+    description = "Implementation of the bots i18n-system backed by a database"
 }

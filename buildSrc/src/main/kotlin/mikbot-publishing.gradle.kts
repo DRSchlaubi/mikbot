@@ -8,8 +8,8 @@ plugins {
 }
 
 val sourcesJar by tasks.creating(Jar::class) {
-    archiveClassifier.set("sources")
-    destinationDirectory.set(buildDir)
+    archiveClassifier = "sources"
+    destinationDirectory = buildDir
     from(sourceSets["main"].allSource)
 }
 
@@ -27,36 +27,36 @@ publishing {
 
 
             pom {
-                name.set("mikbot")
-                description.set("A modular framework for building Discord bots")
-                url.set("https://github.com/DRSchlaubi/mikmusic")
+                name = "mikbot"
+                description = "A modular framework for building Discord bots"
+                url = "https://github.com/DRSchlaubi/mikmusic"
 
                 organization {
-                    name.set("Schlaubi")
-                    url.set("https://github.com/DRSchlaubi")
+                    name = "Schlaubi"
+                    url = "https://github.com/DRSchlaubi"
                 }
 
                 developers {
                     developer {
-                        name.set("Michael Rittmeister")
+                        name = "Michael Rittmeister"
                     }
                 }
 
                 issueManagement {
-                    system.set("GitHub")
-                    url.set("https://github.com/DRSchlaubi/mikmusic/issues")
+                    system = "GitHub"
+                    url = "https://github.com/DRSchlaubi/mikmusic/issues"
                 }
 
                 licenses {
                     license {
-                        name.set("Apache 2.0")
-                        url.set("https://opensource.org/licenses/Apache-2.0")
+                        name = "Apache 2.0"
+                        url = "https://opensource.org/licenses/Apache-2.0"
                     }
                 }
                 scm {
-                    connection.set("scm:git:https://github.com/DRSchlaubi/mikmusic.git")
-                    developerConnection.set("scm:git:ssh://git@github.com:DRSchlaubi/mikmusic.git")
-                    url.set("https://github.com/DRSchlaubi/mikmusic.git")
+                    connection = "scm:git:https://github.com/DRSchlaubi/mikmusic.git"
+                    developerConnection = "scm:git:ssh://git@github.com:DRSchlaubi/mikmusic.git"
+                    url = "https://github.com/DRSchlaubi/mikmusic.git"
                 }
             }
 

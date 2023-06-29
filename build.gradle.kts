@@ -10,15 +10,15 @@ subprojects {
 }
 
 mikbotPlugin {
-    license.set("MIT License")
-    provider.set("Mikbot Official Plugins")
+    license = "MIT License"
+    provider = "Mikbot Official Plugins"
 }
 
 pluginPublishing {
-    repositoryUrl.set("https://storage.googleapis.com/mikbot-plugins")
-    targetDirectory.set(rootProject.file("ci-repo").toPath())
-    currentRepository.set(rootProject.file("ci-repo-old").toPath())
-    projectUrl.set("https://github.com/DRSchlaubi/mikbot")
+    repositoryUrl = "https://storage.googleapis.com/mikbot-plugins"
+    targetDirectory = rootProject.file("ci-repo").toPath()
+    currentRepository = rootProject.file("ci-repo-old").toPath()
+    projectUrl = "https://github.com/DRSchlaubi/mikbot"
 }
 
 tasks {

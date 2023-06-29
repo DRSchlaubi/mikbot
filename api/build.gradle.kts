@@ -33,6 +33,6 @@ dependencies {
 }
 
 template {
-    className.set("MikBotInfo")
-    packageName.set("dev.schlaubi.mikbot.plugin.api")
+    className = "MikBotInfo"
+    packageName = "dev.schlaubi.mikbot.plugin.api"
 }

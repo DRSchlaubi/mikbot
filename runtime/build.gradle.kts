@@ -89,7 +89,7 @@ tasks {
     distTar {
         compression = Compression.GZIP
         archivesName = "bot"
-        archiveExtension.set("tar.gz")
+        archiveExtension = "tar.gz"
     }
 
     task<Copy>("installCi") {
@@ -120,6 +120,6 @@ tasks {
 }
 
 template {
-    className.set("MikBotInfo")
-    packageName.set("dev.schlaubi.mikbot.plugin.api")
+    className = "MikBotInfo"
+    packageName = "dev.schlaubi.mikbot.plugin.api"
 }

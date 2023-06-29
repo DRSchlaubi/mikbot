@@ -8,7 +8,7 @@ import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.bundling.Zip
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.task
+import org.gradle.kotlin.dsl.*
 
 @Suppress("unused")
 class MikBotPluginGradlePlugin : Plugin<Project> {
@@ -65,12 +65,12 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
             val installPlugins = task<InstallPluginsToTestBotTask>("installPluginsToTestBot") {
                 dependsOn(assemblePlugin)
 
-                pluginArchive.set(assemblePlugin)
+                pluginArchive = assemblePlugin
             }
 
             task<RunBotTask>("runBot") {
                 dependsOn(installBotTask, installPlugins)
-                installTask.set(installBotTask)
+                installTask = installBotTask
             }
         }
     }

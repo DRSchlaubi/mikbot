@@ -8,6 +8,7 @@ import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.bundling.Zip
+import org.gradle.kotlin.dsl.*
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
@@ -63,9 +64,9 @@ abstract class AssembleBotTask : Zip() {
     }
 
     internal fun config() {
-        destinationDirectory.set(project.buildDir.resolve("bot"))
-        archiveBaseName.set("bot-${project.name}")
-        archiveExtension.set("zip")
+        destinationDirectory = project.buildDir.resolve("bot")
+        archiveBaseName = "bot-${project.name}"
+        archiveExtension = "zip"
 
         into("") {
             // make this lazy, so it doesn't throw at initialization

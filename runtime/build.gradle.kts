@@ -16,10 +16,6 @@ version = libs.versions.api.get()
 allprojects {
     repositories {
         mavenCentral()
-        maven("https://maven.kotlindiscord.com/repository/maven-public/")
-        maven("https://schlaubi.jfrog.io/artifactory/mikbot/")
-        maven("https://schlaubi.jfrog.io/artifactory/envconf/")
-        maven("https://schlaubi.jfrog.io/artifactory/lavakord/")
         maven("https://s01.oss.sonatype.org/content/repositories/snapshots")
     }
 }

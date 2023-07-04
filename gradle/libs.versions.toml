@@ -7,7 +7,7 @@ serialization = "1.5.1"
 ktor = "2.3.1"
 kord = "0.10.0-SNAPSHOT"
 jjwt = "0.11.5"
-api = "3.19.8"
+api = "3.20.0"
 ksp = "1.8.22-1.0.11"
 
 [libraries]

@@ -95,9 +95,9 @@ tasks {
         into("ci-repo/$version")
     }
 
-    val installPlugins = task<Copy>("installPlugins") {
+    val installPlugins = register<Copy>("installPlugins") {
         (project.file("plugins.txt")
-            .takeIf { it.exists() } ?: return@task)
+            .takeIf { it.exists() } ?: return@register)
             .readLines()
             .asSequence()
             .filterNot { it.isBlank() || it.startsWith('#') }
@@ -105,7 +105,7 @@ tasks {
                 findProject(it) ?: error("Project '$it' not found, make sure to reference it from the root project")
             }
             .forEach {
-                from(it.tasks["assemblePlugin"] ?: error("Project $path does not have a plugin task"))
+                from(it.tasks.findByPath("assemblePlugin") ?: error("Project ${it.path} does not have a plugin task"))
             }
         into(rootProject.file("plugins"))
     }

@@ -1,14 +1,21 @@
+@file:Suppress("INVISIBLE_REFERENCE")
+
 package dev.schlaubi.mikmusic.sponsorblock
 
 import dev.nycode.sponsorblock.SponsorBlockClient
 import dev.nycode.sponsorblock.model.Category
 import dev.nycode.sponsorblock.model.SkipSegment
+import dev.schlaubi.lavakord.audio.internal.GatewayPayload
 import dev.schlaubi.lavakord.audio.player.Player
 import dev.schlaubi.lavakord.audio.player.Track
 import dev.schlaubi.mikmusic.util.youtubeId
 import io.ktor.client.plugins.*
+import kotlinx.coroutines.delay
 import mu.KotlinLogging
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.time.Duration.Companion.seconds
+import dev.schlaubi.lavakord.audio.internal.WebsocketPlayer
+import kotlinx.datetime.Clock
 import kotlin.time.Duration.Companion.milliseconds
 
 private val client = SponsorBlockClient()
@@ -38,13 +45,22 @@ suspend fun Track.loadSponsorBlockInfo(): List<SkipSegment>? {
 /**
  * Checks a [Track] for segments and skips to the next position.
  */
+@Suppress("INVISIBLE_MEMBER")
 suspend fun Track.checkAndSkipSponsorBlockSegments(player: Player) {
     val segments = loadSponsorBlockInfo() ?: return
-    for ((segment1, _, category) in segments) {
-        val segmentRange = segment1.first..segment1.second
-        if (player.position / 1000.0 in segmentRange) {
-            player.seekTo(((segment1.second * 1000).toInt() + 1).milliseconds)
-            logger.debug { "Skipped sponsorblock segment ${category} ${segment1}" }
+    for ((segment, _, category) in segments) {
+        val segmentRange = segment.first..segment.second
+        if (player.positionDuration.inWholeSeconds.toFloat() in segmentRange) {
+            logger.debug { "Skipped sponsorblock segment $category $segment" }
+            val newPosition = segmentRange.endInclusive.toInt().seconds + 10.milliseconds
+            player.seekTo(newPosition)
+            val fakeState = GatewayPayload.PlayerUpdateEvent.State(
+                Clock.System.now().epochSeconds,
+                newPosition.inWholeMilliseconds,
+                false,
+                -1
+            )
+            (player as WebsocketPlayer).provideState(fakeState)
             break
         }
     }

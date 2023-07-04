@@ -194,7 +194,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
         force: Boolean,
         onTop: Boolean,
         tracks: Collection<QueuedTrack>,
-        position: Duration? = null
+        position: Duration? = null,
     ) {
         val isFirst = nextSongIsFirst
         require(isFirst || position == null) { "Can only specify position if nextSong is first" }

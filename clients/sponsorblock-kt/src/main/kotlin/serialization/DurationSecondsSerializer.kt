@@ -11,7 +11,8 @@ import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
 internal object DurationSecondsSerializer : KSerializer<Duration> {
-    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Duration", PrimitiveKind.DOUBLE)
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor("SponsorBlockDuration", PrimitiveKind.DOUBLE)
 
     override fun deserialize(decoder: Decoder): Duration {
         return decoder.decodeDouble().toDuration(DurationUnit.SECONDS)

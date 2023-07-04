@@ -21,6 +21,7 @@ class MusicPlugin(wrapper: PluginContext) : Plugin(wrapper) {
 
     override fun ExtensibleBotBuilder.ExtensionsBuilder.addExtensions() {
         add(::LavalinkManager)
+        add(::MusicModule)
         if (Config.ENABLE_MUSIC_CHANNEL_FEATURE) {
             add(::MusicInteractionModule)
         }

@@ -18,13 +18,12 @@ import dev.schlaubi.lavakord.audio.Link
 import dev.schlaubi.lavakord.audio.player.Player
 import dev.schlaubi.lavakord.kord.connectAudio
 import dev.schlaubi.mikbot.plugin.api.PluginContext
+import dev.schlaubi.mikbot.plugin.api.getExtensions
 import dev.schlaubi.mikbot.plugin.api.io.Database
 import dev.schlaubi.mikbot.plugin.api.io.getCollection
 import dev.schlaubi.mikbot.plugin.api.module.MikBotModule
 import dev.schlaubi.mikbot.plugin.api.util.*
 import dev.schlaubi.mikmusic.checks.musicControlCheck
-import dev.schlaubi.mikmusic.commands.commands
-import dev.schlaubi.mikmusic.context.playMessageAction
 import dev.schlaubi.mikmusic.core.audio.LavalinkManager
 import dev.schlaubi.mikmusic.player.MusicPlayer
 import dev.schlaubi.mikmusic.player.PersistentPlayerState
@@ -32,7 +31,12 @@ import dev.schlaubi.mikmusic.player.applyToPlayer
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
+import org.pf4j.ExtensionPoint
 import kotlin.reflect.KMutableProperty1
+
+interface MusicExtensionPoint : ExtensionPoint {
+    suspend fun MusicModule.overrideSetup()
+}
 
 class MusicModule(context: PluginContext) : MikBotModule(context) {
     private val lavalink: LavalinkManager by extension()
@@ -62,8 +66,11 @@ class MusicModule(context: PluginContext) : MikBotModule(context) {
     }
 
     override suspend fun setup() {
-        commands()
-        playMessageAction()
+        context.pluginSystem.getExtensions<MusicExtensionPoint>().forEach {
+            with(it) {
+                overrideSetup()
+            }
+        }
 
         event<ReadyEvent> {
             action {
@@ -75,7 +82,7 @@ class MusicModule(context: PluginContext) : MikBotModule(context) {
     suspend fun EphemeralSlashCommandContext<*, *>.checkOtherSchedulerOptions(
         myProperty: KMutableProperty1<MusicPlayer, Boolean>,
         vararg properties: KMutableProperty1<MusicPlayer, Boolean>,
-        callback: suspend (newValue: Boolean) -> Unit
+        callback: suspend (newValue: Boolean) -> Unit,
     ) = checkOtherSchedulerOptions(
         musicPlayer, ::translate,
         { confirmation { it() } },
@@ -99,7 +106,7 @@ class MusicModule(context: PluginContext) : MikBotModule(context) {
 
     private suspend fun <E : InteractionCreateEvent, T : ApplicationCommand<E>> Extension.musicApplicationCommand(
         create: suspend Extension.(suspend T.() -> Unit) -> T,
-        body: suspend T.() -> Unit
+        body: suspend T.() -> Unit,
     ) = create {
         check {
             musicControlCheck()
@@ -153,7 +160,7 @@ suspend fun checkOtherSchedulerOptions(
     myProperty: KMutableProperty1<MusicPlayer, Boolean>,
     vararg properties: KMutableProperty1<MusicPlayer, Boolean>,
     translatorGroup: String,
-    callback: suspend (newValue: Boolean) -> Unit
+    callback: suspend (newValue: Boolean) -> Unit,
 ) {
     if (properties.any { it.get(musicPlayer) }) {
         val (confirmed) = confirmation {

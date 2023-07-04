@@ -36,7 +36,7 @@ import kotlin.time.Duration.Companion.seconds
 private data class SavedTrack(val track: Track, val position: Duration)
 
 @OptIn(UnsafeRestApi::class)
-class MusicPlayer(internal val link: Link, private val guild: GuildBehavior) :
+class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
     Link by link, KordExKoinComponent {
     private var queue = LinkedList<QueuedTrack>()
     val queuedTracks get() = queue.toList()

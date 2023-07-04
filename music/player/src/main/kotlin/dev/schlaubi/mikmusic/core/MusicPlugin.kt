@@ -9,8 +9,6 @@ import dev.schlaubi.mikbot.plugin.api.PluginContext
 import dev.schlaubi.mikbot.plugin.api.PluginMain
 import dev.schlaubi.mikmusic.core.audio.LavalinkManager
 import dev.schlaubi.mikmusic.musicchannel.MusicInteractionModule
-import dev.schlaubi.mikmusic.playlist.TrackListSerializer
-import dev.schlaubi.mikmusic.playlist.commands.PlaylistModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.litote.kmongo.serialization.registerSerializer
@@ -19,13 +17,10 @@ import org.litote.kmongo.serialization.registerSerializer
 class MusicPlugin(wrapper: PluginContext) : Plugin(wrapper) {
     override fun start() {
         registerSerializer(TrackSerializer)
-        registerSerializer(TrackListSerializer)
     }
 
     override fun ExtensibleBotBuilder.ExtensionsBuilder.addExtensions() {
         add(::LavalinkManager)
-        add(::MusicModule)
-        add(::PlaylistModule)
         if (Config.ENABLE_MUSIC_CHANNEL_FEATURE) {
             add(::MusicInteractionModule)
         }

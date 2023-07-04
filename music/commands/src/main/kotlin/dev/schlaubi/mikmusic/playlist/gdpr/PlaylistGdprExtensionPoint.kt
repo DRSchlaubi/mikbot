@@ -1,27 +1,21 @@
-package dev.schlaubi.mikmusic.gdpr
+package dev.schlaubi.mikmusic.playlist.gdpr
 
 import dev.kord.core.entity.User
-import dev.schlaubi.mikbot.core.gdpr.api.*
+import dev.schlaubi.mikbot.core.gdpr.api.DataPoint
+import dev.schlaubi.mikbot.core.gdpr.api.GDPRExtensionPoint
+import dev.schlaubi.mikbot.core.gdpr.api.PermanentlyStoredDataPoint
 import dev.schlaubi.mikmusic.playlist.Playlist
 import dev.schlaubi.mikmusic.playlist.PlaylistDatabase
 import org.litote.kmongo.eq
 import org.pf4j.Extension
 
 @Extension
-class MusicGdprExtension : GDPRExtensionPoint {
-    override fun provideDataPoints(): List<DataPoint> =
-        listOf(PlaylistDataPoint, AutoCompleteDataPoint, MusicChannelDataPoint)
+class PlaylistGdprExtensionPoint : GDPRExtensionPoint {
+    override fun provideDataPoints(): List<DataPoint> = listOf(PlaylistDataPoint)
 }
 
 // Data point for stored playlists
 val PlaylistDataPoint: PermanentlyStoredDataPoint = PlaylistDataPointImpl
-
-// Data sent to Google for AutoComplete on search commands
-val AutoCompleteDataPoint =
-    AnonymizedData("music", "gdpr.auto_complete.description", "gdpr.auto_complete.sharing.description")
-
-// Data required for music-channel
-val MusicChannelDataPoint = ProcessedData("music", "gdpr.music_channel.description", null)
 
 private object PlaylistDataPointImpl :
     PermanentlyStoredDataPoint("music", "gdpr.playlists.name", "gdpr.playlists.description", null) {

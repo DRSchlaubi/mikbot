@@ -1,10 +1,10 @@
 package dev.schlaubi.mikmusic.musicchannel
 
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
+import dev.kord.common.asJavaLocale
 import dev.kord.common.entity.ButtonStyle
 import dev.kord.common.entity.DiscordPartialEmoji
 import dev.kord.common.entity.Snowflake
-import dev.kord.common.asJavaLocale
 import dev.kord.core.Kord
 import dev.kord.core.behavior.edit
 import dev.kord.core.behavior.getChannelOfOrNull

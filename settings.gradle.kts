@@ -35,10 +35,6 @@ if (System.getenv("BUILD_PLUGIN_CI")?.toBoolean() != true) {
     )
 }
 
-findProject("music:player")?.let { project ->
-    project.name = "music-player"
-}
-
 includeBuild("gradle-plugin")
 
 buildCache {

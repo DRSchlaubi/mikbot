@@ -48,3 +48,11 @@ mikbotPlugin {
     pluginId = "music-player"
     description = "Plugin providing full music functionality for the bot"
 }
+
+publishing {
+    publications {
+        named<MavenPublication>("maven") {
+            artifactId = "mikbot-music-player"
+        }
+    }
+}

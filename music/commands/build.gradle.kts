@@ -22,5 +22,6 @@ tasks {
 }
 
 mikbotPlugin {
+    pluginId = "music-commands"
     description = "Plugin providing full music related commands"
 }

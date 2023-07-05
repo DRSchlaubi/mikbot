@@ -45,5 +45,6 @@ tasks {
 }
 
 mikbotPlugin {
+    pluginId = "music-player"
     description = "Plugin providing full music functionality for the bot"
 }

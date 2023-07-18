@@ -32,7 +32,7 @@ suspend fun MusicModule.playMessageAction() = ephemeralMessageCommand {
 class PlayMessageActionArguments(override val query: String) : QueueOptions {
     override val force: Boolean = false
     override val top: Boolean = false
-    override val soundcloud: Boolean = false
+    override val searchProvider: QueueOptions.SearchProvider? = null
 }
 
 private suspend fun EphemeralMessageCommandContext<*>.queue(

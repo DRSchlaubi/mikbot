@@ -1,5 +1,6 @@
 package dev.schlaubi.mikmusic.playlist.commands
 
+import com.kotlindiscord.kord.extensions.commands.application.slash.converters.impl.optionalEnumChoice
 import com.kotlindiscord.kord.extensions.commands.converters.impl.defaultingBoolean
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.kord.rest.builder.message.create.embed
@@ -11,10 +12,9 @@ import dev.schlaubi.mikmusic.playlist.mapToEncoded
 
 class PlaylistAddArguments : PlaylistArguments(), QueueOptions {
     override val query by autoCompletedYouTubeQuery("commands.playlist.add.arguments.query.description")
-    override val soundcloud by defaultingBoolean {
-        name = "soundcloud"
-        description = "commands.playlist.add.arguments.soundscloud.description"
-        defaultValue = false
+    override val searchProvider: QueueOptions.SearchProvider? by optionalEnumChoice<QueueOptions.SearchProvider> {
+        name = "search-provider"
+        description = "The search provider to use"
     }
     val search by defaultingBoolean {
         name = "search"

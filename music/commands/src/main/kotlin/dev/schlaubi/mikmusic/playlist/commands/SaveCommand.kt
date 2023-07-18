@@ -31,7 +31,7 @@ class PlaylistSaveArguments : Arguments(), QueueOptions {
         get() = importFrom ?: error("Cannot find tracks if importFrom is not specified")
     override val force: Boolean = false
     override val top: Boolean = false
-    override val soundcloud: Boolean = false
+    override val searchProvider: QueueOptions.SearchProvider? = null
 }
 
 fun PlaylistModule.saveCommand() = ephemeralSubCommand(::PlaylistSaveArguments) {

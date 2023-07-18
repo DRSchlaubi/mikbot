@@ -27,7 +27,7 @@ interface QueueOptions {
     val query: String
     val force: Boolean
     val top: Boolean
-    val search: SearchProvider?
+    val searchProvider: SearchProvider?
 
     enum class SearchProvider(override val readableName: String, val prefix: String) : ChoiceEnum {
         YouTube("YouTube", "ytsearch:"),
@@ -47,7 +47,7 @@ abstract class QueueArguments : Arguments(), QueueOptions {
         description = "Adds this item to the top of the queueTracks"
         defaultValue = false
     }
-    override val search by optionalEnumChoice<QueueOptions.SearchProvider> {
+    override val searchProvider by optionalEnumChoice<QueueOptions.SearchProvider> {
         name = "search-provider"
         description = "Which searchprovider to use"
     }
@@ -95,7 +95,7 @@ internal suspend fun CommandContext.findTracks(
     val isUrl = urlProtocol.find(rawQuery) != null
 
     val query = if (!isUrl) {
-        val searchPrefix = if (arguments.search != null) "${arguments.search?.prefix}" else "dzsearch:"
+        val searchPrefix = if (arguments.searchProvider != null) "${arguments.searchProvider?.prefix}" else "dzsearch:"
 
         searchPrefix + rawQuery
     } else rawQuery

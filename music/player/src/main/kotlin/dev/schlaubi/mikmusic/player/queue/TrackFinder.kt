@@ -50,6 +50,7 @@ abstract class QueueArguments : Arguments(), QueueOptions {
     override val searchProvider by optionalEnumChoice<QueueOptions.SearchProvider> {
         name = "search-provider"
         description = "Which searchprovider to use"
+        typeName = "SearchProvider"
     }
 }
 

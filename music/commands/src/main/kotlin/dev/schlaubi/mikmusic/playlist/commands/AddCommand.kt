@@ -15,6 +15,7 @@ class PlaylistAddArguments : PlaylistArguments(), QueueOptions {
     override val searchProvider: QueueOptions.SearchProvider? by optionalEnumChoice<QueueOptions.SearchProvider> {
         name = "search-provider"
         description = "The search provider to use"
+        typeName = "SearchProvider"
     }
     val search by defaultingBoolean {
         name = "search"

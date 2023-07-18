@@ -150,7 +150,7 @@ suspend fun Link.takeFirstMatch(musicPlayer: MusicPlayer, query: String): List<T
     val queryString = if (isUrl) {
         query
     } else {
-        "ytsearch: $query"
+        "dzsearch: $query"
     }
 
     return when (val result = loadItem(queryString)) {

@@ -24,6 +24,8 @@ import dev.schlaubi.mikmusic.util.addSong
 import dev.schlaubi.mikmusic.util.format
 import kotlinx.datetime.Clock
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 const val playPause = "playPause"
 const val stop = "stop"
@@ -69,7 +71,8 @@ suspend fun updateMessage(
                     }
                 }
 
-                val remainingTime = playingTrack.length - musicPlayer.player.position.milliseconds
+                val remainingTime = playingTrack.info.length
+                    .toDuration(DurationUnit.MILLISECONDS) - musicPlayer.player.position.milliseconds
                 val nextSongAt = Clock.System.now() + remainingTime
 
                 if (musicPlayer.queuedTracks.isNotEmpty()) {

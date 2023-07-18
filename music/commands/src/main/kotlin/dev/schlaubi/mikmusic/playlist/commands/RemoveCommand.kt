@@ -3,7 +3,6 @@ package dev.schlaubi.mikmusic.playlist.commands
 import com.kotlindiscord.kord.extensions.commands.converters.impl.int
 import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.mikmusic.playlist.PlaylistDatabase
-import dev.schlaubi.mikmusic.util.format
 
 class PlaylistRemoveArguments : PlaylistArguments() {
     val index by int {
@@ -37,7 +36,7 @@ fun PlaylistModule.removeCommand() = ephemeralSubCommand(::PlaylistRemoveArgumen
             )
 
             respond {
-                content = translate("commands.playlist.remove.removed", arrayOf(item.format(), playlist.name))
+                content = translate("commands.playlist.remove.removed", arrayOf(item.toTrack(musicPlayer.node), playlist.name))
             }
         }
     }

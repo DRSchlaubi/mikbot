@@ -21,7 +21,7 @@ fun PlaylistModule.loadCommand() = ephemeralSubCommand(::LoadArguments) {
 
         musicPlayer.queueTrack(
             force = false, onTop = false,
-            tracks = playlist.songs.mapToQueuedTrack(user)
+            tracks = playlist.getTracks(musicPlayer.node).mapToQueuedTrack(user)
         )
 
         respond {

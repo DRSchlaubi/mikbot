@@ -9,6 +9,8 @@ import dev.schlaubi.mikmusic.checks.anyMusicPlaying
 import dev.schlaubi.mikmusic.checks.musicQuizAntiCheat
 import dev.schlaubi.mikmusic.core.MusicModule
 import dev.schlaubi.mikmusic.util.addSong
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 class NowPlayingArguments : Arguments() {
     val index by optionalInt {
@@ -54,7 +56,11 @@ suspend fun MusicModule.nowPlayingCommand() = publicSlashCommand(::NowPlayingArg
                 field {
                     name = translate("commands.now_playing.progress")
                     value =
-                        "${player.positionDuration.toString().replace(regex, "")}/${playingTrack.length}"
+                        "${player.positionDuration.toString().replace(regex, "")}/${
+                            playingTrack.info.length.toDuration(
+                                DurationUnit.MILLISECONDS
+                            )
+                        }"
                 }
             }
         }

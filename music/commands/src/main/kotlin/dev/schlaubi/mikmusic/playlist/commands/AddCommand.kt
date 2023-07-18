@@ -7,6 +7,7 @@ import dev.schlaubi.mikmusic.autocomplete.autoCompletedYouTubeQuery
 import dev.schlaubi.mikmusic.player.queue.QueueOptions
 import dev.schlaubi.mikmusic.player.queue.findTracks
 import dev.schlaubi.mikmusic.playlist.PlaylistDatabase
+import dev.schlaubi.mikmusic.playlist.mapToEncoded
 
 class PlaylistAddArguments : PlaylistArguments(), QueueOptions {
     override val query by autoCompletedYouTubeQuery("commands.playlist.add.arguments.query.description")
@@ -31,7 +32,7 @@ fun PlaylistModule.addCommand() = ephemeralSubCommand(::PlaylistAddArguments) {
     action {
         checkPermissions { playlist ->
             val result = findTracks(musicPlayer, arguments.search) ?: return@action
-            val tracks = result.tracks
+            val tracks = result.tracks.mapToEncoded()
 
             PlaylistDatabase.collection.save(playlist.copy(songs = playlist.songs + tracks))
 

@@ -2,8 +2,10 @@ package dev.schlaubi.mikmusic.player
 
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
 import com.kotlindiscord.kord.extensions.koin.KordExKoinComponent
-import dev.inmo.krontab.buildSchedule
-import dev.inmo.krontab.doInfinity
+import dev.arbjerg.lavalink.protocol.v4.Message
+import dev.arbjerg.lavalink.protocol.v4.PlayerUpdate
+import dev.arbjerg.lavalink.protocol.v4.Track
+import dev.arbjerg.lavalink.protocol.v4.toOmissible
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.GuildBehavior
 import dev.kord.core.entity.channel.VoiceChannel
@@ -13,15 +15,14 @@ import dev.schlaubi.lavakord.audio.TrackEndEvent
 import dev.schlaubi.lavakord.audio.TrackStartEvent
 import dev.schlaubi.lavakord.audio.on
 import dev.schlaubi.lavakord.audio.player.Filters
-import dev.schlaubi.lavakord.audio.player.Track
 import dev.schlaubi.lavakord.audio.player.applyFilters
-import dev.schlaubi.lavakord.rest.models.UpdatePlayerRequest
+import dev.schlaubi.lavakord.plugins.sponsorblock.model.Category
+import dev.schlaubi.lavakord.plugins.sponsorblock.rest.disableSponsorblock
+import dev.schlaubi.lavakord.plugins.sponsorblock.rest.putSponsorblockCategories
 import dev.schlaubi.lavakord.rest.updatePlayer
 import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase
 import dev.schlaubi.mikmusic.innerttube.requestVideoChaptersById
 import dev.schlaubi.mikmusic.musicchannel.updateMessage
-import dev.schlaubi.mikmusic.sponsorblock.checkAndSkipSponsorBlockSegments
-import dev.schlaubi.mikmusic.sponsorblock.deleteSponsorBlockCache
 import dev.schlaubi.mikmusic.util.youtubeId
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -32,6 +33,8 @@ import kotlin.random.Random
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 private data class SavedTrack(val track: Track, val position: Duration)
 
@@ -48,7 +51,6 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
         private set
     private val translationsProvider: TranslationsProvider by inject()
 
-    private var sponsorBlockJob: Job? = null
     private var chapterUpdater: Job? = null
     private var leaveTimeout: Job? = null
     internal var autoPlay: AutoPlayContext? = null
@@ -62,7 +64,9 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
             settings.defaultSchedulerSettings?.applyToPlayer(this@MusicPlayer)
 
             if (settings.useSponsorBlock) {
-                launchSponsorBlockJob()
+                player.putSponsorblockCategories(Category.MusicOfftopic)
+            } else {
+                player.disableSponsorblock()
             }
         }
 
@@ -80,21 +84,6 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
             updateMusicChannelMessage()
         }
         disableMusicChannel = to
-    }
-
-    fun launchSponsorBlockJob() {
-        if (sponsorBlockJob != null) {
-            return
-        }
-        sponsorBlockJob = guild.kord.launch {
-            buildSchedule("/1 * * * *").doInfinity {
-                player.playingTrack?.checkAndSkipSponsorBlockSegments(player)
-            }
-        }
-    }
-
-    fun cancelSponsorBlockJob() {
-        sponsorBlockJob?.cancel()
     }
 
     var shuffle = false
@@ -116,11 +105,12 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
     val remainingQueueDuration: Duration
         get() {
             val remainingOfCurrentTrack =
-                player.playingTrack?.length?.minus(player.position.milliseconds)
+                player.playingTrack?.info?.length?.minus(player.position)
+                    ?.toDuration(DurationUnit.MILLISECONDS)
                     ?: 0.milliseconds
 
             val remainingQueue = queuedTracks
-                .fold(0.seconds) { acc, track -> acc + track.track.length }
+                .fold(0.seconds) { acc, track -> acc + track.track.info.length.toDuration(DurationUnit.MILLISECONDS) }
 
             return remainingOfCurrentTrack + remainingQueue
         }
@@ -166,10 +156,10 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
         val removes = queue.countRemoves {
             val tracks = mutableListOf<String>()
             queue.removeIf {
-                if (it.track.track in tracks) {
+                if (it.track.info.identifier in tracks) {
                     true
                 } else {
-                    tracks.add(it.track.track)
+                    tracks.add(it.track.info.identifier)
                     false
                 }
             }
@@ -220,8 +210,8 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
         link.node.updatePlayer(
             guildId,
             noReplace = false,
-            UpdatePlayerRequest(
-                identifier = identifier
+            PlayerUpdate(
+                identifier = identifier.toOmissible()
             )
         )
     }
@@ -235,34 +225,24 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
     private suspend fun onTrackStart(event: TrackStartEvent) {
         leaveTimeout?.cancel()
         updateMusicChannelMessage()
-        applySponsorBlock(event)
 
         guild.kord.launch {
-            val youtubeId = event.getTrack().youtubeId ?: return@launch
+            val youtubeId = event.track.youtubeId ?: return@launch
             val chapters = requestVideoChaptersById(youtubeId)
             if (chapters.isNotEmpty()) {
                 val queuedBy = playingTrack?.queuedBy ?: Snowflake(0)
-                playingTrack = ChapterQueuedTrack(event.getTrack(), queuedBy, chapters)
+                playingTrack = ChapterQueuedTrack(event.track, queuedBy, chapters)
                 updateMusicChannelMessage()
                 restartChapterUpdater()
             }
         }
     }
 
-    private fun applySponsorBlock(event: TrackStartEvent) {
-        if (sponsorBlockJob == null) {
-            return
-        }
-        guild.kord.launch {
-            event.getTrack().checkAndSkipSponsorBlockSegments(player)
-        }
-    }
-
     private suspend fun onTrackEnd(event: TrackEndEvent) {
         if (dontQueue) {
-            dontQueue = event.reason == TrackEndEvent.EndReason.REPLACED
+            dontQueue = event.reason == Message.EmittedEvent.TrackEndEvent.AudioTrackEndReason.REPLACED
         }
-        if (savedTrack != null && event.reason != TrackEndEvent.EndReason.REPLACED) {
+        if (savedTrack != null && event.reason != Message.EmittedEvent.TrackEndEvent.AudioTrackEndReason.REPLACED) {
             val track = savedTrack ?: return
             savedTrack = null
             player.playTrack(track.track) {
@@ -270,9 +250,8 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
             }
             return
         }
-        event.getTrack().deleteSponsorBlockCache()
-        if ((!repeat && !loopQueue && queue.isEmpty()) && event.reason != TrackEndEvent.EndReason.REPLACED) {
-            val autoPlayTrack = findNextAutoPlayedSong(event.getTrack())
+        if ((!repeat && !loopQueue && queue.isEmpty()) && event.reason != Message.EmittedEvent.TrackEndEvent.AudioTrackEndReason.REPLACED) {
+            val autoPlayTrack = findNextAutoPlayedSong(event.track)
             if (autoPlayTrack != null) {
                 queue.add(SimpleQueuedTrack(autoPlayTrack, guild.kord.selfId))
             } else {
@@ -285,12 +264,12 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
         }
 
         // In order to loop the queueTracks we just add every track back to the queueTracks
-        if (event.reason == TrackEndEvent.EndReason.FINISHED && loopQueue && playingTrack != null) {
+        if (event.reason == Message.EmittedEvent.TrackEndEvent.AudioTrackEndReason.FINISHED && loopQueue && playingTrack != null) {
             queue.add(playingTrack!!)
         }
 
         if (event.reason.mayStartNext) {
-            startNextSong(event.getTrack())
+            startNextSong(event.track)
         }
 
         if (repeat) {

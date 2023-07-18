@@ -2,6 +2,7 @@ package dev.schlaubi.mikmusic.playlist.commands
 
 import com.kotlindiscord.kord.extensions.types.editingPaginator
 import com.kotlindiscord.kord.extensions.types.respond
+import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.schlaubi.mikbot.plugin.api.util.forList
 import dev.schlaubi.mikmusic.util.format
 
@@ -22,7 +23,7 @@ fun PlaylistModule.songsCommand() = ephemeralSubCommand(::PlaylistSongsArguments
 
         editingPaginator {
             forList(
-                user, playlist.songs, { it.format() },
+                user, playlist.getTracks(musicPlayer.node), Track::format,
                 { current, total ->
                     translate(
                         "commands.playlist.songs.paginator.title",

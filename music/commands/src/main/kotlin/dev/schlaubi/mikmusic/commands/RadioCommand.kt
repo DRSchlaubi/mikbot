@@ -20,6 +20,7 @@ class RadioArguments : Arguments() {
     }
 }
 
+/*
 suspend fun MusicModule.radioCommand() {
     ephemeralSlashCommand(::RadioArguments) {
         name = "radio"
@@ -46,3 +47,4 @@ suspend fun MusicModule.radioCommand() {
         }
     }
 }
+*/

@@ -9,6 +9,7 @@ kord = "0.10.0-SNAPSHOT"
 jjwt = "0.11.5"
 api = "3.20.0"
 ksp = "1.8.22-1.0.11"
+lavakord = "5.0.2"
 
 [libraries]
 kord-rest = { group = "dev.kord", name = "kord-rest", version.ref = "kord" }
@@ -28,7 +29,9 @@ commons-text = { group = "org.apache.commons", name = "commons-text", version = 
 google-cloud-bom = { group = "com.google.cloud", name = "libraries-bom", version = "26.6.0" }
 google-cloud-translate = { group = "com.google.cloud", name = "google-cloud-translate" }
 google-apis-youtube = { group = "com.google.apis", name = "google-api-services-youtube", version = "v3-rev20230521-2.0.0" }
-lavakord-kord = { group = "dev.schlaubi.lavakord", name = "kord", version = "4.1.0" }
+lavakord-kord = { group = "dev.schlaubi.lavakord", name = "kord", version.ref = "lavakord" }
+lavakord-sponsorblock = { group = "dev.schlaubi.lavakord", name = "sponsorblock", version.ref = "lavakord" }
+lavakord-lavsrc = { group = "dev.schlaubi.lavakord", name = "lavasrc", version.ref = "lavakord" }
 spotify = { group = "se.michaelthelin.spotify", name = "spotify-web-api-java", version = "8.0.0" }
 krontab = { group = "dev.inmo", name = "krontab", version = "0.10.0" }
 ksp-api = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version.ref = "ksp" }

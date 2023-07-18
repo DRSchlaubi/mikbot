@@ -9,7 +9,7 @@ import com.google.api.services.youtube.model.Channel
 import com.google.api.services.youtube.model.ChannelListResponse
 import com.google.api.services.youtube.model.Video
 import com.google.api.services.youtube.model.VideoListResponse
-import dev.schlaubi.lavakord.audio.player.Track
+import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.schlaubi.mikmusic.core.Config
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -42,25 +42,10 @@ suspend fun getVideoById(videoId: String): Video = getVideosById(videoId).items[
 /**
  * Retrieves a [YouTube Channel][Channel] by its [channelId].
  */
-suspend fun getFirstChannelById(channelId: String): Channel {
-    return getChannelsById(channelId).items[0]
-}
-
-suspend fun searchForYouTubeMusicVideos(query: String) {
-    val response = withContext(Dispatchers.IO) {
-        client.search().list(listOf("snippet")).apply {
-            q = query
-            videoCategoryId = "10" // Music category
-        }.execute()
-    }
-
-    response.items.forEach {
-        it.snippet
-    }
-}
+suspend fun getFirstChannelById(channelId: String): Channel = getChannelsById(channelId).items[0]
 
 val Track.youtubeId: String?
-    get() = if (uri?.contains("youtu(?:be)?".toRegex()) == true) identifier else null
+    get() = if (info.uri?.contains("youtu(?:be)?".toRegex()) == true) info.identifier else null
 
 suspend fun Track.findOnYoutube(): Video? = youtubeId?.let {
     getVideoById(it)

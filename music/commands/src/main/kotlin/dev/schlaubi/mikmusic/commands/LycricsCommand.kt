@@ -28,7 +28,7 @@ suspend fun MusicModule.lyricsCommand() = publicSlashCommand(::LyricsArguments) 
     }
 
     action {
-        val query = arguments.name ?: player.playingTrack?.title
+        val query = arguments.name ?: player.playingTrack?.info?.title
             ?.replace("\\(.+(?!\\))".toRegex(), "") // replace anything in brackets like (official music video)
 
         if (query == null) {

@@ -60,7 +60,7 @@ suspend fun MusicModule.removeCommand() = ephemeralControlSlashCommand {
             val track = musicPlayer.removeQueueEntry(arguments.position - 1)
             if (track != null) {
                 respond {
-                    content = translate("commands.remove.song.removed", arrayOf(track.title))
+                    content = translate("commands.remove.song.removed", arrayOf(track.info.title))
                 }
             } else {
                 respond {

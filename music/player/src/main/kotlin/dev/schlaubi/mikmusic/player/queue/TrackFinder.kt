@@ -3,15 +3,15 @@ package dev.schlaubi.mikmusic.player.queue
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.CommandContext
 import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommandContext
+import com.kotlindiscord.kord.extensions.commands.application.slash.converters.ChoiceEnum
+import com.kotlindiscord.kord.extensions.commands.application.slash.converters.impl.optionalEnumChoice
 import com.kotlindiscord.kord.extensions.commands.converters.impl.defaultingBoolean
 import com.kotlindiscord.kord.extensions.types.editingPaginator
 import com.kotlindiscord.kord.extensions.types.respond
+import dev.arbjerg.lavalink.protocol.v4.Exception
+import dev.arbjerg.lavalink.protocol.v4.LoadResult
 import dev.kord.rest.builder.message.create.embed
-import dev.schlaubi.lavakord.Exception
-import dev.schlaubi.lavakord.audio.player.Track
 import dev.schlaubi.lavakord.rest.loadItem
-import dev.schlaubi.lavakord.rest.mapToTrack
-import dev.schlaubi.lavakord.rest.models.TrackResponse
 import dev.schlaubi.mikbot.plugin.api.util.EditableMessageSender
 import dev.schlaubi.mikmusic.autocomplete.autoCompletedYouTubeQuery
 import dev.schlaubi.mikmusic.player.MusicPlayer
@@ -27,7 +27,12 @@ interface QueueOptions {
     val query: String
     val force: Boolean
     val top: Boolean
-    val soundcloud: Boolean
+    val search: SearchProvider?
+
+    enum class SearchProvider(override val readableName: String, val prefix: String) : ChoiceEnum {
+        YouTube("YouTube", "ytsearch:"),
+        SoundCloud("Soundcloud", "scsearch:")
+    }
 }
 
 abstract class QueueArguments : Arguments(), QueueOptions {
@@ -42,10 +47,9 @@ abstract class QueueArguments : Arguments(), QueueOptions {
         description = "Adds this item to the top of the queueTracks"
         defaultValue = false
     }
-    override val soundcloud by defaultingBoolean {
-        name = "soundcloud"
-        description = "Searches for this item on SoundCloud instead of YouTube"
-        defaultValue = false
+    override val search by optionalEnumChoice<QueueOptions.SearchProvider> {
+        name = "search-provider"
+        description = "Which searchprovider to use"
     }
 }
 
@@ -91,64 +95,34 @@ internal suspend fun CommandContext.findTracks(
     val isUrl = urlProtocol.find(rawQuery) != null
 
     val query = if (!isUrl) {
-        val searchPrefix = if (arguments.soundcloud) "scsearch: " else "ytsearch:"
+        val searchPrefix = if (arguments.search != null) "${arguments.search?.prefix}" else "dzsearch:"
 
         searchPrefix + rawQuery
     } else rawQuery
 
-    if (isUrl) {
-        val spotifySearch = findSpotifySongs(musicPlayer, query)
-        if (spotifySearch != null) {
-            return queueSpotifySearch(spotifySearch, respond)
-        }
-    }
-
-    val result = musicPlayer.loadItem(query)
-
-    val searchResult: QueueSearchResult = when (result.loadType) {
-        TrackResponse.LoadType.TRACK_LOADED -> SingleTrack(result.track.toTrack())
-        TrackResponse.LoadType.PLAYLIST_LOADED ->
-            Playlist(result.getPlaylistInfo(), result.tracks.mapToTrack())
-        TrackResponse.LoadType.SEARCH_RESULT -> {
+    val searchResult: QueueSearchResult = when (val result = musicPlayer.loadItem(query)) {
+        is LoadResult.TrackLoaded -> SingleTrack(result.data)
+        is LoadResult.PlaylistLoaded ->
+            Playlist(result.data, result.data.tracks)
+        is LoadResult.SearchResult -> {
             if (search) {
                 searchSong(respond, editingPaginator, getUser()!!, result) ?: return null
             } else {
-                val foundTrack = result.tracks.first()
-                SingleTrack(foundTrack.toTrack())
+                val foundTrack = result.data.tracks.first()
+                SingleTrack(foundTrack)
             }
         }
-        TrackResponse.LoadType.NO_MATCHES -> {
+        is LoadResult.NoMatches -> {
             noMatches(respond)
             return null
         }
-        TrackResponse.LoadType.LOAD_FAILED -> {
+        is LoadResult.LoadFailed -> {
             handleError(respond, result)
             return null
         }
     }
 
     return searchResult
-}
-
-private suspend fun CommandContext.queueSpotifySearch(
-    spotifySearch: List<Track>,
-    respond: EditableMessageSender,
-): QueueSearchResult? {
-    if (spotifySearch.isEmpty()) {
-        respond {
-            content = translate("music.queue.spotify.no_songs_found")
-        }
-        return null
-    }
-
-    return if (spotifySearch.size == 1) {
-        SingleTrack(spotifySearch.first())
-    } else {
-        Playlist(
-            TrackResponse.PlaylistInfo("Spotify Playlist", 0),
-            spotifySearch
-        )
-    }
 }
 
 suspend fun CommandContext.queueTracks(
@@ -202,9 +176,9 @@ private suspend fun CommandContext.noMatches(respond: EditableMessageSender) {
 
 private suspend fun CommandContext.handleError(
     respond: EditableMessageSender,
-    result: TrackResponse
+    result: LoadResult.LoadFailed
 ) {
-    val error = result.getException()
+    val error = result.data
     when (error.severity) {
         Exception.Severity.COMMON -> {
             respond {

@@ -4,6 +4,9 @@ import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalBoolean
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
 import com.kotlindiscord.kord.extensions.types.respond
+import dev.schlaubi.lavakord.plugins.sponsorblock.model.Category
+import dev.schlaubi.lavakord.plugins.sponsorblock.rest.disableSponsorblock
+import dev.schlaubi.lavakord.plugins.sponsorblock.rest.putSponsorblockCategories
 import dev.schlaubi.mikbot.plugin.api.settings.SettingsModule
 import dev.schlaubi.mikbot.plugin.api.settings.guildAdminOnly
 import dev.schlaubi.mikbot.plugin.api.util.safeGuild
@@ -33,9 +36,9 @@ suspend fun SettingsModule.sponsorBlockCommand() {
 
                 val player = musicModule.getMusicPlayer(safeGuild)
                 if (newSetting) {
-                    player.launchSponsorBlockJob()
+                    player.player.putSponsorblockCategories(Category.MusicOfftopic)
                 } else {
-                    player.cancelSponsorBlockJob()
+                    player.player.disableSponsorblock()
                 }
             }
 

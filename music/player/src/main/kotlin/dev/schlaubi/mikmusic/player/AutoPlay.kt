@@ -1,9 +1,9 @@
 package dev.schlaubi.mikmusic.player
 
+import dev.arbjerg.lavalink.protocol.v4.LoadResult
+import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.kord.rest.builder.message.EmbedBuilder
-import dev.schlaubi.lavakord.audio.player.Track
 import dev.schlaubi.lavakord.rest.loadItem
-import dev.schlaubi.lavakord.rest.models.TrackResponse
 import dev.schlaubi.mikbot.plugin.api.util.Translator
 import dev.schlaubi.mikmusic.innerttube.InnerTubeClient
 import dev.schlaubi.mikmusic.innerttube.Text
@@ -98,8 +98,8 @@ suspend fun MusicPlayer.findNextAutoPlayedSong(lastSong: Track?): Track? {
 context(MusicPlayer)
 private suspend fun AutoPlayContext.Track.fetchTrack(): Track? {
     val response = link.loadItem("https://www.youtube.com/watch?v=$id")
-    return if (response.loadType == TrackResponse.LoadType.TRACK_LOADED) {
-        response.track.toTrack()
+    return if (response is LoadResult.TrackLoaded) {
+        response.data
     } else {
         null
     }

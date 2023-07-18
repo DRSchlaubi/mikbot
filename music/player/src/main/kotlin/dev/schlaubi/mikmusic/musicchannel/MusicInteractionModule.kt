@@ -3,6 +3,8 @@ package dev.schlaubi.mikmusic.musicchannel
 import com.kotlindiscord.kord.extensions.checks.guildFor
 import com.kotlindiscord.kord.extensions.checks.inChannel
 import com.kotlindiscord.kord.extensions.extensions.event
+import dev.arbjerg.lavalink.protocol.v4.LoadResult
+import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.kord.core.behavior.channel.withTyping
 import dev.kord.core.behavior.interaction.response.EphemeralMessageInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.response.createEphemeralFollowup
@@ -10,10 +12,7 @@ import dev.kord.core.behavior.reply
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.schlaubi.lavakord.audio.Link
-import dev.schlaubi.lavakord.audio.player.Track
 import dev.schlaubi.lavakord.rest.loadItem
-import dev.schlaubi.lavakord.rest.mapToTrack
-import dev.schlaubi.lavakord.rest.models.TrackResponse
 import dev.schlaubi.mikbot.plugin.api.PluginContext
 import dev.schlaubi.mikbot.plugin.api.module.MikBotModule
 import dev.schlaubi.mikbot.plugin.api.util.*
@@ -24,7 +23,6 @@ import dev.schlaubi.mikmusic.core.checkOtherSchedulerOptions
 import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase
 import dev.schlaubi.mikmusic.player.MusicPlayer
 import dev.schlaubi.mikmusic.player.enableAutoPlay
-import dev.schlaubi.mikmusic.player.queue.findSpotifySongs
 import dev.schlaubi.mikmusic.player.resetAutoPlay
 import dev.schlaubi.mikmusic.util.mapToQueuedTrack
 import kotlin.reflect.KMutableProperty1
@@ -155,19 +153,10 @@ suspend fun Link.takeFirstMatch(musicPlayer: MusicPlayer, query: String): List<T
         "ytsearch: $query"
     }
 
-    if (isUrl) {
-        val spotifySearch: List<Track>? = findSpotifySongs(musicPlayer, query)
-
-        if (!spotifySearch.isNullOrEmpty()) {
-            return spotifySearch
-        }
-    }
-
-    val result = loadItem(queryString)
-    return when (result.loadType) {
-        TrackResponse.LoadType.TRACK_LOADED,
-        TrackResponse.LoadType.PLAYLIST_LOADED -> result.tracks.mapToTrack()
-        TrackResponse.LoadType.SEARCH_RESULT -> result.tracks.take(1).mapToTrack()
+    return when (val result = loadItem(queryString)) {
+        is LoadResult.TrackLoaded -> listOf(result.data)
+        is LoadResult.PlaylistLoaded -> result.data.tracks
+        is LoadResult.SearchResult -> result.data.tracks.take(1)
         else -> emptyList()
     }
 }

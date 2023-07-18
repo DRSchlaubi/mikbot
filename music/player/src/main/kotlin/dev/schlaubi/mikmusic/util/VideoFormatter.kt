@@ -2,12 +2,14 @@ package dev.schlaubi.mikmusic.util
 
 import com.kotlindiscord.kord.extensions.commands.CommandContext
 import com.kotlindiscord.kord.extensions.koin.KordExContext
+import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.kord.common.Color
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.nycode.imagecolor.ImageColorClient
-import dev.schlaubi.lavakord.audio.player.Track
 import dev.schlaubi.mikbot.plugin.api.util.Translator
 import dev.schlaubi.mikmusic.core.Config
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 private val imageColorClient by KordExContext.get().inject<ImageColorClient>()
 
@@ -27,27 +29,31 @@ suspend fun EmbedBuilder.addSong(commandContext: CommandContext, track: Track) =
 suspend fun EmbedBuilder.addSong(translate: Translator, track: Track) {
     field {
         name = translate("music.track.title", "music")
-        value = track.title
+        value = track.info.title
     }
 
     field {
         name = translate("music.track.duration", "music")
-        value = track.length.toString()
+        value = track.info.length.toDuration(DurationUnit.MILLISECONDS).toString()
+    }
+
+    val thumbnailUrl = track.info.artworkUrl
+    if (thumbnailUrl != null) {
+        thumbnail {
+            url = thumbnailUrl
+        }
+
+        if (Config.IMAGE_COLOR_SERVICE_URL != null) {
+            imageColorClient.fetchImageColorOrNull(thumbnailUrl)?.let { imageColor ->
+                color = Color(imageColor)
+            }
+        }
     }
 
     val video = track.findOnYoutube()
     if (video != null) {
         val info = video.snippet
         val channel = getFirstChannelById(info.channelId).snippet
-        thumbnail {
-            url = info.thumbnails.high.url
-        }
-
-        if (Config.IMAGE_COLOR_SERVICE_URL != null) {
-            imageColorClient.fetchImageColorOrNull(info.thumbnails.high.url)?.let { imageColor ->
-                color = Color(imageColor)
-            }
-        }
 
         author {
             name = channel.title
@@ -57,7 +63,7 @@ suspend fun EmbedBuilder.addSong(translate: Translator, track: Track) {
     } else {
         field {
             name = translate("music.track.author", "music")
-            value = track.author
+            value = track.info.author
         }
     }
 }

@@ -5,33 +5,31 @@ import com.kotlindiscord.kord.extensions.pagination.BaseButtonPaginator
 import com.kotlindiscord.kord.extensions.pagination.builders.PaginatorBuilder
 import com.kotlindiscord.kord.extensions.utils.permissionsForMember
 import com.kotlindiscord.kord.extensions.utils.waitForResponse
+import dev.arbjerg.lavalink.protocol.v4.LoadResult
+import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.kord.common.entity.Permission
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.entity.channel.GuildChannel
-import dev.schlaubi.lavakord.rest.mapToTrack
-import dev.schlaubi.lavakord.rest.models.TrackResponse
 import dev.schlaubi.mikbot.plugin.api.util.EditableMessageSender
 import dev.schlaubi.mikbot.plugin.api.util.forList
 import dev.schlaubi.mikmusic.util.format
 import kotlin.time.Duration.Companion.minutes
-import kotlin.time.ExperimentalTime
 
 typealias EditingPaginatorBuilder = suspend PaginatorBuilder.() -> Unit
 typealias EditingPaginatorSender = suspend (EditingPaginatorBuilder) -> BaseButtonPaginator
 
-@OptIn(ExperimentalTime::class)
 suspend fun CommandContext.searchSong(
     respond: EditableMessageSender,
     editingPaginator: EditingPaginatorSender,
     user: UserBehavior,
-    result: TrackResponse
+    result: LoadResult.SearchResult
 ): SingleTrack? {
-    val tracks = result.tracks.mapToTrack()
+    val tracks = result.data.tracks
     val paginator = editingPaginator {
         forList(
             user,
-            tracks,
-            { it.format() },
+            result.data.tracks,
+            Track::format,
             { current, total ->
                 translate("music.queue.search.title", arrayOf(current.toString(), total.toString()))
             }

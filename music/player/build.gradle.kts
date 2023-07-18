@@ -12,11 +12,11 @@ group = "dev.schlaubi.mikbot"
 
 dependencies {
     api(libs.lavakord.kord)
+    api(libs.lavakord.sponsorblock)
+    api(libs.lavakord.lavsrc)
 
     // Plattform support
     implementation(libs.google.apis.youtube)
-    api(libs.spotify)
-
     // SponsorBlock Client
     implementation(projects.clients.sponsorblockKt)
 

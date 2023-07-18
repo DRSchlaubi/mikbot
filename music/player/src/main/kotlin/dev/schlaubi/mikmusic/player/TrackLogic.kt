@@ -2,8 +2,8 @@
 
 package dev.schlaubi.mikmusic.player
 
+import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.kord.common.entity.Snowflake
-import dev.schlaubi.lavakord.audio.player.Track
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

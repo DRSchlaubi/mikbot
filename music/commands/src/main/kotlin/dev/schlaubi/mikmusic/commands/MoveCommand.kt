@@ -6,7 +6,7 @@ import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSla
 import com.kotlindiscord.kord.extensions.commands.application.slash.ephemeralSubCommand
 import com.kotlindiscord.kord.extensions.commands.converters.impl.int
 import com.kotlindiscord.kord.extensions.types.respond
-import dev.schlaubi.lavakord.audio.player.Track
+import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.schlaubi.mikmusic.core.MusicModule
 
 class SingleSongMoveArguments : Arguments() {
@@ -69,7 +69,7 @@ suspend fun MusicModule.moveCommand() {
             description = "commands.move.top.description"
 
             doMove(SingleSongMoveArguments::song, { 0 }) { track ->
-                translate("commands.move.top.success", arrayOf(track.title))
+                translate("commands.move.top.success", arrayOf(track.info.title))
             }
         }
 
@@ -81,7 +81,7 @@ suspend fun MusicModule.moveCommand() {
                 translate(
                     "commands.move.move.success",
                     arrayOf(
-                        track.title,
+                        track.info.title,
                         arguments.from, arguments.to
                     )
                 )
@@ -110,7 +110,7 @@ suspend fun MusicModule.moveCommand() {
                 translate(
                     "commands.move.last.success",
                     arrayOf(
-                        track.title,
+                        track.info.title,
                     )
                 )
             }

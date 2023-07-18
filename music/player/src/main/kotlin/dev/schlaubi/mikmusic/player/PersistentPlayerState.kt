@@ -5,6 +5,7 @@ import dev.schlaubi.lavakord.audio.player.*
 import dev.schlaubi.mikmusic.core.settings.SchedulerSettings
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonElement
 import kotlin.time.Duration
 
 @Serializable
@@ -56,7 +57,8 @@ data class MutableFilters(
     override val channelMix: Filters.ChannelMix? = null,
     override val distortion: Filters.Distortion? = null,
     override val lowPass: Filters.LowPass? = null,
-    override val rotation: Filters.Rotation? = null
+    override val rotation: Filters.Rotation? = null,
+    override val pluginFilters: MutableMap<String, JsonElement> = mutableMapOf()
 ) : Filters {
     override fun unsetChannelMix() = Unit
 

@@ -5,6 +5,8 @@ import dev.schlaubi.lavakord.LavaKord
 import dev.schlaubi.lavakord.audio.Node
 import dev.schlaubi.lavakord.kord.getLink
 import dev.schlaubi.lavakord.kord.lavakord
+import dev.schlaubi.lavakord.plugins.lavasrc.LavaSrc
+import dev.schlaubi.lavakord.plugins.sponsorblock.Sponsorblock
 import dev.schlaubi.mikbot.plugin.api.PluginContext
 import dev.schlaubi.mikbot.plugin.api.io.Database
 import dev.schlaubi.mikbot.plugin.api.io.getCollection
@@ -21,7 +23,12 @@ class LavalinkManager(context: PluginContext) : MikBotModule(context) {
     }
 
     suspend fun load() {
-        lavalink = kord.lavakord()
+        lavalink = kord.lavakord {
+            plugins {
+                install(Sponsorblock)
+                install(LavaSrc)
+            }
+        }
 
         lavalinkServers.find().toList().forEach { (url, password) ->
             lavalink.addNode(url, password)

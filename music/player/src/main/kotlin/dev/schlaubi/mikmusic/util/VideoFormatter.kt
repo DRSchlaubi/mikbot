@@ -29,7 +29,7 @@ suspend fun EmbedBuilder.addSong(commandContext: CommandContext, track: Track) =
 suspend fun EmbedBuilder.addSong(translate: Translator, track: Track) {
     field {
         name = translate("music.track.title", "music")
-        value = track.info.title
+        value = "[${track.info.title}](${track.info.uri})"
     }
 
     field {

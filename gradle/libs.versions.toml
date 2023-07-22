@@ -9,9 +9,10 @@ kord = "0.10.0-SNAPSHOT"
 jjwt = "0.11.5"
 api = "3.20.0"
 ksp = "1.8.22-1.0.11"
-lavakord = "5.0.2"
+lavakord = "5.1.0"
 
 [libraries]
+kord-common = { group = "dev.kord", name = "kord-common", version.ref = "kord" }
 kord-rest = { group = "dev.kord", name = "kord-rest", version.ref = "kord" }
 kordex = { group = "com.kotlindiscord.kord.extensions", name = "kord-extensions", version.ref = "kordex" }
 kordex-unsafe = { group = "com.kotlindiscord.kord.extensions", name = "unsafe", version.ref = "kordex" }
@@ -41,6 +42,8 @@ ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version
 ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
+ktor-client-auth = { group = "io.ktor", name = "ktor-client-auth", version.ref = "ktor" }
+ktor-client-resources = { group = "io.ktor", name = "ktor-client-resources", version.ref = "ktor" }
 ktor-server-content-negotiation = { group = "io.ktor", name = "ktor-server-content-negotiation", version.ref = "ktor" }
 ktor-server-netty = { group = "io.ktor", name = "ktor-server-netty", version.ref = "ktor" }
 ktor-server-resources = { group = "io.ktor", name = "ktor-server-resources", version.ref = "ktor" }

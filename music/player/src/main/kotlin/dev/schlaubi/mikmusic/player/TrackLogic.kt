@@ -4,9 +4,11 @@ package dev.schlaubi.mikmusic.player
 
 import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.kord.common.entity.Snowflake
+import dev.schlaubi.lavakord.plugins.sponsorblock.model.YouTubeChapter
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlin.time.Duration
 
 @Serializable
 sealed class QueuedTrack {
@@ -25,17 +27,21 @@ data class SimpleQueuedTrack(@Contextual override val track: Track, override val
 data class ChapterQueuedTrack(
     @Contextual override val track: Track,
     override val queuedBy: Snowflake,
-    val chapters: List<Chapter>
+    val chapters: List<YouTubeChapter>
 ) : QueuedTrack() {
     var chapterIndex: Int = 0
         private set
-    val chapter: Chapter
+    val chapter: YouTubeChapter
         get() = chapters[chapterIndex]
 
     val isOnLast: Boolean
         get() = chapterIndex >= chapters.lastIndex
 
-    fun nextChapter(): Chapter {
+    fun skipTo(startTime: Duration, name: String) {
+        chapterIndex = chapters.indexOfFirst { it.start == startTime && it.name == name }
+    }
+
+    fun nextChapter(): YouTubeChapter {
         chapterIndex++
         return chapters[chapterIndex]
     }

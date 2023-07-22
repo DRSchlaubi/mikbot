@@ -11,6 +11,8 @@ plugins {
 group = "dev.schlaubi.mikbot"
 
 dependencies {
+    implementation(projects.api)
+    implementation(kotlin("stdlib"))
     api(libs.lavakord.kord)
     api(libs.lavakord.sponsorblock)
     api(libs.lavakord.lavsrc)

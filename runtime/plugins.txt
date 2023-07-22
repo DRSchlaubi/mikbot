@@ -1,2 +1,4 @@
+:core:gdpr
+:core:redeploy-hook
 :music:player
 :music:commands

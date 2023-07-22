@@ -17,13 +17,13 @@ import dev.schlaubi.lavakord.audio.on
 import dev.schlaubi.lavakord.audio.player.Filters
 import dev.schlaubi.lavakord.audio.player.applyFilters
 import dev.schlaubi.lavakord.plugins.sponsorblock.model.Category
+import dev.schlaubi.lavakord.plugins.sponsorblock.model.ChapterStartedEvent
+import dev.schlaubi.lavakord.plugins.sponsorblock.model.ChaptersLoadedEvent
 import dev.schlaubi.lavakord.plugins.sponsorblock.rest.disableSponsorblock
 import dev.schlaubi.lavakord.plugins.sponsorblock.rest.putSponsorblockCategories
 import dev.schlaubi.lavakord.rest.updatePlayer
 import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase
-import dev.schlaubi.mikmusic.innerttube.requestVideoChaptersById
 import dev.schlaubi.mikmusic.musicchannel.updateMessage
-import dev.schlaubi.mikmusic.util.youtubeId
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -72,6 +72,8 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
 
         link.player.on(consumer = ::onTrackEnd)
         link.player.on(consumer = ::onTrackStart)
+        link.player.on(consumer = ::onChaptersLoaded)
+        link.player.on(consumer = ::onChapterStarted)
     }
 
     suspend fun getChannel() = link.lastChannelId
@@ -222,20 +224,22 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
         this.filters = SerializableFilters(filters)
     }
 
-    private suspend fun onTrackStart(event: TrackStartEvent) {
+    private fun onChaptersLoaded(event: ChaptersLoadedEvent) {
+        val playingTrack = playingTrack ?: return
+        val queuedBy = playingTrack.queuedBy
+        this.playingTrack = ChapterQueuedTrack(playingTrack.track, queuedBy, event.chapters)
+        updateMusicChannelMessage()
+    }
+
+    private fun onChapterStarted(event: ChapterStartedEvent) {
+        val chapterTrack = playingTrack as? ChapterQueuedTrack ?: return
+        chapterTrack.skipTo(event.chapter.start, event.chapter.name)
+        updateMusicChannelMessage()
+    }
+
+    private fun onTrackStart(@Suppress("UNUSED_PARAMETER") event: TrackStartEvent) {
         leaveTimeout?.cancel()
         updateMusicChannelMessage()
-
-        guild.kord.launch {
-            val youtubeId = event.track.youtubeId ?: return@launch
-            val chapters = requestVideoChaptersById(youtubeId)
-            if (chapters.isNotEmpty()) {
-                val queuedBy = playingTrack?.queuedBy ?: Snowflake(0)
-                playingTrack = ChapterQueuedTrack(event.track, queuedBy, chapters)
-                updateMusicChannelMessage()
-                restartChapterUpdater()
-            }
-        }
     }
 
     private suspend fun onTrackEnd(event: TrackEndEvent) {
@@ -309,28 +313,8 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
     suspend fun skipChapter() {
         val chapterTrack = (playingTrack as? ChapterQueuedTrack) ?: return
         val chapter = chapterTrack.nextChapter()
-        player.seekTo(chapter.startTime)
-        restartChapterUpdater(chapter.startTime)
+        player.seekTo(chapter.start)
         updateMusicChannelMessage()
-    }
-
-    private suspend fun restartChapterUpdater(position: Duration? = null) {
-        chapterUpdater?.cancel()
-        chapterUpdater = guild.kord.launch {
-            val chapterTrack = (playingTrack as? ChapterQueuedTrack) ?: return@launch
-            if (chapterTrack.isOnLast) {
-                return@launch
-            }
-
-            val nextChapter = chapterTrack.chapters[chapterTrack.chapterIndex + 1]
-
-            val diff = nextChapter.startTime - (position ?: player.positionDuration)
-            delay(diff)
-
-            chapterTrack.nextChapter()
-            updateMusicChannelMessage()
-            restartChapterUpdater(nextChapter.startTime)
-        }
     }
 
     private suspend fun startNextSong(lastSong: Track? = null, force: Boolean = false, position: Duration? = null) {

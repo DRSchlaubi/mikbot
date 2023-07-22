@@ -13,8 +13,6 @@ import kotlinx.serialization.json.Json
 import mu.KotlinLogging
 
 private val youtubeMusic = Url("https://music.youtube.com")
-private val youtube = Url("https://www.youtube.com")
-const val radioParam = "wAEB" // YouTube sends this parameter starting a song radio
 
 
 private val webContext = InnerTubeContext(InnerTubeContext.Client("WEB", "2.20220502.01.00"))
@@ -93,11 +91,6 @@ object InnerTubeClient {
             }
             header(HttpHeaders.AcceptLanguage, localeString)
         }
-
-    suspend fun requestVideoSearch(query: String): InnerTubeSingleBox<TwoColumnSearchResultsRendererContent> =
-        makeRequest(
-            youtube, "search", body = SearchRequest(webContext, query)
-        )
 
     private suspend inline fun <reified B, reified R> makeRequest(
         domain: Url,

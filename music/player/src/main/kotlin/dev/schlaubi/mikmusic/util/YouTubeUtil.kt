@@ -45,7 +45,7 @@ suspend fun getVideoById(videoId: String): Video = getVideosById(videoId).items[
 suspend fun getFirstChannelById(channelId: String): Channel = getChannelsById(channelId).items[0]
 
 val Track.youtubeId: String?
-    get() = if (info.uri?.contains("youtu(?:be)?".toRegex()) == true) info.identifier else null
+    get() = if (info.sourceName == "youtube") info.identifier else null
 
 suspend fun Track.findOnYoutube(): Video? = youtubeId?.let {
     getVideoById(it)

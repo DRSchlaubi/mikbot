@@ -18,6 +18,7 @@ import dev.schlaubi.mikbot.plugin.api.module.MikBotModule
 import dev.schlaubi.mikbot.plugin.api.util.*
 import dev.schlaubi.mikmusic.checks.joinSameChannelCheck
 import dev.schlaubi.mikmusic.checks.musicControlCheck
+import dev.schlaubi.mikmusic.core.Config
 import dev.schlaubi.mikmusic.core.MusicModule
 import dev.schlaubi.mikmusic.core.checkOtherSchedulerOptions
 import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase
@@ -150,7 +151,7 @@ suspend fun Link.takeFirstMatch(musicPlayer: MusicPlayer, query: String): List<T
     val queryString = if (isUrl) {
         query
     } else {
-        "dzsearch: $query"
+        "${Config.DEFAULT_SEARCH_PROVIDER}: $query"
     }
 
     return when (val result = loadItem(queryString)) {

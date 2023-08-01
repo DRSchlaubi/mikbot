@@ -14,6 +14,7 @@ import dev.kord.rest.builder.message.create.embed
 import dev.schlaubi.lavakord.rest.loadItem
 import dev.schlaubi.mikbot.plugin.api.util.EditableMessageSender
 import dev.schlaubi.mikmusic.autocomplete.autoCompletedYouTubeQuery
+import dev.schlaubi.mikmusic.core.Config
 import dev.schlaubi.mikmusic.player.MusicPlayer
 import dev.schlaubi.mikmusic.player.SimpleQueuedTrack
 import mu.KotlinLogging
@@ -96,7 +97,7 @@ internal suspend fun CommandContext.findTracks(
     val isUrl = urlProtocol.find(rawQuery) != null
 
     val query = if (!isUrl) {
-        val searchPrefix = if (arguments.searchProvider != null) "${arguments.searchProvider?.prefix}" else "dzsearch:"
+        val searchPrefix = if (arguments.searchProvider != null) "${arguments.searchProvider?.prefix}" else "${Config.DEFAULT_SEARCH_PROVIDER}:"
 
         searchPrefix + rawQuery
     } else rawQuery

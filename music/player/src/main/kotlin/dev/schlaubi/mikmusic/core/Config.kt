@@ -9,4 +9,5 @@ object Config : EnvironmentConfig("") {
     val SPOTIFY_CLIENT_ID by getEnv("")
     val SPOTIFY_CLIENT_SECRET by getEnv("")
     val IMAGE_COLOR_SERVICE_URL by environment.optional()
+    val DEFAULT_SEARCH_PROVIDER by getEnv("ytsearch")
 }

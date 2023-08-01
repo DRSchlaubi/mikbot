@@ -2,16 +2,6 @@ package dev.schlaubi.mikmusic.commands
 
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.converters.impl.string
-import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
-import com.kotlindiscord.kord.extensions.types.respond
-import dev.schlaubi.lavakord.rest.loadItem
-import dev.schlaubi.mikbot.plugin.api.util.discordError
-import dev.schlaubi.mikmusic.checks.joinSameChannelCheck
-import dev.schlaubi.mikmusic.core.MusicModule
-import dev.schlaubi.mikmusic.innerttube.radioParam
-import dev.schlaubi.mikmusic.player.SimpleQueuedTrack
-import dev.schlaubi.mikmusic.player.enableAutoPlay
-import dev.schlaubi.mikmusic.util.youtubeId
 
 class RadioArguments : Arguments() {
     val query by string {

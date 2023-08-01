@@ -9,7 +9,7 @@ kord = "0.10.0-SNAPSHOT"
 jjwt = "0.11.5"
 api = "3.20.0"
 ksp = "1.8.22-1.0.11"
-lavakord = "5.1.0"
+lavakord = "5.1.3"
 
 [libraries]
 kord-common = { group = "dev.kord", name = "kord-common", version.ref = "kord" }

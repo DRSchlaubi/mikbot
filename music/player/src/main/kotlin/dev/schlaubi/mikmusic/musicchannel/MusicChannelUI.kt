@@ -67,7 +67,7 @@ suspend fun updateMessage(
                 if (playingQueueTrack is ChapterQueuedTrack) {
                     field {
                         name = translate("music.music_channel.chapter")
-                        value = playingQueueTrack.chapters[playingQueueTrack.chapterIndex].title
+                        value = playingQueueTrack.chapters[playingQueueTrack.chapterIndex].name
                     }
                 }
 

@@ -122,10 +122,7 @@ class MusicInteractionModule(context: PluginContext) : MikBotModule(context) {
                 event.message.channel.withTyping {
                     val guild = event.getGuildOrNull() ?: error("Could not find guild")
                     val player = musicModule.getMusicPlayer(guild)
-                    val tracks = player.takeFirstMatch(
-                        player,
-                        event.message.content
-                    )
+                    val tracks = player.takeFirstMatch(event.message.content)
 
                     if (tracks.isEmpty()) {
                         event.message
@@ -146,7 +143,7 @@ class MusicInteractionModule(context: PluginContext) : MikBotModule(context) {
     }
 }
 
-suspend fun Link.takeFirstMatch(musicPlayer: MusicPlayer, query: String): List<Track> {
+suspend fun Link.takeFirstMatch(query: String): List<Track> {
     val isUrl = query.startsWith("http")
     val queryString = if (isUrl) {
         query

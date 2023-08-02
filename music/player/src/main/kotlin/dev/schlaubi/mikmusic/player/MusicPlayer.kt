@@ -318,7 +318,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
     }
 
     private suspend fun startNextSong(lastSong: Track? = null, force: Boolean = false, position: Duration? = null) {
-        val nextTrack = when {
+        val nextTrack: QueuedTrack? = when {
             lastSong != null && repeat -> playingTrack!!
             !force && (shuffle || (loopQueue && queue.isEmpty())) -> {
                 val index = Random.nextInt(queue.size)
@@ -326,7 +326,11 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
                 /* return */queue.removeAt(index)
             }
 
-            else -> queue.poll() ?: return
+            else -> queue.poll()
+        }
+        if (nextTrack == null) {
+            updateMusicChannelMessage()
+            return
         }
 
         playingTrack = nextTrack

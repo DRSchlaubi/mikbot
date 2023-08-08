@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 @Suppress("DSL_SCOPE_VIOLATION") plugins {
     alias(libs.plugins.gradle.publish)
@@ -22,7 +23,13 @@ dependencies {
 }
 
 kotlin {
-    jvmToolchain(19)
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_17
+    }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
 }
 
 gradlePlugin {

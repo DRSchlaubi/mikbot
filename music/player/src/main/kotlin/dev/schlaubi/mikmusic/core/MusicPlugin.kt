@@ -9,11 +9,17 @@ import dev.schlaubi.mikbot.plugin.api.PluginContext
 import dev.schlaubi.mikbot.plugin.api.PluginMain
 import dev.schlaubi.mikmusic.core.audio.LavalinkManager
 import dev.schlaubi.mikmusic.musicchannel.MusicInteractionModule
+import dev.schlaubi.mikmusic.util.JsonObjectSerializer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.litote.kmongo.serialization.registerSerializer
 
 @PluginMain
 class MusicPlugin(wrapper: PluginContext) : Plugin(wrapper) {
+
+    override fun start() {
+        registerSerializer(JsonObjectSerializer)
+    }
     override fun ExtensibleBotBuilder.ExtensionsBuilder.addExtensions() {
         add(::LavalinkManager)
         add(::MusicModule)

@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 import java.nio.file.Files
 
 plugins {
@@ -20,14 +19,7 @@ allprojects {
     }
 }
 
-subprojects {
-    if (path != ":votebot:common") { // MPP projects don't work with ktlint
-        apply(plugin = "org.jlleitschuh.gradle.ktlint")
-    }
-}
-
 dependencies {
-
     // Plugin system
     implementation(libs.pf4j)
     implementation(libs.pf4j.update)
@@ -46,6 +38,7 @@ dependencies {
 application {
     mainClass = "dev.schlaubi.musicbot.LauncherKt"
     applicationName = "mikmusic"
+    applicationDefaultJvmArgs = listOf("--enable-preview")
 }
 
 tasks {
@@ -84,7 +77,7 @@ tasks {
 
     distTar {
         compression = Compression.GZIP
-        archivesName = "bot"
+        archiveBaseName = "bot"
         archiveExtension = "tar.gz"
     }
 

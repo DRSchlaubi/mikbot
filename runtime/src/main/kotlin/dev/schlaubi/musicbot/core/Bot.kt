@@ -26,6 +26,7 @@ import dev.schlaubi.musicbot.core.sentry.SentryExtensionPoint
 import dev.schlaubi.musicbot.module.owner.OwnerModuleImpl
 import dev.schlaubi.musicbot.module.settings.SettingsModuleImpl
 import dev.schlaubi.stdx.core.onEach
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import mu.KotlinLogging
@@ -52,6 +53,7 @@ class Bot : KordExKoinComponent, PluginContext {
             kord {
                 eventFlow = (pluginSystem as DefaultPluginSystem).events
 
+                defaultDispatcher = Dispatchers.IO
                 stackTraceRecovery = true
 
                 cache {

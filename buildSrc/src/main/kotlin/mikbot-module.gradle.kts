@@ -1,4 +1,3 @@
-import org.gradle.jvm.toolchain.internal.DefaultToolchainSpec
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -21,7 +20,7 @@ tasks {
 }
 
 kotlin {
-    jvmToolchain(19)
+    jvmToolchain(20)
 }
 
 ktlint {

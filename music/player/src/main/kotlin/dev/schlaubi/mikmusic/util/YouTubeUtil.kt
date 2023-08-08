@@ -10,9 +10,8 @@ import com.google.api.services.youtube.model.ChannelListResponse
 import com.google.api.services.youtube.model.Video
 import com.google.api.services.youtube.model.VideoListResponse
 import dev.arbjerg.lavalink.protocol.v4.Track
+import dev.schlaubi.mikbot.plugin.api.util.blocking
 import dev.schlaubi.mikmusic.core.Config
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 private val client: YouTube = YouTube.Builder(
     GoogleNetHttpTransport.newTrustedTransport(),
@@ -23,13 +22,13 @@ private val client: YouTube = YouTube.Builder(
     .build()
 
 private suspend fun getVideosById(videoId: String): VideoListResponse {
-    return withContext(Dispatchers.IO) {
+    return blocking {
         client.videos().list(listOf("snippet", "localizations", "contentDetails")).setId(listOf(videoId)).execute()
     }
 }
 
 private suspend fun getChannelsById(channelId: String): ChannelListResponse {
-    return withContext(Dispatchers.IO) {
+    return blocking {
         client.channels().list(listOf("snippet")).setId(listOf(channelId)).execute()
     }
 }

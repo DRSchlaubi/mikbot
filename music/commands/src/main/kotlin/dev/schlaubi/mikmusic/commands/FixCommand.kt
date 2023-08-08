@@ -144,7 +144,7 @@ private object ReEstablishVoiceConnection : RecoveryStep {
         val state = musicPlayer.toState()
         val channelId = musicPlayer.link.lastChannelId!!
 
-        musicPlayer.link.disconnectAudio()
+        musicPlayer.stop()
         delay(200.milliseconds)
         musicPlayer.link.connectAudio(channelId)
         state.applyToPlayer(musicPlayer)

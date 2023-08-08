@@ -64,7 +64,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
             settings.defaultSchedulerSettings?.applyToPlayer(this@MusicPlayer)
 
             if (settings.useSponsorBlock) {
-                player.putSponsorblockCategories(Category.MusicOfftopic)
+                player.putSponsorblockCategories(Category.MusicOfftopic, Category.Filler, Category.Selfpromo, Category.Sponsor)
             } else {
                 player.disableSponsorblock()
             }

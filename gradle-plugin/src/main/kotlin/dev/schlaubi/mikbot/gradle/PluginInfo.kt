@@ -1,6 +1,4 @@
 // It is applied, some issues with included Gradle builds make IntelliJ think it's not
-@file:Suppress("PLUGIN_IS_NOT_ENABLED")
-
 package dev.schlaubi.mikbot.gradle
 
 import kotlinx.serialization.KSerializer
@@ -10,7 +8,7 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -34,7 +32,7 @@ internal data class PluginRelease(
 )
 
 internal object DateSerializer : KSerializer<Date> {
-    private val format = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.DEFAULT, Locale.US)
+    private val format = SimpleDateFormat("MMM dd, yyyy, h:mm:ss a", Locale.ENGLISH)
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Date", PrimitiveKind.STRING)
     override fun deserialize(decoder: Decoder): Date = format.parse(decoder.decodeString())
 

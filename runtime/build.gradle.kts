@@ -26,6 +26,7 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.asm) // pf4j doesn't declare a real dep on it
     implementation(libs.koin)
+    implementation("dev.schlaubi:gradle-plugin")
 
     // Util
     implementation(libs.kotlinx.serialization.json)

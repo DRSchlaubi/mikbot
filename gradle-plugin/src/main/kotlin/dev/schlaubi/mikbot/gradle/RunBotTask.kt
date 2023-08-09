@@ -47,7 +47,7 @@ abstract class RunBotTask : JavaExec() {
     private fun configureClasspath() {
         val installTask = installTask.get()
         val folder =
-            installTask.testBotFolder.resolve("mikmusic-${installTask.botVersionFromProject()}")
+            installTask.testBotFolder.resolve("bot-${installTask.botVersionFromProject()}")
                 .resolve("lib")
         val jars = folder.listDirectoryEntries("*.jar")
 

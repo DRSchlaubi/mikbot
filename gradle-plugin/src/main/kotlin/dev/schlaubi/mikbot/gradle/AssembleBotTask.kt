@@ -72,7 +72,7 @@ abstract class AssembleBotTask : Zip() {
             // make this lazy, so it doesn't throw at initialization
             val provider = project.provider {
                 val version = installBotTask.get().botVersionFromProject()
-                installBotTask.get().testBotFolder.resolve("mikmusic-$version")
+                installBotTask.get().testBotFolder.resolve("bot-$version")
             }
             from(provider)
         }

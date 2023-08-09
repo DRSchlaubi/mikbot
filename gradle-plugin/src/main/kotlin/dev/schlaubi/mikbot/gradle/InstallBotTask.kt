@@ -31,7 +31,7 @@ abstract class InstallBotTask : DefaultTask() {
     private fun downloadMikbot(): File {
         val runtimeDependency = project.dependencies.create(
             mapOf(
-                "name" to "mikmusic",
+                "name" to "bot",
                 "version" to botVersionFromProject(),
                 "ext" to "tar.gz"
             )

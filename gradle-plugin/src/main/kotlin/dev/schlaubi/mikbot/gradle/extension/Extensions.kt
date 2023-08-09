@@ -32,8 +32,8 @@ fun Project.createExtensions() {
             pluginMainFileLocation.convention(base.pluginMainFileLocation)
             bundle.convention(base.bundle)
             enableKordexProcessor
+                .convention(base.enableKordexProcessor.convention(false))
                 .convention(false)
-                .convention(base.enableKordexProcessor)
         }
     }
     extensions.create<BuildRepositoryExtension>(pluginPublishingExtensionName).apply {

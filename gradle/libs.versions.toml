@@ -7,7 +7,7 @@ serialization = "1.6.0-RC"
 ktor = "2.3.3"
 kord = "0.10.0-SNAPSHOT"
 jjwt = "0.11.5"
-api = "3.23.3"
+api = "3.23.4"
 ksp = "1.9.0-1.0.11"
 lavakord = "5.1.4"
 

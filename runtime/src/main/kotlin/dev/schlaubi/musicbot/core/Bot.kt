@@ -12,6 +12,7 @@ import dev.kord.common.Locale
 import dev.kord.common.entity.PresenceStatus
 import dev.kord.core.event.gateway.DisconnectEvent
 import dev.kord.core.event.gateway.ReadyEvent
+import dev.kord.core.event.gateway.ResumedEvent
 import dev.kord.rest.builder.message.create.allowedMentions
 import dev.schlaubi.mikbot.plugin.api.MikBotInfo
 import dev.schlaubi.mikbot.plugin.api.PluginContext
@@ -188,6 +189,15 @@ private class BotModule(private val mikbot: Bot) : Extension() {
                     mikbot.pluginSystem.emitEvent(AllShardsReadyEvent(kord, -1, event.customContext))
                 }
                 LOG.info { "Logged in with shard ${event.shard}, Remaining $remaining" }
+            }
+        }
+
+        event<ResumedEvent> {
+            action {
+                loggedInShards += event.shard
+                val indices = kord.resources.shards.indices
+                val remaining = indices - loggedInShards.toSet()
+                LOG.info { "Resumed with shard ${event.shard}, Remaining $remaining" }
             }
         }
 

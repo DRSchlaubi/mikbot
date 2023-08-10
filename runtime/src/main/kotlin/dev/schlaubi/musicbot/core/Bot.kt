@@ -32,10 +32,11 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import mu.KotlinLogging
 import org.pf4j.PluginWrapper
+import org.pf4j.update.UpdateRepository
 
 private val LOG = KotlinLogging.logger { }
 
-class Bot : KordExKoinComponent, PluginContext {
+class Bot(repos: List<UpdateRepository>) : KordExKoinComponent, PluginContext {
     init {
         _pluginFactory = MikbotPluginFactory(this)
     }
@@ -44,7 +45,7 @@ class Bot : KordExKoinComponent, PluginContext {
 
     override val database: Database = DatabaseImpl()
     lateinit var translationProvider: TranslationsProvider
-    internal val pluginLoader = PluginLoader()
+    internal val pluginLoader = PluginLoader(repos)
     override val pluginSystem: PluginSystem = DefaultPluginSystem(this)
     override val pluginWrapper: PluginWrapper
         get() = error("Unsupported by bot context")

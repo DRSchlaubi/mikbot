@@ -4,17 +4,13 @@ import com.kotlindiscord.kord.extensions.koin.KordExKoinComponent
 import dev.kord.core.event.Event
 import dev.schlaubi.mikbot.plugin.api.Plugin
 import dev.schlaubi.mikbot.plugin.api.PluginSystem
-import dev.schlaubi.mikbot.plugin.api.config.Config
 import dev.schlaubi.mikbot.plugin.api.util.ensurePath
 import dev.schlaubi.musicbot.core.Bot
-import io.ktor.util.*
 import kotlinx.coroutines.flow.MutableSharedFlow
 import mu.KotlinLogging
 import org.pf4j.*
 import org.pf4j.DependencyResolver.*
-import org.pf4j.update.DefaultUpdateRepository
 import org.pf4j.update.UpdateRepository
-import java.net.URI
 import java.nio.file.Path
 import kotlin.io.path.*
 import kotlin.reflect.KClass
@@ -26,12 +22,7 @@ const val BUNDLED_PLUGINS = "bundled-plugins"
 // Due to some weird JVM issues, I cannot put this in a constructor parameter
 internal lateinit var _pluginFactory: PluginFactory
 
-class PluginLoader : DefaultPluginManager(), KordExKoinComponent {
-    internal val repos: List<UpdateRepository> = Config.PLUGIN_REPOSITORIES.map {
-        DefaultUpdateRepository(
-            generateNonce(), URI.create(it).toURL()
-        )
-    }
+class PluginLoader(repos: List<UpdateRepository>) : DefaultPluginManager(), KordExKoinComponent {
     internal val updateManager = PluginUpdater(this, repos)
     private val rootTranslations = ClassLoader.getSystemClassLoader().findTranslations()
     override fun createExtensionFinder(): ExtensionFinder = DependencyCheckingExtensionFinder(this)

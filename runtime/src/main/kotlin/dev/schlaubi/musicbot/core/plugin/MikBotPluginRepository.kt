@@ -1,30 +1,34 @@
 @file:Suppress("INVISIBLE_REFERENCE", "INVISIBLE_MEMBER")
 package dev.schlaubi.musicbot.core.plugin
 
-import io.ktor.http.*
-import io.ktor.util.*
-import org.pf4j.update.DefaultUpdateRepository
-import java.net.URL
 import dev.schlaubi.mikbot.gradle.PluginInfo
 import dev.schlaubi.mikbot.gradle.PluginRelease
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
+import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
+import io.ktor.util.*
+import org.pf4j.update.DefaultUpdateRepository
+import java.net.URL
 import org.pf4j.update.PluginInfo as PF4JPluginInfo
 
 class MikBotPluginRepository internal constructor(private val plugins: List<PF4JPluginInfo>, url: URL) : DefaultUpdateRepository(generateNonce(), url) {
 
     override fun getPlugins(): Map<String, PF4JPluginInfo> = plugins.associateBy(PF4JPluginInfo::id)
     companion object {
-        suspend fun invoke(url: Url): MikBotPluginRepository {
+        suspend operator fun invoke(url: Url): MikBotPluginRepository {
             val info = HttpClient {
                 install(ContentNegotiation) {
                     json()
                 }
             }.use {
-              it.get(url).body<List<PluginInfo>>()
+                it.get(url) {
+                  url {
+                      appendPathSegments("plugins.json")
+                  }
+                }.body<List<PluginInfo>>()
             }
 
             return MikBotPluginRepository(info.toPF4J(), url.toURI().toURL())

@@ -4,6 +4,8 @@ import ch.qos.logback.classic.Logger
 import dev.schlaubi.mikbot.plugin.api._pluginSystem
 import dev.schlaubi.mikbot.plugin.api.config.Config
 import dev.schlaubi.musicbot.core.Bot
+import dev.schlaubi.musicbot.core.plugin.MikBotPluginRepository
+import io.ktor.http.*
 import org.slf4j.LoggerFactory
 import kotlin.io.path.absolutePathString
 import kotlin.io.path.createDirectories
@@ -11,7 +13,10 @@ import kotlin.io.path.exists
 
 suspend fun main() {
     initializeLogging()
-    val bot = Bot()
+    val repos = Config.PLUGIN_REPOSITORIES.map {
+        MikBotPluginRepository(Url(it))
+    }
+    val bot = Bot(repos)
     loadPlugins(bot)
     bot.start()
 }

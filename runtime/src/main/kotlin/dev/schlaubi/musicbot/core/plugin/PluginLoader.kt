@@ -14,7 +14,7 @@ import org.pf4j.*
 import org.pf4j.DependencyResolver.*
 import org.pf4j.update.DefaultUpdateRepository
 import org.pf4j.update.UpdateRepository
-import java.net.URL
+import java.net.URI
 import java.nio.file.Path
 import kotlin.io.path.*
 import kotlin.reflect.KClass
@@ -29,7 +29,7 @@ internal lateinit var _pluginFactory: PluginFactory
 class PluginLoader : DefaultPluginManager(), KordExKoinComponent {
     internal val repos: List<UpdateRepository> = Config.PLUGIN_REPOSITORIES.map {
         DefaultUpdateRepository(
-            generateNonce(), URL(it)
+            generateNonce(), URI.create(it).toURL()
         )
     }
     internal val updateManager = PluginUpdater(this, repos)

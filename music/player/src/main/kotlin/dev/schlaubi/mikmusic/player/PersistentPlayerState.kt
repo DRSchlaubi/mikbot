@@ -12,7 +12,7 @@ import kotlin.time.Duration
 data class PersistentPlayerState(
     val guildId: Snowflake,
     val channelId: Snowflake,
-    val queue: List<@Contextual QueuedTrack>,
+    val queue: List<QueuedTrack>,
     @Contextual // this is a playingTrack which contains the current position
     val currentTrack: QueuedTrack?,
     val filters: SerializableFilters?,

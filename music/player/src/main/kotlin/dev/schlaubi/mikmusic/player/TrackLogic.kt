@@ -1,4 +1,3 @@
-@file:UseSerializers(JsonObjectSerializer::class)
 @file:Suppress("DataClassCanBeRecord")
 
 package dev.schlaubi.mikmusic.player
@@ -6,14 +5,13 @@ package dev.schlaubi.mikmusic.player
 import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.kord.common.entity.Snowflake
 import dev.schlaubi.lavakord.plugins.sponsorblock.model.YouTubeChapter
-import dev.schlaubi.mikmusic.util.JsonObjectSerializer
+import dev.schlaubi.mikmusic.util.QueuedTrackJsonSerializer
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UseSerializers
 import kotlin.time.Duration
 
-@Serializable
+@Serializable(with = QueuedTrackJsonSerializer::class)
 sealed class QueuedTrack {
 
     abstract val track: Track

@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
-@Suppress("DSL_SCOPE_VIOLATION") plugins {
+plugins {
     alias(libs.plugins.gradle.publish)
     `java-gradle-plugin`
     `kotlin-dsl`

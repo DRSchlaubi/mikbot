@@ -6,6 +6,7 @@ import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.kord.common.Color
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.nycode.imagecolor.ImageColorClient
+import dev.schlaubi.lavakord.plugins.lavasrc.lavaSrcInfo
 import dev.schlaubi.mikbot.plugin.api.util.Translator
 import dev.schlaubi.mikmusic.core.Config
 import kotlin.time.DurationUnit
@@ -51,6 +52,7 @@ suspend fun EmbedBuilder.addSong(translate: Translator, track: Track) {
     }
 
     val video = track.findOnYoutube()
+    val lavaSrcInfo = runCatching { track.lavaSrcInfo }.getOrNull()
     if (video != null) {
         val info = video.snippet
         val channel = getFirstChannelById(info.channelId).snippet
@@ -61,9 +63,14 @@ suspend fun EmbedBuilder.addSong(translate: Translator, track: Track) {
             icon = channel.thumbnails.high.url
         }
     } else {
-        field {
-            name = translate("music.track.author", "music")
-            value = track.info.author
+        author {
+            name = track.info.title
+            if (lavaSrcInfo != null) {
+                if (lavaSrcInfo.artistUrl != null) {
+                    url = lavaSrcInfo.artistUrl
+                }
+                icon = lavaSrcInfo.artistArtworkUrl
+            }
         }
     }
 }

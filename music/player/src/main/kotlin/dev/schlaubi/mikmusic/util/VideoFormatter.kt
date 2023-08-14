@@ -64,12 +64,14 @@ suspend fun EmbedBuilder.addSong(translate: Translator, track: Track) {
         }
     } else {
         author {
-            name = track.info.title
+            name = track.info.author
             if (lavaSrcInfo != null) {
                 if (lavaSrcInfo.artistUrl != null) {
                     url = lavaSrcInfo.artistUrl
                 }
-                icon = lavaSrcInfo.artistArtworkUrl
+                if(lavaSrcInfo.artistArtworkUrl != null) {
+                    icon = lavaSrcInfo.artistArtworkUrl
+                }
             }
         }
     }

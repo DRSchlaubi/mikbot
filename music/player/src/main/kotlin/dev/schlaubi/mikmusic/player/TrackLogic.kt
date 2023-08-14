@@ -5,13 +5,12 @@ package dev.schlaubi.mikmusic.player
 import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.kord.common.entity.Snowflake
 import dev.schlaubi.lavakord.plugins.sponsorblock.model.YouTubeChapter
-import dev.schlaubi.mikmusic.util.QueuedTrackJsonSerializer
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration
 
-@Serializable(with = QueuedTrackJsonSerializer::class)
+@Serializable
 sealed class QueuedTrack {
 
     abstract val track: Track

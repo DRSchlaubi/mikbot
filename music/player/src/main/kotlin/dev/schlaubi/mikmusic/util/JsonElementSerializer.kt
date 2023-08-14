@@ -1,9 +1,7 @@
 package dev.schlaubi.mikmusic.util
 
 import dev.schlaubi.mikmusic.player.QueuedTrack
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.Serializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
@@ -11,11 +9,7 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
 
-object QueuedTrackJsonSerializer : JsonElementSerializer<QueuedTrack>(QueuedTrackSerializer)
-
-@OptIn(ExperimentalSerializationApi::class)
-@Serializer(forClass = QueuedTrack::class)
-private object QueuedTrackSerializer : KSerializer<QueuedTrack>
+object QueuedTrackJsonSerializer : JsonElementSerializer<QueuedTrack>(QueuedTrack.serializer())
 
 abstract class JsonElementSerializer<T>(
     private val serializer: KSerializer<T>,

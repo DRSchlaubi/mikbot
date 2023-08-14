@@ -3,6 +3,7 @@ package dev.schlaubi.mikmusic.player
 import dev.kord.common.entity.Snowflake
 import dev.schlaubi.lavakord.audio.player.*
 import dev.schlaubi.mikmusic.core.settings.SchedulerSettings
+import dev.schlaubi.mikmusic.util.QueuedTrackJsonSerializer
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
@@ -12,7 +13,7 @@ import kotlin.time.Duration
 data class PersistentPlayerState(
     val guildId: Snowflake,
     val channelId: Snowflake,
-    val queue: List<QueuedTrack>,
+    val queue: List<@Serializable(with = QueuedTrackJsonSerializer::class) QueuedTrack>,
     @Contextual // this is a playingTrack which contains the current position
     val currentTrack: QueuedTrack?,
     val filters: SerializableFilters?,

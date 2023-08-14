@@ -74,5 +74,16 @@ suspend fun EmbedBuilder.addSong(translate: Translator, track: Track) {
                 }
             }
         }
+
+        if (lavaSrcInfo?.albumName != null) {
+            field {
+                name = translate("music.track.album", "music")
+                value = if (lavaSrcInfo.albumUrl != null) {
+                    "[${lavaSrcInfo.albumName}](${lavaSrcInfo.albumUrl})"
+                } else {
+                    lavaSrcInfo.albumName!!
+                }
+            }
+        }
     }
 }

@@ -27,6 +27,8 @@ import dev.schlaubi.mikmusic.musicchannel.updateMessage
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import org.koin.core.component.inject
 import java.util.*
 import kotlin.random.Random
@@ -36,11 +38,14 @@ import kotlin.time.Duration.Companion.seconds
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
-private data class SavedTrack(val track: Track, val position: Duration)
+private data class SavedTrack(val track: QueuedTrack, val position: Duration)
 
 @OptIn(UnsafeRestApi::class)
 class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
     Link by link, KordExKoinComponent {
+
+    private val lock = Mutex()
+
     private var queue = LinkedList<QueuedTrack>()
     val queuedTracks get() = queue.toList()
     val canSkip: Boolean
@@ -187,7 +192,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
         onTop: Boolean,
         tracks: Collection<QueuedTrack>,
         position: Duration? = null,
-    ) {
+    ) = lock.withLock {
         val isFirst = nextSongIsFirst
         require(isFirst || position == null) { "Can only specify position if nextSong is first" }
         val startIndex = if ((onTop || force) && queue.isNotEmpty()) 0 else queue.size
@@ -201,13 +206,13 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
         updateMusicChannelMessage()
     }
 
-    suspend fun injectTrack(identifier: String, noReplace: Boolean = false) {
+    suspend fun injectTrack(identifier: String, noReplace: Boolean = false) = lock.withLock<Unit> {
         dontQueue = true
-        if (playingTrack != null && !noReplace) {
-            val currentTrack = playingTrack
+        val currentTrack = playingTrack
+        if (currentTrack != null && !noReplace) {
             val currentPosition = player.positionDuration
 
-            savedTrack = SavedTrack(currentTrack!!.track, currentPosition)
+            savedTrack = SavedTrack(currentTrack, currentPosition)
         }
         link.node.updatePlayer(
             guildId,
@@ -242,14 +247,14 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
         updateMusicChannelMessage()
     }
 
-    private suspend fun onTrackEnd(event: TrackEndEvent) {
+    private suspend fun onTrackEnd(event: TrackEndEvent) = lock.withLock {
         if (dontQueue) {
             dontQueue = event.reason == Message.EmittedEvent.TrackEndEvent.AudioTrackEndReason.REPLACED
         }
         if (savedTrack != null && event.reason != Message.EmittedEvent.TrackEndEvent.AudioTrackEndReason.REPLACED) {
             val track = savedTrack ?: return
             savedTrack = null
-            player.playTrack(track.track) {
+            player.playTrack(track.track.track) {
                 position = track.position
             }
             return
@@ -289,15 +294,14 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
         delay(500.milliseconds)
     }
 
-    suspend fun skip(to: Int = 1) {
+    suspend fun skip(to: Int = 1) = lock.withLock {
         val maybeSavedTrack = savedTrack
         if (to > 1) {
             // Drop every track, but the skip to track and then start the next track
             queue = LinkedList(queue.drop(to - 1))
         } else if (maybeSavedTrack != null) {
-            dontQueue = false
             savedTrack = null
-            player.playTrack(maybeSavedTrack.track) {
+            player.playTrack(maybeSavedTrack.track.track) {
                 position = maybeSavedTrack.position
             }
             return
@@ -310,13 +314,14 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
         }
     }
 
-    suspend fun skipChapter() {
+    suspend fun skipChapter() = lock.withLock {
         val chapterTrack = (playingTrack as? ChapterQueuedTrack) ?: return
         val chapter = chapterTrack.nextChapter()
         player.seekTo(chapter.start)
         updateMusicChannelMessage()
     }
 
+    // called under lock
     private suspend fun startNextSong(lastSong: Track? = null, force: Boolean = false, position: Duration? = null) {
         val nextTrack: QueuedTrack? = when {
             lastSong != null && repeat -> playingTrack!!
@@ -347,7 +352,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
         updateMusicChannelMessage()
     }
 
-    suspend fun pause(pause: Boolean = !player.paused) {
+    suspend fun pause(pause: Boolean = !player.paused) = lock.withLock {
         player.pause(pause)
 
         delay(500) // Wait for change to propagate

@@ -2,7 +2,7 @@ import java.nio.file.Files
 
 plugins {
     `mikbot-module`
-    kotlin("plugin.serialization") version "1.7.22"
+    kotlin("plugin.serialization") version "1.9.10"
     application
     // This exists to add the removeVersion extension to this buildscript
     id("dev.schlaubi.mikbot.gradle-plugin") apply false

@@ -3,9 +3,7 @@ package dev.schlaubi.mikmusic.player
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
 import com.kotlindiscord.kord.extensions.koin.KordExKoinComponent
 import dev.arbjerg.lavalink.protocol.v4.Message
-import dev.arbjerg.lavalink.protocol.v4.PlayerUpdate
 import dev.arbjerg.lavalink.protocol.v4.Track
-import dev.arbjerg.lavalink.protocol.v4.toOmissible
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.GuildBehavior
 import dev.kord.core.entity.channel.VoiceChannel
@@ -15,13 +13,13 @@ import dev.schlaubi.lavakord.audio.TrackEndEvent
 import dev.schlaubi.lavakord.audio.TrackStartEvent
 import dev.schlaubi.lavakord.audio.on
 import dev.schlaubi.lavakord.audio.player.Filters
+import dev.schlaubi.lavakord.audio.player.PlayOptions
 import dev.schlaubi.lavakord.audio.player.applyFilters
 import dev.schlaubi.lavakord.plugins.sponsorblock.model.Category
 import dev.schlaubi.lavakord.plugins.sponsorblock.model.ChapterStartedEvent
 import dev.schlaubi.lavakord.plugins.sponsorblock.model.ChaptersLoadedEvent
 import dev.schlaubi.lavakord.plugins.sponsorblock.rest.disableSponsorblock
 import dev.schlaubi.lavakord.plugins.sponsorblock.rest.putSponsorblockCategories
-import dev.schlaubi.lavakord.rest.updatePlayer
 import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase
 import dev.schlaubi.mikmusic.musicchannel.updateMessage
 import kotlinx.coroutines.Job
@@ -38,9 +36,8 @@ import kotlin.time.Duration.Companion.seconds
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
-private data class SavedTrack(val track: QueuedTrack, val position: Duration)
+private data class SavedTrack(val track: QueuedTrack, val position: Duration, val filters: Filters)
 
-@OptIn(UnsafeRestApi::class)
 class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
     Link by link, KordExKoinComponent {
 
@@ -56,7 +53,6 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
         private set
     private val translationsProvider: TranslationsProvider by inject()
 
-    private var chapterUpdater: Job? = null
     private var leaveTimeout: Job? = null
     internal var autoPlay: AutoPlayContext? = null
     private var savedTrack: SavedTrack? = null
@@ -206,21 +202,16 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
         updateMusicChannelMessage()
     }
 
-    suspend fun injectTrack(identifier: String, noReplace: Boolean = false) = lock.withLock<Unit> {
+    suspend fun injectTrack(identifier: String, noReplace: Boolean = false, playOptionsBuilder: PlayOptions.() -> Unit) = lock.withLock<Unit> {
         dontQueue = true
+        val playOptions = PlayOptions().apply(playOptionsBuilder)
         val currentTrack = playingTrack
         if (currentTrack != null && !noReplace) {
             val currentPosition = player.positionDuration
 
-            savedTrack = SavedTrack(currentTrack, currentPosition)
+            savedTrack = SavedTrack(currentTrack, currentPosition, player.filters)
         }
-        link.node.updatePlayer(
-            guildId,
-            noReplace = false,
-            PlayerUpdate(
-                identifier = identifier.toOmissible()
-            )
-        )
+        link.player.searchAndPlayTrack(identifier, playOptionsBuilder)
     }
 
     suspend fun applyFilters(builder: Filters.() -> Unit) {
@@ -256,6 +247,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
             savedTrack = null
             player.playTrack(track.track.track) {
                 position = track.position
+                filters = track.filters
             }
             return
         }
@@ -303,6 +295,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
             savedTrack = null
             player.playTrack(maybeSavedTrack.track.track) {
                 position = maybeSavedTrack.position
+                filters = maybeSavedTrack.filters
             }
             return
         }

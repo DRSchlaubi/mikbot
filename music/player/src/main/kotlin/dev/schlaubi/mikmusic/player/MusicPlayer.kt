@@ -7,7 +7,6 @@ import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.GuildBehavior
 import dev.kord.core.entity.channel.VoiceChannel
-import dev.schlaubi.lavakord.UnsafeRestApi
 import dev.schlaubi.lavakord.audio.Link
 import dev.schlaubi.lavakord.audio.TrackEndEvent
 import dev.schlaubi.lavakord.audio.TrackStartEvent
@@ -36,7 +35,7 @@ import kotlin.time.Duration.Companion.seconds
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
-private data class SavedTrack(val track: QueuedTrack, val position: Duration, val filters: Filters)
+private data class SavedTrack(val track: QueuedTrack, val position: Duration, val filters: Filters, val volume: Int)
 
 class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
     Link by link, KordExKoinComponent {
@@ -204,12 +203,11 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
 
     suspend fun injectTrack(identifier: String, noReplace: Boolean = false, playOptionsBuilder: PlayOptions.() -> Unit) = lock.withLock<Unit> {
         dontQueue = true
-        val playOptions = PlayOptions().apply(playOptionsBuilder)
         val currentTrack = playingTrack
         if (currentTrack != null && !noReplace) {
             val currentPosition = player.positionDuration
 
-            savedTrack = SavedTrack(currentTrack, currentPosition, player.filters)
+            savedTrack = SavedTrack(currentTrack, currentPosition, player.filters, player.volume)
         }
         link.player.searchAndPlayTrack(identifier, playOptionsBuilder)
     }
@@ -248,6 +246,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
             player.playTrack(track.track.track) {
                 position = track.position
                 filters = track.filters
+                volume = track.volume
             }
             return
         }
@@ -296,6 +295,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
             player.playTrack(maybeSavedTrack.track.track) {
                 position = maybeSavedTrack.position
                 filters = maybeSavedTrack.filters
+                volume = maybeSavedTrack.volume
             }
             return
         }

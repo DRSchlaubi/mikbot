@@ -34,7 +34,7 @@ lavakord-kord = { group = "dev.schlaubi.lavakord", name = "kord", version.ref = 
 lavakord-sponsorblock = { group = "dev.schlaubi.lavakord", name = "sponsorblock", version.ref = "lavakord" }
 lavakord-lavsrc = { group = "dev.schlaubi.lavakord", name = "lavasrc-jvm", version.ref = "lavakord" }
 spotify = { group = "se.michaelthelin.spotify", name = "spotify-web-api-java", version = "8.0.0" }
-krontab = { group = "dev.inmo", name = "krontab", version = "0.10.0" }
+krontab = { group = "dev.inmo", name = "krontab", version = "2.2.1" }
 ksp-api = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version.ref = "ksp" }
 rhino = { group = "org.mozilla", name = "rhino", version = "1.7.14" }
 ktor-client-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }

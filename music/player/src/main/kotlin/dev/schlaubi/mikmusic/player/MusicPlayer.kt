@@ -201,7 +201,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
         updateMusicChannelMessage()
     }
 
-    suspend fun injectTrack(identifier: String, noReplace: Boolean = false, playOptionsBuilder: PlayOptions.() -> Unit) = lock.withLock<Unit> {
+    suspend fun injectTrack(identifier: String, noReplace: Boolean = false, playOptionsBuilder: PlayOptions.() -> Unit) = lock.withLock {
         dontQueue = true
         val currentTrack = playingTrack
         if (currentTrack != null && !noReplace) {
@@ -241,25 +241,27 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
             dontQueue = event.reason == Message.EmittedEvent.TrackEndEvent.AudioTrackEndReason.REPLACED
         }
         if (savedTrack != null && event.reason != Message.EmittedEvent.TrackEndEvent.AudioTrackEndReason.REPLACED) {
-            val track = savedTrack ?: return
+            val track = savedTrack ?: return@onTrackEnd
             savedTrack = null
             player.playTrack(track.track.track) {
                 position = track.position
                 filters = track.filters
                 volume = track.volume
             }
-            return
+            return@onTrackEnd
         }
         if ((!repeat && !loopQueue && queue.isEmpty()) && event.reason != Message.EmittedEvent.TrackEndEvent.AudioTrackEndReason.REPLACED) {
             val autoPlayTrack = findNextAutoPlayedSong(event.track)
             if (autoPlayTrack != null) {
                 queue.add(SimpleQueuedTrack(autoPlayTrack, guild.kord.selfId))
             } else {
+                playingTrack = null
+                updateMusicChannelMessage()
                 leaveTimeout = lavakord.launch {
                     delay(MusicSettingsDatabase.findGuild(guild).leaveTimeout)
                     stop()
                 }
-                return
+                return@onTrackEnd
             }
         }
 
@@ -297,7 +299,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
                 filters = maybeSavedTrack.filters
                 volume = maybeSavedTrack.volume
             }
-            return
+            return@skip
         }
         if (canSkip) {
             startNextSong()
@@ -308,7 +310,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
     }
 
     suspend fun skipChapter() = lock.withLock {
-        val chapterTrack = (playingTrack as? ChapterQueuedTrack) ?: return
+        val chapterTrack = (playingTrack as? ChapterQueuedTrack) ?: return@skipChapter
         val chapter = chapterTrack.nextChapter()
         player.seekTo(chapter.start)
         updateMusicChannelMessage()

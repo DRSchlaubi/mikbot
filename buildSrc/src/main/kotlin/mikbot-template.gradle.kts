@@ -1,5 +1,5 @@
 plugins {
-    id("com.github.gmazzo.buildconfig")
+    com.github.gmazzo.buildconfig
 }
 
 abstract class TemplateExtension {

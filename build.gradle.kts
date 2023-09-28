@@ -2,7 +2,7 @@
 import dev.schlaubi.mikbot.gradle.addRepositories
 
 plugins {
-    id("dev.schlaubi.mikbot.gradle-plugin")
+    dev.schlaubi.mikbot.`gradle-plugin`
 }
 
 subprojects {

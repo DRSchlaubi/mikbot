@@ -1,14 +1,14 @@
 [versions]
-kotlin = "1.9.10"
-kordex = "1.5.8-SNAPSHOT"
+kotlin = "1.9.20"
+kordex = "1.6.0-SNAPSHOT"
 kmongo = "4.10.0"
 coroutines = "1.7.3"
 serialization = "1.6.0"
-ktor = "2.3.4"
-kord = "0.11.0"
+ktor = "2.3.5"
+kord = "0.11.1"
 jjwt = "0.11.5"
-api = "3.24.0"
-ksp = "1.9.10-1.0.13"
+api = "3.25.0"
+ksp = "1.9.20-1.0.13"
 lavakord = "feature-new-lavasrc-fields-20230814.202530-2"
 
 [libraries]
@@ -54,7 +54,7 @@ ktor-server-core = { group = "io.ktor", name = "ktor-server-core-jvm", version.r
 ktor-server-cors = { group = "io.ktor", name = "ktor-server-cors", version.ref = "ktor" }
 ktor-server-html-builder = { group = "io.ktor", name = "ktor-server-html-builder", version.ref = "ktor" }
 github-repositories = { group = "dev.nycode.github", name = "repositories", version = "1.0.0-SNAPSHOT" }
-kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version = "0.4.0" }
+kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version = "0.4.1" }
 java-string-similarity = { group = "info.debatty", name = "java-string-similarity", version = "2.0.0" }
 
 pf4j = { group = "org.pf4j", name = "pf4j", version = "3.9.0" }
@@ -75,7 +75,7 @@ jjwt = ["jjwt-api", "jjwt-jackson"]
 [plugins]
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlinx-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-gradle-publish = { id = "com.gradle.plugin-publish", version = "1.2.0" }
-buildconfig = { id = "com.github.gmazzo.buildconfig", version = "3.1.0" }
+gradle-publish = { id = "com.gradle.plugin-publish", version = "1.2.1" }
+buildconfig = { id = "com.github.gmazzo.buildconfig", version = "4.1.2" }
 mikbot = { id = "dev.schlaubi.mikbot.gradle-plugin", version = "1.0.0" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

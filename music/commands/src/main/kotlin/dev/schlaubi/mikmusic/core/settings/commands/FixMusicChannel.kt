@@ -1,7 +1,6 @@
 package dev.schlaubi.mikmusic.core.settings.commands
 
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
-import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.mikbot.plugin.api.settings.SettingsModule
 import dev.schlaubi.mikbot.plugin.api.util.safeGuild
 import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase

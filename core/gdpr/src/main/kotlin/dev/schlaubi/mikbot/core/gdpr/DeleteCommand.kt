@@ -1,6 +1,5 @@
 package dev.schlaubi.mikbot.core.gdpr
 
-import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.mikbot.plugin.api.util.confirmation
 
 fun GDPRModule.deleteCommand() = ephemeralSubCommand {

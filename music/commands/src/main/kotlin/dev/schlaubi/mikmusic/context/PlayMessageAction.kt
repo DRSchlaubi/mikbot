@@ -2,8 +2,6 @@ package dev.schlaubi.mikmusic.context
 
 import com.kotlindiscord.kord.extensions.commands.application.message.EphemeralMessageCommandContext
 import com.kotlindiscord.kord.extensions.extensions.ephemeralMessageCommand
-import com.kotlindiscord.kord.extensions.types.editingPaginator
-import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.mikbot.plugin.api.util.attachmentOrContentQuery
 import dev.schlaubi.mikmusic.checks.joinSameChannelCheck
 import dev.schlaubi.mikmusic.core.MusicModule

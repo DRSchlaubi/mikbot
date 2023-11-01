@@ -15,7 +15,7 @@ import dev.schlaubi.mikbot.plugin.api.util.forList
 import dev.schlaubi.mikmusic.util.format
 import kotlin.time.Duration.Companion.minutes
 
-typealias EditingPaginatorBuilder = suspend PaginatorBuilder.() -> Unit
+typealias EditingPaginatorBuilder = PaginatorBuilder.() -> Unit
 typealias EditingPaginatorSender = suspend (EditingPaginatorBuilder) -> BaseButtonPaginator
 
 suspend fun CommandContext.searchSong(

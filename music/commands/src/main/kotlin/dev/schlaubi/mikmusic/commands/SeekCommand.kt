@@ -4,7 +4,6 @@ import com.kotlindiscord.kord.extensions.DiscordRelayedException
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.converters.impl.string
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
-import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.mikmusic.checks.anyMusicPlaying
 import dev.schlaubi.mikmusic.core.MusicModule
 import kotlin.time.Duration.Companion.minutes

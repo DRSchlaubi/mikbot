@@ -4,8 +4,6 @@ import com.kotlindiscord.kord.extensions.pagination.builders.PaginatorBuilder
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.rest.builder.message.EmbedBuilder
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
 import kotlin.math.ceil
 
@@ -21,14 +19,14 @@ import kotlin.math.ceil
  * @param additionalConfig additional [PaginatorBuilder] config
  * @param additionalPageConfig additional [EmbedBuilder] config, applied to each page
  */
-public suspend fun <T> PaginatorBuilder.forList(
+public fun <T> PaginatorBuilder.forList(
     user: UserBehavior,
     items: List<T>,
     mapper: suspend (T) -> String,
     title: suspend (current: Int, total: Int) -> String,
     chunkSize: Int = 8,
     enumerate: Boolean = true,
-    additionalConfig: suspend PaginatorBuilder.() -> Unit = {},
+    additionalConfig: PaginatorBuilder.() -> Unit = {},
     additionalPageConfig: suspend EmbedBuilder.() -> Unit = {},
 ): Unit = forList(user, items.size, { offset, limit ->
     items.subList(offset, (offset + limit).coerceAtMost(items.size))
@@ -55,21 +53,31 @@ public suspend fun <T> PaginatorBuilder.forFlow(
     title: suspend (current: Int, total: Int) -> String,
     chunkSize: Int = 8,
     enumerate: Boolean = true,
-    additionalConfig: suspend PaginatorBuilder.() -> Unit = {},
+    additionalConfig: PaginatorBuilder.() -> Unit = {},
     additionalPageConfig: suspend EmbedBuilder.() -> Unit = {},
-): Unit = forList(user, total.toInt(), { offset, _ ->
-    items.drop(offset).take(chunkSize).toList()
-}, mapper, title, chunkSize, enumerate, additionalConfig, additionalPageConfig)
+) {
+    val list = items.toList()
+    forList(
+        user,
+        list,
+        mapper,
+        title,
+        chunkSize,
+        enumerate,
+        additionalConfig,
+        additionalPageConfig
+    )
+}
 
-private suspend fun <T> PaginatorBuilder.forList(
+private fun <T> PaginatorBuilder.forList(
     user: UserBehavior,
     size: Int,
-    subList: suspend (offset: Int, limit: Int) -> List<T>,
+    subList: (offset: Int, limit: Int) -> List<T>,
     mapper: suspend (T) -> String,
     title: suspend (current: Int, end: Int) -> String,
     chunkSize: Int = 8,
     enumerate: Boolean = true,
-    additionalConfig: suspend PaginatorBuilder.() -> Unit = {},
+    additionalConfig: PaginatorBuilder.() -> Unit = {},
     additionalPageConfig: suspend EmbedBuilder.() -> Unit = {},
 ) {
     owner = user
@@ -92,7 +100,7 @@ private fun <T> PaginatorBuilder.addPage(
     items: List<T>,
     enumerate: Boolean,
     mapper: suspend (T) -> String,
-    additionalPageConfig: suspend EmbedBuilder.() -> Unit
+    additionalPageConfig: suspend EmbedBuilder.() -> Unit,
 ) {
     page {
         this.title = title((myOffset + 1), pages.groups.size)

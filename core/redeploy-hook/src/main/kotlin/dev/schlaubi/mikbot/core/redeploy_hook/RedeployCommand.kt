@@ -2,7 +2,6 @@ package dev.schlaubi.mikbot.core.redeploy_hook
 
 import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommandContext
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
-import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.mikbot.core.redeploy_hook.api.RedeployExtensionPoint
 import dev.schlaubi.mikbot.plugin.api.getExtensions
 import dev.schlaubi.mikbot.plugin.api.owner.OwnerModule

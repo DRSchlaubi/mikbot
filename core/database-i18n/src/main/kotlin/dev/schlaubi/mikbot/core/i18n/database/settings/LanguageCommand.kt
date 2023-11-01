@@ -4,7 +4,6 @@ import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.application.slash.converters.impl.stringChoice
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
 import com.kotlindiscord.kord.extensions.i18n.SupportedLocales
-import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.mikbot.core.i18n.database.LangaugeUser
 import dev.schlaubi.mikbot.core.i18n.database.LanguageDatabase
 import dev.schlaubi.mikbot.plugin.api.settings.SettingsModule

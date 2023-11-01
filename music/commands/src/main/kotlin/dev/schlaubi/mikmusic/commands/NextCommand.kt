@@ -1,6 +1,5 @@
 package dev.schlaubi.mikmusic.commands
 
-import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.mikmusic.checks.anyMusicPlaying
 import dev.schlaubi.mikmusic.core.MusicModule
 import dev.schlaubi.mikmusic.player.ChapterQueuedTrack

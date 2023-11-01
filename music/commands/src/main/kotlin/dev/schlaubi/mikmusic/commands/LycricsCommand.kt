@@ -3,8 +3,6 @@ package dev.schlaubi.mikmusic.commands
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalString
 import com.kotlindiscord.kord.extensions.extensions.publicSlashCommand
-import com.kotlindiscord.kord.extensions.types.editingPaginator
-import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.mikbot.plugin.api.util.forList
 import dev.schlaubi.mikmusic.checks.musicQuizAntiCheat
 import dev.schlaubi.mikmusic.core.MusicModule

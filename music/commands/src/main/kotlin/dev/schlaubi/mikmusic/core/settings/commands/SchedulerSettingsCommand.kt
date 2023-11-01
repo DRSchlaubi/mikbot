@@ -4,7 +4,6 @@ import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommandContext
 import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalInt
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
-import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.mikbot.plugin.api.settings.SettingsModule
 import dev.schlaubi.mikbot.plugin.api.settings.guildAdminOnly
 import dev.schlaubi.mikbot.plugin.api.util.safeGuild

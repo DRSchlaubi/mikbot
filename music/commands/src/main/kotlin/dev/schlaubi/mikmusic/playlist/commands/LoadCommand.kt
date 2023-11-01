@@ -1,6 +1,5 @@
 package dev.schlaubi.mikmusic.playlist.commands
 
-import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.mikmusic.checks.joinSameChannelCheck
 import dev.schlaubi.mikmusic.playlist.PlaylistDatabase
 import dev.schlaubi.mikmusic.util.mapToQueuedTrack

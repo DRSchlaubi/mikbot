@@ -6,8 +6,6 @@ import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSla
 import com.kotlindiscord.kord.extensions.commands.application.slash.converters.ChoiceEnum
 import com.kotlindiscord.kord.extensions.commands.application.slash.converters.impl.optionalEnumChoice
 import com.kotlindiscord.kord.extensions.commands.converters.impl.defaultingBoolean
-import com.kotlindiscord.kord.extensions.types.editingPaginator
-import com.kotlindiscord.kord.extensions.types.respond
 import dev.arbjerg.lavalink.protocol.v4.Exception
 import dev.arbjerg.lavalink.protocol.v4.LoadResult
 import dev.kord.rest.builder.message.create.embed

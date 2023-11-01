@@ -1,6 +1,5 @@
 package dev.schlaubi.mikmusic.playlist.commands
 
-import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.mikmusic.playlist.PlaylistDatabase
 
 class PlaylistToggleVisibilityCommand : PlaylistArguments()

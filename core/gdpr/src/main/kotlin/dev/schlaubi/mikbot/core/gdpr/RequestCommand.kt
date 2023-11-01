@@ -1,6 +1,5 @@
 package dev.schlaubi.mikbot.core.gdpr
 
-import com.kotlindiscord.kord.extensions.types.editingPaginator
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.schlaubi.mikbot.plugin.api.util.effectiveAvatar
 import dev.schlaubi.stdx.core.paginate

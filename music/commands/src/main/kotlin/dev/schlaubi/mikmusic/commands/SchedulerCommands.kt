@@ -1,7 +1,6 @@
 package dev.schlaubi.mikmusic.commands
 
 import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommandContext
-import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.mikmusic.core.MusicModule
 import dev.schlaubi.mikmusic.player.MusicPlayer
 import kotlin.reflect.KMutableProperty1

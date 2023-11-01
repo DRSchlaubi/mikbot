@@ -6,7 +6,6 @@ import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSla
 import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommandContext
 import com.kotlindiscord.kord.extensions.commands.application.slash.ephemeralSubCommand
 import com.kotlindiscord.kord.extensions.commands.converters.impl.int
-import com.kotlindiscord.kord.extensions.types.respond
 import dev.kord.common.entity.Snowflake
 import dev.schlaubi.mikbot.plugin.api.util.safeGuild
 import dev.schlaubi.mikmusic.core.MusicModule

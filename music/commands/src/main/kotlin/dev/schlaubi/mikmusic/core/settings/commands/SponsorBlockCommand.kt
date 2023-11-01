@@ -3,7 +3,6 @@ package dev.schlaubi.mikmusic.core.settings.commands
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalBoolean
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
-import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.lavakord.plugins.sponsorblock.model.Category
 import dev.schlaubi.lavakord.plugins.sponsorblock.rest.disableSponsorblock
 import dev.schlaubi.lavakord.plugins.sponsorblock.rest.putSponsorblockCategories

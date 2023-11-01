@@ -4,7 +4,6 @@ import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.converters.impl.defaultingBoolean
 import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalString
 import com.kotlindiscord.kord.extensions.commands.converters.impl.string
-import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.mikmusic.player.QueuedTrack
 import dev.schlaubi.mikmusic.player.queue.QueueOptions
 import dev.schlaubi.mikmusic.player.queue.findTracks

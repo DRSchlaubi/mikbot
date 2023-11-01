@@ -1,7 +1,6 @@
 package dev.schlaubi.mikmusic.commands
 
 import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommandContext
-import com.kotlindiscord.kord.extensions.types.edit
 import com.kotlindiscord.kord.extensions.utils.waitFor
 import dev.kord.common.entity.ButtonStyle
 import dev.kord.common.entity.Permission

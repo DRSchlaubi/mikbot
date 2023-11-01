@@ -2,7 +2,6 @@ package dev.schlaubi.mikmusic.commands
 
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.converters.impl.defaultingInt
-import com.kotlindiscord.kord.extensions.types.respond
 import dev.schlaubi.mikmusic.core.MusicModule
 
 class SkipArguments : Arguments() {

@@ -26,8 +26,7 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
                     (target.extensions.getByName("sourceSets") as SourceSetContainer).getByName("main")
                         .apply {
                             resources.srcDir(
-                                target.buildDir.resolve("generated").resolve("mikbot").resolve("main")
-                                    .resolve("resources")
+                                target.layout.buildDirectory.dir("generated/mikbot/main/resources")
                             )
                         }
                 }
@@ -47,7 +46,7 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
                 java {
                     val optionalKspSourceSet = mikbotPluginExtension.enableKordexProcessor.map {
                         if(it) {
-                            file("$buildDir/generated/ksp/main/kotlin/")
+                            layout.buildDirectory.dir("/generated/ksp/main/kotlin/")
                         } else {
                             fileTree("never_exists") {
                                 include { false } // include none

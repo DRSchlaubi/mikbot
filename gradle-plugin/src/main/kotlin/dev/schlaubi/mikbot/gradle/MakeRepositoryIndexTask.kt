@@ -8,6 +8,7 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.bundling.Zip
 import java.nio.file.Files
 import java.util.*
+import kotlin.io.path.exists
 
 abstract class MakeRepositoryIndexTask : DefaultTask() {
 
@@ -18,8 +19,8 @@ abstract class MakeRepositoryIndexTask : DefaultTask() {
     @TaskAction
     fun upload() {
         val publishingExtension = project.pluginPublishingExtension
-        val pluginsPath = publishingExtension.targetDirectory.get().resolve("plugins.json")
-        val plugins = if (Files.exists(pluginsPath)) {
+        val pluginsPath = publishingExtension.targetDirectory.asPath().resolve("plugins.json")
+        val plugins = if (pluginsPath.exists()) {
             readPluginsJson(pluginsPath)
         } else {
             emptyList()

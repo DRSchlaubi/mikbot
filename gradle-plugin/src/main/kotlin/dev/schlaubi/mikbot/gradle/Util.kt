@@ -8,12 +8,18 @@ import kotlinx.serialization.json.Json
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Dependency
 import org.gradle.api.artifacts.ProjectDependency
+import org.gradle.api.file.Directory
+import org.gradle.api.file.FileSystemLocation
+import org.gradle.api.provider.Property
+import org.gradle.api.provider.Provider
+import org.gradle.kotlin.dsl.assign
 import java.nio.file.Files
 import java.nio.file.Path
 import java.security.MessageDigest
 import kotlin.io.path.readBytes
+import kotlin.io.path.readText
 
-internal fun readPluginsJson(path: Path): List<PluginInfo> = Files.readString(path).run { Json.decodeFromString(this) }
+internal fun readPluginsJson(path: Path): List<PluginInfo> = path.readText().run { Json.decodeFromString(this) }
 
 internal fun List<PluginInfo>.writeTo(path: Path) {
     Files.writeString(path, Json.encodeToString(this))
@@ -60,7 +66,7 @@ internal fun Project.buildDependenciesString(): String {
 }
 
 internal fun Dependency.toDependencyString(optional: Boolean = false): String {
-    val safeVersion =  version.toString().substringBefore("-SNAPSHOT")
+    val safeVersion = version.toString().substringBefore("-SNAPSHOT")
     val name = if (this is ProjectDependency) {
         dependencyProject.pluginId
     } else {
@@ -76,10 +82,8 @@ internal fun Dependency.toDependencyString(optional: Boolean = false): String {
 @Suppress("unused")
 fun Project.usePF4J() {
     extensions.configure<PluginExtension>(pluginExtensionName) {
-        ignoreDependencies.set(true)
-        pluginMainFileLocation.set(
-            buildDir.resolve("resources").resolve("main").resolve("plugin.properties").toPath()
-        )
+        ignoreDependencies = true
+        pluginMainFileLocation = layout.buildDirectory.file("resources/main/plugin.properties")
     }
 }
 
@@ -94,3 +98,8 @@ fun ByteArray.sha512Checksum(): String {
 internal fun pluginNotAppliedError(name: String): Nothing =
     error("Please make sure the $name plugin is applied before the mikbot plugin")
 
+internal fun Provider<Directory>.dir(name: String) = map { it.dir(name) }
+internal fun Provider<Directory>.file(name: String) = map { it.file(name) }
+internal fun Property<out FileSystemLocation>.asPath() = get().asFile.toPath()
+internal fun  Property<out FileSystemLocation>.asPathOrElse(other: Path) = orNull?.asFile?.toPath() ?: other
+internal fun FileSystemLocation.asPath() = asFile.toPath()

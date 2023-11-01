@@ -16,8 +16,8 @@ mikbotPlugin {
 
 pluginPublishing {
     repositoryUrl = "https://storage.googleapis.com/mikbot-plugins"
-    targetDirectory = rootProject.file("ci-repo").toPath()
-    currentRepository = rootProject.file("ci-repo-old").toPath()
+    targetDirectory = rootProject.file("ci-repo")
+    currentRepository = rootProject.file("ci-repo-old")
     projectUrl = "https://github.com/DRSchlaubi/mikbot"
 }
 

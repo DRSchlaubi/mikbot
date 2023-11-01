@@ -47,14 +47,14 @@ abstract class RunBotTask : JavaExec() {
     private fun configureClasspath() {
         val installTask = installTask.get()
         val folder =
-            installTask.testBotFolder.resolve("bot-${installTask.botVersionFromProject()}")
-                .resolve("lib")
-        val jars = folder.listDirectoryEntries("*.jar")
+            installTask.testBotFolder.dir("bot-${installTask.botVersionFromProject()}")
+                .dir("lib")
+        val jars = folder.get().asFile.toPath().listDirectoryEntries("*.jar")
 
         classpath += objectFactory.fileCollection().from(jars)
     }
 
     private fun configureSystemProperties() {
-        systemProperties["pf4j.pluginsDir"] = project.buildDir.resolve("test-bot").resolve("plugins")
+        systemProperties["pf4j.pluginsDir"] = project.layout.buildDirectory.dir("test-bot/plugins")
     }
 }

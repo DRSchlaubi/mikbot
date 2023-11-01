@@ -1,22 +1,22 @@
 package dev.schlaubi.mikbot.gradle
 
+import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
-import java.nio.file.Path
 
 abstract class BuildRepositoryExtension {
     /**
      * The directory to save the repository to.
      */
     @get:InputDirectory
-    abstract val targetDirectory: Property<Path>
+    abstract val targetDirectory: DirectoryProperty
 
     /**
      * Directory representing the current repository content (defaults to [targetDirectory]).
      */
     @get:InputDirectory
-    abstract val currentRepository: Property<Path>
+    abstract val currentRepository: DirectoryProperty
 
     /**
      * The URL were the repository is hosted (used for URLs in plugins.json).

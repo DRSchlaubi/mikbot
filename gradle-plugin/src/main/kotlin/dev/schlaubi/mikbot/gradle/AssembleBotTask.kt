@@ -3,8 +3,10 @@ package dev.schlaubi.mikbot.gradle
 import kotlinx.coroutines.*
 import kotlinx.coroutines.future.await
 import org.gradle.api.Project
+import org.gradle.api.file.Directory
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
+import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.bundling.Zip
@@ -13,7 +15,6 @@ import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
-import java.nio.file.Path
 import kotlin.io.path.createDirectories
 import kotlin.io.path.exists
 
@@ -45,10 +46,10 @@ abstract class AssembleBotTask : Zip() {
         .build()
 
     private val pluginSpecs = bundledPlugins.map {
-        it.map {
-            val split = it.split('@')
+        it.map { plugin ->
+            val split = plugin.split('@')
             if (split.size != 2) {
-                error("Invalid name $it, please specify as id@version ")
+                error("Invalid name $plugin, please specify as id@version ")
             }
 
             val (id, version) = split
@@ -64,7 +65,7 @@ abstract class AssembleBotTask : Zip() {
     }
 
     internal fun config() {
-        destinationDirectory = project.buildDir.resolve("bot")
+        destinationDirectory = project.layout.buildDirectory.dir("bot")
         archiveBaseName = "bot-${project.name}"
         archiveExtension = "zip"
 
@@ -72,7 +73,7 @@ abstract class AssembleBotTask : Zip() {
             // make this lazy, so it doesn't throw at initialization
             val provider = project.provider {
                 val version = installBotTask.get().botVersionFromProject()
-                installBotTask.get().testBotFolder.resolve("bot-$version")
+                installBotTask.get().testBotFolder.get().dir("bot-$version")
             }
             from(provider)
         }
@@ -83,7 +84,7 @@ abstract class AssembleBotTask : Zip() {
         }
         into(installedPluginsName) {
             pluginSpecs.get().forEach { (id, version) ->
-                val fullPath = project.pluginCache.resolve(id).resolve(version)
+                val fullPath = project.pluginCache.get().dir("$id/$version")
                 from(fullPath)
                 include("*.zip")
             }
@@ -148,7 +149,7 @@ abstract class AssembleBotTask : Zip() {
             pluginReleases
                 .asSequence()
                 .mapNotNull {
-                    val destination = it.cachePath
+                    val destination = it.cachePath.asFile.toPath()
                     if (!destination.exists()) {
                         destination.parent.createDirectories()
 
@@ -169,13 +170,13 @@ abstract class AssembleBotTask : Zip() {
         }
     }
 
-    private val PluginPair.cachePath: Path
-        get() = project.pluginCache.resolve(id).resolve(version).resolve("plugin-${id}-${version}.zip")
+    private val PluginPair.cachePath: Directory
+        get() = project.pluginCache.get().dir("$id/$version/plugin-${id}-${version}.zip")
 }
 
 data class PluginPair(val id: String, val version: String, val url: String)
 
-private val Project.pluginCache: Path
-    get() = buildDir.toPath().resolve("plugin-cache")
+private val Project.pluginCache: Provider<Directory>
+    get() = layout.buildDirectory.dir("plugin-cache")
 
 

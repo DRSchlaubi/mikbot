@@ -18,12 +18,14 @@ internal fun Project.createPublishingTasks(assemblePluginTask: TaskProvider<Zip>
             include("*.zip")
             // providing version manually, as of weird evaluation errors
             into(
-                pluginPublishingExtension.targetDirectory.getOrElse(project.file("ci-repo").toPath())
+                pluginPublishingExtension.targetDirectory.asPathOrElse(project.file("ci-repo").toPath())
                     .resolve("${project.pluginId}/$version")
             )
 
             eachFile {
                 val parent = pluginPublishingExtension.currentRepository.getOrElse(pluginPublishingExtension.targetDirectory.get())
+                    .asPath()
+
                 val destinationPath = destinationDir.toPath()
                 val probableExistingFile =
                     parent.resolve(

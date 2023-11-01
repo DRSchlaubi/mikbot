@@ -24,7 +24,7 @@ abstract class GenerateDefaultTranslationBundleTask : DefaultTask() {
     fun copyBundle() {
         val sourceSets = project.extensions.getByName("sourceSets") as SourceSetContainer
         val from = sourceSets.getByName("main").resources
-        val to = project.buildDir.resolve("generated").resolve("mikbot").resolve("main").resolve("resources")
+        val to = project.layout.buildDirectory.dir("generated/mikbot/main/resources")
 
         val result = project.copy {
                 val locale = defaultLocale.orNull?.resourceBundleKey

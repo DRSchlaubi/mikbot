@@ -24,7 +24,7 @@ abstract class InstallPluginsToTestBotTask : DefaultTask() {
         val result = project.copy {
             from(task.destinationDirectory)
             include(task.archiveFile.get().asFile.name)
-            into(project.buildDir.resolve("test-bot").resolve("plugins"))
+            into(project.layout.buildDirectory.dir("test-bot/plugins"))
         }
 
         didWork = result.didWork || deleteResult.didWork

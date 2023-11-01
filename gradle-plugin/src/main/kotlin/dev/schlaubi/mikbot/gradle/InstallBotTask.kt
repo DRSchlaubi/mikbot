@@ -1,18 +1,19 @@
 package dev.schlaubi.mikbot.gradle
 
 import org.gradle.api.DefaultTask
+import org.gradle.api.file.Directory
 import org.gradle.api.provider.Property
+import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import java.io.File
-import java.nio.file.Path
 
 abstract class InstallBotTask : DefaultTask() {
     @get:OutputDirectory
-    internal val testBotFolder: Path
-        get() = project.buildDir.resolve("test-bot").resolve(botVersionFromProject()).toPath()
+    internal val testBotFolder: Provider<Directory>
+        get() = project.layout.buildDirectory.dir("test-bot/${botVersionFromProject()}")
 
     @get:Input
     @get:Optional

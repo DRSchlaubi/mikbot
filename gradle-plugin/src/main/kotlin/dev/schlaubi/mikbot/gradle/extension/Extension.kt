@@ -1,8 +1,8 @@
 package dev.schlaubi.mikbot.gradle.extension
 
 import org.gradle.api.Project
+import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
-import java.nio.file.Path
 
 /** Extension for configuring plugins for PF4J. */
 abstract class PluginExtension {
@@ -39,7 +39,7 @@ abstract class PluginExtension {
      *
      * If you use the KSP processor you don't need to worry about this.
      */
-    abstract val pluginMainFileLocation: Property<Path>
+    abstract val pluginMainFileLocation: RegularFileProperty
 
     /**
      * The optional override for the projects resources bundle folder.

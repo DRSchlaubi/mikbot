@@ -4,20 +4,19 @@ import dev.schlaubi.mikbot.gradle.extension.ExtensionKt;
 import dev.schlaubi.mikbot.gradle.extension.ExtensionsKt;
 import dev.schlaubi.mikbot.gradle.extension.PluginExtension;
 import org.gradle.api.DefaultTask;
-import org.gradle.api.provider.Property;
+import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.tasks.InputDirectory;
 import org.gradle.api.tasks.TaskAction;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Properties;
 
 public abstract class PatchPropertiesTask extends DefaultTask {
 
     @InputDirectory
-    public abstract Property<Path> getPropertiesDirectory();
+    public abstract DirectoryProperty getPropertiesDirectory();
 
     @TaskAction
     public void runTask() throws IOException {
@@ -27,7 +26,7 @@ public abstract class PatchPropertiesTask extends DefaultTask {
         var extension = ((PluginExtension) getProject().getExtensions()
             .getByName(ExtensionsKt.pluginExtensionName));
 
-        var file = getPropertiesDirectory().get().resolve("plugin.properties");
+        var file = getPropertiesDirectory().get().file("plugin.properties").getAsFile().toPath();
         if (!Files.exists(file)) {
             throw new IllegalStateException("File %s doesn't exist".formatted(file));
         }

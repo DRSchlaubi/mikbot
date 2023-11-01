@@ -4,26 +4,22 @@ import dev.schlaubi.mikbot.gradle.extension.mikbotPluginExtension
 import dev.schlaubi.mikbot.gradle.extension.pluginId
 import org.gradle.api.Project
 import org.gradle.api.file.DuplicatesStrategy
+import org.gradle.api.file.RegularFile
+import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.TaskContainer
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.bundling.Jar
 import org.gradle.api.tasks.bundling.Zip
-import org.gradle.kotlin.dsl.*
+import org.gradle.kotlin.dsl.assign
+import org.gradle.kotlin.dsl.register
+import org.gradle.kotlin.dsl.repositories
 import java.net.URI
-import java.nio.file.Path
-import kotlin.io.path.name
 
 // There might be a better way of doing this, but for now I can't be bothered figuring it out
-private val Project.pluginMainFile: Path
-    get() = buildDir
-        .resolve("generated")
-        .resolve("ksp")
-        .resolve("main")
-        .resolve("resources")
-        .resolve("META-INF")
-        .resolve("plugin.properties")
-        .toPath()
+private val Project.pluginMainFile: Provider<RegularFile>
+    get() = layout.buildDirectory
+        .file("generated/ksp/main/resources/META-INF/plugin.properties")
 
 internal data class AssemblyTask(val assembleTask: TaskProvider<Zip>, val installBotTask: InstallBotTask)
 
@@ -66,7 +62,7 @@ private fun TaskContainer.createAssembleBotTask(assemblePlugin: TaskProvider<Zip
         dependsOn(assembleBot)
 
         from(zipTree(assembleBot.get().archiveFile))
-        into(buildDir.resolve("installBot"))
+        into(layout.buildDirectory.dir("installBot"))
     }
 }
 
@@ -75,12 +71,12 @@ private fun TaskContainer.createPatchPropertiesTask() =
     register<PatchPropertiesTask>("patchPluginProperties") {
         group = "mikbot-plugin"
         dependsOn("kspKotlin")
-        propertiesDirectory =
-            project
-                .mikbotPluginExtension
-                .pluginMainFileLocation
-                .getOrElse(project.pluginMainFile)
-                .parent
+        propertiesDirectory = (project
+            .mikbotPluginExtension
+            .pluginMainFileLocation
+            .orNull ?: project.pluginMainFile.get())
+            .asFile
+            .parentFile
 
 
         doFirst {
@@ -103,7 +99,7 @@ private fun TaskContainer.createAssemblePluginTask(jarTask: Jar) =
 
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-        destinationDirectory = buildDir.resolve("plugin")
+        destinationDirectory = layout.buildDirectory.dir("plugin")
         archiveBaseName = "plugin-${project.pluginId}"
         archiveExtension = "zip"
 
@@ -139,8 +135,8 @@ private fun TaskContainer.createAssemblePluginTask(jarTask: Jar) =
         }
 
         into("") { // not specifying "" brakes Gradle btw
-            val file = project.mikbotPluginExtension.pluginMainFileLocation
-                .getOrElse(pluginMainFile)
+            val file = (project.mikbotPluginExtension.pluginMainFileLocation
+                .orNull ?: pluginMainFile.get()).asFile
             from(file.parent)
             include(file.name)
         }

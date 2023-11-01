@@ -2,7 +2,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm")
-    org.jlleitschuh.gradle.ktlint
 }
 
 val experimentalAnnotations =
@@ -21,14 +20,4 @@ tasks {
 
 kotlin {
     jvmToolchain(20)
-}
-
-ktlint {
-    disabledRules.add("no-wildcard-imports")
-    filter {
-        exclude { element ->
-            val path = element.file.absolutePath
-            path.contains("build") || path.contains("generated") || element.isDirectory
-        }
-    }
 }

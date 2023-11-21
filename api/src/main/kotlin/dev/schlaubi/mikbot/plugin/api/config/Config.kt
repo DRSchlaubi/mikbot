@@ -13,12 +13,13 @@ import dev.schlaubi.envconf.Config as EnvironmentConfig
 /**
  * Default Configuration options for the bot.
  */
+@Suppress("ConvertLambdaToReference") // this is bugged for some reason
 public object Config : EnvironmentConfig("") {
 
     /**
      * The guild used for owner module commands.
      */
-    public val OWNER_GUILD: Snowflake? by getEnv(transform = ::Snowflake).optional()
+    public val OWNER_GUILD: Snowflake? by getEnv { Snowflake(it) }.optional()
 
     /**
      * A list of bot owners.
@@ -37,7 +38,7 @@ public object Config : EnvironmentConfig("") {
      *
      * @see Level
      */
-    public val LOG_LEVEL: Level by getEnv(Level.INFO, Level::valueOf)
+    public val LOG_LEVEL: Level by getEnv(Level.INFO) { Level.valueOf(it) }
 
     /**
      * The Sentry token.
@@ -64,12 +65,12 @@ public object Config : EnvironmentConfig("") {
     /**
      * The path to the plugins folder.
      */
-    public val PLUGIN_PATH: Path by getEnv(Path("plugins"), ::Path)
+    public val PLUGIN_PATH: Path by getEnv(Path("plugins")) { Path(it) }
 
     /**
      * If you set this variable, all commands will be only registered for this guild, only use this in testing.
      */
-    public val TEST_GUILD: Snowflake? by getEnv(transform = ::Snowflake).optional()
+    public val TEST_GUILD: Snowflake? by getEnv { Snowflake(it) }.optional()
 
     /**
      * A list of plugin repositories.
@@ -92,14 +93,14 @@ public object Config : EnvironmentConfig("") {
     /**
      * Whether the bot will try to update the plugins or not.
      */
-    public val UPDATE_PLUGINS: Boolean by getEnv(true, String::toBooleanStrict)
+    public val UPDATE_PLUGINS: Boolean by getEnv(true) { it.toBooleanStrict() }
 
-    public val VALIDATE_CHECKSUMS: Boolean by getEnv(true, String::toBooleanStrict)
+    public val VALIDATE_CHECKSUMS: Boolean by getEnv(true) { it.toBooleanStrict() }
 
     /**
      * Default locale for translations.
      */
-    public val DEFAULT_LOCALE: Locale by getEnv(SupportedLocales.ENGLISH, Locale::forLanguageTag)
+    public val DEFAULT_LOCALE: Locale by getEnv(SupportedLocales.ENGLISH) { Locale.forLanguageTag(it) }
 }
 
 @Suppress("unused")
@@ -110,7 +111,7 @@ public enum class Environment(public val useSentry: Boolean) {
 
 private inline fun <reified T : Enum<T>> getEnvEnum(
     prefix: String = "",
-    default: T? = null
+    default: T? = null,
 ): EnvironmentVariable<T> =
     getEnv(prefix, default) { java.lang.Enum.valueOf(T::class.java, it) }
 

@@ -40,7 +40,7 @@ dependencies {
 }
 
 application {
-    mainClass = "dev.schlaubi.musicbot.LauncherKt"
+    mainClass = "dev.schlaubi.musicbot.Launcher"
     applicationName = "mikmusic"
     applicationDefaultJvmArgs = listOf("--enable-preview")
 }

@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="20">
-      <module name="gradle-plugin" target="17" />
-      <module name="gradle-plugin.main" target="17" />
-      <module name="gradle-plugin.test" target="17" />
-      <module name="mikmusic.buildSrc" target="19" />
-      <module name="mikmusic.buildSrc.main" target="19" />
-      <module name="mikmusic.buildSrc.test" target="19" />
+    <bytecodeTargetLevel target="21">
       <module name="mikmusic.mikmusic-bot" target="18" />
       <module name="mikmusic.mikmusic-bot.main" target="18" />
       <module name="mikmusic.mikmusic-bot.test" target="18" />

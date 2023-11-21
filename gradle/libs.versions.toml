@@ -7,7 +7,7 @@ serialization = "1.6.0"
 ktor = "2.3.5"
 kord = "0.11.1"
 jjwt = "0.11.5"
-api = "3.25.0"
+api = "3.25.1"
 ksp = "1.9.20-1.0.13"
 lavakord = "feature-new-lavasrc-fields-20230814.202530-2"
 

@@ -4,7 +4,11 @@ import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.JavaExec
 import org.gradle.api.tasks.TaskAction
- import org.gradle.kotlin.dsl.*
+import org.gradle.kotlin.dsl.assign
+import kotlin.collections.asSequence
+import kotlin.collections.component1
+import kotlin.collections.component2
+import kotlin.collections.set
 import kotlin.io.path.isDirectory
 import kotlin.io.path.listDirectoryEntries
 import kotlin.io.path.notExists
@@ -55,6 +59,7 @@ abstract class RunBotTask : JavaExec() {
     }
 
     private fun configureSystemProperties() {
-        systemProperties["pf4j.pluginsDir"] = project.layout.buildDirectory.dir("test-bot/plugins")
+        systemProperties["pf4j.pluginsDir"] =
+            project.layout.buildDirectory.dir("test-bot/plugins").get().asFile.absolutePath
     }
 }

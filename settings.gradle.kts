@@ -30,7 +30,6 @@ if (System.getenv("BUILD_PLUGIN_CI")?.toBoolean() != true) {
         "music:commands",
         "clients:discord-oauth",
         "clients:haste-client",
-        "clients:sponsorblock-kt",
         "clients:image-color-client",
         "clients:image-color-client-kord"
     )

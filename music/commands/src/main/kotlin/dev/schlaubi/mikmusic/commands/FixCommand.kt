@@ -6,7 +6,7 @@ import dev.kord.common.entity.ButtonStyle
 import dev.kord.common.entity.Permission
 import dev.kord.core.behavior.channel.edit
 import dev.kord.core.event.interaction.GuildComponentInteractionCreateEvent
-import dev.kord.rest.builder.message.modify.actionRow
+import dev.kord.rest.builder.message.actionRow
 import dev.schlaubi.lavakord.audio.Link
 import dev.schlaubi.lavakord.kord.connectAudio
 import dev.schlaubi.mikbot.plugin.api.util.safeGuild
@@ -158,9 +158,9 @@ private object SwitchVoiceServers : RecoveryStep {
         val currentRegion = channel.rtcRegion
 
         val availableRegions = (
-                safeGuild.regions
-                    .map { it.id }.toList() - (currentRegion ?: "")
-                )
+            safeGuild.regions
+                .map { it.id }.toList() - (currentRegion ?: "")
+            )
         val fallbackRegion = availableRegions.random()
 
         channel.edit {

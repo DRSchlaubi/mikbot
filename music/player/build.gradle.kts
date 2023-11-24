@@ -18,8 +18,6 @@ dependencies {
 
     // Plattform support
     implementation(libs.google.apis.youtube)
-    // SponsorBlock Client
-    implementation(projects.clients.sponsorblockKt)
 
     // Scheduling
     implementation(libs.krontab)

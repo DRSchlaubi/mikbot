@@ -2,7 +2,7 @@ package dev.schlaubi.mikbot.core.gdpr
 
 import com.kotlindiscord.kord.extensions.commands.CommandContext
 import dev.kord.rest.builder.message.EmbedBuilder
-import dev.kord.rest.builder.message.create.embed
+import dev.kord.rest.builder.message.embed
 import dev.schlaubi.mikbot.core.gdpr.api.AnonymizedData
 import dev.schlaubi.mikbot.core.gdpr.api.DataPoint
 import dev.schlaubi.mikbot.core.gdpr.api.PermanentlyStoredDataPoint

@@ -16,7 +16,7 @@ private class LanguageArguments : Arguments() {
 
         choice("German", SupportedLocales.GERMAN.toLanguageTag())
         choice("Englisch", SupportedLocales.ENGLISH.toLanguageTag())
-        choice("Italian", Locale("it", "IT").toLanguageTag())
+        choice("Italian", Locale.ITALIAN.toLanguageTag())
     }
 }
 

@@ -1,14 +1,14 @@
 [versions]
-kotlin = "1.9.20"
+kotlin = "2.0.0-Beta1"
 kordex = "1.6.0-SNAPSHOT"
-kmongo = "4.10.0"
+kmongo = "4.11.0"
 coroutines = "1.7.3"
 serialization = "1.6.0"
-ktor = "2.3.5"
-kord = "0.11.1"
+ktor = "2.3.6"
+kord = "0.12.0"
 jjwt = "0.11.5"
-api = "3.25.1"
-ksp = "1.9.20-1.0.13"
+api = "3.26.0"
+ksp = "2.0.0-Beta1-1.0.14"
 lavakord = "feature-new-lavasrc-fields-20230814.202530-2"
 
 [libraries]

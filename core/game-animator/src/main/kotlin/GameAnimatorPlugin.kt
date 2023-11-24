@@ -7,7 +7,10 @@ import dev.kord.common.entity.ActivityType
 import dev.kord.common.entity.PresenceStatus
 import dev.kord.core.Kord
 import dev.schlaubi.mikbot.core.game_animator.api.GameAnimatorExtensionPoint
-import dev.schlaubi.mikbot.plugin.api.*
+import dev.schlaubi.mikbot.plugin.api.Plugin
+import dev.schlaubi.mikbot.plugin.api.PluginContext
+import dev.schlaubi.mikbot.plugin.api.PluginMain
+import dev.schlaubi.mikbot.plugin.api.getExtensions
 import dev.schlaubi.mikbot.plugin.api.module.MikBotModule
 import dev.schlaubi.mikbot.plugin.api.util.AllShardsReadyEvent
 import kotlinx.coroutines.Job
@@ -32,7 +35,7 @@ class GameAnimatorPlugin(wrapper: PluginContext) : Plugin(wrapper) {
 
         @OptIn(ObsoleteCoroutinesApi::class)
         private val ticker = ticker(30.seconds.inWholeMilliseconds, 0)
-        private val extensions = pluginSystem.getExtensions<GameAnimatorExtensionPoint>()
+        private val extensions = context.pluginSystem.getExtensions<GameAnimatorExtensionPoint>()
         private val games: List<Game> = Config.GAMES
         private lateinit var runner: Job
 

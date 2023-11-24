@@ -8,7 +8,7 @@ import com.kotlindiscord.kord.extensions.commands.application.slash.converters.i
 import com.kotlindiscord.kord.extensions.commands.converters.impl.defaultingBoolean
 import dev.arbjerg.lavalink.protocol.v4.Exception
 import dev.arbjerg.lavalink.protocol.v4.LoadResult
-import dev.kord.rest.builder.message.create.embed
+import dev.kord.rest.builder.message.embed
 import dev.schlaubi.lavakord.rest.loadItem
 import dev.schlaubi.mikbot.plugin.api.util.EditableMessageSender
 import dev.schlaubi.mikmusic.autocomplete.autoCompletedYouTubeQuery
@@ -55,7 +55,7 @@ abstract class QueueArguments : Arguments(), QueueOptions {
 
 suspend fun <T : QueueArguments> EphemeralSlashCommandContext<T, *>.queueTracks(
     musicPlayer: MusicPlayer,
-    search: Boolean
+    search: Boolean,
 ) {
     return queueTracks(musicPlayer, search, arguments, {
         respond {
@@ -70,9 +70,9 @@ suspend fun <T : QueueArguments> EphemeralSlashCommandContext<T, *>.queueTracks(
 
 suspend fun <T> EphemeralSlashCommandContext<T, *>.findTracks(
     musicPlayer: MusicPlayer,
-    search: Boolean
+    search: Boolean,
 ): QueueSearchResult?
-        where T : Arguments, T : QueueOptions {
+    where T : Arguments, T : QueueOptions {
     return findTracks(musicPlayer, search, arguments, {
         respond {
             it()
@@ -89,13 +89,14 @@ internal suspend fun CommandContext.findTracks(
     search: Boolean,
     arguments: QueueOptions,
     respond: EditableMessageSender,
-    editingPaginator: EditingPaginatorSender
+    editingPaginator: EditingPaginatorSender,
 ): QueueSearchResult? {
     val rawQuery = arguments.query
     val isUrl = urlProtocol.find(rawQuery) != null
 
     val query = if (!isUrl) {
-        val searchPrefix = if (arguments.searchProvider != null) "${arguments.searchProvider?.prefix}" else "${Config.DEFAULT_SEARCH_PROVIDER}:"
+        val searchPrefix =
+            if (arguments.searchProvider != null) "${arguments.searchProvider?.prefix}" else "${Config.DEFAULT_SEARCH_PROVIDER}:"
 
         searchPrefix + rawQuery
     } else rawQuery
@@ -104,6 +105,7 @@ internal suspend fun CommandContext.findTracks(
         is LoadResult.TrackLoaded -> SingleTrack(result.data)
         is LoadResult.PlaylistLoaded ->
             Playlist(result.data, result.data.tracks)
+
         is LoadResult.SearchResult -> {
             if (search) {
                 searchSong(respond, editingPaginator, getUser()!!, result) ?: return null
@@ -112,10 +114,12 @@ internal suspend fun CommandContext.findTracks(
                 SingleTrack(foundTrack)
             }
         }
+
         is LoadResult.NoMatches -> {
             noMatches(respond)
             return null
         }
+
         is LoadResult.LoadFailed -> {
             handleError(respond, result)
             return null
@@ -130,7 +134,7 @@ suspend fun CommandContext.queueTracks(
     search: Boolean,
     arguments: QueueOptions,
     respond: EditableMessageSender,
-    editingPaginator: EditingPaginatorSender
+    editingPaginator: EditingPaginatorSender,
 ) {
     val searchResult = findTracks(musicPlayer, search, arguments, respond, editingPaginator) ?: return
 
@@ -176,7 +180,7 @@ private suspend fun CommandContext.noMatches(respond: EditableMessageSender) {
 
 private suspend fun CommandContext.handleError(
     respond: EditableMessageSender,
-    result: LoadResult.LoadFailed
+    result: LoadResult.LoadFailed,
 ) {
     val error = result.data
     when (error.severity) {
@@ -185,6 +189,7 @@ private suspend fun CommandContext.handleError(
                 content = translate("music.queue.load_failed.common", arrayOf(error.message))
             }
         }
+
         else -> {
             LOG.error(FriendlyException(error.severity, error.message)) { "An error occurred whilst queueing a song" }
 

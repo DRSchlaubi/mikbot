@@ -7,6 +7,9 @@ plugins {
 
 subprojects {
     addRepositories()
+    repositories {
+        maven("https://maven.topi.wtf/releases")
+    }
 }
 
 mikbotPlugin {

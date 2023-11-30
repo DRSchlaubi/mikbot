@@ -15,6 +15,7 @@ dependencies {
     api(libs.lavakord.kord)
     api(libs.lavakord.sponsorblock)
     api(libs.lavakord.lavsrc)
+    api(libs.lavakord.lavasearch)
 
     // Plattform support
     implementation(libs.google.apis.youtube)

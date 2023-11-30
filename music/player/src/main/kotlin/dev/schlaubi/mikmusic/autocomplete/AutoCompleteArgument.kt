@@ -1,11 +1,20 @@
 package dev.schlaubi.mikmusic.autocomplete
 
+import com.kotlindiscord.kord.extensions.ExtensibleBot
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.converters.SingleConverter
 import com.kotlindiscord.kord.extensions.commands.converters.impl.string
-import dev.kord.common.Locale
+import com.kotlindiscord.kord.extensions.koin.KordExContext
 import dev.kord.core.behavior.interaction.suggestString
-import dev.schlaubi.mikmusic.innerttube.requestYouTubeAutoComplete
+import dev.kord.core.event.interaction.GuildAutoCompleteInteractionCreateEvent
+import dev.kord.x.emoji.Emojis
+import dev.schlaubi.lavakord.plugins.lavasearch.rest.search
+import dev.schlaubi.lavakord.plugins.lavasrc.lavaSrcInfo
+import dev.schlaubi.mikmusic.core.Config
+import dev.schlaubi.mikmusic.core.MusicModule
+
+private val musicModule = KordExContext.get().get<ExtensibleBot>()
+    .findExtensions<MusicModule>().first()
 
 /**
  * Creates a `query` argument with [description] supporting YouTube Auto-complete.
@@ -18,9 +27,27 @@ fun Arguments.autoCompletedYouTubeQuery(description: String): SingleConverter<St
         val input = focusedOption.value
 
         if (input.isNotBlank()) {
-            val youtubeResult = requestYouTubeAutoComplete(input, locale ?: Locale.ENGLISH_UNITED_STATES)
+            val result = musicModule
+                .getMusicPlayer((it as GuildAutoCompleteInteractionCreateEvent).interaction.guild)
+                .search("${Config.DEFAULT_SEARCH_PROVIDER}:$input")
+
             suggestString {
-                youtubeResult.take(25).forEach { choice(it, it) }
+                result.texts.take(5).map { (text) ->
+                    choice(text, text)
+                }
+                result.artists.take(5).forEach { playlist ->
+                    choice("${Emojis.man} ${playlist.info.name}", playlist.lavaSrcInfo.url)
+                }
+                result.tracks.take(5).forEach { track ->
+                    val uri = track.info.uri ?: return@forEach
+                    choice("${Emojis.notes} ${track.info.title}", uri)
+                }
+                result.albums.take(5).forEach { playlist ->
+                    choice("${Emojis.cd} ${playlist.info.name}", playlist.lavaSrcInfo.url)
+                }
+                result.playlists.take(5).forEach { playlist ->
+                    choice("${Emojis.scroll} ${playlist.info.name}", playlist.lavaSrcInfo.url)
+                }
             }
         }
     }

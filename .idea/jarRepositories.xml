@@ -91,5 +91,10 @@
       <option name="name" value="Mikbot" />
       <option name="url" value="https://europe-west3-maven.pkg.dev/mik-music/mikbot" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven" />
+      <option name="name" value="maven" />
+      <option name="url" value="https://maven.topi.wtf/releases" />
+    </remote-repository>
   </component>
 </project>

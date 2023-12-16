@@ -27,6 +27,7 @@ import dev.schlaubi.mikmusic.core.audio.LavalinkManager
 import dev.schlaubi.mikmusic.player.MusicPlayer
 import dev.schlaubi.mikmusic.player.PersistentPlayerState
 import dev.schlaubi.mikmusic.player.applyToPlayer
+import dev.schlaubi.mikmusic.player.voiceStateWatcher
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
@@ -71,6 +72,7 @@ class MusicModule(context: PluginContext) : MikBotModule(context) {
             }
         }
 
+        voiceStateWatcher()
         event<ReadyEvent> {
             action {
                 reconnectPlayers()

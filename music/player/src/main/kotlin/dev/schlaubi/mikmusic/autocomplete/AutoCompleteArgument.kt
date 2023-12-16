@@ -40,10 +40,11 @@ fun Arguments.autoCompletedYouTubeQuery(description: String): SingleConverter<St
                 }
                 result.tracks.take(5).forEach { track ->
                     val uri = track.info.uri ?: return@forEach
-                    choice("${Emojis.notes} ${track.info.title}", uri)
+                    choice("${Emojis.notes} ${track.info.author} - ${track.info.title}", uri)
                 }
                 result.albums.take(5).forEach { playlist ->
-                    choice("${Emojis.cd} ${playlist.info.name}", playlist.lavaSrcInfo.url)
+                    val albumInfo = playlist.lavaSrcInfo
+                    choice("${Emojis.cd} ${albumInfo.author} - ${playlist.info.name}", albumInfo.url)
                 }
                 result.playlists.take(5).forEach { playlist ->
                     choice("${Emojis.scroll} ${playlist.info.name}", playlist.lavaSrcInfo.url)

@@ -18,6 +18,7 @@ import dev.schlaubi.lavakord.plugins.sponsorblock.model.Category
 import dev.schlaubi.lavakord.plugins.sponsorblock.model.ChapterStartedEvent
 import dev.schlaubi.lavakord.plugins.sponsorblock.model.ChaptersLoadedEvent
 import dev.schlaubi.lavakord.plugins.sponsorblock.rest.disableSponsorblock
+import dev.schlaubi.lavakord.plugins.sponsorblock.rest.getSponsorblockCategories
 import dev.schlaubi.lavakord.plugins.sponsorblock.rest.putSponsorblockCategories
 import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase
 import dev.schlaubi.mikmusic.musicchannel.updateMessage
@@ -37,8 +38,7 @@ import kotlin.time.toDuration
 
 private data class SavedTrack(val track: QueuedTrack, val position: Duration, val filters: Filters, val volume: Int)
 
-class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
-    Link by link, KordExKoinComponent {
+class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by link, KordExKoinComponent {
 
     private val lock = Mutex()
 
@@ -62,13 +62,9 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
             val settings = MusicSettingsDatabase.findGuild(guild)
 
             settings.defaultSchedulerSettings?.applyToPlayer(this@MusicPlayer)
-
-            if (settings.useSponsorBlock) {
-                player.putSponsorblockCategories(Category.MusicOfftopic, Category.Filler, Category.Selfpromo, Category.Sponsor)
-            } else {
-                player.disableSponsorblock()
-            }
         }
+
+        updateSponsorBlock()
 
         link.player.on(consumer = ::onTrackEnd)
         link.player.on(consumer = ::onTrackStart)
@@ -76,9 +72,26 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
         link.player.on(consumer = ::onChapterStarted)
     }
 
+    private fun updateSponsorBlock() = guild.kord.launch {
+        val settings = MusicSettingsDatabase.findGuild(guild)
+        val categories = player.getSponsorblockCategories()
+
+        if (categories.isEmpty() && settings.useSponsorBlock) {
+            player.putSponsorblockCategories(
+                Category.MusicOfftopic,
+                Category.Filler,
+                Category.Selfpromo,
+                Category.Sponsor
+            )
+        } else if (categories.isNotEmpty()) {
+            player.disableSponsorblock()
+        }
+    }
+
     suspend fun getChannel() = link.lastChannelId
         ?.let { guild.kord.getChannelOf<VoiceChannel>(Snowflake(it)) }
 
+    @Suppress("unused") // used by other plugins
     fun updateMusicChannelState(to: Boolean) {
         if (to) {
             queue.clear()
@@ -201,7 +214,12 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
         updateMusicChannelMessage()
     }
 
-    suspend fun injectTrack(identifier: String, noReplace: Boolean = false, playOptionsBuilder: PlayOptions.() -> Unit) = lock.withLock {
+    @Suppress("unused") // used by Tonbrett
+    suspend fun injectTrack(
+        identifier: String,
+        noReplace: Boolean = false,
+        playOptionsBuilder: PlayOptions.() -> Unit,
+    ) = lock.withLock {
         dontQueue = true
         val currentTrack = playingTrack
         if (currentTrack != null && !noReplace) {
@@ -318,6 +336,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) :
 
     // called under lock
     private suspend fun startNextSong(lastSong: Track? = null, force: Boolean = false, position: Duration? = null) {
+        updateSponsorBlock()
         val nextTrack: QueuedTrack? = when {
             lastSong != null && repeat -> playingTrack!!
             !force && (shuffle || (loopQueue && queue.isEmpty())) -> {

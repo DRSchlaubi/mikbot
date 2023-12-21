@@ -4,12 +4,12 @@ kordex = "1.6.0-SNAPSHOT"
 kmongo = "4.11.0"
 coroutines = "1.7.3"
 serialization = "1.6.0"
-ktor = "2.3.6"
+ktor = "2.3.7"
 kord = "0.12.0"
 jjwt = "0.11.5"
 api = "3.26.0"
 ksp = "2.0.0-Beta1-1.0.14"
-lavakord = "main-SNAPSHOT"
+lavakord = "6.1.2"
 
 [libraries]
 kord-common = { group = "dev.kord", name = "kord-common", version.ref = "kord" }
@@ -34,6 +34,7 @@ lavakord-kord = { group = "dev.schlaubi.lavakord", name = "kord", version.ref = 
 lavakord-sponsorblock = { group = "dev.schlaubi.lavakord", name = "sponsorblock", version.ref = "lavakord" }
 lavakord-lavsrc = { group = "dev.schlaubi.lavakord", name = "lavasrc-jvm", version.ref = "lavakord" }
 lavakord-lavasearch = { group = "dev.schlaubi.lavakord", name = "lavasearch-jvm", version.ref = "lavakord" }
+lavakord-lyrics = { group = "dev.schlaubi.lavakord", name = "lyrics-jvm", version.ref = "lavakord" }
 spotify = { group = "se.michaelthelin.spotify", name = "spotify-web-api-java", version = "8.0.0" }
 krontab = { group = "dev.inmo", name = "krontab", version = "0.10.0" }
 ksp-api = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version.ref = "ksp" }
@@ -53,6 +54,7 @@ ktor-server-auth = { group = "io.ktor", name = "ktor-server-auth", version.ref =
 ktor-server-sessions = { group = "io.ktor", name = "ktor-server-sessions", version.ref = "ktor" }
 ktor-server-core = { group = "io.ktor", name = "ktor-server-core-jvm", version.ref = "ktor" }
 ktor-server-cors = { group = "io.ktor", name = "ktor-server-cors", version.ref = "ktor" }
+ktor-server-websockets = { group = "io.ktor", name = "ktor-server-websockets", version.ref = "ktor" }
 ktor-server-html-builder = { group = "io.ktor", name = "ktor-server-html-builder", version.ref = "ktor" }
 github-repositories = { group = "dev.nycode.github", name = "repositories", version = "1.0.0-SNAPSHOT" }
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version = "0.4.1" }

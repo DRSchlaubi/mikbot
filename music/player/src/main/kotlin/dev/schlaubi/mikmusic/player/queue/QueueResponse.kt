@@ -44,7 +44,7 @@ class Playlist(private val playlist: Playlist, tracks: List<Track>) : QueueSearc
         if (lavaSrcInfo != null) {
             url = lavaSrcInfo.url
             thumbnail {
-                url = lavaSrcInfo.artworkUrl
+                url = lavaSrcInfo.artworkUrl.toString()
             }
 
             author {

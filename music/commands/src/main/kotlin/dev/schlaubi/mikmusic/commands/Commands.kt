@@ -1,6 +1,5 @@
 package dev.schlaubi.mikmusic.commands
 
-import dev.schlaubi.mikmusic.core.Config
 import dev.schlaubi.mikmusic.core.MusicModule
 
 suspend fun MusicModule.commands() {
@@ -19,8 +18,4 @@ suspend fun MusicModule.commands() {
     clearCommand()
     fixCommand()
     nextCommand()
-
-    if (Config.HAPPI_KEY != null) {
-        lyricsCommand()
-    }
 }

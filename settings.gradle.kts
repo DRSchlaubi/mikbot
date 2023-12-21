@@ -28,6 +28,7 @@ if (System.getenv("BUILD_PLUGIN_CI")?.toBoolean() != true) {
         ":music",
         "music:player",
         "music:commands",
+        "music:lyrics",
         "clients:discord-oauth",
         "clients:haste-client",
         "clients:image-color-client",

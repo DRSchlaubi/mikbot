@@ -36,7 +36,7 @@ fun Arguments.autoCompletedYouTubeQuery(description: String): SingleConverter<St
                     choice(text, text)
                 }
                 result.artists.take(5).forEach { playlist ->
-                    choice("${Emojis.man} ${playlist.info.name}", playlist.lavaSrcInfo.url)
+                    choice("${Emojis.man} ${playlist.info.name}", playlist.lavaSrcInfo.url.toString())
                 }
                 result.tracks.take(5).forEach { track ->
                     val uri = track.info.uri ?: return@forEach
@@ -44,10 +44,10 @@ fun Arguments.autoCompletedYouTubeQuery(description: String): SingleConverter<St
                 }
                 result.albums.take(5).forEach { playlist ->
                     val albumInfo = playlist.lavaSrcInfo
-                    choice("${Emojis.cd} ${albumInfo.author} - ${playlist.info.name}", albumInfo.url)
+                    choice("${Emojis.cd} ${albumInfo.author} - ${playlist.info.name}", albumInfo.url.toString())
                 }
                 result.playlists.take(5).forEach { playlist ->
-                    choice("${Emojis.scroll} ${playlist.info.name}", playlist.lavaSrcInfo.url)
+                    choice("${Emojis.scroll} ${playlist.info.name}", playlist.lavaSrcInfo.url.toString())
                 }
             }
         }

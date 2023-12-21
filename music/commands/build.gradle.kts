@@ -18,7 +18,6 @@ tasks {
             freeCompilerArgs = freeCompilerArgs + "-Xcontext-receivers"
         }
     }
-
 }
 
 mikbotPlugin {

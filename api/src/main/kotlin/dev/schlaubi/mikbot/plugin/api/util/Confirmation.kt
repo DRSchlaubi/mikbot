@@ -16,7 +16,7 @@ import dev.kord.core.entity.interaction.ComponentInteraction
 import dev.kord.core.entity.interaction.followup.EphemeralFollowupMessage
 import dev.kord.core.entity.interaction.followup.PublicFollowupMessage
 import dev.kord.core.event.interaction.InteractionCreateEvent
-import dev.kord.rest.builder.message.create.actionRow
+import dev.kord.rest.builder.message.actionRow
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
@@ -117,7 +117,15 @@ private suspend fun CommandContext.confirmation(
     timeout: Duration = 30.seconds,
     acknowledge: Boolean = true,
     messageBuilder: MessageBuilder,
-): Confirmation = confirmation(sendMessage, timeout, messageBuilder, translate = ::translate, yesWord = yesWord, noWord = noWord, acknowledge = acknowledge)
+): Confirmation = confirmation(
+    sendMessage,
+    timeout,
+    messageBuilder,
+    translate = ::translate,
+    yesWord = yesWord,
+    noWord = noWord,
+    acknowledge = acknowledge
+)
 
 /**
  * Bare bone confirmation implementation.

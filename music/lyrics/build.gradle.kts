@@ -11,7 +11,6 @@ plugins {
 dependencies {
     plugin(projects.music.player)
     plugin(projects.core.ktor)
-    ktorDependency(libs.ktor.server.websockets)
     ktorDependency(libs.ktor.server.cors)
 }
 

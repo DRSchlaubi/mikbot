@@ -25,7 +25,6 @@ fun DependencyHandlerScope.ktorDependency(dependency: Provider<*>) = implementat
     exclude(module = "ktor-server-core")
 }
 
-
 tasks {
     val generateDefaultResourceBundle by registering(GenerateDefaultTranslationBundleTask::class) {
         defaultLocale = Locale("en", "GB")

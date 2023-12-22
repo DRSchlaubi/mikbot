@@ -36,7 +36,10 @@ import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
 import io.ktor.util.*
 import io.ktor.websocket.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.serialization.json.Json
 import org.koin.core.component.inject
@@ -80,14 +83,18 @@ class APIServer : KtorExtensionPoint, KordExKoinComponent {
                 contentConverter = KotlinxWebsocketSerializationConverter(Json)
             }
         }
-        if (pluginOrNull(CORS) == null && BotConfig.ENVIRONMENT == Environment.DEVELOPMENT) {
-            install(CORS) {
-                allowMethod(HttpMethod.Options)
-                allowMethod(HttpMethod.Put)
-                allowMethod(HttpMethod.Delete)
-                allowMethod(HttpMethod.Patch)
-                allowHeader(HttpHeaders.Authorization)
+        install(CORS) {
+            allowMethod(HttpMethod.Options)
+            allowMethod(HttpMethod.Put)
+            allowMethod(HttpMethod.Delete)
+            allowMethod(HttpMethod.Patch)
+            allowHeader(HttpHeaders.Authorization)
+            if (BotConfig.ENVIRONMENT == Environment.DEVELOPMENT) {
                 anyHost()
+            } else {
+                allowSameOrigin = true
+                val url = Url(Config.LYRICS_WEB_URL)
+                allowHost(url.host, listOf(url.protocol.name))
             }
         }
 

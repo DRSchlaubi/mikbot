@@ -5,3 +5,5 @@
 # https://github.com/Danimoth/gitattributes
 # These are explicitly windows files and should use crlf
 *.bat           text eol=crlf
+
+*.jar binary

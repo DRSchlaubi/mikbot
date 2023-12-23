@@ -36,7 +36,7 @@ import kotlin.time.Duration.Companion.seconds
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
-private data class SavedTrack(val track: QueuedTrack, val position: Duration, val filters: Filters, val volume: Int)
+internal data class SavedTrack(val track: QueuedTrack, val position: Duration, val filters: Filters, val volume: Int)
 
 class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by link, KordExKoinComponent {
 
@@ -54,7 +54,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
 
     private var leaveTimeout: Job? = null
     internal var autoPlay: AutoPlayContext? = null
-    private var savedTrack: SavedTrack? = null
+    internal var savedTrack: SavedTrack? = null
     private var dontQueue = false
 
     init {

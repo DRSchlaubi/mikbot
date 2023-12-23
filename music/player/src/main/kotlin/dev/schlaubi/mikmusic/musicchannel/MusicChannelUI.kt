@@ -178,7 +178,7 @@ private fun ActionRowBuilder.musicButton(
     enabled: Boolean = false,
     enabledStyle: ButtonStyle = ButtonStyle.Success,
 ) {
-    val playingCondition = musicPlayer.playingTrack != null
+    val playingCondition = musicPlayer.playingTrack != null && musicPlayer.savedTrack == null
 
     val style = if (enabled && playingCondition) {
         enabledStyle

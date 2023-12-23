@@ -13,7 +13,6 @@ import dev.schlaubi.mikbot.plugin.api.util.forList
 import dev.schlaubi.mikmusic.checks.musicQuizAntiCheat
 import dev.schlaubi.mikmusic.util.musicModule
 import dev.schlaubi.stdx.core.paginate
-import io.ktor.http.*
 
 class LyricsArguments : Arguments() {
     val name by optionalString {

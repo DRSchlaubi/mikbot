@@ -4,6 +4,7 @@ import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalString
 import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.extensions.publicSlashCommand
+import dev.schlaubi.lavakord.RestException
 import dev.schlaubi.lavakord.plugins.lyrics.rest.requestLyrics
 import dev.schlaubi.lavakord.plugins.lyrics.rest.searchLyrics
 import dev.schlaubi.lyrics.protocol.TimedLyrics
@@ -12,6 +13,7 @@ import dev.schlaubi.mikbot.plugin.api.util.forList
 import dev.schlaubi.mikmusic.checks.musicQuizAntiCheat
 import dev.schlaubi.mikmusic.util.musicModule
 import dev.schlaubi.stdx.core.paginate
+import io.ktor.http.*
 
 class LyricsArguments : Arguments() {
     val name by optionalString {
@@ -42,12 +44,19 @@ suspend fun Extension.lyricsCommand() = publicSlashCommand(::LyricsArguments) {
 
             return@action
         }
-        val lyrics = if (player.playingTrack != null) {
-            player.requestLyrics()
-        } else {
-            val (videoId) = link.node.searchLyrics(query).firstOrNull()
-                ?: discordError(translate("command.lyrics.no_lyrics"))
-            link.node.requestLyrics(videoId)
+        val lyrics = try {
+            if (arguments.name != null && player.playingTrack != null) {
+                player.requestLyrics()
+            } else {
+                val (videoId) = link.node.searchLyrics(query).firstOrNull()
+                    ?: discordError(translate("command.lyrics.no_lyrics"))
+                link.node.requestLyrics(videoId)
+            }
+        } catch (e: RestException) {
+            if (e.request.call.response.status == HttpStatusCode.NotFound) {
+                discordError(translate("command.lyrics.no_lyrics"))
+            }
+            throw e
         }
 
         val lines = if (lyrics is TimedLyrics) {

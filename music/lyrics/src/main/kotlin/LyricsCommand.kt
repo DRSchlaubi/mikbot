@@ -53,10 +53,7 @@ suspend fun Extension.lyricsCommand() = publicSlashCommand(::LyricsArguments) {
                 link.node.requestLyrics(videoId)
             }
         } catch (e: RestException) {
-            if (e.request.call.response.status == HttpStatusCode.NotFound) {
-                discordError(translate("command.lyrics.no_lyrics"))
-            }
-            throw e
+            discordError(translate("command.lyrics.no_lyrics"))
         }
 
         val lines = if (lyrics is TimedLyrics) {

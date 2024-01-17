@@ -42,6 +42,7 @@ fun PlaylistModule.saveCommand() = ephemeralSubCommand(::PlaylistSaveArguments) 
             respond {
                 content = translate("music.checks.not_playing")
             }
+            return@action
         }
 
         checkName(arguments.name, arguments.public) {

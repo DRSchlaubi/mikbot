@@ -4,7 +4,7 @@ import dev.schlaubi.mikmusic.checks.joinSameChannelCheck
 import dev.schlaubi.mikmusic.playlist.PlaylistDatabase
 import dev.schlaubi.mikmusic.util.mapToQueuedTrack
 
-class LoadArguments : PlaylistArguments()
+class LoadArguments : PlaylistArguments(onlyMine = false)
 
 fun PlaylistModule.loadCommand() = ephemeralSubCommand(::LoadArguments) {
     name = "load"

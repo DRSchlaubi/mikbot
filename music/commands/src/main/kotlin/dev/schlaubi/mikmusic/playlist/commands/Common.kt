@@ -6,6 +6,7 @@ import com.kotlindiscord.kord.extensions.commands.CommandContext
 import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommandContext
 import com.kotlindiscord.kord.extensions.commands.converters.impl.string
 import dev.kord.core.behavior.UserBehavior
+import dev.kord.core.behavior.interaction.suggestString
 import dev.schlaubi.mikbot.plugin.api.PluginContext
 import dev.schlaubi.mikbot.plugin.api.module.SubCommandModule
 import dev.schlaubi.mikbot.plugin.api.util.extension
@@ -13,17 +14,38 @@ import dev.schlaubi.mikmusic.core.MusicModule
 import dev.schlaubi.mikmusic.player.MusicPlayer
 import dev.schlaubi.mikmusic.playlist.Playlist
 import dev.schlaubi.mikmusic.playlist.PlaylistDatabase
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.flow.toList
 import org.litote.kmongo.and
 import org.litote.kmongo.eq
 import org.litote.kmongo.or
+import org.litote.kmongo.util.KMongoUtil
 
-abstract class PlaylistArguments : Arguments() {
+abstract class PlaylistArguments(val onlyMine:Boolean = true) : Arguments() {
     val name by string {
         name = "name"
         description = "The name of the playlist"
 
         validate {
             getPlaylistOrNull(context.getUser()!!, value) ?: context.notFound(value)
+        }
+
+        autoComplete {
+            val genericFilter = if (onlyMine) {
+                Playlist::authorId eq user.id
+            } else {
+                or(Playlist::public eq true, Playlist::authorId eq user.id)
+            }
+            val input = focusedOption.value
+            val names = PlaylistDatabase.collection.find(
+                and(genericFilter,
+                    KMongoUtil.toBson("{name: /$input/i}"))
+            ).toFlow()
+                .take(25)
+                .toList()
+            suggestString {
+                names.forEach { choice(it.name, it.name) }
+            }
         }
     }
 

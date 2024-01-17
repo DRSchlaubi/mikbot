@@ -27,7 +27,7 @@ kmongo-id-serialization = { group = "org.litote.kmongo", name = "kmongo-id-seria
 stdx-full = { group = "dev.schlaubi", name = "stdx-full", version = "1.2.1" }
 logback-classic = { group = "ch.qos.logback", name = "logback-classic", version = "1.4.7" }
 commons-text = { group = "org.apache.commons", name = "commons-text", version = "1.10.0" }
-google-cloud-bom = { group = "com.google.cloud", name = "libraries-bom", version = "26.6.0" }
+google-cloud-bom = { group = "com.google.cloud", name = "libraries-bom", version = "26.30.0" }
 google-cloud-translate = { group = "com.google.cloud", name = "google-cloud-translate" }
 google-apis-youtube = { group = "com.google.apis", name = "google-api-services-youtube", version = "v3-rev20230521-2.0.0" }
 lavakord-kord = { group = "dev.schlaubi.lavakord", name = "kord", version.ref = "lavakord" }

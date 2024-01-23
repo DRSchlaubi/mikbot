@@ -7,6 +7,7 @@ import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
+import kotlinx.serialization.json.Json
 
 /**
  * Client for interacting with a [hastebin](https://github.com/toptal/haste-server) compatible server.
@@ -17,7 +18,10 @@ public class HasteClient(private val url: String) {
 
     private val httpClient: HttpClient = HttpClient(OkHttp) {
         install(ContentNegotiation) {
-            json()
+            val json = Json {
+                ignoreUnknownKeys = true
+            }
+            json(json)
         }
     }
 

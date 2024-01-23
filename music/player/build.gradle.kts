@@ -21,9 +21,6 @@ dependencies {
     // Plattform support
     implementation(libs.google.apis.youtube)
 
-    // Scheduling
-    implementation(libs.krontab)
-
     // redeploy support
     optionalPlugin(projects.core.redeployHook)
 

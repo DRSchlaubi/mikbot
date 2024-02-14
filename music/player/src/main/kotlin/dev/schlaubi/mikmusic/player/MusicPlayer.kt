@@ -36,7 +36,13 @@ import kotlin.time.Duration.Companion.seconds
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
-internal data class SavedTrack(val track: QueuedTrack, val position: Duration, val filters: Filters, val volume: Int)
+internal data class SavedTrack(
+    val track: QueuedTrack,
+    val position: Duration,
+    val filters: Filters,
+    val volume: Int,
+    val pause: Boolean,
+)
 
 class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by link, KordExKoinComponent {
 
@@ -225,7 +231,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
         if (currentTrack != null && !noReplace) {
             val currentPosition = player.positionDuration
 
-            savedTrack = SavedTrack(currentTrack, currentPosition, player.filters, player.volume)
+            savedTrack = SavedTrack(currentTrack, currentPosition, player.filters, player.volume, player.paused)
         }
         link.player.searchAndPlayTrack(identifier, playOptionsBuilder)
     }
@@ -265,6 +271,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
                 position = track.position
                 filters = track.filters
                 volume = track.volume
+                pause = track.pause
             }
             return@onTrackEnd
         }

@@ -1,6 +1,5 @@
 package dev.schlaubi.mikmusic.commands
 
-import com.kotlindiscord.kord.extensions.DiscordRelayedException
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalInt
 import dev.schlaubi.mikmusic.core.MusicModule
@@ -9,12 +8,8 @@ class VolumeArguments : Arguments() {
     val volume by optionalInt {
         name = "volume"
         description = "commands.volume.arguments.volume.description"
-
-        validate {
-            if (value !in 0..100) {
-                throw DiscordRelayedException(translate("commands.volume.invalid_range"))
-            }
-        }
+        maxValue = 100
+        minValue = 0
     }
 }
 

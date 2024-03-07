@@ -27,7 +27,7 @@ suspend fun MusicModule.volumeCommand() = ephemeralControlSlashCommand(::VolumeA
 
             respond { content = translate("commands.volume.set", arrayOf(volume.toString())) }
         } else {
-            respond { content = translate("commands.volume.current", arrayOf((player.volume / 10).toString())) }
+            respond { content = translate("commands.volume.current", arrayOf(player.volume.toString())) }
         }
     }
 }

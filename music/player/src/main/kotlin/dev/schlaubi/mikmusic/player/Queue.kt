@@ -69,11 +69,10 @@ class Queue(private var tracksList: MutableList<QueuedTrack> = mutableListOf()) 
     }
 
     fun removeQueueEntry(index: Int): Track? {
-        val track = runCatching {
-            val elementIndex = order.removeAt(index)
-            tracksList.removeAt(elementIndex)
+        val trackIndex = runCatching {
+            order.removeAt(index)
         }.getOrNull() ?: return null
-        return track.track
+        return tracksList[trackIndex]
     }
 
     fun removeQueueEntries(range: IntRange): Int {

@@ -146,7 +146,7 @@ private object ReEstablishVoiceConnection : RecoveryStep {
         musicPlayer.stop()
         delay(200.milliseconds)
         musicPlayer.link.connectAudio(channelId)
-        state.applyToPlayer(musicPlayer)
+        musicPlayer.applyState(state)
     }
 }
 
@@ -157,10 +157,7 @@ private object SwitchVoiceServers : RecoveryStep {
         val channel = musicPlayer.getChannel()!!
         val currentRegion = channel.rtcRegion
 
-        val availableRegions = (
-            safeGuild.regions
-                .map { it.id }.toList() - (currentRegion ?: "")
-            )
+        val availableRegions = safeGuild.regions.map { it.id }.toList() - (currentRegion ?: "")
         val fallbackRegion = availableRegions.random()
 
         channel.edit {

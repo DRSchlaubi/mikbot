@@ -40,6 +40,7 @@ suspend fun MusicModule.removeCommand() = ephemeralControlSlashCommand {
     ) =
         action {
             val removed = remove()
+            musicPlayer.updateMusicChannelMessage()
             if (removed > 0) {
                 respond {
                     content = translate("commands.remove.removed", arrayOf(removed))
@@ -56,7 +57,8 @@ suspend fun MusicModule.removeCommand() = ephemeralControlSlashCommand {
         description = "commands.remove.song.description"
 
         action {
-            val track = musicPlayer.removeQueueEntry(arguments.position - 1)
+            val track = musicPlayer.queue.removeQueueEntry(arguments.position - 1)
+            musicPlayer.updateMusicChannelMessage()
             if (track != null) {
                 respond {
                     content = translate("commands.remove.song.removed", arrayOf(track.info.title))
@@ -79,7 +81,7 @@ suspend fun MusicModule.removeCommand() = ephemeralControlSlashCommand {
             }
             val range = arguments.from..arguments.to
 
-            musicPlayer.removeQueueEntries(range)
+            musicPlayer.queue.removeQueueEntries(range)
         }
     }
 
@@ -87,7 +89,7 @@ suspend fun MusicModule.removeCommand() = ephemeralControlSlashCommand {
         name = "doubles"
         description = "commands.remove.doubles.description"
 
-        doRemove { musicPlayer.removeDoubles() }
+        doRemove { musicPlayer.queue.removeDoubles() }
     }
 
     ephemeralSubCommand {
@@ -102,7 +104,7 @@ suspend fun MusicModule.removeCommand() = ephemeralControlSlashCommand {
                 .map { it.userId }
                 .toList()
 
-            musicPlayer.removeFromUser { it !in users }
+            musicPlayer.queue.removeFromUser { it !in users }
         }
     }
 }

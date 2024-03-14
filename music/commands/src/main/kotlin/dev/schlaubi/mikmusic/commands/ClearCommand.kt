@@ -7,7 +7,8 @@ suspend fun MusicModule.clearCommand() = ephemeralControlSlashCommand {
     description = "commands.clear.description"
 
     action {
-        musicPlayer.clearQueue()
+        musicPlayer.queue.clear()
+        musicPlayer.updateMusicChannelMessage()
         respond {
             content = translate("commands.clear.cleared")
         }

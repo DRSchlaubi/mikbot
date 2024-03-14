@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlinx.serialization)
     com.google.devtools.ksp
     dev.schlaubi.mikbot.`gradle-plugin`
+    `jvm-test-suite`
 }
 
 group = "dev.schlaubi.mikbot"
@@ -32,12 +33,22 @@ dependencies {
     api(projects.clients.imageColorClientKord)
 
     implementation(libs.ktor.client.logging)
+
+    testImplementation(kotlin("test-junit5"))
 }
 
 tasks {
     withType<KotlinCompile> {
         kotlinOptions {
             freeCompilerArgs = freeCompilerArgs + "-Xcontext-receivers"
+        }
+    }
+}
+
+testing {
+    suites {
+        named<JvmTestSuite>("test") {
+            useJUnitJupiter()
         }
     }
 }

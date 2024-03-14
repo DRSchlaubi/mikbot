@@ -46,7 +46,8 @@ suspend fun MusicModule.moveCommand() {
         val fromRaw = safeArguments.from()
         val fromValue = if (fromRaw == -1) musicPlayer.queuedTracks.size else fromRaw.coerceAtLeast(1)
 
-        val moved = musicPlayer.moveQueuedEntry(fromValue - 1, toValue - 1, swap)
+        val moved = musicPlayer.queue.moveQueuedEntry(fromValue - 1, toValue - 1, swap)
+        musicPlayer.updateMusicChannelMessage()
 
         if (moved != null) {
             respond {

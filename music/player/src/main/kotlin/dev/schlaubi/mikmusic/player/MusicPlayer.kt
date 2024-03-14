@@ -3,10 +3,13 @@ package dev.schlaubi.mikmusic.player
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
 import com.kotlindiscord.kord.extensions.koin.KordExKoinComponent
 import dev.arbjerg.lavalink.protocol.v4.Message
+import dev.arbjerg.lavalink.protocol.v4.PlayerUpdate
 import dev.arbjerg.lavalink.protocol.v4.Track
+import dev.arbjerg.lavalink.protocol.v4.toOmissible
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.GuildBehavior
 import dev.kord.core.entity.channel.VoiceChannel
+import dev.schlaubi.lavakord.UnsafeRestApi
 import dev.schlaubi.lavakord.audio.Link
 import dev.schlaubi.lavakord.audio.TrackEndEvent
 import dev.schlaubi.lavakord.audio.TrackStartEvent
@@ -20,6 +23,8 @@ import dev.schlaubi.lavakord.plugins.sponsorblock.model.ChaptersLoadedEvent
 import dev.schlaubi.lavakord.plugins.sponsorblock.rest.disableSponsorblock
 import dev.schlaubi.lavakord.plugins.sponsorblock.rest.getSponsorblockCategories
 import dev.schlaubi.lavakord.plugins.sponsorblock.rest.putSponsorblockCategories
+import dev.schlaubi.lavakord.rest.getPlayer
+import dev.schlaubi.lavakord.rest.updatePlayer
 import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase
 import dev.schlaubi.mikmusic.musicchannel.updateMessage
 import kotlinx.coroutines.Job
@@ -28,8 +33,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.koin.core.component.inject
-import java.util.*
-import kotlin.random.Random
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
@@ -48,11 +51,11 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
 
     private val lock = Mutex()
 
-    private var queue = LinkedList<QueuedTrack>()
-    val queuedTracks get() = queue.toList()
+    var queue = Queue()
+    val queuedTracks get() = queue.tracks
     val canSkip: Boolean
         get() = queuedTracks.isNotEmpty() || !autoPlay?.songs.isNullOrEmpty()
-    var filters: SerializableFilters? = null
+    var filters: dev.arbjerg.lavalink.protocol.v4.Filters? = null
     var playingTrack: QueuedTrack? = null
     var disableMusicChannel: Boolean = false
         private set
@@ -107,9 +110,10 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
         disableMusicChannel = to
     }
 
-    var shuffle = false
+    var shuffle: Boolean
+        get() = queue.shuffle
         set(value) {
-            field = value
+            queue.shuffle = value
             updateMusicChannelMessage()
         }
     var repeat = false
@@ -138,69 +142,6 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
 
     val nextSongIsFirst: Boolean get() = queue.isEmpty() && link.player.playingTrack == null
 
-    fun moveQueuedEntry(from: Int, to: Int, swap: Boolean): Track? {
-        val song = queue.getOrNull(from) ?: return null
-        if (swap) {
-            val toValue = queue.getOrNull(to) ?: return null
-            queue[to] = song
-            queue[from] = toValue
-        } else {
-            queue.add(to, song)
-            queue.removeAt(from)
-        }
-
-        updateMusicChannelMessage()
-        return song.track
-    }
-
-    fun removeQueueEntry(index: Int): Track? {
-        val track = runCatching { queue.removeAt(index) }.getOrNull() ?: return null
-        updateMusicChannelMessage()
-        return track.track
-    }
-
-    fun removeQueueEntries(range: IntRange): Int {
-        val queueSize = queue.size
-        if (range.first >= 0 && range.last <= queue.size) {
-            val before = queue.subList(0, range.first - 1) // inclusive
-            val after = queue.subList(range.last, queueSize)
-            val combined = before + after
-            queue = LinkedList(combined)
-
-            updateMusicChannelMessage()
-        }
-
-        return queueSize - queue.size
-    }
-
-    fun removeDoubles(): Int {
-        val removes = queue.countRemoves {
-            val tracks = mutableListOf<String>()
-            queue.removeIf {
-                if (it.track.info.identifier in tracks) {
-                    true
-                } else {
-                    tracks.add(it.track.info.identifier)
-                    false
-                }
-            }
-        }
-
-        updateMusicChannelMessage()
-
-        return removes
-    }
-
-    fun removeFromUser(predicate: (Snowflake) -> Boolean): Int {
-        val removes = queue.countRemoves {
-            queue.removeIf { predicate(it.queuedBy) }
-        }
-
-        updateMusicChannelMessage()
-
-        return removes
-    }
-
     suspend fun queueTrack(
         force: Boolean,
         onTop: Boolean,
@@ -209,8 +150,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
     ) = lock.withLock {
         val isFirst = nextSongIsFirst
         require(isFirst || position == null) { "Can only specify position if nextSong is first" }
-        val startIndex = if ((onTop || force) && queue.isNotEmpty()) 0 else queue.size
-        queue.addAll(startIndex, tracks)
+        queue.addTracks(tracks, onTop || force)
 
         if ((force || isFirst) && !dontQueue) {
             startNextSong(force = force, position = position)
@@ -236,10 +176,36 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
         link.player.searchAndPlayTrack(identifier, playOptionsBuilder)
     }
 
+    @OptIn(UnsafeRestApi::class)
+    suspend fun changeVolume(newVolume: Int) {
+        node.updatePlayer(guildId, request = PlayerUpdate(volume = newVolume.toOmissible()))
+    }
+
+    @OptIn(UnsafeRestApi::class)
+    suspend fun applyState(state: PersistentPlayerState) {
+        queue = Queue(state.queue.toMutableList())
+        playingTrack = state.currentTrack
+        filters = state.filters
+        autoPlay = state.autoPlayContext
+
+        val track = state.currentTrack?.track?.encoded
+        val position = state.position.inWholeMilliseconds.takeIf { track != null }
+
+        node.updatePlayer(
+            guildId, request = PlayerUpdate(
+                encodedTrack = track.toOmissible(),
+                position = position.toOmissible(),
+                volume = state.volume.toOmissible(),
+                filters = filters.toOmissible(),
+                paused = state.paused.toOmissible()
+            )
+        )
+        updateMusicChannelMessage()
+    }
+
     suspend fun applyFilters(builder: Filters.() -> Unit) {
-        val filters = MutableFilters().apply(builder)
         player.applyFilters(builder)
-        this.filters = SerializableFilters(filters)
+        this.filters = node.getPlayer(guildId).filters
     }
 
     private fun onChaptersLoaded(event: ChaptersLoadedEvent) {
@@ -278,7 +244,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
         if ((!repeat && !loopQueue && queue.isEmpty()) && event.reason != Message.EmittedEvent.TrackEndEvent.AudioTrackEndReason.REPLACED) {
             val autoPlayTrack = findNextAutoPlayedSong(event.track)
             if (autoPlayTrack != null) {
-                queue.add(SimpleQueuedTrack(autoPlayTrack, guild.kord.selfId))
+                queue.addTracks(SimpleQueuedTrack(autoPlayTrack, guild.kord.selfId))
             } else {
                 playingTrack = null
                 updateMusicChannelMessage()
@@ -292,7 +258,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
 
         // In order to loop the queueTracks we just add every track back to the queueTracks
         if (event.reason == Message.EmittedEvent.TrackEndEvent.AudioTrackEndReason.FINISHED && loopQueue && playingTrack != null) {
-            queue.add(playingTrack!!)
+            queue.addTracks(playingTrack!!)
         }
 
         if (event.reason.mayStartNext) {
@@ -316,7 +282,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
         val maybeSavedTrack = savedTrack
         if (to > 1) {
             // Drop every track, but the skip to track and then start the next track
-            queue = LinkedList(queue.drop(to - 1))
+            queue.drop(to - 1)
         } else if (maybeSavedTrack != null) {
             savedTrack = null
             player.playTrack(maybeSavedTrack.track.track) {
@@ -346,12 +312,6 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
         updateSponsorBlock()
         val nextTrack: QueuedTrack? = when {
             lastSong != null && repeat -> playingTrack!!
-            !force && (shuffle || (loopQueue && queue.isEmpty())) -> {
-                val index = Random.nextInt(queue.size)
-
-                /* return */queue.removeAt(index)
-            }
-
             else -> queue.poll()
         }
         if (nextTrack == null) {
@@ -367,11 +327,6 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
 
     fun toState(): PersistentPlayerState = PersistentPlayerState(this)
 
-    fun clearQueue() {
-        queue.clear()
-
-        updateMusicChannelMessage()
-    }
 
     suspend fun pause(pause: Boolean = !player.paused) = lock.withLock {
         player.pause(pause)
@@ -383,7 +338,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
     suspend fun stop() {
         player.stopTrack()
         link.disconnectAudio()
-        clearQueue()
+        queue.clear()
         autoPlay = null
         playingTrack = null
         updateMusicChannelMessage()
@@ -401,10 +356,4 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
             }
         }
     }
-}
-
-private fun <T : MutableList<*>> T.countRemoves(mutator: T.() -> Unit): Int {
-    val currentSize = size
-    apply(mutator)
-    return currentSize - size
 }

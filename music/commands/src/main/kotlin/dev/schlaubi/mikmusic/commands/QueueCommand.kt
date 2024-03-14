@@ -4,6 +4,7 @@ import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
 import dev.schlaubi.mikbot.plugin.api.util.forList
 import dev.schlaubi.mikmusic.checks.anyMusicPlaying
 import dev.schlaubi.mikmusic.core.MusicModule
+import dev.schlaubi.mikmusic.player.QueuedTrack
 import dev.schlaubi.mikmusic.player.addAutoPlaySongs
 import dev.schlaubi.mikmusic.util.format
 
@@ -17,7 +18,7 @@ suspend fun MusicModule.queueCommand() = ephemeralSlashCommand {
 
     action {
         if (musicPlayer.queuedTracks.isEmpty()) {
-            val track = player.playingTrack
+            val track = musicPlayer.playingTrack
             if (track != null) {
                 respond {
                     content = translate("commands.queue.now_playing", arrayOf(track.format()))
@@ -31,10 +32,10 @@ suspend fun MusicModule.queueCommand() = ephemeralSlashCommand {
         }
 
         editingPaginator {
-            forList(user, musicPlayer.queuedTracks, { (track) -> track.format() }, { current, total ->
+            forList(user, musicPlayer.queuedTracks, QueuedTrack::format, { current, total ->
                 translate("music.queue.info.title", arrayOf(current.toString(), total.toString()))
             }) {
-                val playingTrack = player.playingTrack
+                val playingTrack = musicPlayer.playingTrack
                 if (playingTrack != null) {
                     field {
                         name = translate("music.queue.now_playing")

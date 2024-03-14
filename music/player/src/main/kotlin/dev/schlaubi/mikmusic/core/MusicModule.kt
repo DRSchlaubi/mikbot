@@ -138,7 +138,7 @@ class MusicModule(context: PluginContext) : MikBotModule(context) {
                 val player = getMusicPlayer(guild)
                 it.schedulerOptions.applyToPlayer(player)
                 player.connectAudio(channelId)
-                it.applyToPlayer(player)
+                player.applyState(it)
             }
         }
         playerStates.drop()

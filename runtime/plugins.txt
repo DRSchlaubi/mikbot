@@ -1,3 +1,4 @@
 :core:ktor
 :music:player
 :music:commands
+:core:redeploy-hook

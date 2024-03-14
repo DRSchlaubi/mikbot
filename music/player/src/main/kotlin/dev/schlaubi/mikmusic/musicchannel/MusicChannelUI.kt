@@ -90,7 +90,7 @@ suspend fun updateMessage(
             title = translate("music.music_channel.queue")
             description = musicPlayer.queuedTracks.take(5).mapIndexed { index, track -> track to index }
                 .joinToString("\n") { (track, index) ->
-                    (index + 1).toString() + ". " + track.track.format()
+                    (index + 1).toString() + ". " + track.format()
                 }.ifBlank { translate("music.music_channel.queue.empty") }
 
             musicPlayer.addAutoPlaySongs(::translate)

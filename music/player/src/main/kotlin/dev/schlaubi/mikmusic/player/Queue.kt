@@ -42,6 +42,7 @@ class Queue(private var tracksList: MutableList<QueuedTrack> = mutableListOf()) 
 
     fun poll(): QueuedTrack {
         val queuedTrack = tracksList[order.poll()]
+        nextIndex = nextIndex.coerceAtMost(order.size)
         return queuedTrack
     }
 

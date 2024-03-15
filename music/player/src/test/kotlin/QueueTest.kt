@@ -145,6 +145,16 @@ class QueueTest {
         queue.moveQueuedEntry(5, 7, swap = false)
         assertEquals(tracks[5], queue.tracks[6])
     }
+
+    @Test
+    fun `check queue after queue ran through`() {
+        val queue = makeMockQueue()
+        repeat(queue.tracks.size) { queue.poll() }
+        val track = mockTrack(1)
+        queue.addTracks(track)
+
+        assertEquals(track, queue.poll())
+    }
 }
 
 private fun makeMockQueue() = Queue(MutableList(10, ::mockTrack))

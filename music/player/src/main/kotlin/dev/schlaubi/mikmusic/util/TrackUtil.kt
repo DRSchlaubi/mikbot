@@ -11,9 +11,9 @@ import kotlin.time.toDuration
  * @param repeat whether to add the repeat emoji or not
  */
 fun QueuedTrack.format(repeat: Boolean = false) = with(track.info) {
-    "[`$title - $author`]($uri) (${length.toDuration(DurationUnit.MILLISECONDS)})".run {
+    "[`$title - $author`]($uri) (${length.toDuration(DurationUnit.MILLISECONDS)}) (<@$queuedBy>)".run {
         if (repeat) {
-            "🔂 $this (<@$queuedBy>)"
+            "🔂 $this"
         } else {
             this
         }

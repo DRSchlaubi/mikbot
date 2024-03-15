@@ -6,6 +6,7 @@ import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSla
 import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommandContext
 import com.kotlindiscord.kord.extensions.commands.application.slash.ephemeralSubCommand
 import com.kotlindiscord.kord.extensions.commands.converters.impl.int
+import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalInt
 import dev.kord.common.entity.Snowflake
 import dev.schlaubi.mikbot.plugin.api.util.safeGuild
 import dev.schlaubi.mikmusic.core.MusicModule
@@ -25,7 +26,7 @@ class RemoveRangeSongArguments : Arguments() {
         name = "from"
         description = "commands.remove.arguments.from.description"
     }
-    val to by int {
+    val to by optionalInt {
         name = "to"
         description = "commands.remove.arguments.to.description"
     }
@@ -76,10 +77,11 @@ suspend fun MusicModule.removeCommand() = ephemeralControlSlashCommand {
         description = "commands.remove.range.description"
 
         doRemove {
-            if (arguments.to < arguments.from) {
+            val to = arguments.to ?: arguments.from
+            if (to < arguments.from) {
                 throw DiscordRelayedException(translate("commands.remove.range.invalid_range_end"))
             }
-            val range = arguments.from..arguments.to
+            val range = arguments.from..to
 
             musicPlayer.queue.removeQueueEntries(range)
         }

@@ -58,11 +58,11 @@ class Queue(private var tracksList: MutableList<QueuedTrack> = mutableListOf()) 
         val song = tracksList.getOrNull(fromIndex) ?: return null
         if (swap) {
             val toValue = tracksList.getOrNull(toIndex) ?: return null
-            tracksList[to] = song
-            tracksList[from] = toValue
+            tracksList[toIndex] = song
+            tracksList[fromIndex] = toValue
         } else {
-            tracksList.add(to, song)
-            tracksList.removeAt(from)
+            tracksList.add(toIndex, song)
+            tracksList.removeAt(fromIndex)
         }
 
         return song.track
@@ -72,6 +72,7 @@ class Queue(private var tracksList: MutableList<QueuedTrack> = mutableListOf()) 
         val trackIndex = runCatching {
             order.removeAt(index)
         }.getOrNull() ?: return null
+        if (trackIndex <= nextIndex) nextIndex--
         return tracksList[trackIndex].track
     }
 
@@ -79,9 +80,10 @@ class Queue(private var tracksList: MutableList<QueuedTrack> = mutableListOf()) 
         val queueSize = order.size
         if (range.first >= 0 && range.last <= order.size) {
             val before = order.subList(0, range.first - 1) // inclusive
-            val after = order.subList(range.last, queueSize)
+            val after = order.subList(range.last + 1, queueSize) // inclusive
             val combined = before + after
             order = LinkedList(combined)
+            if (range.last <= nextIndex) nextIndex -= range.count() + 1
         }
 
         return queueSize - order.size

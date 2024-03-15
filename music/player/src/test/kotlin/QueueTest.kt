@@ -74,11 +74,82 @@ class QueueTest {
         queue.shuffle = false
         assertEquals(newTracks + tracks, queue.tracks)
     }
+
+    @Test
+    fun `test removal of tracks`() {
+        val queue = makeMockQueue()
+        val tracks = queue.tracks.toList()
+
+        queue.removeQueueEntry(5)
+        assertEquals(tracks.filterIndexed { index, _ -> index != 5 }, queue.tracks, "Track was not removed")
+
+        val track = mockTrack(11)
+        queue.addTracks(track)
+        repeat(queue.tracks.size - 1) { queue.poll() }
+        assertEquals(track, queue.poll())
+    }
+
+    @Test
+    fun `test removal of tracks in range`() {
+        val queue = makeMockQueue()
+        val tracks = queue.tracks.toList()
+
+        queue.removeQueueEntries(5..8)
+        // removeQueueEntries is inclusive
+        assertEquals(tracks.filterIndexed { index, _ -> index !in 4..8 }, queue.tracks, "Track was not removed")
+
+        val track = mockTrack(11)
+        queue.addTracks(track)
+        repeat(queue.tracks.size - 1) { queue.poll() }
+        assertEquals(track, queue.poll())
+    }
+
+    @Test
+    fun `test swap of tracks`() {
+        val queue = makeMockQueue()
+        val tracks = queue.tracks.toList()
+
+        queue.moveQueuedEntry(5, 7, swap = true)
+        assertEquals(tracks[7], queue.tracks[5])
+        assertEquals(tracks[5], queue.tracks[7])
+    }
+
+    @Test
+    fun `test move of tracks`() {
+        val queue = makeMockQueue()
+        val tracks = queue.tracks.toList()
+
+        queue.moveQueuedEntry(5, 7, swap = false)
+        assertEquals(tracks[5], queue.tracks[6])
+    }
+
+    @Test
+    fun `test swap of tracks in shuffle`() {
+        val queue = makeMockQueue()
+        queue.shuffle = true
+        queue.addTracks(MutableList(10) { mockTrack(it + 11) })
+        val tracks = queue.tracks.toList()
+
+        queue.moveQueuedEntry(5, 7, swap = true)
+        assertEquals(tracks[7], queue.tracks[5])
+        assertEquals(tracks[5], queue.tracks[7])
+    }
+
+    @Test
+    fun `test move of tracks in shuffle`() {
+        val queue = makeMockQueue()
+        queue.shuffle = true
+        queue.addTracks(MutableList(10) { mockTrack(it + 11) })
+        val tracks = queue.tracks.toList()
+
+        queue.moveQueuedEntry(5, 7, swap = false)
+        assertEquals(tracks[5], queue.tracks[6])
+    }
 }
 
 private fun makeMockQueue() = Queue(MutableList(10, ::mockTrack))
 
-private fun mockTrack(num: Int): SimpleQueuedTrack {
+private fun mockTrack(num: Int, author: Snowflake = Snowflake.min): SimpleQueuedTrack {
     val track = Track(
         "$num",
         TrackInfo("", false, "", 0, false, 0, "$num", null, "", null, null),
@@ -86,5 +157,5 @@ private fun mockTrack(num: Int): SimpleQueuedTrack {
         emptyJsonObject()
     )
 
-    return SimpleQueuedTrack(track, Snowflake.min)
+    return SimpleQueuedTrack(track, author)
 }

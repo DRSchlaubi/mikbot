@@ -83,7 +83,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
 
     private fun updateSponsorBlock() = guild.kord.launch {
         val settings = MusicSettingsDatabase.findGuild(guild)
-        val categories = player.getSponsorblockCategories()
+        val categories = runCatching { player.getSponsorblockCategories() }.getOrElse { emptyList() }
 
         if (categories.isEmpty() && settings.useSponsorBlock) {
             player.putSponsorblockCategories(
@@ -153,7 +153,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
         queue.addTracks(tracks, onTop || force)
 
         if ((force || isFirst) && !dontQueue) {
-            startNextSong(force = force, position = position)
+            startNextSong(position = position)
             waitForPlayerUpdate()
         }
 
@@ -221,7 +221,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
         updateMusicChannelMessage()
     }
 
-    private fun onTrackStart(@Suppress("UNUSED_PARAMETER") event: TrackStartEvent) {
+    private fun onTrackStart(@Suppress("unused") event: TrackStartEvent) {
         leaveTimeout?.cancel()
         updateMusicChannelMessage()
     }
@@ -308,7 +308,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
     }
 
     // called under lock
-    private suspend fun startNextSong(lastSong: Track? = null, force: Boolean = false, position: Duration? = null) {
+    private suspend fun startNextSong(lastSong: Track? = null, position: Duration? = null) {
         updateSponsorBlock()
         val nextTrack: QueuedTrack? = when {
             lastSong != null && repeat -> playingTrack!!

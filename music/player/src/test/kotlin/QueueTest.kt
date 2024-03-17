@@ -155,6 +155,16 @@ class QueueTest {
 
         assertEquals(track, queue.poll())
     }
+
+    @Test
+    fun `check queue after queue was cleared`() {
+        val queue = makeMockQueue()
+        queue.clear()
+        val track = mockTrack(1)
+        queue.addTracks(track)
+
+        assertEquals(track, queue.poll())
+    }
 }
 
 private fun makeMockQueue() = Queue(MutableList(10, ::mockTrack))

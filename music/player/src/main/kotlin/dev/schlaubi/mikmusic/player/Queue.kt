@@ -47,6 +47,7 @@ class Queue(private var tracksList: MutableList<QueuedTrack> = mutableListOf()) 
     }
 
     fun clear() {
+        nextIndex = 0
         tracksList.clear()
         order.clear()
     }

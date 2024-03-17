@@ -12,7 +12,7 @@ class Queue(private var tracksList: MutableList<QueuedTrack> = mutableListOf()) 
                 order = LinkedList(order.shuffled())
             } else {
                 val queue = order.subList(0, nextIndex)
-                val shuffled = order.subList(nextIndex.coerceAtMost(order.lastIndex), tracksList.size)
+                val shuffled = order.subList(nextIndex.coerceAtMost(order.lastIndex), order.size)
                 val unShuffled = queue + shuffled.sorted()
 
                 nextIndex = tracksList.size

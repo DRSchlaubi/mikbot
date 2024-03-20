@@ -1,5 +1,5 @@
 [versions]
-kotlin = "2.0.0-Beta2"
+kotlin = "2.0.0-Beta5"
 kordex = "1.7.1-SNAPSHOT"
 kmongo = "4.11.0"
 coroutines = "1.7.3"

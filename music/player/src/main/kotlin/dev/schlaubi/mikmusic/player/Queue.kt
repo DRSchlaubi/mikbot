@@ -17,8 +17,8 @@ class Queue(private var tracksList: MutableList<QueuedTrack> = mutableListOf()) 
                     val unShuffled = queue + shuffled.sorted()
 
                     order = LinkedList(unShuffled)
+                    nextIndex = tracksList.size
                 }
-                nextIndex = tracksList.size
             }
             field = value
         }

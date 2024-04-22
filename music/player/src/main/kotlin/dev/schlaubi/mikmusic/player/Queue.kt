@@ -11,12 +11,14 @@ class Queue(private var tracksList: MutableList<QueuedTrack> = mutableListOf()) 
                 nextIndex = 0
                 order = LinkedList(order.shuffled())
             } else {
-                val queue = order.subList(0, nextIndex)
-                val shuffled = order.subList(nextIndex.coerceAtMost(order.lastIndex), order.size)
-                val unShuffled = queue + shuffled.sorted()
+                if (order.isNotEmpty()) {
+                    val queue = order.subList(0, nextIndex)
+                    val shuffled = order.subList(nextIndex.coerceAtMost(order.lastIndex), order.size)
+                    val unShuffled = queue + shuffled.sorted()
 
+                    order = LinkedList(unShuffled)
+                }
                 nextIndex = tracksList.size
-                order = LinkedList(unShuffled)
             }
             field = value
         }
@@ -43,6 +45,9 @@ class Queue(private var tracksList: MutableList<QueuedTrack> = mutableListOf()) 
     fun poll(): QueuedTrack {
         val queuedTrack = tracksList[order.poll()]
         nextIndex = nextIndex.coerceAtMost(order.size)
+        if (order.size == 0) {
+            shuffle = false
+        }
         return queuedTrack
     }
 
@@ -50,6 +55,7 @@ class Queue(private var tracksList: MutableList<QueuedTrack> = mutableListOf()) 
         nextIndex = 0
         tracksList.clear()
         order.clear()
+        shuffle = false
     }
 
     fun isEmpty() = order.isEmpty()

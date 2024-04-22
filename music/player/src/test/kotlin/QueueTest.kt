@@ -6,6 +6,7 @@ import dev.schlaubi.mikmusic.player.SimpleQueuedTrack
 import dev.schlaubi.stdx.serialization.emptyJsonObject
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotEquals
 
 class QueueTest {
@@ -164,6 +165,25 @@ class QueueTest {
         queue.addTracks(track)
 
         assertEquals(track, queue.poll())
+    }
+
+    @Test
+    fun `test shuffle is over after shuffle is over`() {
+        val queue = makeMockQueue()
+        queue.shuffle = true
+        repeat(queue.tracks.size) { queue.poll() }
+
+        assertFalse(queue.shuffle)
+    }
+
+    @Test
+    fun `test shuffle is over after shuffle is over, when adding unshuffled tracks`() {
+        val queue = makeMockQueue()
+        queue.addTracks(mockTrack(23))
+        queue.shuffle = true
+        repeat(queue.tracks.size) { queue.poll() }
+
+        assertFalse(queue.shuffle)
     }
 }
 

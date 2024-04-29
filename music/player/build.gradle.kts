@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     `mikbot-module`
     `mikbot-publishing`
@@ -37,11 +35,9 @@ dependencies {
     testImplementation(kotlin("test-junit5"))
 }
 
-tasks {
-    withType<KotlinCompile> {
-        kotlinOptions {
-            freeCompilerArgs = freeCompilerArgs + "-Xcontext-receivers"
-        }
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.add("-Xcontext-receivers")
     }
 }
 

@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -24,6 +23,7 @@ dependencies {
 
 kotlin {
     compilerOptions {
+        freeCompilerArgs.add("-Xcontext-receivers")
         jvmTarget = JvmTarget.JVM_17
     }
 }
@@ -46,14 +46,6 @@ gradlePlugin {
     website = "https://github.com/DRSchlaubi/mikbot/tree/main/gradle-plugin"
     vcsUrl = "https://github.com/DRSchlaubi/mikbot"
 
-}
-
-tasks {
-    withType<KotlinCompile> {
-        kotlinOptions {
-            freeCompilerArgs = listOf("-Xcontext-receivers")
-        }
-    }
 }
 
 afterEvaluate {

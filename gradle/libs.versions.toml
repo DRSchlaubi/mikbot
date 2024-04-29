@@ -6,7 +6,7 @@ coroutines = "1.8.0"
 serialization = "1.6.3"
 ktor = "2.3.10"
 kord = "0.13.1"
-api = "3.30.0"
+api = "3.30.1"
 ksp = "2.0.0-RC1-1.0.20"
 lavakord = "6.1.3"
 

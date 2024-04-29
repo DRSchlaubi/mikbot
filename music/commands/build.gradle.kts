@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     `mikbot-module`
     alias(libs.plugins.kotlinx.serialization)
@@ -12,11 +10,9 @@ dependencies {
     optionalPlugin(projects.core.gdpr)
 }
 
-tasks {
-    withType<KotlinCompile> {
-        kotlinOptions {
-            freeCompilerArgs = freeCompilerArgs + "-Xcontext-receivers"
-        }
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.add("-Xcontext-receivers")
     }
 }
 

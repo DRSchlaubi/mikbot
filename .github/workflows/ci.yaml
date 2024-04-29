@@ -13,7 +13,7 @@ permissions: write-all
 
 jobs:
   mikbot:
-    uses: mikbot/mikbot-workflow/.github/workflows/mikbot-workflow.yml@v1.5.4
+    uses: mikbot/mikbot-workflow/.github/workflows/mikbot-workflow.yml@v1.5.5
     with:
       run-maven-publish: true
       update-binary-repository: true

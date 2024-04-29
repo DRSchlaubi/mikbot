@@ -45,15 +45,15 @@ application {
     applicationDefaultJvmArgs = listOf("--enable-preview")
 }
 
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.add("-opt-in=dev.schlaubi.mikbot.plugin.api.InternalAPI")
+    }
+}
+
 tasks {
     startScripts {
         classpath = DummyFileCollection(listOf("lib/*", "lib/."))
-    }
-
-    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions {
-            freeCompilerArgs = freeCompilerArgs + listOf("-opt-in=dev.schlaubi.mikbot.plugin.api.InternalAPI")
-        }
     }
 
     // This is probably the worst way of doing this,

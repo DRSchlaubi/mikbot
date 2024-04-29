@@ -106,10 +106,10 @@ class Bot(repos: List<UpdateRepository>) : KordExKoinComponent, PluginContext {
                         dsn = Config.SENTRY_TOKEN
                         for (extension in sentryExtensions) {
                             with(extension) {
-                                setup()
+                                it.setup()
                             }
                         }
-                        setBeforeSend { event, hint ->
+                        it.setBeforeSend { event, hint ->
                             event.apply {
                                 user = null
                                 for (extension in sentryExtensions) {
@@ -117,7 +117,7 @@ class Bot(repos: List<UpdateRepository>) : KordExKoinComponent, PluginContext {
                                 }
                             }
                         }
-                        setBeforeBreadcrumb { breadcrumb, hint ->
+                        it.setBeforeBreadcrumb { breadcrumb, hint ->
                             breadcrumb.apply {
                                 for (extension in sentryExtensions) {
                                     extension.beforeBreadcrumb(breadcrumb, hint)

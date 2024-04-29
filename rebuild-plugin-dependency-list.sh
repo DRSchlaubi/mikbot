@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
-./gradlew exportDependencies :gradle-plugin:clean
+./gradlew runtime:exportDependencies :gradle-plugin:clean
 rm -rf buildSrc/build
 ./gradlew

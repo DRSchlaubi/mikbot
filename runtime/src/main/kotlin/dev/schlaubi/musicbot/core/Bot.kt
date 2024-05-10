@@ -99,11 +99,11 @@ class Bot(repos: List<UpdateRepository>) : KordExKoinComponent, PluginContext {
             sentry {
                 enable = Config.ENVIRONMENT.useSentry
                 pingInReply = false
+                dsn = Config.SENTRY_TOKEN
 
                 val sentryExtensions = pluginSystem.getExtensions<SentryExtensionPoint>()
                 setupCallback = {
                     init {
-                        dsn = Config.SENTRY_TOKEN
                         for (extension in sentryExtensions) {
                             with(extension) {
                                 it.setup()

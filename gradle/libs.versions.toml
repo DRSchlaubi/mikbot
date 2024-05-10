@@ -1,13 +1,13 @@
 [versions]
-kotlin = "2.0.0-RC1"
+kotlin = "2.0.0-RC3"
 kordex = "1.8.0-SNAPSHOT"
 kmongo = "4.11.0"
 coroutines = "1.8.0"
 serialization = "1.6.3"
 ktor = "2.3.10"
 kord = "0.13.1"
-api = "3.30.2"
-ksp = "2.0.0-RC1-1.0.20"
+api = "3.31.0"
+ksp = "2.0.0-RC3-1.0.20"
 lavakord = "6.2.0"
 
 [libraries]

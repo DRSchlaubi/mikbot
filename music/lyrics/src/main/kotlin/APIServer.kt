@@ -83,18 +83,21 @@ class APIServer : KtorExtensionPoint, KordExKoinComponent {
                 contentConverter = KotlinxWebsocketSerializationConverter(Json)
             }
         }
-        install(CORS) {
-            allowMethod(HttpMethod.Options)
-            allowMethod(HttpMethod.Put)
-            allowMethod(HttpMethod.Delete)
-            allowMethod(HttpMethod.Patch)
-            allowHeader(HttpHeaders.Authorization)
-            if (BotConfig.ENVIRONMENT == Environment.DEVELOPMENT) {
-                anyHost()
-            } else {
-                allowSameOrigin = true
-                val url = Url(Config.LYRICS_WEB_URL)
-                allowHost(url.host, listOf(url.protocol.name))
+
+        if (pluginOrNull(CORS) == null) {
+            install(CORS) {
+                allowMethod(HttpMethod.Options)
+                allowMethod(HttpMethod.Put)
+                allowMethod(HttpMethod.Delete)
+                allowMethod(HttpMethod.Patch)
+                allowHeader(HttpHeaders.Authorization)
+                if (BotConfig.ENVIRONMENT == Environment.DEVELOPMENT) {
+                    anyHost()
+                } else {
+                    allowSameOrigin = true
+                    val url = Url(Config.LYRICS_WEB_URL)
+                    allowHost(url.host, listOf(url.protocol.name))
+                }
             }
         }
 

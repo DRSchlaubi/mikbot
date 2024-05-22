@@ -23,6 +23,10 @@ class PlaylistAddArguments : PlaylistArguments(), QueueOptions {
     }
     override val top: Boolean = false
     override val force: Boolean = false
+    override val shuffle: Boolean? = null
+    override val loop: Boolean? = null
+    override val loopQueue: Boolean? = null
+
 }
 
 fun PlaylistModule.addCommand() = ephemeralSubCommand(::PlaylistAddArguments) {

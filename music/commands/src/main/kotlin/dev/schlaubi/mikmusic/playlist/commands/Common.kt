@@ -21,49 +21,57 @@ import org.litote.kmongo.eq
 import org.litote.kmongo.or
 import org.litote.kmongo.util.KMongoUtil
 
-abstract class PlaylistArguments(val onlyMine:Boolean = true) : Arguments() {
-    val name by string {
-        name = "name"
-        description = "The name of the playlist"
-
-        validate {
-            getPlaylistOrNull(context.getUser()!!, value) ?: context.notFound(value)
-        }
-
-        autoComplete {
-            val genericFilter = if (onlyMine) {
-                Playlist::authorId eq user.id
-            } else {
-                or(Playlist::public eq true, Playlist::authorId eq user.id)
-            }
-            val input = focusedOption.value
-            val names = PlaylistDatabase.collection.find(
-                and(genericFilter,
-                    KMongoUtil.toBson("{name: /$input/i}"))
-            ).toFlow()
-                .take(25)
-                .toList()
-            suggestString {
-                names.forEach { choice(it.name, it.name) }
-            }
-        }
-    }
-
-    private suspend fun CommandContext.notFound(value: String): Nothing {
-        throw DiscordRelayedException(translate("command.playlist.unknown_playlist", arrayOf(value)))
-    }
-
-    suspend fun getPlaylistOrNull(userBehavior: UserBehavior, name: String) =
-        PlaylistDatabase.collection.findOne(
-            and(
-                Playlist::name eq name,
-                or(Playlist::public eq true, Playlist::authorId eq userBehavior.id)
-            )
-        )
+interface PlaylistOptions {
+    val name: String
 }
 
-suspend fun EphemeralSlashCommandContext<out PlaylistArguments, *>.getPlaylist() =
-    arguments.getPlaylistOrNull(user, arguments.name) ?: error("Could not load playlist")
+abstract class PlaylistArguments(onlyMine: Boolean = true) : Arguments(), PlaylistOptions {
+    override val name by playlistName(onlyMine)
+}
+
+fun Arguments.playlistName(onlyMine: Boolean) = string {
+    name = "name"
+    description = "The name of the playlist"
+
+    validate {
+        getPlaylistOrNull(context.getUser()!!, value) ?: context.notFound(value)
+    }
+
+    autoComplete {
+        val genericFilter = if (onlyMine) {
+            Playlist::authorId eq user.id
+        } else {
+            or(Playlist::public eq true, Playlist::authorId eq user.id)
+        }
+        val input = focusedOption.value
+        val names = PlaylistDatabase.collection.find(
+            and(
+                genericFilter,
+                KMongoUtil.toBson("{name: /$input/i}")
+            )
+        ).toFlow()
+            .take(25)
+            .toList()
+        suggestString {
+            names.forEach { choice(it.name, it.name) }
+        }
+    }
+}
+
+private suspend fun CommandContext.notFound(value: String): Nothing {
+    throw DiscordRelayedException(translate("command.playlist.unknown_playlist", arrayOf(value)))
+}
+
+private suspend fun getPlaylistOrNull(userBehavior: UserBehavior, name: String) =
+    PlaylistDatabase.collection.findOne(
+        and(
+            Playlist::name eq name,
+            or(Playlist::public eq true, Playlist::authorId eq userBehavior.id)
+        )
+    )
+suspend fun <T> EphemeralSlashCommandContext<T, *>.getPlaylist()
+    where T : Arguments, T : PlaylistOptions =
+    getPlaylistOrNull(user, arguments.name) ?: error("Could not load playlist")
 
 class PlaylistModule(context: PluginContext) : SubCommandModule(context) {
 

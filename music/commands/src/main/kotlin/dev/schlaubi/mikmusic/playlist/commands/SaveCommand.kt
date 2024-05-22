@@ -31,6 +31,9 @@ class PlaylistSaveArguments : Arguments(), QueueOptions {
     override val force: Boolean = false
     override val top: Boolean = false
     override val searchProvider: QueueOptions.SearchProvider? = null
+    override val shuffle: Boolean? = null
+    override val loop: Boolean? = null
+    override val loopQueue: Boolean? = null
 }
 
 fun PlaylistModule.saveCommand() = ephemeralSubCommand(::PlaylistSaveArguments) {

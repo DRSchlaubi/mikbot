@@ -1,10 +1,13 @@
 package dev.schlaubi.mikmusic.playlist.commands
 
 import dev.schlaubi.mikmusic.checks.joinSameChannelCheck
+import dev.schlaubi.mikmusic.player.queue.SchedulingArguments
 import dev.schlaubi.mikmusic.playlist.PlaylistDatabase
 import dev.schlaubi.mikmusic.util.mapToQueuedTrack
 
-class LoadArguments : PlaylistArguments(onlyMine = false)
+class LoadArguments : SchedulingArguments(), PlaylistOptions {
+    override val name by playlistName(onlyMine = false)
+}
 
 fun PlaylistModule.loadCommand() = ephemeralSubCommand(::LoadArguments) {
     name = "load"
@@ -20,7 +23,8 @@ fun PlaylistModule.loadCommand() = ephemeralSubCommand(::LoadArguments) {
 
         musicPlayer.queueTrack(
             force = false, onTop = false,
-            tracks = playlist.getTracks(musicPlayer.node).mapToQueuedTrack(user)
+            tracks = playlist.getTracks(musicPlayer.node).mapToQueuedTrack(user),
+            schedulingOptions = arguments
         )
 
         respond {

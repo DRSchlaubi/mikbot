@@ -6,6 +6,7 @@ import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSla
 import com.kotlindiscord.kord.extensions.commands.application.slash.converters.ChoiceEnum
 import com.kotlindiscord.kord.extensions.commands.application.slash.converters.impl.optionalEnumChoice
 import com.kotlindiscord.kord.extensions.commands.converters.impl.defaultingBoolean
+import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalBoolean
 import dev.arbjerg.lavalink.protocol.v4.Exception
 import dev.arbjerg.lavalink.protocol.v4.LoadResult
 import dev.kord.rest.builder.message.embed
@@ -22,7 +23,13 @@ private val LOG = KotlinLogging.logger { }
 
 private val urlProtocol = "^https?://".toRegex()
 
-interface QueueOptions {
+interface SchedulingOptions {
+    val shuffle: Boolean?
+    val loop: Boolean?
+    val loopQueue: Boolean?
+}
+
+interface QueueOptions : SchedulingOptions {
     val query: String
     val force: Boolean
     val top: Boolean
@@ -34,7 +41,24 @@ interface QueueOptions {
     }
 }
 
-abstract class QueueArguments : Arguments(), QueueOptions {
+abstract class SchedulingArguments : Arguments(), SchedulingOptions {
+    override val shuffle: Boolean? by optionalBoolean {
+        name = "shuffle"
+        description = "scheduler.options.shuffle.description"
+    }
+
+    override val loop: Boolean? by optionalBoolean {
+        name = "loop"
+        description = "scheduler.options.loop.description"
+    }
+
+    override val loopQueue: Boolean? by optionalBoolean {
+        name = "loop-queue"
+        description = "scheduler.options.loop_queue.description"
+    }
+}
+
+abstract class QueueArguments : SchedulingArguments(), QueueOptions {
     override val query by autoCompletedYouTubeQuery("The query to play")
     override val force by defaultingBoolean {
         name = "force"
@@ -167,7 +191,8 @@ suspend fun CommandContext.queueTracks(
         musicPlayer.queueTrack(
             arguments.force,
             arguments.top,
-            searchResult.tracks.map { SimpleQueuedTrack(it, getUser()!!.id) }
+            searchResult.tracks.map { SimpleQueuedTrack(it, getUser()!!.id) },
+            schedulingOptions = arguments
         )
     }
 }

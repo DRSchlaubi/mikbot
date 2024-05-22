@@ -27,6 +27,7 @@ import dev.schlaubi.lavakord.rest.getPlayer
 import dev.schlaubi.lavakord.rest.updatePlayer
 import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase
 import dev.schlaubi.mikmusic.musicchannel.updateMessage
+import dev.schlaubi.mikmusic.player.queue.SchedulingOptions
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -147,10 +148,15 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
         onTop: Boolean,
         tracks: Collection<QueuedTrack>,
         position: Duration? = null,
+        schedulingOptions: SchedulingOptions? = null
     ) = lock.withLock {
         val isFirst = nextSongIsFirst
         require(isFirst || position == null) { "Can only specify position if nextSong is first" }
         queue.addTracks(tracks, onTop || force)
+
+        queue.shuffle = schedulingOptions?.shuffle ?: queue.shuffle
+        loopQueue = schedulingOptions?.loopQueue ?: loopQueue
+        repeat = schedulingOptions?.loop ?: repeat
 
         if ((force || isFirst) && !dontQueue) {
             startNextSong(position = position)
@@ -310,13 +316,13 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
     // called under lock
     private suspend fun startNextSong(lastSong: Track? = null, position: Duration? = null) {
         updateSponsorBlock()
-        val nextTrack: QueuedTrack? = when {
-            lastSong != null && repeat -> playingTrack!!
-            else -> queue.poll()
-        }
-        if (nextTrack == null) {
+        if (queue.isEmpty()) {
             updateMusicChannelMessage()
             return
+        }
+        val nextTrack: QueuedTrack = when {
+            lastSong != null && repeat -> playingTrack!!
+            else -> queue.poll()
         }
 
         playingTrack = nextTrack

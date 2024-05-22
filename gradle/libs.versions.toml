@@ -7,7 +7,7 @@ serialization = "1.6.3"
 ktor = "2.3.10"
 kord = "0.13.1"
 api = "3.31.0"
-ksp = "2.0.0-RC2-1.0.20"
+ksp = "2.0.0-1.0.21"
 lavakord = "6.2.0"
 
 [libraries]

@@ -1,3 +1,5 @@
+@file:OptIn(IKnowWhatIAmDoing::class)
+
 package dev.schlaubi.mikmusic.player.queue
 
 import com.kotlindiscord.kord.extensions.commands.Arguments
@@ -12,6 +14,8 @@ import dev.arbjerg.lavalink.protocol.v4.LoadResult
 import dev.kord.rest.builder.message.embed
 import dev.schlaubi.lavakord.rest.loadItem
 import dev.schlaubi.mikbot.plugin.api.util.EditableMessageSender
+import dev.schlaubi.mikbot.plugin.api.util.IKnowWhatIAmDoing
+import dev.schlaubi.mikbot.plugin.api.util.SortedArguments
 import dev.schlaubi.mikmusic.autocomplete.autoCompletedYouTubeQuery
 import dev.schlaubi.mikmusic.core.Config
 import dev.schlaubi.mikmusic.player.MusicPlayer
@@ -41,7 +45,7 @@ interface QueueOptions : SchedulingOptions {
     }
 }
 
-abstract class SchedulingArguments : Arguments(), SchedulingOptions {
+abstract class SchedulingArguments : SortedArguments(), SchedulingOptions {
     override val shuffle: Boolean? by optionalBoolean {
         name = "shuffle"
         description = "scheduler.options.shuffle.description"
@@ -62,17 +66,17 @@ abstract class QueueArguments : SchedulingArguments(), QueueOptions {
     override val query by autoCompletedYouTubeQuery("The query to play")
     override val force by defaultingBoolean {
         name = "force"
-        description = "Makes this item skip the queueTracks"
+        description = "queue.options.force.description"
         defaultValue = false
     }
     override val top by defaultingBoolean {
         name = "top"
-        description = "Adds this item to the top of the queueTracks"
+        description = "queue.options.top.description"
         defaultValue = false
     }
     override val searchProvider by optionalEnumChoice<QueueOptions.SearchProvider> {
         name = "search-provider"
-        description = "Which searchprovider to use"
+        description = "queue.options.search_provider.description"
         typeName = "SearchProvider"
     }
 }

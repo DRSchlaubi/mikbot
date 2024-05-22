@@ -2,6 +2,9 @@ package dev.schlaubi.musicbot.core.plugin
 
 import com.kotlindiscord.kord.extensions.i18n.ResourceBundleTranslations
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
+import dev.kord.common.asJavaLocale
+import dev.kord.common.kLocale
+import dev.schlaubi.mikbot.plugin.api.util.convertToISO
 import mu.KotlinLogging
 import java.util.*
 
@@ -17,6 +20,6 @@ class PluginTranslationProvider(private val pluginLoader: PluginLoader, defaultL
             plugin?.pluginClassLoader ?: ClassLoader.getSystemClassLoader()
         LOG.debug { "Found classloader for $bundle to be $classLoader (${plugin?.pluginId ?: "<root>"})" }
 
-        return ResourceBundle.getBundle(bundle, locale, classLoader, control)
+        return ResourceBundle.getBundle(bundle, locale.kLocale.convertToISO().asJavaLocale(), classLoader, control)
     }
 }

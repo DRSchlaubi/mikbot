@@ -53,7 +53,7 @@ ktor-server-html-builder = { group = "io.ktor", name = "ktor-server-html-builder
 pf4j = { group = "org.pf4j", name = "pf4j", version = "3.11.0" }
 pf4j-update = { group = "org.pf4j", name = "pf4j-update", version = "2.3.0" }
 
-gson = { group = "com.google.code.gson", name = "gson", version = "2.10.1" }
+gson = { group = "com.google.code.gson", name = "gson", version = "2.11.0" }
 
 koin = { group = "io.insert-koin", name = "koin-core", version = "3.5.6" }
 

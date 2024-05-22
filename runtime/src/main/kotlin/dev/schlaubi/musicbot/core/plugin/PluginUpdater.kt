@@ -74,7 +74,7 @@ class PluginUpdater(private val pluginLoader: PluginLoader, repos: List<UpdateRe
                 }
                 val lastVersion = lastRelease.version
                 val installedPlugin = pluginLoader.getPlugin(plugin.id)
-                if (installedPlugin != null && BUNDLED_PLUGINS in installedPlugin.pluginPath.absolutePathString()) continue
+                if (installedPlugin == null || BUNDLED_PLUGINS in installedPlugin.pluginPath.absolutePathString()) continue
                 val installedVersion = installedPlugin.descriptor.version
 
                 LOG.debug { "Update plugin '${plugin.id}' from version $installedVersion to version $lastVersion" }

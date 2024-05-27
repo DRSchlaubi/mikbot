@@ -26,7 +26,7 @@ fun DependencyHandlerScope.ktorDependency(dependency: Provider<*>) = implementat
 
 tasks {
     val generateDefaultResourceBundle by registering(GenerateDefaultTranslationBundleTask::class) {
-        defaultLocale = Locale("en", "GB")
+        defaultLocale = Locale.Builder().setLanguage("en").setRegion("GB").build()
     }
 
     classes {

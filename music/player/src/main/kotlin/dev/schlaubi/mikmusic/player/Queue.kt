@@ -7,6 +7,7 @@ import java.util.*
 class Queue(private var tracksList: MutableList<QueuedTrack> = mutableListOf()) {
     var shuffle: Boolean = false
         set(value) {
+            if (field == value) return
             if (value) {
                 nextIndex = 0
                 order = LinkedList(order.shuffled())

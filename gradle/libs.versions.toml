@@ -2,7 +2,7 @@
 kotlin = "2.0.0"
 kordex = "1.8.1-SNAPSHOT"
 kmongo = "5.1.0"
-coroutines = "1.9.0-RC"
+coroutines = "1.8.1"
 serialization = "1.7.0-RC"
 ktor = "2.3.11"
 kord = "0.14.0"

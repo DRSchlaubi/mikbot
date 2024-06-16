@@ -185,6 +185,19 @@ class QueueTest {
 
         assertFalse(queue.shuffle)
     }
+
+    @Test
+    fun `test index gets updated after non-shuffle queue finishes`() {
+        val queue = makeMockQueue()
+        queue.shuffle = true
+        queue.addTracks(mockTrack(23))
+        queue.addTracks(mockTrack(24))
+        queue.addTracks(mockTrack(25))
+        repeat(3) { queue.poll() }
+        val track = mockTrack(26)
+        queue.addTracks(track)
+        assertEquals(track, queue.poll())
+    }
 }
 
 private fun makeMockQueue() = Queue(MutableList(10, ::mockTrack))

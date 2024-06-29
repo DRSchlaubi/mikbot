@@ -91,7 +91,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
                 Category.Selfpromo,
                 Category.Sponsor
             )
-        } else if (categories.isNotEmpty()) {
+        } else if (categories.isNotEmpty() && !settings.useSponsorBlock) {
             player.disableSponsorblock()
         }
     }

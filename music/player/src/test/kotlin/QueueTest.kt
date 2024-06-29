@@ -64,6 +64,17 @@ class QueueTest {
     }
 
     @Test
+    fun `test queue works whilst shuffle is playing`() {
+        val queue = makeMockQueue()
+        queue.shuffle = true
+        queue.poll()
+        val mockTrack = mockTrack(11)
+        queue.addTracks(mockTrack)
+
+        assertEquals(mockTrack, queue.poll())
+    }
+
+    @Test
     fun `test un-shuffle after queue`() {
         val queue = makeMockQueue()
         val tracks = queue.tracks.toList()

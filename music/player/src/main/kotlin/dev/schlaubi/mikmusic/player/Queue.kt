@@ -45,7 +45,7 @@ class Queue(private var tracksList: MutableList<QueuedTrack> = mutableListOf()) 
 
     fun poll(): QueuedTrack {
         val queuedTrack = tracksList[order.poll()]
-        nextIndex--
+        nextIndex = (nextIndex - 1).coerceAtLeast(0)
         if (order.isEmpty()) {
             shuffle = false
         }

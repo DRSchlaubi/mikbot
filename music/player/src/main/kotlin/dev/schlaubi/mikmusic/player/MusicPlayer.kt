@@ -74,8 +74,6 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
             settings.defaultSchedulerSettings?.applyToPlayer(this@MusicPlayer)
         }
 
-        updateSponsorBlock()
-
         link.player.on(consumer = ::onTrackEnd)
         link.player.on(consumer = ::onTrackStart)
         link.player.on(consumer = ::onChaptersLoaded)

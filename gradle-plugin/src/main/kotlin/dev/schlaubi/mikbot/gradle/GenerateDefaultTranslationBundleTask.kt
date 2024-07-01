@@ -27,16 +27,17 @@ abstract class GenerateDefaultTranslationBundleTask : DefaultTask() {
         val to = project.layout.buildDirectory.dir("generated/mikbot/main/resources")
 
         val result = project.copy {
-                val locale = defaultLocale.orNull?.resourceBundleKey
-                    ?: error("Please specify a default locale")
-                from(from)
-                into(to)
+            val locale = defaultLocale.orNull?.resourceBundleKey
+                ?: error("Please specify a default locale")
 
-                bundles.get().ifEmpty { listOf("strings") }.forEach {
-                    val name = "${it}_${locale}.properties"
-                    include("translations/${project.bundle}/$name")
-                    rename(name, "${it}.properties")
-                }
+            from(from)
+            into(to)
+
+            bundles.get().ifEmpty { listOf("strings") }.forEach {
+                val name = "${it}_${locale}.properties"
+                include("translations/${project.bundle}/$name")
+                rename(name, "${it}.properties")
+            }
         }
         didWork = result.didWork
     }

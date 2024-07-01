@@ -9,12 +9,14 @@ import com.kotlindiscord.kord.extensions.commands.application.slash.converters.C
 import com.kotlindiscord.kord.extensions.commands.application.slash.converters.impl.optionalEnumChoice
 import com.kotlindiscord.kord.extensions.commands.converters.impl.defaultingBoolean
 import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalBoolean
+import com.kotlindiscord.kord.extensions.types.TranslatableContext
 import dev.arbjerg.lavalink.protocol.v4.Exception
 import dev.arbjerg.lavalink.protocol.v4.LoadResult
 import dev.kord.rest.builder.message.embed
 import dev.schlaubi.lavakord.rest.loadItem
 import dev.schlaubi.mikbot.plugin.api.util.EditableMessageSender
 import dev.schlaubi.mikbot.plugin.api.util.IKnowWhatIAmDoing
+import dev.schlaubi.mikbot.plugin.api.util.MessageSender
 import dev.schlaubi.mikbot.plugin.api.util.SortedArguments
 import dev.schlaubi.mikmusic.autocomplete.autoCompletedYouTubeQuery
 import dev.schlaubi.mikmusic.core.Config
@@ -81,15 +83,20 @@ abstract class QueueArguments : SchedulingArguments(), QueueOptions {
     }
 }
 
+class SearchQuery(override val query: String) : QueueOptions {
+    override val force: Boolean = false
+    override val top: Boolean = false
+    override val searchProvider: QueueOptions.SearchProvider? = null
+    override val shuffle: Boolean? = null
+    override val loop: Boolean? = null
+    override val loopQueue: Boolean? = null
+}
+
 suspend fun <T : QueueArguments> EphemeralSlashCommandContext<T, *>.queueTracks(
     musicPlayer: MusicPlayer,
     search: Boolean,
 ) {
-    return queueTracks(musicPlayer, search, arguments, {
-        respond {
-            it()
-        }
-    }) {
+    return queueTracks(musicPlayer, search, arguments, ::respond) {
         editingPaginator {
             it()
         }
@@ -101,11 +108,7 @@ suspend fun <T> EphemeralSlashCommandContext<T, *>.findTracks(
     search: Boolean,
 ): QueueSearchResult?
     where T : Arguments, T : QueueOptions {
-    return findTracks(musicPlayer, search, arguments, {
-        respond {
-            it()
-        }
-    }) {
+    return findTracks(musicPlayer, search, arguments, ::respond) {
         editingPaginator {
             it()
         }
@@ -118,6 +121,29 @@ internal suspend fun CommandContext.findTracks(
     arguments: QueueOptions,
     respond: EditableMessageSender,
     editingPaginator: EditingPaginatorSender,
+): QueueSearchResult? = findTracks(musicPlayer, arguments, respond) search@{ result ->
+    if (search) {
+        searchSong(respond, editingPaginator, getUser()!!, result) ?: return@search null
+    } else {
+        val foundTrack = result.data.tracks.first()
+        SingleTrack(foundTrack)
+    }
+}
+
+internal suspend fun TranslatableContext.takeFirstMatch(
+    musicPlayer: MusicPlayer,
+    query: String,
+    respond: MessageSender
+): QueueSearchResult? = findTracks(musicPlayer, SearchQuery(query), respond) {
+    it.data.tracks.firstOrNull()?.let(::SingleTrack)
+}
+
+
+private suspend fun TranslatableContext.findTracks(
+    musicPlayer: MusicPlayer,
+    arguments: QueueOptions,
+    respond: MessageSender,
+    handleSearch: suspend (LoadResult.SearchResult) -> QueueSearchResult?,
 ): QueueSearchResult? {
     val rawQuery = arguments.query
     val isUrl = urlProtocol.find(rawQuery) != null
@@ -134,14 +160,7 @@ internal suspend fun CommandContext.findTracks(
         is LoadResult.PlaylistLoaded ->
             Playlist(result.data, result.data.tracks)
 
-        is LoadResult.SearchResult -> {
-            if (search) {
-                searchSong(respond, editingPaginator, getUser()!!, result) ?: return null
-            } else {
-                val foundTrack = result.data.tracks.first()
-                SingleTrack(foundTrack)
-            }
-        }
+        is LoadResult.SearchResult -> return handleSearch(result)
 
         is LoadResult.NoMatches -> {
             noMatches(respond)
@@ -201,14 +220,14 @@ suspend fun CommandContext.queueTracks(
     }
 }
 
-private suspend fun CommandContext.noMatches(respond: EditableMessageSender) {
+private suspend fun TranslatableContext.noMatches(respond: MessageSender) {
     respond {
         content = translate("music.queue.no_matches")
     }
 }
 
-private suspend fun CommandContext.handleError(
-    respond: EditableMessageSender,
+private suspend fun TranslatableContext.handleError(
+    respond: MessageSender,
     result: LoadResult.LoadFailed,
 ) {
     val error = result.data

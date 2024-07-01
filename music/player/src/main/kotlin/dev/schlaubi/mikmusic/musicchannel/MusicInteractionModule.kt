@@ -3,33 +3,30 @@ package dev.schlaubi.mikmusic.musicchannel
 import com.kotlindiscord.kord.extensions.checks.guildFor
 import com.kotlindiscord.kord.extensions.checks.inChannel
 import com.kotlindiscord.kord.extensions.extensions.event
-import dev.arbjerg.lavalink.protocol.v4.LoadResult
-import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.kord.core.behavior.channel.withTyping
 import dev.kord.core.behavior.interaction.response.EphemeralMessageInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.response.createEphemeralFollowup
 import dev.kord.core.behavior.reply
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.core.event.message.MessageCreateEvent
-import dev.schlaubi.lavakord.audio.Link
-import dev.schlaubi.lavakord.rest.loadItem
 import dev.schlaubi.mikbot.plugin.api.PluginContext
 import dev.schlaubi.mikbot.plugin.api.module.MikBotModule
 import dev.schlaubi.mikbot.plugin.api.util.*
 import dev.schlaubi.mikmusic.checks.joinSameChannelCheck
 import dev.schlaubi.mikmusic.checks.musicControlCheck
-import dev.schlaubi.mikmusic.core.Config
 import dev.schlaubi.mikmusic.core.MusicModule
 import dev.schlaubi.mikmusic.core.checkOtherSchedulerOptions
 import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase
 import dev.schlaubi.mikmusic.player.MusicPlayer
 import dev.schlaubi.mikmusic.player.enableAutoPlay
+import dev.schlaubi.mikmusic.player.queue.takeFirstMatch
 import dev.schlaubi.mikmusic.player.resetAutoPlay
 import dev.schlaubi.mikmusic.util.mapToQueuedTrack
 import kotlin.reflect.KMutableProperty1
 
 class MusicInteractionModule(context: PluginContext) : MikBotModule(context) {
     override val name = "music interaction handler"
+    override val bundle: String = "music"
     val musicModule: MusicModule by extension()
 
     override suspend fun setup() {
@@ -57,7 +54,7 @@ class MusicInteractionModule(context: PluginContext) : MikBotModule(context) {
 
                 suspend fun updateSchedulerOptions(
                     myProperty: KMutableProperty1<MusicPlayer, Boolean>,
-                    vararg properties: KMutableProperty1<MusicPlayer, Boolean>
+                    vararg properties: KMutableProperty1<MusicPlayer, Boolean>,
                 ) {
                     ack.updateSchedulerOptions(
                         player,
@@ -75,14 +72,17 @@ class MusicInteractionModule(context: PluginContext) : MikBotModule(context) {
                         MusicPlayer::loopQueue,
                         MusicPlayer::shuffle, MusicPlayer::repeat
                     )
+
                     repeatOne -> updateSchedulerOptions(
                         MusicPlayer::repeat,
                         MusicPlayer::loopQueue, MusicPlayer::shuffle
                     )
+
                     shuffle -> updateSchedulerOptions(
                         MusicPlayer::shuffle,
                         MusicPlayer::loopQueue, MusicPlayer::repeat
                     )
+
                     autoPlay -> {
                         if (player.autoPlay == null) {
                             player.enableAutoPlay()
@@ -122,19 +122,13 @@ class MusicInteractionModule(context: PluginContext) : MikBotModule(context) {
                 event.message.channel.withTyping {
                     val guild = event.getGuildOrNull() ?: error("Could not find guild")
                     val player = musicModule.getMusicPlayer(guild)
-                    val tracks = player.takeFirstMatch(event.message.content)
-
-                    if (tracks.isEmpty()) {
-                        event.message
-                            .reply { content = translate("music.queue.no_matches", "music") }
-                            .deleteAfterwards()
-                    } else {
-                        player.queueTrack(
-                            force = false,
-                            onTop = false,
-                            tracks = tracks.mapToQueuedTrack(event.message.author!!)
-                        )
-                    }
+                    val track = takeFirstMatch(player, event.message.content) { event.message.reply { it() } }
+                        ?: return@withTyping
+                    player.queueTrack(
+                        force = false,
+                        onTop = false,
+                        tracks = track.tracks.mapToQueuedTrack(event.message.author!!)
+                    )
 
                     event.message.delete("Music channel interaction")
                 }
@@ -143,27 +137,11 @@ class MusicInteractionModule(context: PluginContext) : MikBotModule(context) {
     }
 }
 
-suspend fun Link.takeFirstMatch(query: String): List<Track> {
-    val isUrl = query.startsWith("http")
-    val queryString = if (isUrl) {
-        query
-    } else {
-        "${Config.DEFAULT_SEARCH_PROVIDER}: $query"
-    }
-
-    return when (val result = loadItem(queryString)) {
-        is LoadResult.TrackLoaded -> listOf(result.data)
-        is LoadResult.PlaylistLoaded -> result.data.tracks
-        is LoadResult.SearchResult -> result.data.tracks.take(1)
-        else -> emptyList()
-    }
-}
-
 private suspend fun EphemeralMessageInteractionResponseBehavior.updateSchedulerOptions(
     musicPlayer: MusicPlayer,
     translate: Translator,
     myProperty: KMutableProperty1<MusicPlayer, Boolean>,
-    vararg properties: KMutableProperty1<MusicPlayer, Boolean>
+    vararg properties: KMutableProperty1<MusicPlayer, Boolean>,
 ) = checkOtherSchedulerOptions(
     musicPlayer,
     translate,
@@ -179,7 +157,7 @@ private suspend fun EphemeralMessageInteractionResponseBehavior.updateSchedulerO
 
 private suspend fun EphemeralMessageInteractionResponseBehavior.confirmation(
     messageBuilder: MessageBuilder,
-    translate: Translator
+    translate: Translator,
 ): Confirmation = confirmation(
     {
         createEphemeralFollowup {

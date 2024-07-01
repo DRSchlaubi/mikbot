@@ -25,7 +25,7 @@ suspend fun SettingsModule.fixMusicChannel() = ephemeralSlashCommand {
         musicModule.getMusicPlayer(safeGuild).updateMusicChannelMessage()
 
         respond {
-            content = translate("commands.fix_music_channel.success")
+            content = translate("commands.fix_music_channel.success", "music")
         }
     }
 }

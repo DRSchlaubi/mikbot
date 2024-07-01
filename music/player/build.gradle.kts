@@ -52,6 +52,7 @@ testing {
 mikbotPlugin {
     pluginId = "music-player"
     description = "Plugin providing full music functionality for the bot"
+    bundle = "music"
 }
 
 publishing {

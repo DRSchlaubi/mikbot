@@ -7,7 +7,6 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.bundling.Zip
-import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.*
 
 @Suppress("unused")
@@ -35,7 +34,10 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
     }
 
     private fun Project.configureTasks() {
-        val (assemblePlugin, installBotTask) = tasks.createAssembleTasks()
+        val generateDefaultTranslationBundle by tasks.registering(GenerateDefaultTranslationBundleTask::class) {
+            defaultLocale = mikbotPluginExtension.defaultLocale
+        }
+        val (assemblePlugin, installBotTask) = tasks.createAssembleTasks(generateDefaultTranslationBundle)
         createTestBotTasks(assemblePlugin, installBotTask)
         createPublishingTasks(assemblePlugin)
     }
@@ -45,7 +47,7 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
             named("main") {
                 java {
                     val optionalKspSourceSet = mikbotPluginExtension.enableKordexProcessor.map {
-                        if(it) {
+                        if (it) {
                             layout.buildDirectory.dir("/generated/ksp/main/kotlin/")
                         } else {
                             fileTree("never_exists") {

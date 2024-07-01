@@ -24,11 +24,11 @@ private val Project.pluginMainFile: Provider<RegularFile>
 internal data class AssemblyTask(val assembleTask: TaskProvider<Zip>, val installBotTask: InstallBotTask)
 
 context(Project)
-internal fun TaskContainer.createAssembleTasks(): AssemblyTask {
+internal fun TaskContainer.createAssembleTasks(generateDefaultTranslationBundle: TaskProvider<GenerateDefaultTranslationBundleTask>): AssemblyTask {
     val patchPropertiesTask = createPatchPropertiesTask()
 
     val jar = tasks.findByName("jar") as Jar? ?: pluginNotAppliedError("Kotlin")
-    jar.dependsOn(patchPropertiesTask)
+    jar.dependsOn(patchPropertiesTask, generateDefaultTranslationBundle)
     val assembleTask = createAssemblePluginTask(jar)
     val installBotTask = tasks.create("installBot", InstallBotTask::class.java)
     createAssembleBotTask(assembleTask, installBotTask)

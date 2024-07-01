@@ -1,5 +1,6 @@
 @file:Suppress("INVISIBLE_MEMBER", "INVISIBLE_REFERENCE")
 import dev.schlaubi.mikbot.gradle.addRepositories
+import java.util.Locale
 
 plugins {
     dev.schlaubi.mikbot.`gradle-plugin`
@@ -15,6 +16,7 @@ subprojects {
 mikbotPlugin {
     license = "MIT License"
     provider = "Mikbot Official Plugins"
+    defaultLocale = Locale.Builder().setLanguageTag("en-GB").build()
 }
 
 pluginPublishing {

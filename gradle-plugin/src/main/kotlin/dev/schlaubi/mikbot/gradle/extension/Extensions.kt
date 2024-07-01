@@ -4,6 +4,7 @@ import dev.schlaubi.mikbot.gradle.BuildRepositoryExtension
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionAware
 import org.gradle.api.plugins.ExtensionContainer
+import java.util.*
 
 const val pluginExtensionName = "mikbotPlugin"
 
@@ -34,6 +35,7 @@ fun Project.createExtensions() {
             enableKordexProcessor
                 .convention(base.enableKordexProcessor.convention(false))
                 .convention(false)
+            defaultLocale.convention(base.defaultLocale.convention(Locale.ENGLISH))
         }
     }
     extensions.create<BuildRepositoryExtension>(pluginPublishingExtensionName).apply {

@@ -3,6 +3,7 @@ package dev.schlaubi.mikbot.gradle.extension
 import org.gradle.api.Project
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
+import java.util.Locale
 
 /** Extension for configuring plugins for PF4J. */
 abstract class PluginExtension {
@@ -51,6 +52,11 @@ abstract class PluginExtension {
      * See documentation [here](https://github.com/Kord-Extensions/kord-extensions/tree/root/annotations/src/main/kotlin/com/kotlindiscord/kord/extensions/modules/annotations/converters)
      */
     abstract val enableKordexProcessor: Property<Boolean>
+
+    /**
+     * The default locale.
+     */
+    abstract val defaultLocale: Property<Locale>
 }
 
 internal val Project.pluginId: String

@@ -39,7 +39,7 @@ jobs:
           distribution: 'temurin'
           java-version: 22
       - name: Test with Gradle
-        run: ./gradlew gradle-plugin:classes
+        run: ./gradlew gradle-plugin:check
       - name: Login to Gradle Plugin Portal
         if: "github.event_name == 'push'"
         env:

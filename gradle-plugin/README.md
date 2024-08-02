@@ -117,7 +117,7 @@ git checkout -b plugin-repo
 git remote add origin <repo>
 git push origin plugin-repo
 ```
-2. Enable [GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site) on the new branch
+1. Enable [GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site) on the new branch
 
 Workflow:
 ```yaml

@@ -3,6 +3,7 @@ package dev.schlaubi.mikbot.gradle
 import dev.schlaubi.mikbot.gradle.extension.pluginId
 import dev.schlaubi.mikbot.gradle.extension.pluginPublishingExtension
 import org.gradle.api.Project
+import org.gradle.api.publish.plugins.PublishingPlugin
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.bundling.Zip
@@ -12,7 +13,7 @@ import java.nio.file.Files
 internal fun Project.createPublishingTasks(assemblePluginTask: TaskProvider<Zip>) {
     tasks.apply {
         val copyFilesIntoRepo = register<Copy>("copyFilesIntoRepo") {
-            group = "publishing"
+            group = PublishingPlugin.PUBLISH_TASK_GROUP
 
             from(assemblePluginTask)
             include("*.zip")
@@ -43,13 +44,13 @@ internal fun Project.createPublishingTasks(assemblePluginTask: TaskProvider<Zip>
         }
 
         val repo = register("buildRepository") {
-            group = "publishing"
+            group = PublishingPlugin.PUBLISH_TASK_GROUP
             dependsOn(copyFilesIntoRepo)
         }
 
         afterEvaluate {
             val makeIndex = register<MakeRepositoryIndexTask>(/* name = */ "makeRepositoryIndex") {
-                group = "publishing"
+                group = PublishingPlugin.PUBLISH_TASK_GROUP
                 dependsOn(assemblePluginTask)
             }
 

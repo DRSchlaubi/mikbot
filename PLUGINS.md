@@ -90,17 +90,9 @@ class MyCoolPlugin(wrapper: PluginWrapper) : Plugin(wrapper) {
 You have 3 ways of building/distributing your plugin
 
 - The `assemblePlugin` task: Can be used to generate a single plugin.zip file (Found in `build/plugin`)
-- The `assembleBot` task: Can be used to generate your own distribution of the bot bundling the plugin (Found
-  in `build/bot`)
-    - You can also specify other bundled plugins like this
-  ```kotlin
-  tasks {
-    assembleBot {
-        repositories.add("myrepo.com")
-        bundledPlugins.add("ktor@1.0.0")
-    }
-  }
-  ```
+- The `bot` distribution: Can be used to generate your own distribution of the bot bundling the plugin (Read
+  more [here](https://docs.gradle.org/current/userguide/distribution_plugin.html))
+
 - Plugin publishing: You can read more about that [here](gradle-plugin/README.md#publishing)
 
 <details>
@@ -131,15 +123,15 @@ There are two ways to run the bot
 If you want to dockerize a bot with bundled plugins, you can use this `Dockerfile`
 
 ```Dockerfile
-FROM gradle:jdk18 as builder
+FROM gradle:jdk22 as builder
 WORKDIR /usr/app
 COPY . .
-RUN gradle --no-daemon installBotArchive
+RUN gradle --no-daemon installBotDist
 
-FROM ibm-semeru-runtimes:open-18-jre-focal
+FROM ibm-semeru-runtimes:open-22-jre-focal
 
 WORKDIR /usr/app
-COPY --from=builder /usr/app/build/installBot .
+COPY --from=builder /usr/app/install/bot-pluginName .
 
 ENTRYPOINT ["/usr/app/bin/mikmusic"]
 ```
@@ -245,7 +237,7 @@ Dependency: `plugin("dev.schlaubi", "mikbot-gdpr", "<version>")`
 
 Docs: [README.md](core/gdpr/README.md)
 
-## [ktor](utils/ktor)
+## [ktor](core/ktor)
 
 An API to have a webserver in multiple plugins on the same port powered by [Ktor](https://ktor.io)
 

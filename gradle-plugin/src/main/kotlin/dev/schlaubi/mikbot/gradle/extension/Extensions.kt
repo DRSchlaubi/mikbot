@@ -2,8 +2,8 @@ package dev.schlaubi.mikbot.gradle.extension
 
 import dev.schlaubi.mikbot.gradle.BuildRepositoryExtension
 import org.gradle.api.Project
-import org.gradle.api.plugins.ExtensionAware
-import org.gradle.api.plugins.ExtensionContainer
+import org.gradle.kotlin.dsl.create
+import org.gradle.kotlin.dsl.findByType
 import java.util.*
 
 const val pluginExtensionName = "mikbotPlugin"
@@ -13,17 +13,17 @@ private const val pluginPublishingExtensionName = "pluginPublishing"
 // This is just there for usage in the Plugin, users of the plugin should use Gradle's generated
 // accessors
 internal val Project.mikbotPluginExtension: PluginExtension
-    get() = findExtension(pluginExtensionName) ?: error("Missing MikBot plugin in :path")
+    get() = extensions.findByType() ?: error("Missing MikBot plugin in :path")
 
 // This is just there for usage in the Plugin, users of the plugin should use Gradle's generated accessors
 internal val Project.pluginPublishingExtension: BuildRepositoryExtension
-    get() = findExtension(pluginPublishingExtensionName) ?: error("Missing MikBot plugin in :path")
+    get() = extensions.findByType() ?: error("Missing MikBot plugin in :path")
 
 
 fun Project.createExtensions() {
     extensions.create<PluginExtension>(pluginExtensionName).apply {
         if (parent != null) {
-            val base = rootProject.findExtension<PluginExtension>(pluginExtensionName) ?: return@apply
+            val base = rootProject.extensions.findByType<PluginExtension>() ?: return@apply
             pluginId.convention(base.pluginId)
             requires.convention(base.requires)
             description.convention(base.description)
@@ -36,12 +36,13 @@ fun Project.createExtensions() {
                 .convention(base.enableKordexProcessor.convention(false))
                 .convention(false)
             defaultLocale.convention(base.defaultLocale.convention(Locale.ENGLISH))
+            repositories.convention(emptyList())
         }
     }
     extensions.create<BuildRepositoryExtension>(pluginPublishingExtensionName).apply {
         if (parent != null) {
             val base =
-                rootProject.findExtension<BuildRepositoryExtension>(pluginPublishingExtensionName) ?: return@apply
+                rootProject.extensions.findByType<BuildRepositoryExtension>() ?: return@apply
             targetDirectory.convention(base.targetDirectory)
             currentRepository.convention(base.currentRepository)
             repositoryUrl.convention(base.repositoryUrl)
@@ -50,7 +51,3 @@ fun Project.createExtensions() {
     }
 }
 
-private inline fun <reified T> ExtensionContainer.create(name: String) = create(name, T::class.java)
-
-internal inline fun <reified T> ExtensionAware.findExtension(name: String) =
-    extensions.findByName(name) as T?

@@ -3,25 +3,31 @@ package dev.schlaubi.mikbot.gradle
 import dev.schlaubi.mikbot.gradle.extension.mikbotPluginExtension
 import dev.schlaubi.mikbot.gradle.extension.pluginId
 import org.gradle.api.Project
+import org.gradle.api.distribution.DistributionContainer
+import org.gradle.api.distribution.plugins.DistributionPlugin
 import org.gradle.api.file.DuplicatesStrategy
 import org.gradle.api.file.RegularFile
 import org.gradle.api.provider.Provider
-import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.TaskContainer
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.bundling.Jar
 import org.gradle.api.tasks.bundling.Zip
+import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.assign
+import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.register
-import org.gradle.kotlin.dsl.repositories
-import java.net.URI
+import org.gradle.language.base.plugins.LifecycleBasePlugin
 
 // There might be a better way of doing this, but for now I can't be bothered figuring it out
 private val Project.pluginMainFile: Provider<RegularFile>
     get() = layout.buildDirectory
         .file("generated/ksp/main/resources/META-INF/plugin.properties")
 
-internal data class AssemblyTask(val assembleTask: TaskProvider<Zip>, val installBotTask: InstallBotTask)
+internal data class AssemblyTask(val assembleTask: TaskProvider<Zip>, val installBotTask: TaskProvider<InstallBotTask>)
+
+
+private fun Project.createInstallBotTask(): TaskProvider<InstallBotTask> =
+    tasks.register<InstallBotTask>("installBot")
 
 context(Project)
 internal fun TaskContainer.createAssembleTasks(generateDefaultTranslationBundle: TaskProvider<GenerateDefaultTranslationBundleTask>): AssemblyTask {
@@ -30,39 +36,57 @@ internal fun TaskContainer.createAssembleTasks(generateDefaultTranslationBundle:
     val jar = tasks.findByName("jar") as Jar? ?: pluginNotAppliedError("Kotlin")
     jar.dependsOn(patchPropertiesTask, generateDefaultTranslationBundle)
     val assembleTask = createAssemblePluginTask(jar)
-    val installBotTask = tasks.create("installBot", InstallBotTask::class.java)
+    val installBotTask = createInstallBotTask()
     createAssembleBotTask(assembleTask, installBotTask)
     return AssemblyTask(assembleTask, installBotTask)
 }
 
 context(Project)
-private fun TaskContainer.createAssembleBotTask(assemblePlugin: TaskProvider<Zip>, installBotTask: InstallBotTask) {
-    repositories {
-        ivy {
-            url = URI("https://storage.googleapis.com/mikbot-binaries")
-            patternLayout {
-                artifact("[revision]/[artifact]-[revision].[ext]")
-            }
-            metadataSources {
-                artifact()
+private fun TaskContainer.createAssembleBotTask(
+    assemblePlugin: TaskProvider<Zip>,
+    installBotTask: TaskProvider<InstallBotTask>,
+) {
+    apply<DistributionPlugin>()
+
+    extensions.configure<DistributionContainer> {
+        create("bot") {
+            distributionBaseName = "bot-${project.name}"
+
+            contents {
+                into("/") {
+                    from(installBotTask) {
+                        eachFile {
+                            val rootDir = "bot-${MikBotPluginInfo.VERSION}"
+                            path = path.removePrefix(rootDir)
+                        }
+                    }
+
+                    val installedPluginsName = "lib/bundled-plugins"
+                    into(installedPluginsName) {
+                        from(assemblePlugin.flatMap(Zip::getArchiveFile))
+                    }
+                    into(installedPluginsName) {
+                        from({
+                            val dependencies =
+                                (configurations.getByName("plugin").resolvedConfiguration.resolvedArtifacts +
+                                    configurations.getByName("optionalPlugin").resolvedConfiguration.resolvedArtifacts)
+                                    .map {
+                                        dependencies.create(
+                                            mapOf(
+                                                "name" to it.moduleVersion.id.name,
+                                                "version" to it.moduleVersion.id.version,
+                                                "ext" to "zip"
+                                            )
+                                        )
+                                    }
+
+                            configurations.detachedConfiguration(*dependencies.toTypedArray()).resolve()
+                        })
+                        include("*.zip")
+                    }
+                }
             }
         }
-    }
-
-    val assembleBot = register<AssembleBotTask>("assembleBot") {
-        dependsOn(assemblePlugin, installBotTask)
-        this.assemblePlugin = assemblePlugin
-        this.installBotTask = installBotTask
-    }
-    afterEvaluate {
-        assembleBot.get().config()
-    }
-
-    register<Copy>("installBotArchive") {
-        dependsOn(assembleBot)
-
-        from(zipTree(assembleBot.get().archiveFile))
-        into(layout.buildDirectory.dir("installBot"))
     }
 }
 
@@ -94,7 +118,7 @@ private fun TaskContainer.createPatchPropertiesTask() =
 context(Project)
 private fun TaskContainer.createAssemblePluginTask(jarTask: Jar) =
     register<Zip>("assemblePlugin") {
-        group = "build"
+        group = LifecycleBasePlugin.BUILD_GROUP
         dependsOn(jarTask)
 
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE

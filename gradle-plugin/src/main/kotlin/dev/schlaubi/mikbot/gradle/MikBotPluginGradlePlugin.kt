@@ -4,6 +4,7 @@ import dev.schlaubi.mikbot.gradle.extension.createExtensions
 import dev.schlaubi.mikbot.gradle.extension.mikbotPluginExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.bundling.Zip
@@ -61,7 +62,7 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
         }
     }
 
-    private fun Project.createTestBotTasks(assemblePlugin: TaskProvider<Zip>, installBotTask: InstallBotTask) {
+    private fun Project.createTestBotTasks(assemblePlugin: TaskProvider<Zip>, installBotTask: Provider<InstallBotTask>) {
         tasks.run {
             val installPlugins = task<InstallPluginsToTestBotTask>("installPluginsToTestBot") {
                 dependsOn(assemblePlugin)

@@ -5,27 +5,35 @@ import org.gradle.api.Project
 import org.gradle.api.artifacts.Dependency
 import org.gradle.api.artifacts.MinimalExternalModuleDependency
 import org.gradle.api.artifacts.dsl.DependencyHandler
+import org.gradle.api.artifacts.dsl.RepositoryHandler
 import org.gradle.api.provider.Provider
 import org.gradle.api.provider.ProviderConvertible
 import org.gradle.kotlin.dsl.DependencyHandlerScope
+import org.gradle.kotlin.dsl.repositories
+import java.net.URI
 
 internal fun Project.addRepositories() {
-    repositories.mavenCentral()
-    repositories.maven {
-        name = "Mikbot"
-        url = uri("https://europe-west3-maven.pkg.dev/mik-music/mikbot")
-    }
-    repositories.maven {
-        name = "Kotlin Discord"
-        url = uri("https://maven.kotlindiscord.com/repository/maven-public/")
-    }
-    repositories.maven {
-        name = "Sonatype Snapshots"
-        url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots")
-    }
-    repositories.maven {
-        name = "Sonatype Snapshots"
-        url = uri("https://oss.sonatype.org/content/repositories/snapshots")
+    repositories {
+        mavenCentral()
+        maven {
+            name = "Mikbot"
+            url = uri("https://europe-west3-maven.pkg.dev/mik-music/mikbot")
+        }
+        maven {
+            name = "Kotlin Discord"
+            url = uri("https://maven.kotlindiscord.com/repository/maven-public/")
+        }
+        maven {
+            name = "Sonatype Snapshots"
+            url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots")
+        }
+        maven {
+            name = "Sonatype Snapshots"
+            url = uri("https://oss.sonatype.org/content/repositories/snapshots")
+        }
+
+        mikbotBinaries()
+        mikbotPlugins("https://storage.googleapis.com/mikbot-plugins")
     }
 }
 
@@ -85,3 +93,18 @@ private fun DependencyHandler.mikbot(module: String): Any =
 
 private val MikBotPluginInfo.snapshotVersion
     get() = "$VERSION-SNAPSHOT"
+
+private fun RepositoryHandler.gcs(url: String, pattern: String) = ivy {
+    this.url = URI(url)
+    patternLayout {
+        artifact(pattern)
+    }
+    metadataSources {
+        artifact()
+    }
+}
+
+private fun RepositoryHandler.mikbotBinaries() =
+    gcs("https://storage.googleapis.com/mikbot-binaries", "[revision]/[artifact]-[revision].[ext]")
+
+fun RepositoryHandler.mikbotPlugins(url: String) = gcs(url, "[artifact]/[revision]/plugin-[artifact]-[revision].[ext]")

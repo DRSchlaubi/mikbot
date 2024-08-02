@@ -2,8 +2,9 @@ package dev.schlaubi.mikbot.gradle.extension
 
 import org.gradle.api.Project
 import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
-import java.util.Locale
+import java.util.*
 
 /** Extension for configuring plugins for PF4J. */
 abstract class PluginExtension {
@@ -57,6 +58,11 @@ abstract class PluginExtension {
      * The default locale.
      */
     abstract val defaultLocale: Property<Locale>
+
+    /**
+     * List of repositories used to download plugins bundled with the bot distribution.
+     */
+    abstract val repositories: ListProperty<String>
 }
 
 internal val Project.pluginId: String

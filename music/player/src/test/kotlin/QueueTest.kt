@@ -234,6 +234,19 @@ class QueueTest {
         queue.addTracks(track)
         assertEquals(track, queue.poll())
     }
+
+    @Test
+    fun `test removal of tracks once tracks index exceeds order index`() {
+        val queue = makeMockQueue()
+
+        val track = mockTrack(11)
+        repeat(3) { queue.poll() }
+        queue.removeQueueEntry(5)
+        queue.addTracks(track)
+        repeat(queue.tracks.size - 1) { queue.poll() }
+
+        assertEquals(track, queue.poll())
+    }
 }
 
 private fun makeMockQueue() = Queue(MutableList(10, ::mockTrack))

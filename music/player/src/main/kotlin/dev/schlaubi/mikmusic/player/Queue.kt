@@ -82,7 +82,7 @@ class Queue(private var tracksList: MutableList<QueuedTrack> = mutableListOf()) 
         val trackIndex = runCatching {
             order.removeAt(index)
         }.getOrNull() ?: return null
-        if (trackIndex <= nextIndex) nextIndex--
+        if (index <= nextIndex) nextIndex--
         return tracksList[trackIndex].track
     }
 

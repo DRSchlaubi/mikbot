@@ -209,6 +209,31 @@ class QueueTest {
         queue.addTracks(track)
         assertEquals(track, queue.poll())
     }
+
+    @Test
+    fun `test queue works after skip`() {
+        val queue = makeMockQueue()
+
+        queue.drop(2)
+        repeat(queue.tracks.size) { queue.poll() }
+        val track = mockTrack(26)
+        queue.addTracks(track)
+        assertEquals(track, queue.poll())
+    }
+
+    @Test
+    fun `test queue add works after shuffle skip`() {
+        val queue = makeMockQueue()
+        queue.shuffle = true
+        queue.drop(2)
+        queue.addTracks(mockTrack(23))
+        queue.addTracks(mockTrack(24))
+        queue.addTracks(mockTrack(25))
+        repeat(3) { queue.poll() }
+        val track = mockTrack(26)
+        queue.addTracks(track)
+        assertEquals(track, queue.poll())
+    }
 }
 
 private fun makeMockQueue() = Queue(MutableList(10, ::mockTrack))

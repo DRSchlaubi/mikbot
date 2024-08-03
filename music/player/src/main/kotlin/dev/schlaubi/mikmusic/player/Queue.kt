@@ -40,7 +40,7 @@ class Queue(private var tracksList: MutableList<QueuedTrack> = mutableListOf()) 
 
     fun drop(count: Int) {
         require(count >= 1) { "Count needs to be positive" }
-        nextIndex -= count
+        nextIndex = (nextIndex - count).coerceIn(0..order.size)
         order = LinkedList(order.drop(count))
     }
 

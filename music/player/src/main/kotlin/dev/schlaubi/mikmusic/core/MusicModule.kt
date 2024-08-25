@@ -9,6 +9,8 @@ import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSla
 import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
 import com.kotlindiscord.kord.extensions.extensions.event
+import dev.kord.common.entity.ApplicationIntegrationType
+import dev.kord.common.entity.InteractionContextType
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.GuildBehavior
 import dev.kord.core.event.gateway.ReadyEvent
@@ -56,6 +58,8 @@ class MusicModule(context: PluginContext) : MikBotModule(context) {
 
     val CommandContext.musicPlayer
         get() = getMusicPlayer(safeGuild)
+    val CommandContext.node
+        get() = lavalink.newNode()
 
     fun getMusicPlayer(guild: GuildBehavior): MusicPlayer {
         return musicPlayers.computeIfAbsent(guild.id) {
@@ -109,6 +113,8 @@ class MusicModule(context: PluginContext) : MikBotModule(context) {
         create: suspend Extension.(suspend T.() -> Unit) -> T,
         body: suspend T.() -> Unit,
     ) = create {
+        musicControlContexts()
+
         check {
             musicControlCheck()
         }
@@ -143,6 +149,11 @@ class MusicModule(context: PluginContext) : MikBotModule(context) {
         }
         playerStates.drop()
     }
+}
+
+fun ApplicationCommand<*>.musicControlContexts() {
+    allowedInstallTypes.add(ApplicationIntegrationType.GuildInstall)
+    allowedContexts.add(InteractionContextType.Guild)
 }
 
 /**

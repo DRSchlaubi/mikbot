@@ -4,6 +4,7 @@ import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.converters.impl.defaultingBoolean
 import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalString
 import com.kotlindiscord.kord.extensions.commands.converters.impl.string
+import dev.schlaubi.mikmusic.core.musicControlContexts
 import dev.schlaubi.mikmusic.player.QueuedTrack
 import dev.schlaubi.mikmusic.player.queue.QueueOptions
 import dev.schlaubi.mikmusic.player.queue.findTracks
@@ -40,6 +41,8 @@ fun PlaylistModule.saveCommand() = ephemeralSubCommand(::PlaylistSaveArguments) 
     name = "create"
     description = "Creates a new playlist"
 
+    musicControlContexts()
+
     action {
         if (musicPlayer.playingTrack == null && arguments.importFrom == null) {
             respond {
@@ -52,7 +55,7 @@ fun PlaylistModule.saveCommand() = ephemeralSubCommand(::PlaylistSaveArguments) 
             val tracks = if (arguments.importFrom == null) {
                 (listOfNotNull(musicPlayer.playingTrack) + musicPlayer.queuedTracks).map(QueuedTrack::track)
             } else {
-                findTracks(musicPlayer, false)?.tracks ?: return@action
+                findTracks(node, false)?.tracks ?: return@action
             }
 
             val playlist = Playlist(

@@ -3,6 +3,7 @@ package dev.schlaubi.mikbot.gradle
 import dev.schlaubi.mikbot.gradle.extension.mikbotPluginExtension
 import dev.schlaubi.mikbot.gradle.extension.pluginId
 import org.gradle.api.Project
+import org.gradle.api.artifacts.ModuleDependency
 import org.gradle.api.distribution.DistributionContainer
 import org.gradle.api.distribution.plugins.DistributionPlugin
 import org.gradle.api.file.DuplicatesStrategy
@@ -68,13 +69,15 @@ private fun TaskContainer.createAssembleBotTask(
                     into(installedPluginsName) {
                         from({
                             val dependencies =
-                                (configurations.getByName("plugin").resolvedConfiguration.resolvedArtifacts +
-                                    configurations.getByName("optionalPlugin").resolvedConfiguration.resolvedArtifacts)
+                                (configurations.getByName("plugin").allDependencies +
+                                    configurations.getByName("optionalPlugin").allDependencies)
+                                    .filterIsInstance<ModuleDependency>()
+                                    .filterNot { it.isTransitive }
                                     .map {
                                         dependencies.create(
                                             mapOf(
-                                                "name" to it.moduleVersion.id.name,
-                                                "version" to it.moduleVersion.id.version,
+                                                "name" to it.name,
+                                                "version" to it.version,
                                                 "ext" to "zip"
                                             )
                                         )

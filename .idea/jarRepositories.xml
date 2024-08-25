@@ -96,5 +96,15 @@
       <option name="name" value="maven" />
       <option name="url" value="https://maven.topi.wtf/releases" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="Kotlin Discord" />
+      <option name="name" value="Kotlin Discord" />
+      <option name="url" value="https://repo.kordex.dev/snapshots" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="kordSnapshots" />
+      <option name="name" value="kordSnapshots" />
+      <option name="url" value="https://repo.kord.dev/snapshots" />
+    </remote-repository>
   </component>
 </project>

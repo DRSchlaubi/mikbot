@@ -1,6 +1,7 @@
 package dev.schlaubi.mikmusic.playlist.commands
 
 import dev.schlaubi.mikmusic.checks.joinSameChannelCheck
+import dev.schlaubi.mikmusic.core.musicControlContexts
 import dev.schlaubi.mikmusic.player.queue.SchedulingArguments
 import dev.schlaubi.mikmusic.playlist.PlaylistDatabase
 import dev.schlaubi.mikmusic.util.mapToQueuedTrack
@@ -12,6 +13,8 @@ class LoadArguments : SchedulingArguments(), PlaylistOptions {
 fun PlaylistModule.loadCommand() = ephemeralSubCommand(::LoadArguments) {
     name = "load"
     description = "commands.playlist.load.description"
+
+    musicControlContexts()
 
     check {
         joinSameChannelCheck(bot)

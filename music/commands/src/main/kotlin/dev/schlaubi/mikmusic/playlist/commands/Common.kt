@@ -7,6 +7,7 @@ import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSla
 import com.kotlindiscord.kord.extensions.commands.converters.impl.string
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.interaction.suggestString
+import dev.schlaubi.lavakord.audio.Node
 import dev.schlaubi.mikbot.plugin.api.PluginContext
 import dev.schlaubi.mikbot.plugin.api.module.SubCommandModule
 import dev.schlaubi.mikbot.plugin.api.util.extension
@@ -82,6 +83,9 @@ class PlaylistModule(context: PluginContext) : SubCommandModule(context) {
     val musicModule: MusicModule by extension()
     val CommandContext.musicPlayer: MusicPlayer
         get() = with(musicModule) { musicPlayer }
+
+    val CommandContext.node: Node
+        get() = with(musicModule) { node }
 
     override suspend fun overrideSetup() {
         loadCommand()

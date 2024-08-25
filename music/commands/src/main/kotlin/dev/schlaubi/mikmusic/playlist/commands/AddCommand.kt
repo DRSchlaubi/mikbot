@@ -35,7 +35,7 @@ fun PlaylistModule.addCommand() = ephemeralSubCommand(::PlaylistAddArguments) {
 
     action {
         checkPermissions { playlist ->
-            val result = findTracks(musicPlayer, arguments.search) ?: return@action
+            val result = findTracks(node, arguments.search) ?: return@action
             val tracks = result.tracks.mapToEncoded()
 
             PlaylistDatabase.collection.save(playlist.copy(songs = playlist.songs + tracks))

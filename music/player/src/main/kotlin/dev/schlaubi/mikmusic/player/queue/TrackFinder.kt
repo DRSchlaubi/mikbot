@@ -13,6 +13,7 @@ import com.kotlindiscord.kord.extensions.types.TranslatableContext
 import dev.arbjerg.lavalink.protocol.v4.Exception
 import dev.arbjerg.lavalink.protocol.v4.LoadResult
 import dev.kord.rest.builder.message.embed
+import dev.schlaubi.lavakord.audio.Node
 import dev.schlaubi.lavakord.rest.loadItem
 import dev.schlaubi.mikbot.plugin.api.util.EditableMessageSender
 import dev.schlaubi.mikbot.plugin.api.util.IKnowWhatIAmDoing
@@ -104,11 +105,11 @@ suspend fun <T : QueueArguments> EphemeralSlashCommandContext<T, *>.queueTracks(
 }
 
 suspend fun <T> EphemeralSlashCommandContext<T, *>.findTracks(
-    musicPlayer: MusicPlayer,
+    node: Node,
     search: Boolean,
 ): QueueSearchResult?
     where T : Arguments, T : QueueOptions {
-    return findTracks(musicPlayer, search, arguments, ::respond) {
+    return findTracks(node, search, arguments, ::respond) {
         editingPaginator {
             it()
         }
@@ -116,12 +117,12 @@ suspend fun <T> EphemeralSlashCommandContext<T, *>.findTracks(
 }
 
 internal suspend fun CommandContext.findTracks(
-    musicPlayer: MusicPlayer,
+    node: Node,
     search: Boolean,
     arguments: QueueOptions,
     respond: EditableMessageSender,
     editingPaginator: EditingPaginatorSender,
-): QueueSearchResult? = findTracks(musicPlayer, arguments, respond) search@{ result ->
+): QueueSearchResult? = findTracks(node, arguments, respond) search@{ result ->
     if (search) {
         searchSong(respond, editingPaginator, getUser()!!, result) ?: return@search null
     } else {
@@ -131,16 +132,16 @@ internal suspend fun CommandContext.findTracks(
 }
 
 internal suspend fun TranslatableContext.takeFirstMatch(
-    musicPlayer: MusicPlayer,
+    node: Node,
     query: String,
     respond: MessageSender
-): QueueSearchResult? = findTracks(musicPlayer, SearchQuery(query), respond) {
+): QueueSearchResult? = findTracks(node, SearchQuery(query), respond) {
     it.data.tracks.firstOrNull()?.let(::SingleTrack)
 }
 
 
 private suspend fun TranslatableContext.findTracks(
-    musicPlayer: MusicPlayer,
+    node: Node,
     arguments: QueueOptions,
     respond: MessageSender,
     handleSearch: suspend (LoadResult.SearchResult) -> QueueSearchResult?,
@@ -155,7 +156,7 @@ private suspend fun TranslatableContext.findTracks(
         searchPrefix + rawQuery
     } else rawQuery
 
-    val searchResult: QueueSearchResult = when (val result = musicPlayer.loadItem(query)) {
+    val searchResult: QueueSearchResult = when (val result = node.loadItem(query)) {
         is LoadResult.TrackLoaded -> SingleTrack(result.data)
         is LoadResult.PlaylistLoaded ->
             Playlist(result.data, result.data.tracks)
@@ -183,7 +184,7 @@ suspend fun CommandContext.queueTracks(
     respond: EditableMessageSender,
     editingPaginator: EditingPaginatorSender,
 ) {
-    val searchResult = findTracks(musicPlayer, search, arguments, respond, editingPaginator) ?: return
+    val searchResult = findTracks(musicPlayer.node, search, arguments, respond, editingPaginator) ?: return
 
     val title = if (musicPlayer.nextSongIsFirst) translate("music.queue.now_playing", "music") else translate(
         "music.queue.queued",

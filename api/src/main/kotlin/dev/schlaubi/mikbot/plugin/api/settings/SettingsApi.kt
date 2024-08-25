@@ -1,6 +1,7 @@
 package dev.schlaubi.mikbot.plugin.api.settings
 
 import com.kotlindiscord.kord.extensions.commands.application.slash.SlashCommand
+import dev.kord.common.entity.InteractionContextType
 import dev.kord.common.entity.Permission
 import dev.schlaubi.mikbot.plugin.api.*
 
@@ -19,5 +20,5 @@ public interface SettingsExtensionPoint : ModuleExtensionPoint<SettingsModule> {
 
 public fun SlashCommand<*, *, *>.guildAdminOnly() {
     requirePermission(Permission.ManageGuild)
-    allowInDms = false
+    allowedContexts.add(InteractionContextType.Guild)
 }

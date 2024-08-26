@@ -73,7 +73,7 @@ with PF4J
 
 ```kotlin
 plugins {
-    id("dev.schlaubi.mikbot.gradle-plugin") version "1.0.0"
+    id("dev.schlaubi.mikbot.gradle-plugin") version "<latest mikbot version>"
 }
 ```
 

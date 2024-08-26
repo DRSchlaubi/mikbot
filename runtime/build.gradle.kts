@@ -31,7 +31,7 @@ dependencies {
         // otherwise we would add entire Gradle in here
         isTransitive = false
     }
-    implementation(libs.kord.common)
+    implementation("dev.kord:kord-common-jvm:feature-user-apps-20240825.234248-3")
 
     // Util
     implementation(libs.kotlinx.serialization.json)

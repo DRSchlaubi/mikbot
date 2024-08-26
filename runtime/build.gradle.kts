@@ -1,3 +1,4 @@
+import org.gradle.kotlin.dsl.get
 import java.nio.file.Files
 
 plugins {
@@ -30,6 +31,7 @@ dependencies {
         // otherwise we would add entire Gradle in here
         isTransitive = false
     }
+    implementation(libs.kord.common)
 
     // Util
     implementation(libs.kotlinx.serialization.json)

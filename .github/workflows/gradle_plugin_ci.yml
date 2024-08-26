@@ -6,12 +6,15 @@ on:
       - main
     paths:
       - gradle/libs.versions.toml
+      - gradle-plugin
   pull_request:
     paths:
       - gradle-plugin/**
     types:
       - opened
       - synchronize
+  workflow_dispatch:
+
 
 env:
   BUILD_PLUGIN_CI: true
@@ -30,12 +33,12 @@ jobs:
       - name: Test with Gradle
         run: ./gradlew gradle-plugin:check
       - name: Login to Gradle Plugin Portal
-        if: "github.event_name == 'push'"
+        if: "github.event_name == 'push' || github.event_name == 'workflow_dispatch'"
         env:
           GRADLE_CONFIG: ${{ secrets.GRADLE_CONFIG }}
         run: echo "$GRADLE_CONFIG" > ~/.gradle/gradle.properties
       - name: Update dependency list
         run: ./rebuild-plugin-dependency-list.sh
       - name: Gradle Publish
-        if: "github.event_name == 'push'"
+        if: "github.event_name == 'push' || github.event_name == 'workflow_dispatch'"
         run: ./gradlew :gradle-plugin:publishPlugins

@@ -17,16 +17,13 @@ abstract class InstallPluginsToTestBotTask : DefaultTask() {
     fun install() {
         val task = pluginArchive.get().get()
 
-        val deleteResult = project.delete {
-            delete(task.destinationDirectory.asFile.get().absolutePath + "/plugin-${project.pluginId}*.zip")
-        }
-
         val result = project.copy {
             from(task.destinationDirectory)
             include(task.archiveFile.get().asFile.name)
             into(project.layout.buildDirectory.dir("test-bot/plugins"))
+            rename { "plugin-${project.pluginId}.zip" }
         }
 
-        didWork = result.didWork || deleteResult.didWork
+        didWork = result.didWork
     }
 }

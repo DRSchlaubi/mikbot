@@ -6,9 +6,9 @@ coroutines = "1.8.1"
 serialization = "1.7.1"
 ktor = "2.3.11"
 kord = "feature-user-apps-20240825.234248-3"
-api = "3.35.4"
+api = "3.35.5"
 ksp = "2.0.0-1.0.22"
-lavakord = "6.4.0-SNAPSHOT"
+lavakord = "7.1.0"
 
 [libraries]
 kord-common = { group = "dev.kord", name = "kord-common", version.ref = "kord" }

@@ -124,7 +124,7 @@ internal suspend fun CommandContext.findTracks(
     editingPaginator: EditingPaginatorSender,
 ): QueueSearchResult? = findTracks(node, arguments, respond) search@{ result ->
     if (search) {
-        searchSong(respond, editingPaginator, getUser()!!, result) ?: return@search null
+        searchSong(editingPaginator, getUser()!!, result)
     } else {
         val foundTrack = result.data.tracks.first()
         SingleTrack(foundTrack)

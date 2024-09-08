@@ -72,11 +72,10 @@ private fun TaskContainer.createAssembleBotTask(
                                 (configurations.getByName("plugin").allDependencies +
                                     configurations.getByName("optionalPlugin").allDependencies)
                                     .filterIsInstance<ModuleDependency>()
-                                    .filterNot { it.isTransitive }
                                     .map {
                                         dependencies.create(
                                             mapOf(
-                                                "name" to it.name,
+                                                "name" to it.name.replace("mikbot-", ""),
                                                 "version" to it.version,
                                                 "ext" to "zip"
                                             )

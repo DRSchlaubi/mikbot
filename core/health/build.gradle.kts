@@ -1,5 +1,6 @@
 plugins {
     `mikbot-module`
+    `mikbot-publishing`
     alias(libs.plugins.kotlinx.serialization)
     com.google.devtools.ksp
     dev.schlaubi.mikbot.`gradle-plugin`

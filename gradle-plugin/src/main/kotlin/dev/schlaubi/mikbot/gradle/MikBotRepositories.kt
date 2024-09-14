@@ -20,10 +20,6 @@ internal fun Project.addRepositories() {
             url = uri("https://europe-west3-maven.pkg.dev/mik-music/mikbot")
         }
         maven {
-            name = "Kotlin Discord"
-            url = uri("https://maven.kotlindiscord.com/repository/maven-public/")
-        }
-        maven {
             name = "Sonatype Snapshots"
             url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots")
         }

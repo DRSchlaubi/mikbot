@@ -6,13 +6,14 @@ coroutines = "1.8.1"
 serialization = "1.7.1"
 ktor = "2.3.11"
 kord = "feature-user-apps-20240825.234248-3"
-api = "3.35.6"
+api = "3.36.0"
 ksp = "2.0.0-1.0.22"
 lavakord = "7.1.0"
 
 [libraries]
 kord-common = { group = "dev.kord", name = "kord-common", version.ref = "kord" }
 kord-rest = { group = "dev.kord", name = "kord-rest", version.ref = "kord" }
+kord-core = { group = "dev.kord", name = "kord-core", version.ref = "kord" }
 kordex = { group = "com.kotlindiscord.kord.extensions", name = "kord-extensions", version.ref = "kordex" }
 kordex-unsafe = { group = "com.kotlindiscord.kord.extensions", name = "unsafe", version.ref = "kordex" }
 kordex-processor = { group = "com.kotlindiscord.kord.extensions", name = "annotation-processor", version.ref = "kordex" }
@@ -50,6 +51,9 @@ ktor-server-cors = { group = "io.ktor", name = "ktor-server-cors", version.ref =
 ktor-server-websockets = { group = "io.ktor", name = "ktor-server-websockets", version.ref = "ktor" }
 ktor-server-html-builder = { group = "io.ktor", name = "ktor-server-html-builder", version.ref = "ktor" }
 
+kubernetes-client = { group = "io.kubernetes", name = "client-java", version = "21.0.1" }
+kotlin-jsonpatch = { group = "io.github.reidsync", name = "kotlin-json-patch", version = "1.0.0" }
+
 pf4j = { group = "org.pf4j", name = "pf4j", version = "3.11.1" }
 pf4j-update = { group = "org.pf4j", name = "pf4j-update", version = "2.3.0" }
 
@@ -58,6 +62,9 @@ gson = { group = "com.google.code.gson", name = "gson", version = "2.11.0" }
 koin = { group = "io.insert-koin", name = "koin-core", version = "3.5.6" }
 
 asm = { group = "org.ow2.asm", name = "asm", version = "9.7" }
+
+system-rules = { group = "org.junit-pioneer", name = "junit-pioneer", version = "2.2.0" }
+mikbot-api = { group = "dev.schlaubi", name = "mikbot-api" }
 
 [plugins]
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

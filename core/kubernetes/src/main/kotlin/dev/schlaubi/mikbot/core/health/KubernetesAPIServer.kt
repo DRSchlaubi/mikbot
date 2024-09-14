@@ -14,13 +14,12 @@ import org.koin.core.component.inject
 import org.pf4j.Extension
 
 @Extension
-class HealthServer : KtorExtensionPoint, KordExKoinComponent {
+class KubernetesAPIServer : KtorExtensionPoint, KordExKoinComponent {
     private val checks by inject<List<HealthCheck>>()
 
     override fun Application.apply() {
         routing {
             get<HealthRoutes.Health> {
-                var success = true
                 if (checks.all { it.isSuccessful() }) {
                     call.respond(HttpStatusCode.OK)
                 } else {

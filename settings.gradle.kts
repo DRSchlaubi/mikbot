@@ -22,7 +22,7 @@ if (System.getenv("BUILD_PLUGIN_CI")?.toBoolean() != true) {
         "core:database-i18n",
         "core:game-animator",
         "core:gdpr",
-        "core:health",
+        "core:kubernetes",
         "core:redeploy-hook",
         "core:ktor",
         ":music",

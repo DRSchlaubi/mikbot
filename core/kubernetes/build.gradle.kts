@@ -21,6 +21,7 @@ dependencies {
     implementation(libs.kotlin.jsonpatch)
 
     testImplementation(kotlin("test-junit5"))
+    testImplementation(projects.api)
     testImplementation(libs.system.rules)
     testImplementation(libs.kord.core)
 }

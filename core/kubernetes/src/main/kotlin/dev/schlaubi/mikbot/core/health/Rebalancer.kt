@@ -37,6 +37,7 @@ import kotlin.time.TimeSource
 import io.kubernetes.client.util.Config as KubeConfig
 
 private val startup = TimeSource.Monotonic.markNow()
+private var lastRebalanceCheck = TimeSource.Monotonic.markNow()
 
 private class RebalanceArguments() : Arguments() {
     val forceTo by optionalInt {
@@ -66,9 +67,11 @@ class RebalancerExtension(context: PluginContext) : MikBotModule(context) {
             failIfNot(ready)
             // Do not call listener when pod just started
             // this is to prevent initial guild_creates to cause this
-            failIf(startup.elapsedNow() > 5.minutes)
+            failIf(startup.elapsedNow() < 5.minutes)
+            failIf(lastRebalanceCheck.elapsedNow() < 1.minutes)
         }
         action {
+            lastRebalanceCheck = TimeSource.Monotonic.markNow()
             val (_, newTotalShards) = getGatewayInfo()
             if (newTotalShards > Config.TOTAL_SHARDS) {
                 reBalance(newTotalShards)

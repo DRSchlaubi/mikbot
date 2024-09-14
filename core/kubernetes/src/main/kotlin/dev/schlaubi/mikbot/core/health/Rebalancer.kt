@@ -31,6 +31,7 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonArray
 import kotlinx.serialization.json.putJsonObject
+import kotlin.math.ceil
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.TimeSource
 import io.kubernetes.client.util.Config as KubeConfig
@@ -110,7 +111,7 @@ class RebalancerExtension(context: PluginContext) : MikBotModule(context) {
 
     private suspend fun reBalance(newTotalShards: Int) {
         val json =
-            generateStatefulSetSpec(replicas = newTotalShards / Config.SHARDS_PER_POD, totalShards = newTotalShards)
+            generateStatefulSetSpec(replicas = ceil(newTotalShards.toDouble() / Config.SHARDS_PER_POD.toDouble()).toInt(), totalShards = newTotalShards)
 
         val jsonPatch = generateStatefulSetSpec().generatePatch(json)
 

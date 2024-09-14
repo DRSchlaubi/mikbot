@@ -22,7 +22,6 @@ dependencies {
 
     testImplementation(kotlin("test-junit5"))
     testImplementation(projects.api)
-    testImplementation(libs.system.rules)
     testImplementation(libs.kord.core)
 }
 
@@ -32,13 +31,6 @@ testing {
         named<JvmTestSuite>("test") {
             useJUnitJupiter()
         }
-    }
-}
-
-tasks {
-    test {
-        jvmArgs =
-            listOf("--add-opens", "java.base/java.lang=ALL-UNNAMED", "--add-opens", "java.base/java.lang=ALL-UNNAMED")
     }
 }
 

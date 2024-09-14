@@ -5,10 +5,10 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 
 private val LOG = KotlinLogging.logger { }
 
-fun calculateShards(config: Config = Config, podId: Int = config.POD_ID): Shards {
-    val totalShards = config.TOTAL_SHARDS
-    val firstShard = config.SHARDS_PER_POD * podId
-    val lastShard = (firstShard + (config.SHARDS_PER_POD - 1)).coerceAtMost(totalShards - 1)
+fun calculateShards(shardsPerPod: Int = Config.SHARDS_PER_POD, totalShards: Int = Config.TOTAL_SHARDS, podId: Int = Config.POD_ID): Shards {
+    val totalShards = totalShards
+    val firstShard = shardsPerPod * podId
+    val lastShard = (firstShard + (shardsPerPod - 1)).coerceAtMost(totalShards - 1)
 
     LOG.debug { "Determined shards for $podId ($firstShard..$lastShard)" }
     return Shards(totalShards, firstShard..lastShard)

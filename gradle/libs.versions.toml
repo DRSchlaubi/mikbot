@@ -63,7 +63,6 @@ koin = { group = "io.insert-koin", name = "koin-core", version = "3.5.6" }
 
 asm = { group = "org.ow2.asm", name = "asm", version = "9.7" }
 
-system-rules = { group = "org.junit-pioneer", name = "junit-pioneer", version = "2.2.0" }
 mikbot-api = { group = "dev.schlaubi", name = "mikbot-api" }
 
 [plugins]

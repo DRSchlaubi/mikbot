@@ -4,7 +4,9 @@ import com.kotlindiscord.kord.extensions.builders.ExtensibleBotBuilder
 import com.kotlindiscord.kord.extensions.utils.loadModule
 import dev.schlaubi.mikbot.core.health.check.HealthCheck
 import dev.schlaubi.mikbot.plugin.api.*
+import dev.schlaubi.mikbot.plugin.api.config.Environment
 import mu.KotlinLogging
+import dev.schlaubi.mikbot.plugin.api.config.Config as BotConfig
 
 private val LOG = KotlinLogging.logger { }
 
@@ -41,6 +43,8 @@ class KubernetesPlugin(context: PluginContext) : Plugin(context) {
             }
             applicationCommands {
                 register = Config.POD_ID == 0
+                    || BotConfig.ENVIRONMENT == Environment.DEVELOPMENT
+                    || !Config.ENABLE_SCALING
             }
         }
     }

@@ -7,6 +7,7 @@ import com.kotlindiscord.kord.extensions.i18n.SupportedLocales
 import dev.schlaubi.mikbot.core.i18n.database.LangaugeUser
 import dev.schlaubi.mikbot.core.i18n.database.LanguageDatabase
 import dev.schlaubi.mikbot.plugin.api.settings.SettingsModule
+import dev.schlaubi.mikbot.plugin.api.util.executableEverywhere
 import java.util.*
 
 private class LanguageArguments : Arguments() {
@@ -24,6 +25,7 @@ suspend fun SettingsModule.languageCommand() {
     ephemeralSlashCommand(::LanguageArguments) {
         name = "language"
         description = "Changed the language of the bot"
+        executableEverywhere()
 
         action {
             val locale = Locale.forLanguageTag(arguments.language)

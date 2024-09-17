@@ -1,5 +1,8 @@
 package dev.schlaubi.mikbot.core.gdpr
 
+import com.kotlindiscord.kord.extensions.commands.application.slash.SlashCommand
+import dev.kord.common.entity.ApplicationIntegrationType
+import dev.kord.common.entity.InteractionContextType
 import dev.kord.rest.builder.component.ActionRowBuilder
 import dev.schlaubi.mikbot.core.gdpr.api.DataPoint
 import dev.schlaubi.mikbot.core.gdpr.api.GDPRExtensionPoint
@@ -7,6 +10,7 @@ import dev.schlaubi.mikbot.core.gdpr.api.PermanentlyStoredDataPoint
 import dev.schlaubi.mikbot.plugin.api.PluginContext
 import dev.schlaubi.mikbot.plugin.api.getExtensions
 import dev.schlaubi.mikbot.plugin.api.module.SubCommandModule
+import dev.schlaubi.mikbot.plugin.api.util.executableEverywhere
 import kotlinx.coroutines.flow.first
 
 class GDPRModule(context: PluginContext) : SubCommandModule(context) {
@@ -21,6 +25,10 @@ class GDPRModule(context: PluginContext) : SubCommandModule(context) {
         )
 
     val interactiveDataPoints = dataPoints.filterIsInstance<PermanentlyStoredDataPoint>()
+
+    override fun SlashCommand<*, *, *>.commandSettings() {
+        executableEverywhere()
+    }
 
     override suspend fun overrideSetup() {
         infoCommand()

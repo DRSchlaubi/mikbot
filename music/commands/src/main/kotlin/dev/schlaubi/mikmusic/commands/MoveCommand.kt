@@ -7,6 +7,7 @@ import com.kotlindiscord.kord.extensions.commands.application.slash.ephemeralSub
 import com.kotlindiscord.kord.extensions.commands.converters.impl.int
 import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.schlaubi.mikmusic.core.MusicModule
+import dev.schlaubi.mikmusic.core.musicControlContexts
 
 class SingleSongMoveArguments : Arguments() {
     val song by int {
@@ -63,6 +64,7 @@ suspend fun MusicModule.moveCommand() {
     ephemeralControlSlashCommand {
         name = "move"
         description = "commands.move.description"
+        musicControlContexts()
 
         ephemeralSubCommand(::SingleSongMoveArguments) {
             name = "top"

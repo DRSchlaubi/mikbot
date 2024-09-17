@@ -6,6 +6,7 @@ import com.kotlindiscord.kord.extensions.commands.converters.impl.string
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
 import dev.schlaubi.mikmusic.checks.anyMusicPlaying
 import dev.schlaubi.mikmusic.core.MusicModule
+import dev.schlaubi.mikmusic.core.musicControlContexts
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
@@ -27,6 +28,7 @@ class SeekArguments : Arguments() {
 suspend fun MusicModule.seekCommand() = ephemeralSlashCommand(::SeekArguments) {
     name = "seek"
     description = "commands.seek.description"
+    musicControlContexts()
 
     check {
         anyMusicPlaying(this@seekCommand)

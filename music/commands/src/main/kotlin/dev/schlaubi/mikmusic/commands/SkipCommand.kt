@@ -3,6 +3,7 @@ package dev.schlaubi.mikmusic.commands
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.converters.impl.defaultingInt
 import dev.schlaubi.mikmusic.core.MusicModule
+import dev.schlaubi.mikmusic.core.musicControlContexts
 
 class SkipArguments : Arguments() {
     val to by defaultingInt {
@@ -15,6 +16,7 @@ class SkipArguments : Arguments() {
 suspend fun MusicModule.skipCommand() = ephemeralControlSlashCommand(::SkipArguments) {
     name = "skip"
     description = "commands.skip.description"
+    musicControlContexts()
 
     action {
         if (!musicPlayer.canSkip) {

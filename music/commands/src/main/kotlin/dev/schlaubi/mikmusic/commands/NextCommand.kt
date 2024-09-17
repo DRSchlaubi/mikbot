@@ -2,11 +2,13 @@ package dev.schlaubi.mikmusic.commands
 
 import dev.schlaubi.mikmusic.checks.anyMusicPlaying
 import dev.schlaubi.mikmusic.core.MusicModule
+import dev.schlaubi.mikmusic.core.musicControlContexts
 import dev.schlaubi.mikmusic.player.ChapterQueuedTrack
 
 suspend fun MusicModule.nextCommand() = ephemeralControlSlashCommand {
     name = "next"
     description = "commands.next.description"
+    musicControlContexts()
 
     check {
         anyMusicPlaying(this@nextCommand)

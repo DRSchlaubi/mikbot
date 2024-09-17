@@ -4,6 +4,7 @@ import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
 import dev.schlaubi.mikbot.plugin.api.util.forList
 import dev.schlaubi.mikmusic.checks.anyMusicPlaying
 import dev.schlaubi.mikmusic.core.MusicModule
+import dev.schlaubi.mikmusic.core.musicControlContexts
 import dev.schlaubi.mikmusic.player.QueuedTrack
 import dev.schlaubi.mikmusic.player.addAutoPlaySongs
 import dev.schlaubi.mikmusic.util.format
@@ -11,6 +12,7 @@ import dev.schlaubi.mikmusic.util.format
 suspend fun MusicModule.queueCommand() = ephemeralSlashCommand {
     name = "queue"
     description = "commands.queue.description"
+    musicControlContexts()
 
     check {
         anyMusicPlaying(this@queueCommand)

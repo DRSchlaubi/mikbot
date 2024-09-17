@@ -11,6 +11,7 @@ import dev.schlaubi.lavakord.audio.Link
 import dev.schlaubi.lavakord.kord.connectAudio
 import dev.schlaubi.mikbot.plugin.api.util.safeGuild
 import dev.schlaubi.mikmusic.core.MusicModule
+import dev.schlaubi.mikmusic.core.musicControlContexts
 import dev.schlaubi.mikmusic.player.MusicPlayer
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.map
@@ -21,6 +22,7 @@ import kotlin.time.Duration.Companion.seconds
 suspend fun MusicModule.fixCommand() = ephemeralControlSlashCommand {
     name = "fix"
     description = "commands.fix.description"
+    musicControlContexts()
 
     check {
         requireBotPermissions(Permission.ManageGuild)

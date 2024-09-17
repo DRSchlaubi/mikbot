@@ -4,6 +4,7 @@ import com.kotlindiscord.kord.extensions.commands.converters.impl.defaultingBool
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
 import dev.schlaubi.mikmusic.checks.joinSameChannelCheck
 import dev.schlaubi.mikmusic.core.MusicModule
+import dev.schlaubi.mikmusic.core.musicControlContexts
 import dev.schlaubi.mikmusic.player.queue.QueueArguments
 import dev.schlaubi.mikmusic.player.queue.queueTracks
 
@@ -17,6 +18,8 @@ class PlayArguments : QueueArguments() {
 
 suspend fun MusicModule.playCommand() {
     ephemeralSlashCommand(::PlayArguments) {
+        musicControlContexts()
+
         name = "play"
         description = "commands.play.description"
 

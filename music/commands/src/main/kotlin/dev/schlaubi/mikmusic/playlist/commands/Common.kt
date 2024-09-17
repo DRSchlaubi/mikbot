@@ -4,6 +4,7 @@ import com.kotlindiscord.kord.extensions.DiscordRelayedException
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.CommandContext
 import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommandContext
+import com.kotlindiscord.kord.extensions.commands.application.slash.SlashCommand
 import com.kotlindiscord.kord.extensions.commands.converters.impl.string
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.interaction.suggestString
@@ -12,6 +13,7 @@ import dev.schlaubi.mikbot.plugin.api.PluginContext
 import dev.schlaubi.mikbot.plugin.api.module.SubCommandModule
 import dev.schlaubi.mikbot.plugin.api.util.extension
 import dev.schlaubi.mikmusic.core.MusicModule
+import dev.schlaubi.mikmusic.core.musicControlContexts
 import dev.schlaubi.mikmusic.player.MusicPlayer
 import dev.schlaubi.mikmusic.playlist.Playlist
 import dev.schlaubi.mikmusic.playlist.PlaylistDatabase
@@ -86,6 +88,10 @@ class PlaylistModule(context: PluginContext) : SubCommandModule(context) {
 
     val CommandContext.node: Node
         get() = with(musicModule) { node }
+
+    override fun SlashCommand<*, *, *>.commandSettings() {
+        musicControlContexts()
+    }
 
     override suspend fun overrideSetup() {
         loadCommand()

@@ -7,6 +7,7 @@ import dev.kord.rest.builder.message.embed
 import dev.schlaubi.mikmusic.checks.anyMusicPlaying
 import dev.schlaubi.mikmusic.checks.musicQuizAntiCheat
 import dev.schlaubi.mikmusic.core.MusicModule
+import dev.schlaubi.mikmusic.core.musicControlContexts
 import dev.schlaubi.mikmusic.util.addSong
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
@@ -23,6 +24,7 @@ private val regex = """\.[0-9]*""".toRegex()
 suspend fun MusicModule.nowPlayingCommand() = publicSlashCommand(::NowPlayingArguments) {
     name = "now-playing"
     description = "commands.now_playing.description"
+    musicControlContexts()
 
     check {
         anyMusicPlaying(this@nowPlayingCommand)

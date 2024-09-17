@@ -50,12 +50,14 @@ public abstract class SubCommandModule(context: PluginContext) : MikBotModule(co
         groupBodies.add(GroupPair(name, body))
     }
 
+    public open fun SlashCommand<*, *, *>.commandSettings() = Unit
     final override suspend fun setup() {
         overrideSetup()
 
         ephemeralSlashCommand {
             name = commandName
             description = "<never used>"
+            commandSettings()
 
             ephemeralSubCommandBodies.forEach { with(it) { add() } }
             publicSubCommandBodies.forEach { with(it) { add() } }

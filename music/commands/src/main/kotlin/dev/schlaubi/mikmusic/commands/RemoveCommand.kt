@@ -10,6 +10,7 @@ import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalInt
 import dev.kord.common.entity.Snowflake
 import dev.schlaubi.mikbot.plugin.api.util.safeGuild
 import dev.schlaubi.mikmusic.core.MusicModule
+import dev.schlaubi.mikmusic.core.musicControlContexts
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
@@ -35,6 +36,7 @@ class RemoveRangeSongArguments : Arguments() {
 suspend fun MusicModule.removeCommand() = ephemeralControlSlashCommand {
     name = "remove"
     description = "commands.remove.description"
+    musicControlContexts()
 
     suspend fun <A : Arguments> EphemeralSlashCommand<A, *>.doRemove(
         remove: suspend EphemeralSlashCommandContext<A, *>.() -> Int

@@ -2,6 +2,7 @@ package dev.schlaubi.mikmusic.commands
 
 import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommandContext
 import dev.schlaubi.mikmusic.core.MusicModule
+import dev.schlaubi.mikmusic.core.musicControlContexts
 import dev.schlaubi.mikmusic.player.MusicPlayer
 import kotlin.reflect.KMutableProperty1
 
@@ -27,6 +28,7 @@ suspend fun MusicModule.schedulerCommands() {
     ephemeralControlSlashCommand {
         name = "repeat"
         description = "Toggles repeat mode"
+        musicControlContexts()
 
         action {
             schedulerOption(
@@ -41,6 +43,7 @@ suspend fun MusicModule.schedulerCommands() {
     ephemeralControlSlashCommand {
         name = "loop-queue"
         description = "Toggles loop queueTracks mode (Looping the queueTracks over and over)"
+        musicControlContexts()
 
         action {
             schedulerOption(
@@ -55,6 +58,7 @@ suspend fun MusicModule.schedulerCommands() {
     ephemeralControlSlashCommand {
         name = "shuffle"
         description = "Toggles shuffle mode"
+        musicControlContexts()
 
         action {
             schedulerOption(

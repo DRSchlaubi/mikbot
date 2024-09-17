@@ -6,7 +6,7 @@ coroutines = "1.8.1"
 serialization = "1.7.1"
 ktor = "2.3.11"
 kord = "feature-user-apps-20240917.114617-5"
-api = "3.36.6"
+api = "3.36.7"
 ksp = "2.0.0-1.0.22"
 lavakord = "7.1.0"
 

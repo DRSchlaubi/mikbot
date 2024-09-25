@@ -1,12 +1,12 @@
 [versions]
 kotlin = "2.0.0"
-kordex = "1.9.6-mikbot-SNAPSHOT"
+kordex = "1.9.7-mikbot-SNAPSHOT"
 kmongo = "5.1.0"
 coroutines = "1.8.1"
 serialization = "1.7.1"
 ktor = "2.3.11"
-kord = "feature-user-apps-20240917.114617-5"
-api = "3.37.2"
+kord = "feature-user-apps-20240925.194307-6"
+api = "3.37.3"
 ksp = "2.0.0-1.0.22"
 lavakord = "7.1.0"
 

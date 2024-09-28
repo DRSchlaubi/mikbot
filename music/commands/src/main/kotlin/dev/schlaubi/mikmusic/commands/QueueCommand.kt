@@ -8,6 +8,7 @@ import dev.schlaubi.mikmusic.core.musicControlContexts
 import dev.schlaubi.mikmusic.player.QueuedTrack
 import dev.schlaubi.mikmusic.player.addAutoPlaySongs
 import dev.schlaubi.mikmusic.util.format
+import kotlin.time.Duration.Companion.minutes
 
 suspend fun MusicModule.queueCommand() = ephemeralSlashCommand {
     name = "queue"
@@ -34,6 +35,8 @@ suspend fun MusicModule.queueCommand() = ephemeralSlashCommand {
         }
 
         editingPaginator {
+            timeoutSeconds = 10.minutes.inWholeSeconds
+
             forList(user, musicPlayer.queuedTracks, QueuedTrack::format, { current, total ->
                 translate("music.queue.info.title", arrayOf(current.toString(), total.toString()))
             }) {

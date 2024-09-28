@@ -19,7 +19,9 @@ class KubernetesPlugin(context: PluginContext) : Plugin(context) {
     }
 
     override fun ExtensibleBotBuilder.ExtensionsBuilder.addExtensions() {
-        add(::RebalancerExtension)
+        if (Config.ENABLE_SCALING) {
+            add(::RebalancerExtension)
+        }
         healthChecks.forEach {
             with(it) {
                 addExtensions()

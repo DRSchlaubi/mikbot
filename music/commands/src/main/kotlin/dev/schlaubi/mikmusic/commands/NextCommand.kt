@@ -17,10 +17,11 @@ suspend fun MusicModule.nextCommand() = ephemeralControlSlashCommand {
     action {
         val chapterSong = musicPlayer.playingTrack as? ChapterQueuedTrack
         if (chapterSong == null || chapterSong.isOnLast) {
-            if (musicPlayer.queuedTracks.isEmpty()) {
+            if (musicPlayer.canSkip) {
                 respond { content = translate("commands.skip.empty") }
                 return@action
             }
+            musicPlayer.skip()
             respond { content = translate("commands.skip.skipped") }
         } else {
             musicPlayer.skipChapter()

@@ -1,5 +1,6 @@
 package dev.schlaubi.mikmusic.util
 
+import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.schlaubi.mikmusic.player.QueuedTrack
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
@@ -10,6 +11,7 @@ import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
 
 object QueuedTrackJsonSerializer : JsonElementSerializer<QueuedTrack>(QueuedTrack.serializer())
+object TrackJsonSerializer : JsonElementSerializer<Track>(Track.serializer())
 
 abstract class JsonElementSerializer<T>(
     private val serializer: KSerializer<T>,

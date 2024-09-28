@@ -5,10 +5,10 @@ import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.schlaubi.lavakord.rest.loadItem
 import dev.schlaubi.mikbot.plugin.api.util.Translator
-import dev.schlaubi.mikmusic.util.TrackLinkedListSerializer
-import dev.schlaubi.mikmusic.util.TrackListSerializer
+import dev.schlaubi.mikmusic.util.LinkedListSerializer
 import dev.schlaubi.mikmusic.util.format
 import dev.schlaubi.mikmusic.util.spotifyId
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import java.util.*
 
@@ -16,9 +16,8 @@ import java.util.*
 data class AutoPlayContext(
     val seedGenres: List<String>,
     val seedArtists: List<String>,
-    @Serializable(with = TrackListSerializer::class)
-    val history: List<Track>,
-    @Serializable(with = TrackLinkedListSerializer::class) val songs: LinkedList<Track> = LinkedList(),
+    val history: List<@Contextual Track>,
+    @Serializable(with = LinkedListSerializer::class) val songs: LinkedList<@Contextual Track> = LinkedList(),
 ) {
     val initialSize = songs.size
 

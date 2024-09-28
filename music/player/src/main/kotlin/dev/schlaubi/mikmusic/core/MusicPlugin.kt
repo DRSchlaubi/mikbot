@@ -10,6 +10,7 @@ import dev.schlaubi.mikbot.plugin.api.PluginMain
 import dev.schlaubi.mikmusic.core.audio.LavalinkManager
 import dev.schlaubi.mikmusic.musicchannel.MusicInteractionModule
 import dev.schlaubi.mikmusic.util.QueuedTrackJsonSerializer
+import dev.schlaubi.mikmusic.util.TrackJsonSerializer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.litote.kmongo.serialization.registerSerializer
@@ -18,6 +19,7 @@ import org.litote.kmongo.serialization.registerSerializer
 class MusicPlugin(wrapper: PluginContext) : Plugin(wrapper) {
     override fun start() {
         registerSerializer(QueuedTrackJsonSerializer)
+        registerSerializer(TrackJsonSerializer)
     }
 
     override fun ExtensibleBotBuilder.ExtensionsBuilder.addExtensions() {

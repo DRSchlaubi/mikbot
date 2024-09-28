@@ -23,7 +23,7 @@ suspend fun MusicModule.skipCommand() = ephemeralControlSlashCommand(::SkipArgum
             respond { content = translate("commands.skip.empty") }
             return@action
         }
-        if (arguments.to > musicPlayer.queuedTracks.size) {
+        if (arguments.to > (musicPlayer.queuedTracks.size + musicPlayer.autoPlayTrackCount)) {
             respond {
                 content = translate("commands.skip.exceeds_range")
             }

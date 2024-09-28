@@ -72,6 +72,8 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
         get() = guild.kord
     val hasAutoPlay: Boolean
         get() = !autoPlay?.songs.isNullOrEmpty()
+    val autoPlayTrackCount
+        get() = autoPlay?.songs?.size ?: 0
 
     init {
         guild.kord.launch {

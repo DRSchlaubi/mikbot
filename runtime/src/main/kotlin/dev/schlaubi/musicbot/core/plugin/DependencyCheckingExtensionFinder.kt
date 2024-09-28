@@ -25,7 +25,7 @@ class DependencyCheckingExtensionFinder(pluginManager: PluginManager) : LegacyEx
                 return@buildList
             }
             if (pluginId != null) {
-                val pluginWrapper = pluginManager.getPlugin(pluginId)
+                val pluginWrapper = pluginManager.getPlugin(pluginId) ?: return emptyList()
                 if (PluginState.STARTED != pluginWrapper.pluginState && PluginState.RESOLVED != pluginWrapper.pluginState) {
                     return@buildList
                 }

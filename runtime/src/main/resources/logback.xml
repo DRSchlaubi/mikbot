@@ -8,6 +8,6 @@
         <appender-ref ref="STDOUT"/>
     </root>
     <logger name="org.mongodb.driver" level="INFO"/>
-    <logger name="org.pf4j" level="DEBUG"/>
+    <logger name="org.pf4j" level="INFO"/>
     <logger name="io.netty" level="INFO"/>
 </configuration>

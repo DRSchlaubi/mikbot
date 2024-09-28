@@ -46,6 +46,14 @@ class PluginLoader(repos: List<UpdateRepository>) : DefaultPluginManager(), Kord
         super.loadPlugins()
 
         updateManager.checkForUpdates()
+
+        LOG.debug { "Recalculating dependency graph after plugin updates" }
+        resolvePlugins()
+        plugins.values.forEach {
+            if (it.pluginState == PluginState.RESOLVED) {
+                enablePlugin(it.pluginId)
+            }
+        }
         buildTranslationGraph()
     }
 
@@ -82,7 +90,7 @@ class PluginLoader(repos: List<UpdateRepository>) : DefaultPluginManager(), Kord
 
             missingDependencyPlugins.failPlugins(exception)
 
-            LOG.warn(exception) { "Disabling the following plugins, because of a missing dependency: ${missingDependencyPlugins.map { it.descriptor.pluginId }}" }
+            LOG.debug(exception) { "Disabling the following plugins, because of a missing dependency: ${missingDependencyPlugins.map { it.descriptor.pluginId }}" }
         }
         val wrongVersionDependencies = result.wrongVersionDependencies
         if (wrongVersionDependencies.isNotEmpty()) {
@@ -104,13 +112,17 @@ class PluginLoader(repos: List<UpdateRepository>) : DefaultPluginManager(), Kord
         for (pluginId in sortedPlugins) {
             val pluginWrapper = plugins[pluginId]
             if (unresolvedPlugins.remove(pluginWrapper)) {
-                val pluginState = pluginWrapper!!.pluginState
-                if (pluginState != PluginState.DISABLED) {
+                val wrapper = pluginWrapper!!
+                val state =wrapper.pluginState
+                if (state != PluginState.DISABLED ||
+                    wrapper.failedException is DependenciesWrongVersionException ||
+                    wrapper.failedException is DependenciesNotFoundException
+                ) {
                     pluginWrapper.pluginState = PluginState.RESOLVED
                 }
                 resolvedPlugins.add(pluginWrapper)
                 LOG.info { "Plugin '${getPluginLabel(pluginWrapper.descriptor)}' resolved" }
-                firePluginStateEvent(PluginStateEvent(this, pluginWrapper, pluginState))
+                firePluginStateEvent(PluginStateEvent(this, pluginWrapper, state))
             }
         }
     }
@@ -175,7 +187,8 @@ private class MikBotPluginManifestDescriptionFinder : ManifestPluginDescriptorFi
 internal class DefaultPluginSystem(private val bot: Bot) : PluginSystem {
     internal val events = MutableSharedFlow<Event>()
 
-    override fun <T : ExtensionPoint> getExtensions(type: KClass<T>): List<T> = bot.pluginLoader.getExtensions(type.java)
+    override fun <T : ExtensionPoint> getExtensions(type: KClass<T>): List<T> =
+        bot.pluginLoader.getExtensions(type.java)
 
     override fun translate(key: String, bundleName: String, locale: String?, replacements: Array<Any?>): String {
         return if (locale == null) {

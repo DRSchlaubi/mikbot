@@ -2,11 +2,10 @@ package dev.schlaubi.musicbot.core.plugin
 
 import dev.schlaubi.mikbot.plugin.api.config.Config
 import mu.KotlinLogging
-import org.pf4j.DependencyResolver
-import org.pf4j.PluginDescriptor
 import org.pf4j.update.*
 import org.pf4j.update.verifier.BasicVerifier
 import kotlin.io.path.absolutePathString
+import kotlin.io.path.moveTo
 
 private val LOG = KotlinLogging.logger { }
 
@@ -23,43 +22,13 @@ class PluginUpdater(private val pluginLoader: PluginLoader, repos: List<UpdateRe
             return
         }
 
+        downloadRequestedPlugins()
+
         if (Config.UPDATE_PLUGINS) {
             updatePlugins()
         }
-
-        downloadRequestedPlugins()
-
-        pluginLoader.plugins.forEach {
-            val exception = it.failedException
-            if (exception is DependencyResolver.DependenciesNotFoundException) {
-                if (exception.dependencies.all { id ->
-                        pluginLoader.getPlugin(id) != null
-                    }
-                ) {
-                    attemptPluginRestart(it.descriptor)
-                }
-            }
-
-            if (exception is DependencyResolver.DependenciesWrongVersionException) {
-                if (exception.dependencies.all { dependency ->
-                        pluginLoader.getPlugin(dependency.dependencyId)?.descriptor?.version == dependency.requiredVersion
-                    }
-                ) {
-
-                    attemptPluginRestart(it.descriptor)
-                }
-            }
-        }
     }
 
-
-    private fun attemptPluginRestart(descriptor: PluginDescriptor) {
-        val result = pluginLoader.resolver.resolve(listOf(descriptor))
-        if (result.hasCyclicDependency() || result.notFoundDependencies.isNotEmpty() || result.wrongVersionDependencies.isNotEmpty()) {
-            LOG.warn { "Restart of plugin ${descriptor.pluginId} failed because of invalid dependencies" }
-        }
-        pluginLoader.startPlugin(descriptor.pluginId)
-    }
 
     private fun updatePlugins() {
         if (hasUpdates()) {
@@ -117,12 +86,11 @@ class PluginUpdater(private val pluginLoader: PluginLoader, repos: List<UpdateRe
                         updatePlugin(plugin.id, version)
                     }
                 } else {
-                    val installed = installPlugin(plugin.id, version)
-                    if (installed) {
-                        LOG.info { "Successfully installed plugin ${plugin.id} from a repository" }
-                    } else {
-                        LOG.info { "Installation for plugin ${plugin.id} failed" }
-                    }
+                    val downloaded = downloadPlugin(plugin.id, version)
+                    val destination = pluginLoader.pluginsRoot.resolve(downloaded.fileName)
+                    downloaded.moveTo(destination)
+                    LOG.info { "Downloaded plugin ${plugin.id} $version" }
+                    pluginLoader.loadPlugin(destination)
                 }
             }
         }

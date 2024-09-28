@@ -27,22 +27,22 @@ import kotlin.coroutines.CoroutineContext
 class KtorPlugin(context: PluginContext) : Plugin(context), CoroutineScope {
     override val coroutineContext: CoroutineContext = Dispatchers.IO + SupervisorJob()
 
-    private val extensions = context.pluginSystem.getExtensions<KtorExtensionPoint>()
-
-    private val json = Json {
-        serializersModule = extensions.fold(EmptySerializersModule()) { prev, now ->
-            prev + now.provideSerializersModule()
-        }
-
-        extensions.forEach {
-            with(it) {
-                apply()
-            }
-        }
-    }
-
     @Suppress("ExtractKtorModule")
     override fun start() {
+        val extensions = contextSafe.pluginSystem.getExtensions<KtorExtensionPoint>()
+
+        val json = Json {
+            serializersModule = extensions.fold(EmptySerializersModule()) { prev, now ->
+                prev + now.provideSerializersModule()
+            }
+
+            extensions.forEach {
+                with(it) {
+                    apply()
+                }
+            }
+        }
+
         launch {
             embeddedServer(Netty, port = Config.WEB_SERVER_PORT, host = Config.WEB_SERVER_HOST) {
                 install(Resources)

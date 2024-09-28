@@ -256,10 +256,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
             return@onTrackEnd
         }
         if ((!repeat && !loopQueue && queue.isEmpty()) && event.reason != Message.EmittedEvent.TrackEndEvent.AudioTrackEndReason.REPLACED) {
-            val autoPlayTrack = findNextAutoPlayedSong()
-            if (autoPlayTrack != null) {
-                queue.addTracks(SimpleQueuedTrack(autoPlayTrack, guild.kord.selfId))
-            } else {
+            if (autoPlay != null) {
                 playingTrack = null
                 updateMusicChannelMessage()
                 leaveTimeout = lavakord.launch {
@@ -324,6 +321,10 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
     // called under lock
     private suspend fun startNextSong(lastSong: Track? = null, position: Duration? = null) {
         updateSponsorBlock()
+        val autoPlayTrack = findNextAutoPlayedSong()
+        if (autoPlayTrack != null) {
+            queue.addTracks(SimpleQueuedTrack(autoPlayTrack, guild.kord.selfId))
+        }
         if (queue.isEmpty()) {
             updateMusicChannelMessage()
             return

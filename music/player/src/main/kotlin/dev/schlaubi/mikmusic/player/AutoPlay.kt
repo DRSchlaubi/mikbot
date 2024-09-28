@@ -5,23 +5,24 @@ import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.schlaubi.lavakord.rest.loadItem
 import dev.schlaubi.mikbot.plugin.api.util.Translator
-import dev.schlaubi.mikmusic.innerttube.InnerTubeClient
-import dev.schlaubi.mikmusic.innerttube.Text
 import dev.schlaubi.mikmusic.util.LinkedListSerializer
-import dev.schlaubi.mikmusic.util.youtubeId
+import dev.schlaubi.mikmusic.util.format
+import dev.schlaubi.mikmusic.util.spotifyId
 import kotlinx.serialization.Serializable
 import java.util.*
 
 @Serializable
 data class AutoPlayContext(
-    val playlist: String?,
-    val params: String?,
+    val seedGenres: List<String>,
+    val seedArtists: List<String>,
+    val history: List<Track>,
     @Serializable(with = LinkedListSerializer::class) val songs: LinkedList<Track> = LinkedList(),
 ) {
     val initialSize = songs.size
 
-    @Serializable
-    data class Track(val name: String, val artists: List<String>, val id: String)
+    companion object {
+        val EMPTY = AutoPlayContext(emptyList(), emptyList(), emptyList())
+    }
 }
 
 
@@ -34,36 +35,40 @@ suspend fun MusicPlayer.resetAutoPlay() {
     updateMusicChannelMessage()
 }
 
-suspend fun MusicPlayer.enableAutoPlay(videoId: String? = null, params: String? = null) {
-    val realVideoId = videoId ?: playingTrack?.track?.youtubeId ?: return
-    fetchAutoPlay(realVideoId, params = params)
+suspend fun MusicPlayer.enableAutoPlay() {
+    val seedTracks = queue.tracks.mapNotNull { it.track.spotifyId }
+    if (seedTracks.isEmpty()) error("Spotify tracks are required")
+    fetchAutoPlay(seedTracks = seedTracks)
 }
 
-private suspend fun MusicPlayer.fetchAutoPlay(songId: String, playlistId: String? = null, params: String? = null) {
-    val response = InnerTubeClient.requestNextSongs(songId, playlistId, params)
-    val songsTab = response.contents
-        .singleColumnMusicWatchNextResultsRenderer
-        .tabbedRenderer
-        .watchNextTabbedResultsRenderer
-        .tabs.firstOrNull { it.tabRenderer.content?.musicQueueRenderer != null } ?: return
-    val songRenderers = (songsTab
-        .tabRenderer
-        .content
-        ?.musicQueueRenderer ?: return)
-        .content
-        .playlistPanelRenderer
-        .contents
-        .mapNotNull { it.playlistPanelVideoWrapperRenderer?.primaryRenderer }
-    val newPlayListId = songRenderers.firstOrNull()?.navigationEndpoints?.watchEndpoint?.playlistId
-    val songs = songRenderers
-        .drop(1) // First song is requested song
-        .map {
-            val name = it.title.runs.joinToString(" ", transform = Text::text)
-            AutoPlayContext.Track(
-                name, it.longByLineText?.runs?.map(Text::text)?.take(1) ?: emptyList(), it.videoId
-            )
+suspend fun MusicPlayer.enableAutoPlay(
+    seedTracks: List<String> = emptyList(),
+    seedArtists: List<String> = emptyList(),
+    seedGenres: List<String> = emptyList(),
+) {
+    autoPlay = AutoPlayContext(seedGenres, seedArtists, emptyList())
+    fetchAutoPlay(seedTracks = seedTracks)
+}
+
+private suspend fun MusicPlayer.fetchAutoPlay(
+    seedTracks: List<String> = emptyList(),
+    seedArtists: List<String> = emptyList(),
+    seedGenres: List<String> = emptyList(),
+) {
+    val query = buildString {
+        append("sprec:")
+        if (seedTracks.isNotEmpty()) {
+            append("seed_tracks=${seedTracks.joinToString(",")}")
         }
-    autoPlay = AutoPlayContext(newPlayListId, autoPlay?.params, LinkedList(songs))
+        if (seedArtists.isNotEmpty()) {
+            append("seed_artists=${seedTracks.joinToString(",")}")
+        }
+        if (seedGenres.isNotEmpty()) {
+            append("seed_genres=${seedTracks.joinToString(",")}")
+        }
+    }
+    val (_, list) = link.loadItem(query) as LoadResult.PlaylistLoaded
+    autoPlay = (autoPlay ?: AutoPlayContext.EMPTY).copy(history = list.tracks, songs = LinkedList(list.tracks))
 }
 
 context(EmbedBuilder)
@@ -72,35 +77,17 @@ suspend fun MusicPlayer.addAutoPlaySongs(translate: Translator) {
     if (!songs.isNullOrEmpty()) {
         field {
             name = translate("music.auto_play.next_song", "music")
-            value = songs.joinToString("\n") {
-                buildString {
-                    append(it.name)
-                    if (it.artists.isNotEmpty()) {
-                        append(" - ")
-                        append(it.artists.joinToString(", "))
-                    }
-                }
-            }
+            value = songs.joinToString<Track>("\n", transform = Track::format)
         }
     }
 }
 
-suspend fun MusicPlayer.findNextAutoPlayedSong(lastSong: Track?): Track? {
+suspend fun MusicPlayer.findNextAutoPlayedSong(): Track? {
     val currentAutoPlay = autoPlay ?: return null
     if (currentAutoPlay.songs.isNotEmpty()) {
-        return currentAutoPlay.songs.poll().fetchTrack()
+        return currentAutoPlay.songs.poll()
     }
-    val track = lastSong?.youtubeId ?: return null
-    fetchAutoPlay(track, autoPlay?.playlist, autoPlay?.params)
-    return autoPlay?.songs?.poll()?.fetchTrack()
+    fetchAutoPlay(currentAutoPlay.history.mapNotNull(Track::spotifyId))
+    return autoPlay?.songs?.poll()
 }
 
-context(MusicPlayer)
-private suspend fun AutoPlayContext.Track.fetchTrack(): Track? {
-    val response = link.loadItem("https://www.youtube.com/watch?v=$id")
-    return if (response is LoadResult.TrackLoaded) {
-        response.data
-    } else {
-        null
-    }
-}

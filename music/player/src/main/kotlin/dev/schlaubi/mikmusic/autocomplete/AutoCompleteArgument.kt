@@ -8,6 +8,7 @@ import com.kotlindiscord.kord.extensions.koin.KordExContext
 import dev.kord.core.behavior.interaction.suggestString
 import dev.kord.core.event.interaction.GuildAutoCompleteInteractionCreateEvent
 import dev.kord.x.emoji.Emojis
+import dev.schlaubi.lavakord.plugins.lavasearch.model.SearchType
 import dev.schlaubi.lavakord.plugins.lavasearch.rest.search
 import dev.schlaubi.lavakord.plugins.lavasrc.lavaSrcInfo
 import dev.schlaubi.mikmusic.core.Config
@@ -19,7 +20,7 @@ private val musicModule = KordExContext.get().get<ExtensibleBot>()
 /**
  * Creates a `query` argument with [description] supporting YouTube Auto-complete.
  */
-fun Arguments.autoCompletedYouTubeQuery(description: String): SingleConverter<String> = string {
+fun Arguments.autoCompletedYouTubeQuery(description: String, vararg searchTypes: SearchType): SingleConverter<String> = string {
     name = AUTOCOMPLETE_QUERY_OPTION
     this.description = description
 
@@ -29,7 +30,7 @@ fun Arguments.autoCompletedYouTubeQuery(description: String): SingleConverter<St
         if (input.isNotBlank()) {
             val result = musicModule
                 .getMusicPlayer((it as GuildAutoCompleteInteractionCreateEvent).interaction.guild)
-                .search("${Config.DEFAULT_SEARCH_PROVIDER}:$input")
+                .search("${Config.DEFAULT_SEARCH_PROVIDER}:$input", *searchTypes)
 
             suggestString {
                 result.texts.take(5).map { (text) ->

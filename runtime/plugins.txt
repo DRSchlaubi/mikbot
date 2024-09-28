@@ -1,1 +1,3 @@
 :core:gdpr
+:music:player
+:music:commands

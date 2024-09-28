@@ -85,7 +85,11 @@ class MusicInteractionModule(context: PluginContext) : MikBotModule(context) {
 
                     autoPlay -> {
                         if (player.autoPlay == null) {
-                            player.enableAutoPlay()
+                            try {
+                                player.enableAutoPlay()
+                            } catch (_: IllegalStateException) {
+                                discordError(translate("commands.radio.no_matching_songs"))
+                            }
                         } else {
                             player.resetAutoPlay()
                         }

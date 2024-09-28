@@ -18,4 +18,5 @@ suspend fun MusicModule.commands() {
     clearCommand()
     fixCommand()
     nextCommand()
+    radioCommand()
 }

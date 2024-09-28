@@ -7,6 +7,8 @@ import dev.arbjerg.lavalink.protocol.v4.PlayerUpdate
 import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.arbjerg.lavalink.protocol.v4.toOmissible
 import dev.kord.common.entity.Snowflake
+import dev.kord.core.Kord
+import dev.kord.core.KordObject
 import dev.kord.core.behavior.GuildBehavior
 import dev.kord.core.entity.channel.VoiceChannel
 import dev.schlaubi.lavakord.UnsafeRestApi
@@ -48,7 +50,7 @@ internal data class SavedTrack(
     val pause: Boolean,
 )
 
-class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by link, KordExKoinComponent {
+class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by link, KordExKoinComponent , KordObject {
 
     private val lock = Mutex()
 
@@ -66,6 +68,10 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
     internal var autoPlay: AutoPlayContext? = null
     internal var savedTrack: SavedTrack? = null
     private var dontQueue = false
+    override val kord: Kord
+        get() = guild.kord
+    val hasAutoPlay: Boolean
+        get() = !autoPlay?.songs.isNullOrEmpty()
 
     init {
         guild.kord.launch {
@@ -248,7 +254,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
             return@onTrackEnd
         }
         if ((!repeat && !loopQueue && queue.isEmpty()) && event.reason != Message.EmittedEvent.TrackEndEvent.AudioTrackEndReason.REPLACED) {
-            val autoPlayTrack = findNextAutoPlayedSong(event.track)
+            val autoPlayTrack = findNextAutoPlayedSong()
             if (autoPlayTrack != null) {
                 queue.addTracks(SimpleQueuedTrack(autoPlayTrack, guild.kord.selfId))
             } else {
@@ -339,6 +345,12 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
 
         delay(500) // Wait for change to propagate
         updateMusicChannelMessage()
+    }
+
+    suspend fun start() {
+        if (playingTrack == null) {
+            startNextSong()
+        }
     }
 
     suspend fun stop() {

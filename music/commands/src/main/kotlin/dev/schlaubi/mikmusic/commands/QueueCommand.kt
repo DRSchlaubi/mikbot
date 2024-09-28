@@ -1,6 +1,7 @@
 package dev.schlaubi.mikmusic.commands
 
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
+import dev.kord.rest.builder.message.embed
 import dev.schlaubi.mikbot.plugin.api.util.forList
 import dev.schlaubi.mikmusic.checks.anyMusicPlaying
 import dev.schlaubi.mikmusic.core.MusicModule
@@ -20,11 +21,14 @@ suspend fun MusicModule.queueCommand() = ephemeralSlashCommand {
     }
 
     action {
-        if (musicPlayer.queuedTracks.isEmpty()) {
+        if (musicPlayer.queue.isEmpty()) {
             val track = musicPlayer.playingTrack
             if (track != null) {
                 respond {
-                    content = translate("commands.queue.now_playing", arrayOf(track.format()))
+                    embed {
+                        musicPlayer.addAutoPlaySongs(::translate)
+                        description = translate("commands.queue.now_playing", arrayOf(track.format()))
+                    }
                 }
             } else {
                 respond {

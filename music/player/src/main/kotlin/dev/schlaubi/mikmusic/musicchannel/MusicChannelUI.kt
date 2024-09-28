@@ -124,13 +124,12 @@ suspend fun updateMessage(
                     additionalCondition = !playingQueueTrack.isOnLast
                 )
             }
-            // Disabled due to YouTube changing the underlying API
-//            musicButton(
-//                musicPlayer,
-//                autoPlay,
-//                Emojis.blueCar,
-//                enabled = musicPlayer.autoPlay != null
-//            )
+            musicButton(
+                musicPlayer,
+                autoPlay,
+                Emojis.blueCar,
+                enabled = musicPlayer.autoPlay != null
+            )
         }
         actionRow {
             musicButton(

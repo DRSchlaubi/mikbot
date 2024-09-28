@@ -30,9 +30,12 @@ import dev.schlaubi.mikmusic.player.MusicPlayer
 import dev.schlaubi.mikmusic.player.PersistentPlayerState
 import dev.schlaubi.mikmusic.player.applyToPlayer
 import dev.schlaubi.mikmusic.player.voiceStateWatcher
+import dev.schlaubi.mikmusic.util.TrackLinkedListSerializer
+import dev.schlaubi.mikmusic.util.TrackListSerializer
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
+import org.litote.kmongo.serialization.registerSerializer
 import org.pf4j.ExtensionPoint
 import kotlin.reflect.KMutableProperty1
 
@@ -70,6 +73,8 @@ class MusicModule(context: PluginContext) : MikBotModule(context) {
     }
 
     override suspend fun setup() {
+        registerSerializer(TrackListSerializer)
+        registerSerializer(TrackLinkedListSerializer)
         context.pluginSystem.getExtensions<MusicExtensionPoint>().forEach {
             with(it) {
                 overrideSetup()

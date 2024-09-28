@@ -7,7 +7,7 @@ import dev.schlaubi.mikmusic.autocomplete.autoCompletedYouTubeQuery
 import dev.schlaubi.mikmusic.player.queue.QueueOptions
 import dev.schlaubi.mikmusic.player.queue.findTracks
 import dev.schlaubi.mikmusic.playlist.PlaylistDatabase
-import dev.schlaubi.mikmusic.playlist.mapToEncoded
+import dev.schlaubi.mikmusic.util.mapToEncoded
 
 class PlaylistAddArguments : PlaylistArguments(), QueueOptions {
     override val query by autoCompletedYouTubeQuery("commands.playlist.add.arguments.query.description")

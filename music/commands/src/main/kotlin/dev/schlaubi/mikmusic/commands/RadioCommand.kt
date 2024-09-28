@@ -38,22 +38,37 @@ suspend fun MusicModule.radioCommand() {
             val seedItem = (musicPlayer.loadItem(arguments.query))
 
             val (item, isTrack) = when (seedItem) {
-                is LoadResult.TrackLoaded -> seedItem.data to true
-                is LoadResult.SearchResult -> seedItem.data.tracks.first() to true
-                is LoadResult.PlaylistLoaded -> seedItem.data.tracks.first()
-                    .takeIf { seedItem.data.lavaSrcInfo.type == ExtendedPlaylistInfo.Type.ARTIST }
-                    ?.let { it to false }
-
-                else -> discordError(translate("commands.radio.no_matching_songs"))
-            } ?: discordError(translate("commands.radio.no_matching_songs"))
-
-            if (isTrack) {
-                musicPlayer.enableAutoPlay(seedTracks = listOf(item.spotifyId!!))
-            } else {
-                musicPlayer.enableAutoPlay(seedArtists = listOf(item.spotifyId!!))
+                is LoadResult.TrackLoaded -> listOf(seedItem.data.spotifyId) to true
+                is LoadResult.SearchResult -> seedItem.data.tracks.map { it.spotifyId } to true
+                is LoadResult.PlaylistLoaded -> {
+                    val playlist = seedItem.data.tracks
+                    if (seedItem.data.lavaSrcInfo.type == ExtendedPlaylistInfo.Type.ARTIST) {
+                        listOf(seedItem.data.lavaSrcInfo.url!!.substringAfterLast("/")) to false
+                    } else {
+                        playlist.map { it.spotifyId } to true
+                    }
+                }
+                else -> emptyList<String>() to true
             }
 
-            musicPlayer.queueTrack(false, false, tracks = listOf(SimpleQueuedTrack(item, user.id)))
+            val realItems = item.filterNotNull()
+            if (realItems.isEmpty()) {
+                discordError(translate("commands.radio.no_matching_songs"))
+            }
+
+            if (isTrack) {
+                musicPlayer.enableAutoPlay(seedTracks = realItems)
+            } else {
+                musicPlayer.enableAutoPlay(seedArtists = realItems)
+            }
+
+            val initial = when(seedItem) {
+                is LoadResult.TrackLoaded -> listOf(seedItem.data)
+                is LoadResult.HasTracks -> seedItem.tracks
+                else -> return@action
+            }.map { SimpleQueuedTrack(it, user.id) }
+
+            musicPlayer.queueTrack(false, false, tracks = initial)
             respond {
                 content = translate("commands.radio.queued")
             }

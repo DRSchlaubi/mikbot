@@ -58,13 +58,17 @@ private suspend fun MusicPlayer.fetchAutoPlay(
     val query = buildString {
         append("sprec:")
         if (seedTracks.isNotEmpty()) {
-            append("seed_tracks=${seedTracks.joinToString(",")}")
+            append("seed_tracks=${seedTracks.take(5).joinToString(",")}")
         }
         if (seedArtists.isNotEmpty()) {
-            append("seed_artists=${seedTracks.joinToString(",")}")
+            append("seed_artists=${seedTracks.take((5 - seedTracks.size).coerceAtLeast(0)).joinToString(",")}")
         }
         if (seedGenres.isNotEmpty()) {
-            append("seed_genres=${seedTracks.joinToString(",")}")
+            append(
+                "seed_genres=${
+                    seedTracks.take((5 - seedTracks.size - seedArtists.size).coerceAtLeast(0)).joinToString(",")
+                }"
+            )
         }
     }
     val (_, list) = link.loadItem(query) as LoadResult.PlaylistLoaded

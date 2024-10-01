@@ -198,7 +198,12 @@ suspend fun CommandContext.queueTracks(
             with(searchResult) { addInfo(musicPlayer.link, this@queueTracks) }
 
             footer {
-                val estimatedIn = musicPlayer.remainingQueueDuration
+                val estimatedIn = when {
+                    arguments.top -> musicPlayer.remainingQueueDuration
+                    arguments.force -> 0.milliseconds
+                    else -> musicPlayer.remainingQueueDuration
+                }
+
                 val item = if (estimatedIn == 0.milliseconds) {
                     translate("music.general.now")
                 } else {

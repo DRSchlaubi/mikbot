@@ -136,17 +136,17 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
             updateMusicChannelMessage()
         }
 
+    val remainingTrackDuration: Duration
+        get() = player.playingTrack?.info?.length?.minus(player.position)
+            ?.toDuration(DurationUnit.MILLISECONDS)
+            ?: 0.milliseconds
+
     val remainingQueueDuration: Duration
         get() {
-            val remainingOfCurrentTrack =
-                player.playingTrack?.info?.length?.minus(player.position)
-                    ?.toDuration(DurationUnit.MILLISECONDS)
-                    ?: 0.milliseconds
-
             val remainingQueue = queuedTracks
                 .fold(0.seconds) { acc, track -> acc + track.track.info.length.toDuration(DurationUnit.MILLISECONDS) }
 
-            return remainingOfCurrentTrack + remainingQueue
+            return remainingTrackDuration + remainingQueue
         }
 
     val nextSongIsFirst: Boolean get() = queue.isEmpty() && link.player.playingTrack == null

@@ -126,6 +126,7 @@ class MusicInteractionModule(context: PluginContext) : MikBotModule(context) {
                 event.message.channel.withTyping {
                     val guild = event.getGuildOrNull() ?: error("Could not find guild")
                     val player = musicModule.getMusicPlayer(guild)
+                    player.startLeaveTimeout()
                     val track = takeFirstMatch(player.node, event.message.content) { event.message.reply { it() } }
                         ?: return@withTyping
                     player.queueTrack(

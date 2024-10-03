@@ -12,7 +12,7 @@ import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.core.event.interaction.InteractionCreateEvent
 import dev.schlaubi.lavakord.kord.connectAudio
 import dev.schlaubi.mikbot.plugin.api.util.ifPassing
-import dev.schlaubi.mikmusic.core.audio.LavalinkManager
+import dev.schlaubi.mikmusic.core.MusicModule
 import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.count
@@ -22,13 +22,14 @@ suspend fun <T : Event> CheckContext<T>.joinSameChannelCheck(extensibleBot: Exte
     abstractMusicCheck {
         val botChannelMembers = guild.voiceStates.count { it.channelId == botChannel }
         if (botChannel == null || botChannelMembers == 1) {
-            val lavalink = extensibleBot.findExtension<LavalinkManager>()!!.getLink(guild)
+            val lavalink = extensibleBot.findExtension<MusicModule>()!!.getMusicPlayer(guild)
 
             if (botChannel != null) {
                 lavalink.disconnectAudio()
                 delay(400.milliseconds) // wait for Discord API to propagate
             }
             lavalink.connectAudio(voiceChannel)
+            lavalink.startLeaveTimeout() // start it here, so the bot leaves in case no track is queued
 
             guild.getMember(guild.kord.selfId).edit {
                 deafened = true

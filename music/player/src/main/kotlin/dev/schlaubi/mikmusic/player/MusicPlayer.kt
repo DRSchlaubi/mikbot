@@ -256,13 +256,10 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
             return@onTrackEnd
         }
         if ((!repeat && !loopQueue && queue.isEmpty()) && event.reason != Message.EmittedEvent.TrackEndEvent.AudioTrackEndReason.REPLACED) {
-            if (autoPlay != null) {
+            if (autoPlay == null) {
                 playingTrack = null
                 updateMusicChannelMessage()
-                leaveTimeout = lavakord.launch {
-                    delay(MusicSettingsDatabase.findGuild(guild).leaveTimeout)
-                    stop()
-                }
+                startLeaveTimeout()
                 return@onTrackEnd
             }
         }
@@ -281,6 +278,13 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
         }
 
         updateMusicChannelMessage()
+    }
+
+    fun startLeaveTimeout() {
+        leaveTimeout = lavakord.launch {
+            delay(MusicSettingsDatabase.findGuild(guild).leaveTimeout)
+            stop()
+        }
     }
 
     private suspend fun waitForPlayerUpdate() {

@@ -54,7 +54,7 @@ ktor-server-html-builder = { group = "io.ktor", name = "ktor-server-html-builder
 kubernetes-client = { group = "io.kubernetes", name = "client-java", version = "21.0.1" }
 kotlin-jsonpatch = { group = "io.github.reidsync", name = "kotlin-json-patch", version = "1.0.0" }
 
-pf4j = { group = "org.pf4j", name = "pf4j", version = "3.11.1" }
+pf4j = { group = "org.pf4j", name = "pf4j", version = "3.12.1" }
 pf4j-update = { group = "org.pf4j", name = "pf4j-update", version = "2.3.0" }
 
 gson = { group = "com.google.code.gson", name = "gson", version = "2.11.0" }

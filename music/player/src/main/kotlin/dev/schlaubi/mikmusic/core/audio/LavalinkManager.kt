@@ -40,7 +40,7 @@ class LavalinkManager(context: PluginContext) : MikBotModule(context) {
     fun getLink(guild: GuildBehavior) = lavalink.getLink(guild.id)
 
     @Suppress("INVISIBLE_REFERENCE")
-    fun newNode() = (lavalink as AbstractLavakord).loadBalancer.determineBestNode(Snowflake.min)
+    fun newNode() = (lavalink as AbstractLavakord).loadBalancer.determineBestNode(Snowflake.min.value)
         ?: error("No node found")
 
     override suspend fun unload() {

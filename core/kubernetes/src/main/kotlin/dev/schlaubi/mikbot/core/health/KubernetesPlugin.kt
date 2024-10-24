@@ -3,6 +3,7 @@ package dev.schlaubi.mikbot.core.health
 import com.kotlindiscord.kord.extensions.builders.ExtensibleBotBuilder
 import com.kotlindiscord.kord.extensions.utils.loadModule
 import dev.schlaubi.mikbot.core.health.check.HealthCheck
+import dev.schlaubi.mikbot.core.health.ratelimit.setupDistributedRateLimiter
 import dev.schlaubi.mikbot.plugin.api.*
 import dev.schlaubi.mikbot.plugin.api.config.Environment
 import mu.KotlinLogging
@@ -42,6 +43,7 @@ class KubernetesPlugin(context: PluginContext) : Plugin(context) {
             LOG.debug { "Scaling is enabled " }
             kord {
                 sharding { calculateShards() }
+                setupDistributedRateLimiter()
             }
             applicationCommands {
                 register = Config.POD_ID == (Config.TOTAL_SHARDS / Config.SHARDS_PER_POD)

@@ -1,3 +1,1 @@
-:core:gdpr
-:music:player
-:music:commands
+:core:kubernetes

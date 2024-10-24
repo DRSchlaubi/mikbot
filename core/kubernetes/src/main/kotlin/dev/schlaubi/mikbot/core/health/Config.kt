@@ -10,4 +10,5 @@ object Config : EnvironmentConfig() {
     val STATEFUL_SET_NAME by this
     val NAMESPACE by getEnv("default")
     val CONTAINER_NAME by this
+    val REDIS_URL by this
 }

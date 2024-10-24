@@ -19,6 +19,9 @@ dependencies {
 
     implementation(libs.kubernetes.client)
     implementation(libs.kotlin.jsonpatch)
+    implementation(libs.bucket4j)
+    implementation("io.lettuce:lettuce-core:6.4.0.RELEASE")
+
 
     testImplementation(kotlin("test-junit5"))
     testImplementation(projects.api)

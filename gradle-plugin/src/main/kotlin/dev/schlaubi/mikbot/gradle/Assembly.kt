@@ -38,7 +38,14 @@ internal fun TaskContainer.createAssembleTasks(generateDefaultTranslationBundle:
     jar.dependsOn(patchPropertiesTask, generateDefaultTranslationBundle)
     val assembleTask = createAssemblePluginTask(jar)
     val installBotTask = createInstallBotTask()
-    createAssembleBotTask(assembleTask, installBotTask)
+
+    // This task only makes sense for plugin projects, since mikbot core plugins aren't distributed as standalone bots
+    // Also this is defined though the Gradle environment, therefore it is a compile-time constant
+    // But compilation of public and internal variant is different
+    @Suppress("KotlinConstantConditions")
+    if (!MikBotPluginInfo.IS_MIKBOT) {
+        createAssembleBotTask(assembleTask, installBotTask)
+    }
     return AssemblyTask(assembleTask, installBotTask)
 }
 

@@ -141,8 +141,6 @@ class Bot(repos: List<UpdateRepository>) : KordExKoinComponent, PluginContext {
 
         applicationCommands {
             enabled = true
-
-            register = true
             Config.TEST_GUILD?.let(::defaultGuild)
         }
 

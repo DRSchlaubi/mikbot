@@ -44,7 +44,7 @@ class KubernetesPlugin(context: PluginContext) : Plugin(context) {
                 sharding { calculateShards() }
             }
             applicationCommands {
-                register = Config.POD_ID == (Config.SHARDS_PER_POD)
+                register = Config.POD_ID == (Config.TOTAL_SHARDS / Config.SHARDS_PER_POD)
                     || BotConfig.ENVIRONMENT == Environment.DEVELOPMENT
                     || !Config.ENABLE_SCALING
             }

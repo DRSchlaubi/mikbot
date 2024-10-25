@@ -15,6 +15,7 @@ import kotlinx.datetime.toJavaInstant
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executors
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.toJavaDuration
 
@@ -85,7 +86,7 @@ class DistributedRateLimiter(proxyManager: ProxyManager<String>) : RequestRateLi
                 .capacity(limit.remaining.value)
                 .refillIntervallyAligned(
                     limit.total.value,
-                    (reset.value - Clock.System.now()).coerceAtMost(Duration.ZERO).toJavaDuration(),
+                    (reset.value - Clock.System.now()).coerceAtLeast(1.milliseconds).toJavaDuration(),
                     start.toJavaInstant()
                 )
         }

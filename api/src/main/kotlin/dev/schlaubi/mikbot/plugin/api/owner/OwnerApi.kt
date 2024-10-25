@@ -1,6 +1,8 @@
 package dev.schlaubi.mikbot.plugin.api.owner
 
 import com.kotlindiscord.kord.extensions.commands.application.slash.SlashCommand
+import dev.kord.common.entity.ApplicationIntegrationType
+import dev.kord.common.entity.InteractionContextType
 import dev.kord.common.entity.Permission
 import dev.schlaubi.mikbot.plugin.api.*
 import dev.schlaubi.mikbot.plugin.api.config.Config
@@ -31,4 +33,6 @@ public interface OwnerExtensionPoint : ModuleExtensionPoint<OwnerModule> {
 public fun SlashCommand<*, *, *>.ownerOnly() {
     guildId = Config.OWNER_GUILD ?: error("Cannot register owner command without OWNER_GUILD value")
     requirePermission(Permission.Administrator)
+    allowedContexts.add(InteractionContextType.Guild)
+    allowedInstallTypes.add(ApplicationIntegrationType.GuildInstall)
 }

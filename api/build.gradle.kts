@@ -16,6 +16,10 @@ dependencies {
     // Api base
     api(projects.api.annotations)
     // Bot
+    api("dev.kord:kord-common-jvm:${libs.versions.kord.get()}")
+    api("dev.kord:kord-rest-jvm:${libs.versions.kord.get()}")
+    api("dev.kord:kord-gateway-jvm:${libs.versions.kord.get()}")
+    api("dev.kord:kord-core-jvm:${libs.versions.kord.get()}")
     api(libs.kordex)
     api(libs.kordex.unsafe)
     api(libs.kordx.emoji) {

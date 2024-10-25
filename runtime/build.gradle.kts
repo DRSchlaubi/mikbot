@@ -31,8 +31,9 @@ dependencies {
         // otherwise we would add entire Gradle in here
         isTransitive = false
     }
-    implementation("dev.kord:kord-common-jvm:${libs.versions.kord.get()}")
-    implementation("dev.kord:kord-rest-jvm:${libs.versions.kord.get()}")
+//    implementation("dev.kord:kord-common-jvm:${libs.versions.kord.get()}")
+//    implementation("dev.kord:kord-rest-jvm:${libs.versions.kord.get()}")
+//    implementation("dev.kord:kord-core-jvm:${libs.versions.kord.get()}")
 
     // Util
     implementation(libs.kotlinx.serialization.json)

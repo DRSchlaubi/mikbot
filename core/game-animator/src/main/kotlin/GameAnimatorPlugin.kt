@@ -93,31 +93,31 @@ data class Game(val type: ActivityType, val status: PresenceStatus, val text: St
                 'p' -> Game(
                     ActivityType.Game,
                     PresenceStatus.Online,
-                    game.replaceFirst("p: ".toRegex(), "")
+                    game.replaceFirst("p:\\s*".toRegex(), "")
                 )
 
                 'l' -> Game(
                     ActivityType.Listening,
                     PresenceStatus.Online,
-                    game.replaceFirst("l: ".toRegex(), "")
+                    game.replaceFirst("l:\\s*".toRegex(), "")
                 )
 
                 's' -> Game(
                     ActivityType.Streaming,
                     PresenceStatus.Online,
-                    game.replaceFirst("s: ".toRegex(), "")
+                    game.replaceFirst("s:\\s*".toRegex(), "")
                 )
 
                 'w' -> Game(
                     ActivityType.Watching,
                     PresenceStatus.Online,
-                    game.replaceFirst("w: ".toRegex(), "")
+                    game.replaceFirst("w:\\s*".toRegex(), "")
                 )
 
                 'c' -> Game(
                     ActivityType.Competing,
                     PresenceStatus.Online,
-                    game.replaceFirst("c: ".toRegex(), "")
+                    game.replaceFirst("c:\\s*".toRegex(), "")
                 )
 
                 else -> error("Invalid game: $this")

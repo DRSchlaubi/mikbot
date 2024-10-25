@@ -10,4 +10,5 @@
     <logger name="org.mongodb.driver" level="INFO"/>
     <logger name="org.pf4j" level="INFO"/>
     <logger name="io.netty" level="INFO"/>
+    <logger name="io.lettuce" level="INFO"/>
 </configuration>

@@ -85,7 +85,7 @@ class DistributedRateLimiter(proxyManager: ProxyManager<String>) : RequestRateLi
                 .capacity(limit.remaining.value)
                 .refillIntervallyAligned(
                     limit.total.value,
-                    (Clock.System.now() - reset.value).toJavaDuration(),
+                    (reset.value - Clock.System.now()).coerceAtMost(Duration.ZERO).toJavaDuration(),
                     start.toJavaInstant()
                 )
         }

@@ -8,7 +8,7 @@ ktor = "3.0.0"
 kord = "feature-user-apps-20241022.210712-8"
 api = "3.37.15"
 ksp = "2.0.21-1.0.25"
-lavakord = "7.1.0"
+lavakord = "8.0.1"
 
 [libraries]
 kord-common = { group = "dev.kord", name = "kord-common", version.ref = "kord" }

@@ -1,3 +1,3 @@
 subprojects {
-    version = "3.11.8-SNAPSHOT"
+    version = "3.12.0-SNAPSHOT"
 }

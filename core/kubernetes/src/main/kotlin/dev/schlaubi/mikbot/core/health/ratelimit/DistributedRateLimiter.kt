@@ -63,7 +63,7 @@ class DistributedRateLimiter(proxyManager: ProxyManager<String>) : RequestRateLi
                     val proxy = proxyManager.getProxy(globalBucket) { CompletableFuture.completedFuture(config) }
                     proxy.replaceConfiguration(config, TokensInheritanceStrategy.AS_IS)
                 } else {
-                    val key = response.bucketKey!!
+                    val key = response.bucketKey ?: return
                     val config = response.toBucketConfiguration()
                     val proxy = proxyManager.getProxy(key.value) { CompletableFuture.completedFuture(config) }
                     proxy.replaceConfiguration(config, TokensInheritanceStrategy.AS_IS)

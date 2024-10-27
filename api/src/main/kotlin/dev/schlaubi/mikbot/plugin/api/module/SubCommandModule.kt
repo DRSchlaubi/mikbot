@@ -4,6 +4,9 @@ import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.application.slash.*
 import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
+import com.kotlindiscord.kord.extensions.modules.unsafe.annotations.UnsafeAPI
+import com.kotlindiscord.kord.extensions.modules.unsafe.commands.UnsafeSlashCommand
+import com.kotlindiscord.kord.extensions.modules.unsafe.extensions.unsafeSubCommand
 import dev.schlaubi.mikbot.plugin.api.PluginContext
 
 /**
@@ -18,6 +21,8 @@ public abstract class SubCommandModule(context: PluginContext) : MikBotModule(co
     private val ephemeralSubCommandBodies = mutableListOf<EphemeralCommandPair<*>>()
     private val publicSubCommandBodies = mutableListOf<PublicCommandPair<*>>()
     private val groupBodies = mutableListOf<GroupPair>()
+    @OptIn(UnsafeAPI::class)
+    private val unsafeSubCommandBodies = mutableListOf<UnsafeCommandPair<*>>()
 
     /**
      * The name of the root command.
@@ -50,7 +55,13 @@ public abstract class SubCommandModule(context: PluginContext) : MikBotModule(co
         groupBodies.add(GroupPair(name, body))
     }
 
+    @UnsafeAPI
+    public fun unsafeSubCommand(name: String, body: UnsafeSlashCommand<Arguments, *>.() -> Unit) {
+        unsafeSubCommandBodies.add(UnsafeCommandPair(null, body))
+    }
+
     public open fun SlashCommand<*, *, *>.commandSettings() = Unit
+    @OptIn(UnsafeAPI::class)
     final override suspend fun setup() {
         overrideSetup()
 
@@ -59,8 +70,10 @@ public abstract class SubCommandModule(context: PluginContext) : MikBotModule(co
             description = "<never used>"
             commandSettings()
 
+
             ephemeralSubCommandBodies.forEach { with(it) { add() } }
             publicSubCommandBodies.forEach { with(it) { add() } }
+            unsafeSubCommandBodies.forEach { with(it) { add() } }
         }
     }
 
@@ -114,6 +127,32 @@ public class PublicCommandPair<T : Arguments>(
             }
         } else {
             publicSubCommand(argumentBody) {
+                commandBody()
+            }
+        }
+    }
+}
+
+/**
+ * Pair of a command configurator and it's arguments.
+ *
+ * @param T the [Arguments] type
+ * @property argumentBody the command's argument body
+ * @property commandBody the command body
+ */
+@UnsafeAPI
+public class UnsafeCommandPair<T : Arguments>(
+    private val argumentBody: (() -> T)?,
+    private val commandBody: suspend UnsafeSlashCommand<T, *>.() -> Unit,
+) {
+    public suspend fun SlashCommand<*, *, *>.add() {
+        if (argumentBody == null) {
+            unsafeSubCommand {
+                @Suppress("UNCHECKED_CAST")
+                commandBody(this as UnsafeSlashCommand<T, *>)
+            }
+        } else {
+            unsafeSubCommand(argumentBody) {
                 commandBody()
             }
         }

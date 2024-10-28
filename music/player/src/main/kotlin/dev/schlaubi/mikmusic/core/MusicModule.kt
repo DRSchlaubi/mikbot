@@ -72,6 +72,8 @@ class MusicModule(context: PluginContext) : MikBotModule(context) {
         }
     }
 
+    internal fun unregister(guildId: Snowflake) = musicPlayers.remove(guildId)
+
     override suspend fun setup() {
         registerSerializer(TrackListSerializer)
         registerSerializer(TrackLinkedListSerializer)

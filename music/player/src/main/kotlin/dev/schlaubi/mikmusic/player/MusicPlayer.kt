@@ -27,15 +27,26 @@ import dev.schlaubi.lavakord.plugins.sponsorblock.rest.getSponsorblockCategories
 import dev.schlaubi.lavakord.plugins.sponsorblock.rest.putSponsorblockCategories
 import dev.schlaubi.lavakord.rest.getPlayer
 import dev.schlaubi.lavakord.rest.updatePlayer
+import dev.schlaubi.mikmusic.core.MusicModule
 import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase
 import dev.schlaubi.mikmusic.musicchannel.updateMessage
 import dev.schlaubi.mikmusic.player.queue.SchedulingOptions
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import org.koin.core.component.get
 import org.koin.core.component.inject
+import kotlin.coroutines.CoroutineContext
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
@@ -50,7 +61,7 @@ internal data class SavedTrack(
     val pause: Boolean,
 )
 
-class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by link, KordExKoinComponent , KordObject {
+class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by link, KordExKoinComponent, CoroutineScope, KordObject {
 
     private val lock = Mutex()
 
@@ -74,6 +85,9 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
         get() = !autoPlay?.songs.isNullOrEmpty()
     val autoPlayTrackCount
         get() = autoPlay?.songs?.size ?: 0
+    private val musicChannelUpdateFlow = MutableSharedFlow<Unit>(0, 1, BufferOverflow.DROP_OLDEST)
+    override val coroutineContext: CoroutineContext
+        get() = kord.coroutineContext + SupervisorJob()
 
     init {
         guild.kord.launch {
@@ -88,6 +102,9 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
         link.player.on(consumer = ::onTrackStart)
         link.player.on(consumer = ::onChaptersLoaded)
         link.player.on(consumer = ::onChapterStarted)
+        musicChannelUpdateFlow.debounce(5.seconds).onEach {
+            doMusicChannelMessageUpdate()
+        }.launchIn(this)
     }
 
     private fun updateSponsorBlock() = guild.kord.launch {
@@ -111,11 +128,6 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
 
     @Suppress("unused") // used by other plugins
     fun updateMusicChannelState(to: Boolean) {
-        if (to) {
-            queue.clear()
-            playingTrack = null
-            updateMusicChannelMessage()
-        }
         disableMusicChannel = to
     }
 
@@ -367,9 +379,14 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
         autoPlay = null
         playingTrack = null
         updateMusicChannelMessage()
+        cancel()
+        get<MusicModule>().unregister(guild.id)
     }
 
     fun updateMusicChannelMessage() {
+        musicChannelUpdateFlow.tryEmit(Unit)
+    }
+    private fun doMusicChannelMessageUpdate() {
         if (!disableMusicChannel) {
             guild.kord.launch {
                 updateMessage(

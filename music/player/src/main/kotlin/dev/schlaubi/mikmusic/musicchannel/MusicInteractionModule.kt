@@ -7,7 +7,7 @@ import dev.kord.core.behavior.channel.withTyping
 import dev.kord.core.behavior.interaction.response.EphemeralMessageInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.response.createEphemeralFollowup
 import dev.kord.core.behavior.reply
-import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
+import dev.kord.core.event.interaction.GuildComponentInteractionCreateEvent
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.schlaubi.mikbot.plugin.api.PluginContext
 import dev.schlaubi.mikbot.plugin.api.module.MikBotModule
@@ -30,7 +30,7 @@ class MusicInteractionModule(context: PluginContext) : MikBotModule(context) {
     val musicModule: MusicModule by extension()
 
     override suspend fun setup() {
-        event<ComponentInteractionCreateEvent> {
+        event<GuildComponentInteractionCreateEvent> {
             check {
                 failIf {
                     val interaction = this.event.interaction
@@ -39,6 +39,11 @@ class MusicInteractionModule(context: PluginContext) : MikBotModule(context) {
                     val guildSettings = guild.let { MusicSettingsDatabase.findGuild(guild) }
 
                     /* return */ interaction.message.id != guildSettings.musicChannelData?.musicChannelMessage
+                }
+
+                failIf(translate("music.music_channel.disabled", "music")) {
+                    val player = musicModule.getMusicPlayer(event.interaction.guild)
+                    player.disableMusicChannel
                 }
 
                 musicControlCheck()

@@ -51,7 +51,7 @@ ktor-server-cors = { group = "io.ktor", name = "ktor-server-cors", version.ref =
 ktor-server-websockets = { group = "io.ktor", name = "ktor-server-websockets", version.ref = "ktor" }
 ktor-server-html-builder = { group = "io.ktor", name = "ktor-server-html-builder", version.ref = "ktor" }
 
-kubernetes-client = { group = "io.kubernetes", name = "client-java", version = "21.0.1" }
+kubernetes-client = { group = "io.kubernetes", name = "client-java", version = "21.0.2" }
 kotlin-jsonpatch = { group = "io.github.reidsync", name = "kotlin-json-patch", version = "1.0.0" }
 
 pf4j = { group = "org.pf4j", name = "pf4j", version = "3.12.1" }

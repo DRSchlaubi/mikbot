@@ -1,5 +1,6 @@
 package dev.schlaubi.mikmusic.player
 
+import com.kotlindiscord.kord.extensions.ExtensibleBot
 import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
 import com.kotlindiscord.kord.extensions.koin.KordExKoinComponent
 import dev.arbjerg.lavalink.protocol.v4.Message
@@ -31,17 +32,12 @@ import dev.schlaubi.mikmusic.core.MusicModule
 import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase
 import dev.schlaubi.mikmusic.musicchannel.updateMessage
 import dev.schlaubi.mikmusic.player.queue.SchedulingOptions
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.koin.core.component.get
@@ -102,8 +98,9 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
         link.player.on(consumer = ::onTrackStart)
         link.player.on(consumer = ::onChaptersLoaded)
         link.player.on(consumer = ::onChapterStarted)
+        @OptIn(FlowPreview::class)
         musicChannelUpdateFlow.debounce(5.seconds).onEach {
-            doMusicChannelMessageUpdate()
+            updateMusicChannelMessage()
         }.launchIn(this)
     }
 
@@ -129,6 +126,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
     @Suppress("unused") // used by other plugins
     fun updateMusicChannelState(to: Boolean) {
         disableMusicChannel = to
+        queueMusicChannelMessageUpdate()
     }
 
     var shuffle: Boolean
@@ -238,7 +236,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
         val playingTrack = playingTrack ?: return
         val queuedBy = playingTrack.queuedBy
         this.playingTrack = ChapterQueuedTrack(playingTrack.track, queuedBy, event.chapters)
-        updateMusicChannelMessage()
+        queueMusicChannelMessageUpdate()
     }
 
     private fun onChapterStarted(event: ChapterStartedEvent) {
@@ -362,7 +360,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
     suspend fun pause(pause: Boolean = !player.paused) = lock.withLock {
         player.pause(pause)
 
-        delay(500) // Wait for change to propagate
+        waitForPlayerUpdate() // Wait for change to propagate
         updateMusicChannelMessage()
     }
 
@@ -378,15 +376,17 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
         queue.clear()
         autoPlay = null
         playingTrack = null
-        updateMusicChannelMessage()
-        cancel()
-        get<MusicModule>().unregister(guild.id)
+        queueMusicChannelMessageUpdate()
+        coroutineContext.cancel()
+
+        get<ExtensibleBot>().findExtension<MusicModule>()?.unregister(guild.id)
+    }
+
+    private fun queueMusicChannelMessageUpdate() {
+        musicChannelUpdateFlow.tryEmit(Unit)
     }
 
     fun updateMusicChannelMessage() {
-        musicChannelUpdateFlow.tryEmit(Unit)
-    }
-    private fun doMusicChannelMessageUpdate() {
         if (!disableMusicChannel) {
             guild.kord.launch {
                 updateMessage(

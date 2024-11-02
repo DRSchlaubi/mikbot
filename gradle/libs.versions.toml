@@ -71,5 +71,5 @@ kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", vers
 kotlinx-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 gradle-publish = { id = "com.gradle.plugin-publish", version = "1.2.1" }
 buildconfig = { id = "com.github.gmazzo.buildconfig", version = "5.3.5" }
-mikbot = { id = "dev.schlaubi.mikbot.gradle-plugin", version = "1.0.0" }
+mikbot = { id = "dev.schlaubi.mikbot.gradle-plugin", version = "3.37.23" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

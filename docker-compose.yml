@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   mongo:
     image: mongo
@@ -10,8 +8,6 @@ services:
       - mongo-data:/data/db
   bot:
     image: ghcr.io/drschlaubi/mikmusic/bot:latest # or your own distro, see PLUGINS.md for more
-    env_file:
-      - .env
     depends_on:
       - mongo
     volumes:

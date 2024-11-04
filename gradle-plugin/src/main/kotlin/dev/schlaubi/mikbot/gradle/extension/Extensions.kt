@@ -20,6 +20,7 @@ internal val Project.pluginPublishingExtension: BuildRepositoryExtension
     get() = extensions.findByType() ?: error("Missing MikBot plugin in :path")
 
 
+@Suppress("ConvertLambdaToReference")
 fun Project.createExtensions() {
     extensions.create<PluginExtension>(pluginExtensionName).apply {
         if (parent != null) {
@@ -52,7 +53,7 @@ fun Project.createExtensions() {
                 } + "Translations"
             })
             requires.convention(MikBotPluginInfo.VERSION)
-            version.convention(provider(project.version::toString))
+            version.convention(provider { project.version.toString() })
         }
     }
     extensions.create<BuildRepositoryExtension>(pluginPublishingExtensionName).apply {

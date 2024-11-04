@@ -4,18 +4,17 @@ import dev.schlaubi.mikbot.gradle.extension.pluginId
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.Directory
 import org.gradle.api.file.FileSystemOperations
-import org.gradle.api.file.RegularFile
-import org.gradle.api.provider.Property
+import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Provider
-import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import javax.inject.Inject
 
 abstract class InstallPluginsToTestBotTask : DefaultTask() {
 
-    @get:Input
-    abstract val pluginArchive: Property<RegularFile>
+    @get:InputFile
+    abstract val pluginArchive: RegularFileProperty
 
     @get:OutputDirectory
     val outputDirectory: Provider<Directory> = project.layout.buildDirectory.dir("test-bot/plugins")
@@ -26,7 +25,7 @@ abstract class InstallPluginsToTestBotTask : DefaultTask() {
     @TaskAction
     fun install() {
         val result = fs.copy {
-            from(pluginArchive.get())
+            from(pluginArchive)
             into(outputDirectory)
             rename { "plugin-${project.pluginId}.zip" }
         }

@@ -8,7 +8,7 @@ plugins {
     alias(libs.plugins.buildconfig)
 }
 
-group = "dev.schlaubi.mikbot"
+group = "dev.schlaubi"
 version = libs.versions.api.get()
 
 repositories {

@@ -5,9 +5,9 @@
   "prHourlyLimit": 6,
     "packageRules": [
         {
-            "matchPackageNames": ["/mikbot/"],
+            "matchPackageNames": ["/mikbot/", "gradle-plugin"],
             "matchManagers": ["gradle"],
             "enabled": false
         }
-    ]
+    ],
 }

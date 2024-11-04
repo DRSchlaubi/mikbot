@@ -1,4 +1,3 @@
-import com.github.jk1.license.render.JsonReportRenderer
 import dev.schlaubi.mikbot.gradle.configureLicenseChecker
 import kotlin.io.path.writeText
 
@@ -28,7 +27,7 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.asm) // pf4j doesn't declare a real dep on it
     implementation(libs.koin)
-    implementation("dev.schlaubi.mikbot:gradle-plugin") {
+    implementation("dev.schlaubi:gradle-plugin") {
         // otherwise we would add entire Gradle in here
         isTransitive = false
     }

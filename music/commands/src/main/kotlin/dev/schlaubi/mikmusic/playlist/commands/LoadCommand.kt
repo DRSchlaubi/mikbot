@@ -1,5 +1,7 @@
 package dev.schlaubi.mikmusic.playlist.commands
 
+import dev.schlaubi.mikbot.plugin.api.util.translate
+import dev.schlaubi.mikbot.translations.MusicTranslations
 import dev.schlaubi.mikmusic.checks.joinSameChannelCheck
 import dev.schlaubi.mikmusic.core.musicControlContexts
 import dev.schlaubi.mikmusic.player.queue.SchedulingArguments
@@ -11,8 +13,8 @@ class LoadArguments : SchedulingArguments(), PlaylistOptions {
 }
 
 fun PlaylistModule.loadCommand() = ephemeralSubCommand(::LoadArguments) {
-    name = "load"
-    description = "commands.playlist.load.description"
+    name = MusicTranslations.Commands.Playlist.Load.name
+    description = MusicTranslations.Commands.Playlist.Load.description
 
     musicControlContexts()
 
@@ -31,7 +33,7 @@ fun PlaylistModule.loadCommand() = ephemeralSubCommand(::LoadArguments) {
         )
 
         respond {
-            content = translate("command.playlist.load.queued", arrayOf(playlist.songs.size, playlist.name))
+            content = translate(MusicTranslations.Command.Playlist.Load.queued, playlist.songs.size, playlist.name)
         }
     }
 }

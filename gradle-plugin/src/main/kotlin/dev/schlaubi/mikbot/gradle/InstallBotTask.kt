@@ -1,7 +1,9 @@
 package dev.schlaubi.mikbot.gradle
 
 import org.gradle.api.DefaultTask
+import org.gradle.api.file.ArchiveOperations
 import org.gradle.api.file.Directory
+import org.gradle.api.file.FileSystemOperations
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.Input
@@ -9,6 +11,7 @@ import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import java.io.File
+import javax.inject.Inject
 
 abstract class InstallBotTask : DefaultTask() {
     @get:OutputDirectory
@@ -18,6 +21,21 @@ abstract class InstallBotTask : DefaultTask() {
     @get:Input
     @get:Optional
     abstract val botVersion: Property<String>
+
+    @get:Inject
+    abstract val fs: FileSystemOperations
+    @get:Inject
+    abstract val archives: ArchiveOperations
+
+    private val runtimeDependency = project.dependencies.create(
+        mapOf(
+            "name" to "bot",
+            "version" to botVersionFromProject(),
+            "ext" to "tar.gz"
+        )
+    )
+
+    private val configuration = project.configurations.detachedConfiguration(runtimeDependency)
 
     @TaskAction
     fun runTask() {
@@ -29,21 +47,11 @@ abstract class InstallBotTask : DefaultTask() {
         extractBot(archive)
     }
 
-    private fun downloadMikbot(): File {
-        val runtimeDependency = project.dependencies.create(
-            mapOf(
-                "name" to "bot",
-                "version" to botVersionFromProject(),
-                "ext" to "tar.gz"
-            )
-        )
-
-        return project.configurations.detachedConfiguration(runtimeDependency).resolve().single()
-    }
+    private fun downloadMikbot(): File = configuration.resolve().single()
 
     private fun extractBot(archive: File) {
-        project.copy {
-            from(project.tarTree(archive))
+        fs.copy {
+            from(archives.tarTree(archive))
             into(testBotFolder)
         }
     }

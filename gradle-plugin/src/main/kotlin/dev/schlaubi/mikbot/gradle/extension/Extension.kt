@@ -1,13 +1,16 @@
 package dev.schlaubi.mikbot.gradle.extension
 
+import dev.kordex.gradle.plugins.kordex.i18n.KordExI18nSettings
+import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.internal.provider.PropertyFactory
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
-import java.util.*
+import javax.inject.Inject
 
 /** Extension for configuring plugins for PF4J. */
-abstract class PluginExtension {
+abstract class PluginExtension @Inject constructor(props: PropertyFactory) {
     /** Plugin id used for building and publishing (defaults to the project name) */
     abstract val pluginId: Property<String>
 
@@ -55,18 +58,32 @@ abstract class PluginExtension {
     abstract val enableKordexProcessor: Property<Boolean>
 
     /**
-     * The default locale.
-     */
-    abstract val defaultLocale: Property<Locale>
-
-    /**
      * List of repositories used to download plugins bundled with the bot distribution.
      */
     abstract val repositories: ListProperty<String>
+
+    /**
+     * The version of the plugin.
+     */
+    abstract val version: Property<String>
+
+
+    /**
+     * Settings regarding i18n.
+     */
+    val i18n: KordExI18nSettings = KordExI18nSettings(props)
+
+    /**
+     * Configures the projects i18n settings.
+     *
+     * @see i18n
+     * @see KordExI18nSettings
+     */
+    fun i18n(action: Action<KordExI18nSettings>) = action.execute(i18n)
 }
 
 internal val Project.pluginId: String
-    get() = mikbotPluginExtension.pluginId.getOrElse(name)
+    get() = mikbotPluginExtension.pluginId.get()
 
 internal val Project.bundle: String
-    get() = mikbotPluginExtension.bundle.getOrElse(name)
+    get() = mikbotPluginExtension.bundle.get()

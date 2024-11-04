@@ -1,5 +1,6 @@
-import org.gradle.kotlin.dsl.get
-import java.nio.file.Files
+import com.github.jk1.license.render.JsonReportRenderer
+import dev.schlaubi.mikbot.gradle.configureLicenseChecker
+import kotlin.io.path.writeText
 
 plugins {
     `mikbot-module`
@@ -31,9 +32,6 @@ dependencies {
         // otherwise we would add entire Gradle in here
         isTransitive = false
     }
-//    implementation("dev.kord:kord-common-jvm:${libs.versions.kord.get()}")
-//    implementation("dev.kord:kord-rest-jvm:${libs.versions.kord.get()}")
-//    implementation("dev.kord:kord-core-jvm:${libs.versions.kord.get()}")
 
     // Util
     implementation(libs.kotlinx.serialization.json)
@@ -60,26 +58,26 @@ tasks {
         classpath = DummyFileCollection(listOf("lib/*", "lib/."))
     }
 
+
     // This is probably the worst way of doing this,
     // but I tried to use JVM resources or compilation file manipulation for 3 hrs now with no luck
     task("exportDependencies") {
-        doLast {
-            val deps = configurations["runtimeClasspath"].resolvedConfiguration.resolvedArtifacts.mapNotNull {
-                val idWithoutPlatform = it.moduleVersion.id.name.substringBefore("-jvm")
-                it.moduleVersion.id.group + ":" + idWithoutPlatform
-            }
+        val deps = configurations["runtimeClasspath"].resolvedConfiguration.resolvedArtifacts.mapNotNull {
+            val idWithoutPlatform = it.moduleVersion.id.name.substringBefore("-jvm")
+            it.moduleVersion.id.group + ":" + idWithoutPlatform
+        }
 
-            val kotlinFile = """
+        val destination =
+            rootProject.file("gradle-plugin/src/main/kotlin/dev/schlaubi/mikbot/gradle/TransientDependencies.kt")
+
+        val kotlinFile = """
                 package dev.schlaubi.mikbot.gradle
 
                 const val transientDependencies = "${deps.joinToString("\\n")}"
             """.trimIndent()
 
-            Files.writeString(
-                rootProject.file("gradle-plugin/src/main/kotlin/dev/schlaubi/mikbot/gradle/TransientDependencies.kt")
-                    .toPath(),
-                kotlinFile
-            )
+        doLast {
+            destination.toPath().writeText(kotlinFile)
         }
     }
 
@@ -120,3 +118,6 @@ template {
     className = "MikBotInfo"
     packageName = "dev.schlaubi.mikbot.plugin.api"
 }
+
+// Configure same report for runtime as for plugins
+configureLicenseChecker()

@@ -1,17 +1,18 @@
 package dev.schlaubi.mikmusic.checks
 
-import com.kotlindiscord.kord.extensions.ExtensibleBot
-import com.kotlindiscord.kord.extensions.checks.hasRole
-import com.kotlindiscord.kord.extensions.checks.memberFor
-import com.kotlindiscord.kord.extensions.checks.types.CheckContext
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.GuildBehavior
 import dev.kord.core.behavior.edit
 import dev.kord.core.event.Event
 import dev.kord.core.event.interaction.ComponentInteractionCreateEvent
 import dev.kord.core.event.interaction.InteractionCreateEvent
+import dev.kordex.core.ExtensibleBot
+import dev.kordex.core.checks.hasRole
+import dev.kordex.core.checks.memberFor
+import dev.kordex.core.checks.types.CheckContext
 import dev.schlaubi.lavakord.kord.connectAudio
 import dev.schlaubi.mikbot.plugin.api.util.ifPassing
+import dev.schlaubi.mikbot.translations.MusicTranslations
 import dev.schlaubi.mikmusic.core.MusicModule
 import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase
 import kotlinx.coroutines.delay
@@ -35,7 +36,7 @@ suspend fun <T : Event> CheckContext<T>.joinSameChannelCheck(extensibleBot: Exte
                 deafened = true
             }
         } else if (voiceChannel != botChannel) {
-            fail(translateM("music.checks.already_in_use"))
+            fail(MusicTranslations.Music.Checks.already_in_use)
         }
     }
 }
@@ -43,17 +44,17 @@ suspend fun <T : Event> CheckContext<T>.joinSameChannelCheck(extensibleBot: Exte
 suspend fun <T : InteractionCreateEvent> CheckContext<T>.musicControlCheck(ignoreDjMode: Boolean = false) {
     abstractMusicCheck(ignoreDjMode) {
         if (botChannel == null) {
-            return@abstractMusicCheck fail(translateM("music.checks.no_running"))
+            return@abstractMusicCheck fail(MusicTranslations.Music.Checks.no_running)
         }
         if (voiceChannel != botChannel) {
-            fail(translateM("music.checks.not_in_same_vc"))
+            fail(MusicTranslations.Music.Checks.no_running)
         }
     }
 }
 
 private suspend inline fun <T : Event> CheckContext<T>.abstractMusicCheck(
     ignoreDjMode: Boolean = false,
-    block: MusicCheckContext.() -> Unit
+    block: MusicCheckContext.() -> Unit,
 ) {
     if (!passed) {
         return
@@ -67,7 +68,7 @@ private suspend inline fun <T : Event> CheckContext<T>.abstractMusicCheck(
         }
     }
     val voiceChannel = member?.getVoiceStateOrNull()?.channelId
-        ?: return fail(translateM("music.checks.not_in_vc"))
+        ?: return fail(MusicTranslations.Music.Checks.not_in_vc)
     val guild = member.guild
 
     val guildSettings = MusicSettingsDatabase.findGuild(guild)
@@ -83,10 +84,8 @@ private suspend inline fun <T : Event> CheckContext<T>.abstractMusicCheck(
     }
 }
 
-private fun CheckContext<*>.translateM(key: String) = translate(key, "music")
-
 private data class MusicCheckContext(
     val voiceChannel: Snowflake,
     val botChannel: Snowflake?,
-    val guild: GuildBehavior
+    val guild: GuildBehavior,
 )

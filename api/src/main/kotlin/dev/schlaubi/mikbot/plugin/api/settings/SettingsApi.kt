@@ -1,10 +1,12 @@
 package dev.schlaubi.mikbot.plugin.api.settings
 
-import com.kotlindiscord.kord.extensions.commands.application.slash.SlashCommand
-import dev.kord.common.entity.ApplicationIntegrationType
 import dev.kord.common.entity.InteractionContextType
 import dev.kord.common.entity.Permission
-import dev.schlaubi.mikbot.plugin.api.*
+import dev.kordex.core.commands.application.slash.SlashCommand
+import dev.schlaubi.mikbot.plugin.api.InternalAPI
+import dev.schlaubi.mikbot.plugin.api.ModuleExtensionPoint
+import dev.schlaubi.mikbot.plugin.api.ModuleExtensionPointImpl
+import dev.schlaubi.mikbot.plugin.api.PluginContext
 
 /**
  * Extension for settings.

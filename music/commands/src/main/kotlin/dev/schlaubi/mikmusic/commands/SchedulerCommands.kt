@@ -1,6 +1,9 @@
 package dev.schlaubi.mikmusic.commands
 
-import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommandContext
+import dev.kordex.core.commands.application.slash.EphemeralSlashCommandContext
+import dev.kordex.core.i18n.types.Key
+import dev.schlaubi.mikbot.plugin.api.util.translate
+import dev.schlaubi.mikbot.translations.MusicTranslations
 import dev.schlaubi.mikmusic.core.MusicModule
 import dev.schlaubi.mikmusic.core.musicControlContexts
 import dev.schlaubi.mikmusic.player.MusicPlayer
@@ -10,8 +13,8 @@ suspend fun MusicModule.schedulerCommands() {
     suspend fun EphemeralSlashCommandContext<*, *>.schedulerOption(
         myProperty: KMutableProperty1<MusicPlayer, Boolean>,
         vararg properties: KMutableProperty1<MusicPlayer, Boolean>,
-        enabled: String,
-        disabled: String,
+        enabled: Key,
+        disabled: Key,
         additional: suspend (Boolean) -> Unit = {}
     ) {
         checkOtherSchedulerOptions(myProperty, *properties) { gotEnabled ->
@@ -26,46 +29,46 @@ suspend fun MusicModule.schedulerCommands() {
     }
 
     ephemeralControlSlashCommand {
-        name = "repeat"
-        description = "Toggles repeat mode"
+        name = MusicTranslations.Commands.Repeat.name
+        description = MusicTranslations.Commands.Repeat.description
         musicControlContexts()
 
         action {
             schedulerOption(
                 MusicPlayer::repeat,
                 MusicPlayer::shuffle, MusicPlayer::loopQueue,
-                enabled = "commands.repeat.enabled",
-                disabled = "commands.repeat.disabled"
+                enabled = MusicTranslations.Commands.Repeat.enabled,
+                disabled = MusicTranslations.Commands.Repeat.disabled,
             )
         }
     }
 
     ephemeralControlSlashCommand {
-        name = "loop-queue"
-        description = "Toggles loop queueTracks mode (Looping the queueTracks over and over)"
+        name = MusicTranslations.Commands.Loop_queue.name
+        description = MusicTranslations.Commands.Loop_queue.description
         musicControlContexts()
 
         action {
             schedulerOption(
                 MusicPlayer::loopQueue,
                 MusicPlayer::shuffle, MusicPlayer::repeat,
-                enabled = "commands.loop_queue.enabled",
-                disabled = "commands.loop_queue.disabled"
+                enabled = MusicTranslations.Commands.Loop_queue.enabled,
+                disabled = MusicTranslations.Commands.Loop_queue.disabled,
             )
         }
     }
 
     ephemeralControlSlashCommand {
-        name = "shuffle"
-        description = "Toggles shuffle mode"
+        name = MusicTranslations.Commands.Shuffle.name
+        description = MusicTranslations.Commands.Shuffle.description
         musicControlContexts()
 
         action {
             schedulerOption(
                 MusicPlayer::shuffle,
                 MusicPlayer::repeat, MusicPlayer::loopQueue,
-                enabled = "commands.shuffle.enabled",
-                disabled = "commands.shuffle.disabled"
+                enabled = MusicTranslations.Commands.Shuffle.enabled,
+                disabled = MusicTranslations.Commands.Shuffle.disabled,
             )
         }
     }

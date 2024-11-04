@@ -6,7 +6,6 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 private val LOG = KotlinLogging.logger { }
 
 fun calculateShards(shardsPerPod: Int = Config.SHARDS_PER_POD, totalShards: Int = Config.TOTAL_SHARDS, podId: Int = Config.POD_ID): Shards {
-    val totalShards = totalShards
     val firstShard = shardsPerPod * podId
     val lastShard = (firstShard + (shardsPerPod - 1)).coerceAtMost(totalShards - 1)
 

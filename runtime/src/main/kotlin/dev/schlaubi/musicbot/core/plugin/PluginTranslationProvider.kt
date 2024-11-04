@@ -1,7 +1,7 @@
 package dev.schlaubi.musicbot.core.plugin
 
-import com.kotlindiscord.kord.extensions.i18n.ResourceBundleTranslations
-import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
+import dev.kordex.core.i18n.ResourceBundleTranslations
+import dev.kordex.core.i18n.TranslationsProvider
 import dev.kord.common.asJavaLocale
 import dev.kord.common.kLocale
 import dev.schlaubi.mikbot.plugin.api.util.convertToISO

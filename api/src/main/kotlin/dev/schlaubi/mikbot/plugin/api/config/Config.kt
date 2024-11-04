@@ -1,7 +1,7 @@
 package dev.schlaubi.mikbot.plugin.api.config
 
 import ch.qos.logback.classic.Level
-import com.kotlindiscord.kord.extensions.i18n.SupportedLocales
+import dev.kordex.core.i18n.SupportedLocales
 import dev.kord.common.entity.Snowflake
 import dev.schlaubi.envconf.EnvironmentVariable
 import dev.schlaubi.envconf.getEnv
@@ -43,24 +43,24 @@ public object Config : EnvironmentConfig("") {
     /**
      * The Sentry token.
      */
-    public val SENTRY_TOKEN: String? by environment.optional()
+    public val SENTRY_TOKEN: String? by getEnv().optional()
 
     /**
      * The Discord token.
      */
-    public val DISCORD_TOKEN: String by environment
+    public val DISCORD_TOKEN: String by this
 
     /**
      * The [Mongo connection String](https://docs.mongodb.com/manual/reference/connection-string/) used for the bots Database features.
      */
-    public val MONGO_URL: String? by environment.optional()
+    public val MONGO_URL: String? by getEnv().optional()
 
     /**
      * The database to use.
      *
      * **This has to be specified, even if there is a database in [MONGO_URL]**
      */
-    public val MONGO_DATABASE: String? by environment.optional()
+    public val MONGO_DATABASE: String? by getEnv().optional()
 
     /**
      * The path to the plugins folder.
@@ -120,7 +120,7 @@ public data class PluginSpec(public val id: String, public val version: String?)
         public fun parse(spec: String): PluginSpec {
             val at = spec.indexOf('@')
             return if (at >= 0) {
-                PluginSpec(spec.substring(0, at), spec.substring(at + 1, spec.length))
+                PluginSpec(spec.take(at), spec.substring(at + 1, spec.length))
             } else {
                 PluginSpec(spec, null)
             }

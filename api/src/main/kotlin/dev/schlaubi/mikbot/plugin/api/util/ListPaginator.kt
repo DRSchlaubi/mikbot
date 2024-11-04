@@ -1,6 +1,6 @@
 package dev.schlaubi.mikbot.plugin.api.util
 
-import com.kotlindiscord.kord.extensions.pagination.builders.PaginatorBuilder
+import dev.kordex.core.pagination.builders.PaginatorBuilder
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.rest.builder.message.EmbedBuilder
 import kotlinx.coroutines.flow.Flow

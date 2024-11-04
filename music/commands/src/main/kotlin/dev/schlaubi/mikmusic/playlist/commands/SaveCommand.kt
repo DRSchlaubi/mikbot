@@ -1,9 +1,11 @@
 package dev.schlaubi.mikmusic.playlist.commands
 
-import com.kotlindiscord.kord.extensions.commands.Arguments
-import com.kotlindiscord.kord.extensions.commands.converters.impl.defaultingBoolean
-import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalString
-import com.kotlindiscord.kord.extensions.commands.converters.impl.string
+import dev.kordex.core.commands.Arguments
+import dev.kordex.core.commands.converters.impl.defaultingBoolean
+import dev.kordex.core.commands.converters.impl.optionalString
+import dev.kordex.core.commands.converters.impl.string
+import dev.schlaubi.mikbot.plugin.api.util.translate
+import dev.schlaubi.mikbot.translations.MusicTranslations
 import dev.schlaubi.mikmusic.core.musicControlContexts
 import dev.schlaubi.mikmusic.player.QueuedTrack
 import dev.schlaubi.mikmusic.player.queue.QueueOptions
@@ -15,17 +17,17 @@ import org.litote.kmongo.newId
 
 class PlaylistSaveArguments : Arguments(), QueueOptions {
     val name by string {
-        name = "name"
-        description = "commands.playlist.save.arguments.name.description"
+        name = MusicTranslations.Commands.Playlist.Save.Arguments.Name.name
+        description = MusicTranslations.Commands.Playlist.Save.Arguments.Name.description
     }
     val public by defaultingBoolean {
-        name = "public"
-        description = "commands.playlist.save.arguments.public.description"
+        name = MusicTranslations.Commands.Playlist.Save.Arguments.Public.name
+        description = MusicTranslations.Commands.Playlist.Save.Arguments.Public.description
         defaultValue = false
     }
     val importFrom by optionalString {
-        name = "import_from"
-        description = "commands.playlist.save.arguments.import_from.description"
+        name = MusicTranslations.Commands.Playlist.Save.Arguments.Import_from.name
+        description = MusicTranslations.Commands.Playlist.Save.Arguments.Import_from.description
     }
     override val query: String
         get() = importFrom ?: error("Cannot find tracks if importFrom is not specified")
@@ -38,15 +40,15 @@ class PlaylistSaveArguments : Arguments(), QueueOptions {
 }
 
 fun PlaylistModule.saveCommand() = ephemeralSubCommand(::PlaylistSaveArguments) {
-    name = "create"
-    description = "Creates a new playlist"
+    name = MusicTranslations.Commands.Playlist.Save.name
+    description = MusicTranslations.Commands.Playlist.Save.description
 
     musicControlContexts()
 
     action {
         if (musicPlayer.playingTrack == null && arguments.importFrom == null) {
             respond {
-                content = translate("music.checks.not_playing")
+                content = translate(MusicTranslations.Music.Checks.not_playing)
             }
             return@action
         }
@@ -69,7 +71,7 @@ fun PlaylistModule.saveCommand() = ephemeralSubCommand(::PlaylistSaveArguments) 
             PlaylistDatabase.collection.save(playlist)
 
             respond {
-                content = translate("commands.playlist.save.saved", arrayOf(arguments.name, tracks.size))
+                content = translate(MusicTranslations.Commands.Playlist.Save.saved, arguments.name, tracks.size)
             }
         }
     }

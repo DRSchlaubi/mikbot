@@ -1,6 +1,6 @@
 package dev.schlaubi.mikbot.plugin.api.module
 
-import com.kotlindiscord.kord.extensions.extensions.Extension
+import dev.kordex.core.extensions.Extension
 import dev.schlaubi.mikbot.plugin.api.PluginContext
 import dev.schlaubi.mikbot.plugin.api.Plugin
 

@@ -1,6 +1,7 @@
 package dev.schlaubi.mikbot.core.gdpr.api
 
 import dev.kord.core.entity.User
+import dev.kordex.core.i18n.types.Key
 
 /**
  * Top-level representation of a type of personal data, that is being collected.
@@ -11,9 +12,8 @@ import dev.kord.core.entity.User
  * `null` mean this data isn't shared.
  */
 sealed class DataPoint {
-    abstract val module: String
-    abstract val descriptionKey: String
-    abstract val sharingDescriptionKey: String?
+    abstract val descriptionKey: Key
+    abstract val sharingDescriptionKey: Key?
 }
 
 /**
@@ -22,10 +22,9 @@ sealed class DataPoint {
  * @property displayNameKey i18n key for the name display in /gdpr request
  */
 abstract class PermanentlyStoredDataPoint(
-    override val module: String,
-    val displayNameKey: String,
-    override val descriptionKey: String,
-    override val sharingDescriptionKey: String? = null
+    val displayNameKey: Key,
+    override val descriptionKey: Key,
+    override val sharingDescriptionKey: Key? = null
 ) : DataPoint() {
     /**
      * Deletes data matching this [DataPoint] for [user].
@@ -42,16 +41,14 @@ abstract class PermanentlyStoredDataPoint(
  * Data which is stores anonymized.
  */
 class AnonymizedData(
-    override val module: String,
-    override val descriptionKey: String,
-    override val sharingDescriptionKey: String?
+    override val descriptionKey: Key,
+    override val sharingDescriptionKey: Key?
 ) : DataPoint()
 
 /**
  * Data which is only stored in memory for processing reasons and deleted immediately after it was needed.
  */
 class ProcessedData(
-    override val module: String,
-    override val descriptionKey: String,
-    override val sharingDescriptionKey: String?
+    override val descriptionKey: Key,
+    override val sharingDescriptionKey: Key?
 ) : DataPoint()

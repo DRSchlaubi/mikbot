@@ -1,7 +1,7 @@
 package dev.schlaubi.mikmusic.player
 
-import com.kotlindiscord.kord.extensions.extensions.event
 import dev.kord.core.event.user.VoiceStateUpdateEvent
+import dev.kordex.core.extensions.event
 import dev.schlaubi.mikmusic.core.MusicModule
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.toList

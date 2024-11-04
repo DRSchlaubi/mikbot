@@ -1,6 +1,6 @@
 package dev.schlaubi.mikbot.plugin.api.util
 
-import com.kotlindiscord.kord.extensions.extensions.Extension
+import dev.kordex.core.extensions.Extension
 
 /**
  * Allows to lazily access other extensions in an [Extension].

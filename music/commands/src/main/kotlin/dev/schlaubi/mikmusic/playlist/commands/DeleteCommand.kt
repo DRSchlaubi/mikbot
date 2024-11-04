@@ -1,19 +1,21 @@
 package dev.schlaubi.mikmusic.playlist.commands
 
+import dev.schlaubi.mikbot.plugin.api.util.translate
+import dev.schlaubi.mikbot.translations.MusicTranslations
 import dev.schlaubi.mikmusic.playlist.PlaylistDatabase
 
 class PlaylistDeleteArguments : PlaylistArguments()
 
 fun PlaylistModule.deleteCommand() = ephemeralSubCommand(::PlaylistDeleteArguments) {
-    name = "delete"
-    description = "commands.delete.description"
+    name = MusicTranslations.Commands.Playlist.Delete.name
+    description = MusicTranslations.Commands.Playlist.Delete.description
 
     action {
-        checkPermissions { playlist ->
-            PlaylistDatabase.collection.deleteOneById(playlist.id)
+        checkPermissions { (id, _, playlistName) ->
+            PlaylistDatabase.collection.deleteOneById(id)
 
             respond {
-                content = translate("commands.playlist.delete.deleted", arrayOf(playlist.name))
+                content = translate(MusicTranslations.Commands.Playlist.Delete.deleted, playlistName)
             }
         }
     }

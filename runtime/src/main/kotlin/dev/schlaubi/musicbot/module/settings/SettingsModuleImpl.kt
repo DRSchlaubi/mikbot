@@ -11,6 +11,5 @@ import kotlin.reflect.KClass
 class SettingsModuleImpl(pluginSystem: PluginContext) : SettingsModule(pluginSystem) {
     override val name: String = "settings"
     override val extensionClazz: KClass<out ModuleExtensionPoint<SettingsModule>> = SettingsExtensionPoint::class
-    override val bundle: String = "settings"
     val database: Database by inject()
 }

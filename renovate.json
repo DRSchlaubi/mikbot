@@ -2,5 +2,12 @@
   "extends": [
     "config:base"
   ],
-  "prHourlyLimit": 6
+  "prHourlyLimit": 6,
+    "packageRules": [
+        {
+            "matchPackageNames": ["/mikbot/"],
+            "matchManagers": ["gradle"],
+            "enabled": false
+        }
+    ]
 }

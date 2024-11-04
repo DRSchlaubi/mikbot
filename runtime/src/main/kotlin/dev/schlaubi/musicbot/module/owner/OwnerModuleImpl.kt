@@ -1,6 +1,7 @@
 package dev.schlaubi.musicbot.module.owner
 
-import com.kotlindiscord.kord.extensions.extensions.slashCommandCheck
+import dev.kordex.core.extensions.slashCommandCheck
+import dev.schlaubi.mikbot.plugin.api.MikBotTranslations
 import dev.schlaubi.mikbot.plugin.api.ModuleExtensionPoint
 import dev.schlaubi.mikbot.plugin.api.PluginContext
 import dev.schlaubi.mikbot.plugin.api.config.Config
@@ -16,14 +17,13 @@ import kotlin.reflect.KClass
 
 class OwnerModuleImpl(pluginSystem: PluginContext) : OwnerModule(pluginSystem) {
     override val name: String = "owner"
-    override val bundle: String = "owner"
     val database: Database by inject()
     override val coroutineContext: CoroutineContext = Dispatchers.IO + SupervisorJob()
     override val extensionClazz: KClass<out ModuleExtensionPoint<OwnerModule>> = OwnerExtensionPoint::class
 
     override suspend fun setup() {
         slashCommandCheck {
-            failIfNot(translate("checks.owner.failed")) { event.interaction.user.id in Config.BOT_OWNERS }
+            failIfNot(MikBotTranslations.Checks.Owner.failed) { event.interaction.user.id in Config.BOT_OWNERS }
         }
 
         super.setup()

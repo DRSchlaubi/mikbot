@@ -1,17 +1,19 @@
 package dev.schlaubi.mikbot.core.gdpr
 
-import com.kotlindiscord.kord.extensions.commands.CommandContext
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.kord.rest.builder.message.embed
+import dev.kordex.core.commands.CommandContext
 import dev.schlaubi.mikbot.core.gdpr.api.AnonymizedData
 import dev.schlaubi.mikbot.core.gdpr.api.DataPoint
 import dev.schlaubi.mikbot.core.gdpr.api.PermanentlyStoredDataPoint
 import dev.schlaubi.mikbot.core.gdpr.api.ProcessedData
+import dev.schlaubi.mikbot.plugin.api.util.translate
+import dev.schlaubi.mikbot.translations.GdprTranslations
 import dev.schlaubi.stdx.core.paginate
 
 fun GDPRModule.infoCommand() = ephemeralSubCommand {
-    name = "info"
-    description = "commands.gdpr.info.name"
+    name = GdprTranslations.Commands.Gdpr.Info.name
+    description = GdprTranslations.Commands.Gdpr.Info.description
 
     action {
         val (storedData, anonymizedData, processedData) =
@@ -19,18 +21,18 @@ fun GDPRModule.infoCommand() = ephemeralSubCommand {
 
         respond {
             embed {
-                title = translate("commands.gdpr.info.title")
+                title = translate(GdprTranslations.Commands.Gdpr.Info.title)
 
                 dataPoint(
-                    translate("commands.gdpr.info.stored_data"),
+                    translate(GdprTranslations.Commands.Gdpr.Info.stored_data),
                     storedData,
-                    translate("gdpr.general.persistent_data.explainer")
+                    translate(GdprTranslations.Gdpr.General.Persistent_data.explainer)
                 )
-                dataPoint(translate("commands.gdpr.info.anonymized_data"), anonymizedData)
+                dataPoint(translate(GdprTranslations.Commands.Gdpr.Info.anonymized_data), anonymizedData)
                 dataPoint(
-                    translate("commands.gdpr.info.data_processing"),
+                    translate(GdprTranslations.Commands.Gdpr.Info.data_processing),
                     processedData,
-                    translate("gdpr.general.processed_data.explainer")
+                    translate(GdprTranslations.Gdpr.General.Persistent_data.explainer)
                 )
             }
         }
@@ -59,12 +61,16 @@ private data class DataPointsDescriptions(
 
 private suspend fun List<DataPoint>.toDescription(commandContext: CommandContext): DataPointsDescriptions {
     suspend fun DataPoint.describe() = buildString {
-        append(commandContext.translate(descriptionKey, module))
+        append(commandContext.translate(descriptionKey))
         if (sharingDescriptionKey != null) {
             appendLine()
-            append(commandContext.translate("gdpr.general.data_sharing"))
+            append(commandContext.translate(GdprTranslations.Gdpr.General.data_sharing))
             append(' ')
-            append(commandContext.translate(sharingDescriptionKey!!, module))
+            append(
+                commandContext.translate(
+                    sharingDescriptionKey ?: error("No key defined for sharing on: ${this@describe}")
+                )
+            )
         }
     }
 

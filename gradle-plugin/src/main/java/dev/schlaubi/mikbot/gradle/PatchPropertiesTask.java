@@ -1,12 +1,11 @@
 package dev.schlaubi.mikbot.gradle;
 
-import dev.schlaubi.mikbot.gradle.extension.ExtensionKt;
 import dev.schlaubi.mikbot.gradle.extension.ExtensionsKt;
 import dev.schlaubi.mikbot.gradle.extension.PluginExtension;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.file.DirectoryProperty;
-import org.gradle.api.tasks.InputDirectory;
-import org.gradle.api.tasks.TaskAction;
+import org.gradle.api.provider.Property;
+import org.gradle.api.tasks.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -18,27 +17,33 @@ public abstract class PatchPropertiesTask extends DefaultTask {
     @InputDirectory
     public abstract DirectoryProperty getPropertiesDirectory();
 
+
+    private final PluginExtension extension = getProject().getExtensions().getByType(PluginExtension.class);
+    private final String dependenciesString = UtilKt.buildDependenciesString(getProject());
+    private final String version = getProject().getVersion().toString();
+
+    @Input
+    public PluginExtension getExtension() {
+        return extension;
+    }
+
     @TaskAction
     public void runTask() throws IOException {
         if (!getDidWork()) return;
         var properties = new Properties();
-
-        var extension = ((PluginExtension) getProject().getExtensions()
-            .getByName(ExtensionsKt.pluginExtensionName));
 
         var file = getPropertiesDirectory().get().file("plugin.properties").getAsFile().toPath();
         if (!Files.exists(file)) {
             throw new IllegalStateException("File %s doesn't exist".formatted(file));
         }
         properties.load(Files.newBufferedReader(file));
-        properties.setProperty("plugin.id", ExtensionKt.getPluginId(getProject()));
-        properties.setProperty("plugin.version", String.valueOf(getProject().getVersion()).replace("-SNAPSHOT", ""));
+        properties.setProperty("plugin.id", extension.getPluginId().get());
+        properties.setProperty("plugin.version", String.valueOf(version).replace("-SNAPSHOT", ""));
         var requires = extension.getRequires().getOrNull();
         if (requires != null) {
             properties.setProperty("plugin.requires", requires);
         }
 
-        var dependenciesString = UtilKt.buildDependenciesString(getProject());
         if (!dependenciesString.isBlank()) {
             properties.setProperty("plugin.dependencies", dependenciesString);
         }

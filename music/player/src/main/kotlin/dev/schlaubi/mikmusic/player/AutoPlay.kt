@@ -3,8 +3,11 @@ package dev.schlaubi.mikmusic.player
 import dev.arbjerg.lavalink.protocol.v4.LoadResult
 import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.kord.rest.builder.message.EmbedBuilder
+import dev.kordex.core.types.TranslatableContext
 import dev.schlaubi.lavakord.rest.loadItem
 import dev.schlaubi.mikbot.plugin.api.util.Translator
+import dev.schlaubi.mikbot.plugin.api.util.translate
+import dev.schlaubi.mikbot.translations.MusicTranslations
 import dev.schlaubi.mikmusic.util.LinkedListSerializer
 import dev.schlaubi.mikmusic.util.format
 import dev.schlaubi.mikmusic.util.spotifyId
@@ -77,12 +80,12 @@ private suspend fun MusicPlayer.fetchAutoPlay(
 }
 
 context(EmbedBuilder)
-suspend fun MusicPlayer.addAutoPlaySongs(translate: Translator) {
+suspend fun MusicPlayer.addAutoPlaySongs(translator: TranslatableContext) {
     val songs = autoPlay?.songs?.take(5)
     if (!songs.isNullOrEmpty()) {
         field {
-            name = translate("music.auto_play.next_song", "music")
-            value = songs.joinToString<Track>("\n", transform = Track::format)
+            name = translator.translate(MusicTranslations.Music.Auto_play.next_song)
+            value = songs.joinToString("\n", transform = Track::format)
         }
     }
 }

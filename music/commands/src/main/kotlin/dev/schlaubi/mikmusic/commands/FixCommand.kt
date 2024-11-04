@@ -1,15 +1,18 @@
 package dev.schlaubi.mikmusic.commands
 
-import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommandContext
-import com.kotlindiscord.kord.extensions.utils.waitFor
+import dev.kordex.core.commands.application.slash.EphemeralSlashCommandContext
+import dev.kordex.core.utils.waitFor
 import dev.kord.common.entity.ButtonStyle
 import dev.kord.common.entity.Permission
 import dev.kord.core.behavior.channel.edit
 import dev.kord.core.event.interaction.GuildComponentInteractionCreateEvent
 import dev.kord.rest.builder.message.actionRow
+import dev.kordex.core.i18n.types.Key
 import dev.schlaubi.lavakord.audio.Link
 import dev.schlaubi.lavakord.kord.connectAudio
 import dev.schlaubi.mikbot.plugin.api.util.safeGuild
+import dev.schlaubi.mikbot.plugin.api.util.translate
+import dev.schlaubi.mikbot.translations.MusicTranslations
 import dev.schlaubi.mikmusic.core.MusicModule
 import dev.schlaubi.mikmusic.core.musicControlContexts
 import dev.schlaubi.mikmusic.player.MusicPlayer
@@ -20,8 +23,8 @@ import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
 suspend fun MusicModule.fixCommand() = ephemeralControlSlashCommand {
-    name = "fix"
-    description = "commands.fix.description"
+    name = MusicTranslations.Commands.Fix.name
+    description = MusicTranslations.Commands.Fix.description
     musicControlContexts()
 
     check {
@@ -40,7 +43,7 @@ suspend fun MusicModule.fixCommand() = ephemeralControlSlashCommand {
             val current: RecoveryStep = nextStep
 
             edit {
-                content = translate("commands.fix.running_step", arrayOf(translate(current.nameKey)))
+                content = translate(MusicTranslations.Commands.Fix.running_step, translate(current.nameKey))
                 components = mutableListOf()
             }
 
@@ -49,7 +52,7 @@ suspend fun MusicModule.fixCommand() = ephemeralControlSlashCommand {
             }
 
             edit {
-                content = translate("commands.fix.ran_step", arrayOf(translate(current.nameKey)))
+                content = translate(MusicTranslations.Commands.Fix.ran_step, translate(current.nameKey))
 
                 if (applicableRecoverySteps.hasNext()) {
                     nextStep = applicableRecoverySteps.next()
@@ -60,12 +63,12 @@ suspend fun MusicModule.fixCommand() = ephemeralControlSlashCommand {
                         }
 
                         interactionButton(ButtonStyle.Success, "abort") {
-                            label = translate("commands.fix.abort")
+                            label = translate(MusicTranslations.Commands.Fix.abort)
                         }
                     }
                 } else {
                     edit {
-                        content = translate("command.fix.troubleshooting_done")
+                        content = translate(MusicTranslations.Command.Fix.troubleshooting_done)
                     }
                     nextStep = null
                 }
@@ -90,7 +93,7 @@ suspend fun MusicModule.fixCommand() = ephemeralControlSlashCommand {
 }
 
 private interface RecoveryStep {
-    val nameKey: String
+    val nameKey: Key
 
     val MusicPlayer.applicable: Boolean
         get() = true
@@ -106,7 +109,7 @@ private interface RecoveryStep {
 }
 
 private object ReJoinVoiceChannel : RecoveryStep {
-    override val nameKey: String = "commands.fix.step.re_join_channel"
+    override val nameKey: Key = MusicTranslations.Commands.Fix.Step.re_join_channel
     override val MusicPlayer.applicable: Boolean
         get() = link.lastChannelId == null || link.state == Link.State.NOT_CONNECTED
 
@@ -116,8 +119,7 @@ private object ReJoinVoiceChannel : RecoveryStep {
 }
 
 private object UnPausePlayback : RecoveryStep {
-
-    override val nameKey: String = "commands.fix.step.unpause_plackback"
+    override val nameKey: Key = MusicTranslations.Commands.Fix.Step.unpause_plackback
     override val MusicPlayer.applicable: Boolean
         get() = link.player.paused
 
@@ -128,7 +130,7 @@ private object UnPausePlayback : RecoveryStep {
 
 private object RestartPlayback : RecoveryStep {
 
-    override val nameKey: String = "commands.fix.step.restart_playback"
+    override val nameKey: Key = MusicTranslations.Commands.Fix.Step.restart_playback
 
     override suspend fun EphemeralSlashCommandContext<*, *>.apply(musicPlayer: MusicPlayer) {
         musicPlayer.player.pause(true)
@@ -139,7 +141,7 @@ private object RestartPlayback : RecoveryStep {
 
 private object ReEstablishVoiceConnection : RecoveryStep {
 
-    override val nameKey: String = "commands.fix.step.re_establish_voice_connection"
+    override val nameKey: Key = MusicTranslations.Commands.Fix.Step.re_establish_voice_connection
 
     override suspend fun EphemeralSlashCommandContext<*, *>.apply(musicPlayer: MusicPlayer) {
         val state = musicPlayer.toState()
@@ -153,7 +155,7 @@ private object ReEstablishVoiceConnection : RecoveryStep {
 }
 
 private object SwitchVoiceServers : RecoveryStep {
-    override val nameKey: String = "commands.fix.step.switch_voice_server"
+    override val nameKey: Key = MusicTranslations.Commands.Fix.Step.switch_voice_server
 
     override suspend fun EphemeralSlashCommandContext<*, *>.apply(musicPlayer: MusicPlayer) {
         val channel = musicPlayer.getChannel()!!
@@ -176,7 +178,7 @@ object SkipTrack : RecoveryStep {
     override val MusicPlayer.applicable: Boolean
         get() = queuedTracks.isNotEmpty()
 
-    override val nameKey: String = "commands.fix.step.skip_track"
+    override val nameKey: Key = MusicTranslations.Commands.Fix.Step.skip_track
 
     override suspend fun EphemeralSlashCommandContext<*, *>.apply(musicPlayer: MusicPlayer) {
         musicPlayer.skip()

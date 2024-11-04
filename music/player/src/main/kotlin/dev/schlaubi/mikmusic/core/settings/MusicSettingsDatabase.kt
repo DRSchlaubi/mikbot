@@ -1,8 +1,8 @@
 package dev.schlaubi.mikmusic.core.settings
 
-import com.kotlindiscord.kord.extensions.koin.KordExKoinComponent
 import dev.kord.core.behavior.GuildBehavior
 import dev.kord.core.behavior.UserBehavior
+import dev.kordex.core.koin.KordExKoinComponent
 import dev.schlaubi.mikbot.plugin.api.io.getCollection
 import dev.schlaubi.mikbot.plugin.api.util.database
 

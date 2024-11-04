@@ -1,14 +1,16 @@
 package dev.schlaubi.mikmusic.commands
 
-import com.kotlindiscord.kord.extensions.DiscordRelayedException
-import com.kotlindiscord.kord.extensions.commands.Arguments
-import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommand
-import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommandContext
-import com.kotlindiscord.kord.extensions.commands.application.slash.ephemeralSubCommand
-import com.kotlindiscord.kord.extensions.commands.converters.impl.int
-import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalInt
 import dev.kord.common.entity.Snowflake
+import dev.kordex.core.commands.Arguments
+import dev.kordex.core.commands.application.slash.EphemeralSlashCommand
+import dev.kordex.core.commands.application.slash.EphemeralSlashCommandContext
+import dev.kordex.core.commands.application.slash.ephemeralSubCommand
+import dev.kordex.core.commands.converters.impl.int
+import dev.kordex.core.commands.converters.impl.optionalInt
+import dev.schlaubi.mikbot.plugin.api.util.discordError
 import dev.schlaubi.mikbot.plugin.api.util.safeGuild
+import dev.schlaubi.mikbot.plugin.api.util.translate
+import dev.schlaubi.mikbot.translations.MusicTranslations
 import dev.schlaubi.mikmusic.core.MusicModule
 import dev.schlaubi.mikmusic.core.musicControlContexts
 import kotlinx.coroutines.flow.filter
@@ -17,71 +19,71 @@ import kotlinx.coroutines.flow.toList
 
 class RemoveSingleSongArguments : Arguments() {
     val position by int {
-        name = "position"
-        description = "commands.remove.arguments.position.description"
+        name = MusicTranslations.Commands.Remove.Arguments.Position.name
+        description = MusicTranslations.Commands.Remove.Arguments.Position.description
     }
 }
 
 class RemoveRangeSongArguments : Arguments() {
     val from by int {
-        name = "from"
-        description = "commands.remove.arguments.from.description"
+        name = MusicTranslations.Commands.Remove.Arguments.From.name
+        description = MusicTranslations.Commands.Remove.Arguments.From.description
     }
     val to by optionalInt {
-        name = "to"
-        description = "commands.remove.arguments.to.description"
+        name = MusicTranslations.Commands.Remove.Arguments.To.name
+        description = MusicTranslations.Commands.Remove.Arguments.To.description
     }
 }
 
 suspend fun MusicModule.removeCommand() = ephemeralControlSlashCommand {
-    name = "remove"
-    description = "commands.remove.description"
+    name = MusicTranslations.Commands.Remove.name
+    description = MusicTranslations.Commands.Remove.description
     musicControlContexts()
 
     suspend fun <A : Arguments> EphemeralSlashCommand<A, *>.doRemove(
-        remove: suspend EphemeralSlashCommandContext<A, *>.() -> Int
+        remove: suspend EphemeralSlashCommandContext<A, *>.() -> Int,
     ) =
         action {
             val removed = remove()
             musicPlayer.updateMusicChannelMessage()
             if (removed > 0) {
                 respond {
-                    content = translate("commands.remove.removed", arrayOf(removed))
+                    content = translate(MusicTranslations.Commands.Remove.removed, removed)
                 }
             } else {
                 respond {
-                    content = translate("commands.remove.invalid_index.multiple")
+                    content = translate(MusicTranslations.Commands.Remove.Invalid_index.multiple)
                 }
             }
         }
 
     ephemeralSubCommand(::RemoveSingleSongArguments) {
-        name = "song"
-        description = "commands.remove.song.description"
+        name = MusicTranslations.Commands.Remove.Song.name
+        description = MusicTranslations.Commands.Remove.Song.description
 
         action {
             val track = musicPlayer.queue.removeQueueEntry(arguments.position - 1)
             musicPlayer.updateMusicChannelMessage()
             if (track != null) {
                 respond {
-                    content = translate("commands.remove.song.removed", arrayOf(track.info.title))
+                    content = translate(MusicTranslations.Commands.Remove.Song.removed, track.info.title)
                 }
             } else {
                 respond {
-                    content = translate("commands.remove.invalid_index.single")
+                    content = translate(MusicTranslations.Commands.Remove.Invalid_index.single)
                 }
             }
         }
     }
 
     ephemeralSubCommand(::RemoveRangeSongArguments) {
-        name = "range"
-        description = "commands.remove.range.description"
+        name = MusicTranslations.Commands.Remove.Range.name
+        description = MusicTranslations.Commands.Remove.Range.description
 
         doRemove {
             val to = arguments.to ?: arguments.from
             if (to < arguments.from) {
-                throw DiscordRelayedException(translate("commands.remove.range.invalid_range_end"))
+                discordError(MusicTranslations.Commands.Remove.Range.invalid_range_end)
             }
             val range = arguments.from..to
 
@@ -90,15 +92,15 @@ suspend fun MusicModule.removeCommand() = ephemeralControlSlashCommand {
     }
 
     ephemeralSubCommand {
-        name = "doubles"
-        description = "commands.remove.doubles.description"
+        name = MusicTranslations.Commands.Remove.Doubles.name
+        description = MusicTranslations.Commands.Remove.Doubles.description
 
         doRemove { musicPlayer.queue.removeDoubles() }
     }
 
     ephemeralSubCommand {
-        name = "cleanup"
-        description = "commands.remove.cleanup.description"
+        name = MusicTranslations.Commands.Remove.Cleanup.name
+        description = MusicTranslations.Commands.Remove.Cleanup.description
 
         doRemove {
             val channel = musicPlayer.lastChannelId!!

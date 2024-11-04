@@ -4,6 +4,7 @@ import dev.kord.core.entity.User
 import dev.schlaubi.mikbot.core.gdpr.api.DataPoint
 import dev.schlaubi.mikbot.core.gdpr.api.GDPRExtensionPoint
 import dev.schlaubi.mikbot.core.gdpr.api.PermanentlyStoredDataPoint
+import dev.schlaubi.mikbot.translations.MusicTranslations
 import dev.schlaubi.mikmusic.playlist.Playlist
 import dev.schlaubi.mikmusic.playlist.PlaylistDatabase
 import org.litote.kmongo.eq
@@ -18,7 +19,7 @@ class PlaylistGdprExtensionPoint : GDPRExtensionPoint {
 val PlaylistDataPoint: PermanentlyStoredDataPoint = PlaylistDataPointImpl
 
 private object PlaylistDataPointImpl :
-    PermanentlyStoredDataPoint("music", "gdpr.playlists.name", "gdpr.playlists.description", null) {
+    PermanentlyStoredDataPoint(MusicTranslations.Gdpr.Playlists.name, MusicTranslations.Gdpr.Playlists.description, null) {
     override suspend fun deleteFor(user: User) {
         PlaylistDatabase.collection.deleteMany(Playlist::authorId eq user.id)
     }

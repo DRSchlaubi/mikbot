@@ -1,6 +1,6 @@
 package dev.schlaubi.mikbot.core.health
 
-import com.kotlindiscord.kord.extensions.koin.KordExKoinComponent
+import dev.kordex.core.koin.KordExKoinComponent
 import dev.schlaubi.mikbot.core.health.check.HealthCheck
 import dev.schlaubi.mikbot.core.health.routes.HealthRoutes
 import dev.schlaubi.mikbot.util_plugins.ktor.api.KtorExtensionPoint

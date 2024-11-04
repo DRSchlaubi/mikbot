@@ -1,9 +1,11 @@
 package dev.schlaubi.mikmusic.commands
 
-import com.kotlindiscord.kord.extensions.DiscordRelayedException
-import com.kotlindiscord.kord.extensions.commands.Arguments
-import com.kotlindiscord.kord.extensions.commands.converters.impl.string
-import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
+import dev.kordex.core.commands.Arguments
+import dev.kordex.core.commands.converters.impl.string
+import dev.kordex.core.extensions.ephemeralSlashCommand
+import dev.schlaubi.mikbot.plugin.api.util.discordError
+import dev.schlaubi.mikbot.plugin.api.util.translate
+import dev.schlaubi.mikbot.translations.MusicTranslations
 import dev.schlaubi.mikmusic.checks.anyMusicPlaying
 import dev.schlaubi.mikmusic.core.MusicModule
 import dev.schlaubi.mikmusic.core.musicControlContexts
@@ -14,20 +16,20 @@ private val seekRegex = "([0-9]+)(?::([0-9]+))?".toRegex()
 
 class SeekArguments : Arguments() {
     val to by string {
-        name = "to"
-        description = "commands.seek.arguments.to.description"
+        name = MusicTranslations.Commands.Seek.Arguments.To.name
+        description = MusicTranslations.Commands.Seek.Arguments.To.description
 
         validate {
             if (!value.matches(seekRegex)) {
-                throw DiscordRelayedException(translate("command.seek.invalid_format"))
+                discordError(MusicTranslations.Command.Seek.invalid_format)
             }
         }
     }
 }
 
 suspend fun MusicModule.seekCommand() = ephemeralSlashCommand(::SeekArguments) {
-    name = "seek"
-    description = "commands.seek.description"
+    name = MusicTranslations.Commands.Seek.name
+    description = MusicTranslations.Commands.Seek.description
     musicControlContexts()
 
     check {
@@ -47,7 +49,7 @@ suspend fun MusicModule.seekCommand() = ephemeralSlashCommand(::SeekArguments) {
         player.seekTo(position)
 
         respond {
-            content = translate("commands.seek.success", arrayOf(position.toString()))
+            content = translate(MusicTranslations.Commands.Seek.success, position)
         }
     }
 }

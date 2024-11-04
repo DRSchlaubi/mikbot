@@ -13,11 +13,15 @@ version = libs.versions.api.get()
 
 repositories {
     mavenCentral()
+    gradlePluginPortal()
+    maven("https://releases-repo.kordex.dev")
 }
 
 dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.coroutines.jdk8)
+    implementation(libs.kordex.gradle.plugin)
+    implementation(libs.gradle.license.report)
     compileOnly(kotlin("gradle-plugin"))
 }
 
@@ -53,7 +57,7 @@ afterEvaluate {
         packageName("dev.schlaubi.mikbot.gradle")
         className("MikBotPluginInfo")
         buildConfigField("String", "VERSION", "\"${libs.versions.api.get()}\"")
-        buildConfigField("String", "KORDEX_VERSION", "\"${libs.versions.kordex.get()}\"")
+        buildConfigField("String", "KORDEX_VERSION", "\"${libs.versions.kordex.asProvider().get()}\"")
         buildConfigField("boolean", "IS_MIKBOT", (System.getenv("BUILD_PLUGIN_CI")?.toBoolean() != true).toString())
     }
 }

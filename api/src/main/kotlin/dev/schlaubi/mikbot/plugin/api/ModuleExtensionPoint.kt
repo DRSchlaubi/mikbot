@@ -1,6 +1,6 @@
 package dev.schlaubi.mikbot.plugin.api
 
-import com.kotlindiscord.kord.extensions.extensions.Extension
+import dev.kordex.core.extensions.Extension
 import dev.schlaubi.mikbot.plugin.api.module.MikBotModule
 import org.pf4j.ExtensionPoint
 import kotlin.reflect.KClass

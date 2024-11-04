@@ -1,28 +1,30 @@
 package dev.schlaubi.mikmusic.core.settings.commands
 
-import com.kotlindiscord.kord.extensions.commands.Arguments
-import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalBoolean
-import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
+import dev.kordex.core.commands.Arguments
+import dev.kordex.core.commands.converters.impl.optionalBoolean
+import dev.kordex.core.extensions.ephemeralSlashCommand
 import dev.schlaubi.lavakord.plugins.sponsorblock.model.Category
 import dev.schlaubi.lavakord.plugins.sponsorblock.rest.disableSponsorblock
 import dev.schlaubi.lavakord.plugins.sponsorblock.rest.putSponsorblockCategories
 import dev.schlaubi.mikbot.plugin.api.settings.SettingsModule
 import dev.schlaubi.mikbot.plugin.api.settings.guildAdminOnly
 import dev.schlaubi.mikbot.plugin.api.util.safeGuild
+import dev.schlaubi.mikbot.plugin.api.util.translate
+import dev.schlaubi.mikbot.translations.MusicTranslations
 import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase
 import dev.schlaubi.mikmusic.util.musicModule
 
 private class SponsorBlockArguments : Arguments() {
     val enableSponsorBlock by optionalBoolean {
-        name = "use-sponsorblock"
-        description = "Enable or disable the usage of SponsorBlock"
+        name = MusicTranslations.Commands.Sponsorblock.Arguments.Use_sponsorblock.name
+        description = MusicTranslations.Commands.Sponsorblock.Arguments.Use_sponsorblock.description
     }
 }
 
 suspend fun SettingsModule.sponsorBlockCommand() {
     ephemeralSlashCommand(::SponsorBlockArguments) {
-        name = "sponsorblock"
-        description = "Toggles SponsorBlock"
+        name = MusicTranslations.Commands.Sponsorblock.name
+        description = MusicTranslations.Commands.Sponsorblock.description
 
         guildAdminOnly()
 
@@ -43,11 +45,11 @@ suspend fun SettingsModule.sponsorBlockCommand() {
 
             if (newSetting) {
                 respond {
-                    content = translate("command.sponsorblock.enabled")
+                    content = translate(MusicTranslations.Command.Sponsorblock.enabled)
                 }
             } else {
                 respond {
-                    content = translate("command.sponsorblock.disabled")
+                    content = translate(MusicTranslations.Command.Sponsorblock.disabled)
                 }
             }
         }

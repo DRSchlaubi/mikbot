@@ -1,6 +1,6 @@
 package dev.schlaubi.mikbot.plugin.api.util
 
-import com.kotlindiscord.kord.extensions.checks.types.CheckContext
+import dev.kordex.core.checks.types.CheckContext
 import dev.kord.core.behavior.interaction.ActionInteractionBehavior
 import dev.kord.core.behavior.interaction.respondEphemeral
 import dev.kord.core.behavior.reply

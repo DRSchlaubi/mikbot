@@ -1,15 +1,16 @@
 package dev.schlaubi.mikbot.plugin.api.util
 
-import com.kotlindiscord.kord.extensions.ExtensibleBot
 import dev.kord.common.Locale
 import dev.kord.core.entity.User
 import dev.kord.core.entity.channel.GuildChannel
+import dev.kordex.core.ExtensibleBot
 import java.util.Locale as JLocale
 
 /** Resolve the locale for this command context. **/
 public suspend fun ExtensibleBot.getLocale(channel: GuildChannel, user: User): JLocale {
     var locale: JLocale? = null
 
+    @Suppress("LoopToCallChain") // False positive
     for (resolver in settings.i18nBuilder.localeResolvers) {
         val result = resolver(channel.guild, channel, user, null)
 

@@ -1,31 +1,33 @@
 package dev.schlaubi.mikmusic.commands
 
-import com.kotlindiscord.kord.extensions.commands.Arguments
-import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalInt
+import dev.kordex.core.commands.Arguments
+import dev.kordex.core.commands.converters.impl.optionalInt
+import dev.schlaubi.mikbot.plugin.api.util.translate
+import dev.schlaubi.mikbot.translations.MusicTranslations
 import dev.schlaubi.mikmusic.core.MusicModule
 import dev.schlaubi.mikmusic.core.musicControlContexts
 
 class VolumeArguments : Arguments() {
     val volume by optionalInt {
-        name = "volume"
-        description = "commands.volume.arguments.volume.description"
+        name = MusicTranslations.Commands.Volume.Arguments.Volume.name
+        description = MusicTranslations.Commands.Volume.Arguments.Volume.description
         maxValue = 1000
         minValue = 0
     }
 }
 
 suspend fun MusicModule.volumeCommand() = ephemeralControlSlashCommand(::VolumeArguments) {
-    name = "volume"
-    description = "commands.volume.description"
+    name = MusicTranslations.Commands.Volume.name
+    description = MusicTranslations.Commands.Volume.description
     musicControlContexts()
 
     action {
         val volume = arguments.volume
         if (volume != null) {
             musicPlayer.changeVolume(volume)
-            respond { content = translate("commands.volume.set", arrayOf(volume.toString())) }
+            respond { content = translate(MusicTranslations.Commands.Volume.set, volume.toString()) }
         } else {
-            respond { content = translate("commands.volume.current", arrayOf(player.volume.toString())) }
+            respond { content = translate(MusicTranslations.Commands.Volume.current, player.volume.toString()) }
         }
     }
 }

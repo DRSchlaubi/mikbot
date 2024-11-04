@@ -1,11 +1,13 @@
 package dev.schlaubi.mikmusic.player.queue
 
-import com.kotlindiscord.kord.extensions.commands.CommandContext
+import dev.kordex.core.commands.CommandContext
 import dev.arbjerg.lavalink.protocol.v4.Playlist
 import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.schlaubi.lavakord.audio.Link
 import dev.schlaubi.lavakord.plugins.lavasrc.lavaSrcInfo
+import dev.schlaubi.mikbot.plugin.api.util.translate
+import dev.schlaubi.mikbot.translations.MusicTranslations
 import dev.schlaubi.mikmusic.util.addSong
 
 sealed interface QueueSearchResult {
@@ -20,7 +22,7 @@ sealed interface QueueSearchResult {
 class SingleTrack(private val track: Track) : QueueSearchResult {
     override val tracks: List<Track> = listOf(track)
 
-    override suspend fun CommandContext.type(): String = translate("music.info.track")
+    override suspend fun CommandContext.type(): String = translate(MusicTranslations.Music.Info.track)
 
     override suspend fun EmbedBuilder.addInfo(link: Link, context: CommandContext) {
         addSong(context, track)
@@ -35,7 +37,7 @@ class Playlist(private val playlist: Playlist, tracks: List<Track>) : QueueSearc
         tracks.drop(playlist.info.selectedTrack)
     }
 
-    override suspend fun CommandContext.type(): String = translate("music.info.playlist")
+    override suspend fun CommandContext.type(): String = translate(MusicTranslations.Music.Info.playlist)
 
     override suspend fun EmbedBuilder.addInfo(link: Link, context: CommandContext) {
         description = playlist.info.name

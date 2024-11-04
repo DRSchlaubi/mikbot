@@ -1,29 +1,31 @@
 package dev.schlaubi.mikmusic.lyrics
 
-import com.kotlindiscord.kord.extensions.commands.Arguments
-import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalString
-import com.kotlindiscord.kord.extensions.extensions.Extension
-import com.kotlindiscord.kord.extensions.extensions.publicSlashCommand
+import dev.kordex.core.commands.Arguments
+import dev.kordex.core.commands.converters.impl.optionalString
+import dev.kordex.core.extensions.Extension
+import dev.kordex.core.extensions.publicSlashCommand
 import dev.schlaubi.lavakord.RestException
 import dev.schlaubi.lavakord.plugins.lyrics.rest.requestLyrics
 import dev.schlaubi.lavakord.plugins.lyrics.rest.searchLyrics
 import dev.schlaubi.lyrics.protocol.TimedLyrics
 import dev.schlaubi.mikbot.plugin.api.util.discordError
 import dev.schlaubi.mikbot.plugin.api.util.forList
+import dev.schlaubi.mikbot.plugin.api.util.translate
+import dev.schlaubi.mikbot.translations.LyricsTranslations
 import dev.schlaubi.mikmusic.checks.musicQuizAntiCheat
 import dev.schlaubi.mikmusic.util.musicModule
 import dev.schlaubi.stdx.core.paginate
 
 class LyricsArguments : Arguments() {
     val name by optionalString {
-        name = "song_name"
-        description = "commands.lyrics.arguments.song_name.description"
+        name = LyricsTranslations.Commands.Lyrics.Arguments.Song_name.name
+        description = LyricsTranslations.Commands.Lyrics.Arguments.Song_name.description
     }
 }
 
 suspend fun Extension.lyricsCommand() = publicSlashCommand(::LyricsArguments) {
-    name = "lyrics"
-    description = "commands.lyrics.description"
+    name = LyricsTranslations.Commands.Lyrics.name
+    description = LyricsTranslations.Commands.Lyrics.description
 
     check {
         musicQuizAntiCheat(musicModule)
@@ -38,7 +40,7 @@ suspend fun Extension.lyricsCommand() = publicSlashCommand(::LyricsArguments) {
 
         if (query == null) {
             respond {
-                content = translate("command.lyrics.no_song_playing")
+                content = translate(LyricsTranslations.Command.Lyrics.no_song_playing)
             }
 
             return@action
@@ -48,11 +50,11 @@ suspend fun Extension.lyricsCommand() = publicSlashCommand(::LyricsArguments) {
                 player.requestLyrics()
             } else {
                 val (videoId) = link.node.searchLyrics(query).firstOrNull()
-                    ?: discordError(translate("command.lyrics.no_lyrics"))
+                    ?: discordError(LyricsTranslations.Command.Lyrics.no_lyrics)
                 link.node.requestLyrics(videoId)
             }
         } catch (e: RestException) {
-            discordError(translate("command.lyrics.no_lyrics"))
+            discordError(LyricsTranslations.Command.Lyrics.no_lyrics)
         }
 
         val lines = if (lyrics is TimedLyrics) {
@@ -71,7 +73,7 @@ suspend fun Extension.lyricsCommand() = publicSlashCommand(::LyricsArguments) {
         editingPaginator {
             forList(user, paged, { it }, { _, _ -> lyrics.track.title }) {
                 footer {
-                    text = translate("command.lyrics.source", arrayOf(lyrics.source))
+                    text = translate(LyricsTranslations.Command.Lyrics.source, lyrics.source)
                 }
             }
         }.send()

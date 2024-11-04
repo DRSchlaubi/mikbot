@@ -1,13 +1,14 @@
 package dev.schlaubi.mikmusic.autocomplete
 
-import com.kotlindiscord.kord.extensions.ExtensibleBot
-import com.kotlindiscord.kord.extensions.commands.Arguments
-import com.kotlindiscord.kord.extensions.commands.converters.SingleConverter
-import com.kotlindiscord.kord.extensions.commands.converters.impl.string
-import com.kotlindiscord.kord.extensions.koin.KordExContext
+import dev.kordex.core.ExtensibleBot
+import dev.kordex.core.commands.Arguments
+import dev.kordex.core.commands.converters.SingleConverter
+import dev.kordex.core.commands.converters.impl.string
+import dev.kordex.core.koin.KordExContext
 import dev.kord.core.behavior.interaction.suggestString
 import dev.kord.core.event.interaction.GuildAutoCompleteInteractionCreateEvent
 import dev.kord.x.emoji.Emojis
+import dev.kordex.core.i18n.types.Key
 import dev.schlaubi.lavakord.plugins.lavasearch.model.SearchType
 import dev.schlaubi.lavakord.plugins.lavasearch.rest.search
 import dev.schlaubi.lavakord.plugins.lavasrc.lavaSrcInfo
@@ -20,8 +21,8 @@ private val musicModule = KordExContext.get().get<ExtensibleBot>()
 /**
  * Creates a `query` argument with [description] supporting YouTube Auto-complete.
  */
-fun Arguments.autoCompletedYouTubeQuery(description: String, vararg searchTypes: SearchType): SingleConverter<String> = string {
-    name = AUTOCOMPLETE_QUERY_OPTION
+fun Arguments.autoCompletedYouTubeQuery(name: Key, description: Key, vararg searchTypes: SearchType): SingleConverter<String> = string {
+    this.name = name
     this.description = description
 
     autoComplete {

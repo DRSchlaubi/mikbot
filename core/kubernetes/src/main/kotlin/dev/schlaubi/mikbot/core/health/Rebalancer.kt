@@ -1,20 +1,22 @@
 package dev.schlaubi.mikbot.core.health
 
-import com.kotlindiscord.kord.extensions.commands.Arguments
-import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalInt
-import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
-import com.kotlindiscord.kord.extensions.extensions.event
+import dev.kordex.core.commands.Arguments
+import dev.kordex.core.commands.converters.impl.optionalInt
+import dev.kordex.core.extensions.ephemeralSlashCommand
+import dev.kordex.core.extensions.event
 import com.reidsync.kxjsonpatch.generatePatch
 import dev.kord.common.KordConstants
 import dev.kord.core.event.guild.GuildCreateEvent
 import dev.kord.rest.json.response.BotGatewayResponse
 import dev.kord.rest.route.Route
 import dev.schlaubi.mikbot.core.health.check.ready
-import dev.schlaubi.mikbot.core.health.util.blocking
 import dev.schlaubi.mikbot.plugin.api.PluginContext
 import dev.schlaubi.mikbot.plugin.api.module.MikBotModule
 import dev.schlaubi.mikbot.plugin.api.owner.ownerOnly
+import dev.schlaubi.mikbot.plugin.api.util.blocking
 import dev.schlaubi.mikbot.plugin.api.util.discordError
+import dev.schlaubi.mikbot.plugin.api.util.translate
+import dev.schlaubi.mikbot.translations.KubernetesTranslations
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.statement.bodyAsText
@@ -41,14 +43,13 @@ private var lastRebalanceCheck = TimeSource.Monotonic.markNow()
 
 private class RebalanceArguments() : Arguments() {
     val forceTo by optionalInt {
-        name = "force_to"
-        description = "commands.rebalance.arguments.force_to.description"
+        name = KubernetesTranslations.Commands.Rebalance.Arguments.Force_to.name
+        description = KubernetesTranslations.Commands.Rebalance.Arguments.Force_to.description
     }
 }
 
 class RebalancerExtension(context: PluginContext) : MikBotModule(context) {
     override val name: String = "rebalancer"
-    override val bundle: String = "kubernetes"
 
     private val kubeClient = KubeConfig.defaultClient()
     private val kubeApi = AppsV1Api(kubeClient)
@@ -80,8 +81,8 @@ class RebalancerExtension(context: PluginContext) : MikBotModule(context) {
     }
 
     private suspend fun command() = ephemeralSlashCommand(::RebalanceArguments) {
-        name = "rebalance"
-        description = "commands.rebalance.description"
+        name = KubernetesTranslations.Commands.Rebalance.name
+        description = KubernetesTranslations.Commands.Rebalance.description
         ownerOnly()
 
         action {
@@ -93,11 +94,11 @@ class RebalancerExtension(context: PluginContext) : MikBotModule(context) {
             } else if (arguments.forceTo != null) {
                 reBalance(arguments.forceTo!!)
             } else {
-                discordError(translate("commands.rebalance.already_balanced"))
+                discordError(KubernetesTranslations.Commands.Rebalance.already_balanced)
             }
 
             respond {
-                content = translate("commands.rebalance.done")
+                content = translate(KubernetesTranslations.Commands.Rebalance.done)
             }
         }
 

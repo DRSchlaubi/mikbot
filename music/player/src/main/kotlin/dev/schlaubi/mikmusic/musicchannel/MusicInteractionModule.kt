@@ -1,17 +1,19 @@
 package dev.schlaubi.mikmusic.musicchannel
 
-import com.kotlindiscord.kord.extensions.checks.guildFor
-import com.kotlindiscord.kord.extensions.checks.inChannel
-import com.kotlindiscord.kord.extensions.extensions.event
+import dev.kordex.core.checks.guildFor
+import dev.kordex.core.checks.inChannel
+import dev.kordex.core.extensions.event
 import dev.kord.core.behavior.channel.withTyping
 import dev.kord.core.behavior.interaction.response.EphemeralMessageInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.response.createEphemeralFollowup
 import dev.kord.core.behavior.reply
 import dev.kord.core.event.interaction.GuildComponentInteractionCreateEvent
 import dev.kord.core.event.message.MessageCreateEvent
+import dev.kordex.core.types.TranslatableContext
 import dev.schlaubi.mikbot.plugin.api.PluginContext
 import dev.schlaubi.mikbot.plugin.api.module.MikBotModule
 import dev.schlaubi.mikbot.plugin.api.util.*
+import dev.schlaubi.mikbot.translations.MusicTranslations
 import dev.schlaubi.mikmusic.checks.joinSameChannelCheck
 import dev.schlaubi.mikmusic.checks.musicControlCheck
 import dev.schlaubi.mikmusic.core.MusicModule
@@ -26,7 +28,6 @@ import kotlin.reflect.KMutableProperty1
 
 class MusicInteractionModule(context: PluginContext) : MikBotModule(context) {
     override val name = "music interaction handler"
-    override val bundle: String = "music"
     val musicModule: MusicModule by extension()
 
     override suspend fun setup() {
@@ -41,7 +42,7 @@ class MusicInteractionModule(context: PluginContext) : MikBotModule(context) {
                     /* return */ interaction.message.id != guildSettings.musicChannelData?.musicChannelMessage
                 }
 
-                failIf(translate("music.music_channel.disabled", "music")) {
+                failIf(MusicTranslations.Music.Music_channel.disabled) {
                     val player = musicModule.getMusicPlayer(event.interaction.guild)
                     player.disableMusicChannel
                 }
@@ -63,7 +64,7 @@ class MusicInteractionModule(context: PluginContext) : MikBotModule(context) {
                 ) {
                     ack.updateSchedulerOptions(
                         player,
-                        ::translate,
+                        this,
                         myProperty, *properties
                     )
                 }
@@ -93,7 +94,7 @@ class MusicInteractionModule(context: PluginContext) : MikBotModule(context) {
                             try {
                                 player.enableAutoPlay()
                             } catch (_: IllegalStateException) {
-                                discordError(translate("commands.radio.no_matching_songs"))
+                                discordError(MusicTranslations.Commands.Radio.no_matching_songs)
                             }
                         } else {
                             player.resetAutoPlay()
@@ -117,7 +118,7 @@ class MusicInteractionModule(context: PluginContext) : MikBotModule(context) {
                 inChannel(channelId)
 
                 ifPassing { // only respond if this check fails
-                    failIf(translate("music.music_channel.disabled", "music")) {
+                    failIf(MusicTranslations.Music.Music_channel.disabled) {
                         val player = musicModule.getMusicPlayer(guild)
                         player.disableMusicChannel
                     }
@@ -149,25 +150,24 @@ class MusicInteractionModule(context: PluginContext) : MikBotModule(context) {
 
 private suspend fun EphemeralMessageInteractionResponseBehavior.updateSchedulerOptions(
     musicPlayer: MusicPlayer,
-    translate: Translator,
+    translator: TranslatableContext,
     myProperty: KMutableProperty1<MusicPlayer, Boolean>,
     vararg properties: KMutableProperty1<MusicPlayer, Boolean>,
 ) = checkOtherSchedulerOptions(
     musicPlayer,
-    translate,
+    translator,
     { messageBuilder ->
-        confirmation(messageBuilder, translate)
+        confirmation(messageBuilder, translator)
     },
     { /* we just don't edit here because we don't need to */ },
     myProperty,
     properties = properties,
-    translatorGroup = "settings",
     callback = {}
 )
 
 private suspend fun EphemeralMessageInteractionResponseBehavior.confirmation(
     messageBuilder: MessageBuilder,
-    translate: Translator,
+    translator: TranslatableContext,
 ): Confirmation = confirmation(
     {
         createEphemeralFollowup {
@@ -175,6 +175,6 @@ private suspend fun EphemeralMessageInteractionResponseBehavior.confirmation(
         }
     },
     messageBuilder = messageBuilder,
-    translate = translate,
-    hasNoOption = false
-) // no option doesn't make a lot of sense here
+    translatableContext = translator,
+    hasNoOption = false // no option doesnt make a lot of sense here
+)

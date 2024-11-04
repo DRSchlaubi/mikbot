@@ -1,12 +1,14 @@
 package dev.schlaubi.mikmusic.playlist.commands
 
+import dev.schlaubi.mikbot.plugin.api.util.translate
+import dev.schlaubi.mikbot.translations.MusicTranslations
 import dev.schlaubi.mikmusic.playlist.PlaylistDatabase
 
 class PlaylistToggleVisibilityCommand : PlaylistArguments()
 
 fun PlaylistModule.toggleVisibilityCommand() = ephemeralSubCommand(::PlaylistToggleVisibilityCommand) {
-    name = "toggle-visibility"
-    description = "commands.playlist.toggle_visibility.description"
+    name = MusicTranslations.Commands.Playlist.Toggle_visibility.name
+    description = MusicTranslations.Commands.Playlist.Toggle_visibility.description
 
     action {
         checkPermissions { playlist ->
@@ -14,9 +16,9 @@ fun PlaylistModule.toggleVisibilityCommand() = ephemeralSubCommand(::PlaylistTog
 
             respond {
                 content = if (!playlist.public) {
-                    translate("commands.playlist.toggle_visibility.on")
+                    translate(MusicTranslations.Commands.Playlist.Toggle_visibility.on)
                 } else {
-                    translate("commands.playlist.toggle_visibility.off")
+                    translate(MusicTranslations.Commands.Playlist.Toggle_visibility.off)
                 }
             }
         }

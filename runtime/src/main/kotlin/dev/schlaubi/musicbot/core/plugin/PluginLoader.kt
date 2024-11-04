@@ -1,7 +1,7 @@
 package dev.schlaubi.musicbot.core.plugin
 
-import com.kotlindiscord.kord.extensions.koin.KordExKoinComponent
 import dev.kord.core.event.Event
+import dev.kordex.core.koin.KordExKoinComponent
 import dev.schlaubi.mikbot.plugin.api.Plugin
 import dev.schlaubi.mikbot.plugin.api.PluginSystem
 import dev.schlaubi.mikbot.plugin.api.util.ensurePath
@@ -12,6 +12,7 @@ import org.pf4j.*
 import org.pf4j.DependencyResolver.*
 import org.pf4j.update.UpdateRepository
 import java.nio.file.Path
+import java.util.*
 import kotlin.io.path.*
 import kotlin.reflect.KClass
 
@@ -113,7 +114,7 @@ class PluginLoader(repos: List<UpdateRepository>) : DefaultPluginManager(), Kord
             val pluginWrapper = plugins[pluginId]
             if (unresolvedPlugins.remove(pluginWrapper)) {
                 val wrapper = pluginWrapper!!
-                val state =wrapper.pluginState
+                val state = wrapper.pluginState
                 if (state != PluginState.DISABLED ||
                     wrapper.failedException is DependenciesWrongVersionException ||
                     wrapper.failedException is DependenciesNotFoundException
@@ -190,11 +191,12 @@ internal class DefaultPluginSystem(private val bot: Bot) : PluginSystem {
     override fun <T : ExtensionPoint> getExtensions(type: KClass<T>): List<T> =
         bot.pluginLoader.getExtensions(type.java)
 
+    @Suppress("DEPRECATION")
     override fun translate(key: String, bundleName: String, locale: String?, replacements: Array<Any?>): String {
         return if (locale == null) {
-            bot.translationProvider.translate(key, bundleName, replacements)
+            bot.translationProvider.translate(key, bundleName, replacements = replacements)
         } else {
-            bot.translationProvider.translate(key, locale, bundleName, replacements)
+            bot.translationProvider.translate(key, bundleName, Locale.of(locale), replacements)
         }
     }
 

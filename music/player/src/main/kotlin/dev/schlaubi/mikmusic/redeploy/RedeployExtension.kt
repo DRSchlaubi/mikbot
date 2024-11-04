@@ -1,7 +1,7 @@
 package dev.schlaubi.mikmusic.redeploy
 
-import com.kotlindiscord.kord.extensions.ExtensibleBot
-import com.kotlindiscord.kord.extensions.koin.KordExKoinComponent
+import dev.kordex.core.ExtensibleBot
+import dev.kordex.core.koin.KordExKoinComponent
 import dev.schlaubi.mikbot.core.redeploy_hook.api.RedeployExtensionPoint
 import dev.schlaubi.mikmusic.core.MusicModule
 import org.koin.core.component.inject

@@ -1,18 +1,20 @@
 package dev.schlaubi.mikmusic.playlist.commands
 
-import com.kotlindiscord.kord.extensions.commands.converters.impl.int
+import dev.kordex.core.commands.converters.impl.int
+import dev.schlaubi.mikbot.plugin.api.util.translate
+import dev.schlaubi.mikbot.translations.MusicTranslations
 import dev.schlaubi.mikmusic.playlist.PlaylistDatabase
 
 class PlaylistRemoveArguments : PlaylistArguments() {
     val index by int {
-        name = "index"
-        description = "commands.playlist.remove.arguments.index.description"
+        name = MusicTranslations.Commands.Playlist.Remove.Arguments.Index.name
+        description = MusicTranslations.Commands.Playlist.Remove.Arguments.Index.description
     }
 }
 
 fun PlaylistModule.removeCommand() = ephemeralSubCommand(::PlaylistRemoveArguments) {
-    name = "remove"
-    description = "commands.playlist.remove.description"
+    name = MusicTranslations.Commands.Playlist.Remove.name
+    description = MusicTranslations.Commands.Playlist.Remove.description
 
     action {
         checkPermissions { playlist ->
@@ -20,7 +22,7 @@ fun PlaylistModule.removeCommand() = ephemeralSubCommand(::PlaylistRemoveArgumen
             val item = playlist.songs.getOrNull(index)
             if (item == null) {
                 respond {
-                    content = translate("commands.playlist.remove.too_high_index")
+                    content = translate(MusicTranslations.Commands.Playlist.Remove.too_high_index)
                 }
 
                 return@action
@@ -35,7 +37,7 @@ fun PlaylistModule.removeCommand() = ephemeralSubCommand(::PlaylistRemoveArgumen
             )
 
             respond {
-                content = translate("commands.playlist.remove.removed", arrayOf(item.toTrack(musicPlayer.node), playlist.name))
+                content = translate(MusicTranslations.Commands.Playlist.Remove.removed, item.toTrack(musicPlayer.node), playlist.name)
             }
         }
     }

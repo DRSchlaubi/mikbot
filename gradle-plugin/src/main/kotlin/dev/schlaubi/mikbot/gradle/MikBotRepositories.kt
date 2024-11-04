@@ -19,6 +19,17 @@ internal fun Project.addRepositories() {
             name = "Mikbot"
             url = uri("https://europe-west3-maven.pkg.dev/mik-music/mikbot")
         }
+
+        maven {
+            name = "KordEx (Releases)"
+            url = uri("https://repo.kordex.dev/releases")
+        }
+
+        maven {
+            name = "KordEx (Snapshots)"
+            url = uri("https://repo.kordex.dev/snapshots")
+        }
+
         maven {
             name = "Sonatype Snapshots"
             url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots")

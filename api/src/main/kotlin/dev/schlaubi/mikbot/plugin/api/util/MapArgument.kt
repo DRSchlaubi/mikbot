@@ -1,8 +1,9 @@
 package dev.schlaubi.mikbot.plugin.api.util
 
-import com.kotlindiscord.kord.extensions.commands.CommandContext
-import com.kotlindiscord.kord.extensions.commands.converters.Converter
-import com.kotlindiscord.kord.extensions.parser.StringParser
+import dev.kordex.core.commands.CommandContext
+import dev.kordex.core.commands.converters.Converter
+import dev.kordex.core.i18n.types.Key
+import dev.kordex.parser.StringParser
 
 public fun <InputType : Any?, OutputType : Any?, NamedInputType : Any, ResultType : Any, B : Any?> Converter<InputType, OutputType, NamedInputType, ResultType>.map(
     mapper: (OutputType) -> B
@@ -15,7 +16,9 @@ public fun <InputType : Any?, OutputType : Any?, NamedInputType : Any, ResultTyp
             @Suppress("UNCHECKED_CAST")
             get() = mapper(this@map.parsed)
             set(value) {}
-        override val signatureTypeString: String = this@map.signatureTypeString + ".mapped"
+
+        override val signatureType: Key
+            get() = TODO("Not supported")
 
         override suspend fun parse(parser: StringParser?, context: CommandContext, named: NamedInputType?): ResultType {
             val result = this@map.parse(parser, context, named)

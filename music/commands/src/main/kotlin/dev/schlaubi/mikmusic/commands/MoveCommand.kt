@@ -1,29 +1,33 @@
 package dev.schlaubi.mikmusic.commands
 
-import com.kotlindiscord.kord.extensions.commands.Arguments
-import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommand
-import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommandContext
-import com.kotlindiscord.kord.extensions.commands.application.slash.ephemeralSubCommand
-import com.kotlindiscord.kord.extensions.commands.converters.impl.int
+import dev.kordex.core.commands.Arguments
+import dev.kordex.core.commands.application.slash.EphemeralSlashCommand
+import dev.kordex.core.commands.application.slash.EphemeralSlashCommandContext
+import dev.kordex.core.commands.application.slash.ephemeralSubCommand
+import dev.kordex.core.commands.converters.impl.int
 import dev.arbjerg.lavalink.protocol.v4.Track
+import dev.kordex.core.i18n.EMPTY_KEY
+import dev.kordex.core.i18n.toKey
+import dev.schlaubi.mikbot.plugin.api.util.translate
+import dev.schlaubi.mikbot.translations.MusicTranslations
 import dev.schlaubi.mikmusic.core.MusicModule
 import dev.schlaubi.mikmusic.core.musicControlContexts
 
 class SingleSongMoveArguments : Arguments() {
     val song by int {
-        name = "song"
-        description = "commands.move.arguments.song"
+        name = MusicTranslations.Commands.Move.Arguments.Song.name
+        description = MusicTranslations.Commands.Move.Arguments.Song.description
     }
 }
 
 class MoveArguments : Arguments() {
     val from by int {
-        name = "from"
-        description = "commands.move.arguments.from"
+        name = MusicTranslations.Commands.Move.Arguments.From.name
+        description = MusicTranslations.Commands.Move.Arguments.From.description
     }
     val to by int {
-        name = "to"
-        description = "commands.move.arguments.to"
+        name = MusicTranslations.Commands.Move.Arguments.To.name
+        description = MusicTranslations.Commands.Move.Arguments.To.description
     }
 }
 
@@ -32,14 +36,14 @@ suspend fun MusicModule.moveCommand() {
         from: T.() -> Int,
         to: T.() -> Int,
         swap: Boolean = false,
-        successMessageBuilder: suspend EphemeralSlashCommandContext<T, *>.(track: Track) -> String
+        successMessageBuilder: suspend EphemeralSlashCommandContext<T, *>.(track: Track) -> String,
     ) = action {
         @Suppress("UNCHECKED_CAST")
         val safeArguments = kotlin.runCatching { arguments }.getOrElse { Arguments() as T }
         val toValue = safeArguments.to().coerceAtLeast(1)
         if (toValue > musicPlayer.queuedTracks.size) {
             respond {
-                content = translate("commands.move.invalid_index.to")
+                content = translate(MusicTranslations.Commands.Move.Invalid_index.to)
             }
             return@action
         }
@@ -56,65 +60,53 @@ suspend fun MusicModule.moveCommand() {
             }
         } else {
             respond {
-                content = translate("commands.move.invalid_index.from")
+                content = translate(MusicTranslations.Commands.Move.Invalid_index.from)
             }
         }
     }
 
     ephemeralControlSlashCommand {
-        name = "move"
-        description = "commands.move.description"
+        name = MusicTranslations.Commands.Move.name
+        description = "<not used>".toKey()
         musicControlContexts()
 
         ephemeralSubCommand(::SingleSongMoveArguments) {
-            name = "top"
-            description = "commands.move.top.description"
+            name = MusicTranslations.Commands.Move.Top.name
+            description = MusicTranslations.Commands.Move.Top.description
 
             doMove(SingleSongMoveArguments::song, { 0 }) { track ->
-                translate("commands.move.top.success", arrayOf(track.info.title))
+                translate(MusicTranslations.Commands.Move.Top.success, track.info.title)
             }
         }
 
         ephemeralSubCommand(::MoveArguments) {
-            name = "move"
-            description = "commands.move.move.description"
+            name = MusicTranslations.Commands.Move.Move.name
+            description = MusicTranslations.Commands.Move.Move.description
 
             doMove(MoveArguments::from, MoveArguments::to) { track ->
                 translate(
-                    "commands.move.move.success",
-                    arrayOf(
-                        track.info.title,
-                        arguments.from, arguments.to
-                    )
+                    MusicTranslations.Commands.Move.Move.success,
+                    track.info.title,
+                    arguments.from, arguments.to
                 )
             }
         }
 
         ephemeralSubCommand(::MoveArguments) {
-            name = "swap"
-            description = "commands.move.swap.description"
+            name = MusicTranslations.Commands.Move.Swap.name
+            description = MusicTranslations.Commands.Move.Swap.description
 
             doMove(MoveArguments::from, MoveArguments::to, swap = true) {
-                translate(
-                    "commands.move.swap.success",
-                    arrayOf(
-                        arguments.from, arguments.to
-                    )
-                )
+                translate(MusicTranslations.Commands.Move.Swap.success, it.info.title)
             }
         }
 
         ephemeralSubCommand {
-            name = "last"
-            description = "commands.move.last.description"
+            name = MusicTranslations.Commands.Move.Last.name
+            description = MusicTranslations.Commands.Move.Last.description
 
             doMove({ -1 }, { 0 }, swap = true) { track ->
-                translate(
-                    "commands.move.last.success",
-                    arrayOf(
-                        track.info.title,
-                    )
-                )
+                translate(MusicTranslations.Commands.Move.Last.success, track.info.title)
             }
         }
     }

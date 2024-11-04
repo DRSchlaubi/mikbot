@@ -1,13 +1,15 @@
 package dev.schlaubi.mikmusic.util
 
-import com.kotlindiscord.kord.extensions.commands.CommandContext
-import com.kotlindiscord.kord.extensions.koin.KordExContext
 import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.kord.common.Color
 import dev.kord.rest.builder.message.EmbedBuilder
+import dev.kordex.core.koin.KordExContext
+import dev.kordex.core.types.TranslatableContext
 import dev.nycode.imagecolor.ImageColorClient
 import dev.schlaubi.lavakord.plugins.lavasrc.lavaSrcInfo
 import dev.schlaubi.mikbot.plugin.api.util.Translator
+import dev.schlaubi.mikbot.plugin.api.util.translate
+import dev.schlaubi.mikbot.translations.MusicTranslations
 import dev.schlaubi.mikmusic.core.Config
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
@@ -17,24 +19,16 @@ private val imageColorClient by KordExContext.get().inject<ImageColorClient>()
 /**
  * This function fetches all required information for [track] and adds it to `this` [EmbedBuilder].
  *
- * @param commandContext [CommandContext] which supplies the translate function
+ * @param translator A [TranslatableContext] to translate messages.
  */
-suspend fun EmbedBuilder.addSong(commandContext: CommandContext, track: Track) =
-    addSong(commandContext::translate, track)
-
-/**
- * This function fetches all required information for [track] and adds it to `this` [EmbedBuilder].
- *
- * @param translate A [Translator] to translate messages.
- */
-suspend fun EmbedBuilder.addSong(translate: Translator, track: Track) {
+suspend fun EmbedBuilder.addSong(translator: TranslatableContext, track: Track) {
     field {
-        name = translate("music.track.title", "music")
+        name = translator.translate(MusicTranslations.Music.Track.title)
         value = "[${track.info.title}](${track.info.uri})"
     }
 
     field {
-        name = translate("music.track.duration", "music")
+        name = translator.translate(MusicTranslations.Music.Track.duration)
         value = track.info.length.toDuration(DurationUnit.MILLISECONDS).toString()
     }
 
@@ -69,7 +63,7 @@ suspend fun EmbedBuilder.addSong(translate: Translator, track: Track) {
                 if (lavaSrcInfo.artistUrl != null) {
                     url = lavaSrcInfo.artistUrl
                 }
-                if(lavaSrcInfo.artistArtworkUrl != null) {
+                if (lavaSrcInfo.artistArtworkUrl != null) {
                     icon = lavaSrcInfo.artistArtworkUrl
                 }
             }
@@ -77,7 +71,7 @@ suspend fun EmbedBuilder.addSong(translate: Translator, track: Track) {
 
         if (lavaSrcInfo?.albumName != null) {
             field {
-                name = translate("music.track.album", "music")
+                name = translator.translate(MusicTranslations.Music.Track.album)
                 value = if (lavaSrcInfo.albumUrl != null) {
                     "[${lavaSrcInfo.albumName}](${lavaSrcInfo.albumUrl})"
                 } else {

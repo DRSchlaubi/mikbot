@@ -1,6 +1,5 @@
 package dev.schlaubi.mikmusic.musicchannel
 
-import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
 import dev.kord.common.asJavaLocale
 import dev.kord.common.entity.ButtonStyle
 import dev.kord.common.entity.DiscordPartialEmoji
@@ -15,7 +14,11 @@ import dev.kord.rest.builder.message.actionRow
 import dev.kord.rest.builder.message.embed
 import dev.kord.x.emoji.DiscordEmoji
 import dev.kord.x.emoji.Emojis
+import dev.kordex.core.i18n.TranslationsProvider
+import dev.kordex.core.i18n.types.Key
+import dev.kordex.core.types.TranslatableContext
 import dev.schlaubi.mikbot.plugin.api.util.convertToISO
+import dev.schlaubi.mikbot.translations.MusicTranslations
 import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase
 import dev.schlaubi.mikmusic.player.ChapterQueuedTrack
 import dev.schlaubi.mikmusic.player.MusicPlayer
@@ -23,6 +26,7 @@ import dev.schlaubi.mikmusic.player.addAutoPlaySongs
 import dev.schlaubi.mikmusic.util.addSong
 import dev.schlaubi.mikmusic.util.format
 import kotlinx.datetime.Clock
+import java.util.*
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
@@ -41,15 +45,21 @@ suspend fun updateMessage(
     kord: Kord,
     musicPlayer: MusicPlayer,
     initialUpdate: Boolean = false,
-    translationsProvider: TranslationsProvider,
+    translator: TranslationsProvider,
 ) {
     val message = findMessageSafe(guildId, kord)
     val locale = kord.getGuildOrNull(guildId)?.preferredLocale?.convertToISO()?.asJavaLocale()
-        ?: translationsProvider.defaultLocale
+        ?: translator.defaultLocale
 
-    fun translate(key: String, vararg replacements: Any?) = translationsProvider.translate(
-        key, locale, "music", replacements.toList()
-    )
+
+    @Suppress("UNCHECKED_CAST")
+    fun translate(key: Key, vararg replacements: Any?) =
+        translator.translate(key.withLocale(locale, overwrite = true), replacements as Array<Any?>)
+
+    val translatableContext = object : TranslatableContext {
+        override var resolvedLocale: Locale? = locale
+        override suspend fun getLocale(): Locale = locale
+    }
 
     message?.edit {
         if (initialUpdate) {
@@ -62,11 +72,11 @@ suspend fun updateMessage(
         embed {
             val playingTrack = playingQueueTrack?.track
             if (playingTrack != null) {
-                addSong(::translate, playingTrack)
+                addSong(translatableContext, playingTrack)
 
                 if (playingQueueTrack is ChapterQueuedTrack) {
                     field {
-                        name = translate("music.music_channel.chapter")
+                        name = translate(MusicTranslations.Music.Music_channel.chapter)
                         value = playingQueueTrack.chapters[playingQueueTrack.chapterIndex].name
                     }
                 }
@@ -77,9 +87,9 @@ suspend fun updateMessage(
 
                 if (musicPlayer.queuedTracks.isNotEmpty()) {
                     field {
-                        name = translate("music.music_channel.next_song_at")
+                        name = translate(MusicTranslations.Music.Music_channel.next_song_at)
                         value = if (musicPlayer.player.paused) {
-                            translate("music.music_channel.paused")
+                            translate(MusicTranslations.Music.Music_channel.paused)
                         } else {
                             "<t:${nextSongAt.epochSeconds}:R>"
                         }
@@ -87,16 +97,16 @@ suspend fun updateMessage(
                 }
             }
 
-            title = translate("music.music_channel.queue")
+            title = translate(MusicTranslations.Music.Music_channel.queue)
             description = musicPlayer.queuedTracks.take(5).mapIndexed { index, track -> track to index }
                 .joinToString("\n") { (track, index) ->
                     (index + 1).toString() + ". " + track.format()
-                }.ifBlank { translate("music.music_channel.queue.empty") }
+                }.ifBlank { translate(MusicTranslations.Music.Music_channel.Queue.empty) }
 
-            musicPlayer.addAutoPlaySongs(::translate)
+            musicPlayer.addAutoPlaySongs(translatableContext)
 
             footer {
-                text = translate("music.music_channel.footer")
+                text = translate(MusicTranslations.Music.Music_channel.footer)
             }
         }
 

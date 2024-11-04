@@ -2,29 +2,30 @@
 
 package dev.schlaubi.mikmusic.player.queue
 
-import com.kotlindiscord.kord.extensions.commands.Arguments
-import com.kotlindiscord.kord.extensions.commands.CommandContext
-import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommandContext
-import com.kotlindiscord.kord.extensions.commands.application.slash.converters.ChoiceEnum
-import com.kotlindiscord.kord.extensions.commands.application.slash.converters.impl.optionalEnumChoice
-import com.kotlindiscord.kord.extensions.commands.converters.impl.defaultingBoolean
-import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalBoolean
-import com.kotlindiscord.kord.extensions.types.TranslatableContext
 import dev.arbjerg.lavalink.protocol.v4.Exception
 import dev.arbjerg.lavalink.protocol.v4.LoadResult
 import dev.kord.rest.builder.message.embed
+import dev.kordex.core.commands.Arguments
+import dev.kordex.core.commands.CommandContext
+import dev.kordex.core.commands.application.slash.EphemeralSlashCommandContext
+import dev.kordex.core.commands.application.slash.converters.ChoiceEnum
+import dev.kordex.core.commands.application.slash.converters.impl.optionalEnumChoice
+import dev.kordex.core.commands.converters.impl.defaultingBoolean
+import dev.kordex.core.commands.converters.impl.optionalBoolean
+import dev.kordex.core.i18n.EMPTY_KEY
+import dev.kordex.core.i18n.types.Key
+import dev.kordex.core.types.TranslatableContext
 import dev.schlaubi.lavakord.audio.Node
 import dev.schlaubi.lavakord.rest.loadItem
-import dev.schlaubi.mikbot.plugin.api.util.EditableMessageSender
-import dev.schlaubi.mikbot.plugin.api.util.IKnowWhatIAmDoing
-import dev.schlaubi.mikbot.plugin.api.util.MessageSender
-import dev.schlaubi.mikbot.plugin.api.util.SortedArguments
+import dev.schlaubi.mikbot.plugin.api.util.*
+import dev.schlaubi.mikbot.translations.MusicTranslations
 import dev.schlaubi.mikmusic.autocomplete.autoCompletedYouTubeQuery
 import dev.schlaubi.mikmusic.core.Config
 import dev.schlaubi.mikmusic.player.MusicPlayer
 import dev.schlaubi.mikmusic.player.SimpleQueuedTrack
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlin.time.Duration.Companion.milliseconds
+
 
 private val LOG = KotlinLogging.logger { }
 
@@ -42,45 +43,52 @@ interface QueueOptions : SchedulingOptions {
     val top: Boolean
     val searchProvider: SearchProvider?
 
-    enum class SearchProvider(override val readableName: String, val prefix: String) : ChoiceEnum {
-        YouTube("YouTube", "ytsearch:"),
-        SoundCloud("Soundcloud", "scsearch:")
+    enum class SearchProvider(override val readableName: Key, val prefix: String) : ChoiceEnum {
+        YouTube(MusicTranslations.Searchprovider.youtube, "ytsearch:"),
+        SoundCloud(MusicTranslations.Searchprovider.soundcloud, "scsearch:"),
+        Spotify(MusicTranslations.Searchprovider.spotify, "spsearch:"),
+        Deezer(MusicTranslations.Searchprovider.deezer, "dzsearch:"),
     }
 }
 
+@OptIn(IKnowWhatIAmDoing::class)
 abstract class SchedulingArguments : SortedArguments(), SchedulingOptions {
     override val shuffle: Boolean? by optionalBoolean {
-        name = "shuffle"
-        description = "scheduler.options.shuffle.description"
+        name = MusicTranslations.Scheduler.Options.Shuffle.name
+        description = MusicTranslations.Scheduler.Options.Shuffle.description
     }
 
     override val loop: Boolean? by optionalBoolean {
-        name = "loop"
-        description = "scheduler.options.loop.description"
+        name = MusicTranslations.Scheduler.Options.Loop.name
+        description = MusicTranslations.Scheduler.Options.Loop.description
     }
 
     override val loopQueue: Boolean? by optionalBoolean {
-        name = "loop-queue"
-        description = "scheduler.options.loop_queue.description"
+        name = MusicTranslations.Scheduler.Options.Loop_queue.name
+        description = MusicTranslations.Scheduler.Options.Loop_queue.description
     }
 }
 
 abstract class QueueArguments : SchedulingArguments(), QueueOptions {
-    override val query by autoCompletedYouTubeQuery("The query to play")
+    override val query by autoCompletedYouTubeQuery(
+        MusicTranslations.Queue.Options.Query.name,
+        MusicTranslations.Queue.Options.Query.description
+    )
     override val force by defaultingBoolean {
-        name = "force"
-        description = "queue.options.force.description"
+        name = MusicTranslations.Queue.Options.Force.name
+        description = MusicTranslations.Queue.Options.Force.description
+
         defaultValue = false
     }
     override val top by defaultingBoolean {
-        name = "top"
-        description = "queue.options.top.description"
+        name = MusicTranslations.Queue.Options.Top.name
+        description = MusicTranslations.Queue.Options.Top.description
         defaultValue = false
     }
     override val searchProvider by optionalEnumChoice<QueueOptions.SearchProvider> {
-        name = "search-provider"
-        description = "queue.options.search_provider.description"
-        typeName = "SearchProvider"
+        name = MusicTranslations.Queue.Options.Search_provider.name
+        description = MusicTranslations.Queue.Options.Search_provider.description
+        typeName = EMPTY_KEY
     }
 }
 
@@ -134,7 +142,7 @@ internal suspend fun CommandContext.findTracks(
 internal suspend fun TranslatableContext.takeFirstMatch(
     node: Node,
     query: String,
-    respond: MessageSender
+    respond: MessageSender,
 ): QueueSearchResult? = findTracks(node, SearchQuery(query), respond) {
     it.data.tracks.firstOrNull()?.let(::SingleTrack)
 }
@@ -186,10 +194,9 @@ suspend fun CommandContext.queueTracks(
 ) {
     val searchResult = findTracks(musicPlayer.node, search, arguments, respond, editingPaginator) ?: return
 
-    val title = if (musicPlayer.nextSongIsFirst) translate("music.queue.now_playing", "music") else translate(
-        "music.queue.queued",
-        "music",
-        arrayOf(with(searchResult) { type() })
+    val title = if (musicPlayer.nextSongIsFirst) translate(MusicTranslations.Music.Queue.now_playing) else translate(
+        MusicTranslations.Music.Queue.queued,
+        with(searchResult) { type() }
     )
 
     respond {
@@ -205,15 +212,11 @@ suspend fun CommandContext.queueTracks(
                 }
 
                 val item = if (estimatedIn == 0.milliseconds) {
-                    translate("music.general.now")
+                    translate(MusicTranslations.Music.General.now)
                 } else {
                     musicPlayer.remainingQueueDuration.toString()
                 }
-                text = translate(
-                    "music.plays_in.estimated",
-                    "music",
-                    arrayOf(item)
-                )
+                text = translate(MusicTranslations.Music.Plays_in.estimated, item)
             }
         }
 
@@ -228,7 +231,7 @@ suspend fun CommandContext.queueTracks(
 
 private suspend fun TranslatableContext.noMatches(respond: MessageSender) {
     respond {
-        content = translate("music.queue.no_matches")
+        content = translate(MusicTranslations.Music.Queue.no_matches)
     }
 }
 
@@ -240,7 +243,7 @@ private suspend fun TranslatableContext.handleError(
     when (error.severity) {
         Exception.Severity.COMMON -> {
             respond {
-                content = translate("music.queue.load_failed.common", arrayOf(error.message))
+                content = translate(MusicTranslations.Music.Queue.Load_failed.common, error.message)
             }
         }
 
@@ -248,7 +251,7 @@ private suspend fun TranslatableContext.handleError(
             LOG.error(FriendlyException(error.severity, error.message)) { "An error occurred whilst queueing a song" }
 
             respond {
-                content = translate("music.queue.load_failed.uncommon")
+                content = translate(MusicTranslations.Music.Queue.Load_failed.uncommon)
             }
         }
     }

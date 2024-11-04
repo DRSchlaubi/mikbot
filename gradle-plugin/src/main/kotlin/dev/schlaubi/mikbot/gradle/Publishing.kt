@@ -1,5 +1,6 @@
 package dev.schlaubi.mikbot.gradle
 
+import dev.schlaubi.mikbot.gradle.extension.mikbotPluginExtension
 import dev.schlaubi.mikbot.gradle.extension.pluginId
 import dev.schlaubi.mikbot.gradle.extension.pluginPublishingExtension
 import org.gradle.api.Project
@@ -12,20 +13,20 @@ import java.nio.file.Files
 
 internal fun Project.createPublishingTasks(assemblePluginTask: TaskProvider<Zip>) {
     tasks.apply {
+        val pluginFile = assemblePluginTask.get().archiveFileName.get()
+        val pluginExtension = project.mikbotPluginExtension
+        val pluginPublishingExtension = project.pluginPublishingExtension
+
         val copyFilesIntoRepo = register<Copy>("copyFilesIntoRepo") {
             group = PublishingPlugin.PUBLISH_TASK_GROUP
 
             from(assemblePluginTask)
             include("*.zip")
             // providing version manually, as of weird evaluation errors
-            into(
-                pluginPublishingExtension.targetDirectory.asPathOrElse(project.file("ci-repo").toPath())
-                    .resolve("${project.pluginId}/$version")
-            )
+            into(pluginPublishingExtension.targetDirectory.get().asPath().resolve("${pluginExtension.pluginId.get()}/$version"))
 
             eachFile {
-                val parent = pluginPublishingExtension.currentRepository.getOrElse(pluginPublishingExtension.targetDirectory.get())
-                    .asPath()
+                val parent = pluginPublishingExtension.currentRepository.get().asPath()
 
                 val destinationPath = destinationDir.toPath()
                 val probableExistingFile =
@@ -34,8 +35,7 @@ internal fun Project.createPublishingTasks(assemblePluginTask: TaskProvider<Zip>
                             destinationPath.nameCount - 2,
                             destinationPath.nameCount
                         )
-                    )
-                        .resolve(assemblePluginTask.get().archiveFileName.get())
+                    ).resolve(pluginFile)
 
                 if (Files.exists(probableExistingFile)) {
                     exclude() // exclude existing files, so checksums don't change
@@ -49,7 +49,7 @@ internal fun Project.createPublishingTasks(assemblePluginTask: TaskProvider<Zip>
         }
 
         afterEvaluate {
-            val makeIndex = register<MakeRepositoryIndexTask>(/* name = */ "makeRepositoryIndex") {
+            val makeIndex = register<MakeRepositoryIndexTask>("makeRepositoryIndex") {
                 group = PublishingPlugin.PUBLISH_TASK_GROUP
                 dependsOn(assemblePluginTask)
             }

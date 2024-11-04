@@ -1,8 +1,9 @@
 package dev.schlaubi.mikbot.plugin.api
 
-import com.kotlindiscord.kord.extensions.ExtensibleBot
-import com.kotlindiscord.kord.extensions.builders.ExtensibleBotBuilder
-import com.kotlindiscord.kord.extensions.extensions.Extension
+import dev.kordex.core.ExtensibleBot
+import dev.kordex.core.builders.ExtensibleBotBuilder
+import dev.kordex.core.builders.ExtensionsBuilder
+import dev.kordex.core.extensions.Extension
 import dev.schlaubi.mikbot.plugin.api.io.Database
 import dev.schlaubi.mikbot.plugin.api.module.MikBotModule
 import kotlinx.coroutines.CoroutineScope
@@ -39,6 +40,7 @@ public abstract class Plugin : Plugin {
      * @param wrapper the [PluginWrapper] provided by the plugin engine
      */
     @Deprecated("Deprecated by PF4J (Use Plugin#Plugin(PluginContext) instead")
+    @Suppress("DEPRECATION")
     public constructor(wrapper: PF4JPluginWrapper) : super(wrapper) {
         context = null
     }
@@ -84,7 +86,7 @@ public abstract class Plugin : Plugin {
     /**
      * Add new extensions.
      */
-    public open fun ExtensibleBotBuilder.ExtensionsBuilder.addExtensions(): Unit = Unit
+    public open fun ExtensionsBuilder.addExtensions(): Unit = Unit
 
     /**
      * This is being executed directly after the bot got started.
@@ -96,6 +98,6 @@ public abstract class Plugin : Plugin {
      *
      * @see MikBotModule
      */
-    public fun <T : MikBotModule> ExtensibleBotBuilder.ExtensionsBuilder.add(builder: (PluginContext) -> T): Unit =
+    public fun <T : MikBotModule> ExtensionsBuilder.add(builder: (PluginContext) -> T): Unit =
         add { builder(context ?: error("Please upgrade this plugin to the new context")) }
 }

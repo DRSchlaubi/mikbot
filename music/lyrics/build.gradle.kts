@@ -1,6 +1,3 @@
-import dev.schlaubi.mikbot.gradle.GenerateDefaultTranslationBundleTask
-import java.util.*
-
 plugins {
     `mikbot-module`
     com.google.devtools.ksp
@@ -17,19 +14,10 @@ dependencies {
 mikbotPlugin {
     pluginId = "music-lyrics"
     description = "Plugin providing lyrics for the music plugin"
+    bundle = "lyrics"
 }
 
 fun DependencyHandlerScope.ktorDependency(dependency: ProviderConvertible<*>) = ktorDependency(dependency.asProvider())
 fun DependencyHandlerScope.ktorDependency(dependency: Provider<*>) = implementation(dependency) {
     exclude(module = "ktor-server-core")
-}
-
-tasks {
-    val generateDefaultResourceBundle by registering(GenerateDefaultTranslationBundleTask::class) {
-        defaultLocale = Locale.Builder().setLanguage("en").setRegion("GB").build()
-    }
-
-    classes {
-        dependsOn(generateDefaultResourceBundle)
-    }
 }

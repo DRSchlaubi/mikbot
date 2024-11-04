@@ -1,18 +1,20 @@
 package dev.schlaubi.mikmusic.playlist.commands
 
-import com.kotlindiscord.kord.extensions.commands.converters.impl.string
+import dev.kordex.core.commands.converters.impl.string
+import dev.schlaubi.mikbot.plugin.api.util.translate
+import dev.schlaubi.mikbot.translations.MusicTranslations
 import dev.schlaubi.mikmusic.playlist.PlaylistDatabase
 
 class PlaylistRenameArguments : PlaylistArguments() {
     val newName by string {
-        name = "new_name"
-        description = "commands.playlist.rename.arguments.new_name.description"
+        name = MusicTranslations.Commands.Playlist.Rename.Arguments.New_name.name
+        description = MusicTranslations.Commands.Playlist.Rename.Arguments.New_name.description
     }
 }
 
 fun PlaylistModule.renameCommand() = ephemeralSubCommand(::PlaylistRenameArguments) {
-    name = "rename"
-    description = "commands.rename.description"
+    name = MusicTranslations.Commands.Playlist.Rename.name
+    description = MusicTranslations.Commands.Playlist.Rename.description
 
     action {
         checkPermissions { playlist ->
@@ -20,7 +22,7 @@ fun PlaylistModule.renameCommand() = ephemeralSubCommand(::PlaylistRenameArgumen
                 PlaylistDatabase.collection.save(playlist.copy(name = arguments.newName))
 
                 respond {
-                    content = translate("commands.playlist.rename.renamed", arrayOf(playlist.name, arguments.newName))
+                    content = translate(MusicTranslations.Commands.Playlist.Rename.renamed, playlist.name, arguments.newName)
                 }
             }
         }

@@ -1,14 +1,16 @@
 package dev.schlaubi.mikbot.core.gdpr
 
 import dev.schlaubi.mikbot.plugin.api.util.confirmation
+import dev.schlaubi.mikbot.plugin.api.util.translate
+import dev.schlaubi.mikbot.translations.GdprTranslations
 
 fun GDPRModule.deleteCommand() = ephemeralSubCommand {
-    name = "delete"
-    description = "commands.gdpr.delete.name"
+    name = GdprTranslations.Commands.Gdpr.Delete.name
+    description = GdprTranslations.Commands.Gdpr.Delete.description
 
     action {
         val (confirmed) = confirmation {
-            content = translate("commands.gdpr.delete.confirm")
+            content = translate(GdprTranslations.Commands.Gdpr.Delete.confirm)
         }
 
         if (!confirmed) {
@@ -22,7 +24,7 @@ fun GDPRModule.deleteCommand() = ephemeralSubCommand {
         }
 
         respond {
-            content = translate("commands.gdpr.delete.success")
+            content = translate(GdprTranslations.Commands.Gdpr.Delete.success)
         }
     }
 }

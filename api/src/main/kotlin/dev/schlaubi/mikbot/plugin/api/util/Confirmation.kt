@@ -1,14 +1,10 @@
 package dev.schlaubi.mikbot.plugin.api.util
 
-import com.kotlindiscord.kord.extensions.commands.CommandContext
-import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommandContext
-import com.kotlindiscord.kord.extensions.commands.application.slash.PublicSlashCommandContext
-import com.kotlindiscord.kord.extensions.components.components
-import com.kotlindiscord.kord.extensions.modules.unsafe.annotations.UnsafeAPI
-import com.kotlindiscord.kord.extensions.modules.unsafe.contexts.UnsafeSlashCommandContext
-import com.kotlindiscord.kord.extensions.modules.unsafe.types.respondEphemeral
-import com.kotlindiscord.kord.extensions.modules.unsafe.types.respondPublic
-import com.kotlindiscord.kord.extensions.utils.waitFor
+import dev.kordex.core.commands.CommandContext
+import dev.kordex.core.commands.application.slash.EphemeralSlashCommandContext
+import dev.kordex.core.commands.application.slash.PublicSlashCommandContext
+import dev.kordex.core.components.components
+import dev.kordex.modules.dev.unsafe.annotations.UnsafeAPI
 import dev.kord.common.entity.ButtonStyle
 import dev.kord.core.behavior.interaction.followup.FollowupMessageBehavior
 import dev.kord.core.behavior.interaction.followup.edit
@@ -17,6 +13,11 @@ import dev.kord.core.entity.interaction.followup.EphemeralFollowupMessage
 import dev.kord.core.entity.interaction.followup.PublicFollowupMessage
 import dev.kord.core.event.interaction.InteractionCreateEvent
 import dev.kord.rest.builder.message.actionRow
+import dev.kordex.core.i18n.withContext
+import dev.kordex.core.types.TranslatableContext
+import dev.kordex.core.utils.waitFor
+import dev.kordex.modules.dev.unsafe.contexts.UnsafeCommandSlashCommandContext
+import dev.schlaubi.mikbot.plugin.api.MikBotTranslations
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
@@ -73,7 +74,7 @@ public suspend fun PublicSlashCommandContext<*, *>.confirmation(
  * @return whether the user confirmed the form or not
  */
 @UnsafeAPI
-public suspend fun UnsafeSlashCommandContext<*, *>.ephemeralConfirmation(
+public suspend fun UnsafeCommandSlashCommandContext<*, *>.ephemeralConfirmation(
     yesWord: String? = null,
     noWord: String? = null,
     timeout: Duration = 30.seconds,
@@ -92,7 +93,7 @@ public suspend fun UnsafeSlashCommandContext<*, *>.ephemeralConfirmation(
  * @return whether the user confirmed the form or not
  */
 @UnsafeAPI
-public suspend fun UnsafeSlashCommandContext<*, *>.publicConfirmation(
+public suspend fun UnsafeCommandSlashCommandContext<*, *>.publicConfirmation(
     yesWord: String? = null,
     noWord: String? = null,
     timeout: Duration = 30.seconds,
@@ -101,7 +102,7 @@ public suspend fun UnsafeSlashCommandContext<*, *>.publicConfirmation(
 ): Confirmation = unsafeConfirmation(yesWord, noWord, messageBuilder, timeout, acknowledge) { respondPublic { it() } }
 
 @OptIn(UnsafeAPI::class)
-private suspend fun UnsafeSlashCommandContext<*, *>.unsafeConfirmation(
+private suspend fun UnsafeCommandSlashCommandContext<*, *>.unsafeConfirmation(
     yesWord: String?,
     noWord: String?,
     messageBuilder: MessageBuilder,
@@ -121,7 +122,7 @@ private suspend fun CommandContext.confirmation(
     sendMessage,
     timeout,
     messageBuilder,
-    translate = ::translate,
+    translatableContext = this,
     yesWord = yesWord,
     noWord = noWord,
     acknowledge = acknowledge
@@ -135,7 +136,7 @@ public suspend fun confirmation(
     timeout: Duration? = 30.seconds,
     messageBuilder: MessageBuilder,
     hasNoOption: Boolean = true,
-    translate: Translator,
+    translatableContext: TranslatableContext,
     yesWord: String? = null,
     noWord: String? = null,
     acknowledge: Boolean = true,
@@ -146,12 +147,16 @@ public suspend fun confirmation(
         components {
             actionRow {
                 interactionButton(ButtonStyle.Success, yes) {
-                    label = yesWord ?: translate("general.yes", "general")
+                    label = yesWord ?: MikBotTranslations.General.yes
+                        .withContext(translatableContext)
+                        .translate()
                 }
 
                 if (hasNoOption) {
                     interactionButton(ButtonStyle.Danger, no) {
-                        label = noWord ?: translate("general.no", "general")
+                        label = noWord ?: MikBotTranslations.General.no
+                            .withContext(translatableContext)
+                            .translate()
                     }
                 }
             }

@@ -1,6 +1,6 @@
 package dev.schlaubi.mikbot.core.health.check
 
-import com.kotlindiscord.kord.extensions.builders.ExtensibleBotBuilder
+import dev.kordex.core.builders.ExtensionsBuilder
 import org.pf4j.ExtensionPoint
 
 interface HealthCheck : ExtensionPoint {
@@ -14,5 +14,5 @@ interface HealthCheck : ExtensionPoint {
     /**
      * Register an optional extension.
      */
-    fun ExtensibleBotBuilder.ExtensionsBuilder.addExtensions() = Unit
+    fun ExtensionsBuilder.addExtensions() = Unit
 }

@@ -16,7 +16,10 @@ subprojects {
 mikbotPlugin {
     license = "MIT License"
     provider = "Mikbot Official Plugins"
-    defaultLocale = Locale.Builder().setLanguageTag("en-GB").build()
+
+    i18n {
+        classPackage = "dev.schlaubi.mikbot.translations"
+    }
 }
 
 pluginPublishing {

@@ -6,6 +6,7 @@ import dev.schlaubi.mikbot.gradle.extension.pluginPublishingExtension
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.bundling.Zip
+import org.gradle.kotlin.dsl.getByName
 import java.nio.file.Files
 import java.util.*
 import kotlin.io.path.exists
@@ -16,9 +17,13 @@ abstract class MakeRepositoryIndexTask : DefaultTask() {
         outputs.dir(project.pluginPublishingExtension.targetDirectory)
     }
 
+    private val publishingExtension = project.pluginPublishingExtension
+    private val pluginArchive = project.tasks.getByName<Zip>("assemblePlugin").archiveFile
+    private val extension = project.mikbotPluginExtension
+    private val projectName = project.name
+
     @TaskAction
     fun upload() {
-        val publishingExtension = project.pluginPublishingExtension
         val pluginsPath = publishingExtension.targetDirectory.asPath().resolve("plugins.json")
         val plugins = if (pluginsPath.exists()) {
             readPluginsJson(pluginsPath)
@@ -26,22 +31,19 @@ abstract class MakeRepositoryIndexTask : DefaultTask() {
             emptyList()
         }
 
-        val pluginTask = project.tasks.getByName("assemblePlugin") as Zip
-
-        val extension = project.mikbotPluginExtension
         val newPlugins = plugins.addPlugins(
             PluginInfo(
-                project.pluginId,
-                project.name,
+                extension.pluginId.get(),
+                projectName,
                 extension.description.getOrElse(""),
                 publishingExtension.projectUrl.get(),
                 listOf(
                     PluginRelease(
-                        (project.version as String).substringBefore("-SNAPSHOT"),
+                        extension.version.get().substringBefore("-SNAPSHOT"),
                         Date(),
-                        extension.requires.getOrElse(project.project(":").version as String),
-                        publishingExtension.repositoryUrl.get() + "/" + project.pluginFilePath,
-                        pluginTask.archiveFile.get().asFile.toPath().sha512Checksum()
+                        extension.requires.get(),
+                        publishingExtension.repositoryUrl.get() + "/" + extension.pluginFilePath,
+                        pluginArchive.get().asFile.toPath().sha512Checksum()
                     )
                 )
             )

@@ -144,3 +144,5 @@ plugins/
 **/bin/main
 !buildSrc/src/main/kotlin/**
 main-dependency-export.txt
+# Kordex Data Collection directory
+data/kordex

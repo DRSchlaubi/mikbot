@@ -12,6 +12,5 @@ class MusicSettingsExtension : SettingsExtensionPoint {
         fixMusicChannel()
         leaveTimeoutCommand()
         sponsorBlockCommand()
-        optionsCommand()
     }
 }

@@ -1,11 +1,15 @@
 package dev.schlaubi.mikbot.core.health
 
-import com.kotlindiscord.kord.extensions.builders.ExtensibleBotBuilder
-import com.kotlindiscord.kord.extensions.utils.loadModule
+import dev.kordex.core.builders.ExtensibleBotBuilder
+import dev.kordex.core.builders.ExtensionsBuilder
+import dev.kordex.core.utils.loadModule
 import dev.schlaubi.mikbot.core.health.check.HealthCheck
 import dev.schlaubi.mikbot.core.health.ratelimit.setupDistributedRateLimiter
-import dev.schlaubi.mikbot.plugin.api.*
+import dev.schlaubi.mikbot.plugin.api.Plugin
+import dev.schlaubi.mikbot.plugin.api.PluginContext
+import dev.schlaubi.mikbot.plugin.api.PluginMain
 import dev.schlaubi.mikbot.plugin.api.config.Environment
+import dev.schlaubi.mikbot.plugin.api.getExtensions
 import mu.KotlinLogging
 import dev.schlaubi.mikbot.plugin.api.config.Config as BotConfig
 
@@ -19,7 +23,7 @@ class KubernetesPlugin(context: PluginContext) : Plugin(context) {
         logger.info { "Registered ${healthChecks.size} health checks available at /healthz" }
     }
 
-    override fun ExtensibleBotBuilder.ExtensionsBuilder.addExtensions() {
+    override fun ExtensionsBuilder.addExtensions() {
         if (Config.ENABLE_SCALING) {
             add(::RebalancerExtension)
         }

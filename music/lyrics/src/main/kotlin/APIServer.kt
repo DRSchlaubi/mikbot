@@ -1,7 +1,7 @@
 package dev.schlaubi.mikmusic.lyrics
 
-import com.kotlindiscord.kord.extensions.ExtensibleBot
-import com.kotlindiscord.kord.extensions.koin.KordExKoinComponent
+import dev.kordex.core.ExtensibleBot
+import dev.kordex.core.koin.KordExKoinComponent
 import dev.kord.cache.api.query
 import dev.kord.common.annotation.KordExperimental
 import dev.kord.common.annotation.KordUnsafe
@@ -51,6 +51,7 @@ import dev.schlaubi.mikbot.plugin.api.config.Config as BotConfig
 private val PLAYER = AttributeKey<MusicPlayer>("MUSIC_PLAYER")
 private val authKeys = mutableMapOf<String, Snowflake>()
 
+
 fun requestToken(userId: Snowflake): String {
     val key = generateNonce()
     authKeys[key] = userId
@@ -68,6 +69,10 @@ class APIServer : KtorExtensionPoint, KordExKoinComponent {
             val header = request.authorization() ?: parameters["api_key"] ?: unauthorized()
             return authKeys[header] ?: unauthorized()
         }
+
+    private val playerFinder = createRouteScopedPlugin("PlayerFinder") {
+        onCall { it.attributes.put(PLAYER, it.userId.findPlayer())}
+    }
 
     @OptIn(KordUnsafe::class, KordExperimental::class)
     private suspend fun Snowflake.findPlayer(): MusicPlayer {
@@ -110,10 +115,7 @@ class APIServer : KtorExtensionPoint, KordExKoinComponent {
                 }
 
                 route("events") {
-                    intercept(ApplicationCallPipeline.Plugins) {
-                        call.attributes.put(PLAYER, call.userId.findPlayer())
-                        proceed()
-                    }
+                    install(playerFinder)
 
                     webSocket {
                         val player = call.attributes[PLAYER].player

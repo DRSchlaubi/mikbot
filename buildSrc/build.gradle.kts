@@ -9,6 +9,8 @@ plugins {
 repositories {
     mavenCentral()
     gradlePluginPortal()
+
+    maven("https://releases-repo.kordex.dev")
 }
 
 dependencies {

@@ -1,8 +1,11 @@
 package dev.schlaubi.mikmusic.playlist.commands
 
-import com.kotlindiscord.kord.extensions.commands.application.slash.converters.impl.optionalEnumChoice
-import com.kotlindiscord.kord.extensions.commands.converters.impl.defaultingBoolean
+import dev.kordex.core.commands.application.slash.converters.impl.optionalEnumChoice
+import dev.kordex.core.commands.converters.impl.defaultingBoolean
 import dev.kord.rest.builder.message.embed
+import dev.kordex.core.i18n.EMPTY_KEY
+import dev.schlaubi.mikbot.plugin.api.util.translate
+import dev.schlaubi.mikbot.translations.MusicTranslations
 import dev.schlaubi.mikmusic.autocomplete.autoCompletedYouTubeQuery
 import dev.schlaubi.mikmusic.player.queue.QueueOptions
 import dev.schlaubi.mikmusic.player.queue.findTracks
@@ -10,15 +13,15 @@ import dev.schlaubi.mikmusic.playlist.PlaylistDatabase
 import dev.schlaubi.mikmusic.util.mapToEncoded
 
 class PlaylistAddArguments : PlaylistArguments(), QueueOptions {
-    override val query by autoCompletedYouTubeQuery("commands.playlist.add.arguments.query.description")
+    override val query by autoCompletedYouTubeQuery(MusicTranslations.Commands.Playlist.Add.Arguments.Query.name, MusicTranslations.Commands.Playlist.Add.Arguments.Query.description)
     override val searchProvider: QueueOptions.SearchProvider? by optionalEnumChoice<QueueOptions.SearchProvider> {
-        name = "search-provider"
-        description = "The search provider to use"
-        typeName = "SearchProvider"
+        name = MusicTranslations.Commands.Playlist.Add.Arguments.Search_provider.name
+        description = MusicTranslations.Commands.Playlist.Add.Arguments.Search_provider.description
+        typeName = EMPTY_KEY
     }
     val search by defaultingBoolean {
-        name = "search"
-        description = "commands.playlist.add.arguments.search.description"
+        name = MusicTranslations.Commands.Playlist.Add.Arguments.Search.name
+        description = MusicTranslations.Commands.Playlist.Add.Arguments.Search.description
         defaultValue = false
     }
     override val top: Boolean = false
@@ -30,8 +33,8 @@ class PlaylistAddArguments : PlaylistArguments(), QueueOptions {
 }
 
 fun PlaylistModule.addCommand() = ephemeralSubCommand(::PlaylistAddArguments) {
-    name = "add"
-    description = "commands.playlist.add.description"
+    name = MusicTranslations.Commands.Playlist.Add.name
+    description = MusicTranslations.Commands.Playlist.Add.description
 
     action {
         checkPermissions { playlist ->
@@ -42,7 +45,7 @@ fun PlaylistModule.addCommand() = ephemeralSubCommand(::PlaylistAddArguments) {
 
             respond {
                 embed {
-                    title = translate("commands.playlist.add.added", arrayOf(tracks.size.toString()))
+                    title = translate(MusicTranslations.Commands.Playlist.Add.added, tracks.size.toString())
 
                     with(result) {
                         addInfo(musicPlayer.link, this@action)

@@ -1,8 +1,10 @@
 package dev.schlaubi.mikmusic.commands
 
-import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
+import dev.kordex.core.extensions.ephemeralSlashCommand
 import dev.kord.rest.builder.message.embed
 import dev.schlaubi.mikbot.plugin.api.util.forList
+import dev.schlaubi.mikbot.plugin.api.util.translate
+import dev.schlaubi.mikbot.translations.MusicTranslations
 import dev.schlaubi.mikmusic.checks.anyMusicPlaying
 import dev.schlaubi.mikmusic.core.MusicModule
 import dev.schlaubi.mikmusic.core.musicControlContexts
@@ -12,8 +14,8 @@ import dev.schlaubi.mikmusic.util.format
 import kotlin.time.Duration.Companion.minutes
 
 suspend fun MusicModule.queueCommand() = ephemeralSlashCommand {
-    name = "queue"
-    description = "commands.queue.description"
+    name = MusicTranslations.Commands.Queue.name
+    description = MusicTranslations.Commands.Queue.description
     musicControlContexts()
 
     check {
@@ -26,13 +28,13 @@ suspend fun MusicModule.queueCommand() = ephemeralSlashCommand {
             if (track != null) {
                 respond {
                     embed {
-                        musicPlayer.addAutoPlaySongs(::translate)
-                        description = translate("commands.queue.now_playing", arrayOf(track.format()))
+                        musicPlayer.addAutoPlaySongs(this@action)
+                        description = translate(MusicTranslations.Commands.Queue.now_playing, track.format())
                     }
                 }
             } else {
                 respond {
-                    content = translate("commands.queue.no_songs")
+                    content = translate(MusicTranslations.Commands.Queue.no_songs)
                 }
             }
             return@action
@@ -42,24 +44,24 @@ suspend fun MusicModule.queueCommand() = ephemeralSlashCommand {
             timeoutSeconds = 10.minutes.inWholeSeconds
 
             forList(user, musicPlayer.queuedTracks, QueuedTrack::format, { current, total ->
-                translate("music.queue.info.title", arrayOf(current.toString(), total.toString()))
+                translate(MusicTranslations.Music.Queue.Info.title, current.toString(), total.toString())
             }) {
                 val playingTrack = musicPlayer.playingTrack
                 if (playingTrack != null) {
                     field {
-                        name = translate("music.queue.now_playing")
+                        name = translate(MusicTranslations.Music.Queue.now_playing)
                         value = playingTrack.format(musicPlayer.repeat)
                     }
                 }
 
                 if (musicPlayer.shuffle || musicPlayer.loopQueue) {
                     field {
-                        name = translate("music.queueTracks.order")
+                        name = translate(MusicTranslations.Music.QueueTracks.order)
                         value = if (musicPlayer.shuffle) "\uD83D\uDD00" else "\uD83D\uDD01"
                     }
                 }
 
-                musicPlayer.addAutoPlaySongs(::translate)
+                musicPlayer.addAutoPlaySongs(this@action)
             }
         }.send()
     }

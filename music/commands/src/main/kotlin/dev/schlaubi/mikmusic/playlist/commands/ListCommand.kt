@@ -1,8 +1,10 @@
 package dev.schlaubi.mikmusic.playlist.commands
 
-import com.kotlindiscord.kord.extensions.commands.Arguments
-import com.kotlindiscord.kord.extensions.commands.converters.impl.defaultingBoolean
+import dev.kordex.core.commands.Arguments
+import dev.kordex.core.commands.converters.impl.defaultingBoolean
 import dev.schlaubi.mikbot.plugin.api.util.forList
+import dev.schlaubi.mikbot.plugin.api.util.translate
+import dev.schlaubi.mikbot.translations.MusicTranslations
 import dev.schlaubi.mikmusic.playlist.Playlist
 import dev.schlaubi.mikmusic.playlist.PlaylistDatabase
 import org.litote.kmongo.eq
@@ -10,15 +12,15 @@ import org.litote.kmongo.or
 
 class PlayListListArguments : Arguments() {
     val onlyMine by defaultingBoolean {
-        name = "only_mine"
-        description = "commands.playlist.list.arguments.only_mine.description"
+        name = MusicTranslations.Commands.Playlist.List.Arguments.Only_mine.name
+        description = MusicTranslations.Commands.Playlist.List.Arguments.Only_mine.description
         defaultValue = false
     }
 }
 
 fun PlaylistModule.listCommand() = ephemeralSubCommand(::PlayListListArguments) {
-    name = "list"
-    description = "commands.playlist.list.description"
+    name = MusicTranslations.Commands.Playlist.List.name
+    description = MusicTranslations.Commands.Playlist.List.description
 
     action {
         val myPlaylists = Playlist::authorId eq user.id
@@ -32,20 +34,20 @@ fun PlaylistModule.listCommand() = ephemeralSubCommand(::PlayListListArguments) 
 
         if (playlistCount == 0L) {
             respond {
-                content = translate("commands.playlist.list.empty")
+                content = translate(MusicTranslations.Commands.Playlist.List.empty)
             }
             return@action
         }
         val playlists = PlaylistDatabase.collection.find(filter).toList()
 
-        val tracks = translate("music.general.tracks")
+        val tracks = translate(MusicTranslations.Music.General.tracks)
         editingPaginator {
             forList(
                 user, playlists, { "${it.name} - ${it.songs.size} $tracks by <@${it.authorId}>" },
                 { current, total ->
                     translate(
-                        "commands.playlist.list.paginator.title",
-                        arrayOf(current.toString(), total.toString())
+                        MusicTranslations.Commands.Playlist.List.Paginator.title,
+                        current.toString(), total.toString()
                     )
                 }
             )

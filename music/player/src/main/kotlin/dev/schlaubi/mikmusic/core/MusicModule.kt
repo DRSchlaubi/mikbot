@@ -1,20 +1,21 @@
 package dev.schlaubi.mikmusic.core
 
-import com.kotlindiscord.kord.extensions.annotations.ExtensionDSL
-import com.kotlindiscord.kord.extensions.commands.Arguments
-import com.kotlindiscord.kord.extensions.commands.CommandContext
-import com.kotlindiscord.kord.extensions.commands.application.ApplicationCommand
-import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommand
-import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommandContext
-import com.kotlindiscord.kord.extensions.extensions.Extension
-import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
-import com.kotlindiscord.kord.extensions.extensions.event
+import dev.kordex.core.annotations.ExtensionDSL
+import dev.kordex.core.commands.Arguments
+import dev.kordex.core.commands.CommandContext
+import dev.kordex.core.commands.application.ApplicationCommand
+import dev.kordex.core.commands.application.slash.EphemeralSlashCommand
+import dev.kordex.core.commands.application.slash.EphemeralSlashCommandContext
+import dev.kordex.core.extensions.Extension
+import dev.kordex.core.extensions.ephemeralSlashCommand
+import dev.kordex.core.extensions.event
 import dev.kord.common.entity.ApplicationIntegrationType
 import dev.kord.common.entity.InteractionContextType
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.GuildBehavior
 import dev.kord.core.event.gateway.ReadyEvent
 import dev.kord.core.event.interaction.InteractionCreateEvent
+import dev.kordex.core.types.TranslatableContext
 import dev.schlaubi.lavakord.audio.Link
 import dev.schlaubi.lavakord.audio.player.Player
 import dev.schlaubi.lavakord.kord.connectAudio
@@ -24,6 +25,7 @@ import dev.schlaubi.mikbot.plugin.api.io.Database
 import dev.schlaubi.mikbot.plugin.api.io.getCollection
 import dev.schlaubi.mikbot.plugin.api.module.MikBotModule
 import dev.schlaubi.mikbot.plugin.api.util.*
+import dev.schlaubi.mikbot.translations.MusicTranslations
 import dev.schlaubi.mikmusic.checks.musicControlCheck
 import dev.schlaubi.mikmusic.core.audio.LavalinkManager
 import dev.schlaubi.mikmusic.player.MusicPlayer
@@ -47,7 +49,6 @@ class MusicModule(context: PluginContext) : MikBotModule(context) {
     private val lavalink: LavalinkManager by extension()
     private val musicPlayers: MutableMap<Snowflake, MusicPlayer> = mutableMapOf()
     override val name: String = "music"
-    override val bundle: String = "music"
     override val allowApplicationCommandInDMs: Boolean = false
 
     val database: Database by inject()
@@ -96,12 +97,11 @@ class MusicModule(context: PluginContext) : MikBotModule(context) {
         vararg properties: KMutableProperty1<MusicPlayer, Boolean>,
         callback: suspend (newValue: Boolean) -> Unit,
     ) = checkOtherSchedulerOptions(
-        musicPlayer, ::translate,
+        musicPlayer, this,
         { confirmation { it() } },
         { edit { it() } },
         myProperty,
         *properties,
-        translatorGroup = "music",
         callback = callback
     )
 
@@ -173,20 +173,19 @@ fun ApplicationCommand<*>.musicControlContexts() {
  */
 suspend fun checkOtherSchedulerOptions(
     musicPlayer: MusicPlayer,
-    translate: Translator,
+    translator: TranslatableContext,
     confirmation: ConfirmationSender,
     edit: MessageEditor,
     myProperty: KMutableProperty1<MusicPlayer, Boolean>,
     vararg properties: KMutableProperty1<MusicPlayer, Boolean>,
-    translatorGroup: String,
     callback: suspend (newValue: Boolean) -> Unit,
 ) {
     if (properties.any { it.get(musicPlayer) }) {
         val (confirmed) = confirmation {
-            content = translate("music.multiple_scheduler_options", translatorGroup)
+            content = translator.translate(MusicTranslations.Music.multiple_scheduler_options)
         }
         if (!confirmed) {
-            edit { content = translate("music.general.aborted", translatorGroup) }
+            edit { content = translator.translate(MusicTranslations.Music.General.aborted) }
             return
         }
         properties.forEach {

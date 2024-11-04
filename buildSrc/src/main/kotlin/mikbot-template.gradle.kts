@@ -1,5 +1,7 @@
+import com.github.gmazzo.gradle.plugins.BuildConfigField
+
 plugins {
-    com.github.gmazzo.buildconfig
+    com.github.gmazzo.buildconfig apply false
 }
 
 abstract class TemplateExtension {
@@ -12,14 +14,13 @@ abstract class TemplateExtension {
 
 extensions.create<TemplateExtension>("template")
 
-afterEvaluate {
-    val extension = project.extensions.findByName("template") as TemplateExtension
+val extension = project.extensions.findByName("template") as TemplateExtension
 
-    buildConfig {
-        packageName(extension.packageName.get())
-        className(extension.className.get())
-        buildConfigField("String", "VERSION", "\"${project.version}\"")
-        buildConfigField("String", "BRANCH", "\"${project.getGitBranch()}\"")
-        buildConfigField("String", "COMMIT", "\"${project.getGitCommit()}\"")
-    }
+buildConfig {
+    packageName = extension.packageName
+    className = extension.className
+
+    buildConfigField("String", "VERSION", "\"${project.version}\"")
+//    buildConfigField("String", "BRANCH", provider { "\"${project.getGitBranch()}\"" })
+//    buildConfigField("String", "COMMIT", provider { "\"${project.getGitCommit()}\"" })
 }

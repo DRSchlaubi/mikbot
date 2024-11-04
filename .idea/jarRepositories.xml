@@ -106,5 +106,15 @@
       <option name="name" value="kordSnapshots" />
       <option name="url" value="https://repo.kord.dev/snapshots" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="KordEx (Releases)" />
+      <option name="name" value="KordEx (Releases)" />
+      <option name="url" value="https://repo.kordex.dev/releases" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven" />
+      <option name="name" value="maven" />
+      <option name="url" value="https://releases-repo.kordex.dev" />
+    </remote-repository>
   </component>
 </project>

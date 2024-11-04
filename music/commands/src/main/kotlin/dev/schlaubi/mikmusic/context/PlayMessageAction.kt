@@ -1,8 +1,9 @@
 package dev.schlaubi.mikmusic.context
 
-import com.kotlindiscord.kord.extensions.commands.application.message.EphemeralMessageCommandContext
-import com.kotlindiscord.kord.extensions.extensions.ephemeralMessageCommand
+import dev.kordex.core.commands.application.message.EphemeralMessageCommandContext
+import dev.kordex.core.extensions.ephemeralMessageCommand
 import dev.schlaubi.mikbot.plugin.api.util.attachmentOrContentQuery
+import dev.schlaubi.mikbot.translations.MusicTranslations
 import dev.schlaubi.mikmusic.checks.joinSameChannelCheck
 import dev.schlaubi.mikmusic.core.MusicModule
 import dev.schlaubi.mikmusic.core.musicControlContexts
@@ -10,10 +11,9 @@ import dev.schlaubi.mikmusic.player.MusicPlayer
 import dev.schlaubi.mikmusic.player.queue.SearchQuery
 import dev.schlaubi.mikmusic.player.queue.queueTracks
 
-const val playActionName = "Play as track"
 
 suspend fun MusicModule.playMessageAction() = ephemeralMessageCommand {
-    name = playActionName
+    name = MusicTranslations.Context.Message.play_as_track
 
     musicControlContexts()
 

@@ -1,12 +1,15 @@
 package dev.schlaubi.mikbot.plugin.api.module
 
-import com.kotlindiscord.kord.extensions.commands.Arguments
-import com.kotlindiscord.kord.extensions.commands.application.slash.*
-import com.kotlindiscord.kord.extensions.extensions.Extension
-import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
-import com.kotlindiscord.kord.extensions.modules.unsafe.annotations.UnsafeAPI
-import com.kotlindiscord.kord.extensions.modules.unsafe.commands.UnsafeSlashCommand
-import com.kotlindiscord.kord.extensions.modules.unsafe.extensions.unsafeSubCommand
+import dev.kordex.core.commands.Arguments
+import dev.kordex.core.commands.application.slash.*
+import dev.kordex.core.extensions.Extension
+import dev.kordex.core.extensions.ephemeralSlashCommand
+import dev.kordex.core.i18n.EMPTY_KEY
+import dev.kordex.core.i18n.toKey
+import dev.kordex.core.i18n.types.Key
+import dev.kordex.modules.dev.unsafe.annotations.UnsafeAPI
+import dev.kordex.modules.dev.unsafe.commands.slash.UnsafeSlashCommand
+import dev.kordex.modules.dev.unsafe.extensions.unsafeSubCommand
 import dev.schlaubi.mikbot.plugin.api.PluginContext
 
 /**
@@ -27,7 +30,7 @@ public abstract class SubCommandModule(context: PluginContext) : MikBotModule(co
     /**
      * The name of the root command.
      */
-    public abstract val commandName: String
+    public abstract val commandName: Key
 
     public fun <T : Arguments> ephemeralSubCommand(
         argumentBody: (() -> T),
@@ -56,18 +59,18 @@ public abstract class SubCommandModule(context: PluginContext) : MikBotModule(co
     }
 
     @UnsafeAPI
-    public fun unsafeSubCommand(name: String, body: UnsafeSlashCommand<Arguments, *>.() -> Unit) {
+    public fun unsafeSubCommand(body: UnsafeSlashCommand<Arguments, *>.() -> Unit) {
         unsafeSubCommandBodies.add(UnsafeCommandPair(null, body))
     }
 
-    public open fun SlashCommand<*, *, *>.commandSettings() = Unit
+    public open fun SlashCommand<*, *, *>.commandSettings(): Unit = Unit
     @OptIn(UnsafeAPI::class)
     final override suspend fun setup() {
         overrideSetup()
 
         ephemeralSlashCommand {
             name = commandName
-            description = "<never used>"
+            description = "<not used>".toKey()
             commandSettings()
 
 

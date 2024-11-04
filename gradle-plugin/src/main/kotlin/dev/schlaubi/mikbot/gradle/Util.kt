@@ -47,8 +47,8 @@ internal fun List<PluginInfo>.addPlugins(vararg plugins: PluginInfo): List<Plugi
     return (new + backlog).map(PluginWrapper::pluginInfo) + updated
 }
 
-internal val Project.pluginFilePath: String
-    get() = "${pluginId}/${version}/plugin-${pluginId}-${version}.zip"
+internal val PluginExtension.pluginFilePath: String
+    get() = "${pluginId.get()}/${version.get()}/plugin-${pluginId.get()}-${version.get()}.zip"
 
 private data class PluginWrapper(val pluginInfo: PluginInfo) {
     override fun equals(other: Any?): Boolean = (other as? PluginWrapper)?.pluginInfo?.id == pluginInfo.id
@@ -101,5 +101,4 @@ internal fun pluginNotAppliedError(name: String): Nothing =
 internal fun Provider<Directory>.dir(name: String) = map { it.dir(name) }
 internal fun Provider<Directory>.file(name: String) = map { it.file(name) }
 internal fun Property<out FileSystemLocation>.asPath() = get().asFile.toPath()
-internal fun  Property<out FileSystemLocation>.asPathOrElse(other: Path) = orNull?.asFile?.toPath() ?: other
 internal fun FileSystemLocation.asPath() = asFile.toPath()

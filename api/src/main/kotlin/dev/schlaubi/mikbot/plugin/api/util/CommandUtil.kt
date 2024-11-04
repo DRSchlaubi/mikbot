@@ -1,8 +1,8 @@
 package dev.schlaubi.mikbot.plugin.api.util
 
-import com.kotlindiscord.kord.extensions.checks.anyGuild
-import com.kotlindiscord.kord.extensions.commands.Command
-import com.kotlindiscord.kord.extensions.commands.CommandContext
+import dev.kordex.core.checks.anyGuild
+import dev.kordex.core.commands.Command
+import dev.kordex.core.commands.CommandContext
 import dev.kord.core.Kord
 import dev.kord.core.behavior.GuildBehavior
 import dev.kord.core.behavior.MemberBehavior

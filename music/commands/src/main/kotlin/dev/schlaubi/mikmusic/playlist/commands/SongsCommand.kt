@@ -2,19 +2,21 @@ package dev.schlaubi.mikmusic.playlist.commands
 
 import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.schlaubi.mikbot.plugin.api.util.forList
+import dev.schlaubi.mikbot.plugin.api.util.translate
+import dev.schlaubi.mikbot.translations.MusicTranslations
 import dev.schlaubi.mikmusic.util.format
 
 class PlaylistSongsArguments : PlaylistArguments()
 
 fun PlaylistModule.songsCommand() = ephemeralSubCommand(::PlaylistSongsArguments) {
-    name = "songs"
-    description = "commands.playlist.songs.description"
+    name = MusicTranslations.Commands.Playlist.Songs.name
+    description = MusicTranslations.Commands.Playlist.Songs.description
 
     action {
         val playlist = getPlaylist()
         if (playlist.songs.isEmpty()) {
             respond {
-                content = translate("commands.playlist.songs.is_empty")
+                content = translate(MusicTranslations.Commands.Playlist.Songs.is_empty)
             }
             return@action
         }
@@ -26,7 +28,7 @@ fun PlaylistModule.songsCommand() = ephemeralSubCommand(::PlaylistSongsArguments
                 user, tracks, Track::format,
                 { current, total ->
                     translate(
-                        "commands.playlist.songs.paginator.title",
+                        MusicTranslations.Commands.Playlist.Songs.Paginator.title,
                         arrayOf(playlist.name, current.toString(), total.toString())
                     )
                 }

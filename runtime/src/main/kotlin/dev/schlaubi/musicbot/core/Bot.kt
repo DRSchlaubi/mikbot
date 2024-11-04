@@ -1,12 +1,12 @@
 package dev.schlaubi.musicbot.core
 
-import com.kotlindiscord.kord.extensions.ExtensibleBot
-import com.kotlindiscord.kord.extensions.builders.ExtensibleBotBuilder
-import com.kotlindiscord.kord.extensions.extensions.Extension
-import com.kotlindiscord.kord.extensions.extensions.event
-import com.kotlindiscord.kord.extensions.i18n.TranslationsProvider
-import com.kotlindiscord.kord.extensions.koin.KordExKoinComponent
-import com.kotlindiscord.kord.extensions.utils.loadModule
+import dev.kordex.core.ExtensibleBot
+import dev.kordex.core.builders.ExtensibleBotBuilder
+import dev.kordex.core.extensions.Extension
+import dev.kordex.core.extensions.event
+import dev.kordex.core.i18n.TranslationsProvider
+import dev.kordex.core.koin.KordExKoinComponent
+import dev.kordex.core.utils.loadModule
 import dev.kord.cache.api.DataEntryCache
 import dev.kord.common.Locale
 import dev.kord.common.entity.PresenceStatus
@@ -14,6 +14,7 @@ import dev.kord.core.event.gateway.DisconnectEvent
 import dev.kord.core.event.gateway.ReadyEvent
 import dev.kord.core.event.gateway.ResumedEvent
 import dev.kord.rest.builder.message.allowedMentions
+import dev.kordex.core.builders.about.CopyrightType
 import dev.schlaubi.mikbot.plugin.api.MikBotInfo
 import dev.schlaubi.mikbot.plugin.api.PluginContext
 import dev.schlaubi.mikbot.plugin.api.PluginSystem
@@ -31,6 +32,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import mu.KotlinLogging
+import org.pf4j.PluginState
 import org.pf4j.PluginWrapper
 import org.pf4j.update.UpdateRepository
 
@@ -165,7 +167,11 @@ class Bot(repos: List<UpdateRepository>) : KordExKoinComponent, PluginContext {
         // Disable all mentions in error responses
         errorResponse { message, _ ->
             allowedMentions()
-            content = message
+            content = message.translate()
+        }
+
+        about {
+            aboutCommand(this@Bot)
         }
     }
 }
@@ -215,7 +221,7 @@ private class BotModule(private val mikbot: Bot) : Extension() {
             action {
                 if (mikbot.pluginLoader.plugins.none { it.pluginId == "game-animator" }) {
                     kord.editPresence {
-                        playing("Mikbot v${MikBotInfo.VERSION}@${MikBotInfo.BRANCH} (${MikBotInfo.COMMIT})")
+                        playing("Mikbot v${MikBotInfo.VERSION}")
                     }
                 }
             }

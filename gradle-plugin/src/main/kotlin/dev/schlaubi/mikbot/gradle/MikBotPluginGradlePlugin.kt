@@ -1,5 +1,7 @@
 package dev.schlaubi.mikbot.gradle
 
+import dev.kordex.gradle.plugins.kordex.InternalAPI
+import dev.kordex.gradle.plugins.kordex.helpers.I18nHelper
 import dev.schlaubi.mikbot.gradle.extension.createExtensions
 import dev.schlaubi.mikbot.gradle.extension.mikbotPluginExtension
 import org.gradle.api.Plugin
@@ -9,11 +11,14 @@ import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.bundling.Zip
 import org.gradle.kotlin.dsl.*
+import java.nio.file.Path
+import kotlin.io.path.exists
+import kotlin.io.path.useDirectoryEntries
 
 @Suppress("unused")
 class MikBotPluginGradlePlugin : Plugin<Project> {
     override fun apply(target: Project) {
-        target.run {
+        with(target) {
             createExtensions()
             // Do not create assemble tasks for root project (multimodule support)
             if (project.plugins.hasPlugin("org.jetbrains.kotlin.jvm")) {
@@ -22,7 +27,9 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
                 addRepositories()
                 addDependencies()
                 configureSourceSets()
+                configureLicenseChecker()
                 target.afterEvaluate {
+                    target.configureTranslations()
                     (target.extensions.getByName("sourceSets") as SourceSetContainer).getByName("main")
                         .apply {
                             resources.srcDir(
@@ -34,11 +41,19 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
         }
     }
 
-    private fun Project.configureTasks() {
-        val generateDefaultTranslationBundle by tasks.registering(GenerateDefaultTranslationBundleTask::class) {
-            defaultLocale = mikbotPluginExtension.defaultLocale
+    @OptIn(InternalAPI::class)
+    private fun Project.configureTranslations() {
+        val translationsDir = layout.projectDirectory
+            .dir("src/main/resources/translations/")
+            .asFile
+            .toPath()
+        if (translationsDir.exists() && translationsDir.useDirectoryEntries(block = Sequence<Path>::any)) {
+            I18nHelper.apply(this, mikbotPluginExtension.i18n)
         }
-        val (assemblePlugin, installBotTask) = tasks.createAssembleTasks(generateDefaultTranslationBundle)
+    }
+
+    private fun Project.configureTasks() {
+        val (assemblePlugin, installBotTask) = tasks.createAssembleTasks()
         createTestBotTasks(assemblePlugin, installBotTask)
         createPublishingTasks(assemblePlugin)
     }
@@ -62,7 +77,10 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
         }
     }
 
-    private fun Project.createTestBotTasks(assemblePlugin: TaskProvider<Zip>, installBotTask: Provider<InstallBotTask>) {
+    private fun Project.createTestBotTasks(
+        assemblePlugin: TaskProvider<Zip>,
+        installBotTask: Provider<InstallBotTask>,
+    ) {
         tasks.run {
             val installPlugins = task<InstallPluginsToTestBotTask>("installPluginsToTestBot") {
                 dependsOn(assemblePlugin)

@@ -1,8 +1,8 @@
 package dev.schlaubi.mikbot.plugin.api.util
 
-import com.kotlindiscord.kord.extensions.ExtensibleBot
-import com.kotlindiscord.kord.extensions.commands.CommandContext
-import com.kotlindiscord.kord.extensions.koin.KordExKoinComponent
+import dev.kordex.core.ExtensibleBot
+import dev.kordex.core.commands.CommandContext
+import dev.kordex.core.koin.KordExKoinComponent
 import dev.schlaubi.mikbot.plugin.api.io.Database
 import org.koin.core.component.KoinComponent
 

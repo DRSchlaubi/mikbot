@@ -8,7 +8,7 @@ import dev.kord.core.event.Event
  * Event fired when all shards are first connected to Discord.
  */
 @OptIn(KordPreview::class)
-public class AllShardsReadyEvent constructor(
+public class AllShardsReadyEvent(
     override val kord: Kord,
     override val shard: Int,
     override val customContext: Any? = null,

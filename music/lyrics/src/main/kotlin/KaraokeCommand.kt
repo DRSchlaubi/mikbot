@@ -1,16 +1,18 @@
 package dev.schlaubi.mikmusic.lyrics
 
-import com.kotlindiscord.kord.extensions.extensions.Extension
-import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
+import dev.kordex.core.extensions.Extension
+import dev.kordex.core.extensions.ephemeralSlashCommand
 import dev.schlaubi.lavakord.plugins.lyrics.rest.requestLyrics
 import dev.schlaubi.lyrics.protocol.TimedLyrics
 import dev.schlaubi.mikbot.plugin.api.util.discordError
+import dev.schlaubi.mikbot.plugin.api.util.translate
+import dev.schlaubi.mikbot.translations.LyricsTranslations
 import dev.schlaubi.mikmusic.checks.musicQuizAntiCheat
 import dev.schlaubi.mikmusic.util.musicModule
 
 suspend fun Extension.karaokeCommand() = ephemeralSlashCommand {
-    name = "karaoke"
-    description = "commands.karaoke.description"
+    name = LyricsTranslations.Commands.Karaoke.name
+    description = LyricsTranslations.Commands.Karaoke.description
 
     check {
         musicQuizAntiCheat(musicModule)
@@ -22,13 +24,13 @@ suspend fun Extension.karaokeCommand() = ephemeralSlashCommand {
         val lyrics = runCatching { player.requestLyrics() }.getOrNull()
 
         if (lyrics !is TimedLyrics) {
-            discordError(translate("commands.karaoke.not_available"))
+            discordError(LyricsTranslations.Commands.Karaoke.not_available)
         }
 
         val token = requestToken(user.id)
 
         respond {
-            content = translate("commands.karaoke.success", arrayOf("${Config.LYRICS_WEB_URL}?apiKey=$token"))
+            content = translate(LyricsTranslations.Commands.Karaoke.success, "${Config.LYRICS_WEB_URL}?apiKey=$token")
         }
     }
 }

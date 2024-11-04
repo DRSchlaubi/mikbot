@@ -1,17 +1,19 @@
 package dev.schlaubi.mikmusic.playlist.commands
 
-import com.kotlindiscord.kord.extensions.DiscordRelayedException
-import com.kotlindiscord.kord.extensions.commands.Arguments
-import com.kotlindiscord.kord.extensions.commands.CommandContext
-import com.kotlindiscord.kord.extensions.commands.application.slash.EphemeralSlashCommandContext
-import com.kotlindiscord.kord.extensions.commands.application.slash.SlashCommand
-import com.kotlindiscord.kord.extensions.commands.converters.impl.string
 import dev.kord.core.behavior.UserBehavior
 import dev.kord.core.behavior.interaction.suggestString
+import dev.kordex.core.DiscordRelayedException
+import dev.kordex.core.commands.Arguments
+import dev.kordex.core.commands.CommandContext
+import dev.kordex.core.commands.application.slash.EphemeralSlashCommandContext
+import dev.kordex.core.commands.application.slash.SlashCommand
+import dev.kordex.core.commands.converters.impl.string
 import dev.schlaubi.lavakord.audio.Node
 import dev.schlaubi.mikbot.plugin.api.PluginContext
 import dev.schlaubi.mikbot.plugin.api.module.SubCommandModule
 import dev.schlaubi.mikbot.plugin.api.util.extension
+import dev.schlaubi.mikbot.plugin.api.util.translate
+import dev.schlaubi.mikbot.translations.MusicTranslations
 import dev.schlaubi.mikmusic.core.MusicModule
 import dev.schlaubi.mikmusic.core.musicControlContexts
 import dev.schlaubi.mikmusic.player.MusicPlayer
@@ -33,8 +35,8 @@ abstract class PlaylistArguments(onlyMine: Boolean = true) : Arguments(), Playli
 }
 
 fun Arguments.playlistName(onlyMine: Boolean) = string {
-    name = "name"
-    description = "The name of the playlist"
+    name = MusicTranslations.Commands.Playlist.Arguments.Name.name
+    description = MusicTranslations.Commands.Playlist.Arguments.Name.description
 
     validate {
         getPlaylistOrNull(context.getUser()!!, value) ?: context.notFound(value)
@@ -62,7 +64,7 @@ fun Arguments.playlistName(onlyMine: Boolean) = string {
 }
 
 private suspend fun CommandContext.notFound(value: String): Nothing {
-    throw DiscordRelayedException(translate("command.playlist.unknown_playlist", arrayOf(value)))
+    throw DiscordRelayedException(MusicTranslations.Command.Playlist.unknown_playlist.withOrdinalPlaceholders(value))
 }
 
 private suspend fun getPlaylistOrNull(userBehavior: UserBehavior, name: String) =
@@ -72,15 +74,14 @@ private suspend fun getPlaylistOrNull(userBehavior: UserBehavior, name: String) 
             or(Playlist::public eq true, Playlist::authorId eq userBehavior.id)
         )
     )
+
 suspend fun <T> EphemeralSlashCommandContext<T, *>.getPlaylist()
     where T : Arguments, T : PlaylistOptions =
     getPlaylistOrNull(user, arguments.name) ?: error("Could not load playlist")
 
 class PlaylistModule(context: PluginContext) : SubCommandModule(context) {
-
-    override val bundle: String = "music"
     override val name: String = "playlist"
-    override val commandName: String = "playlist"
+    override val commandName = MusicTranslations.Commands.Playlist.name
 
     val musicModule: MusicModule by extension()
     val CommandContext.musicPlayer: MusicPlayer
@@ -117,7 +118,7 @@ suspend inline fun EphemeralSlashCommandContext<*, *>.checkName(name: String, pu
     val existingPlaylist = PlaylistDatabase.collection.findOne(findBson)
     if (existingPlaylist != null) {
         respond {
-            content = translate("commands.playlist.save.already_exists", arrayOf(name))
+            content = translate(MusicTranslations.Commands.Playlist.Save.already_exists, name)
         }
     }
 
@@ -128,7 +129,7 @@ suspend inline fun EphemeralSlashCommandContext<out PlaylistArguments, *>.checkP
     val playlist = getPlaylist()
     if (playlist.authorId != user.id) {
         respond {
-            content = translate("commands.playlist.delete.no_permission")
+            content = translate(MusicTranslations.Commands.Playlist.Delete.no_permission)
         }
         return
     }

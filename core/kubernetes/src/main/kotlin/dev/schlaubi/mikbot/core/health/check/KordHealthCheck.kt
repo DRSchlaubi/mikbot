@@ -1,15 +1,15 @@
 package dev.schlaubi.mikbot.core.health.check
 
-import com.kotlindiscord.kord.extensions.builders.ExtensibleBotBuilder
-import com.kotlindiscord.kord.extensions.extensions.event
-import com.kotlindiscord.kord.extensions.koin.KordExKoinComponent
 import dev.kord.core.Kord
+import dev.kordex.core.builders.ExtensionsBuilder
+import dev.kordex.core.extensions.event
+import dev.kordex.core.koin.KordExKoinComponent
 import dev.schlaubi.mikbot.plugin.api.util.AllShardsReadyEvent
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.isActive
 import org.koin.core.component.inject
 import org.pf4j.Extension
-import com.kotlindiscord.kord.extensions.extensions.Extension as KordExtension
+import dev.kordex.core.extensions.Extension as KordExtension
 
 private val LOG = KotlinLogging.logger { }
 
@@ -27,7 +27,7 @@ class KordHealthCheck : HealthCheck, KordExKoinComponent {
     override suspend fun checkHealth(): Boolean =
         ready && kord.gateway.gateways.all { it.value.isActive } && kord.isActive
 
-    override fun ExtensibleBotBuilder.ExtensionsBuilder.addExtensions() {
+    override fun ExtensionsBuilder.addExtensions() {
         add(::ShardMonitor)
     }
 }

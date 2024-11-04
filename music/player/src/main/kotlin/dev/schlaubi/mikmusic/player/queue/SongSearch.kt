@@ -1,14 +1,17 @@
 package dev.schlaubi.mikmusic.player.queue
 
-import com.kotlindiscord.kord.extensions.commands.CommandContext
-import com.kotlindiscord.kord.extensions.components.publicStringSelectMenu
-import com.kotlindiscord.kord.extensions.pagination.BaseButtonPaginator
-import com.kotlindiscord.kord.extensions.pagination.builders.PaginatorBuilder
+import dev.kordex.core.commands.CommandContext
+import dev.kordex.core.components.publicStringSelectMenu
+import dev.kordex.core.pagination.BaseButtonPaginator
+import dev.kordex.core.pagination.builders.PaginatorBuilder
 import dev.arbjerg.lavalink.protocol.v4.LoadResult
 import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.kord.core.behavior.UserBehavior
+import dev.kordex.core.i18n.types.Key
 import dev.schlaubi.mikbot.plugin.api.util.discordError
 import dev.schlaubi.mikbot.plugin.api.util.forList
+import dev.schlaubi.mikbot.plugin.api.util.translate
+import dev.schlaubi.mikbot.translations.MusicTranslations
 import dev.schlaubi.mikmusic.util.format
 import dev.schlaubi.stdx.core.limit
 import kotlinx.coroutines.CompletableDeferred
@@ -28,14 +31,14 @@ suspend fun CommandContext.searchSong(
             result.data.tracks,
             Track::format,
             { current, total ->
-                translate("music.queue.search.title", arrayOf(current.toString(), total.toString()))
+                translate(MusicTranslations.Music.Queue.Search.title, arrayOf(current.toString(), total.toString()))
             }
         )
     }
     val future = CompletableDeferred<String?>()
     paginator.components.publicStringSelectMenu {
         result.data.tracks.forEach { (_, info) ->
-            option("${info.title} - ${info.author}".limit(100), info.identifier)
+            option(Key("${info.title} - ${info.author}".limit(100)), info.identifier)
         }
 
         action {
@@ -49,7 +52,7 @@ suspend fun CommandContext.searchSong(
     paginator.destroy()
 
     val track = tracks.firstOrNull { it.info.identifier == selection }
-        ?: discordError(translate("music.queue.search.not_found"))
+        ?: discordError(MusicTranslations.Music.Queue.Search.not_found)
 
     return SingleTrack(track)
 }

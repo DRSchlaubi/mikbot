@@ -1,8 +1,9 @@
 package dev.schlaubi.mikmusic.core
 
-import com.kotlindiscord.kord.extensions.ExtensibleBot
-import com.kotlindiscord.kord.extensions.builders.ExtensibleBotBuilder
-import com.kotlindiscord.kord.extensions.utils.loadModule
+import dev.kordex.core.ExtensibleBot
+import dev.kordex.core.builders.ExtensibleBotBuilder
+import dev.kordex.core.builders.ExtensionsBuilder
+import dev.kordex.core.utils.loadModule
 import dev.nycode.imagecolor.ImageColorClient
 import dev.schlaubi.mikbot.plugin.api.Plugin
 import dev.schlaubi.mikbot.plugin.api.PluginContext
@@ -22,7 +23,7 @@ class MusicPlugin(wrapper: PluginContext) : Plugin(wrapper) {
         registerSerializer(TrackJsonSerializer)
     }
 
-    override fun ExtensibleBotBuilder.ExtensionsBuilder.addExtensions() {
+    override fun ExtensionsBuilder.addExtensions() {
         add(::LavalinkManager)
         add(::MusicModule)
         if (Config.ENABLE_MUSIC_CHANNEL_FEATURE) {

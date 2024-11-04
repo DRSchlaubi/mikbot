@@ -1,9 +1,6 @@
 package dev.schlaubi.mikbot.core.gdpr
 
-import com.kotlindiscord.kord.extensions.commands.application.slash.SlashCommand
-import dev.kord.common.entity.ApplicationIntegrationType
-import dev.kord.common.entity.InteractionContextType
-import dev.kord.rest.builder.component.ActionRowBuilder
+import dev.kordex.core.commands.application.slash.SlashCommand
 import dev.schlaubi.mikbot.core.gdpr.api.DataPoint
 import dev.schlaubi.mikbot.core.gdpr.api.GDPRExtensionPoint
 import dev.schlaubi.mikbot.core.gdpr.api.PermanentlyStoredDataPoint
@@ -11,15 +8,15 @@ import dev.schlaubi.mikbot.plugin.api.PluginContext
 import dev.schlaubi.mikbot.plugin.api.getExtensions
 import dev.schlaubi.mikbot.plugin.api.module.SubCommandModule
 import dev.schlaubi.mikbot.plugin.api.util.executableEverywhere
-import kotlinx.coroutines.flow.first
+import dev.schlaubi.mikbot.translations.GdprTranslations
 
 class GDPRModule(context: PluginContext) : SubCommandModule(context) {
     override val name: String = "gdpr"
-    override val bundle: String = "gdpr"
-    override val commandName: String = "gdpr"
+    override val commandName = GdprTranslations.Commands.Gdpr.name
 
     val dataPoints: List<DataPoint> =
-        context.pluginSystem.getExtensions<GDPRExtensionPoint>().flatMap { it.provideDataPoints() } + listOf(
+        context.pluginSystem.getExtensions<GDPRExtensionPoint>()
+            .flatMap(GDPRExtensionPoint::provideDataPoints) + listOf(
             UserIdDataPoint,
             SentryDataPoint
         )
@@ -34,18 +31,5 @@ class GDPRModule(context: PluginContext) : SubCommandModule(context) {
         infoCommand()
         requestCommand()
         deleteCommand()
-    }
-
-    @Suppress("UNREACHABLE_CODE")
-    suspend fun ActionRowBuilder.clickCommandButton(name: String, label: String) {
-        // https://github.com/discord/discord-api-docs/discussions/3347#discussioncomment-1162191
-        return
-        val command = kord.getGlobalApplicationCommands().first { it.name == name }
-
-        val url = "discord://commands/${kord.resources.applicationId}/${command.id}"
-
-        linkButton(url) {
-            this.label = label
-        }
     }
 }

@@ -1,6 +1,6 @@
 package dev.schlaubi.mikbot.plugin.api.owner
 
-import com.kotlindiscord.kord.extensions.commands.application.slash.SlashCommand
+import dev.kordex.core.commands.application.slash.SlashCommand
 import dev.kord.common.entity.ApplicationIntegrationType
 import dev.kord.common.entity.InteractionContextType
 import dev.kord.common.entity.Permission

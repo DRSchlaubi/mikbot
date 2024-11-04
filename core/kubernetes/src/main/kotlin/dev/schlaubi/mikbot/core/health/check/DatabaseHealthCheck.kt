@@ -1,7 +1,7 @@
 package dev.schlaubi.mikbot.core.health.check
 
-import com.kotlindiscord.kord.extensions.koin.KordExKoinComponent
 import com.mongodb.ReadPreference
+import dev.kordex.core.koin.KordExKoinComponent
 import dev.schlaubi.mikbot.plugin.api.config.Config
 import dev.schlaubi.mikbot.plugin.api.util.IKnowWhatIAmDoing
 import dev.schlaubi.mikbot.plugin.api.util.database

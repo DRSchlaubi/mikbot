@@ -2,10 +2,6 @@
 
 package dev.schlaubi.mikmusic.musicchannel
 
-import com.kotlindiscord.kord.extensions.DiscordRelayedException
-import com.kotlindiscord.kord.extensions.commands.Arguments
-import com.kotlindiscord.kord.extensions.commands.converters.impl.optionalChannel
-import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
 import dev.kord.common.annotation.KordExperimental
 import dev.kord.common.annotation.KordUnsafe
 import dev.kord.common.entity.ChannelType
@@ -14,35 +10,34 @@ import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.behavior.interaction.followup.edit
 import dev.kord.core.entity.channel.TextChannel
 import dev.kord.core.supplier.EntitySupplyStrategy
+import dev.kordex.core.commands.Arguments
+import dev.kordex.core.commands.converters.impl.optionalChannel
+import dev.kordex.core.extensions.ephemeralSlashCommand
+import dev.kordex.core.i18n.TranslationsProvider
 import dev.schlaubi.mikbot.plugin.api.settings.SettingsModule
 import dev.schlaubi.mikbot.plugin.api.settings.guildAdminOnly
 import dev.schlaubi.mikbot.plugin.api.util.confirmation
+import dev.schlaubi.mikbot.plugin.api.util.discordError
 import dev.schlaubi.mikbot.plugin.api.util.safeGuild
+import dev.schlaubi.mikbot.plugin.api.util.translate
+import dev.schlaubi.mikbot.translations.MusicTranslations
 import dev.schlaubi.mikmusic.core.settings.MusicChannelData
 import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase
 import dev.schlaubi.mikmusic.util.musicModule
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toSet
+import org.koin.core.component.get
 
 private class MusicChannelArguments : Arguments() {
     val channel by optionalChannel {
-        name = "channel"
-        description = "Text Channel to use for Music Channel"
+        name = MusicTranslations.Commands.Music_channel.Arguments.Channel.name
+        description = MusicTranslations.Commands.Music_channel.Arguments.Channel.description
 
         validate {
             val channel = value ?: return@validate
-            if (channel.type != ChannelType.GuildText) {
-                throw DiscordRelayedException(
-                    translate(
-                        "commands.musicchannel.notextchannel",
-                        replacements = arrayOf(channel.data.name)
-                    )
-                )
-            }
-
             val botPermissions = (channel.fetchChannel() as TextChannel).getEffectivePermissions(channel.kord.selfId)
             if (Permission.ManageMessages !in botPermissions) {
-                throw DiscordRelayedException(translate("command.music_channel.channel_missing_perms"))
+                discordError(MusicTranslations.Command.Music_channel.channel_missing_perms)
             }
         }
         requiredChannelTypes.add(ChannelType.GuildText)
@@ -52,8 +47,8 @@ private class MusicChannelArguments : Arguments() {
 @OptIn(KordUnsafe::class, KordExperimental::class)
 suspend fun SettingsModule.musicChannel() {
     ephemeralSlashCommand(::MusicChannelArguments) {
-        name = "music-channel"
-        description = "Set your music channel in this guild"
+        name = MusicTranslations.Commands.Music_channel.name
+        description = MusicTranslations.Commands.Music_channel.description
 
         guildAdminOnly()
 
@@ -62,16 +57,18 @@ suspend fun SettingsModule.musicChannel() {
 
             if (arguments.channel == null) {
                 val confirmation = confirmation {
-                    content = translate("settings.musicchannel.reset.confirm", "music")
+                    content = translate(MusicTranslations.Settings.Musicchannel.Reset.confirm)
                 }
 
                 if (confirmation.value) {
                     MusicSettingsDatabase.guild.save(guildSettings.copy(musicChannelData = null))
                     if (guildSettings.musicChannelData != null)
-                        user.kord.unsafe.message(guildSettings.musicChannelData.musicChannel,
-                            guildSettings.musicChannelData.musicChannelMessage).delete()
+                        user.kord.unsafe.message(
+                            guildSettings.musicChannelData.musicChannel,
+                            guildSettings.musicChannelData.musicChannelMessage
+                        ).delete()
                     confirmation.edit {
-                        content = translate("settings.musicchannel.reset.done", "music")
+                        content = translate(MusicTranslations.Settings.Musicchannel.Reset.done)
                     }
                 }
 
@@ -80,11 +77,11 @@ suspend fun SettingsModule.musicChannel() {
 
             if (guildSettings.musicChannelData != null) {
                 val (confirmed) = confirmation {
-                    content = translate("settings.musicchannel.confirmnew")
+                    content = translate(MusicTranslations.Settings.Musicchannel.confirmnew)
                 }
 
                 if (!confirmed) {
-                    edit { content = translate("settings.musicchannel.new.aborted") }
+                    edit { content = translate(MusicTranslations.Settings.Musicchannel.New.aborted) }
                     return@action
                 }
             }
@@ -96,7 +93,7 @@ suspend fun SettingsModule.musicChannel() {
 
             if (textChannel.getLastMessage() != null) {
                 val (confirmed) = confirmation {
-                    content = translate("settings.musicchannel.try_delete_messages")
+                    content = translate(MusicTranslations.Settings.Musicchannel.try_delete_messages)
                 }
 
                 if (confirmed) {
@@ -110,7 +107,7 @@ suspend fun SettingsModule.musicChannel() {
             }
 
             val message = textChannel.createMessage {
-                content = translate("settings.loading")
+                content = translate(MusicTranslations.Settings.loading)
             }
 
             message.pin("Main music channel message")
@@ -127,11 +124,11 @@ suspend fun SettingsModule.musicChannel() {
                 this@ephemeralSlashCommand.kord,
                 musicModule.getMusicPlayer(safeGuild),
                 true,
-                translationsProvider
+                get<TranslationsProvider>()
             )
 
             respond {
-                content = translate("settings.musicchannel.createdchannel")
+                content = translate(MusicTranslations.Settings.Musicchannel.createdchannel)
             }
         }
     }

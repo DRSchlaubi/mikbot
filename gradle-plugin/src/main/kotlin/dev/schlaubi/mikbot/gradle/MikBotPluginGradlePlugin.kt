@@ -85,7 +85,7 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
             val installPlugins = task<InstallPluginsToTestBotTask>("installPluginsToTestBot") {
                 dependsOn(assemblePlugin)
 
-                pluginArchive = assemblePlugin
+                pluginArchive = assemblePlugin.flatMap { it.archiveFile }
             }
 
             task<RunBotTask>("runBot") {

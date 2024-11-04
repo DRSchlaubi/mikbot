@@ -20,7 +20,7 @@ dependencies {
     implementation(libs.kubernetes.client)
     implementation(libs.kotlin.jsonpatch)
     implementation(libs.bucket4j)
-
+    implementation(libs.lettuce.core)
 
     testImplementation(kotlin("test-junit5"))
     testImplementation(projects.api)

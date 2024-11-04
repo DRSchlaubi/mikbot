@@ -5,7 +5,6 @@ import dev.schlaubi.mikbot.gradle.MikBotPluginInfo
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.findByType
-import java.util.*
 
 const val pluginExtensionName = "mikbotPlugin"
 
@@ -53,7 +52,7 @@ fun Project.createExtensions() {
                 } + "Translations"
             })
             requires.convention(MikBotPluginInfo.VERSION)
-            version.convention(project.version.toString())
+            version.convention(provider(project.version::toString))
         }
     }
     extensions.create<BuildRepositoryExtension>(pluginPublishingExtensionName).apply {

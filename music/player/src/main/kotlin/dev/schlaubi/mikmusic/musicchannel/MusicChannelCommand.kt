@@ -30,14 +30,14 @@ import org.koin.core.component.get
 
 private class MusicChannelArguments : Arguments() {
     val channel by optionalChannel {
-        name = MusicTranslations.Commands.Music_channel.Arguments.Channel.name
-        description = MusicTranslations.Commands.Music_channel.Arguments.Channel.description
+        name = MusicTranslations.Commands.MusicChannel.Arguments.Channel.name
+        description = MusicTranslations.Commands.MusicChannel.Arguments.Channel.description
 
         validate {
             val channel = value ?: return@validate
             val botPermissions = (channel.fetchChannel() as TextChannel).getEffectivePermissions(channel.kord.selfId)
             if (Permission.ManageMessages !in botPermissions) {
-                discordError(MusicTranslations.Command.Music_channel.channel_missing_perms)
+                discordError(MusicTranslations.Command.MusicChannel.channelMissingPerms)
             }
         }
         requiredChannelTypes.add(ChannelType.GuildText)
@@ -47,8 +47,8 @@ private class MusicChannelArguments : Arguments() {
 @OptIn(KordUnsafe::class, KordExperimental::class)
 suspend fun SettingsModule.musicChannel() {
     ephemeralSlashCommand(::MusicChannelArguments) {
-        name = MusicTranslations.Commands.Music_channel.name
-        description = MusicTranslations.Commands.Music_channel.description
+        name = MusicTranslations.Commands.MusicChannel.name
+        description = MusicTranslations.Commands.MusicChannel.description
 
         guildAdminOnly()
 
@@ -93,7 +93,7 @@ suspend fun SettingsModule.musicChannel() {
 
             if (textChannel.getLastMessage() != null) {
                 val (confirmed) = confirmation {
-                    content = translate(MusicTranslations.Settings.Musicchannel.try_delete_messages)
+                    content = translate(MusicTranslations.Settings.Musicchannel.tryDeleteMessages)
                 }
 
                 if (confirmed) {

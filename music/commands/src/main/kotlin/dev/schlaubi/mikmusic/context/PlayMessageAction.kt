@@ -13,7 +13,7 @@ import dev.schlaubi.mikmusic.player.queue.queueTracks
 
 
 suspend fun MusicModule.playMessageAction() = ephemeralMessageCommand {
-    name = MusicTranslations.Context.Message.play_as_track
+    name = MusicTranslations.Context.Message.playAsTrack
 
     musicControlContexts()
 

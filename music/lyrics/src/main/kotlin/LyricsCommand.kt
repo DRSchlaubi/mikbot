@@ -18,8 +18,8 @@ import dev.schlaubi.stdx.core.paginate
 
 class LyricsArguments : Arguments() {
     val name by optionalString {
-        name = LyricsTranslations.Commands.Lyrics.Arguments.Song_name.name
-        description = LyricsTranslations.Commands.Lyrics.Arguments.Song_name.description
+        name = LyricsTranslations.Commands.Lyrics.Arguments.SongName.name
+        description = LyricsTranslations.Commands.Lyrics.Arguments.SongName.description
     }
 }
 
@@ -40,7 +40,7 @@ suspend fun Extension.lyricsCommand() = publicSlashCommand(::LyricsArguments) {
 
         if (query == null) {
             respond {
-                content = translate(LyricsTranslations.Command.Lyrics.no_song_playing)
+                content = translate(LyricsTranslations.Command.Lyrics.noSongPlaying)
             }
 
             return@action
@@ -50,11 +50,11 @@ suspend fun Extension.lyricsCommand() = publicSlashCommand(::LyricsArguments) {
                 player.requestLyrics()
             } else {
                 val (videoId) = link.node.searchLyrics(query).firstOrNull()
-                    ?: discordError(LyricsTranslations.Command.Lyrics.no_lyrics)
+                    ?: discordError(LyricsTranslations.Command.Lyrics.noLyrics)
                 link.node.requestLyrics(videoId)
             }
         } catch (e: RestException) {
-            discordError(LyricsTranslations.Command.Lyrics.no_lyrics)
+            discordError(LyricsTranslations.Command.Lyrics.noLyrics)
         }
 
         val lines = if (lyrics is TimedLyrics) {

@@ -6,10 +6,10 @@ coroutines = "1.9.0"
 serialization = "1.7.3"
 ktor = "3.0.1"
 kord = "feature-user-apps-20241102.180018-12"
-api = "4.0.5"
+api = "4.1.0"
 ksp = "2.0.21-1.0.26"
 lavakord = "8.0.1"
-kordex-plugin = "1.5.5"
+kordex-plugin = "1.5.6"
 
 [libraries]
 kord-common = { group = "dev.kord", name = "kord-common", version.ref = "kord" }

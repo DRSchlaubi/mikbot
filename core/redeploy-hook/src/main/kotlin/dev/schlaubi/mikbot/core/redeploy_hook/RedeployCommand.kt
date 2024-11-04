@@ -49,6 +49,6 @@ suspend fun OwnerModule.redeployCommand() = ephemeralSlashCommand {
 
 private suspend fun EphemeralSlashCommandContext<*, *>.notAvailable() {
     respond {
-        content = translate(RedeployHookTranslations.Commands.Redeploy.not_satisfied)
+        content = translate(RedeployHookTranslations.Commands.Redeploy.notSatisfied)
     }
 }

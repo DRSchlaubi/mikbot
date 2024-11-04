@@ -43,8 +43,8 @@ private var lastRebalanceCheck = TimeSource.Monotonic.markNow()
 
 private class RebalanceArguments() : Arguments() {
     val forceTo by optionalInt {
-        name = KubernetesTranslations.Commands.Rebalance.Arguments.Force_to.name
-        description = KubernetesTranslations.Commands.Rebalance.Arguments.Force_to.description
+        name = KubernetesTranslations.Commands.Rebalance.Arguments.ForceTo.name
+        description = KubernetesTranslations.Commands.Rebalance.Arguments.ForceTo.description
     }
 }
 
@@ -94,7 +94,7 @@ class RebalancerExtension(context: PluginContext) : MikBotModule(context) {
             } else if (arguments.forceTo != null) {
                 reBalance(arguments.forceTo!!)
             } else {
-                discordError(KubernetesTranslations.Commands.Rebalance.already_balanced)
+                discordError(KubernetesTranslations.Commands.Rebalance.alreadyBalanced)
             }
 
             respond {

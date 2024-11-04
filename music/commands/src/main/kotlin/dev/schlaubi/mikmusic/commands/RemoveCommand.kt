@@ -52,7 +52,7 @@ suspend fun MusicModule.removeCommand() = ephemeralControlSlashCommand {
                 }
             } else {
                 respond {
-                    content = translate(MusicTranslations.Commands.Remove.Invalid_index.multiple)
+                    content = translate(MusicTranslations.Commands.Remove.InvalidIndex.multiple)
                 }
             }
         }
@@ -70,7 +70,7 @@ suspend fun MusicModule.removeCommand() = ephemeralControlSlashCommand {
                 }
             } else {
                 respond {
-                    content = translate(MusicTranslations.Commands.Remove.Invalid_index.single)
+                    content = translate(MusicTranslations.Commands.Remove.InvalidIndex.single)
                 }
             }
         }
@@ -83,7 +83,7 @@ suspend fun MusicModule.removeCommand() = ephemeralControlSlashCommand {
         doRemove {
             val to = arguments.to ?: arguments.from
             if (to < arguments.from) {
-                discordError(MusicTranslations.Commands.Remove.Range.invalid_range_end)
+                discordError(MusicTranslations.Commands.Remove.Range.invalidRangeEnd)
             }
             val range = arguments.from..to
 

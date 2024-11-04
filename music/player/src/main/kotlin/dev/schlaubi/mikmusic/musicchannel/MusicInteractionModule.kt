@@ -42,7 +42,7 @@ class MusicInteractionModule(context: PluginContext) : MikBotModule(context) {
                     /* return */ interaction.message.id != guildSettings.musicChannelData?.musicChannelMessage
                 }
 
-                failIf(MusicTranslations.Music.Music_channel.disabled) {
+                failIf(MusicTranslations.Music.MusicChannel.disabled) {
                     val player = musicModule.getMusicPlayer(event.interaction.guild)
                     player.disableMusicChannel
                 }
@@ -94,7 +94,7 @@ class MusicInteractionModule(context: PluginContext) : MikBotModule(context) {
                             try {
                                 player.enableAutoPlay()
                             } catch (_: IllegalStateException) {
-                                discordError(MusicTranslations.Commands.Radio.no_matching_songs)
+                                discordError(MusicTranslations.Commands.Radio.noMatchingSongs)
                             }
                         } else {
                             player.resetAutoPlay()
@@ -118,7 +118,7 @@ class MusicInteractionModule(context: PluginContext) : MikBotModule(context) {
                 inChannel(channelId)
 
                 ifPassing { // only respond if this check fails
-                    failIf(MusicTranslations.Music.Music_channel.disabled) {
+                    failIf(MusicTranslations.Music.MusicChannel.disabled) {
                         val player = musicModule.getMusicPlayer(guild)
                         player.disableMusicChannel
                     }

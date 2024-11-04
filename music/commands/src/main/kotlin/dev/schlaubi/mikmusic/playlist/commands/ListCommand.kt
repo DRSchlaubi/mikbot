@@ -12,8 +12,8 @@ import org.litote.kmongo.or
 
 class PlayListListArguments : Arguments() {
     val onlyMine by defaultingBoolean {
-        name = MusicTranslations.Commands.Playlist.List.Arguments.Only_mine.name
-        description = MusicTranslations.Commands.Playlist.List.Arguments.Only_mine.description
+        name = MusicTranslations.Commands.Playlist.List.Arguments.OnlyMine.name
+        description = MusicTranslations.Commands.Playlist.List.Arguments.OnlyMine.description
         defaultValue = false
     }
 }

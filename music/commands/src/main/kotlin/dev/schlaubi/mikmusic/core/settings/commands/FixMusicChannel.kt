@@ -10,15 +10,15 @@ import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase
 import dev.schlaubi.mikmusic.util.musicModule
 
 suspend fun SettingsModule.fixMusicChannel() = ephemeralSlashCommand {
-    name = MusicTranslations.Commands.Fix_music_channel.name
-    description = MusicTranslations.Commands.Fix_music_channel.description
+    name = MusicTranslations.Commands.FixMusicChannel.name
+    description = MusicTranslations.Commands.FixMusicChannel.description
     musicControlContexts()
 
     action {
         val guildSettings = MusicSettingsDatabase.findGuild(safeGuild)
         if (guildSettings.musicChannelData == null) {
             respond {
-                content = translate(MusicTranslations.Commands.Fix_music_channel.not_enabled)
+                content = translate(MusicTranslations.Commands.FixMusicChannel.notEnabled)
             }
 
             return@action
@@ -27,7 +27,7 @@ suspend fun SettingsModule.fixMusicChannel() = ephemeralSlashCommand {
         musicModule.getMusicPlayer(safeGuild).updateMusicChannelMessage()
 
         respond {
-            content = translate(MusicTranslations.Commands.Fix_music_channel.success)
+            content = translate(MusicTranslations.Commands.FixMusicChannel.success)
         }
     }
 }

@@ -22,7 +22,7 @@ fun PlaylistModule.removeCommand() = ephemeralSubCommand(::PlaylistRemoveArgumen
             val item = playlist.songs.getOrNull(index)
             if (item == null) {
                 respond {
-                    content = translate(MusicTranslations.Commands.Playlist.Remove.too_high_index)
+                    content = translate(MusicTranslations.Commands.Playlist.Remove.tooHighIndex)
                 }
 
                 return@action

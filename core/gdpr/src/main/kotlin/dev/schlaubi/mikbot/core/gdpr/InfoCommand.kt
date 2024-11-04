@@ -24,15 +24,15 @@ fun GDPRModule.infoCommand() = ephemeralSubCommand {
                 title = translate(GdprTranslations.Commands.Gdpr.Info.title)
 
                 dataPoint(
-                    translate(GdprTranslations.Commands.Gdpr.Info.stored_data),
+                    translate(GdprTranslations.Commands.Gdpr.Info.storedData),
                     storedData,
-                    translate(GdprTranslations.Gdpr.General.Persistent_data.explainer)
+                    translate(GdprTranslations.Gdpr.General.PersistentData.explainer)
                 )
-                dataPoint(translate(GdprTranslations.Commands.Gdpr.Info.anonymized_data), anonymizedData)
+                dataPoint(translate(GdprTranslations.Commands.Gdpr.Info.anonymizedData), anonymizedData)
                 dataPoint(
-                    translate(GdprTranslations.Commands.Gdpr.Info.data_processing),
+                    translate(GdprTranslations.Commands.Gdpr.Info.dataProcessing),
                     processedData,
-                    translate(GdprTranslations.Gdpr.General.Persistent_data.explainer)
+                    translate(GdprTranslations.Gdpr.General.PersistentData.explainer)
                 )
             }
         }
@@ -64,7 +64,7 @@ private suspend fun List<DataPoint>.toDescription(commandContext: CommandContext
         append(commandContext.translate(descriptionKey))
         if (sharingDescriptionKey != null) {
             appendLine()
-            append(commandContext.translate(GdprTranslations.Gdpr.General.data_sharing))
+            append(commandContext.translate(GdprTranslations.Gdpr.General.dataSharing))
             append(' ')
             append(
                 commandContext.translate(

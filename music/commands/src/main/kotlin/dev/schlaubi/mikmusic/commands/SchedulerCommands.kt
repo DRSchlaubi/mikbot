@@ -44,16 +44,16 @@ suspend fun MusicModule.schedulerCommands() {
     }
 
     ephemeralControlSlashCommand {
-        name = MusicTranslations.Commands.Loop_queue.name
-        description = MusicTranslations.Commands.Loop_queue.description
+        name = MusicTranslations.Commands.LoopQueue.name
+        description = MusicTranslations.Commands.LoopQueue.description
         musicControlContexts()
 
         action {
             schedulerOption(
                 MusicPlayer::loopQueue,
                 MusicPlayer::shuffle, MusicPlayer::repeat,
-                enabled = MusicTranslations.Commands.Loop_queue.enabled,
-                disabled = MusicTranslations.Commands.Loop_queue.disabled,
+                enabled = MusicTranslations.Commands.LoopQueue.enabled,
+                disabled = MusicTranslations.Commands.LoopQueue.disabled,
             )
         }
     }

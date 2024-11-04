@@ -16,9 +16,9 @@ class MusicGdprExtension : GDPRExtensionPoint {
 // Data sent to Google for AutoComplete on search commands
 val AutoCompleteDataPoint =
     AnonymizedData(
-        MusicTranslations.Gdpr.Auto_complete.description,
-        MusicTranslations.Gdpr.Auto_complete.Sharing.description
+        MusicTranslations.Gdpr.AutoComplete.description,
+        MusicTranslations.Gdpr.AutoComplete.Sharing.description
     )
 
 // Data required for music-channel
-val MusicChannelDataPoint = ProcessedData(MusicTranslations.Gdpr.Music_channel.description, null)
+val MusicChannelDataPoint = ProcessedData(MusicTranslations.Gdpr.MusicChannel.description, null)

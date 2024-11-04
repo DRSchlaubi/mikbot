@@ -5,7 +5,6 @@ import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.kordex.core.types.TranslatableContext
 import dev.schlaubi.lavakord.rest.loadItem
-import dev.schlaubi.mikbot.plugin.api.util.Translator
 import dev.schlaubi.mikbot.plugin.api.util.translate
 import dev.schlaubi.mikbot.translations.MusicTranslations
 import dev.schlaubi.mikmusic.util.LinkedListSerializer
@@ -84,7 +83,7 @@ suspend fun MusicPlayer.addAutoPlaySongs(translator: TranslatableContext) {
     val songs = autoPlay?.songs?.take(5)
     if (!songs.isNullOrEmpty()) {
         field {
-            name = translator.translate(MusicTranslations.Music.Auto_play.next_song)
+            name = translator.translate(MusicTranslations.Music.AutoPlay.nextSong)
             value = songs.joinToString("\n", transform = Track::format)
         }
     }

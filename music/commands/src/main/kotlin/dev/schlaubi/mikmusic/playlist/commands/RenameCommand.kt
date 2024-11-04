@@ -7,8 +7,8 @@ import dev.schlaubi.mikmusic.playlist.PlaylistDatabase
 
 class PlaylistRenameArguments : PlaylistArguments() {
     val newName by string {
-        name = MusicTranslations.Commands.Playlist.Rename.Arguments.New_name.name
-        description = MusicTranslations.Commands.Playlist.Rename.Arguments.New_name.description
+        name = MusicTranslations.Commands.Playlist.Rename.Arguments.NewName.name
+        description = MusicTranslations.Commands.Playlist.Rename.Arguments.NewName.description
     }
 }
 

@@ -21,7 +21,7 @@ class SeekArguments : Arguments() {
 
         validate {
             if (!value.matches(seekRegex)) {
-                discordError(MusicTranslations.Command.Seek.invalid_format)
+                discordError(MusicTranslations.Command.Seek.invalidFormat)
             }
         }
     }

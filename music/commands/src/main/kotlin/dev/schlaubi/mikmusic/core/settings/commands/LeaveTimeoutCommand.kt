@@ -18,20 +18,20 @@ private val limit = 10.minutes
 
 class LeaveTimeoutArguments : Arguments() {
     val timeout by duration {
-        name = MusicTranslations.Commands.Leave_timeout.Arguments.Timeout.name
-        description = MusicTranslations.Commands.Leave_timeout.Arguments.Timeout.description
+        name = MusicTranslations.Commands.LeaveTimeout.Arguments.Timeout.name
+        description = MusicTranslations.Commands.LeaveTimeout.Arguments.Timeout.description
 
         validate {
             if (value.toDuration(TimeZone.UTC) > limit) {
-                discordError(MusicTranslations.Command.Leave_timeout.limit_exceeded.withOrdinalPlaceholders(limit))
+                discordError(MusicTranslations.Command.LeaveTimeout.limitExceeded.withOrdinalPlaceholders(limit))
             }
         }
     }
 }
 
 suspend fun SettingsModule.leaveTimeoutCommand() = ephemeralSlashCommand(::LeaveTimeoutArguments) {
-    name = MusicTranslations.Commands.Leave_timeout.name
-    description = MusicTranslations.Commands.Leave_timeout.description
+    name = MusicTranslations.Commands.LeaveTimeout.name
+    description = MusicTranslations.Commands.LeaveTimeout.description
 
     guildAdminOnly()
 
@@ -42,7 +42,7 @@ suspend fun SettingsModule.leaveTimeoutCommand() = ephemeralSlashCommand(::Leave
         MusicSettingsDatabase.guild.save(newGuild)
 
         respond {
-            content = translate(MusicTranslations.Commands.Leave_timeout.success, duration)
+            content = translate(MusicTranslations.Commands.LeaveTimeout.success, duration)
         }
     }
 }

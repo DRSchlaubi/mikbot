@@ -36,7 +36,7 @@ suspend fun <T : Event> CheckContext<T>.joinSameChannelCheck(extensibleBot: Exte
                 deafened = true
             }
         } else if (voiceChannel != botChannel) {
-            fail(MusicTranslations.Music.Checks.already_in_use)
+            fail(MusicTranslations.Music.Checks.alreadyInUse)
         }
     }
 }
@@ -44,10 +44,10 @@ suspend fun <T : Event> CheckContext<T>.joinSameChannelCheck(extensibleBot: Exte
 suspend fun <T : InteractionCreateEvent> CheckContext<T>.musicControlCheck(ignoreDjMode: Boolean = false) {
     abstractMusicCheck(ignoreDjMode) {
         if (botChannel == null) {
-            return@abstractMusicCheck fail(MusicTranslations.Music.Checks.no_running)
+            return@abstractMusicCheck fail(MusicTranslations.Music.Checks.noRunning)
         }
         if (voiceChannel != botChannel) {
-            fail(MusicTranslations.Music.Checks.no_running)
+            fail(MusicTranslations.Music.Checks.noRunning)
         }
     }
 }
@@ -68,7 +68,7 @@ private suspend inline fun <T : Event> CheckContext<T>.abstractMusicCheck(
         }
     }
     val voiceChannel = member?.getVoiceStateOrNull()?.channelId
-        ?: return fail(MusicTranslations.Music.Checks.not_in_vc)
+        ?: return fail(MusicTranslations.Music.Checks.notInVc)
     val guild = member.guild
 
     val guildSettings = MusicSettingsDatabase.findGuild(guild)

@@ -16,16 +16,16 @@ import kotlin.time.toDuration
 
 class NowPlayingArguments : Arguments() {
     val index by optionalInt {
-        name = MusicTranslations.Commands.Now_playing.Arguments.Position.name
-        description = MusicTranslations.Commands.Now_playing.Arguments.Position.description
+        name = MusicTranslations.Commands.NowPlaying.Arguments.Position.name
+        description = MusicTranslations.Commands.NowPlaying.Arguments.Position.description
     }
 }
 
 private val regex = """\.[0-9]*""".toRegex()
 
 suspend fun MusicModule.nowPlayingCommand() = publicSlashCommand(::NowPlayingArguments) {
-    name = MusicTranslations.Commands.Now_playing.name
-    description = MusicTranslations.Commands.Now_playing.description
+    name = MusicTranslations.Commands.NowPlaying.name
+    description = MusicTranslations.Commands.NowPlaying.description
     musicControlContexts()
 
     check {
@@ -37,7 +37,7 @@ suspend fun MusicModule.nowPlayingCommand() = publicSlashCommand(::NowPlayingArg
         val index = arguments.index
         val (playingTrack) = if (index != null) {
             musicPlayer.queuedTracks.getOrNull(index) ?: run {
-                respond { translate(MusicTranslations.Commands.Now_playing.invalid_index) }
+                respond { translate(MusicTranslations.Commands.NowPlaying.invalidIndex) }
                 return@action
             }
         } else musicPlayer.playingTrack ?: return@action
@@ -47,17 +47,17 @@ suspend fun MusicModule.nowPlayingCommand() = publicSlashCommand(::NowPlayingArg
                 addSong(this@action, playingTrack)
 
                 field {
-                    name = translate(MusicTranslations.Commands.Now_playing.Serving_node.discord)
+                    name = translate(MusicTranslations.Commands.NowPlaying.ServingNode.discord)
                     value = "`${java.net.InetAddress.getLocalHost().hostName}`"
                 }
 
                 field {
-                    name = translate(MusicTranslations.Commands.Now_playing.Serving_node.music)
+                    name = translate(MusicTranslations.Commands.NowPlaying.ServingNode.music)
                     value = "`${link.node.host}`"
                 }
 
                 field {
-                    name = translate(MusicTranslations.Commands.Now_playing.progress)
+                    name = translate(MusicTranslations.Commands.NowPlaying.progress)
                     value =
                         "${player.positionDuration.toString().replace(regex, "")}/${
                             playingTrack.info.length.toDuration(

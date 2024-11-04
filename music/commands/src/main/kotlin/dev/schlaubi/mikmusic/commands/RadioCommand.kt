@@ -36,7 +36,7 @@ suspend fun MusicModule.radioCommand() {
 
         action {
             if (musicPlayer.hasAutoPlay) {
-                discordError(MusicTranslations.Commands.Radio.already_enabled)
+                discordError(MusicTranslations.Commands.Radio.alreadyEnabled)
             }
             val seedItem = (musicPlayer.loadItem(arguments.query))
 
@@ -56,7 +56,7 @@ suspend fun MusicModule.radioCommand() {
 
             val realItems = item.filterNotNull()
             if (realItems.isEmpty()) {
-                discordError(MusicTranslations.Commands.Radio.no_matching_songs)
+                discordError(MusicTranslations.Commands.Radio.noMatchingSongs)
             }
 
             if (isTrack) {

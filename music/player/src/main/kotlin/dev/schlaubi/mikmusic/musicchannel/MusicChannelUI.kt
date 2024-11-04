@@ -76,7 +76,7 @@ suspend fun updateMessage(
 
                 if (playingQueueTrack is ChapterQueuedTrack) {
                     field {
-                        name = translate(MusicTranslations.Music.Music_channel.chapter)
+                        name = translate(MusicTranslations.Music.MusicChannel.chapter)
                         value = playingQueueTrack.chapters[playingQueueTrack.chapterIndex].name
                     }
                 }
@@ -87,9 +87,9 @@ suspend fun updateMessage(
 
                 if (musicPlayer.queuedTracks.isNotEmpty()) {
                     field {
-                        name = translate(MusicTranslations.Music.Music_channel.next_song_at)
+                        name = translate(MusicTranslations.Music.MusicChannel.nextSongAt)
                         value = if (musicPlayer.player.paused) {
-                            translate(MusicTranslations.Music.Music_channel.paused)
+                            translate(MusicTranslations.Music.MusicChannel.paused)
                         } else {
                             "<t:${nextSongAt.epochSeconds}:R>"
                         }
@@ -97,16 +97,16 @@ suspend fun updateMessage(
                 }
             }
 
-            title = translate(MusicTranslations.Music.Music_channel.queue)
+            title = translate(MusicTranslations.Music.MusicChannel.queue)
             description = musicPlayer.queuedTracks.take(5).mapIndexed { index, track -> track to index }
                 .joinToString("\n") { (track, index) ->
                     (index + 1).toString() + ". " + track.format()
-                }.ifBlank { translate(MusicTranslations.Music.Music_channel.Queue.empty) }
+                }.ifBlank { translate(MusicTranslations.Music.MusicChannel.Queue.empty) }
 
             musicPlayer.addAutoPlaySongs(translatableContext)
 
             footer {
-                text = translate(MusicTranslations.Music.Music_channel.footer)
+                text = translate(MusicTranslations.Music.MusicChannel.footer)
             }
         }
 

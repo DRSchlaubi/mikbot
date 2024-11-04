@@ -27,7 +27,7 @@ suspend fun MusicModule.nextCommand() = ephemeralControlSlashCommand {
             respond { content = translate(MusicTranslations.Commands.Skip.skipped) }
         } else {
             musicPlayer.skipChapter()
-            respond { content = translate(MusicTranslations.Commands.Next.skipped_chapter) }
+            respond { content = translate(MusicTranslations.Commands.Next.skippedChapter) }
         }
     }
 }

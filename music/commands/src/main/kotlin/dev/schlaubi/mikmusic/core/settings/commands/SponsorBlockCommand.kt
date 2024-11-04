@@ -16,8 +16,8 @@ import dev.schlaubi.mikmusic.util.musicModule
 
 private class SponsorBlockArguments : Arguments() {
     val enableSponsorBlock by optionalBoolean {
-        name = MusicTranslations.Commands.Sponsorblock.Arguments.Use_sponsorblock.name
-        description = MusicTranslations.Commands.Sponsorblock.Arguments.Use_sponsorblock.description
+        name = MusicTranslations.Commands.Sponsorblock.Arguments.UseSponsorblock.name
+        description = MusicTranslations.Commands.Sponsorblock.Arguments.UseSponsorblock.description
     }
 }
 

@@ -15,8 +15,8 @@ import dev.schlaubi.mikmusic.util.mapToEncoded
 class PlaylistAddArguments : PlaylistArguments(), QueueOptions {
     override val query by autoCompletedYouTubeQuery(MusicTranslations.Commands.Playlist.Add.Arguments.Query.name, MusicTranslations.Commands.Playlist.Add.Arguments.Query.description)
     override val searchProvider: QueueOptions.SearchProvider? by optionalEnumChoice<QueueOptions.SearchProvider> {
-        name = MusicTranslations.Commands.Playlist.Add.Arguments.Search_provider.name
-        description = MusicTranslations.Commands.Playlist.Add.Arguments.Search_provider.description
+        name = MusicTranslations.Commands.Playlist.Add.Arguments.SearchProvider.name
+        description = MusicTranslations.Commands.Playlist.Add.Arguments.SearchProvider.description
         typeName = EMPTY_KEY
     }
     val search by defaultingBoolean {

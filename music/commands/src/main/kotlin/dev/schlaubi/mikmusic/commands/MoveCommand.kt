@@ -1,12 +1,11 @@
 package dev.schlaubi.mikmusic.commands
 
+import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.kordex.core.commands.Arguments
 import dev.kordex.core.commands.application.slash.EphemeralSlashCommand
 import dev.kordex.core.commands.application.slash.EphemeralSlashCommandContext
 import dev.kordex.core.commands.application.slash.ephemeralSubCommand
 import dev.kordex.core.commands.converters.impl.int
-import dev.arbjerg.lavalink.protocol.v4.Track
-import dev.kordex.core.i18n.EMPTY_KEY
 import dev.kordex.core.i18n.toKey
 import dev.schlaubi.mikbot.plugin.api.util.translate
 import dev.schlaubi.mikbot.translations.MusicTranslations
@@ -43,7 +42,7 @@ suspend fun MusicModule.moveCommand() {
         val toValue = safeArguments.to().coerceAtLeast(1)
         if (toValue > musicPlayer.queuedTracks.size) {
             respond {
-                content = translate(MusicTranslations.Commands.Move.Invalid_index.to)
+                content = translate(MusicTranslations.Commands.Move.InvalidIndex.to)
             }
             return@action
         }
@@ -60,7 +59,7 @@ suspend fun MusicModule.moveCommand() {
             }
         } else {
             respond {
-                content = translate(MusicTranslations.Commands.Move.Invalid_index.from)
+                content = translate(MusicTranslations.Commands.Move.InvalidIndex.from)
             }
         }
     }

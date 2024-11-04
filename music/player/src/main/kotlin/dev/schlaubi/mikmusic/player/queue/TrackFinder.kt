@@ -64,8 +64,8 @@ abstract class SchedulingArguments : SortedArguments(), SchedulingOptions {
     }
 
     override val loopQueue: Boolean? by optionalBoolean {
-        name = MusicTranslations.Scheduler.Options.Loop_queue.name
-        description = MusicTranslations.Scheduler.Options.Loop_queue.description
+        name = MusicTranslations.Scheduler.Options.LoopQueue.name
+        description = MusicTranslations.Scheduler.Options.LoopQueue.description
     }
 }
 
@@ -86,8 +86,8 @@ abstract class QueueArguments : SchedulingArguments(), QueueOptions {
         defaultValue = false
     }
     override val searchProvider by optionalEnumChoice<QueueOptions.SearchProvider> {
-        name = MusicTranslations.Queue.Options.Search_provider.name
-        description = MusicTranslations.Queue.Options.Search_provider.description
+        name = MusicTranslations.Queue.Options.SearchProvider.name
+        description = MusicTranslations.Queue.Options.SearchProvider.description
         typeName = EMPTY_KEY
     }
 }
@@ -194,7 +194,7 @@ suspend fun CommandContext.queueTracks(
 ) {
     val searchResult = findTracks(musicPlayer.node, search, arguments, respond, editingPaginator) ?: return
 
-    val title = if (musicPlayer.nextSongIsFirst) translate(MusicTranslations.Music.Queue.now_playing) else translate(
+    val title = if (musicPlayer.nextSongIsFirst) translate(MusicTranslations.Music.Queue.nowPlaying) else translate(
         MusicTranslations.Music.Queue.queued,
         with(searchResult) { type() }
     )
@@ -216,7 +216,7 @@ suspend fun CommandContext.queueTracks(
                 } else {
                     musicPlayer.remainingQueueDuration.toString()
                 }
-                text = translate(MusicTranslations.Music.Plays_in.estimated, item)
+                text = translate(MusicTranslations.Music.PlaysIn.estimated, item)
             }
         }
 
@@ -231,7 +231,7 @@ suspend fun CommandContext.queueTracks(
 
 private suspend fun TranslatableContext.noMatches(respond: MessageSender) {
     respond {
-        content = translate(MusicTranslations.Music.Queue.no_matches)
+        content = translate(MusicTranslations.Music.Queue.noMatches)
     }
 }
 
@@ -243,7 +243,7 @@ private suspend fun TranslatableContext.handleError(
     when (error.severity) {
         Exception.Severity.COMMON -> {
             respond {
-                content = translate(MusicTranslations.Music.Queue.Load_failed.common, error.message)
+                content = translate(MusicTranslations.Music.Queue.LoadFailed.common, error.message)
             }
         }
 
@@ -251,7 +251,7 @@ private suspend fun TranslatableContext.handleError(
             LOG.error(FriendlyException(error.severity, error.message)) { "An error occurred whilst queueing a song" }
 
             respond {
-                content = translate(MusicTranslations.Music.Queue.Load_failed.uncommon)
+                content = translate(MusicTranslations.Music.Queue.LoadFailed.uncommon)
             }
         }
     }

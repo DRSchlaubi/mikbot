@@ -27,11 +27,11 @@ suspend fun MusicModule.skipCommand() = ephemeralControlSlashCommand(::SkipArgum
             return@action
         }
         if (arguments.to < 1 && musicPlayer.hasAutoPlay) {
-            discordError(MusicTranslations.Commands.skips_exceed_autoplay_range)
+            discordError(MusicTranslations.Commands.skipsExceedAutoplayRange)
         }
         if (arguments.to > (musicPlayer.queuedTracks.size + musicPlayer.autoPlayTrackCount)) {
             respond {
-                content = translate(MusicTranslations.Commands.Skip.exceeds_range)
+                content = translate(MusicTranslations.Commands.Skip.exceedsRange)
             }
             return@action
         }

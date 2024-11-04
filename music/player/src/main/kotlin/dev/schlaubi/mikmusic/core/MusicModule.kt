@@ -182,7 +182,7 @@ suspend fun checkOtherSchedulerOptions(
 ) {
     if (properties.any { it.get(musicPlayer) }) {
         val (confirmed) = confirmation {
-            content = translator.translate(MusicTranslations.Music.multiple_scheduler_options)
+            content = translator.translate(MusicTranslations.Music.multipleSchedulerOptions)
         }
         if (!confirmed) {
             edit { content = translator.translate(MusicTranslations.Music.General.aborted) }

@@ -12,15 +12,15 @@ import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase
 
 private class DjModeArguments : Arguments() {
     val djRole by optionalRole {
-        name = MusicTranslations.Commands.Dj_mode.Arguments.Role.name
-        description = MusicTranslations.Commands.Dj_mode.Arguments.Role.description
+        name = MusicTranslations.Commands.DjMode.Arguments.Role.name
+        description = MusicTranslations.Commands.DjMode.Arguments.Role.description
     }
 }
 
 suspend fun SettingsModule.djModeCommand() {
     ephemeralSlashCommand(::DjModeArguments) {
-        name = MusicTranslations.Commands.Dj_mode.name
-        description = MusicTranslations.Commands.Dj_mode.description
+        name = MusicTranslations.Commands.DjMode.name
+        description = MusicTranslations.Commands.DjMode.description
 
         guildAdminOnly()
 

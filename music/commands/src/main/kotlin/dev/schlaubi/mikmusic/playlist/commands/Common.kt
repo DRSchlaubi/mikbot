@@ -64,7 +64,7 @@ fun Arguments.playlistName(onlyMine: Boolean) = string {
 }
 
 private suspend fun CommandContext.notFound(value: String): Nothing {
-    throw DiscordRelayedException(MusicTranslations.Command.Playlist.unknown_playlist.withOrdinalPlaceholders(value))
+    throw DiscordRelayedException(MusicTranslations.Command.Playlist.unknownPlaylist.withOrdinalPlaceholders(value))
 }
 
 private suspend fun getPlaylistOrNull(userBehavior: UserBehavior, name: String) =
@@ -118,7 +118,7 @@ suspend inline fun EphemeralSlashCommandContext<*, *>.checkName(name: String, pu
     val existingPlaylist = PlaylistDatabase.collection.findOne(findBson)
     if (existingPlaylist != null) {
         respond {
-            content = translate(MusicTranslations.Commands.Playlist.Save.already_exists, name)
+            content = translate(MusicTranslations.Commands.Playlist.Save.alreadyExists, name)
         }
     }
 
@@ -129,7 +129,7 @@ suspend inline fun EphemeralSlashCommandContext<out PlaylistArguments, *>.checkP
     val playlist = getPlaylist()
     if (playlist.authorId != user.id) {
         respond {
-            content = translate(MusicTranslations.Commands.Playlist.Delete.no_permission)
+            content = translate(MusicTranslations.Commands.Playlist.Delete.noPermission)
         }
         return
     }

@@ -26,8 +26,8 @@ class PlaylistSaveArguments : Arguments(), QueueOptions {
         defaultValue = false
     }
     val importFrom by optionalString {
-        name = MusicTranslations.Commands.Playlist.Save.Arguments.Import_from.name
-        description = MusicTranslations.Commands.Playlist.Save.Arguments.Import_from.description
+        name = MusicTranslations.Commands.Playlist.Save.Arguments.ImportFrom.name
+        description = MusicTranslations.Commands.Playlist.Save.Arguments.ImportFrom.description
     }
     override val query: String
         get() = importFrom ?: error("Cannot find tracks if importFrom is not specified")
@@ -48,7 +48,7 @@ fun PlaylistModule.saveCommand() = ephemeralSubCommand(::PlaylistSaveArguments) 
     action {
         if (musicPlayer.playingTrack == null && arguments.importFrom == null) {
             respond {
-                content = translate(MusicTranslations.Music.Checks.not_playing)
+                content = translate(MusicTranslations.Music.Checks.notPlaying)
             }
             return@action
         }

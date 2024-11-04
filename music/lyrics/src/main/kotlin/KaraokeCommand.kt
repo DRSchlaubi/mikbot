@@ -24,7 +24,7 @@ suspend fun Extension.karaokeCommand() = ephemeralSlashCommand {
         val lyrics = runCatching { player.requestLyrics() }.getOrNull()
 
         if (lyrics !is TimedLyrics) {
-            discordError(LyricsTranslations.Commands.Karaoke.not_available)
+            discordError(LyricsTranslations.Commands.Karaoke.notAvailable)
         }
 
         val token = requestToken(user.id)

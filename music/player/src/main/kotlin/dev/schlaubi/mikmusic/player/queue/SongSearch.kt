@@ -52,7 +52,7 @@ suspend fun CommandContext.searchSong(
     paginator.destroy()
 
     val track = tracks.firstOrNull { it.info.identifier == selection }
-        ?: discordError(MusicTranslations.Music.Queue.Search.not_found)
+        ?: discordError(MusicTranslations.Music.Queue.Search.notFound)
 
     return SingleTrack(track)
 }

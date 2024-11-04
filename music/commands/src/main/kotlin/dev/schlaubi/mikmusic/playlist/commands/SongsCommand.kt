@@ -16,7 +16,7 @@ fun PlaylistModule.songsCommand() = ephemeralSubCommand(::PlaylistSongsArguments
         val playlist = getPlaylist()
         if (playlist.songs.isEmpty()) {
             respond {
-                content = translate(MusicTranslations.Commands.Playlist.Songs.is_empty)
+                content = translate(MusicTranslations.Commands.Playlist.Songs.isEmpty)
             }
             return@action
         }

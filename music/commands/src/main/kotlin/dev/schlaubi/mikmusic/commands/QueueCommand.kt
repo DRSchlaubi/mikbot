@@ -29,12 +29,12 @@ suspend fun MusicModule.queueCommand() = ephemeralSlashCommand {
                 respond {
                     embed {
                         musicPlayer.addAutoPlaySongs(this@action)
-                        description = translate(MusicTranslations.Commands.Queue.now_playing, track.format())
+                        description = translate(MusicTranslations.Commands.Queue.nowPlaying, track.format())
                     }
                 }
             } else {
                 respond {
-                    content = translate(MusicTranslations.Commands.Queue.no_songs)
+                    content = translate(MusicTranslations.Commands.Queue.noSongs)
                 }
             }
             return@action
@@ -49,7 +49,7 @@ suspend fun MusicModule.queueCommand() = ephemeralSlashCommand {
                 val playingTrack = musicPlayer.playingTrack
                 if (playingTrack != null) {
                     field {
-                        name = translate(MusicTranslations.Music.Queue.now_playing)
+                        name = translate(MusicTranslations.Music.Queue.nowPlaying)
                         value = playingTrack.format(musicPlayer.repeat)
                     }
                 }

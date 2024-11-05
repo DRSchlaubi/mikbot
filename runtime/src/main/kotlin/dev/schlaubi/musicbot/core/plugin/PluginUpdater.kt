@@ -72,6 +72,7 @@ class PluginUpdater(private val pluginLoader: PluginLoader, repos: List<UpdateRe
 
             requestedPlugins.forEach {
                 val plugin = availablePlugins[it.id]
+                if(it.id in installedPlugins) return@forEach
                 if (plugin == null) {
                     LOG.warn { "Could not find plugin ${it.id} in any repo" }
                     return@forEach

@@ -53,7 +53,7 @@ internal fun Project.addDependencies() {
             add("ksp", mikbot("plugin-processor"))
             val optionalKordExDependency = mikbotPluginExtension.enableKordexProcessor.map {
                 if (it) {
-                    create("com.kotlindiscord.kord.extensions:annotation-processor:${MikBotPluginInfo.KORDEX_VERSION}")
+                    create("dev.kordex:annotation-processor:${MikBotPluginInfo.KORDEX_VERSION}")
                 } else {
                     val emptyDependency = project.fileTree("empty") {
                         include { false }

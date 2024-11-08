@@ -32,6 +32,8 @@ dependencies {
         isTransitive = false
     }
 
+    implementation("dev.kord", "kord-gateway-jvm", "mikbot-20241108.170257-3")
+
     // Util
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.ktor.client.core)

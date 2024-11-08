@@ -31,8 +31,8 @@ cd ~/music-bot
 now create a new file called `docker-compose.yml` and use your favourite editor to edit this file, I will be using nano
 
 ```bash
-touch docker-compose.yml
-nano docker-compose.yml
+touch docker-compose.yaml
+nano docker-compose.yaml
 ```
 
 paste the following into that file

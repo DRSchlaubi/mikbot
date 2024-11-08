@@ -32,7 +32,7 @@ dependencies {
         isTransitive = false
     }
 
-    implementation("dev.kord", "kord-gateway-jvm", "mikbot-20241108.170257-3")
+    implementation("dev.kord", "kord-gateway-jvm", "0.15.0")
 
     // Util
     implementation(libs.kotlinx.serialization.json)

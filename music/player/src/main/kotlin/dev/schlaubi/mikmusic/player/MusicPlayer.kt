@@ -262,12 +262,6 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
         if (event.reason.mayStartNext) {
             startNextSong(event.track)
         }
-
-        if (repeat) {
-            waitForPlayerUpdate()
-        }
-
-        updateMusicChannelMessage()
     }
 
     fun startLeaveTimeout() {

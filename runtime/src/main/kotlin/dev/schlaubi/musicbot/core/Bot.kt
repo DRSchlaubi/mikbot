@@ -143,6 +143,8 @@ class Bot(repos: List<UpdateRepository>) : KordExKoinComponent, PluginContext {
 
         applicationCommands {
             enabled = true
+            // TODO: Undo before commit
+            register = false
             Config.TEST_GUILD?.let(::defaultGuild)
         }
 

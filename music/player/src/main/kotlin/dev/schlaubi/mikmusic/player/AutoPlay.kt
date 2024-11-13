@@ -79,8 +79,11 @@ private suspend fun MusicPlayer.fetchAutoPlay(
 }
 
 context(EmbedBuilder)
-suspend fun MusicPlayer.addAutoPlaySongs(translator: TranslatableContext) {
-    val songs = autoPlay?.songs?.take(5)
+suspend fun MusicPlayer.addAutoPlaySongs(translator: TranslatableContext) = autoPlay.addAutoPlaySongs(translator)
+
+context(EmbedBuilder)
+suspend fun AutoPlayContext?.addAutoPlaySongs(translator: TranslatableContext) {
+    val songs = this?.songs?.take(5)
     if (!songs.isNullOrEmpty()) {
         field {
             name = translator.translate(MusicTranslations.Music.AutoPlay.nextSong)

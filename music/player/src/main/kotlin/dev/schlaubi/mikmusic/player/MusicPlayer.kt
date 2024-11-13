@@ -33,15 +33,9 @@ import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase
 import dev.schlaubi.mikmusic.musicchannel.updateMessage
 import dev.schlaubi.mikmusic.player.queue.SchedulingOptions
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.koin.core.component.get
-import org.koin.core.component.inject
 import kotlin.coroutines.CoroutineContext
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
@@ -57,7 +51,8 @@ internal data class SavedTrack(
     val pause: Boolean,
 )
 
-class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by link, KordExKoinComponent, CoroutineScope, KordObject {
+class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by link, KordExKoinComponent, CoroutineScope,
+    KordObject {
 
     private val lock = Mutex()
 
@@ -69,7 +64,6 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
     var playingTrack: QueuedTrack? = null
     var disableMusicChannel: Boolean = false
         private set
-    private val translationsProvider: TranslationsProvider by inject()
 
     private var leaveTimeout: Job? = null
     internal var autoPlay: AutoPlayContext? = null
@@ -81,27 +75,20 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
         get() = !autoPlay?.songs.isNullOrEmpty()
     val autoPlayTrackCount
         get() = autoPlay?.songs?.size ?: 0
-    private val musicChannelUpdateFlow = MutableSharedFlow<Unit>(0, 1, BufferOverflow.DROP_OLDEST)
     override val coroutineContext: CoroutineContext
         get() = kord.coroutineContext + SupervisorJob()
 
     init {
-        guild.kord.launch {
+        kord.launch {
             val settings = MusicSettingsDatabase.findGuild(guild)
 
             settings.defaultSchedulerSettings?.applyToPlayer(this@MusicPlayer)
         }
 
-        updateSponsorBlock()
-
         link.player.on(consumer = ::onTrackEnd)
         link.player.on(consumer = ::onTrackStart)
         link.player.on(consumer = ::onChaptersLoaded)
         link.player.on(consumer = ::onChapterStarted)
-        @OptIn(FlowPreview::class)
-        musicChannelUpdateFlow.debounce(5.seconds).onEach {
-            updateMusicChannelMessage()
-        }.launchIn(this)
     }
 
     private fun updateSponsorBlock() = guild.kord.launch {
@@ -126,25 +113,15 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
     @Suppress("unused") // used by other plugins
     fun updateMusicChannelState(to: Boolean) {
         disableMusicChannel = to
-        queueMusicChannelMessageUpdate()
     }
 
     var shuffle: Boolean
         get() = queue.shuffle
         set(value) {
             queue.shuffle = value
-            updateMusicChannelMessage()
         }
     var repeat = false
-        set(value) {
-            field = value
-            updateMusicChannelMessage()
-        }
     var loopQueue = false
-        set(value) {
-            field = value
-            updateMusicChannelMessage()
-        }
 
     val remainingTrackDuration: Duration
         get() = player.playingTrack?.info?.length?.minus(player.position)
@@ -166,7 +143,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
         onTop: Boolean,
         tracks: Collection<QueuedTrack>,
         position: Duration? = null,
-        schedulingOptions: SchedulingOptions? = null
+        schedulingOptions: SchedulingOptions? = null,
     ) = lock.withLock {
         val isFirst = nextSongIsFirst
         require(isFirst || position == null) { "Can only specify position if nextSong is first" }
@@ -179,9 +156,11 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
         if ((force || isFirst) && !dontQueue) {
             startNextSong(position = position)
             waitForPlayerUpdate()
+        } else {
+            // In this case the onTrackStart won't trigger an update
+            // since there already is something playing
+            updateMusicChannelMessage()
         }
-
-        updateMusicChannelMessage()
     }
 
     @Suppress("unused") // used by Tonbrett
@@ -236,7 +215,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
         val playingTrack = playingTrack ?: return
         val queuedBy = playingTrack.queuedBy
         this.playingTrack = ChapterQueuedTrack(playingTrack.track, queuedBy, event.chapters)
-        queueMusicChannelMessageUpdate()
+        updateMusicChannelMessage()
     }
 
     private fun onChapterStarted(event: ChapterStartedEvent) {
@@ -291,6 +270,8 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
     }
 
     fun startLeaveTimeout() {
+        if (playingTrack != null) return
+        if (leaveTimeout != null) leaveTimeout?.cancel()
         leaveTimeout = lavakord.launch {
             delay(MusicSettingsDatabase.findGuild(guild).leaveTimeout)
             stop()
@@ -376,24 +357,21 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
         queue.clear()
         autoPlay = null
         playingTrack = null
-        queueMusicChannelMessageUpdate()
+        updateMusicChannelMessage()
         coroutineContext.cancel()
 
         get<ExtensibleBot>().findExtension<MusicModule>()?.unregister(guild.id)
     }
 
-    private fun queueMusicChannelMessageUpdate() {
-        musicChannelUpdateFlow.tryEmit(Unit)
-    }
-
-    fun updateMusicChannelMessage() {
+    fun updateMusicChannelMessage(force: Boolean = false) {
         if (!disableMusicChannel) {
             guild.kord.launch {
                 updateMessage(
                     guild.id,
                     guild.kord,
                     this@MusicPlayer,
-                    translator = get<TranslationsProvider>()
+                    translator = get<TranslationsProvider>(),
+                    force = force
                 )
             }
         }

@@ -24,7 +24,7 @@ suspend fun SettingsModule.fixMusicChannel() = ephemeralSlashCommand {
             return@action
         }
 
-        musicModule.getMusicPlayer(safeGuild).updateMusicChannelMessage()
+        musicModule.getMusicPlayer(safeGuild).updateMusicChannelMessage(force = true)
 
         respond {
             content = translate(MusicTranslations.Commands.FixMusicChannel.success)

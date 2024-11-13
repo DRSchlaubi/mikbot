@@ -110,8 +110,6 @@ suspend fun SettingsModule.musicChannel() {
                 content = translate(MusicTranslations.Settings.loading)
             }
 
-            message.pin("Main music channel message")
-
             MusicSettingsDatabase.guild.save(
                 guildSettings.copy(
                     musicChannelData = MusicChannelData(textChannel.id, message.id)

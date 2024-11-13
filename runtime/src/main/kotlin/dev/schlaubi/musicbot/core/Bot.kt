@@ -1,12 +1,5 @@
 package dev.schlaubi.musicbot.core
 
-import dev.kordex.core.ExtensibleBot
-import dev.kordex.core.builders.ExtensibleBotBuilder
-import dev.kordex.core.extensions.Extension
-import dev.kordex.core.extensions.event
-import dev.kordex.core.i18n.TranslationsProvider
-import dev.kordex.core.koin.KordExKoinComponent
-import dev.kordex.core.utils.loadModule
 import dev.kord.cache.api.DataEntryCache
 import dev.kord.common.Locale
 import dev.kord.common.entity.PresenceStatus
@@ -14,7 +7,13 @@ import dev.kord.core.event.gateway.DisconnectEvent
 import dev.kord.core.event.gateway.ReadyEvent
 import dev.kord.core.event.gateway.ResumedEvent
 import dev.kord.rest.builder.message.allowedMentions
-import dev.kordex.core.builders.about.CopyrightType
+import dev.kordex.core.ExtensibleBot
+import dev.kordex.core.builders.ExtensibleBotBuilder
+import dev.kordex.core.extensions.Extension
+import dev.kordex.core.extensions.event
+import dev.kordex.core.i18n.TranslationsProvider
+import dev.kordex.core.koin.KordExKoinComponent
+import dev.kordex.core.utils.loadModule
 import dev.schlaubi.mikbot.plugin.api.MikBotInfo
 import dev.schlaubi.mikbot.plugin.api.PluginContext
 import dev.schlaubi.mikbot.plugin.api.PluginSystem
@@ -32,7 +31,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import mu.KotlinLogging
-import org.pf4j.PluginState
 import org.pf4j.PluginWrapper
 import org.pf4j.update.UpdateRepository
 
@@ -143,8 +141,6 @@ class Bot(repos: List<UpdateRepository>) : KordExKoinComponent, PluginContext {
 
         applicationCommands {
             enabled = true
-            // TODO: Undo before commit
-            register = false
             Config.TEST_GUILD?.let(::defaultGuild)
         }
 

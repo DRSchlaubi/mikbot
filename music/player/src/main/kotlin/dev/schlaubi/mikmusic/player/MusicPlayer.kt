@@ -230,6 +230,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
     }
 
     private suspend fun onTrackEnd(event: TrackEndEvent) = lock.withLock {
+//        println("Track end: ${event.track.info.sourceName}")
         if (dontQueue) {
             dontQueue = event.reason == Message.EmittedEvent.TrackEndEvent.AudioTrackEndReason.REPLACED
         }

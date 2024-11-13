@@ -9,13 +9,8 @@ import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
 import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.behavior.edit
-import dev.kord.core.behavior.getChannelOfOrNull
-import dev.kord.core.entity.Message
-import dev.kord.core.entity.channel.TextChannel
 import dev.kord.rest.builder.component.ActionRowBuilder
 import dev.kord.rest.builder.component.MessageComponentBuilder
-import dev.kord.rest.builder.message.actionRow
-import dev.kord.rest.builder.message.embed
 import dev.kord.x.emoji.DiscordEmoji
 import dev.kord.x.emoji.Emojis
 import dev.kordex.core.i18n.TranslationsProvider

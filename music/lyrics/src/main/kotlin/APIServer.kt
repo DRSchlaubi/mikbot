@@ -15,6 +15,7 @@ import dev.schlaubi.lavakord.audio.TrackStartEvent
 import dev.schlaubi.lavakord.audio.on
 import dev.schlaubi.lavakord.audio.player.Player
 import dev.schlaubi.lavakord.plugins.lyrics.rest.requestLyrics
+import dev.schlaubi.lyrics.protocol.Lyrics
 import dev.schlaubi.lyrics.protocol.TimedLyrics
 import dev.schlaubi.mikbot.plugin.api.config.Environment
 import dev.schlaubi.mikbot.util_plugins.ktor.api.KtorExtensionPoint
@@ -41,6 +42,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import org.koin.core.component.inject
 import org.pf4j.Extension
@@ -51,6 +54,12 @@ import dev.schlaubi.mikbot.plugin.api.config.Config as BotConfig
 private val PLAYER = AttributeKey<MusicPlayer>("MUSIC_PLAYER")
 private val authKeys = mutableMapOf<String, Snowflake>()
 
+@Serializable
+private data class CurrenState(
+    val lyrics: Lyrics,
+    val time: Instant,
+    val position: Long
+)
 
 fun requestToken(userId: Snowflake): String {
     val key = generateNonce()
@@ -111,7 +120,10 @@ class APIServer : KtorExtensionPoint, KordExKoinComponent {
                 get("current") {
                     val player = call.userId.findPlayer()
 
-                    call.respond(player.player.requestLyrics().takeIf { it is TimedLyrics } ?: notFound())
+                    val lyrics = player.player.requestLyrics().takeIf { it is TimedLyrics } ?: notFound()
+                    val state = CurrenState(lyrics, Clock.System.now(), player.player.position)
+
+                    call.respond(state)
                 }
 
                 route("events") {

@@ -46,7 +46,7 @@ suspend fun Extension.lyricsCommand() = publicSlashCommand(::LyricsArguments) {
             return@action
         }
         val lyrics = try {
-            if (arguments.name != null && player.playingTrack != null) {
+            if (arguments.name == null && player.playingTrack != null) {
                 player.requestLyrics()
             } else {
                 val (videoId) = link.node.searchLyrics(query).firstOrNull()

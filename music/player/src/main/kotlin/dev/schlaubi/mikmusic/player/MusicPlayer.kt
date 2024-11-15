@@ -315,7 +315,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
         if (autoPlayTrack != null) {
             queue.addTracks(SimpleQueuedTrack(autoPlayTrack, guild.kord.selfId))
         }
-        if (queue.isEmpty()) {
+        if (queue.isEmpty() && !repeat) {
             updateMusicChannelMessage()
             return
         }

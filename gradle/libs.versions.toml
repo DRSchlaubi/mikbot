@@ -8,7 +8,7 @@ ktor = "3.0.1"
 kord = "mikbot-SNAPSHOT"
 api = "4.1.3"
 ksp = "2.0.21-1.0.26"
-lavakord = "8.0.1"
+lavakord = "8.1.0"
 kordex-plugin = "1.5.6"
 
 [libraries]

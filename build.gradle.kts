@@ -7,9 +7,6 @@ plugins {
 
 subprojects {
     addRepositories()
-    repositories {
-        mavenLocal()
-    }
 }
 
 mikbotPlugin {

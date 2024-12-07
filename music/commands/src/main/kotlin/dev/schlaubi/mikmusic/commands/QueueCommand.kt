@@ -5,10 +5,10 @@ import dev.kord.rest.builder.message.embed
 import dev.schlaubi.mikbot.plugin.api.util.forList
 import dev.schlaubi.mikbot.plugin.api.util.translate
 import dev.schlaubi.mikbot.translations.MusicTranslations
+import dev.schlaubi.mikmusic.api.types.QueuedTrack
 import dev.schlaubi.mikmusic.checks.anyMusicPlaying
 import dev.schlaubi.mikmusic.core.MusicModule
 import dev.schlaubi.mikmusic.core.musicControlContexts
-import dev.schlaubi.mikmusic.player.QueuedTrack
 import dev.schlaubi.mikmusic.player.addAutoPlaySongs
 import dev.schlaubi.mikmusic.util.format
 import kotlin.time.Duration.Companion.minutes

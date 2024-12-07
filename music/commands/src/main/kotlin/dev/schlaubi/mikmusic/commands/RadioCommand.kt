@@ -10,10 +10,10 @@ import dev.schlaubi.lavakord.rest.loadItem
 import dev.schlaubi.mikbot.plugin.api.util.discordError
 import dev.schlaubi.mikbot.plugin.api.util.translate
 import dev.schlaubi.mikbot.translations.MusicTranslations
+import dev.schlaubi.mikmusic.api.types.SimpleQueuedTrack
 import dev.schlaubi.mikmusic.autocomplete.autoCompletedYouTubeQuery
 import dev.schlaubi.mikmusic.checks.joinSameChannelCheck
 import dev.schlaubi.mikmusic.core.MusicModule
-import dev.schlaubi.mikmusic.player.SimpleQueuedTrack
 import dev.schlaubi.mikmusic.player.enableAutoPlay
 import dev.schlaubi.mikmusic.util.spotifyId
 

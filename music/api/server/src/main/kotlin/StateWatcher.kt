@@ -49,9 +49,10 @@ class StateWatcher : Extension() {
         val guild = kord.getGuild(guildId)
         val player = musicModule.getCachedMusicPlayer(guildId) ?: return
         val time = (this as? LavalinkPlayerUpdateEvent)?.state?.time ?: System.currentTimeMillis()
+        val channelId = player.lastChannelId ?: return
 
         broadcastEvent(
-            Snowflake(player.lastChannelId!!),
+            Snowflake(channelId),
             PlayerUpdateEvent(player.toPlayerState(guild), player.queuedTracks.mapToAPIQueuedTrack(guild), time, guildId),
         )
     }

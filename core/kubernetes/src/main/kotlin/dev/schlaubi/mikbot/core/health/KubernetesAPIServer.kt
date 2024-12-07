@@ -1,23 +1,23 @@
 package dev.schlaubi.mikbot.core.health
 
-import dev.kordex.core.koin.KordExKoinComponent
 import dev.schlaubi.mikbot.core.health.check.HealthCheck
 import dev.schlaubi.mikbot.core.health.routes.HealthRoutes
-import dev.schlaubi.mikbot.util_plugins.ktor.api.KtorExtensionPoint
+import dev.schlaubi.mikbot.core.redeploy_hook.api.RedeployExtensionPoint
+import dev.schlaubi.mikbot.plugin.api.PluginContext
+import dev.schlaubi.mikbot.plugin.api.getExtensions
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.engine.*
+import io.ktor.server.netty.*
 import io.ktor.server.resources.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import mu.KotlinLogging
-import org.koin.core.component.inject
-import org.pf4j.Extension
 
-@Extension
-class KubernetesAPIServer : KtorExtensionPoint, KordExKoinComponent {
-    private val checks by inject<List<HealthCheck>>()
+fun startServer(checks: List<HealthCheck>, context: PluginContext) =
+    embeddedServer(Netty, Config.PORT) {
+        install(Resources)
 
-    override fun Application.apply() {
         routing {
             get<HealthRoutes.Health> {
                 if (checks.all { it.isSuccessful() }) {
@@ -26,9 +26,15 @@ class KubernetesAPIServer : KtorExtensionPoint, KordExKoinComponent {
                     call.respond(HttpStatusCode.InternalServerError)
                 }
             }
+
+            if (context.pluginWrapper.pluginManager.getPlugin("redeploy-hook") != null) {
+                val redeployHooks = context.pluginSystem.getExtensions<RedeployExtensionPoint>()
+                get<HealthRoutes.PreStop> {
+                    redeployHooks.forEach { it.beforeRedeploy() }
+                }
+            }
         }
-    }
-}
+    }.start(wait = false)
 
 private val logger = KotlinLogging.logger {}
 

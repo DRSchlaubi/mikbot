@@ -2,10 +2,10 @@ package dev.schlaubi.mikmusic.commands
 
 import dev.schlaubi.mikbot.plugin.api.util.translate
 import dev.schlaubi.mikbot.translations.MusicTranslations
+import dev.schlaubi.mikmusic.api.types.ChapterQueuedTrack
 import dev.schlaubi.mikmusic.checks.anyMusicPlaying
 import dev.schlaubi.mikmusic.core.MusicModule
 import dev.schlaubi.mikmusic.core.musicControlContexts
-import dev.schlaubi.mikmusic.player.ChapterQueuedTrack
 
 suspend fun MusicModule.nextCommand() = ephemeralControlSlashCommand {
     name = MusicTranslations.Commands.Next.name

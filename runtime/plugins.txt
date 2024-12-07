@@ -1,3 +1,5 @@
 :core:ktor
+:core:redeploy-hook
+:core:kubernetes
 :music:player
-:music:api:server
+:music:commands

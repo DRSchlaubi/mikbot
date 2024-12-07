@@ -6,8 +6,8 @@ import dev.kordex.core.commands.converters.impl.optionalString
 import dev.kordex.core.commands.converters.impl.string
 import dev.schlaubi.mikbot.plugin.api.util.translate
 import dev.schlaubi.mikbot.translations.MusicTranslations
+import dev.schlaubi.mikmusic.api.types.QueuedTrack
 import dev.schlaubi.mikmusic.core.musicControlContexts
-import dev.schlaubi.mikmusic.player.QueuedTrack
 import dev.schlaubi.mikmusic.player.queue.QueueOptions
 import dev.schlaubi.mikmusic.player.queue.findTracks
 import dev.schlaubi.mikmusic.playlist.Playlist

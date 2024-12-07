@@ -15,7 +15,9 @@ repositories {
 }
 
 dependencies {
-    plugin(projects.core.ktor)
+    optionalPlugin(projects.core.redeployHook)
+    implementation(libs.ktor.server.netty)
+    implementation(libs.ktor.server.resources)
 
     implementation(libs.kubernetes.client)
     implementation(libs.kotlin.jsonpatch)

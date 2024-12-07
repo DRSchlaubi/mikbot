@@ -5,6 +5,7 @@ import dev.kordex.core.builders.ExtensionsBuilder
 import dev.kordex.core.utils.loadModule
 import dev.schlaubi.mikbot.core.health.check.HealthCheck
 import dev.schlaubi.mikbot.core.health.ratelimit.setupDistributedRateLimiter
+import dev.schlaubi.mikbot.core.redeploy_hook.api.RedeployExtensionPoint
 import dev.schlaubi.mikbot.plugin.api.Plugin
 import dev.schlaubi.mikbot.plugin.api.PluginContext
 import dev.schlaubi.mikbot.plugin.api.PluginMain
@@ -18,9 +19,12 @@ private val LOG = KotlinLogging.logger { }
 @PluginMain
 class KubernetesPlugin(context: PluginContext) : Plugin(context) {
     private val healthChecks by lazy<List<HealthCheck>>(context.pluginSystem::getExtensions)
+
     private val logger = KotlinLogging.logger(log)
     override fun start() {
         logger.info { "Registered ${healthChecks.size} health checks available at /healthz" }
+
+        startServer(healthChecks, contextSafe)
     }
 
     override fun ExtensionsBuilder.addExtensions() {

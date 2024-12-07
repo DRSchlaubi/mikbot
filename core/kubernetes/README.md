@@ -4,22 +4,28 @@ Plugin providing tools for running Mikbot within kubernetes
 
 Also shouteout to @lucsoft, who helped me to set this up
 
-## health endpoint
+## kubernetes hooks
 
 The plugin adds a HTTP endpoint, which you can use as a K8s probe, it will return 200 unless a shard or the DB connection
-is down
+is down.
+It also adds a pre-stop hook, which will call hooks of the [redeploy-hook](../redeploy-hook) plugin
 
 ```yaml
           livenessProbe:
               httpGet:
                   path: /healthz
-                  port: mikbot
+                  port: mikbot-kubernetes # remember to specify this port somewhere, it defaults to 8081
           startupProbe:
               httpGet:
                   path: /healthz
-                  port: mikbot # remember to specify that port name somewhere
+                  port: mikbot-kubernetes
               # let's give our shards time to connect
               initialDelaySeconds: 15
+          lifecycle:
+              preStop:
+                  httpGet:
+                      port: mikbot-kubernetes
+                      path: /kubernetes/pre-stop
 ```
 
 ### Own health checks

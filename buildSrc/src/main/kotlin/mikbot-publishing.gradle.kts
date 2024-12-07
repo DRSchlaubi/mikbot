@@ -7,58 +7,57 @@ plugins {
     com.google.cloud.artifactregistry.`gradle-plugin`
 }
 
+val sourcesJar by tasks.creating(Jar::class) {
+    dependsOn(tasks.processResources)
+    archiveClassifier = "sources"
+    destinationDirectory = layout.buildDirectory
+    from(sourceSets["main"].allSource)
+}
 
 publishing {
     publications {
-        if (plugins.hasPlugin("org.jetbrains.kotlin.jvm")) {
-            create<MavenPublication>("maven") {
-                groupId = "dev.schlaubi"
-                artifactId = "mikbot-${project.name}"
-                afterEvaluate {
-                    version = project.version as String
+        create<MavenPublication>("maven") {
+            groupId = "dev.schlaubi"
+            artifactId = "mikbot-${project.name}"
+            afterEvaluate {
+                version = project.version as String
+            }
+
+            from(components["java"])
+            artifact(sourcesJar)
+
+
+            pom {
+                name = "mikbot"
+                description = "A modular framework for building Discord bots"
+                url = "https://github.com/DRSchlaubi/mikmusic"
+
+                organization {
+                    name = "Schlaubi"
+                    url = "https://github.com/DRSchlaubi"
                 }
 
-                from(components["java"])
-                val sourcesJar by tasks.creating(Jar::class) {
-                    dependsOn(tasks.processResources)
-                    archiveClassifier = "sources"
-                    destinationDirectory = layout.buildDirectory
-                    from(sourceSets["main"].allSource)
+                developers {
+                    developer {
+                        name = "Michael Rittmeister"
+                    }
                 }
-                artifact(sourcesJar)
 
-                pom {
-                    name = "mikbot"
-                    description = "A modular framework for building Discord bots"
-                    url = "https://github.com/DRSchlaubi/mikmusic"
+                issueManagement {
+                    system = "GitHub"
+                    url = "https://github.com/DRSchlaubi/mikmusic/issues"
+                }
 
-                    organization {
-                        name = "Schlaubi"
-                        url = "https://github.com/DRSchlaubi"
+                licenses {
+                    license {
+                        name = "Apache 2.0"
+                        url = "https://opensource.org/licenses/Apache-2.0"
                     }
-
-                    developers {
-                        developer {
-                            name = "Michael Rittmeister"
-                        }
-                    }
-
-                    issueManagement {
-                        system = "GitHub"
-                        url = "https://github.com/DRSchlaubi/mikmusic/issues"
-                    }
-
-                    licenses {
-                        license {
-                            name = "Apache 2.0"
-                            url = "https://opensource.org/licenses/Apache-2.0"
-                        }
-                    }
-                    scm {
-                        connection = "scm:git:https://github.com/DRSchlaubi/mikmusic.git"
-                        developerConnection = "scm:git:ssh://git@github.com:DRSchlaubi/mikmusic.git"
-                        url = "https://github.com/DRSchlaubi/mikmusic.git"
-                    }
+                }
+                scm {
+                    connection = "scm:git:https://github.com/DRSchlaubi/mikmusic.git"
+                    developerConnection = "scm:git:ssh://git@github.com:DRSchlaubi/mikmusic.git"
+                    url = "https://github.com/DRSchlaubi/mikmusic.git"
                 }
             }
 
@@ -85,6 +84,6 @@ signing {
     val signingPassword = System.getenv("SIGNING_KEY_PASSWORD")?.toString()
     if (signingKey != null && signingPassword != null) {
         useInMemoryPgpKeys(String(Base64.getDecoder().decode(signingKey)), signingPassword)
-        publishing.publications.forEach { sign(it) }
+        sign(publishing.publications["maven"])
     }
 }

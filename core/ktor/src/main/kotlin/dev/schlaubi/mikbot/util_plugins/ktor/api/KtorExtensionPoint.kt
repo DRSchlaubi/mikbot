@@ -1,12 +1,15 @@
 package dev.schlaubi.mikbot.util_plugins.ktor.api
 
+import io.bkbn.kompendium.core.plugin.NotarizedApplication
+import io.bkbn.kompendium.json.schema.definition.JsonSchema
+import io.bkbn.kompendium.oas.OpenApiSpec
 import io.ktor.server.application.*
 import io.ktor.server.plugins.statuspages.*
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.JsonBuilder
 import kotlinx.serialization.modules.EmptySerializersModule
 import kotlinx.serialization.modules.SerializersModule
 import org.pf4j.ExtensionPoint
+import kotlin.reflect.KType
 
 /**
  * Ktor plugin extension point.
@@ -31,4 +34,19 @@ interface KtorExtensionPoint : ExtensionPoint {
      * Add extension specific [JsonBuilder] options.
      */
     fun JsonBuilder.apply() {}
+
+    /**
+     * Provides [NotarizedApplication.Config.customTypes] for this extension.
+     */
+    fun provideCustomTypes(): Map<KType, JsonSchema> = emptyMap()
+
+    /**
+     * Provides [NotarizedApplication] configuration for this extension.
+     */
+    fun NotarizedApplication.Config.apply() {}
+
+    /**
+     * Configures the base [OpenApiSpec].
+     */
+    fun OpenApiSpec.apply(): OpenApiSpec = this
 }

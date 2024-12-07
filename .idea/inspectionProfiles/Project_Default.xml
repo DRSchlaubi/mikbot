@@ -3,9 +3,10 @@
     <option name="myName" value="Project Default" />
     <inspection_tool class="AddOperatorModifier" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="ConvertLambdaToReference" enabled="true" level="INFORMATION" enabled_by_default="true">
-      <scope name="Not kts" level="WARNING" enabled="true" />
+      <scope name="Not kts" level="WARNING" enabled="false" />
     </inspection_tool>
     <inspection_tool class="ConvertPairConstructorToToFunction" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="CssConvertColorToHexInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="DataClassCanBeRecord" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="Destructure" enabled="true" level="SERVER PROBLEM" enabled_by_default="true" />
     <inspection_tool class="FromClosedRangeMigration" enabled="true" level="WEAK WARNING" enabled_by_default="true" />

@@ -1,6 +1,5 @@
 @file:Suppress("INVISIBLE_MEMBER", "INVISIBLE_REFERENCE")
 import dev.schlaubi.mikbot.gradle.addRepositories
-import java.util.Locale
 
 plugins {
     dev.schlaubi.mikbot.`gradle-plugin`
@@ -9,7 +8,7 @@ plugins {
 subprojects {
     addRepositories()
     repositories {
-        maven("https://maven.topi.wtf/releases")
+        mavenLocal()
     }
 }
 

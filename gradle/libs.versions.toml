@@ -4,12 +4,13 @@ kordex = "2.3.1-MIKBOT.4"
 kmongo = "5.1.0"
 coroutines = "1.9.0"
 serialization = "1.7.3"
-ktor = "3.0.1"
+ktor = "3.0.2"
 kord = "mikbot-SNAPSHOT"
 api = "4.1.5"
 ksp = "2.0.21-1.0.26"
-lavakord = "8.0.1"
+lavakord = "9.0.1"
 kordex-plugin = "1.5.6"
+kompendium = "4.0.4-SNAPSHOT"
 
 [libraries]
 kord-common = { group = "dev.kord", name = "kord-common", version.ref = "kord" }
@@ -33,7 +34,9 @@ lavakord-sponsorblock = { group = "dev.schlaubi.lavakord", name = "sponsorblock"
 lavakord-lavsrc = { group = "dev.schlaubi.lavakord", name = "lavasrc-jvm", version.ref = "lavakord" }
 lavakord-lavasearch = { group = "dev.schlaubi.lavakord", name = "lavasearch-jvm", version.ref = "lavakord" }
 lavakord-lyrics = { group = "dev.schlaubi.lavakord", name = "lyrics-jvm", version.ref = "lavakord" }
+lavalink-protocol = { group = "dev.arbjerg.lavalink", name = "protocol", version = "4.0.8" }
 ksp-api = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version.ref = "ksp" }
+ktor-resources = { group = "io.ktor", name = "ktor-resources", version.ref = "ktor" }
 ktor-client-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }
 ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
@@ -46,11 +49,15 @@ ktor-server-netty = { group = "io.ktor", name = "ktor-server-netty", version.ref
 ktor-server-resources = { group = "io.ktor", name = "ktor-server-resources", version.ref = "ktor" }
 ktor-server-status-pages = { group = "io.ktor", name = "ktor-server-status-pages", version.ref = "ktor" }
 ktor-server-auth = { group = "io.ktor", name = "ktor-server-auth", version.ref = "ktor" }
+ktor-server-auth-jwt = { group = "io.ktor", name = "ktor-server-auth-jwt", version.ref = "ktor" }
 ktor-server-sessions = { group = "io.ktor", name = "ktor-server-sessions", version.ref = "ktor" }
 ktor-server-core = { group = "io.ktor", name = "ktor-server-core-jvm", version.ref = "ktor" }
 ktor-server-cors = { group = "io.ktor", name = "ktor-server-cors", version.ref = "ktor" }
 ktor-server-websockets = { group = "io.ktor", name = "ktor-server-websockets", version.ref = "ktor" }
 ktor-server-html-builder = { group = "io.ktor", name = "ktor-server-html-builder", version.ref = "ktor" }
+ktor-server-swagger = { group = "io.ktor", name = "ktor-server-swagger", version.ref = "ktor" }
+kompendium-core = { group = "io.bkbn", name = "kompendium-core", version.ref = "kompendium" }
+kompendium-resources = { group = "io.bkbn", name = "kompendium-resources", version.ref = "kompendium" }
 
 kubernetes-client = { group = "io.kubernetes", name = "client-java", version = "21.0.2" }
 kotlin-jsonpatch = { group = "io.github.reidsync", name = "kotlin-json-patch", version = "1.0.0" }

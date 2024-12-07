@@ -67,6 +67,7 @@ internal fun Project.buildDependenciesString(): String {
 
 internal fun Dependency.toDependencyString(optional: Boolean = false): String {
     val safeVersion = version.toString().substringBefore("-SNAPSHOT")
+    @Suppress("DEPRECATION") // Currently no better way available
     val name = if (this is ProjectDependency) {
         dependencyProject.pluginId
     } else {

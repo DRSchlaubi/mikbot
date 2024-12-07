@@ -28,8 +28,13 @@ class LavalinkManager(context: PluginContext) : MikBotModule(context) {
         private set
     private val database: Database by inject()
     private val lavalinkServers = database.getCollection<LavalinkServer>("lavalink_servers")
+    private val loadListeners: MutableList<suspend () -> Unit> = mutableListOf()
 
     override suspend fun setup() {
+    }
+
+    fun onLoad(block: suspend () -> Unit) {
+        loadListeners += block
     }
 
     suspend fun load() {
@@ -47,6 +52,8 @@ class LavalinkManager(context: PluginContext) : MikBotModule(context) {
         lavalinkServers.find().toList().forEach { (url, password) ->
             lavalink.addNode(url, password)
         }
+
+        loadListeners.forEach { it() }
     }
 
     fun getLink(guild: GuildBehavior) = lavalink.getLink(guild.id)

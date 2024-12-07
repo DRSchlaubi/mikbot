@@ -19,6 +19,22 @@
             </SchemaInfo>
           </value>
         </entry>
+        <entry key="OpenAPI 3.1">
+          <value>
+            <SchemaInfo>
+              <option name="name" value="OpenAPI 3.1" />
+              <option name="relativePathToSchema" value="https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/schemas/v3.1/schema.json" />
+              <option name="applicationDefined" value="true" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value="music/api/server/src/main/resources/openapi/documentation.json" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
       </map>
     </state>
   </component>

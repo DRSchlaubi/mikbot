@@ -1,6 +1,7 @@
 package dev.schlaubi.mikmusic.core.settings
 
 import dev.kord.common.entity.Snowflake
+import dev.schlaubi.mikmusic.api.types.SchedulerSettings
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

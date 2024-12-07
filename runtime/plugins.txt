@@ -1,4 +1,3 @@
-:music:player
-:music:commands
-:music:lyrics
 :core:ktor
+:music:player
+:music:api:server

@@ -1,6 +1,4 @@
-@file:Suppress("DataClassCanBeRecord")
-
-package dev.schlaubi.mikmusic.player
+package dev.schlaubi.mikmusic.api.types
 
 import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.kord.common.entity.Snowflake

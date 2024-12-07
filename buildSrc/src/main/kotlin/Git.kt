@@ -2,25 +2,23 @@ import org.gradle.api.Project
 import java.io.ByteArrayOutputStream
 
 fun Project.getGitCommit(): String {
-    return execCommand(arrayOf("git", "rev-parse", "--short", "HEAD"))
+    return execCommand("git", "rev-parse", "--short", "HEAD")
         ?: System.getenv("GITHUB_SHA") ?: "<unknown>"
 }
 
-fun Project.getGitBranch(): String {
-    return execCommand(arrayOf("git", "rev-parse", "--abbrev-ref", "HEAD")) ?: "unknown"
-}
+fun Project.getGitBranch(): String = execCommand("git", "rev-parse", "--abbrev-ref", "HEAD") ?: "unknown"
 
-private fun Project.execCommand(command: Array<String>): String? {
-    return try {
-        ByteArrayOutputStream().use { out ->
-            exec {
-                commandLine(command.asIterable())
-                standardOutput = out
-            }
-            out.toString().trim()
-        }
-    } catch (e: Throwable) {
-        logger.warn("An error occurred whilst executing a command", e)
-        null
+internal fun Project.execCommand(vararg command: String): String? {
+    val output = ByteArrayOutputStream()
+    try {
+        providers.exec {
+            commandLine("git", *command)
+            standardOutput = output
+            errorOutput = output
+            workingDir = rootDir
+        }.result.get().rethrowFailure()
+    } catch (e: Exception) {
+        return null
     }
+    return output.toString().trim()
 }

@@ -10,7 +10,9 @@ plugins {
 group = "dev.schlaubi.mikbot"
 
 dependencies {
-    implementation(projects.api)
+    api(projects.music.api.types) {
+        exclude(group = "io.ktor")
+    }
     api(libs.lavakord.kord)
     api(libs.lavakord.sponsorblock)
     api(libs.lavakord.lavsrc)
@@ -61,4 +63,8 @@ publishing {
             artifactId = "mikbot-music-player"
         }
     }
+}
+
+fun DependencyHandlerScope.lavakordDependency(provider: Provider<*>) = implementation(provider) {
+    exclude(module = "ktor-resources-jvm")
 }

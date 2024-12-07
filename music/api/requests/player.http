@@ -1,0 +1,29 @@
+GET http://localhost:8080/music/players
+Authorization: Bearer {{$auth.token("auth")}}
+
+###
+GET http://localhost:8080/music/players/1277696743823114353
+Authorization: Bearer {{$auth.token("auth")}}
+
+###
+GET http://localhost:8080/music/search?query=spsearch:Gathering Storm pentakill
+Authorization: Bearer {{$auth.token("auth")}}
+
+###
+
+PATCH http://localhost:8080/music/players/809471441719787602
+Authorization: Bearer {{$auth.token("auth")}}
+Content-Type: application/json
+
+{
+    "channel": "1199813828913930250",
+    "track": "QAABzgMAD0dhdGhlcmluZyBTdG9ybQAJUGVudGFraWxsAAAAAAAEOpoAFjJlS2FiN0Z3NWxDVm5WTTRHMTZONkIAAQA1aHR0cHM6Ly9vcGVuLnNwb3RpZnkuY29tL3RyYWNrLzJlS2FiN0Z3NWxDVm5WTTRHMTZONkIBAEBodHRwczovL2kuc2Nkbi5jby9pbWFnZS9hYjY3NjE2ZDAwMDBiMjczMjcxZGI4MmRjOGFiMzZhNThlZGIwNGQ3AQAMUVpINlMxOTAwMzU0AAdzcG90aWZ5AQARSUlJOiBMb3N0IENoYXB0ZXIBADVodHRwczovL29wZW4uc3BvdGlmeS5jb20vYWxidW0vNmpIc25ZcVNtaU1xQnZ6Rzhxcll1RQEANmh0dHBzOi8vb3Blbi5zcG90aWZ5LmNvbS9hcnRpc3QvMnFjR1RCNXMydDlvMnc5U3JJNzE5cwABAGtodHRwczovL3Auc2Nkbi5jby9tcDMtcHJldmlldy9jYTIwNWEzYjU3NTg3YjllYWVmMDI3YWIyODU1MzQ0ZDJjZTlhM2MyP2NpZD1mNmE0MDc3NjU4MDk0M2E3YmM1MTczMTI1YTFlODgzMgAAAAAAAAAAAA"
+}
+
+###
+DELETE http://localhost:8080/music/players/809471441719787602
+Authorization: Bearer {{$auth.token("auth")}}
+
+###
+
+WEBSOCKET ws://localhost:8080/music/events?api_key={{$auth.token("auth")}}

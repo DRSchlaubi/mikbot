@@ -28,10 +28,13 @@ import dev.schlaubi.lavakord.plugins.sponsorblock.rest.getSponsorblockCategories
 import dev.schlaubi.lavakord.plugins.sponsorblock.rest.putSponsorblockCategories
 import dev.schlaubi.lavakord.rest.getPlayer
 import dev.schlaubi.lavakord.rest.updatePlayer
+import dev.schlaubi.mikmusic.api.types.ChapterQueuedTrack
+import dev.schlaubi.mikmusic.api.types.QueuedTrack
+import dev.schlaubi.mikmusic.api.types.SchedulingOptions
+import dev.schlaubi.mikmusic.api.types.SimpleQueuedTrack
 import dev.schlaubi.mikmusic.core.MusicModule
 import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase
 import dev.schlaubi.mikmusic.musicchannel.updateMessage
-import dev.schlaubi.mikmusic.player.queue.SchedulingOptions
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -56,7 +59,8 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
 
     private val lock = Mutex()
 
-    var queue = Queue()
+    var djModeRole: Snowflake? = null
+    var queue = Queue(musicPlayer = this)
     val queuedTracks get() = queue.tracks
     val canSkip: Boolean
         get() = queuedTracks.isNotEmpty() || !autoPlay?.songs.isNullOrEmpty()
@@ -83,6 +87,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
             val settings = MusicSettingsDatabase.findGuild(guild)
 
             settings.defaultSchedulerSettings?.applyToPlayer(this@MusicPlayer)
+            djModeRole = settings.djRole.takeIf { settings.djMode }
         }
 
         link.player.on(consumer = ::onTrackEnd)
@@ -186,7 +191,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
 
     @OptIn(UnsafeRestApi::class)
     suspend fun applyState(state: PersistentPlayerState) {
-        queue = Queue(state.queue.toMutableList())
+        queue = Queue(state.queue.toMutableList(), this)
         playingTrack = state.currentTrack
         filters = state.filters
         autoPlay = state.autoPlayContext

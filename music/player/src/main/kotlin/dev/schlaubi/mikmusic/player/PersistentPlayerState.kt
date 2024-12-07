@@ -2,12 +2,11 @@ package dev.schlaubi.mikmusic.player
 
 import dev.arbjerg.lavalink.protocol.v4.Filters
 import dev.kord.common.entity.Snowflake
-import dev.schlaubi.lavakord.audio.player.*
-import dev.schlaubi.mikmusic.core.settings.SchedulerSettings
+import dev.schlaubi.mikmusic.api.types.QueuedTrack
+import dev.schlaubi.mikmusic.api.types.SchedulerSettings
 import dev.schlaubi.mikmusic.util.QueuedTrackJsonSerializer
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonElement
 import kotlin.time.Duration
 
 @Serializable
@@ -22,7 +21,7 @@ data class PersistentPlayerState(
     val paused: Boolean,
     val position: Duration,
     val autoPlayContext: AutoPlayContext?,
-    val volume: Int
+    val volume: Int,
 ) {
     constructor(musicPlayer: MusicPlayer) : this(
         Snowflake(musicPlayer.guildId),
@@ -40,12 +39,12 @@ data class PersistentPlayerState(
 
 fun SchedulerSettings.applyToPlayer(player: MusicPlayer) {
     if (shuffle != null) {
-        player.shuffle = shuffle
+        player.shuffle = shuffle!!
     }
     if (loopQueue != null) {
-        player.loopQueue = loopQueue
+        player.loopQueue = loopQueue!!
     }
-    if (repeat != null) {
-        player.repeat = repeat
+    if (loop != null) {
+        player.repeat = loop!!
     }
 }

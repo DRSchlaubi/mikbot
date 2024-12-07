@@ -1,7 +1,7 @@
 package dev.schlaubi.mikmusic.util
 
 import dev.arbjerg.lavalink.protocol.v4.Track
-import dev.schlaubi.mikmusic.player.QueuedTrack
+import dev.schlaubi.mikmusic.api.types.QueuedTrack
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor

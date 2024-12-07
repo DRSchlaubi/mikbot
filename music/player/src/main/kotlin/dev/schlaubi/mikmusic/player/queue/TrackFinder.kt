@@ -19,10 +19,11 @@ import dev.schlaubi.lavakord.audio.Node
 import dev.schlaubi.lavakord.rest.loadItem
 import dev.schlaubi.mikbot.plugin.api.util.*
 import dev.schlaubi.mikbot.translations.MusicTranslations
+import dev.schlaubi.mikmusic.api.types.SchedulingOptions
+import dev.schlaubi.mikmusic.api.types.SimpleQueuedTrack
 import dev.schlaubi.mikmusic.autocomplete.autoCompletedYouTubeQuery
 import dev.schlaubi.mikmusic.core.Config
 import dev.schlaubi.mikmusic.player.MusicPlayer
-import dev.schlaubi.mikmusic.player.SimpleQueuedTrack
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -31,11 +32,6 @@ private val LOG = KotlinLogging.logger { }
 
 private val urlProtocol = "^https?://".toRegex()
 
-interface SchedulingOptions {
-    val shuffle: Boolean?
-    val loop: Boolean?
-    val loopQueue: Boolean?
-}
 
 interface QueueOptions : SchedulingOptions {
     val query: String

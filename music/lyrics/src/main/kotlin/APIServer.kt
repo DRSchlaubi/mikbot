@@ -98,25 +98,23 @@ class APIServer : KtorExtensionPoint, KordExKoinComponent {
             }
         }
 
-        if (pluginOrNull(CORS) == null) {
-            install(CORS) {
-                allowMethod(HttpMethod.Options)
-                allowMethod(HttpMethod.Put)
-                allowMethod(HttpMethod.Delete)
-                allowMethod(HttpMethod.Patch)
-                allowHeader(HttpHeaders.Authorization)
-                if (BotConfig.ENVIRONMENT == Environment.DEVELOPMENT) {
-                    anyHost()
-                } else {
-                    allowSameOrigin = true
-                    val url = Url(Config.LYRICS_WEB_URL)
-                    allowHost(url.host, listOf(url.protocol.name))
-                }
-            }
-        }
-
         routing {
             route("lyrics") {
+                install(CORS) {
+                    allowMethod(HttpMethod.Options)
+                    allowMethod(HttpMethod.Put)
+                    allowMethod(HttpMethod.Delete)
+                    allowMethod(HttpMethod.Patch)
+                    allowHeader(HttpHeaders.Authorization)
+                    if (BotConfig.ENVIRONMENT == Environment.DEVELOPMENT) {
+                        anyHost()
+                    } else {
+                        allowSameOrigin = true
+                        val url = Url(Config.LYRICS_WEB_URL)
+                        allowHost(url.host, listOf(url.protocol.name))
+                    }
+                }
+
                 get("current") {
                     val player = call.userId.findPlayer()
 

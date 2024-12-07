@@ -20,11 +20,11 @@ import dev.schlaubi.lavakord.RestException
 import dev.schlaubi.mikbot.plugin.api.util.convertToISO
 import dev.schlaubi.mikbot.plugin.api.util.embed
 import dev.schlaubi.mikbot.translations.MusicTranslations
+import dev.schlaubi.mikmusic.api.types.ChapterQueuedTrack
+import dev.schlaubi.mikmusic.api.types.QueuedTrack
 import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase
 import dev.schlaubi.mikmusic.player.AutoPlayContext
-import dev.schlaubi.mikmusic.player.ChapterQueuedTrack
 import dev.schlaubi.mikmusic.player.MusicPlayer
-import dev.schlaubi.mikmusic.player.QueuedTrack
 import dev.schlaubi.mikmusic.player.addAutoPlaySongs
 import dev.schlaubi.mikmusic.util.addSong
 import dev.schlaubi.mikmusic.util.format

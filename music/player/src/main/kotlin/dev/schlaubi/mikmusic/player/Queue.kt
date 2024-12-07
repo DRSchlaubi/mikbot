@@ -2,9 +2,13 @@ package dev.schlaubi.mikmusic.player
 
 import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.kord.common.entity.Snowflake
+import dev.schlaubi.mikmusic.api.types.QueuedTrack
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import java.util.*
 
-class Queue(private var tracksList: MutableList<QueuedTrack> = mutableListOf()) {
+class Queue(private var tracksList: MutableList<QueuedTrack> = mutableListOf(), val musicPlayer: MusicPlayer) {
     var shuffle: Boolean = false
         set(value) {
             if (field == value) return
@@ -36,12 +40,16 @@ class Queue(private var tracksList: MutableList<QueuedTrack> = mutableListOf()) 
         val orderStartIndex = if (atStart) 0 else nextIndex
         order.addAll(orderStartIndex, tracks.indices.map { it + trackListSize })
         nextIndex += tracks.size
+
+        _updates.tryEmit(this)
     }
 
     fun drop(count: Int) {
         require(count >= 1) { "Count needs to be positive" }
         nextIndex = (nextIndex - count).coerceIn(0..order.size)
         order = LinkedList(order.drop(count))
+
+        _updates.tryEmit(this)
     }
 
     fun poll(): QueuedTrack {
@@ -50,6 +58,7 @@ class Queue(private var tracksList: MutableList<QueuedTrack> = mutableListOf()) 
         if (order.isEmpty()) {
             shuffle = false
         }
+        _updates.tryEmit(this)
         return queuedTrack
     }
 
@@ -75,6 +84,8 @@ class Queue(private var tracksList: MutableList<QueuedTrack> = mutableListOf()) 
             tracksList.removeAt(fromIndex)
         }
 
+        _updates.tryEmit(this)
+
         return song.track
     }
 
@@ -83,6 +94,8 @@ class Queue(private var tracksList: MutableList<QueuedTrack> = mutableListOf()) 
             order.removeAt(index)
         }.getOrNull() ?: return null
         if (index <= nextIndex) nextIndex--
+
+        _updates.tryEmit(this)
         return tracksList[trackIndex].track
     }
 
@@ -96,6 +109,7 @@ class Queue(private var tracksList: MutableList<QueuedTrack> = mutableListOf()) 
             if (range.last <= nextIndex) nextIndex -= range.count() + 1
         }
 
+        _updates.tryEmit(this)
         return queueSize - order.size
     }
 
@@ -113,6 +127,7 @@ class Queue(private var tracksList: MutableList<QueuedTrack> = mutableListOf()) 
             }
         }
 
+        _updates.tryEmit(this)
         return removes
     }
 
@@ -121,7 +136,13 @@ class Queue(private var tracksList: MutableList<QueuedTrack> = mutableListOf()) 
             order.removeIf { predicate(tracksList[it].queuedBy) }
         }
 
+        _updates.tryEmit(this)
         return removes
+    }
+
+    companion object {
+        private val _updates = MutableSharedFlow<Queue>(Channel.UNLIMITED)
+        val updates = _updates.asSharedFlow()
     }
 
 }

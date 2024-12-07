@@ -37,6 +37,7 @@ dependencies {
     // Util
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.resources)
 
     implementation(projects.api)
     implementation(kotlin("reflect"))

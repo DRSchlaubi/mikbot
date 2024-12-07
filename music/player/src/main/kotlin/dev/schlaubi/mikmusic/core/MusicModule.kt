@@ -65,6 +65,8 @@ class MusicModule(context: PluginContext) : MikBotModule(context) {
     val CommandContext.node
         get() = lavalink.newNode()
 
+    fun getCachedMusicPlayer(guildId: Snowflake) = musicPlayers[guildId]
+
     fun getMusicPlayer(guild: GuildBehavior): MusicPlayer {
         return musicPlayers.computeIfAbsent(guild.id) {
             val link = lavalink.getLink(guild)

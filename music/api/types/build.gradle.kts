@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlinx.serialization)
     `maven-publish`
     signing
+    com.google.cloud.artifactregistry.`gradle-plugin`
 }
 
 kotlin {

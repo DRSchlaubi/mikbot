@@ -22,11 +22,11 @@ class PluginUpdater(private val pluginLoader: PluginLoader, repos: List<UpdateRe
             return
         }
 
-        downloadRequestedPlugins()
-
         if (Config.UPDATE_PLUGINS) {
             updatePlugins()
         }
+
+        downloadRequestedPlugins()
     }
 
 

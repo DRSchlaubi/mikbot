@@ -7,57 +7,58 @@ plugins {
     com.google.cloud.artifactregistry.`gradle-plugin`
 }
 
-val sourcesJar by tasks.creating(Jar::class) {
-    dependsOn(tasks.processResources)
-    archiveClassifier = "sources"
-    destinationDirectory = layout.buildDirectory
-    from(sourceSets["main"].allSource)
-}
 
 publishing {
     publications {
-        create<MavenPublication>("maven") {
-            groupId = "dev.schlaubi"
-            artifactId = "mikbot-${project.name}"
-            afterEvaluate {
-                version = project.version as String
-            }
-
-            from(components["java"])
-            artifact(sourcesJar)
-
-
-            pom {
-                name = "mikbot"
-                description = "A modular framework for building Discord bots"
-                url = "https://github.com/DRSchlaubi/mikmusic"
-
-                organization {
-                    name = "Schlaubi"
-                    url = "https://github.com/DRSchlaubi"
+        if (plugins.hasPlugin("org.jetbrains.kotlin.jvm")) {
+            create<MavenPublication>("maven") {
+                groupId = "dev.schlaubi"
+                artifactId = "mikbot-${project.name}"
+                afterEvaluate {
+                    version = project.version as String
                 }
 
-                developers {
-                    developer {
-                        name = "Michael Rittmeister"
+                from(components["java"])
+                val sourcesJar by tasks.creating(Jar::class) {
+                    dependsOn(tasks.processResources)
+                    archiveClassifier = "sources"
+                    destinationDirectory = layout.buildDirectory
+                    from(sourceSets["main"].allSource)
+                }
+                artifact(sourcesJar)
+
+                pom {
+                    name = "mikbot"
+                    description = "A modular framework for building Discord bots"
+                    url = "https://github.com/DRSchlaubi/mikmusic"
+
+                    organization {
+                        name = "Schlaubi"
+                        url = "https://github.com/DRSchlaubi"
                     }
-                }
 
-                issueManagement {
-                    system = "GitHub"
-                    url = "https://github.com/DRSchlaubi/mikmusic/issues"
-                }
-
-                licenses {
-                    license {
-                        name = "Apache 2.0"
-                        url = "https://opensource.org/licenses/Apache-2.0"
+                    developers {
+                        developer {
+                            name = "Michael Rittmeister"
+                        }
                     }
-                }
-                scm {
-                    connection = "scm:git:https://github.com/DRSchlaubi/mikmusic.git"
-                    developerConnection = "scm:git:ssh://git@github.com:DRSchlaubi/mikmusic.git"
-                    url = "https://github.com/DRSchlaubi/mikmusic.git"
+
+                    issueManagement {
+                        system = "GitHub"
+                        url = "https://github.com/DRSchlaubi/mikmusic/issues"
+                    }
+
+                    licenses {
+                        license {
+                            name = "Apache 2.0"
+                            url = "https://opensource.org/licenses/Apache-2.0"
+                        }
+                    }
+                    scm {
+                        connection = "scm:git:https://github.com/DRSchlaubi/mikmusic.git"
+                        developerConnection = "scm:git:ssh://git@github.com:DRSchlaubi/mikmusic.git"
+                        url = "https://github.com/DRSchlaubi/mikmusic.git"
+                    }
                 }
             }
 

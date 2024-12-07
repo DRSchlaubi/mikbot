@@ -1,6 +1,7 @@
 plugins {
     kotlin("multiplatform")
     alias(libs.plugins.kotlinx.serialization)
+    `mikbot-publishing`
 }
 
 kotlin {

@@ -60,7 +60,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
     private val lock = Mutex()
 
     var djModeRole: Snowflake? = null
-    var queue = Queue(musicPlayer = this)
+    var queue = Queue(_musicPlayer = this)
     val queuedTracks get() = queue.tracks
     val canSkip: Boolean
         get() = queuedTracks.isNotEmpty() || !autoPlay?.songs.isNullOrEmpty()

@@ -35,6 +35,7 @@ dependencies {
     implementation(libs.ktor.client.logging)
 
     testImplementation(kotlin("test-junit5"))
+    testImplementation(libs.stdx.full)
 }
 
 kotlin {

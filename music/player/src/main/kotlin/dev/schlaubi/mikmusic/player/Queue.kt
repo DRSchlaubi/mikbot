@@ -8,7 +8,12 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import java.util.*
 
-class Queue(private var tracksList: MutableList<QueuedTrack> = mutableListOf(), val musicPlayer: MusicPlayer) {
+class Queue(
+    private var tracksList: MutableList<QueuedTrack> = mutableListOf(),
+    private val _musicPlayer: MusicPlayer? = null,
+) {
+    val musicPlayer: MusicPlayer
+        get() = _musicPlayer ?: error("This queue is a mock")
     var shuffle: Boolean = false
         set(value) {
             if (field == value) return

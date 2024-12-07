@@ -1,8 +1,8 @@
 import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.arbjerg.lavalink.protocol.v4.TrackInfo
 import dev.kord.common.entity.Snowflake
+import dev.schlaubi.mikmusic.api.types.SimpleQueuedTrack
 import dev.schlaubi.mikmusic.player.Queue
-import dev.schlaubi.mikmusic.player.SimpleQueuedTrack
 import dev.schlaubi.stdx.serialization.emptyJsonObject
 import kotlin.test.Test
 import kotlin.test.assertEquals

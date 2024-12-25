@@ -251,7 +251,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
             return@onTrackEnd
         }
         if ((!repeat && !loopQueue && queue.isEmpty()) && event.reason != Message.EmittedEvent.TrackEndEvent.AudioTrackEndReason.REPLACED) {
-            if (autoPlay == null) {
+            if (autoPlay == null && queue.isEmpty()) {
                 playingTrack = null
                 updateMusicChannelMessage()
                 startLeaveTimeout()

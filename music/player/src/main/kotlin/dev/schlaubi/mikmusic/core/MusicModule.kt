@@ -39,6 +39,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.inject
 import org.litote.kmongo.serialization.registerSerializer
 import org.pf4j.ExtensionPoint
+import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KMutableProperty1
 
 interface MusicExtensionPoint : ExtensionPoint {
@@ -47,7 +48,7 @@ interface MusicExtensionPoint : ExtensionPoint {
 
 class MusicModule(context: PluginContext) : MikBotModule(context) {
     private val lavalink: LavalinkManager by extension()
-    private val musicPlayers: MutableMap<Snowflake, MusicPlayer> = mutableMapOf()
+    private val musicPlayers: MutableMap<Snowflake, MusicPlayer> = ConcurrentHashMap()
     override val name: String = "music"
     override val allowApplicationCommandInDMs: Boolean = false
 

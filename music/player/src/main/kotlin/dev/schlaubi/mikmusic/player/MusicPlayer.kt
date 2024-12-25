@@ -141,7 +141,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
             return remainingTrackDuration + remainingQueue
         }
 
-    val nextSongIsFirst: Boolean get() = queue.isEmpty() && link.player.playingTrack == null
+    val nextSongIsFirst: Boolean get() = queue.isEmpty() && playingTrack == null
 
     suspend fun queueTrack(
         force: Boolean,
@@ -229,7 +229,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
         updateMusicChannelMessage()
     }
 
-    private fun onTrackStart(@Suppress("unused") event: TrackStartEvent) {
+    private fun onTrackStart(@Suppress("unused_parameter") event: TrackStartEvent) {
         leaveTimeout?.cancel()
         updateMusicChannelMessage()
     }
@@ -300,7 +300,6 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
         }
         if (canSkip) {
             startNextSong()
-            updateMusicChannelMessage()
         } else {
             stop()
         }
@@ -321,7 +320,6 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
             queue.addTracks(SimpleQueuedTrack(autoPlayTrack, guild.kord.selfId))
         }
         if (queue.isEmpty() && !repeat) {
-            updateMusicChannelMessage()
             return
         }
         val nextTrack: QueuedTrack = when {

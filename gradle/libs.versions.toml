@@ -59,7 +59,7 @@ ktor-server-swagger = { group = "io.ktor", name = "ktor-server-swagger", version
 kompendium-core = { group = "io.bkbn", name = "kompendium-core", version.ref = "kompendium" }
 kompendium-resources = { group = "io.bkbn", name = "kompendium-resources", version.ref = "kompendium" }
 
-kubernetes-client = { group = "io.kubernetes", name = "client-java", version = "21.0.2" }
+kubernetes-client = { group = "io.kubernetes", name = "client-java", version = "22.0.0" }
 kotlin-jsonpatch = { group = "io.github.reidsync", name = "kotlin-json-patch", version = "1.0.0" }
 
 pf4j = { group = "org.pf4j", name = "pf4j", version = "3.12.1" }

@@ -198,6 +198,7 @@ suspend fun checkOtherSchedulerOptions(
 
     val currentValue = myProperty.get(musicPlayer)
     myProperty.set(musicPlayer, !currentValue)
+    musicPlayer.updateMusicChannelMessage()
 
     callback(!currentValue)
 }

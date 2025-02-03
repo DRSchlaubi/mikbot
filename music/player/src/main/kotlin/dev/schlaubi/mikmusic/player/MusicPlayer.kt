@@ -79,8 +79,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
         get() = !autoPlay?.songs.isNullOrEmpty()
     val autoPlayTrackCount
         get() = autoPlay?.songs?.size ?: 0
-    override val coroutineContext: CoroutineContext
-        get() = kord.coroutineContext + SupervisorJob()
+    override val coroutineContext: CoroutineContext = kord.coroutineContext + SupervisorJob()
 
     init {
         kord.launch {
@@ -90,10 +89,10 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
             djModeRole = settings.djRole.takeIf { settings.djMode }
         }
 
-        link.player.on(consumer = ::onTrackEnd)
-        link.player.on(consumer = ::onTrackStart)
-        link.player.on(consumer = ::onChaptersLoaded)
-        link.player.on(consumer = ::onChapterStarted)
+        link.player.on(consumer = ::onTrackEnd, scope = this)
+        link.player.on(consumer = ::onTrackStart, scope = this)
+        link.player.on(consumer = ::onChaptersLoaded, scope = this)
+        link.player.on(consumer = ::onChapterStarted, scope = this)
     }
 
     private fun updateSponsorBlock() = guild.kord.launch {
@@ -349,6 +348,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
         }
     }
 
+    @Suppress("SuspendFunctionOnCoroutineScope")
     suspend fun stop() {
         player.stopTrack()
         link.disconnectAudio()
@@ -356,9 +356,9 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
         autoPlay = null
         playingTrack = null
         updateMusicChannelMessage()
-        coroutineContext.cancel()
-
         get<ExtensibleBot>().findExtension<MusicModule>()?.unregister(guild.id)
+
+        this.cancel()
     }
 
     fun updateMusicChannelMessage(force: Boolean = false) {

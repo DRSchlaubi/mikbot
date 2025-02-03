@@ -7,7 +7,7 @@ plugins {
     com.google.cloud.artifactregistry.`gradle-plugin`
 }
 
-val sourcesJar by tasks.creating(Jar::class) {
+val sourcesJar by tasks.registering(Jar::class) {
     dependsOn(tasks.processResources)
     archiveClassifier = "sources"
     destinationDirectory = layout.buildDirectory

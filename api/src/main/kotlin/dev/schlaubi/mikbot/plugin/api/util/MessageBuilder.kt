@@ -1,9 +1,9 @@
 package dev.schlaubi.mikbot.plugin.api.util
 
-import dev.kordex.core.commands.CommandContext
 import dev.kord.core.behavior.interaction.followup.FollowupMessageBehavior
 import dev.kord.rest.builder.message.create.MessageCreateBuilder
 import dev.kord.rest.builder.message.modify.MessageModifyBuilder
+import dev.kordex.core.commands.CommandContext
 
 /**
  * This is a message builder block (aka. the thing a [MessageSender] takes).

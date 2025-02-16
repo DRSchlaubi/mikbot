@@ -24,7 +24,9 @@ import dev.schlaubi.mikmusic.player.enableAutoPlay
 import dev.schlaubi.mikmusic.player.queue.takeFirstMatch
 import dev.schlaubi.mikmusic.player.resetAutoPlay
 import dev.schlaubi.mikmusic.util.mapToQueuedTrack
+import kotlinx.coroutines.delay
 import kotlin.reflect.KMutableProperty1
+import kotlin.time.Duration.Companion.seconds
 
 class MusicInteractionModule(context: PluginContext) : MikBotModule(context) {
     override val name = "music interaction handler"
@@ -133,15 +135,18 @@ class MusicInteractionModule(context: PluginContext) : MikBotModule(context) {
                     val guild = event.getGuildOrNull() ?: error("Could not find guild")
                     val player = musicModule.getMusicPlayer(guild)
                     player.startLeaveTimeout()
-                    val track = takeFirstMatch(player.node, event.message.content) { event.message.reply { it() } }
-                        ?: return@withTyping
+                    event.message.delete("Music channel interaction")
+                    val track = takeFirstMatch(player.node, event.message.content) {
+                        val message = event.message.reply { it() }
+                        delay(5.seconds)
+                        message.delete()
+
+                    } ?: return@withTyping
                     player.queueTrack(
                         force = false,
                         onTop = false,
                         tracks = track.tracks.mapToQueuedTrack(event.message.author!!)
                     )
-
-                    event.message.delete("Music channel interaction")
                 }
             }
         }

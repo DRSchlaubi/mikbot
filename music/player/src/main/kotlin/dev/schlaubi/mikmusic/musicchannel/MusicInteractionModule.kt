@@ -1,14 +1,14 @@
 package dev.schlaubi.mikmusic.musicchannel
 
-import dev.kordex.core.checks.guildFor
-import dev.kordex.core.checks.inChannel
-import dev.kordex.core.extensions.event
+import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.behavior.channel.withTyping
 import dev.kord.core.behavior.interaction.response.EphemeralMessageInteractionResponseBehavior
 import dev.kord.core.behavior.interaction.response.createEphemeralFollowup
-import dev.kord.core.behavior.reply
 import dev.kord.core.event.interaction.GuildComponentInteractionCreateEvent
 import dev.kord.core.event.message.MessageCreateEvent
+import dev.kordex.core.checks.guildFor
+import dev.kordex.core.checks.inChannel
+import dev.kordex.core.extensions.event
 import dev.kordex.core.types.TranslatableContext
 import dev.schlaubi.mikbot.plugin.api.PluginContext
 import dev.schlaubi.mikbot.plugin.api.module.MikBotModule
@@ -137,7 +137,7 @@ class MusicInteractionModule(context: PluginContext) : MikBotModule(context) {
                     player.startLeaveTimeout()
                     event.message.delete("Music channel interaction")
                     val track = takeFirstMatch(player.node, event.message.content) {
-                        val message = event.message.reply { it() }
+                        val message = event.message.channel.createMessage { it() }
                         delay(5.seconds)
                         message.delete()
 

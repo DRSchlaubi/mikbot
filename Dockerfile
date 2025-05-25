@@ -1,4 +1,4 @@
-FROM --platform=$TARGETOS/$TARGETARCH eclipse-temurin:22-jre-alpine
+FROM --platform=$TARGETOS/$TARGETARCH eclipse-temurin:23-jre-alpine
 
 WORKDIR /usr/app
 COPY runtime/build/install/mikmusic ./

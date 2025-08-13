@@ -1,7 +1,7 @@
 [versions]
 kotlin = "2.1.10"
 kordex = "2.3.1-MIKBOT.4"
-kmongo = "5.1.0"
+kmongo = "5.5.1"
 coroutines = "1.10.1"
 serialization = "1.8.0"
 ktor = "3.0.3"

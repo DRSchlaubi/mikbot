@@ -77,7 +77,7 @@ bucket4j = { group = "com.bucket4j", name = "bucket4j_jdk17-lettuce", version = 
 kordex-gradle-plugin = { group = "dev.kordex.gradle.plugins", name = "kordex", version.ref = "kordex-plugin" }
 gradle-license-report = { group = "com.github.jk1", name = "gradle-license-report", version = "2.9" }
 
-lettuce-core = { group = "io.lettuce", name = "lettuce-core", version = "6.5.0.RELEASE" }
+lettuce-core = { group = "io.lettuce", name = "lettuce-core", version = "6.8.1.RELEASE" }
 
 [plugins]
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

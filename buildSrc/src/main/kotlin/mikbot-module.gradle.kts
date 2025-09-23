@@ -12,7 +12,7 @@ tasks {
 }
 
 kotlin {
-    jvmToolchain(22)
+    jvmToolchain(24)
 
     compilerOptions {
         freeCompilerArgs.addAll(experimentalAnnotations.map { "-opt-in=$it" })

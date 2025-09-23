@@ -26,7 +26,7 @@ pluginPublishing {
 }
 
 tasks {
-    task("buildDockerImage") {
+    register("buildDockerImage") {
         dependsOn(":runtime:installDist")
     }
 }

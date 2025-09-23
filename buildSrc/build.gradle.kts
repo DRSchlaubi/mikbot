@@ -25,6 +25,12 @@ dependencies {
     implementation(localGroovy())
 }
 
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.add("-Xdont-warn-on-error-suppression")
+    }
+}
+
 tasks {
     withType<KotlinCompile> {
         compilerOptions {

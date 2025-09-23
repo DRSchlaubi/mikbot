@@ -54,6 +54,6 @@ val kordExExtension = extensions.create<KordExExtension>("kordex").apply {
     }
 }
 
-@Suppress("INVISIBLE_MEMBER")
+@Suppress("INVISIBLE_MEMBER", "INVISIBLE_REFERENCE")
 @OptIn(InternalAPI::class)
 I18nHelper.apply(project, kordExExtension.i18n)

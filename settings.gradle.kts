@@ -1,5 +1,5 @@
 plugins {
-    id("com.gradle.develocity") version "3.18.1"
+    id("com.gradle.develocity") version "4.2"
 }
 
 develocity {
@@ -32,7 +32,6 @@ if (System.getenv("BUILD_PLUGIN_CI")?.toBoolean() != true) {
         "music:api",
         "music:api:types",
         "music:api:server",
-        "clients:discord-oauth",
         "clients:haste-client",
         "clients:image-color-client",
         "clients:image-color-client-kord"

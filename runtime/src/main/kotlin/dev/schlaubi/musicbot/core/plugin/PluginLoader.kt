@@ -1,6 +1,7 @@
 package dev.schlaubi.musicbot.core.plugin
 
 import dev.kord.core.event.Event
+import dev.kordex.core.i18n.toKey
 import dev.kordex.core.koin.KordExKoinComponent
 import dev.schlaubi.mikbot.plugin.api.Plugin
 import dev.schlaubi.mikbot.plugin.api.PluginSystem
@@ -194,9 +195,9 @@ internal class DefaultPluginSystem(private val bot: Bot) : PluginSystem {
     @Suppress("DEPRECATION")
     override fun translate(key: String, bundleName: String, locale: String?, replacements: Array<Any?>): String {
         return if (locale == null) {
-            bot.translationProvider.translate(key, bundleName, replacements = replacements)
+            bot.translationProvider.translate(key.toKey(bundleName), replacements = replacements)
         } else {
-            bot.translationProvider.translate(key, bundleName, Locale.of(locale), replacements)
+            bot.translationProvider.translate(key.toKey(bundleName, Locale.of(locale)), replacements)
         }
     }
 

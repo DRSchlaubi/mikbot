@@ -10,8 +10,8 @@ import io.github.bucket4j.TokensInheritanceStrategy
 import io.github.bucket4j.distributed.proxy.ProxyManager
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.future.await
-import kotlinx.datetime.Clock
-import kotlinx.datetime.toJavaInstant
+import kotlin.time.Clock
+import kotlin.time.toJavaInstant
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executors
 import kotlin.time.Duration

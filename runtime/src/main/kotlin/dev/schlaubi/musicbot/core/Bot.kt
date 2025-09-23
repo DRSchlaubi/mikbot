@@ -8,6 +8,7 @@ import dev.kord.core.event.gateway.ReadyEvent
 import dev.kord.core.event.gateway.ResumedEvent
 import dev.kord.rest.builder.message.allowedMentions
 import dev.kordex.core.ExtensibleBot
+import dev.kordex.core.annotations.warnings.ReplacingDefaultErrorResponseBuilder
 import dev.kordex.core.builders.ExtensibleBotBuilder
 import dev.kordex.core.extensions.Extension
 import dev.kordex.core.extensions.event
@@ -91,6 +92,7 @@ class Bot(repos: List<UpdateRepository>) : KordExKoinComponent, PluginContext {
         }
     }
 
+    @OptIn(ReplacingDefaultErrorResponseBuilder::class)
     private suspend fun ExtensibleBotBuilder.builtIns() {
         extensions {
             add { SettingsModuleImpl(this@Bot) }

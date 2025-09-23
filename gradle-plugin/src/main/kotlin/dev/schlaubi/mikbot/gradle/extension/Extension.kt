@@ -15,7 +15,7 @@ abstract class PluginExtension @Inject constructor(props: PropertyFactory) {
     abstract val pluginId: Property<String>
 
     /** The version of the application this plugin requires (optional). */
-    abstract val requires: Property<String?>
+    abstract val requires: Property<String>
 
     /** The description of the plugin. */
     abstract val description: Property<String>

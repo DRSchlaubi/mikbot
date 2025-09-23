@@ -28,7 +28,7 @@ import dev.schlaubi.mikmusic.player.MusicPlayer
 import dev.schlaubi.mikmusic.player.addAutoPlaySongs
 import dev.schlaubi.mikmusic.util.addSong
 import dev.schlaubi.mikmusic.util.format
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import java.util.*
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes

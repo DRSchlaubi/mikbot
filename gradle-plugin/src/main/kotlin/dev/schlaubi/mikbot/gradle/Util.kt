@@ -3,7 +3,6 @@ package dev.schlaubi.mikbot.gradle
 import dev.schlaubi.mikbot.gradle.extension.PluginExtension
 import dev.schlaubi.mikbot.gradle.extension.pluginExtensionName
 import dev.schlaubi.mikbot.gradle.extension.pluginId
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Dependency
@@ -59,16 +58,17 @@ internal fun Project.buildDependenciesString(): String {
     val plugin = configurations.getByName("plugin")
     val optionalPlugin = configurations.getByName("optionalPlugin")
 
-    val required = plugin.allDependencies.map(Dependency::toDependencyString)
-    val optional = optionalPlugin.allDependencies.map { it.toDependencyString(true) }
+    val required = plugin.allDependencies.map { it.toDependencyString(rootProject) }
+    val optional = optionalPlugin.allDependencies.map { it.toDependencyString(rootProject, true) }
 
     return (required + optional).joinToString(", ")
 }
 
-internal fun Dependency.toDependencyString(optional: Boolean = false): String {
+internal fun Dependency.toDependencyString(rootProject: Project, optional: Boolean = false): String {
     val safeVersion = version.toString().substringBefore("-SNAPSHOT")
     @Suppress("DEPRECATION") // Currently no better way available
     val name = if (this is ProjectDependency) {
+        val dependencyProject = rootProject.project(path)
         dependencyProject.pluginId
     } else {
         name.substringAfter("mikbot-")

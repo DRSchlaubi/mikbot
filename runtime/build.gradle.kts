@@ -63,22 +63,22 @@ tasks {
 
     // This is probably the worst way of doing this,
     // but I tried to use JVM resources or compilation file manipulation for 3 hrs now with no luck
-    task("exportDependencies") {
-        val deps = configurations["runtimeClasspath"].resolvedConfiguration.resolvedArtifacts.mapNotNull {
-            val idWithoutPlatform = it.moduleVersion.id.name.substringBefore("-jvm")
-            it.moduleVersion.id.group + ":" + idWithoutPlatform
-        }
+    register("exportDependencies") {
+        doLast {
+            val deps = configurations["runtimeClasspath"].resolvedConfiguration.resolvedArtifacts.mapNotNull {
+                val idWithoutPlatform = it.moduleVersion.id.name.substringBefore("-jvm")
+                it.moduleVersion.id.group + ":" + idWithoutPlatform
+            }
 
-        val destination =
-            rootProject.file("gradle-plugin/src/main/kotlin/dev/schlaubi/mikbot/gradle/TransientDependencies.kt")
+            val destination =
+                rootProject.file("gradle-plugin/src/main/kotlin/dev/schlaubi/mikbot/gradle/TransientDependencies.kt")
 
-        val kotlinFile = """
+            val kotlinFile = """
                 package dev.schlaubi.mikbot.gradle
 
                 const val transientDependencies = "${deps.joinToString("\\n")}"
             """.trimIndent()
 
-        doLast {
             destination.toPath().writeText(kotlinFile)
         }
     }
@@ -89,7 +89,7 @@ tasks {
         archiveExtension = "tar.gz"
     }
 
-    task<Copy>("installCi") {
+    register<Copy>("installCi") {
         dependsOn(distTar)
         from(distTar)
         include("*.tar.gz")

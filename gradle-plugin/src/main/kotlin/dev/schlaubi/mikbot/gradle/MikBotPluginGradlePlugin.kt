@@ -82,13 +82,13 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
         installBotTask: Provider<InstallBotTask>,
     ) {
         tasks.run {
-            val installPlugins = task<InstallPluginsToTestBotTask>("installPluginsToTestBot") {
+            val installPlugins = register<InstallPluginsToTestBotTask>("installPluginsToTestBot") {
                 dependsOn(assemblePlugin)
 
                 pluginArchive = assemblePlugin.flatMap { it.archiveFile }
             }
 
-            task<RunBotTask>("runBot") {
+            register<RunBotTask>("runBot") {
                 dependsOn(installBotTask, installPlugins)
                 installTask = installBotTask
             }

@@ -15,7 +15,7 @@ import io.ktor.server.routing.*
 import mu.KotlinLogging
 
 fun startServer(checks: List<HealthCheck>, context: PluginContext) =
-    embeddedServer(Netty, Config.KUBERNETES_PORT) {
+    embeddedServer(Netty, Config.KUBERNETES_HEALHTZ_PORT) {
         install(Resources)
 
         routing {

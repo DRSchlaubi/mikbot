@@ -29,7 +29,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 24
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/setup-gradle@v5
       - name: Test with Gradle
         run: ./gradlew gradle-plugin:check
       - name: Login to Gradle Plugin Portal

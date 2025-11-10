@@ -1,5 +1,5 @@
 [versions]
-kotlin = "2.2.20"
+kotlin = "2.2.21"
 kordex = "2.3.5-MIKBOT.1-SNAPSHOT"
 kmongo = "5.5.1"
 coroutines = "1.10.2"

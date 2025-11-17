@@ -1,5 +1,8 @@
 package dev.schlaubi.musicbot.core.io
 
+import com.mongodb.ConnectionString
+import com.mongodb.MongoClientSettings
+import com.mongodb.MongoCredential
 import dev.schlaubi.mikbot.plugin.api.config.Config
 import dev.schlaubi.mikbot.plugin.api.io.Database
 import dev.schlaubi.mikbot.plugin.api.util.IKnowWhatIAmDoing
@@ -8,6 +11,17 @@ import org.litote.kmongo.coroutine.CoroutineDatabase
 import org.litote.kmongo.coroutine.coroutine
 import org.litote.kmongo.reactivestreams.KMongo
 import org.litote.kmongo.serialization.registerSerializer
+
+private fun String.toMongoConnectionUrl() = MongoClientSettings.builder()
+    .applyConnectionString(ConnectionString(this))
+    .apply {
+        val username = Config.MONGO_USERNAME ?: return@apply
+        val password = Config.MONGO_PASSWORD ?: return@apply
+        val authDatabase = Config.MONGO_AUTH_DATABASE ?: return@apply
+
+        credential(MongoCredential.createCredential(username, authDatabase, password.toCharArray()))
+    }
+    .build()
 
 class DatabaseImpl : Database {
 
@@ -20,7 +34,7 @@ class DatabaseImpl : Database {
 
         if (url != null && database != null) {
             registerSerializer(DurationSerializer)
-            internalClient = KMongo.createClient(url).coroutine
+            internalClient = KMongo.createClient(url.toMongoConnectionUrl()).coroutine
 
             internalDatabase = internalClient?.getDatabase(database)
         }

@@ -39,18 +39,3 @@ if (System.getenv("BUILD_PLUGIN_CI")?.toBoolean() != true) {
 }
 
 includeBuild("gradle-plugin")
-
-buildCache {
-    remote<HttpBuildCache> {
-        isPush = (System.getenv("GRADLE_BUILD_CACHE_PUSH") == "true") && (System.getenv("IS_PR") == "false")
-        url = uri("https://gradle-build-cache.srv02.schlaubi.net/cache/")
-        val cacheUsername = System.getenv("GRADLE_BUILDCACHE_USERNNAME")
-        val cachePassword = System.getenv("GRADLE_BUILDCACHE_PASSWORD")
-        if (cacheUsername != null && cachePassword != null) {
-            credentials {
-                username = cacheUsername
-                password = cachePassword
-            }
-        }
-    }
-}

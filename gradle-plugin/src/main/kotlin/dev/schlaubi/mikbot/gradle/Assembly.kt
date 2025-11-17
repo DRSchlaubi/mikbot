@@ -1,7 +1,6 @@
 package dev.schlaubi.mikbot.gradle
 
 import dev.schlaubi.mikbot.gradle.extension.mikbotPluginExtension
-import dev.schlaubi.mikbot.gradle.extension.pluginId
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ModuleDependency
 import org.gradle.api.distribution.DistributionContainer
@@ -30,14 +29,14 @@ internal data class AssemblyTask(val assembleTask: TaskProvider<Zip>, val instal
 private fun Project.createInstallBotTask(): TaskProvider<InstallBotTask> =
     tasks.register<InstallBotTask>("installBot")
 
-context(Project)
+context(project: Project)
 internal fun TaskContainer.createAssembleTasks(): AssemblyTask {
     val patchPropertiesTask = createPatchPropertiesTask()
 
-    val jar = tasks.findByName("jar") as Jar? ?: pluginNotAppliedError("Kotlin")
+    val jar = project.tasks.findByName("jar") as Jar? ?: pluginNotAppliedError("Kotlin")
     jar.dependsOn(patchPropertiesTask)
     val assembleTask = createAssemblePluginTask(jar)
-    val installBotTask = createInstallBotTask()
+    val installBotTask = project.createInstallBotTask()
 
     // This task only makes sense for plugin projects, since mikbot core plugins aren't distributed as standalone bots
     // Also this is defined though the Gradle environment, therefore it is a compile-time constant
@@ -49,14 +48,14 @@ internal fun TaskContainer.createAssembleTasks(): AssemblyTask {
     return AssemblyTask(assembleTask, installBotTask)
 }
 
-context(Project)
+context(project: Project)
 private fun TaskContainer.createAssembleBotTask(
     assemblePlugin: TaskProvider<Zip>,
     installBotTask: TaskProvider<InstallBotTask>,
 ) {
-    apply<DistributionPlugin>()
+    project.apply<DistributionPlugin>()
 
-    extensions.configure<DistributionContainer> {
+    project.extensions.configure<DistributionContainer> {
         create("bot") {
             distributionBaseName = "bot-${project.name}"
 
@@ -76,11 +75,11 @@ private fun TaskContainer.createAssembleBotTask(
                     into(installedPluginsName) {
                         from({
                             val dependencies =
-                                (configurations.getByName("plugin").allDependencies +
-                                    configurations.getByName("optionalPlugin").allDependencies)
+                                (project.configurations.getByName("plugin").allDependencies +
+                                    project.configurations.getByName("optionalPlugin").allDependencies)
                                     .filterIsInstance<ModuleDependency>()
                                     .map {
-                                        dependencies.create(
+                                        project.dependencies.create(
                                             mapOf(
                                                 "name" to it.name.replace("mikbot-", ""),
                                                 "version" to it.version,
@@ -89,7 +88,7 @@ private fun TaskContainer.createAssembleBotTask(
                                         )
                                     }
 
-                            configurations.detachedConfiguration(*dependencies.toTypedArray()).resolve()
+                            project.configurations.detachedConfiguration(*dependencies.toTypedArray()).resolve()
                         })
                         include("*.zip")
                     }
@@ -99,7 +98,7 @@ private fun TaskContainer.createAssembleBotTask(
     }
 }
 
-context(Project)
+context(_: Project)
 private fun TaskContainer.createPatchPropertiesTask() =
     register<PatchPropertiesTask>("patchPluginProperties") {
         group = "mikbot-plugin"
@@ -118,7 +117,7 @@ private fun TaskContainer.createPatchPropertiesTask() =
 // therefore not calling it, would always use the main spec
 // which took me 4 hrs to figure out
 // Funfact 2: 2 yrs later I figured out I am supposed to apply the "kotlin-dsl" plugin
-context(Project)
+context(project: Project)
 private fun TaskContainer.createAssemblePluginTask(jarTask: Jar) =
     register<Zip>("assemblePlugin") {
         val extension = project.mikbotPluginExtension
@@ -127,7 +126,7 @@ private fun TaskContainer.createAssemblePluginTask(jarTask: Jar) =
 
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-        destinationDirectory = layout.buildDirectory.dir("plugin")
+        destinationDirectory = project.layout.buildDirectory.dir("plugin")
         archiveBaseName = extension.pluginId.map { "plugin-$it" }
         archiveExtension = "zip"
 
@@ -137,7 +136,7 @@ private fun TaskContainer.createAssemblePluginTask(jarTask: Jar) =
         }
 
         // and then we also need to include any libraries that are needed by the plugin
-        dependsOn(configurations.getByName("runtimeClasspath"))
+        dependsOn(project.configurations.getByName("runtimeClasspath"))
         into("lib") {
             from({
                 val mainConfiguration = if (!extension.ignoreDependencies.getOrElse(false)) {
@@ -149,20 +148,19 @@ private fun TaskContainer.createAssemblePluginTask(jarTask: Jar) =
                 }
 
                 // filter out dupe dependencies
-                configurations.getByName("runtimeClasspath").resolvedConfiguration.resolvedArtifacts.asSequence()
+                project.configurations.getByName("runtimeClasspath").resolvedConfiguration.resolvedArtifacts.asSequence()
                     .filter { dep ->
                         val idWithoutPlatform = dep.moduleVersion.id.name.substringBefore("-jvm")
                         (dep.moduleVersion.id.group + ":" + idWithoutPlatform) !in mainConfiguration
-                    }.mapNotNull { dep ->
+                    }.map { dep ->
                         dep.file
                     }.toList()
             })
         }
 
         into("") { // not specifying "" brakes Gradle btw
-            val file = (extension.pluginMainFileLocation.orNull ?: pluginMainFile.get()).asFile
+            val file = (extension.pluginMainFileLocation.orNull ?: project.pluginMainFile.get()).asFile
             from(file.parent)
             include(file.name)
         }
     }
-

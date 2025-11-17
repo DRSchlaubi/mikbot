@@ -56,6 +56,21 @@ public object Config : EnvironmentConfig("") {
     public val MONGO_URL: String? by getEnv().optional()
 
     /**
+     * The MongoDB username (if not specified in [MONGO_URL]).
+     */
+    public val MONGO_USERNAME: String? by getEnv().optional()
+
+    /**
+     * The MongoDB password (if not specified in [MONGO_URL]).
+     */
+    public val MONGO_PASSWORD: String? by getEnv().optional()
+
+    /**
+     * The MongoDB auth database (if not specified in [MONGO_URL]).
+     */
+    public val MONGO_AUTH_DATABASE: String? by getEnv().optional()
+
+    /**
      * The database to use.
      *
      * **This has to be specified, even if there is a database in [MONGO_URL]**

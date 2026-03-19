@@ -78,14 +78,14 @@ private suspend fun MusicPlayer.fetchAutoPlay(
     autoPlay = (autoPlay ?: AutoPlayContext.EMPTY).copy(history = list.tracks, songs = LinkedList(list.tracks))
 }
 
-context(EmbedBuilder)
+context(_: EmbedBuilder)
 suspend fun MusicPlayer.addAutoPlaySongs(translator: TranslatableContext) = autoPlay.addAutoPlaySongs(translator)
 
-context(EmbedBuilder)
+context(embed: EmbedBuilder)
 suspend fun AutoPlayContext?.addAutoPlaySongs(translator: TranslatableContext) {
     val songs = this?.songs?.take(5)
     if (!songs.isNullOrEmpty()) {
-        field {
+        embed.field {
             name = translator.translate(MusicTranslations.Music.AutoPlay.nextSong)
             value = songs.joinToString("\n", transform = Track::format)
         }

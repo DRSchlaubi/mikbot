@@ -34,7 +34,7 @@ kotlin {
 tasks {
     withType<KotlinCompile> {
         compilerOptions {
-            jvmTarget = JvmTarget.JVM_19
+            jvmTarget = JvmTarget.JVM_21
         }
     }
 }

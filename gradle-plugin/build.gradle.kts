@@ -28,7 +28,7 @@ dependencies {
 kotlin {
     compilerOptions {
         freeCompilerArgs.add("-Xcontext-parameters")
-        jvmTarget = JvmTarget.JVM_17
+        jvmTarget = JvmTarget.JVM_21
     }
 }
 

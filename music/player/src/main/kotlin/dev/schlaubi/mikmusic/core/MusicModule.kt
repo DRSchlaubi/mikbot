@@ -108,13 +108,11 @@ class MusicModule(context: PluginContext) : MikBotModule(context) {
         callback = callback
     )
 
-    @ExtensionDSL
     suspend fun <T : Arguments> Extension.ephemeralControlSlashCommand(
         arguments: () -> T,
         body: suspend EphemeralSlashCommand<T, *>.() -> Unit,
     ): EphemeralSlashCommand<T, *> = musicApplicationCommand({ ephemeralSlashCommand(arguments, it) }, body)
 
-    @ExtensionDSL
     suspend fun Extension.ephemeralControlSlashCommand(
         body: suspend EphemeralSlashCommand<Arguments, *>.() -> Unit,
     ): EphemeralSlashCommand<Arguments, *> = musicApplicationCommand({ ephemeralSlashCommand(it) }, body)

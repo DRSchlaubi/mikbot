@@ -4,6 +4,7 @@ import dev.schlaubi.mikbot.gradle.extension.mikbotPluginExtension
 import dev.schlaubi.mikbot.gradle.extension.pluginId
 import dev.schlaubi.mikbot.gradle.extension.pluginPublishingExtension
 import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.bundling.Zip
 import org.gradle.kotlin.dsl.getByName
@@ -11,6 +12,7 @@ import java.nio.file.Files
 import java.util.*
 import kotlin.io.path.exists
 
+@CacheableTask
 abstract class MakeRepositoryIndexTask : DefaultTask() {
 
     init {

@@ -4,6 +4,7 @@ import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.JavaExec
 import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.UntrackedTask
 import org.gradle.kotlin.dsl.assign
 import kotlin.collections.asSequence
 import kotlin.collections.component1
@@ -14,6 +15,7 @@ import kotlin.io.path.listDirectoryEntries
 import kotlin.io.path.notExists
 import kotlin.io.path.readLines
 
+@UntrackedTask(because = "Runs the bot, therefore is never up to date")
 abstract class RunBotTask : JavaExec() {
     @get:Internal
     internal abstract val installTask: Property<InstallBotTask>

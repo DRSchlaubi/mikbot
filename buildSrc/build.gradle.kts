@@ -40,5 +40,5 @@ tasks {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_19
+    sourceCompatibility = JavaVersion.VERSION_21
 }

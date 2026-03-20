@@ -1,10 +1,8 @@
 package dev.schlaubi.mikbot.gradle;
 
-import dev.schlaubi.mikbot.gradle.extension.ExtensionsKt;
 import dev.schlaubi.mikbot.gradle.extension.PluginExtension;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.file.DirectoryProperty;
-import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.*;
 
 import java.io.IOException;
@@ -12,9 +10,11 @@ import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.Properties;
 
+@CacheableTask
 public abstract class PatchPropertiesTask extends DefaultTask {
 
     @InputDirectory
+    @PathSensitive(PathSensitivity.RELATIVE)
     public abstract DirectoryProperty getPropertiesDirectory();
 
 

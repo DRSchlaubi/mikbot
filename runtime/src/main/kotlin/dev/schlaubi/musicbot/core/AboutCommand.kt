@@ -7,10 +7,13 @@ import dev.schlaubi.mikbot.plugin.api.getExtensions
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonIgnoreUnknownKeys
 import kotlinx.serialization.json.decodeFromStream
 import org.pf4j.PluginState
 import java.io.InputStream
 
+@OptIn(ExperimentalSerializationApi::class)
+@JsonIgnoreUnknownKeys
 @Serializable
 private data class LicenseReport(
     val dependencies: List<Dependency> = emptyList(),

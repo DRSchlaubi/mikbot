@@ -1,11 +1,11 @@
 services:
   mongo:
-    image: mongo
+    image: mongo:8.0.4
     environment:
       MONGO_INITDB_ROOT_USERNAME: bot
       MONGO_INITDB_ROOT_PASSWORD: bot
     volumes:
-      - mongo-data:/data/db
+      - mongo-data2:/data/db
     ports:
       - "27017:27017"
   image_color_service:
@@ -13,4 +13,4 @@ services:
     ports:
       - "4567:8080"
 volumes:
-  mongo-data: { }
+  mongo-data2: { }

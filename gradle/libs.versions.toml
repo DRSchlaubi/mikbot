@@ -9,7 +9,7 @@ kord = "mikbot-SNAPSHOT"
 api = "5.1.1"
 ksp = "2.3.6"
 lavakord = "9.2.0"
-kordex-plugin = "1.7.3"
+kordex-plugin = "1.9.0"
 kompendium = "4.0.4-SNAPSHOT"
 
 [libraries]

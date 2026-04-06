@@ -29,6 +29,10 @@ private data class LicenseReport(
     )
 }
 
+private val json = Json {
+    ignoreUnknownKeys = true
+}
+
 @OptIn(ExperimentalSerializationApi::class)
 suspend fun AboutBuilder.aboutCommand(bot: Bot) {
     copyright("MikBot", "MIT", CopyrightType.Framework, "https://github.com/DRSchlaubi/mikbot")
@@ -36,7 +40,7 @@ suspend fun AboutBuilder.aboutCommand(bot: Bot) {
     bot.pluginLoader.plugins.asSequence()
         .filter { it.pluginState != PluginState.DISABLED }
         .mapNotNull { it.pluginClassLoader.getResourceAsStream("license-report.json") }
-        .map { it.use<InputStream, LicenseReport>(Json.Default::decodeFromStream) }
+        .map { it.use<InputStream, LicenseReport>(json::decodeFromStream) }
         .flatMap(LicenseReport::dependencies)
         .distinctBy(LicenseReport.Dependency::moduleName)
         .forEach {

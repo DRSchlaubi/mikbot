@@ -76,7 +76,7 @@ mikbot-api = { group = "dev.schlaubi", name = "mikbot-api" }
 bucket4j = { group = "com.bucket4j", name = "bucket4j_jdk17-lettuce", version = "8.17.0" }
 
 kordex-gradle-plugin = { group = "dev.kordex.gradle.plugins", name = "kordex", version.ref = "kordex-plugin" }
-gradle-license-report = { group = "com.github.jk1", name = "gradle-license-report", version = "3.1.1" }
+gradle-license-report = { group = "com.github.jk1", name = "gradle-license-report", version = "3.1.4" }
 
 lettuce-core = { group = "io.lettuce", name = "lettuce-core", version = "7.5.0.RELEASE" }
 

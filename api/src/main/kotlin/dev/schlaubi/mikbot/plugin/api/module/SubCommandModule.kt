@@ -4,9 +4,8 @@ import dev.kordex.core.commands.Arguments
 import dev.kordex.core.commands.application.slash.*
 import dev.kordex.core.extensions.Extension
 import dev.kordex.core.extensions.ephemeralSlashCommand
-import dev.kordex.core.i18n.EMPTY_KEY
 import dev.kordex.core.i18n.toKey
-import dev.kordex.core.i18n.types.Key
+import dev.kordex.i18n.Key
 import dev.kordex.modules.dev.unsafe.annotations.UnsafeAPI
 import dev.kordex.modules.dev.unsafe.commands.slash.UnsafeSlashCommand
 import dev.kordex.modules.dev.unsafe.extensions.unsafeSubCommand
@@ -24,6 +23,7 @@ public abstract class SubCommandModule(context: PluginContext) : MikBotModule(co
     private val ephemeralSubCommandBodies = mutableListOf<EphemeralCommandPair<*>>()
     private val publicSubCommandBodies = mutableListOf<PublicCommandPair<*>>()
     private val groupBodies = mutableListOf<GroupPair>()
+
     @OptIn(UnsafeAPI::class)
     private val unsafeSubCommandBodies = mutableListOf<UnsafeCommandPair<*>>()
 
@@ -64,6 +64,7 @@ public abstract class SubCommandModule(context: PluginContext) : MikBotModule(co
     }
 
     public open fun SlashCommand<*, *, *>.commandSettings(): Unit = Unit
+
     @OptIn(UnsafeAPI::class)
     final override suspend fun setup() {
         overrideSetup()

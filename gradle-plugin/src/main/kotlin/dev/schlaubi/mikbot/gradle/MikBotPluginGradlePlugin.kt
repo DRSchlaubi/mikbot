@@ -1,7 +1,8 @@
 package dev.schlaubi.mikbot.gradle
 
-import dev.kordex.gradle.plugins.kordex.InternalAPI
-import dev.kordex.gradle.plugins.kordex.helpers.I18nHelper
+import dev.kordex.gradle.plugins.i18n.I18nExtension
+import dev.kordex.gradle.plugins.i18n.I18nPlugin
+import dev.schlaubi.mikbot.gradle.extension.PluginExtension
 import dev.schlaubi.mikbot.gradle.extension.createExtensions
 import dev.schlaubi.mikbot.gradle.extension.mikbotPluginExtension
 import org.gradle.api.Plugin
@@ -41,14 +42,23 @@ class MikBotPluginGradlePlugin : Plugin<Project> {
         }
     }
 
-    @OptIn(InternalAPI::class)
     private fun Project.configureTranslations() {
+        val extension = project.extensions.getByType<PluginExtension>().i18n
+
         val translationsDir = layout.projectDirectory
             .dir("src/main/resources/translations/")
             .asFile
             .toPath()
         if (translationsDir.exists() && translationsDir.useDirectoryEntries(block = Sequence<Path>::any)) {
-            I18nHelper.apply(this, mikbotPluginExtension.i18n)
+            apply<I18nPlugin>()
+            extensions.configure<I18nExtension> {
+                val bundleName = extension.translationBundle.get()
+                bundle("$bundleName.strings", extension.classPackage.get()) {
+                    className = extension.className
+                    outputDirectory = extension.outputDirectory.map { it.asFile }
+                    publicVisibility = extension.publicVisibility
+                }
+            }
         }
     }
 

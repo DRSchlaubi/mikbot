@@ -1,16 +1,17 @@
 package dev.schlaubi.mikbot.gradle.extension
 
-import dev.kordex.gradle.plugins.kordex.i18n.KordExI18nSettings
 import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.internal.provider.PropertyFactory
+import org.gradle.api.plugins.ExtensionAware
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
+import org.gradle.api.tasks.Nested
 import javax.inject.Inject
 
 /** Extension for configuring plugins for PF4J. */
-abstract class PluginExtension @Inject constructor(props: PropertyFactory) {
+abstract class PluginExtension @Inject constructor(props: PropertyFactory) : ExtensionAware {
     /** Plugin id used for building and publishing (defaults to the project name) */
     abstract val pluginId: Property<String>
 
@@ -71,15 +72,16 @@ abstract class PluginExtension @Inject constructor(props: PropertyFactory) {
     /**
      * Settings regarding i18n.
      */
-    val i18n: KordExI18nSettings = KordExI18nSettings(props)
+    @get:Nested
+    abstract val i18n: MikBotI18NSettings
 
     /**
      * Configures the projects i18n settings.
      *
      * @see i18n
-     * @see KordExI18nSettings
+     * @see MikBotI18NSettings
      */
-    fun i18n(action: Action<KordExI18nSettings>) = action.execute(i18n)
+    fun i18n(action: Action<MikBotI18NSettings>) = action.execute(i18n)
 }
 
 internal val Project.pluginId: String

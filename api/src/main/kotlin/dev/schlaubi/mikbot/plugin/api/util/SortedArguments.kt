@@ -4,7 +4,7 @@ import dev.kordex.core.annotations.UnexpectedFunctionBehaviour
 import dev.kordex.core.commands.Argument
 import dev.kordex.core.commands.Arguments
 import dev.kordex.core.commands.converters.*
-import dev.kordex.core.i18n.types.Key
+import dev.kordex.i18n.Key
 
 /**
  * This class sorts its arguments by the [Converter.required] property, ensuring that required arguments always come
@@ -38,19 +38,19 @@ public abstract class SortedArguments : Arguments() {
         displayName: Key,
         description: Key,
         converter: ListConverter<R>,
-    ): ListConverter<R> =addArgument(displayName, description, converter)
+    ): ListConverter<R> = addArgument(displayName, description, converter)
 
     public override fun <R : Any> arg(
         displayName: Key,
         description: Key,
         converter: CoalescingConverter<R>,
-    ): CoalescingConverter<R> =addArgument(displayName, description, converter)
+    ): CoalescingConverter<R> = addArgument(displayName, description, converter)
 
     public override fun <R : Any> arg(
         displayName: Key,
         description: Key,
         converter: DefaultingCoalescingConverter<R>,
-    ): DefaultingCoalescingConverter<R> =addArgument(displayName, description, converter)
+    ): DefaultingCoalescingConverter<R> = addArgument(displayName, description, converter)
 
     public override fun <R : Any> arg(
         displayName: Key,

@@ -7,7 +7,7 @@ import dev.kordex.core.pagination.builders.PaginatorBuilder
 import dev.arbjerg.lavalink.protocol.v4.LoadResult
 import dev.arbjerg.lavalink.protocol.v4.Track
 import dev.kord.core.behavior.UserBehavior
-import dev.kordex.core.i18n.types.Key
+import dev.kordex.i18n.Key
 import dev.schlaubi.mikbot.plugin.api.util.discordError
 import dev.schlaubi.mikbot.plugin.api.util.forList
 import dev.schlaubi.mikbot.plugin.api.util.translate

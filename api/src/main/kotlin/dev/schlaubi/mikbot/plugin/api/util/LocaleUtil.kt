@@ -4,6 +4,7 @@ import dev.kord.common.Locale
 import dev.kord.core.entity.User
 import dev.kord.core.entity.channel.GuildChannel
 import dev.kordex.core.ExtensibleBot
+import dev.kordex.i18n.I18n
 import java.util.Locale as JLocale
 
 /** Resolve the locale for this command context. **/
@@ -20,7 +21,7 @@ public suspend fun ExtensibleBot.getLocale(channel: GuildChannel, user: User): J
         }
     }
 
-    return locale ?: settings.i18nBuilder.defaultLocale
+    return locale ?: I18n.defaultLocale
 }
 
 /**

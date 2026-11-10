@@ -13,9 +13,10 @@ import dev.kord.rest.builder.component.ActionRowBuilder
 import dev.kord.rest.builder.component.MessageComponentBuilder
 import dev.kord.x.emoji.DiscordEmoji
 import dev.kord.x.emoji.Emojis
-import dev.kordex.core.i18n.TranslationsProvider
-import dev.kordex.core.i18n.types.Key
 import dev.kordex.core.types.TranslatableContext
+import dev.kordex.i18n.I18n
+import dev.kordex.i18n.Key
+import dev.kordex.i18n.Translations
 import dev.schlaubi.lavakord.RestException
 import dev.schlaubi.mikbot.plugin.api.util.convertToISO
 import dev.schlaubi.mikbot.plugin.api.util.embed
@@ -28,8 +29,8 @@ import dev.schlaubi.mikmusic.player.MusicPlayer
 import dev.schlaubi.mikmusic.player.addAutoPlaySongs
 import dev.schlaubi.mikmusic.util.addSong
 import dev.schlaubi.mikmusic.util.format
-import kotlin.time.Clock
 import java.util.*
+import kotlin.time.Clock
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.DurationUnit
@@ -78,7 +79,6 @@ suspend fun updateMessage(
     kord: Kord,
     musicPlayer: MusicPlayer,
     initialUpdate: Boolean = false,
-    translator: TranslationsProvider,
     force: Boolean = false,
 ) {
     val state = MusicChannelInformation.from(musicPlayer)
@@ -90,11 +90,11 @@ suspend fun updateMessage(
     val message = kord.unsafe.message(musicChannelData.musicChannel, musicChannelData.musicChannelMessage)
 
     val locale = kord.getGuildOrNull(guildId)?.preferredLocale?.convertToISO()?.asJavaLocale()
-        ?: translator.defaultLocale
+        ?: I18n.defaultLocale
 
     @Suppress("UNCHECKED_CAST")
     fun translate(key: Key, vararg replacements: Any?) =
-        translator.translate(key.withLocale(locale, overwrite = true), replacements as Array<Any?>)
+        Translations.translateOrdinal(key.withLocale(locale, overwrite = true), replacements as Array<Any?>)
 
     val translatableContext = object : TranslatableContext {
         override var resolvedLocale: Locale? = locale

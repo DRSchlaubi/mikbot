@@ -1,13 +1,9 @@
-import dev.kordex.gradle.plugins.kordex.InternalAPI
-import dev.kordex.gradle.plugins.kordex.base.KordExExtension
-import dev.kordex.gradle.plugins.kordex.helpers.I18nHelper
-import dev.kordex.gradle.plugins.kordex.i18n.KordExI18nSettings
-
 plugins {
     `mikbot-module`
     `mikbot-publishing`
     `mikbot-template`
     java
+    dev.kordex.gradle.i18n
 }
 
 group = "dev.schlaubi.mikbot"
@@ -46,14 +42,8 @@ template {
     packageName = "dev.schlaubi.mikbot.plugin.api"
 }
 
-val kordExExtension = extensions.create<KordExExtension>("kordex").apply {
-    i18n {
-        classPackage = "dev.schlaubi.mikbot.plugin.api"
+i18n {
+    bundle("mikbot.strings","dev.schlaubi.mikbot.plugin.api") {
         className = "MikBotTranslations"
-        translationBundle = "mikbot"
     }
 }
-
-@Suppress("INVISIBLE_MEMBER", "INVISIBLE_REFERENCE")
-@OptIn(InternalAPI::class)
-I18nHelper.apply(project, kordExExtension.i18n)

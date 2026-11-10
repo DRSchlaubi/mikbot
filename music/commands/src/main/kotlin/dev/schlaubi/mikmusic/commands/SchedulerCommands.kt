@@ -1,7 +1,7 @@
 package dev.schlaubi.mikmusic.commands
 
 import dev.kordex.core.commands.application.slash.EphemeralSlashCommandContext
-import dev.kordex.core.i18n.types.Key
+import dev.kordex.i18n.Key
 import dev.schlaubi.mikbot.plugin.api.util.translate
 import dev.schlaubi.mikbot.translations.MusicTranslations
 import dev.schlaubi.mikmusic.core.MusicModule

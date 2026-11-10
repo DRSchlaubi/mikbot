@@ -30,3 +30,13 @@ tasks {
         dependsOn(":runtime:installDist")
     }
 }
+
+subprojects {
+    configurations.all {
+        resolutionStrategy.eachDependency {
+            if (requested.group == "org.jetbrains.kotlinx" && requested.name == "kotlinx-datetime") {
+                useVersion(libs.kotlinx.datetime.get().version!!)
+            }
+        }
+    }
+}

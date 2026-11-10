@@ -12,9 +12,9 @@ import dev.kordex.core.annotations.warnings.ReplacingDefaultErrorResponseBuilder
 import dev.kordex.core.builders.ExtensibleBotBuilder
 import dev.kordex.core.extensions.Extension
 import dev.kordex.core.extensions.event
-import dev.kordex.core.i18n.TranslationsProvider
 import dev.kordex.core.koin.KordExKoinComponent
 import dev.kordex.core.utils.loadModule
+import dev.kordex.i18n.Translations
 import dev.schlaubi.mikbot.plugin.api.MikBotInfo
 import dev.schlaubi.mikbot.plugin.api.PluginContext
 import dev.schlaubi.mikbot.plugin.api.PluginSystem
@@ -45,7 +45,6 @@ class Bot(repos: List<UpdateRepository>) : KordExKoinComponent, PluginContext {
     private lateinit var bot: ExtensibleBot
 
     override val database: Database = DatabaseImpl()
-    lateinit var translationProvider: TranslationsProvider
     internal val pluginLoader = PluginLoader(repos)
     override val pluginSystem: PluginSystem = DefaultPluginSystem(this)
     override val pluginWrapper: PluginWrapper
@@ -143,18 +142,12 @@ class Bot(repos: List<UpdateRepository>) : KordExKoinComponent, PluginContext {
 
         applicationCommands {
             enabled = true
-            Config.TEST_GUILD?.let(::defaultGuild)
+
+            Config.TEST_GUILD?.let(defaultScope::limitToGuild)
         }
 
         i18n {
             interactionUserLocaleResolver()
-            translationsProvider {
-                translationProvider = PluginTranslationProvider(pluginLoader) {
-                    defaultLocale
-                }
-
-                translationProvider
-            }
             applicationCommandLocales.add(Locale.GERMAN)
         }
 

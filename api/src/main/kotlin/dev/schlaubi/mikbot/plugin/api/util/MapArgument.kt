@@ -2,7 +2,7 @@ package dev.schlaubi.mikbot.plugin.api.util
 
 import dev.kordex.core.commands.CommandContext
 import dev.kordex.core.commands.converters.Converter
-import dev.kordex.core.i18n.types.Key
+import dev.kordex.i18n.Key
 import dev.kordex.parser.StringParser
 
 public fun <InputType : Any?, OutputType : Any?, NamedInputType : Any, ResultType : Any, B : Any?> Converter<InputType, OutputType, NamedInputType, ResultType>.map(

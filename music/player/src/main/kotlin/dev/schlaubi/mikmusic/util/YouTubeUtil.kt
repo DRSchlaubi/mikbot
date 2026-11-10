@@ -1,6 +1,6 @@
 package dev.schlaubi.mikmusic.util
 
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
+import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.youtube.YouTube
 import com.google.api.services.youtube.YouTubeRequest
@@ -14,7 +14,7 @@ import dev.schlaubi.mikbot.plugin.api.util.blocking
 import dev.schlaubi.mikmusic.core.Config
 
 private val client: YouTube = YouTube.Builder(
-    GoogleNetHttpTransport.newTrustedTransport(),
+    NetHttpTransport.Builder().build(),
     GsonFactory.getDefaultInstance()
 ) { }
     .setApplicationName("mikmusic-discord")

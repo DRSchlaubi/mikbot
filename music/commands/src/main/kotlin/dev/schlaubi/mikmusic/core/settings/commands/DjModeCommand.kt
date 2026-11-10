@@ -24,7 +24,6 @@ suspend fun SettingsModule.djModeCommand() {
 
         guildAdminOnly()
 
-
         action {
             val role = arguments.djRole
 

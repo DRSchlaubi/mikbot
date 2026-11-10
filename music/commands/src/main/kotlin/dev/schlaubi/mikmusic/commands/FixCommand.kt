@@ -1,13 +1,13 @@
 package dev.schlaubi.mikmusic.commands
 
-import dev.kordex.core.commands.application.slash.EphemeralSlashCommandContext
-import dev.kordex.core.utils.waitFor
 import dev.kord.common.entity.ButtonStyle
 import dev.kord.common.entity.Permission
 import dev.kord.core.behavior.channel.edit
 import dev.kord.core.event.interaction.GuildComponentInteractionCreateEvent
-import dev.kord.rest.builder.message.actionRow
-import dev.kordex.core.i18n.types.Key
+import dev.kord.rest.builder.component.actionRow
+import dev.kordex.core.commands.application.slash.EphemeralSlashCommandContext
+import dev.kordex.core.utils.waitFor
+import dev.kordex.i18n.Key
 import dev.schlaubi.lavakord.audio.Link
 import dev.schlaubi.lavakord.kord.connectAudio
 import dev.schlaubi.mikbot.plugin.api.util.safeGuild

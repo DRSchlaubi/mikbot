@@ -160,8 +160,10 @@ class MusicModule(context: PluginContext) : MikBotModule(context) {
 }
 
 fun ApplicationCommand<*>.musicControlContexts() {
-    allowedInstallTypes.add(ApplicationIntegrationType.GuildInstall)
-    allowedContexts.add(InteractionContextType.Guild)
+    scope {
+        guildInstallable()
+        contexts.allowInGuilds()
+    }
 }
 
 /**

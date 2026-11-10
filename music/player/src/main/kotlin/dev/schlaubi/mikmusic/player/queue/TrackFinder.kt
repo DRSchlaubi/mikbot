@@ -12,8 +12,8 @@ import dev.kordex.core.commands.application.slash.converters.ChoiceEnum
 import dev.kordex.core.commands.application.slash.converters.impl.optionalEnumChoice
 import dev.kordex.core.commands.converters.impl.defaultingBoolean
 import dev.kordex.core.commands.converters.impl.optionalBoolean
-import dev.kordex.core.i18n.EMPTY_KEY
-import dev.kordex.core.i18n.types.Key
+import dev.kordex.i18n.EMPTY_KEY
+import dev.kordex.i18n.Key
 import dev.kordex.core.types.TranslatableContext
 import dev.schlaubi.lavakord.audio.Node
 import dev.schlaubi.lavakord.rest.loadItem

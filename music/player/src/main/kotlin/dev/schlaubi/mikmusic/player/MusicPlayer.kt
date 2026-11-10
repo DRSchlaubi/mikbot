@@ -10,7 +10,6 @@ import dev.kord.core.KordObject
 import dev.kord.core.behavior.GuildBehavior
 import dev.kord.core.entity.channel.VoiceChannel
 import dev.kordex.core.ExtensibleBot
-import dev.kordex.core.i18n.TranslationsProvider
 import dev.kordex.core.koin.KordExKoinComponent
 import dev.schlaubi.lavakord.UnsafeRestApi
 import dev.schlaubi.lavakord.audio.Link
@@ -233,7 +232,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
         updateMusicChannelMessage()
     }
 
-    private suspend fun onTrackEnd(event: TrackEndEvent) = lock.withLock {
+    private suspend fun onTrackEnd(event: TrackEndEvent): Unit = lock.withLock {
 //        println("Track end: ${event.track.info.sourceName}")
         if (dontQueue) {
             dontQueue = event.reason == Message.EmittedEvent.TrackEndEvent.AudioTrackEndReason.REPLACED
@@ -368,7 +367,6 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
                     guild.id,
                     guild.kord,
                     this@MusicPlayer,
-                    translator = get<TranslationsProvider>(),
                     force = force
                 )
             }

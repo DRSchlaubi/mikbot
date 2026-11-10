@@ -1,10 +1,5 @@
 package dev.schlaubi.mikbot.plugin.api.util
 
-import dev.kordex.core.commands.CommandContext
-import dev.kordex.core.commands.application.slash.EphemeralSlashCommandContext
-import dev.kordex.core.commands.application.slash.PublicSlashCommandContext
-import dev.kordex.core.components.components
-import dev.kordex.modules.dev.unsafe.annotations.UnsafeAPI
 import dev.kord.common.entity.ButtonStyle
 import dev.kord.core.behavior.interaction.followup.FollowupMessageBehavior
 import dev.kord.core.behavior.interaction.followup.edit
@@ -12,10 +7,14 @@ import dev.kord.core.entity.interaction.ComponentInteraction
 import dev.kord.core.entity.interaction.followup.EphemeralFollowupMessage
 import dev.kord.core.entity.interaction.followup.PublicFollowupMessage
 import dev.kord.core.event.interaction.InteractionCreateEvent
-import dev.kord.rest.builder.message.actionRow
+import dev.kord.rest.builder.component.actionRow
+import dev.kordex.core.commands.CommandContext
+import dev.kordex.core.commands.application.slash.EphemeralSlashCommandContext
+import dev.kordex.core.commands.application.slash.PublicSlashCommandContext
 import dev.kordex.core.i18n.withContext
 import dev.kordex.core.types.TranslatableContext
 import dev.kordex.core.utils.waitFor
+import dev.kordex.modules.dev.unsafe.annotations.UnsafeAPI
 import dev.kordex.modules.dev.unsafe.contexts.UnsafeCommandSlashCommandContext
 import dev.schlaubi.mikbot.plugin.api.MikBotTranslations
 import kotlin.time.Duration
@@ -65,7 +64,7 @@ public suspend fun PublicSlashCommandContext<*, *>.confirmation(
 ): Confirmation = confirmation(yesWord, noWord, { respond { it() } }, timeout, acknowledge, messageBuilder)
 
 /**
- * Initiates a button based confirmation form for a [UnsafeSlashCommandContext].
+ * Initiates a button based confirmation form for a [UnsafeCommandSlashCommandContext].
  * Sends an ephemeral message to the user.
  *
  * @param timeout the [Duration] after which the confirmation process should be aborted (default to false)
@@ -84,7 +83,7 @@ public suspend fun UnsafeCommandSlashCommandContext<*, *>.ephemeralConfirmation(
     unsafeConfirmation(yesWord, noWord, messageBuilder, timeout, acknowledge) { respondEphemeral { it() } }
 
 /**
- * Initiates a button based confirmation form for a [UnsafeSlashCommandContext].
+ * Initiates a button based confirmation form for a [UnsafeCommandSlashCommandContext].
  * Sends a public message to the user.
  *
  * @param timeout the [Duration] after which the confirmation process should be aborted (default to false)
@@ -144,20 +143,18 @@ public suspend fun confirmation(
     val message = sendMessage {
         messageBuilder()
 
-        components {
-            actionRow {
-                interactionButton(ButtonStyle.Success, yes) {
-                    label = yesWord ?: MikBotTranslations.General.yes
+        actionRow {
+            interactionButton(ButtonStyle.Success, yes) {
+                label = yesWord ?: MikBotTranslations.General.yes
+                    .withContext(translatableContext)
+                    .translate()
+            }
+
+            if (hasNoOption) {
+                interactionButton(ButtonStyle.Danger, no) {
+                    label = noWord ?: MikBotTranslations.General.no
                         .withContext(translatableContext)
                         .translate()
-                }
-
-                if (hasNoOption) {
-                    interactionButton(ButtonStyle.Danger, no) {
-                        label = noWord ?: MikBotTranslations.General.no
-                            .withContext(translatableContext)
-                            .translate()
-                    }
                 }
             }
         }

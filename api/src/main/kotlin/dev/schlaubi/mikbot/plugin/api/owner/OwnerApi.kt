@@ -31,8 +31,10 @@ public interface OwnerExtensionPoint : ModuleExtensionPoint<OwnerModule> {
  * Configures this command, to only be usable by administrators of [Config.OWNER_GUILD].
  */
 public fun SlashCommand<*, *, *>.ownerOnly() {
-    guildId = Config.OWNER_GUILD ?: error("Cannot register owner command without OWNER_GUILD value")
+    scope {
+        limitToGuild(Config.OWNER_GUILD ?: error("Cannot register owner command without OWNER_GUILD value"))
+        contexts.allowInGuilds()
+        guildInstallable()
+    }
     requirePermission(Permission.Administrator)
-    allowedContexts.add(InteractionContextType.Guild)
-    allowedInstallTypes.add(ApplicationIntegrationType.GuildInstall)
 }

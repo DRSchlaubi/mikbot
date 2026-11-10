@@ -5,6 +5,8 @@ import dev.kordex.core.i18n.toKey
 import dev.kordex.core.koin.KordExKoinComponent
 import dev.schlaubi.mikbot.plugin.api.Plugin
 import dev.schlaubi.mikbot.plugin.api.PluginSystem
+import dev.schlaubi.mikbot.plugin.api.config.Config
+import dev.schlaubi.mikbot.plugin.api.config.Environment
 import dev.schlaubi.mikbot.plugin.api.util.ensurePath
 import dev.schlaubi.musicbot.core.Bot
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -28,7 +30,6 @@ class PluginLoader(repos: List<UpdateRepository>) : DefaultPluginManager(), Kord
     internal val updateManager = PluginUpdater(this, repos)
     private val rootTranslations = ClassLoader.getSystemClassLoader().findTranslations()
     override fun createExtensionFinder(): ExtensionFinder = DependencyCheckingExtensionFinder(this)
-    val resolver: DependencyResolver get() = dependencyResolver
     private lateinit var pluginBundles: Map<String, String>
 
     override fun getPluginDescriptorFinder(): PluginDescriptorFinder = MikBotPluginDescriptionFinder()
@@ -38,9 +39,9 @@ class PluginLoader(repos: List<UpdateRepository>) : DefaultPluginManager(), Kord
         // Load bundled plugins
         val bundledPlugins = ClassLoader.getSystemResource(BUNDLED_PLUGINS)
         return if (bundledPlugins != null) {
-            listOf(*super.createPluginsRoot().toTypedArray(), Path.of(bundledPlugins.toURI()))
+            listOf(Config.PLUGIN_PATH, Path.of(bundledPlugins.toURI()))
         } else {
-            super.createPluginsRoot()
+            listOf(Config.PLUGIN_PATH)
         }
     }
 
@@ -147,13 +148,6 @@ class PluginLoader(repos: List<UpdateRepository>) : DefaultPluginManager(), Kord
         }
     }
 
-    fun getPluginForBundle(bundle: String): PluginWrapper? {
-        val sanitizedName = bundle.substringAfter("translations.").substringBefore(".")
-        val pluginName = pluginBundles[sanitizedName] ?: return null
-
-        return getPlugin(pluginName)
-    }
-
     val botPlugins: List<Plugin>
         get() = plugins.values
             .asSequence()
@@ -191,15 +185,6 @@ internal class DefaultPluginSystem(private val bot: Bot) : PluginSystem {
 
     override fun <T : ExtensionPoint> getExtensions(type: KClass<T>): List<T> =
         bot.pluginLoader.getExtensions(type.java)
-
-    @Suppress("DEPRECATION")
-    override fun translate(key: String, bundleName: String, locale: String?, replacements: Array<Any?>): String {
-        return if (locale == null) {
-            bot.translationProvider.translate(key.toKey(bundleName), replacements = replacements)
-        } else {
-            bot.translationProvider.translate(key.toKey(bundleName, Locale.of(locale)), replacements)
-        }
-    }
 
     override suspend fun emitEvent(event: Event) = events.emit(event)
 }

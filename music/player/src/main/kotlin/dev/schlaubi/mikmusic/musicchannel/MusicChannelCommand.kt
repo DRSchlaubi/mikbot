@@ -13,7 +13,6 @@ import dev.kord.core.supplier.EntitySupplyStrategy
 import dev.kordex.core.commands.Arguments
 import dev.kordex.core.commands.converters.impl.optionalChannel
 import dev.kordex.core.extensions.ephemeralSlashCommand
-import dev.kordex.core.i18n.TranslationsProvider
 import dev.schlaubi.mikbot.plugin.api.settings.SettingsModule
 import dev.schlaubi.mikbot.plugin.api.settings.guildAdminOnly
 import dev.schlaubi.mikbot.plugin.api.util.confirmation
@@ -26,7 +25,6 @@ import dev.schlaubi.mikmusic.core.settings.MusicSettingsDatabase
 import dev.schlaubi.mikmusic.util.musicModule
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toSet
-import org.koin.core.component.get
 
 private class MusicChannelArguments : Arguments() {
     val channel by optionalChannel {
@@ -121,8 +119,7 @@ suspend fun SettingsModule.musicChannel() {
                 safeGuild.id,
                 this@ephemeralSlashCommand.kord,
                 musicModule.getMusicPlayer(safeGuild),
-                true,
-                get<TranslationsProvider>()
+                true
             )
 
             respond {

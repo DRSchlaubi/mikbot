@@ -1,10 +1,12 @@
 package dev.schlaubi.mikbot.plugin.api.util
 
-import dev.kordex.core.commands.application.ApplicationCommand
 import dev.kord.common.entity.ApplicationIntegrationType
 import dev.kord.common.entity.InteractionContextType
+import dev.kordex.core.commands.application.ApplicationCommand
 
 public fun ApplicationCommand<*>.executableEverywhere() {
-    allowedInstallTypes.addAll(ApplicationIntegrationType.entries)
-    allowedContexts.addAll(InteractionContextType.entries)
+    scope {
+        integrationTypes.addAll(ApplicationIntegrationType.entries)
+        contexts.contexts.addAll(InteractionContextType.entries)
+    }
 }

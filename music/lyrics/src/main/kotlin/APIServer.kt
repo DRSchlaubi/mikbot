@@ -61,8 +61,8 @@ private data class CurrenState(
     val position: Long
 )
 
-fun requestToken(userId: Snowflake): String {
-    val key = generateNonce()
+suspend fun requestToken(userId: Snowflake): String {
+    val key = generateNonceSuspend()
     authKeys[key] = userId
     return key
 }

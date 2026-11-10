@@ -1,6 +1,5 @@
 package dev.schlaubi.mikbot.plugin.api.settings
 
-import dev.kord.common.entity.InteractionContextType
 import dev.kord.common.entity.Permission
 import dev.kordex.core.commands.application.slash.SlashCommand
 import dev.schlaubi.mikbot.plugin.api.InternalAPI
@@ -23,5 +22,7 @@ public interface SettingsExtensionPoint : ModuleExtensionPoint<SettingsModule> {
 
 public fun SlashCommand<*, *, *>.guildAdminOnly() {
     requirePermission(Permission.ManageGuild)
-    allowedContexts.add(InteractionContextType.Guild)
+    scope {
+        contexts.allowInGuilds()
+    }
 }

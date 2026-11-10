@@ -1,7 +1,7 @@
 package dev.schlaubi.mikbot.plugin.api.util
 
 import dev.kordex.core.DiscordRelayedException
-import dev.kordex.core.i18n.types.Key
+import dev.kordex.i18n.Key
 
 /**
  * Throws a [DiscordRelayedException] with [message] and therefore sends it to the user.

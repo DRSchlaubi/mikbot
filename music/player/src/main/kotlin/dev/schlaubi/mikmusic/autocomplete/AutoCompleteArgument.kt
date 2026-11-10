@@ -8,7 +8,7 @@ import dev.kordex.core.koin.KordExContext
 import dev.kord.core.behavior.interaction.suggestString
 import dev.kord.core.event.interaction.GuildAutoCompleteInteractionCreateEvent
 import dev.kord.x.emoji.Emojis
-import dev.kordex.core.i18n.types.Key
+import dev.kordex.i18n.Key
 import dev.schlaubi.lavakord.plugins.lavasearch.model.SearchType
 import dev.schlaubi.lavakord.plugins.lavasearch.rest.search
 import dev.schlaubi.lavakord.plugins.lavasrc.lavaSrcInfo

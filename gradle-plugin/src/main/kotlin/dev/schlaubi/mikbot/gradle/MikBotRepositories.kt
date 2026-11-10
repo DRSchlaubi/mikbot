@@ -14,6 +14,7 @@ import java.net.URI
 
 internal fun Project.addRepositories() {
     repositories {
+        mavenLocal()
         mavenCentral()
         maven {
             name = "Mikbot"

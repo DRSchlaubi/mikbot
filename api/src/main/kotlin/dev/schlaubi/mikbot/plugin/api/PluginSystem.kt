@@ -2,8 +2,11 @@ package dev.schlaubi.mikbot.plugin.api
 
 import dev.kord.core.Kord
 import dev.kord.core.event.Event
+import dev.kordex.i18n.Translations
+import dev.kordex.i18n.toKey
 import dev.schlaubi.mikbot.plugin.api.module.MikBotModule
 import org.pf4j.ExtensionPoint
+import java.util.Locale
 import kotlin.reflect.KClass
 
 /**
@@ -40,7 +43,7 @@ public interface PluginSystem {
         bundleName: String,
         locale: String? = null,
         replacements: Array<Any?> = emptyArray(),
-    ): String
+    ): String = Translations.translateOrdinal(key.toKey(bundleName, locale?.toLocale()), replacements)
 
     /**
      * Emits [event] on [Kord.events].
@@ -52,3 +55,5 @@ public interface PluginSystem {
  * Retrieves all extensions of the [extension point][T].
  */
 public inline fun <reified T : ExtensionPoint> PluginSystem.getExtensions(): List<T> = getExtensions(T::class)
+
+private fun String.toLocale(): Locale = Locale.of(this)

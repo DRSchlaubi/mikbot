@@ -3,7 +3,7 @@ package dev.schlaubi.mikmusic.playlist.commands
 import dev.kordex.core.commands.application.slash.converters.impl.optionalEnumChoice
 import dev.kordex.core.commands.converters.impl.defaultingBoolean
 import dev.kord.rest.builder.message.embed
-import dev.kordex.core.i18n.EMPTY_KEY
+import dev.kordex.i18n.EMPTY_KEY
 import dev.schlaubi.mikbot.plugin.api.util.translate
 import dev.schlaubi.mikbot.translations.MusicTranslations
 import dev.schlaubi.mikmusic.autocomplete.autoCompletedYouTubeQuery

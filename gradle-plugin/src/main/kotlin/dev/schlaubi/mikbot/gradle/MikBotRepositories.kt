@@ -23,12 +23,16 @@ internal fun Project.addRepositories() {
 
         maven {
             name = "KordEx (Releases)"
-            url = uri("https://repo.kordex.dev/releases")
+            url = uri("https://releases-repo.kordex.dev")
         }
 
         maven {
             name = "KordEx (Snapshots)"
-            url = uri("https://repo.kordex.dev/snapshots")
+            url = uri("https://snapshots-repo.kordex.dev")
+        }
+        maven {
+            name = "KordEx (Mirror)"
+            url = uri("https://mirror-repo.kordex.dev")
         }
 
         maven {

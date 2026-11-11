@@ -60,9 +60,7 @@ class PluginProcessor(private val environment: SymbolProcessorEnvironment) : Sym
         if (resolver.getNewFiles().none()) return emptyList()
 
         // abort processing when we found no plugin main
-        if (!processPluginMain(resolver)) {
-            return emptyList()
-        }
+        processPluginMain(resolver)
         processExtension(resolver)
 
         // this processor can't fail processing a symbol,

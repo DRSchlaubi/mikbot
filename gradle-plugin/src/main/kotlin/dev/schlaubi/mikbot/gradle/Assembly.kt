@@ -158,7 +158,12 @@ private fun TaskContainer.createAssemblePluginTask(jarTask: Jar) =
 
         into("") { // not specifying "" brakes Gradle btw
             val file = (extension.pluginMainFileLocation.orNull ?: project.pluginMainFile.get()).asFile
-            from(file.parent)
-            include(file.name)
+            from(file.parent) {
+                include(file.name)
+            }
+
+            from(project.layout.buildDirectory.dir("generated/ksp/main/resources/META-INF")) {
+                include("extensions.idx")
+            }
         }
     }

@@ -14,7 +14,7 @@ import org.pf4j.update.DefaultUpdateRepository
 import java.net.URL
 import org.pf4j.update.PluginInfo as PF4JPluginInfo
 
-class MikBotPluginRepository internal constructor(private val plugins: List<PF4JPluginInfo>, url: URL) : DefaultUpdateRepository(generateNonce(), url) {
+class MikBotPluginRepository internal constructor(private val plugins: List<PF4JPluginInfo>, url: URL) : DefaultUpdateRepository(generateNonceBlocking(), url) {
 
     override fun getPlugins(): Map<String, PF4JPluginInfo> = plugins.associateBy(PF4JPluginInfo::id)
     companion object {

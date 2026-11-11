@@ -1,5 +1,5 @@
 subprojects {
-    version = "5.1.0-SNAPSHOT"
+    version = "5.2.0-SNAPSHOT"
 
     repositories {
         maven("https://maven.topi.wtf/releases")

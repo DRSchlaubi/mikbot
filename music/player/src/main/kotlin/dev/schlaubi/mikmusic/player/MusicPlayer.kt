@@ -282,7 +282,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
         delay(500.milliseconds)
     }
 
-    suspend fun skip(to: Int = 1) = lock.withLock {
+    suspend fun skip(to: Int = 1): Unit = lock.withLock {
         val maybeSavedTrack = savedTrack
         if (to > 1) {
             // Drop every track, but the skip to track and then start the next track
@@ -303,7 +303,7 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
         }
     }
 
-    suspend fun skipChapter() = lock.withLock {
+    suspend fun skipChapter(): Unit = lock.withLock {
         val chapterTrack = (playingTrack as? ChapterQueuedTrack) ?: return@skipChapter
         val chapter = chapterTrack.nextChapter()
         player.seekTo(chapter.start)

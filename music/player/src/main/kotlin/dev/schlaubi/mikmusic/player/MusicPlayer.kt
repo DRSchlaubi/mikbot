@@ -229,7 +229,9 @@ class MusicPlayer(val link: Link, private val guild: GuildBehavior) : Link by li
 
     private fun onTrackStart(@Suppress("unused_parameter") event: TrackStartEvent) {
         leaveTimeout?.cancel()
-        updateMusicChannelMessage()
+        if (playingTrack != null) {
+            updateMusicChannelMessage()
+        }
     }
 
     private suspend fun onTrackEnd(event: TrackEndEvent): Unit = lock.withLock {

@@ -45,12 +45,13 @@ class MusicInteractionModule(context: PluginContext) : MikBotModule(context) {
                         && interaction.channelId != guildSettings.musicChannelData.musicChannel
                 }
 
-                failIf(MusicTranslations.Music.MusicChannel.disabled) {
-                    val player = musicModule.getMusicPlayer(event.interaction.guild)
-                    player.disableMusicChannel
-                }
 
-                ifPassing { musicControlCheck() }
+                ifPassing {
+                    failIf(MusicTranslations.Music.MusicChannel.disabled) {
+                        val player = musicModule.getMusicPlayer(event.interaction.guild)
+                        player.disableMusicChannel
+                    }
+                    musicControlCheck() }
                 respondIfFailed()
             }
 

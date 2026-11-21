@@ -1,6 +1,6 @@
 #!/usr/bin/env kotlin
 @file:DependsOn(
-    "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.10",
+    "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.25",
     "com.vdurmont:semver4j:3.1.0"
 )
 
